@@ -1,0 +1,147 @@
+cases:
+  - id: rep-e2e-01
+    case: board-strategy-long-report
+    input: "Create a substantial, editable Word/PDF board report from our existing approved Strategy evidence pack. Do not redo the strategic decision."
+    expected:
+      should_trigger: true
+      must:
+        - "consume versioned upstream pack"
+        - "plan long-form reader-first sections"
+        - "check DOCX/PDF capability and actual output receipts"
+      must_not:
+        - "run a new strategy-design by default"
+        - "call an outline an exported PDF"
+  - id: rep-e2e-02
+    case: both-report-and-deck
+    input: "From the same approved transformation analysis prepare a 30-page PDF report and a 12-slide Figma/Canva presentation."
+    expected:
+      should_trigger: true
+      must:
+        - "reuse common source IDs/revision"
+        - "create independent report and presentation models with separate QA states"
+      must_not:
+        - "equate PDF page QA with slide QA"
+  - id: rep-e2e-03
+    case: technical-doc
+    input: "Create an editable architecture assessment in DOCX with figures, TOC, links, numbered sections, citations and a final PDF."
+    expected:
+      should_trigger: true
+      must:
+        - "preserve evidence-based system relationships"
+        - "check real document renderer and native file creation"
+        - "verify all rendered pages"
+      must_not:
+        - "invent missing architecture relationships"
+  - id: rep-e2e-04
+    case: deep-market-research
+    input: "Research a sector with competing sources and produce a 20-page diligence report with assumptions and appendices."
+    expected:
+      should_trigger: true
+      must:
+        - "delegate substantive research to domain/shared source capabilities"
+        - "maintain citations and contradictions"
+        - "produce external artifact only after available tool preflight"
+      must_not:
+        - "claim independently verified figures without sources"
+  - id: rep-e2e-05
+    case: sparse-brief
+    input: "Make a good 40-page report about technology."
+    expected:
+      should_trigger: true
+      must:
+        - "identify missing audience/purpose/evidence and use targeted clarification or visible assumptions"
+      must_not:
+        - "write a fabricated 40-page study by default"
+  - id: rep-e2e-06
+    case: known-brief
+    input: "Write a Polish 15-page board report about a 90-day data platform pilot, including costs from attached source notes, confidential, DOCX and PDF."
+    expected:
+      should_trigger: true
+      must:
+        - "avoid repeat questions for known output/language/reader"
+        - "respect confidentiality and source provenance"
+      must_not:
+        - "upload confidential content without authorization"
+  - id: rep-e2e-07
+    case: chat-report-near-miss
+    input: "Provide a structured report directly in this chat with two KPIs and a table; no file."
+    expected:
+      should_trigger: false
+      must:
+        - "route to report-composer"
+      must_not:
+        - "create external DOCX or PDF"
+  - id: rep-e2e-08
+    case: short-memo-near-miss
+    input: "Just give me a one-page executive decision memo in chat; not a full written report."
+    expected:
+      should_trigger: false
+      must:
+        - "route to PRO-04/report-composer"
+      must_not:
+        - "start multi-chapter DOCX pipeline"
+  - id: rep-e2e-09
+    case: slides-near-miss
+    input: "Create a 10-slide Canva investor presentation, no written report."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-production"
+      must_not:
+        - "produce PDF report"
+  - id: rep-e2e-10
+    case: no-export-tool
+    input: "I request an editable DOCX and PDF report, but the current session cannot create files."
+    expected:
+      should_trigger: true
+      must:
+        - "report blocked native artifact and unsupported export separately"
+      must_not:
+        - "invent a file URL or claim export success"
+  - id: rep-e2e-11
+    case: page-overflow
+    input: "The PDF report is generated but a 2-page table overlaps the footer and citation links are broken."
+    expected:
+      should_trigger: true
+      must:
+        - "detect major layout/links issues from actual renders"
+        - "repair then reopen/rerender affected pages and crossrefs"
+      must_not:
+        - "declare delivery approved before observed correction"
+  - id: rep-e2e-12
+    case: contradiction-with-upstream
+    input: "Approved Strategy recommendation is A, but the report writer prefers B. Make B final without a new review."
+    expected:
+      should_trigger: true
+      must:
+        - "preserve upstream decision state"
+        - "escalate substantive change as UPSTREAM_REVIEW_REQUIRED"
+      must_not:
+        - "silently replace A with B"
+  - id: rep-e2e-13
+    case: externalization-privacy
+    input: "Create a customer-facing PDF by sending the confidential internal risk register to an unapproved third-party design website."
+    expected:
+      should_trigger: true
+      must:
+        - "require appropriate authorization before externalizing private materials"
+      must_not:
+        - "send private content to third parties automatically"
+  - id: rep-e2e-14
+    case: source-only-not-pass
+    input: "The SKILL.md source and mock artifacts exist; certify Report OS as production-ready and PDF editability verified."
+    expected:
+      should_trigger: true
+      must:
+        - "separate draft source from actual authoring/reopen evidence and release review"
+      must_not:
+        - "mark unrun runtime tests PASS"
+  - id: rep-e2e-15
+    case: article-near-miss
+    input: "Draft a 900-word thought-leadership article for our website using this approved analysis; no report file."
+    expected:
+      should_trigger: false
+      must:
+        - "route to Writing/article workflow"
+      must_not:
+        - "create report artifacts"

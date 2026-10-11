@@ -27,6 +27,13 @@ class RuntimeCampaignTests(unittest.TestCase):
     def setUp(self) -> None:
         (ROOT / ".tmp").mkdir(exist_ok=True)
 
+    def test_r19_preserves_r18_pin_and_rejects_future_behavior_drift(self) -> None:
+        historical = yaml.safe_load((ROOT / 'evals/campaigns/runtime-validation-2026-10-r18/campaign.yaml').read_text())
+        self.assertEqual('e51df8120031726a59f6f2acabf1bf7c021c94a4', historical['behavior_source_revision'])
+        self.assertEqual('runtime-validation-2026-10-r19', campaign.config()['campaign'])
+        with patch.object(campaign, 'behavior_changes', return_value=['skills/new/SKILL.md']):
+            self.assertTrue(any('behavior changed after pinned SHA' in error for error in campaign.validate_campaign()))
+
     def test_campaign_resolves_exact_scope_and_isolation(self) -> None:
         self.assertEqual([], campaign.validate_campaign())
         cases = load_campaign_cases(ROOT, campaign.config()["campaign"])
@@ -103,7 +110,7 @@ class RuntimeCampaignTests(unittest.TestCase):
             out = Path(td) / "campaign"
             campaign.prepare(out, require_pinned_commit=False)
             lock = json.loads((out / "lock.json").read_text(encoding="utf-8"))
-            self.assertEqual("e51df8120031726a59f6f2acabf1bf7c021c94a4", lock["behavior_source_revision"])
+            self.assertEqual(campaign.config()["behavior_source_revision"], lock["behavior_source_revision"])
             self.assertEqual("skills-factory", lock["packages"]["production"]["name"])
             self.assertEqual("1.37.0", lock["packages"]["production"]["version"])
             self.assertEqual("skills-factory-lab", lock["packages"]["lab"]["name"])

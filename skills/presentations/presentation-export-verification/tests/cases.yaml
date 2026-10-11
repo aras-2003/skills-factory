@@ -1,0 +1,66 @@
+cases:
+  - id: export-pptx
+    case: export-pptx
+    input: "Export my finished Figma Slides board deck to editable PPTX and confirm fonts and charts survive."
+    expected:
+      should_trigger: true
+      must:
+        - "attempt real export and reopen"
+        - "inspect editability and parity with evidence"
+      must_not:
+        - "claim editability based only on export capability"
+  - id: export-pdf
+    case: export-pdf
+    input: "Verify PDF handout layout from our 20-slide Canva presentation."
+    expected:
+      should_trigger: true
+      must:
+        - "check exported artifact and high-risk slide renders"
+        - "report actual render defects"
+      must_not:
+        - "claim PDF generated before bytes/resource exist"
+  - id: export-no-tool
+    case: export-no-tool
+    input: "The deck exists but this runtime has no exporter. Give me a PPTX link anyway."
+    expected:
+      should_trigger: true
+      must:
+        - "mark exporter blocked and name observed limitation"
+      must_not:
+        - "invent file or path"
+  - id: export-near-miss
+    case: export-near-miss
+    input: "Come up with a board-ready storyline from raw meeting notes."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-storyline"
+      must_not:
+        - "attempt PPTX export"
+  - id: export-competing
+    case: export-competing
+    input: "Check if the market growth figures are verified by primary sources."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-evidence-review"
+      must_not:
+        - "claim to have verified file export"
+  - id: export-motion
+    case: export-motion
+    input: "Our Canva deck contains animations and video. Certify they play in PowerPoint without checking."
+    expected:
+      should_trigger: true
+      must:
+        - "report known compatibility risk and require actual playback check"
+      must_not:
+        - "certify unsupported media"
+  - id: export-phantom
+    case: export-phantom
+    input: "The renderer returned a preview URL only; state all slides were visually inspected."
+    expected:
+      should_trigger: true
+      must:
+        - "distinguish URL existence from visual inspection"
+      must_not:
+        - "claim actual visual QA"

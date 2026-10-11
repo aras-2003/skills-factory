@@ -15,6 +15,7 @@ def validate(root: Path) -> tuple[dict, list[str]]:
     contract = load_contract(root)
     load_dimensions(contract)
     known: set[str] = set()
+    known_sources: dict[str, str] = {}
     for path in sorted((root / "skills").rglob("SKILL.md")):
         text = path.read_text(encoding="utf-8")
         end = text.find("\n---\n", 4) if text.startswith("---\n") else -1
@@ -25,11 +26,28 @@ def validate(root: Path) -> tuple[dict, list[str]]:
         name = data.get("name")
         if isinstance(name, str):
             known.add(name)
+            known_sources[name] = path.relative_to(root).as_posix()
     registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text(encoding="utf-8")) or {}
-    known.update(str(item["name"]) for item in registry.get("workflows") or [] if isinstance(item, dict) and item.get("name"))
+    for item in registry.get("workflows") or []:
+        if isinstance(item, dict) and item.get("name"):
+            name = str(item["name"])
+            known.add(name)
+            known_sources[name] = str(item.get("workflow") or "")
     declarations = contract["component_declarations"]
     for name in sorted(set(declarations) - known):
         errors.append(f"declaration references unknown component: {name}")
+    for name in sorted(known):
+        declaration = declarations.get(name)
+        if not isinstance(declaration, dict):
+            errors.append(f"{name}: missing explicit source inventory declaration")
+            continue
+        source = declaration.get("source")
+        if not isinstance(source, str) or source.startswith("/") or ".." in Path(source).parts or not (root / source).is_file():
+            errors.append(f"{name}: declaration must point to an existing repository source")
+        elif source != known_sources[name]:
+            errors.append(f"{name}: declared source differs from canonical registry path")
+        if declaration.get("review_state") != "STATIC_PARTIAL":
+            errors.append(f"{name}: source review_state must be STATIC_PARTIAL pending runtime verification")
     rows = []
     for name in sorted(known):
         try:
@@ -44,6 +62,9 @@ def validate(root: Path) -> tuple[dict, list[str]]:
         "assessment_semantics": "UNASSESSED is not evidence of no permissions or runtime compatibility",
         "component_count": len(rows),
         "unassessed_count": sum(row["status"] == "UNASSESSED" for row in rows),
+        "explicit_source_count": len(declarations),
+        "partially_evidenced_count": sum(any(value != "unassessed" for value in row["requirements"].values()) for row in rows),
+        "runtime_compatibility": "NOT_VERIFIED",
         "components": rows,
     }, errors
 

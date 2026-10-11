@@ -26,3 +26,23 @@ cases:
       must:
         - recommend deterministic code for arithmetic
         - limit any skill to interpretation or orchestration
+
+  - id: spec-negative-authoring
+    case: approved-spec-now-author
+    input: "The approved specification and trigger boundary for this skill are complete. Write the SKILL.md and its references now."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-authoring based on the approved contract
+      must_not:
+        - restart the specification exercise
+
+  - id: spec-negative-test-design
+    case: already-defined-skill-needs-tests
+    input: "The skill is already implemented with an approved contract. Create near-miss and competing-route test cases for its existing description."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-test-design for test design
+      must_not:
+        - redefine an already-approved skill scope

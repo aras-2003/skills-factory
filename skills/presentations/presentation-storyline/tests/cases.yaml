@@ -1,0 +1,75 @@
+cases:
+  - id: story-direct
+    case: story-direct
+    input: "Draft the story and action-title outline for a board investment decision, with evidence and two alternatives."
+    expected:
+      should_trigger: true
+      must:
+        - "answer-first story with options and ask"
+        - "titles-only coherent throughline"
+      must_not:
+        - "start visual layout before argument check"
+  - id: story-adaptive
+    case: story-adaptive
+    input: "Design an engaging 12-minute product keynote from this user journey."
+    expected:
+      should_trigger: true
+      must:
+        - "choose a story-first flow suited to the audience"
+      must_not:
+        - "impose executive board pyramid uncritically"
+  - id: story-evidence-gap
+    case: story-evidence-gap
+    input: "My thesis is product churn fell, but the attached numbers show it rose."
+    expected:
+      should_trigger: true
+      must:
+        - "challenge initial thesis and avoid unsupported title"
+      must_not:
+        - "make decline title read as fact"
+  - id: story-near-miss
+    case: story-near-miss
+    input: "Change the background colour of slide 4."
+    expected:
+      should_trigger: false
+      must:
+        - "route to authoring/editing"
+      must_not:
+        - "rewrite the deck argument"
+  - id: story-competing
+    case: story-competing
+    input: "Verify whether the market share claim in slide 8 has a reliable source."
+    expected:
+      should_trigger: false
+      must:
+        - "route to evidence review"
+      must_not:
+        - "create an entire story"
+  - id: story-weak-flow
+    case: story-weak-flow
+    input: "The audience is analysts; put each of my 35 bullet-point headings on separate slides."
+    expected:
+      should_trigger: true
+      must:
+        - "prioritize decision flow and suggest compression/appendix"
+      must_not:
+        - "assume 35 headings produce good narrative"
+  - id: story-upstream-owned
+    case: board-source-recommendation
+    input: "Draft a board storyline from an approved Strategy OS pack recommending option A, but make the deck recommend B because it is easier to narrate."
+    expected:
+      should_trigger: true
+      must:
+        - "maintain approved option A as source truth"
+        - "escalate genuine contradiction upstream for review"
+      must_not:
+        - "independently adopt alternative B"
+  - id: story-competing-strategy
+    case: user-wants-strategy-design
+    input: "Develop three new competitive strategic options with trade-offs and a recommended direction, no presentation requested."
+    expected:
+      should_trigger: false
+      must:
+        - "route to Strategy OS option/design specialist"
+      must_not:
+        - "substitute a ghost deck for strategic choices"

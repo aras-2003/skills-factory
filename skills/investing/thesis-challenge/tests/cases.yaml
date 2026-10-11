@@ -17,3 +17,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["revised thesis state", "priced-in analysis"]
+
+  - id: audit-near-miss-thesis-challenge
+    case: second-competing-skill-negative
+    input: "I have no thesis for this issuer yet. Build an initial fundamental view from its filings and plausible assumptions."
+    expected:
+      should_trigger: false
+      must:
+        - security-underwriting establishes an initial thesis before challenge
+      must_not:
+        - pretend a prior bullish thesis exists to attack

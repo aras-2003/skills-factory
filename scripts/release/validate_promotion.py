@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -36,12 +37,12 @@ def validate_promotion(root: Path, *, require_ancestor: bool = True) -> list[str
     source_revision = lab.get("source_revision")
     lab_release_id = lab.get("release_id")
     lab_digest = lab.get("payload_content_sha256")
-    if not isinstance(source_revision, str) or len(source_revision) != 40:
+    if not isinstance(source_revision, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", source_revision):
         errors.append("Lab manifest must identify a full 40-character source_revision")
         source_revision = None
     if not isinstance(lab_release_id, str) or not lab_release_id:
         errors.append("Lab manifest is missing release_id")
-    if not isinstance(lab_digest, str) or len(lab_digest) != 64:
+    if not isinstance(lab_digest, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", lab_digest):
         errors.append("Lab manifest is missing a SHA-256 payload digest")
     for field in ("source_revision", "release_id", "payload_content_sha256", "version"):
         if lab_copy.get(field) != lab.get(field):

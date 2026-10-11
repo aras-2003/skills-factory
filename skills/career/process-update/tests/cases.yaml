@@ -23,3 +23,13 @@ cases:
       should_trigger: true
       must:
         - follow the skill boundary and output contract
+
+  - id: audit-near-miss-process-update
+    case: second-competing-skill-negative
+    input: "Analyze whether this Head of Technology role is worth pursuing based on the reporting line and team; don't update any tracker or status."
+    expected:
+      should_trigger: false
+      must:
+        - executive-role-evaluator makes the career decision before a process update
+      must_not:
+        - mutate an application tracker or invent a stage change

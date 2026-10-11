@@ -1,0 +1,27 @@
+name: Improvement / research
+description: Proposed capability, engineering task or research spike
+title: "[IMPROVEMENT] "
+body:
+  - type: input
+    id: legacy
+    attributes:
+      label: Historical ID / source
+      description: Existing ENG/E2E/AIS/RT ID and source link, if any
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and expected value
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed scope and non-goals
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria / decision gate
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks, dependencies and existing overlaps

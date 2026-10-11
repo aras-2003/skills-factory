@@ -28,3 +28,13 @@ cases:
       should_trigger: false
       must_not:
         - provide regulatory clearance as acquisition analysis
+
+  - id: audit-near-miss-acquisition-fit-review
+    case: second-competing-skill-negative
+    input: "This sleep supplement has attractive ad creatives. Before considering paid ads, check whether its Polish health claims and classification allow the advertised promises."
+    expected:
+      should_trigger: false
+      must:
+        - commerce-regulatory-risk-review owns product claims and classification risk
+      must_not:
+        - treat strong creative potential as legal permission to advertise

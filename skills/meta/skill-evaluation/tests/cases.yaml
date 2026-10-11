@@ -130,3 +130,13 @@ cases:
         - route to factual company research or another appropriate capability
       must_not:
         - treat topical overlap as sufficient trigger evidence
+
+  - id: eval-negative-unapproved-scope
+    case: specification-not-evaluation
+    input: "We have an idea for a new skill but no agreed trigger boundary, output contract or candidate files. Decide what its specification should be."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-specification before any behavioral evaluation
+      must_not:
+        - report candidate runtime PASS without a candidate or test runs

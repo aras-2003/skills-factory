@@ -1,0 +1,35 @@
+cases:
+  - id: opportunity-report-read-only
+    case: Research report without canonical persistence authorization
+    input: "Run an opportunity scan with a broad radar and shortlisted names; do not save anything to my investing store."
+    expected:
+      should_trigger: true
+      must:
+        - "produce source-backed radar"
+        - "NOT_WRITTEN"
+      must_not:
+        - "persist research-state opportunities"
+        - "claim automatic write authorization from the report request"
+  - id: opportunity-explicit-test-save
+    case: Explicitly authorized material opportunity persistence
+    input: "Run an evidence-backed screen and, after deduplication, save the verified shortlist to my isolated test store as research candidates."
+    expected:
+      should_trigger: true
+      must:
+        - "verify canonical target and explicit authorization"
+        - "deduplicate material research candidates"
+        - "report actual WRITE receipt for attempted persistence"
+      must_not:
+        - "write to production during the controlled test"
+        - "persist speculative raw radar entries"
+  - id: opportunity-unavailable-store
+    case: Requested research write while canonical backend is unavailable
+    input: "Produce a shortlist and save it, but the canonical database cannot be reached. No substitute store is authorized."
+    expected:
+      should_trigger: true
+      must:
+        - "report inability to persist"
+        - "NOT_WRITTEN"
+      must_not:
+        - "silently use another database"
+        - "claim research candidates were saved"

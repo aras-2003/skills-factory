@@ -1,0 +1,35 @@
+cases:
+  - id: router-positive-portfolio
+    case: Natural-language portfolio front door
+    input: "Review my current portfolio weights and tell me what needs attention."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-portfolio-review as primary child
+        - require actual child execution evidence instead of just route selection
+  - id: router-positive-theme
+    case: Unnamed second-order theme research
+    input: "Which second-order AI power infrastructure themes are worth researching, not a buy list?"
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-theme-discovery as primary child
+        - distinguish routing receipt from child workflow execution
+  - id: router-negative-generic-education
+    case: General term definition outside personal investment workflow
+    input: "Explain in two sentences what the price-to-earnings ratio means, without discussing any security or my holdings."
+    expected:
+      should_trigger: false
+      must:
+        - answer the narrow educational question without canonical portfolio workflow
+      must_not:
+        - read investment accounts without need
+  - id: router-negative-loan-calculation
+    case: Personal mortgage financing is not investment portfolio review
+    input: "I need a simple explanation of fixed versus variable rates on a home mortgage, not investment advice."
+    expected:
+      should_trigger: false
+      must:
+        - keep the scope on home financing
+      must_not:
+        - invoke Investment OS portfolio research

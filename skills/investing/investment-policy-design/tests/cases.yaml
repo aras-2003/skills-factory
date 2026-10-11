@@ -17,3 +17,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["portfolio buckets", "sizing rules"]
+
+  - id: audit-near-miss-investment-policy-design
+    case: second-competing-skill-negative
+    input: "My portfolio policy and risk limits are already recorded. Evaluate how large one proposed semiconductor position could reasonably be."
+    expected:
+      should_trigger: false
+      must:
+        - position-sizing-review handles a specific position within an existing policy
+      must_not:
+        - rewrite the entire portfolio policy unnecessarily

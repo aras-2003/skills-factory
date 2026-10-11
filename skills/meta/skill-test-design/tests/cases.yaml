@@ -97,3 +97,23 @@ cases:
         - prefer semantic assertions over exact wording
         - allow equivalent accurate language
         - preserve the actual evidence requirement
+
+  - id: testdesign-negative-eval-existing
+    case: existing-run-grading-not-case-design
+    input: "All skill test cases and frozen rubrics are already written, and I have their actual executor outputs. Grade candidate versus baseline; do not propose new cases."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-evaluation to assess observed outputs
+      must_not:
+        - invent new cases instead of grading the recorded runs
+
+  - id: testdesign-negative-release
+    case: release-approval-not-case-design
+    input: "Validation and every required model eval have completed for the exact candidate revision. Review whether this package is ready for the named production channel."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-release-review after checking version and evidence
+      must_not:
+        - treat release authorization as the same as designing tests

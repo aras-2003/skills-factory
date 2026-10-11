@@ -1637,3 +1637,10 @@ Najpierw zamykamy bieżące procesy/kampanie jakościowe z jawnie zapisanym wyni
 Każdy domenowy review wiąże dokładne source/runtime versions; sprawdza odpowiedzialność i sąsiednie routingi, zależności, testy/evidence, security/capabilities, prywatność i nieufne wejścia oraz zgodność kanałów. Wynikiem dla każdego komponentu jest jedna z decyzji: retain, adopt, adapt, update, defer albo no-change, wraz z uzasadnieniem, minimalnym zakresem, testami, zależnościami i kryteriami akceptacji. Sam review nie wdraża zmian, nie zmienia maturity ani nie autoryzuje publikacji; każda aktualizacja przechodzi istniejący lifecycle.
 
 Backlog: `ENG-19` ustala gate/protokół, `DOM-01`–`DOM-05` prowadzą domeny, `ENG-20` utwardza supply chain/CI/publikację, a `ENG-21` porządkuje minimalne governance publicznego repo. `ENG-15` i `ENG-17` zmieniono tak, by rozbudowywały istniejący skaner i katalog, zamiast tworzyć duplikaty.
+
+
+## Addendum — free-first test platform decision, 2026-10-09
+
+The current backlog already contains the core mechanics for eval isolation, local execution, browser E2E, failure injection and CI hardening, but it lacked one explicit target architecture for the test toolchain. **ENG-22 (P1)** closes that gap without creating a parallel eval framework.
+
+Target sequencing: keep `evals/`, receipts and campaign protocol canonical; integrate Promptfoo Community as a pinned regression harness over the existing runner; layer GitHub Actions by cost/coverage; emit vendor-neutral OpenTelemetry/OpenInference traces; inspect them locally in Phoenix OSS; add trajectory and forbidden-action assertions; and introduce persistent TEST storage only when a real persistence case requires it. No additional ChatGPT plugin or paid evaluation SaaS is part of the baseline.

@@ -25,3 +25,13 @@ cases:
       must:
         - preserve unknowns
         - avoid inventing missing organisational facts
+
+  - id: audit-near-miss-capability-gap-analysis
+    case: second-competing-skill-negative
+    input: "We already have a finished capability map. Check whether two L1 capabilities overlap in scope and have inconsistent naming."
+    expected:
+      should_trigger: false
+      must:
+        - capability-map-review checks map coherence before a gap analysis
+      must_not:
+        - infer missing capabilities or projects from naming alone

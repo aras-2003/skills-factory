@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-transformation-blueprint
+    case: second-competing-skill-negative
+    input: "We only need to determine whether current decision forums have clear rights for a single product-launch decision. Do not build a transformation roadmap."
+    expected:
+      should_trigger: false
+      must:
+        - decision-rights-review identifies decision owners before transformation design
+      must_not:
+        - construct a full change program for a narrow decision-rights question

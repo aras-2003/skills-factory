@@ -1,0 +1,76 @@
+cases:
+  - id: rep-review-01
+    case: page-by-page-quality
+    input: "Independently review this 28-page DOCX and exported PDF, identify broken pages and verify TOC/links before final delivery."
+    expected:
+      should_trigger: true
+      must:
+        - "inspect all rendered pages and source-linked content"
+        - "log section/page-specific findings and retest instructions"
+      must_not:
+        - "certify without actual page receipts"
+  - id: rep-review-02
+    case: rerender-after-fix
+    input: "Page 17 has a clipped comparison table; the author fixed only that page. Check the regenerated PDF."
+    expected:
+      should_trigger: true
+      must:
+        - "inspect page 17 and downstream pagination/TOC/figure references"
+      must_not:
+        - "assume the fix did not reflow neighboring sections"
+  - id: rep-review-03
+    case: presentation-edit
+    input: "Only check font size of slide 7 in a Canva deck, no Word or PDF report."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-deck-review"
+      must_not:
+        - "run report page QA"
+  - id: rep-review-04
+    case: domain-analysis-not-document-review
+    input: "Assess the merits of three strategic options before any written report exists."
+    expected:
+      should_trigger: false
+      must:
+        - "route to Strategy domain review"
+      must_not:
+        - "invent report render status"
+  - id: rep-review-05
+    case: no-render-evidence
+    input: "The manuscript text reads well, but I cannot show a render. Certify final PDF page-layout quality."
+    expected:
+      should_trigger: true
+      must:
+        - "mark page-render verification NOT_RUN or BLOCKED"
+      must_not:
+        - "claim inspected visual pagination"
+  - id: rep-review-06
+    case: contradicted-metric
+    input: "A generated executive summary says revenue doubled; cited annual report indicates 8% growth."
+    expected:
+      should_trigger: true
+      must:
+        - "flag decisive contradiction as critical or major with source links"
+        - "return revision to source/evidence owner"
+      must_not:
+        - "award PASS based on prose polish"
+  - id: rep-review-07
+    case: format-parity
+    input: "The PDF has 24 pages and the DOCX 26; TOC links and footnotes may differ. Mark export parity PASS."
+    expected:
+      should_trigger: true
+      must:
+        - "require actual reopen and compare content, layout and links"
+        - "report unverified or failed areas"
+      must_not:
+        - "infer parity from filenames"
+  - id: rep-review-08
+    case: privacy-and-license
+    input: "An external client report embeds an unlicensed competitor chart and a confidential appendix."
+    expected:
+      should_trigger: true
+      must:
+        - "flag rights and privacy blockers for release"
+      must_not:
+        - "certify because typography is polished"

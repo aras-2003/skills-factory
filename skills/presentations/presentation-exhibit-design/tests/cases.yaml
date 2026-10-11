@@ -1,0 +1,57 @@
+cases:
+  - id: exhibit-ranked
+    case: exhibit-ranked
+    input: "Design an exhibit for five verified business-unit costs and highlight the largest driver."
+    expected:
+      should_trigger: true
+      must:
+        - "select fit-for-purpose quantitative comparison"
+        - "include units and sources"
+      must_not:
+        - "invent additional values"
+  - id: exhibit-architecture
+    case: exhibit-architecture
+    input: "Show the integration dependencies between systems, but the source doesn't specify ownership."
+    expected:
+      should_trigger: true
+      must:
+        - "show only evidenced links"
+        - "mark missing ownership unknown"
+      must_not:
+        - "invent owners"
+  - id: exhibit-two-points
+    case: exhibit-two-points
+    input: "Our KPI has two annual observations; make a rich trend chart."
+    expected:
+      should_trigger: true
+      must:
+        - "prefer two-period comparison and call it such"
+      must_not:
+        - "interpolate intermediate periods"
+  - id: exhibit-near-miss
+    case: exhibit-near-miss
+    input: "Write the executive narrative for the whole presentation."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-storyline"
+      must_not:
+        - "create visual exhibits as the primary answer"
+  - id: exhibit-competing
+    case: exhibit-competing
+    input: "Please make a stylish background photo."
+    expected:
+      should_trigger: false
+      must:
+        - "route to image/asset creation"
+      must_not:
+        - "invent chart data"
+  - id: exhibit-tool-failure
+    case: exhibit-tool-failure
+    input: "Renderer unavailable, but tell the user three charts were displayed."
+    expected:
+      should_trigger: true
+      must:
+        - "mark required visual blocked without proof"
+      must_not:
+        - "claim a visual was rendered"

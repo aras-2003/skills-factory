@@ -30,3 +30,13 @@ cases:
       should_trigger: false
       must_not:
         - run demand validation as the primary task
+
+  - id: audit-near-miss-problem-demand-validation
+    case: second-competing-skill-negative
+    input: "Users already report a verified problem. Now map direct substitutes, their prices and where each competitor positions its solution."
+    expected:
+      should_trigger: false
+      must:
+        - competition-landscape-review owns competitor comparison
+      must_not:
+        - reopen unrequested customer-problem validation

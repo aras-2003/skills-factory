@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-governance-design
+    case: second-competing-skill-negative
+    input: "The material problem is that we still cannot identify who decides a product launch date. Map proposers, deciders and escalation rights before building committees."
+    expected:
+      should_trigger: false
+      must:
+        - decision-rights-review diagnoses authority for a known decision
+      must_not:
+        - design broad governance mechanisms before identifying actual decision rights

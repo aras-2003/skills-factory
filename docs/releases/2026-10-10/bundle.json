@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0",
+  "release": "2026-10-10",
+  "lab_version": "0.34.0",
+  "state": "candidate-awaiting-runtime-evidence",
+  "base_revision": "a33154555ba317d20ccad615a5fb7ae93ea86c27",
+  "production_promotion": "NOT_RUN",
+  "pull_requests": [
+    {
+      "number": 146,
+      "title": "feat: align remote MCP catalog with Lab package",
+      "head_sha": "8e5dd8e514b2de648f010d6becb80515bbe65c50",
+      "disposition": "superseded-historical-pin-not-imported",
+      "issues": [],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 159,
+      "title": "docs: establish GitHub governance and issue intake foundation",
+      "head_sha": "d358c4489dfabfa9badeae16407443c0ca55916a",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        160
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 255,
+      "title": "docs(governance): map all 89 backlog IDs and gate legacy backlog cleanup",
+      "head_sha": "ba7f3e1836aa72941f5e8e6e7be5d9264ffc011d",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        160
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 269,
+      "title": "Backlog: add P1 free-first test platform architecture",
+      "head_sha": "c55cdb2f33624a416a01a7f569512c870691aa22",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 270,
+      "title": "chore(P0): evidence-neutral roadmap audit and reconciliation baseline",
+      "head_sha": "20de9b0b78d35d2395213a0aca01ea4d8de910da",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        234
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 274,
+      "title": "fix(ENG-15): fail closed on unreadable scanner inputs",
+      "head_sha": "59cebfa80e7ed042874c4f8792b347474d5e3538",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        245
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 276,
+      "title": "fix(ENG-02): fail closed on malformed high-severity readiness evidence",
+      "head_sha": "e24b4fc9267cf617b98a6845475cf0f881a42104",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        235
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 277,
+      "title": "fix(ENG-04): guard evaluator-only headings from executor inputs",
+      "head_sha": "e88626dd0b2fd928ee4de6f0a992741f638783ff",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        237
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 278,
+      "title": "feat(ENG-08): one-command offline evaluation preflight with honest runtime state",
+      "head_sha": "677c8ce3288370ee2561b731be050073ba1f3477",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        240
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 279,
+      "title": "fix(ENG-20): strict hex validation for Lab promotion identity",
+      "head_sha": "3e4a52f46e03b67d1abf73daf33af90789dc7396",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        248
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 280,
+      "title": "feat(ENG-16): source-linked static capability inventory for 70 components",
+      "head_sha": "c0b484f2fcba1eca48767e1aeac5b7f452ebef20",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        246
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 281,
+      "title": "feat(ENG-06): deterministic DOCS/routing/behavior change gates and early test design",
+      "head_sha": "798a23464d3114a1ca49b6df5b53b08bb52bb630",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        239
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 282,
+      "title": "feat(ENG-10): no-skill near-miss routing cases and explicit lexical margin report",
+      "head_sha": "1d6576cb8ee711ff001883da3026392ae0adba4c",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        241
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 284,
+      "title": "draft: Presentation OS candidate skills + 7-stage deck workflow (PRES-01)",
+      "head_sha": "fd3a4aab939b87b0fe8560233bad52f22b6a50ef",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        283
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 285,
+      "title": "audit(skills): Lab-process review of all 54 skills and discriminating routing regressions",
+      "head_sha": "a2f09bb4d59988a114da466defb58c81c433c744",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        286
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 292,
+      "title": "fix(P0): authorize thesis-monitor canonical writes and handle unavailable reads",
+      "head_sha": "9ee03774c640c50a44d9ca37f2cd479100d03648",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        291
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 294,
+      "title": "audit(workflows): source-check all 16 packaged Skills Factory Lab entrypoints",
+      "head_sha": "e0f6fde37140931b993e15af0cfe7ef86097507c",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        290
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 295,
+      "title": "draft: Report OS long-form document workflow + cross-OS domain result contract (REP-01)",
+      "head_sha": "956ffd62df4c734e634ff626c6460a6fa3f49740",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        293
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 302,
+      "title": "OUT-02 deterministic output router + 27 isolated policy tests and backlog map",
+      "head_sha": "ff573dd4a8e145b39c0e91ba5f044720bd24dcd3",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        298
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    },
+    {
+      "number": 304,
+      "title": "fix(P0 AUD-07): explicit authorization boundary for investing research writes",
+      "head_sha": "23bca8d9cd6dd8ccad89a621ebee722570d9d12c",
+      "disposition": "integrated-on-candidate-branch",
+      "issues": [
+        303
+      ],
+      "scope": "PR increment only; no full-ticket acceptance claim"
+    }
+  ]
+}

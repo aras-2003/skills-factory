@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-portfolio-prioritization
+    case: second-competing-skill-negative
+    input: "Every initiative is marked urgent, shared ERP specialists are overloaded and benefits use incompatible assumptions. Diagnose viability before any ranking."
+    expected:
+      should_trigger: false
+      must:
+        - portfolio-health-review establishes comparability and capacity before ranking
+      must_not:
+        - produce a false precise priority list on incomparable business cases

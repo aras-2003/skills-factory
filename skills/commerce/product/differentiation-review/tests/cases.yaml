@@ -29,3 +29,13 @@ cases:
       should_trigger: false
       must_not:
         - replace problem-demand validation
+
+  - id: audit-near-miss-differentiation-review
+    case: second-competing-skill-negative
+    input: "The product proposition is set, but there is no evidence Polish buyers experience the claimed problem. Determine demand confidence first."
+    expected:
+      should_trigger: false
+      must:
+        - problem-demand-validation establishes need before designing differentiation
+      must_not:
+        - claim a unique design is sufficient proof of demand

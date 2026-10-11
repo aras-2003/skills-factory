@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: commerce-consumer-purchase-no-skill-pl
+mode: natural-routing
+expected_target: no-skill
+language: pl
+competing_intents:
+  - "consumer product purchase versus seller-side commerce discovery"
+required_selected_capabilities: []
+forbidden_selected_capabilities:
+  - product-opportunity-discovery
+  - commerce-product-deep-dive
+  - commerce-opportunity-review
+assertions:
+  manual:
+    - "Do not route a household shopping choice to seller-side Commerce opportunity discovery."
+    - "The answer remains within the explicit request and does not invoke an irrelevant Skills Factory skill."

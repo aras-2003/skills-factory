@@ -1,0 +1,35 @@
+cases:
+  - id: reset-strategy-traceability
+    case: Broken outcome-to-investment chain
+    input: "Our approved strategic outcomes are not connected to capabilities, funding and portfolio decisions. Diagnose how to reset execution."
+    expected:
+      should_trigger: true
+      must:
+        - trace outcomes through capabilities, portfolio and decision ownership
+        - diagnose comparability before using portfolio prioritization
+  - id: reset-ownership-and-evidence
+    case: Strategy translation lacks accountability
+    input: "We have a clear strategy but cannot explain which initiatives deliver each outcome or who owns the funding decisions. Design the smallest evidence-backed reset."
+    expected:
+      should_trigger: true
+      must:
+        - identify strategy traceability and funding authority gaps
+        - defer transformation blueprint until the target direction is supported
+  - id: reset-negative-prioritization
+    case: Comparable portfolio requires ranking only
+    input: "Five initiatives have comparable business cases and known resource constraints. Select their funding order; strategic outcomes and ownership are settled."
+    expected:
+      should_trigger: false
+      must:
+        - route the bounded decision to portfolio-prioritization
+      must_not:
+        - restart organization-wide strategy diagnosis
+  - id: reset-negative-decision-rights
+    case: Single decision authority issue
+    input: "For our product launch date, identify who proposes, decides, advises and escalates. We do not need a new strategy execution program."
+    expected:
+      should_trigger: false
+      must:
+        - prefer decision-rights-review
+      must_not:
+        - invent transformation workstreams

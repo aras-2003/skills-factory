@@ -14,4 +14,725 @@ dimensions:
   credentials: [none, named_classes, unassessed]
   external_actions: [none, approval_required, unassessed]
 availability_states: [supported, unavailable, requiring_approval, unknown]
-component_declarations: {}
+component_declarations:
+  acquisition-fit-review:
+    source: skills/commerce/growth/acquisition-fit-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  architecture-review:
+    source: skills/oaf/enterprise-architecture/architecture-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  capability-gap-analysis:
+    source: skills/oaf/enterprise-architecture/capability-gap-analysis/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  capability-map-review:
+    source: skills/oaf/enterprise-architecture/capability-map-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  commerce-opportunity-review:
+    source: workflows/commerce-opportunity-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  commerce-product-deep-dive:
+    source: workflows/commerce-product-deep-dive/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  commerce-regulatory-risk-review:
+    source: skills/commerce/risk/commerce-regulatory-risk-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: read
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  company-context-research:
+    source: skills/career/company-context-research/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: read
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  competition-landscape-review:
+    source: skills/commerce/market/competition-landscape-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  cv-gap-analysis:
+    source: skills/career/cv-gap-analysis/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  cv-tailoring:
+    source: skills/career/cv-tailoring/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  decision-bottleneck-analysis:
+    source: skills/oaf/decision-governance/decision-bottleneck-analysis/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  decision-journal-update:
+    source: skills/investing/decision-journal-update/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: approval_required
+  decision-rights-review:
+    source: skills/oaf/decision-governance/decision-rights-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  differentiation-review:
+    source: skills/commerce/product/differentiation-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  evidence-loop-review:
+    source: skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  executive-role-evaluator:
+    source: skills/career/executive-role-evaluator/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  global-local-model-review:
+    source: skills/oaf/operating-model/global-local-model-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  governance-design:
+    source: skills/oaf/decision-governance/governance-design/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  interview-brief:
+    source: skills/career/interview-brief/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-attention-review:
+    source: workflows/investment-attention-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-attention-triage:
+    source: skills/investing/investment-attention-triage/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-opportunity-hunter:
+    source: workflows/investment-opportunity-hunter/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: named_classes
+      external_actions: approval_required
+  investment-os-review:
+    source: workflows/investment-os-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-policy-design:
+    source: skills/investing/investment-policy-design/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-portfolio-observation:
+    source: workflows/investment-portfolio-observation/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-portfolio-review:
+    source: workflows/investment-portfolio-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-record-store:
+    source: skills/investing/investment-record-store/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: named_classes
+      external_actions: approval_required
+  investment-security-review:
+    source: workflows/investment-security-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investment-theme-discovery:
+    source: workflows/investment-theme-discovery/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  investor-pattern-research:
+    source: skills/investing/investor-pattern-research/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  job-discovery:
+    source: skills/career/job-discovery/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: read
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  job-validity-check:
+    source: skills/career/job-validity-check/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  kpi-quality-review:
+    source: skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  market-opportunity-scan:
+    source: skills/investing/market-opportunity-scan/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: read
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: named_classes
+      external_actions: unassessed
+  market-transferability-review:
+    source: skills/commerce/opportunity/market-transferability-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-enterprise-architecture-review:
+    source: workflows/oaf-enterprise-architecture-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-enterprise-change-review:
+    source: workflows/oaf-enterprise-change-review/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-governance-redesign:
+    source: workflows/oaf-governance-redesign/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-health-check:
+    source: workflows/oaf-health-check/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-operating-model-redesign:
+    source: workflows/oaf-operating-model-redesign/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-strategy-execution-reset:
+    source: workflows/oaf-strategy-execution-reset/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  oaf-transformation-design:
+    source: workflows/oaf-transformation-design/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  operating-model-review:
+    source: skills/oaf/operating-model/operating-model-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  organizational-interface-review:
+    source: skills/oaf/operating-model/organizational-interface-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  portfolio-health-review:
+    source: skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  portfolio-prioritization:
+    source: skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  portfolio-state-review:
+    source: skills/investing/portfolio-state-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  position-sizing-review:
+    source: skills/investing/position-sizing-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  problem-demand-validation:
+    source: skills/commerce/demand/problem-demand-validation/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  process-update:
+    source: skills/career/process-update/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  product-opportunity-discovery:
+    source: skills/commerce/opportunity/product-opportunity-discovery/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  report-composer:
+    source: skills/meta/report-composer/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  security-underwriting:
+    source: skills/investing/security-underwriting/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skill-authoring:
+    source: skills/meta/skill-authoring/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skill-evaluation:
+    source: skills/meta/skill-evaluation/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skill-release-review:
+    source: skills/meta/skill-release-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skill-specification:
+    source: skills/meta/skill-specification/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skill-test-design:
+    source: skills/meta/skill-test-design/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skill-validation:
+    source: skills/meta/skill-validation/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  skills-factory-diagnostic:
+    source: skills/meta/skills-factory-diagnostic/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  strategy-to-execution-diagnostic:
+    source: skills/oaf/direction-strategy/strategy-to-execution-diagnostic/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  supplier-viability-review:
+    source: skills/commerce/operations/supplier-viability-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  thesis-challenge:
+    source: skills/investing/thesis-challenge/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  thesis-monitor:
+    source: skills/investing/thesis-monitor/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  transformation-blueprint:
+    source: skills/oaf/portfolio-execution/transformation-blueprint/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  trend-theme-research:
+    source: skills/investing/trend-theme-research/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  unit-economics-review:
+    source: skills/commerce/economics/unit-economics-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  valuation-scenario-review:
+    source: skills/investing/valuation-scenario-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  visual-output-design:
+    source: skills/meta/visual-output-design/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+
+  presentation-brief:
+    source: skills/presentations/presentation-brief/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-deck-review:
+    source: skills/presentations/presentation-deck-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-evidence-review:
+    source: skills/presentations/presentation-evidence-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-exhibit-design:
+    source: skills/presentations/presentation-exhibit-design/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-export-verification:
+    source: skills/presentations/presentation-export-verification/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-slide-authoring:
+    source: skills/presentations/presentation-slide-authoring/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-storyline:
+    source: skills/presentations/presentation-storyline/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  report-document-architecture:
+    source: skills/reports/report-document-architecture/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  report-document-authoring:
+    source: skills/reports/report-document-authoring/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  report-document-review:
+    source: skills/reports/report-document-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed

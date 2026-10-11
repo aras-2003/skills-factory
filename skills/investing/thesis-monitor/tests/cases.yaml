@@ -25,3 +25,49 @@ cases:
     expected:
       should_trigger: false
       must_not: ["prior thesis", "kill criteria"]
+
+  - id: audit-near-miss-thesis-monitor
+    case: second-competing-skill-negative
+    input: "I have never owned or researched this company; build its initial investment thesis instead of comparing news to a nonexistent baseline."
+    expected:
+      should_trigger: false
+      must:
+        - security-underwriting is for initial issuer research
+      must_not:
+        - claim an unrecorded thesis has changed
+
+  - id: monitor-read-store-unavailable
+    case: Canonical thesis read unavailable is not missing thesis
+    input: "Our canonical thesis database is unreachable. Based only on a provider summary, decide whether my active thesis became stronger."
+    expected:
+      should_trigger: true
+      must:
+        - return BLOCKED_CANONICAL_READ
+        - distinguish unavailable canonical data from absence of an active thesis
+        - record that actual thesis monitoring did not run
+      must_not:
+        - claim thesis health or STRENGTHENS from an unverified baseline
+        - invent a saved monitoring event
+
+  - id: monitor-analysis-without-write-authorization
+    case: Monitoring request explicitly excludes external writes
+    input: "Compare the new MU results to my ACTIVE thesis and explain what changed. This is read-only analysis; do not save records or update the journal."
+    expected:
+      should_trigger: true
+      must:
+        - analyze differences only if the ACTIVE canonical thesis is available
+        - return NOT_WRITTEN for persistence
+      must_not:
+        - write to the canonical store or fabricate a persistence receipt
+
+  - id: monitor-authorized-append-only
+    case: Explicit authorized monitoring write requires verified receipt
+    input: "Review earnings against my ACTIVE thesis and, if the canonical store is available, save one new monitoring event. Do not change historical thesis versions."
+    expected:
+      should_trigger: true
+      must:
+        - require explicit authorization or a verified standing policy for the write
+        - append rather than overwrite existing thesis history
+        - return SAVED only with a verified persistence receipt or WRITE_FAILED on failure
+      must_not:
+        - claim saved status solely from intent or an unobserved tool call

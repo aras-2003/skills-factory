@@ -101,3 +101,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["persist", "APPEND", "SNAPSHOT"]
+
+  - id: audit-near-miss-investment-record-store
+    case: second-competing-skill-negative
+    input: "Discuss whether current earnings news materially changes my view of one stock. Do not persist notes or retrieve canonical database rows."
+    expected:
+      should_trigger: false
+      must:
+        - investment-attention-triage interprets new issuer evidence; no standalone persistence was authorized
+      must_not:
+        - write a signal or assume a database side effect was approved

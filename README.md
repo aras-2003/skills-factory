@@ -32,7 +32,7 @@ The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) preser
 
 The source tree is not the runtime allow-list.
 
-Current implemented source skills: **54**, across five implemented domains: `career`, `commerce`, `investing`, `meta` and `oaf`. The source tree contains 17 workflow definitions. Other domain README files describe design/backlog intent unless stated otherwise.
+Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS source-only components; 19 workflow definitions, of which three (skill-development, presentation-production and report-production) are not runtime-registered. The existing implemented domains are `career`, `commerce`, `investing`, `meta` and `oaf`. Presentation/Report OS remains draft source. Lab availability is determined by its generated manifest. Other domain README files describe design/backlog intent unless stated otherwise.
 
 ## Branches, maturity and installed capability
 

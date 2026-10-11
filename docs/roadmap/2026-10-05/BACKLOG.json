@@ -2187,6 +2187,35 @@
       "status": "PROPOSED",
       "owner": "UNASSIGNED",
       "legacy_links": []
+    },
+    {
+      "id": "ENG-22",
+      "priority": "P1",
+      "epic": "Skill Engineering",
+      "type": "test-platform/observability",
+      "title": "Wdrożyć darmową, warstwową architekturę testów i observability",
+      "rationale": "Backlog obejmuje runner, browser E2E, failure injection i CI hardening, ale nie ma jednej decyzji spinającej docelowy free-first stack testowy. Bez wspólnego harnessu i standardowego trace evidence kolejne skille zwiększają koszt ręcznych kampanii, a PASS może nadal zależeć od niepełnego dowodu UI lub deklaracji wykonawcy.",
+      "scope": "Ujednolicić istniejący eval protocol bez budowania drugiego frameworka: zachować evals/ i repozytoryjne fixtures jako source of truth; wykorzystać Promptfoo Community jako opcjonalny/pinowany regression harness nad istniejącym runnerem; uruchamiać warstwowe testy w GitHub Actions; instrumentować runtime vendor-neutral przez OpenTelemetry + OpenInference; używać lokalnego Arize Phoenix OSS do trace/debug/experiments. Nie wymagać nowego pluginu ChatGPT ani płatnego SaaS. Persistence testować najpierw na fixtures/mocks i ephemeral Postgres; osobny Supabase TEST dopiero gdy potrzebne są trwałość między sesjami lub realizm zdalnego store.",
+      "acceptance_criteria": [
+        "evals/ pozostaje kanonicznym miejscem przypadków, rubric isolation i wersjonowanych fixtures; Promptfoo nie tworzy drugiego niezależnego stanu testów ani nie zastępuje istniejącego receipt/campaign protocol",
+        "Promptfoo Community jest przypięty do wersji i potrafi uruchomić reprezentatywny zestaw routing/behavior/negative cases przeciw TEST/local runtime bez obowiązkowego konta cloud",
+        "GitHub Actions rozdziela co najmniej: deterministic checks na każdy PR, mały smoke/regression suite na PR, pełną regresję na main/manual oraz kosztowniejszy red-team/failure suite manualnie lub okresowo; konfiguracja respektuje darmowe limity i nie odpala pełnej kampanii bez potrzeby",
+        "Runtime emituje vendor-neutral trace przez OpenTelemetry/OpenInference z run_id, environment, capability/skill identity, source_revision, tool calls, external reads/writes lub ich jawny brak, latency i status; trace nie zawiera sekretów ani ukrytego chain-of-thought",
+        "Lokalny Phoenix OSS potrafi odebrać trace i pokazać trajectory dla reprezentatywnego run bez obowiązkowego SaaS; backend observability pozostaje wymienny dzięki OTEL",
+        "Asercje obejmują trajectory i forbidden actions, w szczególności wykrycie PROD access/write, brak wymaganej provenance i niezgodność expected tool path; deterministyczne asercje mają pierwszeństwo przed LLM-as-judge",
+        "Test fixtures są syntetyczne, wersjonowane i resetowalne; test persistence używa najpierw ephemeral/local store, a stały Supabase TEST jest dodawany tylko po udokumentowanej potrzebie",
+        "Dokumentacja wskazuje cel kosztowy 0 PLN opłat platformowych na obecnym etapie poza rzeczywistym inference/CI ponad darmowe limity oraz wyjaśnia, że Promptfoo/Phoenix/OTEL nie wymagają pluginów ChatGPT",
+        "ENG-08, ENG-09, ENG-11, ENG-12, ENG-20 oraz E2E-01..05 mają mapę odpowiedzialności względem ENG-22, tak aby nie dublować runnera, receipts, browser E2E ani release evidence"
+      ],
+      "depends_on": [
+        "ENG-08",
+        "ENG-20",
+        "E2E-01"
+      ],
+      "effort": "L",
+      "status": "PROPOSED",
+      "owner": "UNASSIGNED",
+      "legacy_links": []
     }
   ],
   "change_log": [
@@ -2305,6 +2334,17 @@
       ],
       "evidence": [
         "https://chatgpt.com/c/6ac64f00-c5c0-83eb-b9d9-0f3689f97393"
+      ]
+    },
+    {
+      "date_local": "2026-10-09",
+      "decision": "Adopt a free-first test-platform architecture before broad net-new skill expansion: keep repository evals/ and fixtures canonical; add Promptfoo Community for regression orchestration, layered GitHub Actions, OpenTelemetry/OpenInference traces and local Phoenix OSS; defer persistent Supabase TEST until persistence realism is actually required.",
+      "ids": [
+        "ENG-22"
+      ],
+      "evidence": [
+        "Current backlog already covers ENG-08 local runner integration, ENG-20 CI hardening and E2E-01..05 runtime/browser controls",
+        "Architecture review in project conversation on 2026-10-09 selected Promptfoo Community + OTEL/OpenInference + local Phoenix OSS as the lowest-cost target stack"
       ]
     }
   ]

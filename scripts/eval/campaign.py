@@ -22,7 +22,7 @@ import validate_routing
 import build_plugin
 import artifact_validation
 
-CONFIG_REL = Path("evals/campaigns/runtime-validation-2026-10-r18/campaign.yaml")
+CONFIG_REL = Path("evals/campaigns/runtime-validation-2026-10-r19/campaign.yaml")
 CONFIG = ROOT / CONFIG_REL
 SEPARATE_META_CAMPAIGN_REL = Path("evals/campaigns/skill-release-review-2026-10/release-review-campaign.yaml")
 SKILL_ENGINEERING_CAMPAIGN_REL = Path("evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml")
@@ -163,14 +163,14 @@ def validate_campaign() -> list[str]:
         errors.append(f"expected 42 Lab core cases, got {len(cases)}")
 
     if cfg.get("execution_channel") != "lab":
-        errors.append("R18 execution_channel must be lab")
+        errors.append("Active campaign execution_channel must be lab")
     excluded = {str(item.get("id")) for item in cfg.get("excluded_production_only_cases") or [] if isinstance(item, dict)}
     active_production_fallbacks = {cid for cid, case in cases.items() if case.get("suite") == "production-fallback"}
     if active_production_fallbacks:
         errors.append("Production-only fallback cases cannot run in the Lab campaign: " + ", ".join(sorted(active_production_fallbacks)))
     expected_excluded = {"fallback-strategy-production-002", "fallback-interface-explicit-production-002"}
     if excluded != expected_excluded:
-        errors.append("R18 must preserve both Production-only fallback IDs in excluded_production_only_cases")
+        errors.append("Active campaign must preserve both Production-only fallback IDs in excluded_production_only_cases")
 
     for cid, case in cases.items():
         suite = str(case.get("suite") or "")

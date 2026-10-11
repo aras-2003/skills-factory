@@ -7,7 +7,7 @@
       },
       "lab": {
         "name": "skills-factory-lab",
-        "version": "0.33.7"
+        "version": "0.34.0"
       }
     },
     "source_revision": "89db15ef94cf",
@@ -15,7 +15,7 @@
     "capability_assessment": "UNASSESSED",
     "runtime_installation": "NOT_OBSERVED",
     "availability_semantics": "Source maturity and declared channels do not prove package inclusion or installed runtime availability.",
-    "source_workflow_count": 17,
+    "source_workflow_count": 19,
     "registered_workflow_count": 16
   },
   "skills": [
@@ -203,7 +203,7 @@
       "name": "investment-attention-triage",
       "domain": "investing",
       "maturity": "production",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Triage new market, company, industry and portfolio information into a short attention queue based on materiality, thesis impact, valuation/expectations and decision relevance. Use structured research plugins for breadth, Firecrawl/primary sources for verification, and canonical Investment OS history for change detection.",
       "source": "skills/investing/investment-attention-triage/SKILL.md",
       "source_status": "present",
@@ -293,7 +293,7 @@
       "name": "thesis-monitor",
       "domain": "investing",
       "maturity": "production",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "description": "Monitor an existing investment thesis against new earnings, guidance, industry data, price/valuation changes and predefined kill criteria. Use canonical thesis history plus structured research/primary evidence; do not restart full underwriting unless the thesis materially changes or evidence becomes stale.",
       "source": "skills/investing/thesis-monitor/SKILL.md",
       "source_status": "present",
@@ -558,6 +558,106 @@
       "source": "skills/oaf/portfolio-execution/transformation-blueprint/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-brief",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Establish the audience, communication objective, intended decision or behavior and constraints before producing a slide deck. Use when someone asks to prepare a presentation from a topic, idea, notes, brief or source documents; do not use for a narrow request to edit a known slide.",
+      "source": "skills/presentations/presentation-brief/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-deck-review",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Critique a real or draft presentation for strategy, audience fit, evidence integrity, narrative and visual craft; rank specific defects and guide targeted revision. Use before final delivery or after deck changes; do not confuse an opinion score with verified rendered output.",
+      "source": "skills/presentations/presentation-deck-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-evidence-review",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Check source-to-slide fidelity, citations, claim sufficiency, conflicting evidence and chart inputs in presentations. Use when slide assertions/exhibits need source mapping; delegate substantive new strategy research and analysis to their domain/shared owners.",
+      "source": "skills/presentations/presentation-evidence-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-exhibit-design",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Choose data-faithful charts, diagrams and presentation exhibits for an approved slide claim and audience, delegating actual rendering to existing visual-output-design and deterministic tools. Use after storyline/evidence planning; do not use for decorative image prompts alone.",
+      "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-export-verification",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Verify a presentation's actual rendered slides, delivery format, PowerPoint/PDF round-trip behavior, editability, fonts and animation limitations. Use when a deck exists and the user needs final deliverable QA; do not treat a planned export or tool invocation as successful delivery.",
+      "source": "skills/presentations/presentation-export-verification/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-slide-authoring",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Create or revise an editable presentation in a supported Figma Slides or Canva runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
+      "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-storyline",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Design and stress-test a slide deck's audience-specific argument, narrative order and action-title ghost deck before visual authoring. Use when a presentation brief or draft deck needs story structure, executive flow, persuasive narrative that communicates supplied or domain-supported conclusions; do not design business strategy or just a chart.",
+      "source": "skills/presentations/presentation-storyline/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-document-architecture",
+      "domain": "reports",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Plan the section hierarchy and evidence-backed reading flow for a substantial written report or technical document before DOCX/PDF production. Use when a long-form analytical document needs a coherent chapter outline, section arguments, exhibits, appendix and citation plan; do not design slide storylines or redo domain research.",
+      "source": "skills/reports/report-document-architecture/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-document-authoring",
+      "domain": "reports",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Turn an approved long-form report model into a real editable and professionally typeset DOCX, Google Doc or paginated PDF using available document tools. Use when an external report document with headings, citations, figures and page layout is explicitly requested; do not claim exported files from chat prose or create presentation slides.",
+      "source": "skills/reports/report-document-authoring/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-document-review",
+      "domain": "reports",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Critique and verify actual long-form DOCX/PDF report artifacts page by page for content fidelity, citations, style, pagination, tables, links, editability and export parity. Use for quality review or regression checks of generated written documents; do not replace Strategy/OAF analysis reviews or certify a report without rendered pages.",
+      "source": "skills/reports/report-document-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
     }
   ],
   "workflows": [
@@ -627,7 +727,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "Child workflow for Investment OS attention triage. Use when selected by investment-os-review, explicitly requested, or when the user clearly asks whether new company/industry/market information changes existing holdings or theses. Do not use as the default entry point for broad natural investment requests.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
@@ -657,7 +757,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "description": "Child workflow for Investment OS opportunity discovery. Use when selected by investment-os-review, explicitly requested, or when the user clearly asks to scan for new securities or research candidates. Do not use as the default entry point for broad natural investment requests.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
@@ -711,7 +811,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "Lightweight portfolio observation child workflow for natural requests asking what changed, what is happening with holdings, exposure drift or what deserves attention now. It compares canonical state over time, separates observed change from causal attribution, suppresses unchanged noise and does not optimise toward a fixed target allocation.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
@@ -999,6 +1099,32 @@
         "report-composer",
         "visual-output-design"
       ],
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-production",
+      "source": "workflows/presentation-production/WORKFLOW.md",
+      "source_status": "present",
+      "runtime_registration": "not_registered",
+      "maturity": "unknown",
+      "version": "unknown",
+      "description": "Produce an audience-specific, evidence-backed, professionally designed **presentation artifact** in Figma Slides or Canva, when explicitly requested. This workflow owns orchestration and stage gates, not all specialist reasoning/rendering.",
+      "declared_channels": {},
+      "required_dependencies": [],
+      "optional_dependencies": [],
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-production",
+      "source": "workflows/report-production/WORKFLOW.md",
+      "source_status": "present",
+      "runtime_registration": "not_registered",
+      "maturity": "unknown",
+      "version": "unknown",
+      "description": "Produce an **audience-specific, source-faithful, professionally authored long-form document** when the user explicitly requests a report file or an external editable/paginated document. This workflow owns orchestration; it delegates subject analysis, report semantics, exhibits and actual file actions.",
+      "declared_channels": {},
+      "required_dependencies": [],
+      "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
     {

@@ -75,3 +75,12 @@ cases:
   - id: investment-policy-natural-pl
     input: evals/routing/investment-policy-natural-pl.input.md
     rubric: evals/routing/investment-policy-natural-pl.rubric.yaml
+  - id: commerce-consumer-purchase-no-skill-pl
+    input: evals/routing/commerce-consumer-purchase-no-skill-pl.input.md
+    rubric: evals/routing/commerce-consumer-purchase-no-skill-pl.rubric.yaml
+  - id: copyedit-no-skill-en
+    input: evals/routing/copyedit-no-skill-en.input.md
+    rubric: evals/routing/copyedit-no-skill-en.rubric.yaml
+  - id: software-adr-no-skill-en
+    input: evals/routing/software-adr-no-skill-en.input.md
+    rubric: evals/routing/software-adr-no-skill-en.rubric.yaml

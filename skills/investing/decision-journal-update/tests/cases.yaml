@@ -17,3 +17,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["decision record", "append"]
+
+  - id: audit-near-miss-decision-journal-update
+    case: second-competing-skill-negative
+    input: "Analyze whether my newly discovered stock has an attractive business and valuation; I have made no investment decision and don't want to create a journal entry."
+    expected:
+      should_trigger: false
+      must:
+        - security-underwriting evaluates an instrument before a recorded decision
+      must_not:
+        - write a fictitious buy/hold decision into the journal

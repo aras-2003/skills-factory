@@ -29,6 +29,31 @@ class RoutingCollisionReportTests(unittest.TestCase):
         self.assertTrue(all(case["runtime_semantic_evidence_required"] for case in report["cases"]))
         self.assertTrue(all(case["semantic_review_signal"] in {"REVIEW", "NO_STATIC_COLLISION_SIGNAL", "INSUFFICIENT_LEXICAL_SIGNAL"} for case in report["cases"]))
 
+    def test_no_skill_near_misses_cover_pl_en_without_runtime_claims(self) -> None:
+        report = build_report(ROOT)
+        negative = {case["id"]: case for case in report["cases"] if case["route_kind"] == "no_skill_negative"}
+        self.assertEqual(3, report["no_skill_negative_case_count"])
+        self.assertEqual(24, report["positive_case_count"])
+        self.assertEqual({"pl", "en"}, set(report["languages"]))
+        for case_id in (
+            "commerce-consumer-purchase-no-skill-pl",
+            "copyedit-no-skill-en",
+            "software-adr-no-skill-en",
+        ):
+            with self.subTest(case=case_id):
+                case = negative[case_id]
+                self.assertEqual("no-skill", case["expected_target"])
+                self.assertIsNone(case["lexical_target_rank"])
+                self.assertIsNone(case["lexical_margin_to_competitor"])
+                self.assertIsNone(case["runtime_outcome"])
+                self.assertTrue(case["runtime_semantic_evidence_required"])
+                self.assertIn(case["semantic_review_signal"], {"REVIEW", "INSUFFICIENT_LEXICAL_SIGNAL"})
+
+    def test_routing_registry_remains_isolated_and_well_formed(self) -> None:
+        from validate_routing import validate
+        self.assertEqual([], validate(ROOT))
+
+
 
 if __name__ == "__main__":
     unittest.main()

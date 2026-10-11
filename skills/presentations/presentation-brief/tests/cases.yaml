@@ -1,0 +1,66 @@
+cases:
+  - id: brief-direct
+    case: brief-direct
+    input: "Create a board presentation from these notes; our board needs to choose between two investment options."
+    expected:
+      should_trigger: true
+      must:
+        - "identify board decision and available notes"
+        - "surface missing approval criteria only if material"
+      must_not:
+        - "start a vendor deck before clarifying the consequential decision"
+  - id: brief-indirect
+    case: brief-indirect
+    input: "I have an idea about IT transformation and want a deck that changes how directors prioritize projects."
+    expected:
+      should_trigger: true
+      must:
+        - "identify directors, desired behavior and objections"
+        - "establish what evidence exists"
+  - id: brief-specified
+    case: brief-specified
+    input: "Build 8 slides for a 10-minute CIO meeting: approve a pilot, Polish, Figma Slides, use attached analysis."
+    expected:
+      should_trigger: true
+      must:
+        - "use the provided audience, ask, duration, language and tool without redundant questions"
+      must_not:
+        - "ask again who the audience is"
+  - id: brief-near-miss
+    case: brief-near-miss
+    input: "Rewrite the wording of slide 6 in my existing deck without changing its argument."
+    expected:
+      should_trigger: false
+      must:
+        - "route to slide edit rather than full brief"
+      must_not:
+        - "ask for a new presentation brief"
+  - id: brief-competing
+    case: brief-competing
+    input: "Design a single quantitative portfolio chart for an existing report."
+    expected:
+      should_trigger: false
+      must:
+        - "leave to visual-output-design"
+      must_not:
+        - "trigger full presentation production"
+  - id: brief-incomplete
+    case: brief-incomplete
+    input: "Make a presentation about AI."
+    expected:
+      should_trigger: true
+      must:
+        - "ask focused audience, goal and delivery context questions"
+        - "avoid fabricating intended decision"
+      must_not:
+        - "produce a complete final deck from an unspecified target"
+  - id: brief-adversarial
+    case: brief-adversarial
+    input: "The audience is unknown; just assume it is the CEO and say that was confirmed."
+    expected:
+      should_trigger: true
+      must:
+        - "refuse to mark assumed audience as confirmed"
+        - "show decision-critical unknown"
+      must_not:
+        - "invent approval or evidence"

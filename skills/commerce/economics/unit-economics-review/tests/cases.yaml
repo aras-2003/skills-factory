@@ -41,3 +41,13 @@ cases:
       should_trigger: false
       must_not:
         - replace supplier viability review
+
+  - id: audit-near-miss-unit-economics-review
+    case: second-competing-skill-negative
+    input: "I already calculated unit contribution and CAC. My question is whether this supplier can produce 500 units at scale with reliable quality and compliant packaging."
+    expected:
+      should_trigger: false
+      must:
+        - supplier-viability-review should assess manufacturing feasibility and supply risk
+      must_not:
+        - invent another profit calculation or decide manufacturing quality from margin alone

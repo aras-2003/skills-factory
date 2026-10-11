@@ -30,3 +30,13 @@ cases:
       should_trigger: false
       must_not:
         - run supplier viability as the primary analysis
+
+  - id: audit-near-miss-supplier-viability-review
+    case: second-competing-skill-negative
+    input: "The quote and supplier have been verified. Calculate the break-even acquisition cost of a two-pack using the specified VAT, shipping and payment fees."
+    expected:
+      should_trigger: false
+      must:
+        - unit-economics-review handles the financial contribution model
+      must_not:
+        - replace cost calculations with supplier reliability speculation

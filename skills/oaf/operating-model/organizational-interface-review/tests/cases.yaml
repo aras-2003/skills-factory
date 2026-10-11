@@ -25,3 +25,13 @@ cases:
       must:
         - preserve unknowns
         - avoid inventing missing organisational facts
+
+  - id: audit-near-miss-organizational-interface-review
+    case: second-competing-skill-negative
+    input: "A specific customer-contract exception has a known owner but waits several days for approvals, vetoes and rework. Trace the actual decision path."
+    expected:
+      should_trigger: false
+      must:
+        - decision-bottleneck-analysis diagnoses one identified slow decision path
+      must_not:
+        - reframe an identified approval path as generic cross-unit interface ambiguity

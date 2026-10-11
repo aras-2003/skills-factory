@@ -23,3 +23,13 @@ cases:
       should_trigger: true
       must:
         - follow the skill boundary and output contract
+
+  - id: audit-near-miss-cv-gap-analysis
+    case: second-competing-skill-negative
+    input: "Build a finished two-page CV tailored to an already-approved job description. I have completed the gap analysis; rewrite the executive summary and achievements now."
+    expected:
+      should_trigger: false
+      must:
+        - cv-tailoring owns the authorized rewrite; previous gap analysis should not be rerun
+      must_not:
+        - rewrite the user's CV as part of gap analysis

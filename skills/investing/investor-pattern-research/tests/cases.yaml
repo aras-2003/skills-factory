@@ -17,3 +17,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["copy holdings", "buy the same stocks"]
+
+  - id: audit-near-miss-investor-pattern-research
+    case: second-competing-skill-negative
+    input: "I know the investor's principles already; now underwrite one specific listed company using current filings and valuation scenarios."
+    expected:
+      should_trigger: false
+      must:
+        - security-underwriting applies analysis to a named issuer
+      must_not:
+        - substitute a biography of investors for the requested stock research

@@ -134,3 +134,23 @@ cases:
         - reject inheritance of the unrelated exception
         - withhold new production approval until required evidence is current
         - preserve the missing runtime evidence as pending or NOT_RUN
+
+  - id: release-negative-source-authoring
+    case: author-from-approved-spec
+    input: "We agreed the scope of a new skill. Please create its initial SKILL.md and references; there is no versioned candidate or runtime evidence yet."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-authoring or specification as needed
+      must_not:
+        - issue production-ready approval before a candidate exists
+
+  - id: release-negative-test-design
+    case: create-missing-near-miss-cases
+    input: "Our candidate routing suite lacks negative cases. Propose realistic near-miss and competing-skill prompts before running a new evaluation."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-test-design for missing coverage
+      must_not:
+        - recommend production promotion without executable cases

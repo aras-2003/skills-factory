@@ -293,7 +293,7 @@ def capability_assessment(root: Path, component: str) -> dict:
     for name, value in requirements.items():
         if value not in dimensions.get(name, []):
             raise ValueError(f"{component}: invalid {name} capability {value!r}")
-    return {"status": "DECLARED", "requirements": dict(requirements)}
+    return {"status": "UNASSESSED" if "unassessed" in requirements.values() else "DECLARED", "requirements": dict(requirements)}
 
 
 def capability_contract_metadata() -> dict:

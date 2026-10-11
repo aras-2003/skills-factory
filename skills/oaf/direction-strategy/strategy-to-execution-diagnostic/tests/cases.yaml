@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-strategy-to-execution-diagnostic
+    case: second-competing-skill-negative
+    input: "The enterprise objectives are clear, but the only request is to assess whether an existing initiative portfolio has overloaded shared resources and unrealistic milestones."
+    expected:
+      should_trigger: false
+      must:
+        - portfolio-health-review diagnoses portfolio execution issues
+      must_not:
+        - relaunch full strategic operating-model diagnostics

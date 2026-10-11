@@ -37,3 +37,13 @@ cases:
         - preserve the supported team size of 12 and distinguish it from portfolio scope
         - mark missing scale claims as omitted or awaiting confirmation
         - include a concise source check and change log
+
+  - id: audit-near-miss-cv-tailoring
+    case: second-competing-skill-negative
+    input: "Before editing any CV content, compare my approved career history to this CTO description and identify missing proof and weak claims."
+    expected:
+      should_trigger: false
+      must:
+        - cv-gap-analysis first establishes evidence gaps before tailoring
+      must_not:
+        - rewrite an unapproved CV or fill gaps with invented achievements

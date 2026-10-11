@@ -28,3 +28,13 @@ cases:
       should_trigger: false
       must_not:
         - replace unit economics analysis
+
+  - id: audit-near-miss-commerce-regulatory-risk-review
+    case: second-competing-skill-negative
+    input: "This ordinary nonregulated brush has a fixed approved offer. Compute order contribution margin including CAC and fulfilment, not a compliance opinion."
+    expected:
+      should_trigger: false
+      must:
+        - unit-economics-review computes order margin
+      must_not:
+        - replace arithmetic with unnecessary regulatory clearance

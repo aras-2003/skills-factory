@@ -1,0 +1,454 @@
+{
+  "schema_version": 1,
+  "source": "docs/roadmap/2026-10-05/BACKLOG.json",
+  "source_blob_sha": "7ffb6f45b97be90e3e039ad493bdaaa2f2a26d0f",
+  "generated_date": "2026-10-09",
+  "mapping_status": "id-complete, evidence-review-incomplete",
+  "items": [
+    {
+      "legacy_id": "CON-01",
+      "issue": 169,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-02",
+      "issue": 185,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-03",
+      "issue": 176,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-04",
+      "issue": 186,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-05",
+      "issue": 187,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-06",
+      "issue": 188,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-07",
+      "issue": 189,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CON-08",
+      "issue": 190,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CORE-01",
+      "issue": 182,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CORE-02",
+      "issue": 183,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CORE-03",
+      "issue": 184,
+      "review_required": false
+    },
+    {
+      "legacy_id": "CORE-04",
+      "issue": 171,
+      "review_required": false
+    },
+    {
+      "legacy_id": "DOM-01",
+      "issue": 228,
+      "review_required": false
+    },
+    {
+      "legacy_id": "DOM-02",
+      "issue": 229,
+      "review_required": false
+    },
+    {
+      "legacy_id": "DOM-03",
+      "issue": 230,
+      "review_required": false
+    },
+    {
+      "legacy_id": "DOM-04",
+      "issue": 231,
+      "review_required": false
+    },
+    {
+      "legacy_id": "DOM-05",
+      "issue": 232,
+      "review_required": false
+    },
+    {
+      "legacy_id": "E2E-01",
+      "issue": 250,
+      "review_required": true
+    },
+    {
+      "legacy_id": "E2E-02",
+      "issue": 251,
+      "review_required": true
+    },
+    {
+      "legacy_id": "E2E-03",
+      "issue": 252,
+      "review_required": true
+    },
+    {
+      "legacy_id": "E2E-04",
+      "issue": 253,
+      "review_required": true
+    },
+    {
+      "legacy_id": "E2E-05",
+      "issue": 254,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-01",
+      "issue": 234,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-02",
+      "issue": 235,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-03",
+      "issue": 236,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-04",
+      "issue": 237,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-05",
+      "issue": 238,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-06",
+      "issue": 239,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-07",
+      "issue": 177,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-08",
+      "issue": 240,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-09",
+      "issue": 178,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-10",
+      "issue": 241,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-11",
+      "issue": 179,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-12",
+      "issue": 180,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-13",
+      "issue": 181,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-14",
+      "issue": 242,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-15",
+      "issue": 245,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-16",
+      "issue": 246,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-17",
+      "issue": 247,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-18",
+      "issue": 162,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-19",
+      "issue": 227,
+      "review_required": false
+    },
+    {
+      "legacy_id": "ENG-20",
+      "issue": 248,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-21",
+      "issue": 249,
+      "review_required": true
+    },
+    {
+      "legacy_id": "EXI-01",
+      "issue": 243,
+      "review_required": true
+    },
+    {
+      "legacy_id": "EXI-02",
+      "issue": 209,
+      "review_required": false
+    },
+    {
+      "legacy_id": "EXI-03",
+      "issue": 210,
+      "review_required": false
+    },
+    {
+      "legacy_id": "EXI-04",
+      "issue": 244,
+      "review_required": true
+    },
+    {
+      "legacy_id": "EXI-05",
+      "issue": 211,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LEA-01",
+      "issue": 175,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LEA-02",
+      "issue": 202,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LEA-03",
+      "issue": 203,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LEA-04",
+      "issue": 204,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LIF-01",
+      "issue": 172,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LIF-02",
+      "issue": 164,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LIF-03",
+      "issue": 205,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LIF-04",
+      "issue": 206,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LIF-05",
+      "issue": 207,
+      "review_required": false
+    },
+    {
+      "legacy_id": "LIF-06",
+      "issue": 208,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-01",
+      "issue": 196,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-02",
+      "issue": 197,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-03",
+      "issue": 174,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-04",
+      "issue": 198,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-05",
+      "issue": 163,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-06",
+      "issue": 199,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-07",
+      "issue": 200,
+      "review_required": false
+    },
+    {
+      "legacy_id": "PRO-08",
+      "issue": 201,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-01",
+      "issue": 173,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-02",
+      "issue": 165,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-03",
+      "issue": 212,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-04",
+      "issue": 213,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-05",
+      "issue": 214,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-06",
+      "issue": 215,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-07",
+      "issue": 216,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-08",
+      "issue": 217,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-09",
+      "issue": 218,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-10",
+      "issue": 219,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-11",
+      "issue": 220,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-12",
+      "issue": 221,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-13",
+      "issue": 222,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-14",
+      "issue": 223,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-15",
+      "issue": 224,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-16",
+      "issue": 225,
+      "review_required": false
+    },
+    {
+      "legacy_id": "STR-17",
+      "issue": 226,
+      "review_required": false
+    },
+    {
+      "legacy_id": "WRI-01",
+      "issue": 170,
+      "review_required": false
+    },
+    {
+      "legacy_id": "WRI-02",
+      "issue": 191,
+      "review_required": false
+    },
+    {
+      "legacy_id": "WRI-03",
+      "issue": 192,
+      "review_required": false
+    },
+    {
+      "legacy_id": "WRI-04",
+      "issue": 193,
+      "review_required": false
+    },
+    {
+      "legacy_id": "WRI-05",
+      "issue": 194,
+      "review_required": false
+    },
+    {
+      "legacy_id": "WRI-06",
+      "issue": 195,
+      "review_required": false
+    }
+  ]
+}

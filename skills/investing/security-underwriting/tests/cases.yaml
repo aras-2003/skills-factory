@@ -54,3 +54,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["full investment case", "kill criteria"]
+
+  - id: audit-near-miss-security-underwriting
+    case: second-competing-skill-negative
+    input: "Map the entire AI datacenter power-equipment value chain and identify second-order themes; don't value a specific ticker."
+    expected:
+      should_trigger: false
+      must:
+        - trend-theme-research handles ecosystem-level thematic research
+      must_not:
+        - generate full single-stock underwriting without a named security

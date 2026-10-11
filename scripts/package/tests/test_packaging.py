@@ -169,7 +169,7 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual("repository-side-v1", capabilities["capability_contract"]["contract_id"])
             production_skill = next(x for x in capabilities["capabilities"] if x.get("kind") == "skill")
             self.assertEqual("UNASSESSED", production_skill["capability_assessment"]["status"])
-            self.assertTrue(all(value == "unassessed" for value in production_skill["capability_assessment"]["requirements"].values()))
+            self.assertIn("unassessed", production_skill["capability_assessment"]["requirements"].values())
             release = json.loads((out / "release-manifest.json").read_text(encoding="utf-8"))
             release_skill = next(x for x in release["components"] if x.get("kind") == "skill")
             self.assertEqual(production_skill["capability_assessment"], release_skill["capability_assessment"])

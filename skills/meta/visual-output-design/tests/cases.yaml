@@ -128,3 +128,13 @@ cases:
         - imply price-only lines are total return
         - plot unrelated KPIs on one shared axis
         - interpolate missing observations
+
+  - id: audit-near-miss-visual-output-design
+    case: second-competing-skill-negative
+    input: "Turn my findings into a structured executive report with sections, logical flow, decisions and evidence. I am not asking to render charts or diagrams."
+    expected:
+      should_trigger: false
+      must:
+        - report-composer should own the narrative structure and reading flow
+      must_not:
+        - produce decorative visuals or falsely claim embedded graphics

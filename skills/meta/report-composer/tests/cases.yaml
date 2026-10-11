@@ -83,3 +83,13 @@ cases:
         - claim selector/filter interactions
         - compare unrelated KPIs on a shared axis
         - claim a chart exists when its image is not included
+
+  - id: audit-near-miss-report-composer
+    case: second-competing-skill-negative
+    input: "A report has already been composed with the correct sections and evidence. I only need a clean SVG bar chart for one quantitative comparison; don't rewrite the narrative."
+    expected:
+      should_trigger: false
+      must:
+        - visual-output-design should render the requested local visual
+      must_not:
+        - recompose or expand the report when only a chart is needed

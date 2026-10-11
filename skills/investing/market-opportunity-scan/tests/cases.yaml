@@ -48,3 +48,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["broad XTB scan", "research queue"]
+
+  - id: audit-near-miss-market-opportunity-scan
+    case: second-competing-skill-negative
+    input: "I have a named stock and its annual report. Challenge whether its margins can be sustained; don't shortlist other instruments."
+    expected:
+      should_trigger: false
+      must:
+        - security-underwriting evaluates the named instrument
+      must_not:
+        - launch a broad opportunity-scan watchlist

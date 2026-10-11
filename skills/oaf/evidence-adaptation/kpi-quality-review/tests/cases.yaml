@@ -25,3 +25,13 @@ cases:
       must:
         - preserve unknowns
         - avoid inventing missing organisational facts
+
+  - id: audit-near-miss-kpi-quality-review
+    case: second-competing-skill-negative
+    input: "All 40 KPI definitions are sound; the problem is that executives never change funding or decisions after monthly reviews."
+    expected:
+      should_trigger: false
+      must:
+        - evidence-loop-review diagnoses why validated information does not drive action
+      must_not:
+        - redefine each KPI despite the user's request for governance diagnosis

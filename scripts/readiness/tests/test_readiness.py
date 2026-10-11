@@ -85,6 +85,18 @@ class ReadinessPolicyTests(unittest.TestCase):
             )
         self.assertTrue(any("high-severity" in e for e in errors))
 
+    def test_high_severity_flag_must_be_boolean(self) -> None:
+        for invalid in ("true", "false", 1, None):
+            with self.subTest(invalid=invalid):
+                rec = self._pending()
+                rec["known_high_severity_failure"] = invalid
+                with tempfile.TemporaryDirectory() as td:
+                    errors = validate_readiness.validate_record(
+                        Path(td), "demo", "1.0.0", rec,
+                        review_by=self.review_by, today=self.today,
+                    )
+                self.assertTrue(any("must be a boolean" in error for error in errors))
+
     def test_lab_candidate_can_wait_for_runtime_without_exception(self) -> None:
         rec = {
             "current_runtime_receipt": "pending",

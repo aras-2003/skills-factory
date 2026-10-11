@@ -25,3 +25,13 @@ cases:
       must:
         - preserve unknowns
         - avoid inventing missing organisational facts
+
+  - id: audit-near-miss-portfolio-health-review
+    case: second-competing-skill-negative
+    input: "Five initiatives have comparable benefits and resource requirements. We know portfolio capacity and now need to rank which ones receive funding."
+    expected:
+      should_trigger: false
+      must:
+        - portfolio-prioritization chooses initiatives after health and evidence are ready
+      must_not:
+        - restart portfolio health diagnostics instead of making the requested ranking

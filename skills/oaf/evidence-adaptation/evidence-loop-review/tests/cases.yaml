@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-evidence-loop-review
+    case: second-competing-skill-negative
+    input: "Review whether the uptime metric definition has a numerator, denominator and reliable data owner. I am not asking why governance meetings ignore dashboards."
+    expected:
+      should_trigger: false
+      must:
+        - kpi-quality-review validates one decision-useful KPI
+      must_not:
+        - expand one metric-definition check into an enterprise evidence-feedback diagnosis

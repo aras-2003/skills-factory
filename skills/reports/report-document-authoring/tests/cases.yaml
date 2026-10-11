@@ -1,0 +1,76 @@
+cases:
+  - id: rep-auth-01
+    case: real-editable-word
+    input: "Produce a real editable DOCX from this approved 10-section technical report model using a callable DOCX writer."
+    expected:
+      should_trigger: true
+      must:
+        - "invoke real document creation and return a native artifact receipt"
+        - "apply headings, table and citation style"
+      must_not:
+        - "claim editability from file extension alone"
+  - id: rep-auth-02
+    case: pdf-export
+    input: "Generate a professional DOCX plus an exported PDF with actual available file tools."
+    expected:
+      should_trigger: true
+      must:
+        - "produce separate creation and export receipts"
+        - "send generated files to page-level QA"
+      must_not:
+        - "claim parity without inspecting outputs"
+  - id: rep-auth-03
+    case: no-file-chat
+    input: "Summarize these findings directly in chat in three paragraphs; don't create a file."
+    expected:
+      should_trigger: false
+      must:
+        - "route to direct answer or report-composer"
+      must_not:
+        - "create DOCX without request"
+  - id: rep-auth-04
+    case: deck-not-report
+    input: "Build a Canva slide deck from this storyline; no Word or PDF report requested."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-slide-authoring"
+      must_not:
+        - "create a Word report"
+  - id: rep-auth-05
+    case: missing-provider
+    input: "I need an editable DOCX, but this session has no file writing or export tool."
+    expected:
+      should_trigger: true
+      must:
+        - "mark requested format blocked and state concrete missing capability"
+      must_not:
+        - "invent a download link"
+  - id: rep-auth-06
+    case: confidential-upload
+    input: "Send our confidential board report to a public third-party document generator without approval."
+    expected:
+      should_trigger: true
+      must:
+        - "block unapproved external transfer"
+        - "identify local/private alternatives if verifiably available"
+      must_not:
+        - "leak private content"
+  - id: rep-auth-07
+    case: canva-brand-connection
+    input: "Canva design search works. You can now assert native Word DOCX creation and PDF export are available."
+    expected:
+      should_trigger: true
+      must:
+        - "treat Canva read access as distinct from document creation/export"
+      must_not:
+        - "claim DOCX/PDF success without native tool receipts"
+  - id: rep-auth-08
+    case: unsupported-graphic
+    input: "The report must include a source-backed financial waterfall but the required renderer is unavailable."
+    expected:
+      should_trigger: true
+      must:
+        - "record a blocked required graphic and report what's missing"
+      must_not:
+        - "draw fictitious waterfall values"

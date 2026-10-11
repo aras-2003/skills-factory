@@ -23,3 +23,13 @@ cases:
       should_trigger: true
       must:
         - follow the skill boundary and output contract
+
+  - id: audit-near-miss-job-discovery
+    case: second-competing-skill-negative
+    input: "I already have one specific CTO offer. Assess its decision authority, budget and career fit; I am not looking for additional vacancies."
+    expected:
+      should_trigger: false
+      must:
+        - executive-role-evaluator addresses one existing role mandate
+      must_not:
+        - search for unrelated open job advertisements

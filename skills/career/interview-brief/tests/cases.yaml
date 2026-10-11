@@ -23,3 +23,13 @@ cases:
       should_trigger: true
       must:
         - follow the skill boundary and output contract
+
+  - id: audit-near-miss-interview-brief
+    case: second-competing-skill-negative
+    input: "I only need a verified overview of this company's ownership and revenue. I have no interview scheduled and don't want questions to ask the panel."
+    expected:
+      should_trigger: false
+      must:
+        - company-context-research should provide the requested facts
+      must_not:
+        - create an interview-stage briefing or fabricate meeting details

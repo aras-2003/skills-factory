@@ -90,8 +90,8 @@ def _dependency_is_pinned(value: str) -> bool:
 def _scan_file(root: Path, path: Path) -> list[Finding]:
     try:
         text = path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError):
-        return []
+    except (OSError, UnicodeDecodeError) as exc:
+        raise ValueError(f"cannot inspect {path.relative_to(root).as_posix()}: {type(exc).__name__}") from exc
     rel = path.relative_to(root).as_posix()
     lines = text.splitlines()
     findings: list[Finding] = []
@@ -210,7 +210,10 @@ def scan(root: Path = ROOT, *, today: date | None = None) -> tuple[list[Finding]
             rel = path.relative_to(root).as_posix()
             findings.append(Finding("SEC009", "high", rel, 0, _message("SEC009"), _fingerprint("SEC009", rel, "symlink")))
             continue
-        findings.extend(_scan_file(root, path))
+        try:
+            findings.extend(_scan_file(root, path))
+        except ValueError as exc:
+            errors.append(str(exc))
     matched_waivers = {(item.rule_id, item.path, item.fingerprint) for item in findings} & set(waivers)
     for key in sorted(set(waivers) - matched_waivers):
         errors.append(f"waiver has no matching finding (stale or fingerprint mismatch): {key[0]} {key[1]}")

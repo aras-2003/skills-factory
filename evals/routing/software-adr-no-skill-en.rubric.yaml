@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: software-adr-no-skill-en
+mode: natural-routing
+expected_target: no-skill
+language: en
+competing_intents:
+  - "low-level software ADR versus enterprise architecture"
+required_selected_capabilities: []
+forbidden_selected_capabilities:
+  - architecture-review
+  - oaf-enterprise-architecture-review
+  - oaf-health-check
+assertions:
+  manual:
+    - "The answer compares technical implementation trade-offs, not organizational architecture."
+    - "No unrelated enterprise architecture skill is selected."

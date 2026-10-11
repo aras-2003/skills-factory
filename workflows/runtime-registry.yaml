@@ -453,10 +453,10 @@ workflows:
       attribution, suppresses unchanged noise and does not optimise toward a fixed target allocation.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.2.0"
+      version: "0.2.1"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-03
+      last_reviewed: 2026-10-10
       execution:
         default_model_class: standard
   - name: investment-attention-review
@@ -494,10 +494,10 @@ workflows:
       Do not use as the default entry point for broad natural investment requests.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.2.0"
+      version: "0.2.1"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-02
+      last_reviewed: 2026-10-10
       execution:
         default_model_class: standard
   - name: investment-opportunity-hunter
@@ -533,10 +533,10 @@ workflows:
       for broad natural investment requests.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.5.0"
+      version: "0.5.1"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-02
+      last_reviewed: 2026-10-10
       execution:
         default_model_class: standard
   - name: investment-security-review

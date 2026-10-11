@@ -8,7 +8,7 @@ from pathlib import Path
 from common import load_registry, repo_root
 
 FORBIDDEN_INPUT_HEADINGS = re.compile(
-    r"^##\s+(PASS(?:\s+criteria)?|Expected routing|Expected output properties|Expected behavior(?:s)?|Failure conditions|Test objective)\b",
+    r"^##\s+(PASS(?:\s+criteria)?|Expected routing|Expected route|Expected output properties|Expected behavior(?:s)?|Failure conditions|Test objective|Evaluator(?:-only)? rubric|Evaluator instructions|Scoring rubric)\b",
     re.IGNORECASE | re.MULTILINE,
 )
 

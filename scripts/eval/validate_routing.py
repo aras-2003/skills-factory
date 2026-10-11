@@ -64,8 +64,12 @@ def validate(root: Path) -> list[str]:
         if rubric.get("mode") != "natural-routing":
             errors.append(f"{cid}: mode must be natural-routing")
         target = rubric.get("expected_target")
-        if target not in known:
+        if target not in known and target != "no-skill":
             errors.append(f"{cid}: unknown expected_target {target!r}")
+        if target == "no-skill" and (rubric.get("required_selected_capabilities") or []):
+            errors.append(f"{cid}: no-skill case cannot require skill selection")
+        if target == "no-skill" and not (rubric.get("forbidden_selected_capabilities") or []):
+            errors.append(f"{cid}: no-skill case requires explicit forbidden skill routes")
         if target and str(target).lower() in input_text:
             errors.append(f"{cid}: input leaks expected target name")
         leaked = leaked_capabilities(input_text, known)

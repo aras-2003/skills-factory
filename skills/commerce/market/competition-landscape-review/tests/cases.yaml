@@ -29,3 +29,13 @@ cases:
       should_trigger: false
       must_not:
         - substitute competition review for unit economics
+
+  - id: audit-near-miss-competition-landscape-review
+    case: second-competing-skill-negative
+    input: "There are four similar gadgets for sale, but I need to establish if Polish buyers actually suffer the problem before analyzing rival positioning."
+    expected:
+      should_trigger: false
+      must:
+        - problem-demand-validation should validate demand before competitor analysis
+      must_not:
+        - claim demand is established merely because alternatives exist

@@ -1,6 +1,6 @@
 # AI Skills expansion roadmap — 2026-10-05
 
-This directory preserves the expansion analysis and 84 proposed development tasks. It is a planning artifact, not a release or runtime-readiness declaration.
+This directory preserves the expansion analysis and 90 tracked development tasks. It is a planning artifact, not a release or runtime-readiness declaration.
 
 ## Start here
 
@@ -53,3 +53,9 @@ Do not downgrade any current maturity as a result of the Claude review or the ne
 The first queue covers the five implemented source domains: Meta, Career, Commerce, Investing and OAF (`DOM-01`–`DOM-05`). Select the starting domain only after quality closure, based on actual use, risk and dependencies. Planned/placeholder domains enter this queue only after they have real implementations.
 
 Supporting hardening work is tracked separately: `ENG-20` covers branch, CI and publication supply-chain controls; `ENG-21` records minimum public-repository governance, including an explicit licensing decision without assigning a license by default.
+
+## Free-first test platform — 2026-10-09
+
+**ENG-22 (P1)** now captures the target testing architecture before broad net-new skill expansion. It does not replace the existing runner, receipts or browser E2E work. The intended stack is: repository `evals/` + versioned synthetic fixtures as source of truth; Promptfoo Community as a pinned regression harness; layered GitHub Actions; vendor-neutral OpenTelemetry/OpenInference traces; and local Arize Phoenix OSS for trace/debug/experiments. No additional ChatGPT plugin or paid SaaS is required.
+
+Keep deterministic assertions first. Add trajectory/forbidden-action checks for provenance and PROD access. Use fixtures/mocks and ephemeral persistence first; add a persistent Supabase TEST environment only when a test needs cross-session state or realistic remote persistence. The current platform-cost target is **0 PLN** apart from actual model inference or CI usage beyond free allowances.

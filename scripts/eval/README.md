@@ -47,3 +47,14 @@ An assisted run cannot be recorded as PASS.
 - `python scripts/eval/receipt.py validate evals/results/<record>.json`
 
 Provider/runtime execution remains external to the offline harness. Exact-version smoke requires independently observed package release/source/payload/component identity; values copied from the lock are not evidence. A routing mismatch may be archived as `FAIL` or `REVIEW_REQUIRED`, but it blocks `PASS`. Offline synthetic regressions are not runtime evidence.
+
+## One-command local preflight (ENG-08)
+
+Run `python scripts/eval/local_preflight.py --output .tmp/offline-eval-preflight.json`
+from a checked-out repository. It calls the existing isolation, natural-routing
+fixture and test-case-schema validators, and writes a deterministic JSON result.
+The command is repeatable and invokes **no model, browser or external action**.
+`overall_status: PASS` means only that those static gates passed. Every result
+explicitly retains `runtime_case_execution: NOT_RUN` and
+`runtime_compatibility: NOT_VERIFIED`. It is **not** a replacement for a
+model-executed campaign receipt or the external Desktop/browser runner.

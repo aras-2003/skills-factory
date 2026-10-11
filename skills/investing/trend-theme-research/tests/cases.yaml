@@ -17,3 +17,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["value chain", "theme invalidation"]
+
+  - id: audit-near-miss-trend-theme-research
+    case: second-competing-skill-negative
+    input: "Value this one listed industrial company under three EBITDA growth scenarios; don't map its whole industry."
+    expected:
+      should_trigger: false
+      must:
+        - valuation-scenario-review calculates scenario value for a specific instrument
+      must_not:
+        - replace company valuation with thematic trend storytelling

@@ -15,3 +15,23 @@ cases:
       should_trigger: false
       must_not:
         - return SKILLS_FACTORY_ACTIVE
+
+  - id: audit-near-miss-skills-factory-diagnostic
+    case: second-competing-skill-negative
+    input: "I want to know what makes an Agent Skill different from a repository script and when I should create one. Explain the concepts; do not check an installed plugin."
+    expected:
+      should_trigger: false
+      must:
+        - skill-specification or a conceptual explanation is appropriate
+      must_not:
+        - emit SKILLS_FACTORY_ACTIVE without an explicit runtime diagnostic request
+
+  - id: audit-indirect-positive-skills-factory-diagnostic
+    case: indirect-positive-runtime-diagnostic
+    input: "Can you verify that the installed Skills Factory package really exposes its instructions to this chat, rather than merely appearing in the plugin list?"
+    expected:
+      should_trigger: true
+      must:
+        - verify actual loaded diagnostic skill instructions and state the exact marker only when loaded
+      must_not:
+        - claim access to unrelated bundled skills without loading them

@@ -54,3 +54,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["portfolio concentration", "snapshot"]
+
+  - id: audit-near-miss-portfolio-state-review
+    case: second-competing-skill-negative
+    input: "My portfolio holdings are already validated. Determine the maximum sensible size of a new speculative position under my risk policy."
+    expected:
+      should_trigger: false
+      must:
+        - position-sizing-review handles new-position sizing
+      must_not:
+        - replace a sizing decision with a redundant portfolio snapshot

@@ -116,7 +116,10 @@ def validate_record(
         return [f"{name}: invalid current_runtime_receipt"]
     if not rec.get("maturity_disposition"):
         errors.append(f"{name}: missing maturity_disposition")
-    if rec.get("known_high_severity_failure") is True:
+    severity_flag = rec.get("known_high_severity_failure", False)
+    if not isinstance(severity_flag, bool):
+        errors.append(f"{name}: known_high_severity_failure must be a boolean")
+    if severity_flag is not False:
         errors.append(f"{name}: unresolved known high-severity failure blocks readiness disposition")
 
     if status == "verified":

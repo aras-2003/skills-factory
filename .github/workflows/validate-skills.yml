@@ -24,6 +24,8 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install --require-hashes -r requirements-dev.lock
+      - name: Enforce immutable GitHub Actions dependencies
+        run: python scripts/security/validate_actions_pins.py
       - name: Skill and runtime source security scan
         run: |
           mkdir -p .tmp
@@ -46,26 +48,70 @@ jobs:
             .tmp/routing-collision-report.json
           if-no-files-found: ignore
           retention-days: 30
+      - name: Historical P0 backlog structural audit
+        run: |
+          python scripts/roadmap/audit_p0.py --output .tmp/p0-backlog-audit.json
+          python -m unittest discover -s scripts/roadmap/tests -p 'test_*.py'
+      - name: Archive P0 inventory receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: p0-backlog-structural-audit
+          path: .tmp/p0-backlog-audit.json
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Skill development change-class regression
+        run: |
+          python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
+          python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
+      - name: Lab lifecycle compliance audit (54 source skills)
+        run: |
+          mkdir -p .tmp
+          python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
+          python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
+      - name: Upload lifecycle audit
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skills-factory-lifecycle-audit
+          path: .tmp/skill-lifecycle-audit.json
+          if-no-files-found: error
+          retention-days: 60
+      - name: Audit registered workflow lifecycle contracts
+        run: |
+          mkdir -p .tmp
+          python scripts/engineering/audit_workflow_lifecycle.py --output .tmp/workflow-lifecycle-audit.json
+          python -m unittest discover -s scripts/engineering/tests -p 'test_audit_workflow_lifecycle.py'
+      - name: Archive workflow audit evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skills-factory-workflow-lifecycle-audit
+          path: .tmp/workflow-lifecycle-audit.json
+          if-no-files-found: error
+          retention-days: 60
       - name: Static validation
         run: python scripts/validate/validate_all.py
       - name: Validator mutation tests
         run: python -m unittest discover -s scripts/validate/tests -p 'test_*.py'
+      - name: Output policy router deterministic unit tests
+        run: python -m unittest discover -s scripts/output/tests -p 'test_*.py'
       - name: Eval isolation, evidence and runtime campaign tests
         run: |
           python scripts/eval/validate_isolation.py
           python scripts/eval/campaign.py validate
           python scripts/eval/skill_release_campaign.py validate
           python -m unittest discover -s scripts/eval/tests -p 'test_*.py'
-          python scripts/eval/campaign.py prepare --output .tmp/runtime-campaign-r18
+          python scripts/eval/campaign.py prepare --output .tmp/runtime-campaign-r19
           python scripts/eval/campaign.py validate-evidence
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
-          cp -R .tmp/runtime-campaign-r18/production-plugin .tmp/runtime-retest-pack/production
-          cp -R .tmp/runtime-campaign-r18/lab-plugin .tmp/runtime-retest-pack/lab
-          cp .tmp/runtime-campaign-r18/lock.json .tmp/runtime-retest-pack/lock.json
-          cp .tmp/runtime-campaign-r18/smoke-production-template.json .tmp/runtime-retest-pack/smoke-production-template.json
-          cp .tmp/runtime-campaign-r18/smoke-lab-template.json .tmp/runtime-retest-pack/smoke-lab-template.json
+          cp -R .tmp/runtime-campaign-r19/production-plugin .tmp/runtime-retest-pack/production
+          cp -R .tmp/runtime-campaign-r19/lab-plugin .tmp/runtime-retest-pack/lab
+          cp .tmp/runtime-campaign-r19/lock.json .tmp/runtime-retest-pack/lock.json
+          cp .tmp/runtime-campaign-r19/smoke-production-template.json .tmp/runtime-retest-pack/smoke-production-template.json
+          cp .tmp/runtime-campaign-r19/smoke-lab-template.json .tmp/runtime-retest-pack/smoke-lab-template.json
           cp evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-strategy-production-002.input.md .tmp/runtime-retest-pack/executor-inputs/01-fallback-strategy-explicit.input.md
           if find .tmp/runtime-retest-pack -type f \( -name '*.rubric.yaml' -o -name '*.rubric.yml' \) | grep -q .; then
             echo "rubric leaked into executor pack"
@@ -74,7 +120,7 @@ jobs:
       - name: Upload executor-only runtime retest pack
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: runtime-retest-pack-r18
+          name: runtime-retest-pack-r19
           path: .tmp/runtime-retest-pack
           if-no-files-found: error
           retention-days: 14

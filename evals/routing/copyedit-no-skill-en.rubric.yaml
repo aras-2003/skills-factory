@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: copyedit-no-skill-en
+mode: natural-routing
+expected_target: no-skill
+language: en
+competing_intents:
+  - "prose rewriting versus market research or OAF strategy analysis"
+required_selected_capabilities: []
+forbidden_selected_capabilities:
+  - strategy-to-execution-diagnostic
+  - oaf-health-check
+  - company-context-research
+assertions:
+  manual:
+    - "The answer edits the supplied prose without initiating market or organizational research."
+    - "No unrelated Skills Factory skill is selected."

@@ -23,8 +23,16 @@ class ClosurePackTests(unittest.TestCase):
         self.assertEqual(self.summary['by_lane']['workflow'], 48)
         self.assertEqual(self.summary['by_lane']['loader-parity'], 70)
 
+    def test_source_only_drafts_are_not_cloud_cases(self):
+        _, sources, cases = assemble()
+        drafts = {'presentation-brief', 'report-document-authoring',
+                  'presentation-production', 'report-production'}
+        self.assertFalse(drafts & set(sources))
+        self.assertFalse(drafts & {case['target'] for case in cases})
+
     def test_full_backlog_and_no_runtime_pass(self):
-        self.assertEqual(self.summary['backlog_items'], 89)
+        backlog = json.loads((ROOT / 'docs/roadmap/2026-10-05/BACKLOG.json').read_text())
+        self.assertEqual(self.summary['backlog_items'], len(backlog['items']))
         self.assertEqual(self.summary['runtime_tests_executed'], 0)
         q = json.loads((self.out / 'queue.json').read_text())['cases']
         self.assertTrue(all(c['status'] == 'NOT_RUN' and c['outcome'] is None for c in q))

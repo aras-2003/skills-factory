@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-architecture-review
+    case: second-competing-skill-negative
+    input: "Two engineers need to choose a Kafka topic partitioning strategy, schema evolution and retry pattern for one microservice."
+    expected:
+      should_trigger: false
+      must:
+        - software architecture decision is too low-level for enterprise architecture skill
+      must_not:
+        - reframe one service implementation as enterprise capability strategy

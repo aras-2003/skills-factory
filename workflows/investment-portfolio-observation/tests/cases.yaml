@@ -1,0 +1,35 @@
+cases:
+  - id: observation-positive-change
+    case: Compare two portfolio snapshots without rebalancing
+    input: "What changed in my portfolio since the last snapshot and which exposures should I watch?"
+    expected:
+      should_trigger: true
+      must:
+        - distinguish observed state from unsupported cause
+        - avoid automatic target allocation optimization
+  - id: observation-positive-data-gap
+    case: Missing canonical comparison does not imply no change
+    input: "Monitor my portfolio changes, but the older canonical snapshot may be unavailable."
+    expected:
+      should_trigger: true
+      must:
+        - report material DATA_GAP when comparison is unavailable
+        - avoid claiming no movement from missing data
+  - id: observation-negative-allocation
+    case: Portfolio restructuring decision not observation only
+    input: "Design a new target mix across my whole portfolio and rank what to reduce first under the approved risk policy."
+    expected:
+      should_trigger: false
+      must:
+        - route the requested restructuring to investment-portfolio-review
+      must_not:
+        - pretend descriptive drift is a binding sell instruction
+  - id: observation-negative-security
+    case: One-security underwriting request
+    input: "Underwrite the valuation and downside risks for this one semiconductor stock before I decide whether to buy."
+    expected:
+      should_trigger: false
+      must:
+        - route to investment-security-review
+      must_not:
+        - replace underwriting with a portfolio observation report

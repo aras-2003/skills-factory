@@ -35,10 +35,13 @@ def write_json(path: Path, value):
 
 
 def component_sources(root=ROOT):
+    package = read_yaml(root / 'release/package.yaml')
+    draft_targets = set(package['lab']['draft_test_targets'])
     result = {}
     for path in sorted((root / 'skills').rglob('SKILL.md')):
         fm = yaml.safe_load(path.read_text(encoding='utf-8').split('---', 2)[1])
-        result[fm['name']] = path
+        if fm.get('metadata', {}).get('maturity') in ('candidate', 'production') or fm['name'] in draft_targets:
+            result[fm['name']] = path
     for row in read_yaml(root / 'workflows/runtime-registry.yaml')['workflows']:
         if row.get('channels', {}).get('lab') == 'supported':
             result[row['name']] = root / row['workflow']
@@ -83,6 +86,8 @@ def assemble(root=ROOT, baseline_path=None):
     for path in sorted([*(root / 'skills').glob('**/tests/cases.yaml'),
                         *(root / 'workflows').glob('**/tests/cases.yaml')]):
         target = path.parent.parent.name
+        if target not in sources and target != 'skill-development':
+            continue
         for row in read_yaml(path)['cases']:
             expected = row['expected']
             criteria = expected.get('must', []) + expected.get('must_not', [])
@@ -121,6 +126,8 @@ def assemble(root=ROOT, baseline_path=None):
                 target = 'skill-test-design'
             elif name.startswith('evaluation-'):
                 target = 'skill-evaluation'
+        if target and target not in sources and target != 'skill-development':
+            continue
         # These historical R16 rubrics assume a production-only catalog. In
         # v12 both specialists exist: keep history immutable, create an overlay.
         if name in ('fallback-strategy-production-002', 'fallback-interface-explicit-production-002'):
@@ -211,7 +218,7 @@ def prepare(output: Path, root=ROOT, baseline_path=None, instructions_path=None)
     write_json(output / 'backlog-snapshot.json', backlog)
     lines = ['# Pełny backlog — snapshot do przekazania Lunie', '',
              'Źródło: docs/roadmap/2026-10-05/BACKLOG.json. Zachowano wszystkie identyfikatory i statusy. To snapshot, nie nowy system statusów.', '',
-             '7 IN_PROGRESS, 8 DISCOVERY, 74 PROPOSED. Żaden element nie został zamknięty przez przygotowanie pakietu.', '']
+             'Żaden element nie został zamknięty przez przygotowanie pakietu.', '']
     for item in backlog['items']:
         lines += [f"## {item['id']} · {item['priority']} · {item['status']} — {item['title']}", '',
                   str(item['scope']), '', 'Warunki odbioru:', '']
@@ -268,7 +275,9 @@ def validate(output: Path):
             if z.read(Path(case['input']).name) != (output / case['input']).read_bytes():
                 raise ValueError('executor zip/input mismatch')
     coverage = json.loads((output / 'coverage.json').read_text())
-    if len(coverage) != 70 or any(not c['cases'] for c in coverage):
+    baseline = json.loads((output / 'baseline.json').read_text())
+    expected = {row['name'] for row in baseline['catalog']['skills']}
+    if {row['target'] for row in coverage} != expected or len(coverage) != len(expected) or any(not c['cases'] for c in coverage):
         raise ValueError('incomplete component coverage')
 
 

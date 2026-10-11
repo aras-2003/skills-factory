@@ -32,16 +32,42 @@ class SiteCatalogContractTests(unittest.TestCase):
         self.assertTrue(catalog["metadata"]["packages"]["lab"]["version"])
         self.assertTrue(catalog["skills"])
         self.assertTrue(catalog["workflows"])
-        self.assertEqual(17, catalog["metadata"]["source_workflow_count"])
+        self.assertEqual(len(self.workflow_sources()), catalog["metadata"]["source_workflow_count"])
         self.assertEqual(16, catalog["metadata"]["registered_workflow_count"])
         skill_development = next(item for item in catalog["workflows"] if item["name"] == "skill-development")
         self.assertEqual("not_registered", skill_development["runtime_registration"])
         self.assertEqual("unknown", skill_development["maturity"])
+        presentation = next(item for item in catalog["workflows"] if item["name"] == "presentation-production")
+        self.assertEqual("not_registered", presentation["runtime_registration"])
+        self.assertEqual({}, presentation["declared_channels"])
+        report_production = next(item for item in catalog["workflows"] if item["name"] == "report-production")
+        self.assertEqual("not_registered", report_production["runtime_registration"])
+        self.assertEqual({}, report_production["declared_channels"])
         self.assertEqual("UNASSESSED", catalog["metadata"]["capability_assessment"])
         self.assertTrue(all(item["capability_assessment"] == "UNASSESSED" for item in catalog["skills"]))
         self.assertTrue(all(item["declared_channels"] for item in catalog["workflows"] if item["runtime_registration"] == "registered"))
         self.assertEqual({}, skill_development["declared_channels"])
         self.assertEqual("NOT_OBSERVED", catalog["metadata"]["runtime_installation"])
+
+    def test_site_catalog_does_not_promote_partial_capability_declaration(self) -> None:
+        markdown = ("| Skill | Domain | Maturity | Version | Description | Source |\n"
+                    "|---|---|---|---|---|---|\n"
+                    "| example | meta | draft | 0.1.0 | Example | skills/meta/example/SKILL.md |\n")
+        manifest = 'package:\n  name: skills-factory\n  version: "1.0"\nlab:\n  name: skills-factory-lab\n  version: "1.0"\n'
+        contract = (
+            "contract_id: repository-side-v1\n"
+            "component_declarations:\n  example:\n    requirements:\n"
+            "      network: none\n      filesystem: none\n"
+            "      shell_exec: none\n      credentials: unassessed\n"
+            "      external_actions: none\n"
+        )
+        catalog = build_catalog(markdown, manifest, "revision", capability_contract=contract)
+        self.assertEqual("UNASSESSED", catalog["skills"][0]["capability_assessment"])
+        self.assertEqual("UNASSESSED", catalog["metadata"]["capability_assessment"])
+
+        invalid_contract = contract.replace("external_actions: none", "unexpected_dimension: none")
+        invalid = build_catalog(markdown, manifest, "revision", capability_contract=invalid_contract)
+        self.assertEqual("UNASSESSED", invalid["skills"][0]["capability_assessment"])
 
     def test_catalog_rejects_missing_package_or_revision_provenance(self) -> None:
         markdown = """| Skill | Domain | Maturity | Version | Description | Source |

@@ -69,6 +69,20 @@ class ValidatePromotionTests(unittest.TestCase):
         errors = validate_promotion(self.root, require_ancestor=False)
         self.assertTrue(any("exact Lab candidate" in error for error in errors))
 
+    def test_rejects_nonhex_lab_source_revision(self) -> None:
+        lab = json.loads((self.root / "plugins/skills-factory-lab/release-manifest.json").read_text())
+        lab["source_revision"] = "g" * 40
+        self._write("plugins/skills-factory-lab/release-manifest.json", lab)
+        errors = validate_promotion(self.root, require_ancestor=False)
+        self.assertTrue(any("full 40-character source_revision" in e for e in errors))
+
+    def test_rejects_nonhex_lab_payload_digest(self) -> None:
+        lab = json.loads((self.root / "plugins/skills-factory-lab/release-manifest.json").read_text())
+        lab["payload_content_sha256"] = "z" * 64
+        self._write("plugins/skills-factory-lab/release-manifest.json", lab)
+        errors = validate_promotion(self.root, require_ancestor=False)
+        self.assertTrue(any("SHA-256 payload digest" in e for e in errors))
+
     def test_rejects_missing_runtime_receipt(self) -> None:
         (self.root / "release/promotion-evidence.json").unlink()
         errors = validate_promotion(self.root, require_ancestor=False)

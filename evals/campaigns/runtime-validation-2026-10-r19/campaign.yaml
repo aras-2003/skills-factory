@@ -1,0 +1,173 @@
+# New candidate definition; R18 and its receipts remain immutable.
+schema_version: "1.0"
+campaign: runtime-validation-2026-10-r19
+behavior_source_revision: 83526d177a8a48891db0bfbf38eb6d149f164d88
+package:
+  name: skills-factory-lab
+  version: "0.34.0"
+  channel: lab
+execution_channel: lab
+commerce_case_ids:
+  - case-001-premium-vs-generic
+  - case-002-good-demand-bad-economics
+  - case-003-viral-regulated
+  - case-004-boring-winner
+  - case-005-false-us-pl-transfer
+  - case-006-product-discovery
+routing_registry: evals/routing/registry.yaml
+routing_case_ids:
+  - career-company-facts-pl
+  - career-role-eval-en
+  - commerce-economics-pl
+  - commerce-supplier-en
+  - commerce-discovery-pl
+  - commerce-regulatory-en
+  - oaf-decision-pl
+  - oaf-architecture-en
+  - career-cv-gaps-en
+  - career-cv-tailor-pl
+  - oaf-portfolio-health-en
+  - oaf-portfolio-priority-pl
+  - oaf-kpi-quality-en
+  - oaf-evidence-loop-pl
+  - commerce-deep-dive-en
+  - oaf-architecture-workflow-pl
+  - investment-portfolio-natural-en
+  - investment-security-natural-en
+  - investment-opportunity-natural-pl
+  - investment-theme-natural-en
+  - investment-attention-natural-pl
+  - investment-policy-natural-pl
+executive_source: skills/career/executive-role-evaluator/tests/cases.yaml
+executive_case_dir: evals/campaigns/runtime-validation-2026-10/executive
+executive_case_ids:
+  - executive-role-001
+  - executive-role-002
+  - executive-role-003
+  - executive-role-004
+  - executive-role-005
+  - executive-role-006
+  - executive-role-007
+  - executive-role-008
+  - executive-role-009
+  - executive-role-010
+  - executive-role-011
+  - executive-role-012
+  - executive-role-013
+  - executive-role-014
+excluded_production_only_cases:
+  - id: fallback-strategy-production-002
+    mode: explicit
+    target: oaf-health-check
+    input: evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-strategy-production-002.input.md
+    rubric: evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-strategy-production-002.rubric.yaml
+  - id: fallback-interface-explicit-production-002
+    mode: explicit
+    target: oaf-operating-model-redesign
+    input: evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-interface-explicit-production-002.input.md
+    rubric: evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-interface-explicit-production-002.rubric.yaml
+supplemental_routing_registry: evals/routing/supplemental-registry.yaml
+supplemental_routing_case_ids:
+  - oaf-interface-natural-pl
+  - oaf-decision-bottleneck-natural-pl
+  - oaf-decision-rights-natural-pl
+retest_focus_case_ids:
+  - case-001-opportunity-hunter
+  - case-002-security-sizing
+  - case-003-portfolio-review
+  - case-004-theme-discovery
+  - case-006-attention-acn
+execution_order:
+  - commerce
+  - routing
+  - executive-role
+required_runtime_tool_fragments:
+  - render_bar_chart
+  - render_line_chart
+  - route_investment_request
+client_display_validation_case_ids:
+  - case-001-opportunity-hunter
+  - case-003-portfolio-review
+client_display_evidence_types:
+  - screenshot
+  - telemetry
+  - user_confirmation
+runtime_fields_required:
+  - provider
+  - model_id
+  - reasoning
+  - available_tools
+  - observed_catalog
+  - package_version
+evidence_root: evals/results/runtime-campaign-r19
+unassisted_rule: Executor must run in a fresh session that has not seen evaluator rubrics. This conversation is evaluator-aware and cannot produce independent unassisted evidence.
+domain_retest_case_ids:
+  - "0002"
+  - "0029"
+  - "0032"
+  - "0035"
+  - "0040"
+  - "0048"
+  - "0060"
+  - "0063"
+  - "0064"
+  - "0068"
+  - "0073"
+  - "0074"
+  - "0075"
+  - "0078"
+  - "0079"
+  - "0082"
+  - "0084"
+  - "0088"
+  - "0089"
+  - "0090"
+  - "0092"
+  - "0093"
+  - "0096"
+  - "0098"
+  - "0105"
+  - "0107"
+  - "0114"
+  - "0119"
+  - "0122"
+  - "0123"
+  - "0130"
+  - "0134"
+  - "0135"
+  - "0136"
+  - "0140"
+  - "0142"
+  - "0145"
+  - "0147"
+  - "0150"
+  - "0151"
+  - "0154"
+  - "0162"
+  - "0173"
+  - "0178"
+  - "0181"
+  - "0182"
+  - "0184"
+  - "0185"
+  - "0186"
+  - "0187"
+  - "0188"
+  - "0189"
+  - "0190"
+  - "0241"
+  - "0243"
+  - "0244"
+  - "0335"
+  - "0336"
+  - "0339"
+  - "0342"
+  - "0344"
+  - "0345"
+  - "0348"
+  - "0351"
+  - "0354"
+  - "0356"
+  - "0357"
+  - "0360"
+  - "0362"

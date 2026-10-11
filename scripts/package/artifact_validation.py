@@ -107,8 +107,10 @@ def validate_manifests(path: Path) -> list[str]:
                         errors.append(f"{name}: invalid capability assessment dimensions")
                     elif assessment.get("status") not in {"DECLARED", "UNASSESSED"}:
                         errors.append(f"{name}: invalid capability assessment status")
-                    elif assessment.get("status") == "UNASSESSED" and any(value != "unassessed" for value in requirements.values()):
-                        errors.append(f"{name}: UNASSESSED capability requirements must remain explicit")
+                    elif assessment.get("status") == "UNASSESSED" and "unassessed" not in requirements.values():
+                        errors.append(f"{name}: UNASSESSED status requires an unresolved capability dimension")
+                    elif assessment.get("status") == "DECLARED" and "unassessed" in requirements.values():
+                        errors.append(f"{name}: DECLARED status cannot hide unresolved capability dimensions")
 
             capability_names = {
                 item.get("name") for item in capability_items if isinstance(item, dict) and item.get("name")

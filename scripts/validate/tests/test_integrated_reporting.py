@@ -338,8 +338,10 @@ class IntegratedReportingTests(unittest.TestCase):
         cases = (ROOT / "skills/investing/investment-record-store/tests/cases.yaml").read_text(encoding="utf-8")
 
         self.assertIn("RESEARCH_CANDIDATE", hunter)
-        self.assertIn("research-state writes", hunter)
-        self.assertIn("direct user request to run discovery", hunter.lower())
+        self.assertIn("is **not by itself** write authorization", hunter)
+        self.assertIn("verifiable standing mandate", hunter)
+        self.assertIn("Read-only, preview, test, no-save", hunter)
+        self.assertNotIn("authorizes these bounded research-state writes by default", hunter)
         self.assertIn("request alone is not write authorization", store.lower())
         self.assertIn("never write to a canonical production backend during evaluation", store.lower())
         self.assertIn("store-research-report-opportunity-write", cases)

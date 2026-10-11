@@ -433,15 +433,15 @@ components:
 
   - name: investment-attention-triage
     kind: skill
-    version: "0.2.2"
+    version: "0.2.3"
     source: skills/investing/investment-attention-triage/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact deployed-runtime receipt for remediation campaign R17 is pending."
-    limitation: "Lab-only candidate; exact R17 runtime validation is required before any production promotion."
+    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: investment-policy-design
     kind: skill
@@ -542,15 +542,15 @@ components:
 
   - name: thesis-monitor
     kind: skill
-    version: "0.3.1"
+    version: "0.3.2"
     source: skills/investing/thesis-monitor/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
+    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: trend-theme-research
     kind: skill
@@ -592,29 +592,27 @@ components:
 
   - name: investment-attention-review
     kind: workflow
-    version: "0.2.0"
+    version: "0.2.1"
     source: workflows/investment-attention-review/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
-    maturity_disposition: retain-existing-pending-evidence-review
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
-    exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-10-14"
+    maturity_disposition: lab-candidate-pending-runtime-validation
+    candidate_channel: lab
+    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: investment-opportunity-hunter
     kind: workflow
-    version: "0.5.0"
+    version: "0.5.1"
     source: workflows/investment-opportunity-hunter/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
-    maturity_disposition: retain-existing-pending-evidence-review
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
-    exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-10-14"
+    maturity_disposition: lab-candidate-pending-runtime-validation
+    candidate_channel: lab
+    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: investment-security-review
     kind: workflow
@@ -631,16 +629,15 @@ components:
 
   - name: investment-portfolio-observation
     kind: workflow
-    version: "0.2.0"
+    version: "0.2.1"
     source: workflows/investment-portfolio-observation/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
-    maturity_disposition: retain-existing-pending-evidence-review
-    evidence_gap: "New observation path has canonical-view/static coverage; exact-version unassisted runtime observation evidence is pending."
-    limitation: "Use for observation/change monitoring; do not treat soft reference bands as target allocation or policy enforcement."
-    exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-10-14"
+    maturity_disposition: lab-candidate-pending-runtime-validation
+    candidate_channel: lab
+    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: investment-portfolio-review
     kind: workflow

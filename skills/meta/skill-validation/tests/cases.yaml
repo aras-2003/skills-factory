@@ -24,3 +24,23 @@ cases:
       should_trigger: true
       must:
         - flag deterministic-boundary issue
+
+  - id: validate-negative-test-design
+    case: test-suite-design-not-package-validation
+    input: "My skill package has passed static validation. Design realistic competing-intent routing tests for its updated description."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-test-design for new routing cases
+      must_not:
+        - claim that static package validation alone establishes new routing behavior
+
+  - id: validate-negative-model-eval
+    case: compare-executed-model-outputs
+    input: "We already have a valid skill package and frozen test fixtures. Compare observed answers from v0.3 with v0.2 and report failures."
+    expected:
+      should_trigger: false
+      must:
+        - route to skill-evaluation rather than re-validating only source files
+      must_not:
+        - claim model evaluation PASS from static source inspection

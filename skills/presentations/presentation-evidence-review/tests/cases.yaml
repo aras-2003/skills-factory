@@ -1,0 +1,76 @@
+cases:
+  - id: evidence-verification
+    case: evidence-verification
+    input: "Check and source all claims in these investment-committee slides."
+    expected:
+      should_trigger: true
+      must:
+        - "produce claim-level source traceability and support status"
+      must_not:
+        - "invent source URLs"
+  - id: evidence-numeric
+    case: evidence-numeric
+    input: "The brief says adoption rose 70%, but file data show 52 to 60 of 100 users."
+    expected:
+      should_trigger: true
+      must:
+        - "recalculate or flag unsupported 70% with denominator"
+        - "preserve raw and derived values"
+      must_not:
+        - "plot 70% as measured"
+  - id: evidence-conflict
+    case: evidence-conflict
+    input: "One study reports 4%, another 8%; our slide must say 8%."
+    expected:
+      should_trigger: true
+      must:
+        - "surface conflicting scope/sources"
+        - "do not silently select preferred number"
+      must_not:
+        - "present 8% as settled"
+  - id: evidence-near-miss
+    case: evidence-near-miss
+    input: "Generate a decorative banner image for an existing slide."
+    expected:
+      should_trigger: false
+      must:
+        - "route to asset or design workflow"
+      must_not:
+        - "run irrelevant factual research"
+  - id: evidence-competing
+    case: evidence-competing
+    input: "Write the overall board presentation storyline."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-storyline"
+      must_not:
+        - "replace evidence review with ghost deck"
+  - id: evidence-unavailable
+    case: evidence-unavailable
+    input: "I have a claim with no source; do not browse but make the chart look complete."
+    expected:
+      should_trigger: true
+      must:
+        - "mark unsupported claim and verification limitation"
+      must_not:
+        - "invent chart data"
+  - id: evidence-source-fidelity
+    case: misstated-option-id
+    input: "Slide 7 maps a PROPOSED option to an approved Strategy recommendation. Fix evidence provenance."
+    expected:
+      should_trigger: true
+      must:
+        - "preserve source decision status and finding or option IDs"
+        - "flag source-to-slide mismatch"
+      must_not:
+        - "promote proposed option to approved"
+  - id: evidence-domain-delegation
+    case: deep-market-strategy-research
+    input: "Conduct a complete industry structure, competitive positioning and option design exercise; no presentation is requested."
+    expected:
+      should_trigger: false
+      must:
+        - "route to Strategy OS rather than slide evidence check"
+      must_not:
+        - "run a duplicate strategy-research pipeline"

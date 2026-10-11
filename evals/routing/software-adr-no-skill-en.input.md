@@ -1,0 +1,1 @@
+Our backend team needs a technical ADR comparing Kafka and RabbitMQ for asynchronous events between two microservices. Discuss ordering, retries, operational cost and recovery at the implementation level. This is not a business or operating-model review.

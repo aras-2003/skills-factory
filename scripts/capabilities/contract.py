@@ -38,7 +38,7 @@ def assessment_for(contract: dict, component: str) -> dict:
     for name, value in values.items():
         if value not in schema[name]:
             raise ValueError(f"{component}: invalid {name} capability {value!r}")
-    return {"status": "DECLARED", "requirements": dict(values)}
+    return {"status": "UNASSESSED" if "unassessed" in values.values() else "DECLARED", "requirements": dict(values)}
 
 
 def load_dimensions(contract: dict) -> dict[str, list[str]]:

@@ -34,6 +34,8 @@ Classify as:
 - **RESOURCE** — scripts/references/assets change;
 - **DOCS** — no behavioral effect.
 
+For a repeatable, local-only change-class plan, run `python scripts/engineering/change_gate.py --change-class <NEW|ROUTING|BEHAVIOR|RESOURCE|DOCS> --path <changed-file> [--path <changed-file> ...] --output .tmp/change-gate.json`. The tool does not infer a safe DOCS classification from arbitrary Markdown, and its `PLAN_READY` is **only** an offline test plan, never a runtime PASS or authorization to publish.
+
 This determines test depth. For a description-only `ROUTING` change, rerun positive, realistic near-miss and competing-skill routing cases; do not add output-format tests unless the contract also changed. `BEHAVIOR` changes require affected behavioral/regression cases. `RESOURCE` changes require direct resource/helper checks plus dependent flows. `DOCS` changes use static validation only unless implementation semantics changed.
 
 ## Stage 1 — specification
@@ -51,6 +53,8 @@ Outputs:
 - evidence/tool requirements;
 - risk level;
 - candidate examples.
+
+At specification time, draft the first **test intent map** before writing the skill: one positive trigger, one plausible competing or near-miss route, and one expected failure/missing-evidence behavior. Mark each case `DESIGN_ONLY` until executable fixtures exist. Stage 5 finalizes the fixtures and assertions; this early map is **not** execution evidence.
 
 Gate S1:
 - the task is genuinely repeatable;
@@ -246,6 +250,10 @@ Recommended for high-value skills:
 - failure/regression log;
 - changelog;
 - generated catalog entry.
+
+## Handoff per change
+
+Always hand over the exact changed files/revision, change class, applied static gates and independently executed eval receipts, with explicit `NOT_RUN` for skipped runtime cases. Separate **implementation complete**, **locally validated**, **runtime validated**, and **release authorized**; none implies the next. State the smallest unresolved action rather than treating a passing plan or static CI as release approval.
 
 ## Core principle
 

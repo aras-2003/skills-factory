@@ -29,3 +29,13 @@ cases:
       should_trigger: false
       must_not:
         - replace broad opportunity discovery
+
+  - id: audit-near-miss-market-transferability-review
+    case: second-competing-skill-negative
+    input: "I have only Polish product offers. Compare their current prices, bundles and differentiated claims; I am not transferring a foreign-market trend."
+    expected:
+      should_trigger: false
+      must:
+        - competition-landscape-review analyzes same-market rival offerings
+      must_not:
+        - invent US trend transfer risk without foreign signal

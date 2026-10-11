@@ -1,0 +1,1 @@
+Please edit the following paragraph for clarity without changing its meaning: 'Our strategy aims to grow the business by coordinating between teams and delivering results.' Do not research the market or provide organizational recommendations.

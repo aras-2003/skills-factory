@@ -25,3 +25,13 @@ cases:
       must:
         - distinguish evidence from inference
         - surface material unknowns
+
+  - id: audit-near-miss-capability-map-review
+    case: second-competing-skill-negative
+    input: "Our agreed map is sound. Compare required data governance capability maturity to actual ownership, people and controls to identify a material gap."
+    expected:
+      should_trigger: false
+      must:
+        - capability-gap-analysis examines missing enablement versus a target
+      must_not:
+        - redraw the capability map when its structure is not in question

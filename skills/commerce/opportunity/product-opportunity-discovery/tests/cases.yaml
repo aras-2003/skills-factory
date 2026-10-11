@@ -30,3 +30,13 @@ cases:
       should_trigger: false
       must_not:
         - use discovery instead of the known-product workflow
+
+  - id: audit-near-miss-product-opportunity-discovery
+    case: second-competing-skill-negative
+    input: "We already selected one product and need an end-to-end diligence assessment with sourcing, economics, claims and acquisition."
+    expected:
+      should_trigger: false
+      must:
+        - commerce-product-deep-dive handles selected-product diligence
+      must_not:
+        - restart broad ideation instead of analyzing the selected product

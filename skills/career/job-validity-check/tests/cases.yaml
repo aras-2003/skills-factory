@@ -23,3 +23,13 @@ cases:
       should_trigger: true
       must:
         - follow the skill boundary and output contract
+
+  - id: audit-near-miss-job-validity-check
+    case: second-competing-skill-negative
+    input: "Find currently open Warsaw CIO and CTO roles matching a technology-leadership mandate; I am not asking to authenticate one suspicious listing."
+    expected:
+      should_trigger: false
+      must:
+        - job-discovery finds opportunities before listing-specific verification
+      must_not:
+        - turn a broad vacancy search into a verdict on a single listing

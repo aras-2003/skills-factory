@@ -39,3 +39,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["policy band", "lifecycle state"]
+
+  - id: audit-near-miss-position-sizing-review
+    case: second-competing-skill-negative
+    input: "I need a consolidated view of current exposures and concentration without making a buy, sell or size-change decision."
+    expected:
+      should_trigger: false
+      must:
+        - portfolio-state-review reports exposures and risk state
+      must_not:
+        - recommend a trade or sizing action from a descriptive review

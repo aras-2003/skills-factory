@@ -48,19 +48,24 @@ def build_report(root: Path) -> dict:
             ((name, round(similarity(prompt, surface), 6)) for name, surface in surfaces.items()),
             key=lambda row: (-row[1], row[0]),
         )
+        no_skill = target == "no-skill"
         target_score = next((score for name, score in ranked if name == target), 0.0)
         target_rank = next((index + 1 for index, (name, _) in enumerate(ranked) if name == target), None) if target_score > 0 else None
         competitor = next(((name, score) for name, score in ranked if name != target and score > 0), None)
+        margin = round(target_score - competitor[1], 6) if competitor and not no_skill else None
         review_signal = (
-            "INSUFFICIENT_LEXICAL_SIGNAL" if target_score == 0
-            else "REVIEW" if target_rank != 1 or (competitor and target_score - competitor[1] < 0.03)
+            "REVIEW" if no_skill and competitor
+            else "INSUFFICIENT_LEXICAL_SIGNAL" if target_score == 0
+            else "REVIEW" if target_rank != 1 or (margin is not None and margin < 0.03)
             else "NO_STATIC_COLLISION_SIGNAL"
         )
         cases.append({
             "id": entry["id"],
             "language": rubric.get("language"),
             "expected_target": target,
+            "route_kind": "no_skill_negative" if no_skill else "skill_positive",
             "lexical_target_rank": target_rank,
+            "lexical_margin_to_competitor": margin,
             "target_score": target_score,
             "nearest_competitor": {"name": competitor[0], "score": competitor[1]} if competitor else None,
             "semantic_review_signal": review_signal,
@@ -81,6 +86,9 @@ def build_report(root: Path) -> dict:
         "runtime_evidence": "NOT_PROVIDED",
         "catalog_component_count": len(surfaces),
         "case_count": len(cases),
+        "positive_case_count": sum(row["route_kind"] == "skill_positive" for row in cases),
+        "no_skill_negative_case_count": sum(row["route_kind"] == "no_skill_negative" for row in cases),
+        "languages": sorted({row["language"] for row in cases if row["language"]}),
         "cases": cases,
         "description_neighbors": neighbors[:100],
         "limitations": [

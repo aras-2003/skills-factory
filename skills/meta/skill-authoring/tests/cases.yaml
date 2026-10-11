@@ -26,3 +26,23 @@ cases:
       should_trigger: true
       must:
         - recommend script or deterministic implementation for arithmetic
+
+  - id: author-negative-validation-only
+    case: validation-review-not-authoring
+    input: "Review this existing SKILL.md package for broken references, hidden external actions and routing ambiguity; provide validation findings, not a rewritten skill."
+    expected:
+      should_trigger: false
+      must:
+        - hand off to skill-validation to inspect the existing package
+      must_not:
+        - create or rewrite a SKILL.md
+
+  - id: author-negative-eval-only
+    case: execution-comparison-not-authoring
+    input: "Our existing candidate has an approved suite and two execution receipts. Compare its measured routing quality to the previous version; do not edit the skill."
+    expected:
+      should_trigger: false
+      must:
+        - hand off to skill-evaluation and compare observed evidence
+      must_not:
+        - rewrite the candidate instructions

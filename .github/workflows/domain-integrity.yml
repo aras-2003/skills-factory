@@ -23,6 +23,8 @@ jobs:
         run: python scripts/validate/validate_all.py
       - name: Validate natural-routing fixtures
         run: python scripts/eval/validate_routing.py
+      - name: Output policy router deterministic unit tests
+        run: python -m unittest discover -s scripts/output/tests -p 'test_*.py'
       - name: Eval protocol tests
         run: python -m unittest discover -s scripts/eval/tests -p "test_*.py"
       - name: Unit-economics calculator tests

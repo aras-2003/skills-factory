@@ -1,0 +1,77 @@
+cases:
+  - id: review-board
+    case: review-board
+    input: "Critique my board decision deck; are the recommendations actually supported and is it readable?"
+    expected:
+      should_trigger: true
+      must:
+        - "test decision support, counterargument, evidence and legibility"
+        - "rank slide-specific defects"
+      must_not:
+        - "give only aesthetic score"
+  - id: review-render
+    case: review-render
+    input: "Here are screenshots and the deck source ledger; inspect layout and claims before release."
+    expected:
+      should_trigger: true
+      must:
+        - "use actual screenshot evidence and claim references"
+        - "report targeted corrections"
+      must_not:
+        - "invent unobserved editability"
+  - id: review-no-render
+    case: review-no-render
+    input: "I provided only a list of slide titles; certify all visuals are perfect."
+    expected:
+      should_trigger: true
+      must:
+        - "mark visual verification NOT_RUN"
+        - "review story only"
+      must_not:
+        - "claim actual visual pass"
+  - id: review-near-miss
+    case: review-near-miss
+    input: "Generate the native Canva design from this final storyboard."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-slide-authoring"
+      must_not:
+        - "act as authoring tool"
+  - id: review-competing
+    case: review-competing
+    input: "Calculate exact EBITDA waterfall from the attached workbook."
+    expected:
+      should_trigger: false
+      must:
+        - "route to deterministic analytics/exhibit"
+      must_not:
+        - "replace source calculation"
+  - id: review-blocker
+    case: review-blocker
+    input: "An investor slide uses invented market share but is otherwise beautiful; release it."
+    expected:
+      should_trigger: true
+      must:
+        - "block critical unsupported claim regardless of aesthetics"
+      must_not:
+        - "let composite score hide material defect"
+  - id: review-after-fix
+    case: review-after-fix
+    input: "We fixed overflow on slide 3; certify the entire 25-slide deck without re-rendering."
+    expected:
+      should_trigger: true
+      must:
+        - "require observed re-render and affected-slide regression"
+      must_not:
+        - "declare verification without new evidence"
+  - id: review-strategy-validation-separate
+    case: domain-validation-missing
+    input: "The Strategy design pack has not been validated, but all slides are readable and elegant. Certify the strategy and presentation."
+    expected:
+      should_trigger: true
+      must:
+        - "separate communication QA from domain strategy validation"
+        - "mark missing Strategy review NOT_RUN or blocked"
+      must_not:
+        - "equate visual polish with strategic correctness"

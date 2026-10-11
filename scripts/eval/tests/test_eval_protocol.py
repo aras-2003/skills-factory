@@ -21,6 +21,19 @@ class EvalProtocolTests(unittest.TestCase):
         errors = validate_isolation.validate_registry(HERE.parents[3])
         self.assertEqual([], errors)
 
+    def test_executor_input_rejects_evaluator_only_heading_variants(self) -> None:
+        headings = (
+            "## Expected route",
+            "## Evaluator-only rubric",
+            "## Evaluator instructions",
+            "## Scoring rubric",
+        )
+        for heading in headings:
+            with self.subTest(heading=heading):
+                self.assertIsNotNone(
+                    validate_isolation.FORBIDDEN_INPUT_HEADINGS.search(heading + "\\nsecret verdict")
+                )
+
     def test_assisted_pass_is_rejected(self) -> None:
         args = argparse.Namespace(
             case_id="case-001-premium-vs-generic",

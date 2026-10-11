@@ -25,3 +25,13 @@ cases:
       must:
         - preserve unknowns
         - avoid inventing missing organisational facts
+
+  - id: audit-near-miss-global-local-model-review
+    case: second-competing-skill-negative
+    input: "We need to discover why handoffs between Product, Sales and IT have unclear owners, before debating global standards or local autonomy."
+    expected:
+      should_trigger: false
+      must:
+        - organizational-interface-review diagnoses unclear cross-unit handoffs
+      must_not:
+        - assume a global/local design issue without evidence

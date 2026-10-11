@@ -1,0 +1,66 @@
+cases:
+  - id: rep-arch-01
+    case: board-report-chapter-plan
+    input: "We have an approved strategic options pack with source references. Plan a 25-page board report in Polish, with executive summary, decision, trade-offs and evidence annexes."
+    expected:
+      should_trigger: true
+      must:
+        - "build a reader-first chapter hierarchy linked to pack finding/option IDs"
+        - "preserve recommendation approval status"
+      must_not:
+        - "reanalyse or select a new strategy"
+  - id: rep-arch-02
+    case: indirect-technical-report
+    input: "I need a well-structured engineering design document, not slides. Organize source notes and architecture options with explicit dependencies and assumptions."
+    expected:
+      should_trigger: true
+      must:
+        - "organize technical sections, decisions and evidence into a long-form reading flow"
+      must_not:
+        - "invent missing system links"
+  - id: rep-arch-03
+    case: no-unnecessary-pages
+    input: "We only need a concise executive memo of one or two pages; do not produce a long report."
+    expected:
+      should_trigger: false
+      must:
+        - "route to executive memo or report-composer profile"
+      must_not:
+        - "force a multi-chapter document"
+  - id: rep-arch-04
+    case: slides-near-miss
+    input: "Create a 12-slide board presentation from these strategic findings, not a written report."
+    expected:
+      should_trigger: false
+      must:
+        - "route to presentation-storyline"
+      must_not:
+        - "make a Word report outline"
+  - id: rep-arch-05
+    case: incomplete-brief
+    input: "Outline a sophisticated report about AI."
+    expected:
+      should_trigger: true
+      must:
+        - "identify audience, reader task and missing material scope without inventing report findings"
+      must_not:
+        - "pad a default 40-page agenda"
+  - id: rep-arch-06
+    case: source-status-drift
+    input: "The supplied domain pack marks option B as PROPOSED. Draft a report architecture treating B as approved."
+    expected:
+      should_trigger: true
+      must:
+        - "preserve proposed status"
+        - "surface any approval/status change as an upstream review item"
+      must_not:
+        - "assert approval"
+  - id: rep-arch-07
+    case: missing-analysis-runtime
+    input: "Build the strategic recommendation and a document outline using an unavailable Strategy workflow."
+    expected:
+      should_trigger: true
+      must:
+        - "mark unavailable domain analysis and plan only supported/provisional structure"
+      must_not:
+        - "fabricate an accepted strategic recommendation"

@@ -17,3 +17,13 @@ cases:
     expected:
       should_trigger: false
       must_not: ["bear", "base", "bull"]
+
+  - id: audit-near-miss-valuation-scenario-review
+    case: second-competing-skill-negative
+    input: "There is no defined company or cash-flow model. Research the second-order beneficiaries of European grid modernization."
+    expected:
+      should_trigger: false
+      must:
+        - trend-theme-research develops theme candidates before per-security valuation
+      must_not:
+        - fabricate inputs or a fair value for an unnamed stock
