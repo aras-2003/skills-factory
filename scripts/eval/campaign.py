@@ -22,7 +22,7 @@ import validate_routing
 import build_plugin
 import artifact_validation
 
-CONFIG_REL = Path("evals/campaigns/runtime-validation-2026-10-r19/campaign.yaml")
+CONFIG_REL = Path("evals/campaigns/runtime-validation-2026-10-r20/campaign.yaml")
 CONFIG = ROOT / CONFIG_REL
 SEPARATE_META_CAMPAIGN_REL = Path("evals/campaigns/skill-release-review-2026-10/release-review-campaign.yaml")
 SKILL_ENGINEERING_CAMPAIGN_REL = Path("evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml")
