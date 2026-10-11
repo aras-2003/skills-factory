@@ -1,0 +1,32 @@
+schema_version: "1.0"
+campaign: presentation-os-creative-direction-2026-10
+purpose: isolate-source-case-coverage-from-unrelated-r20-runtime-baseline
+runtime_status: NOT_RUN
+out_of_scope_behavior_paths:
+  - skills/presentations/presentation-deck-review/SKILL.md
+  - skills/presentations/presentation-exhibit-design/SKILL.md
+  - skills/presentations/presentation-slide-authoring/SKILL.md
+  - skills/presentations/presentation-storyline/SKILL.md
+  - workflows/presentation-production/WORKFLOW.md
+  - workflows/presentation-production/references/artifact-contract.md
+  - workflows/presentation-production/references/creative-direction.md
+  - workflows/presentation-production/references/quality-standard.md
+case_suites:
+  - path: workflows/presentation-production/tests/cases.yaml
+    required_case_ids:
+      - pres-e2e-22
+      - pres-e2e-23
+      - pres-e2e-24
+  - path: skills/presentations/presentation-deck-review/tests/cases.yaml
+    required_case_ids:
+      - review-high-impact-art-direction
+  - path: skills/presentations/presentation-exhibit-design/tests/cases.yaml
+    required_case_ids:
+      - exhibit-focal-point-and-variety
+  - path: skills/presentations/presentation-slide-authoring/tests/cases.yaml
+    required_case_ids:
+      - authoring-creative-brief
+      - authoring-google-slides
+  - path: skills/presentations/presentation-storyline/tests/cases.yaml
+    required_case_ids:
+      - story-visual-arc

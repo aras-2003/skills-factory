@@ -55,3 +55,13 @@ cases:
         - "mark required visual blocked without proof"
       must_not:
         - "claim a visual was rendered"
+  - id: exhibit-focal-point-and-variety
+    case: exhibit-focal-point-and-variety
+    input: "Design exhibits for a pitch: one source-backed metric, a product mechanism and a choice between two options. They should not all look like the same card grid."
+    expected:
+      should_trigger: true
+      must:
+        - "select visual grammar by communication job and state the focal point"
+        - "vary exhibits when it improves comprehension"
+      must_not:
+        - "add decorative visual variety without meaning"

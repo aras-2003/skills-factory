@@ -614,7 +614,7 @@
       "domain": "presentations",
       "maturity": "draft",
       "version": "0.1.0",
-      "description": "Create or revise an editable presentation in a supported Figma Slides or Canva runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
+      "description": "Create or revise an editable presentation in a supported Figma Slides, Canva or Google Slides runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
       "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
@@ -1108,7 +1108,7 @@
       "runtime_registration": "not_registered",
       "maturity": "unknown",
       "version": "unknown",
-      "description": "Produce an audience-specific, evidence-backed, professionally designed **presentation artifact** in Figma Slides or Canva, when explicitly requested. This workflow owns orchestration and stage gates, not all specialist reasoning/rendering.",
+      "description": "Produce an audience-specific, evidence-backed, deliberately art-directed **presentation artifact** in a connected native presentation platform (Figma Slides, Canva, Google Slides, or another verified destination), when explicitly requested. This workflow owns orchestration and stage gates, not all specialist reasoning/rendering.",
       "declared_channels": {},
       "required_dependencies": [],
       "optional_dependencies": [],

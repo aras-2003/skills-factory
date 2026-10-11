@@ -26,6 +26,7 @@ CONFIG_REL = Path("evals/campaigns/runtime-validation-2026-10-r20/campaign.yaml"
 CONFIG = ROOT / CONFIG_REL
 SEPARATE_META_CAMPAIGN_REL = Path("evals/campaigns/skill-release-review-2026-10/release-review-campaign.yaml")
 SKILL_ENGINEERING_CAMPAIGN_REL = Path("evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml")
+PRESENTATION_OS_CAMPAIGN_REL = Path("evals/campaigns/presentation-os-creative-direction-2026-10/source-coverage.yaml")
 
 
 def separately_validated_engineering_paths() -> set[str]:
@@ -87,6 +88,75 @@ def separately_validated_engineering_paths() -> set[str]:
     return expected
 
 
+def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
+    """Return the draft Presentation OS paths covered by exact source behavior cases."""
+    path = root / PRESENTATION_OS_CAMPAIGN_REL
+    if not path.is_file():
+        return set()
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    expected_paths = {
+        "skills/presentations/presentation-deck-review/SKILL.md",
+        "skills/presentations/presentation-exhibit-design/SKILL.md",
+        "skills/presentations/presentation-slide-authoring/SKILL.md",
+        "skills/presentations/presentation-storyline/SKILL.md",
+        "workflows/presentation-production/WORKFLOW.md",
+        "workflows/presentation-production/references/artifact-contract.md",
+        "workflows/presentation-production/references/creative-direction.md",
+        "workflows/presentation-production/references/quality-standard.md",
+    }
+    declared_paths = cfg.get("out_of_scope_behavior_paths") or []
+    if (
+        cfg.get("campaign") != "presentation-os-creative-direction-2026-10"
+        or set(declared_paths) != expected_paths
+        or len(declared_paths) != len(expected_paths)
+        or cfg.get("runtime_status") != "NOT_RUN"
+        or any(not (root / item).is_file() for item in expected_paths)
+    ):
+        return set()
+    for rel in expected_paths:
+        if not rel.startswith("skills/presentations/") or not rel.endswith("/SKILL.md"):
+            continue
+        source = (root / rel).read_text(encoding="utf-8")
+        if not source.startswith("---\n"):
+            return set()
+        end = source.find("\n---\n", 4)
+        if end < 0:
+            return set()
+        metadata = (yaml.safe_load(source[4:end]) or {}).get("metadata") or {}
+        if metadata.get("maturity") != "draft":
+            return set()
+    readme = root / "skills/presentations/README.md"
+    if not readme.is_file() or "source-only candidate design" not in readme.read_text(encoding="utf-8"):
+        return set()
+    registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text(encoding="utf-8")) or {}
+    if any(item.get("name") == "presentation-production" for item in registry.get("workflows", [])):
+        return set()
+
+    for suite in cfg.get("case_suites") or []:
+        source = root / str(suite.get("path") or "")
+        if not source.is_file():
+            return set()
+        cases_doc = yaml.safe_load(source.read_text(encoding="utf-8")) or {}
+        cases_by_id = {
+            str(item.get("id")): item
+            for item in cases_doc.get("cases", [])
+            if isinstance(item, dict) and item.get("id")
+        }
+        required_ids = set(map(str, suite.get("required_case_ids") or []))
+        if not required_ids or not required_ids.issubset(cases_by_id):
+            return set()
+        if any(
+            not isinstance(cases_by_id[case_id].get("expected", {}).get("should_trigger"), bool)
+            or not cases_by_id[case_id].get("expected", {}).get("must")
+            or not cases_by_id[case_id].get("expected", {}).get("must_not")
+            for case_id in required_ids
+        ):
+            return set()
+    if not cfg.get("case_suites"):
+        return set()
+    return expected_paths
+
+
 def config(root: Path = ROOT):
     return yaml.safe_load((root / CONFIG_REL).read_text(encoding="utf-8")) or {}
 
@@ -124,6 +194,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
         ):
             separate_meta_targets = set(expected_paths)
     separate_meta_targets.update(separately_validated_engineering_paths())
+    separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
         if not path:
