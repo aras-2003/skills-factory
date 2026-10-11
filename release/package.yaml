@@ -3,8 +3,15 @@ package:
   version: "1.37.0"
 lab:
   name: skills-factory-lab
-  version: "0.34.0"
+  version: "0.35.0"
   draft_test_targets:
     - skill-test-design
     - skill-evaluation
     - skill-release-review
+    - presentation-brief
+    - presentation-deck-review
+    - presentation-evidence-review
+    - presentation-exhibit-design
+    - presentation-export-verification
+    - presentation-slide-authoring
+    - presentation-storyline
