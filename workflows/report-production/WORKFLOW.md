@@ -6,7 +6,7 @@ Produce an **audience-specific, source-faithful, professionally authored long-fo
 
 ## Source and scope
 
-**Status:** DRAFT; intentionally **not registered** in the runtime registry. No model execution, DOCX/PDF generation, page inspection or release PASS is implied by the source definition.
+**Status:** DRAFT; registered only in the isolated Lab runtime and unavailable in the production channel. No model execution, DOCX/PDF generation, page inspection or release PASS is implied by the source definition.
 
 Read `references/document-contract.md` and `references/quality-standard.md` as needed and the shared [cross-OS contract](../../docs/architecture/content-to-artifact-contract.md). Source of truth is the user's supplied materials or compatible, versioned domain output.
 

@@ -1,6 +1,6 @@
 schema_version: "1.0"
 campaign: presentation-os-creative-direction-2026-10
-purpose: isolate-source-case-coverage-from-unrelated-r20-runtime-baseline
+purpose: keep-lab-exposed-draft-changes-distinct-from-the-pinned-r20-runtime-receipt
 runtime_status: NOT_RUN
 out_of_scope_behavior_paths:
   - skills/presentations/presentation-deck-review/SKILL.md

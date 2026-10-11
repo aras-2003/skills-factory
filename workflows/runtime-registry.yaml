@@ -649,3 +649,73 @@ workflows:
       last_reviewed: 2026-10-02
       execution:
         default_model_class: standard
+  - name: skill-development
+    workflow: workflows/skill-development/WORKFLOW.md
+    channels:
+      plugin: unavailable
+      lab: supported
+      chatgpt-zip: unavailable
+    dependencies:
+      required:
+        - skill-authoring
+        - skill-specification
+        - skill-test-design
+        - skill-evaluation
+        - skill-validation
+        - skill-release-review
+      optional: []
+    description: >
+      Run the complete skill-development lifecycle for defining, authoring, validating, evaluating and releasing a reusable skill.
+      Use when a skill is created, materially changed or considered for promotion; do not use for routine execution of an existing skill.
+    metadata:
+      owner: arkadiusz-kamrowski
+      version: "0.1.0"
+      maturity: draft
+      risk: medium
+      last_reviewed: 2026-10-11
+  - name: presentation-production
+    workflow: workflows/presentation-production/WORKFLOW.md
+    channels:
+      plugin: unavailable
+      lab: supported
+      chatgpt-zip: unavailable
+    dependencies:
+      required:
+        - presentation-brief
+        - presentation-deck-review
+        - presentation-evidence-review
+        - presentation-exhibit-design
+        - presentation-export-verification
+        - presentation-slide-authoring
+        - presentation-storyline
+      optional: []
+    description: >
+      Orchestrate an evidence-backed presentation from brief and story through art direction, native slide authoring, review and export verification.
+      Use when a user requests a new or substantially rebuilt presentation artifact; do not use for a report, isolated chart or storyline-only request.
+    metadata:
+      owner: arkadiusz-kamrowski
+      version: "0.1.0"
+      maturity: draft
+      risk: medium
+      last_reviewed: 2026-10-11
+  - name: report-production
+    workflow: workflows/report-production/WORKFLOW.md
+    channels:
+      plugin: unavailable
+      lab: supported
+      chatgpt-zip: unavailable
+    dependencies:
+      required:
+        - report-document-architecture
+        - report-document-authoring
+        - report-document-review
+      optional: []
+    description: >
+      Orchestrate a long-form report from brief and source analysis through document architecture, native authoring, review and export verification.
+      Use when a user requests an external report artifact; do not use for a slide deck or a short response in chat.
+    metadata:
+      owner: arkadiusz-kamrowski
+      version: "0.1.0"
+      maturity: draft
+      risk: medium
+      last_reviewed: 2026-10-11

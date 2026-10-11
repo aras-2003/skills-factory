@@ -125,11 +125,20 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
         metadata = (yaml.safe_load(source[4:end]) or {}).get("metadata") or {}
         if metadata.get("maturity") != "draft":
             return set()
-    readme = root / "skills/presentations/README.md"
-    if not readme.is_file() or "source-only candidate design" not in readme.read_text(encoding="utf-8"):
+    readme = root / "README.md"
+    if not readme.is_file() or "Lab 0.35.0 and its bundled MCP expose every source skill and workflow regardless of maturity" not in readme.read_text(encoding="utf-8"):
         return set()
     registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text(encoding="utf-8")) or {}
-    if any(item.get("name") == "presentation-production" for item in registry.get("workflows", [])):
+    presentation_workflow = next(
+        (item for item in registry.get("workflows", []) if item.get("name") == "presentation-production"),
+        None,
+    )
+    if (
+        presentation_workflow is None
+        or (presentation_workflow.get("metadata") or {}).get("maturity") != "draft"
+        or (presentation_workflow.get("channels") or {}).get("lab") != "supported"
+        or (presentation_workflow.get("channels") or {}).get("plugin") != "unavailable"
+    ):
         return set()
 
     for suite in cfg.get("case_suites") or []:

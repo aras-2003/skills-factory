@@ -7,7 +7,7 @@
       },
       "lab": {
         "name": "skills-factory-lab",
-        "version": "0.34.0"
+        "version": "0.35.0"
       }
     },
     "source_revision": "89db15ef94cf",
@@ -16,7 +16,7 @@
     "runtime_installation": "NOT_OBSERVED",
     "availability_semantics": "Source maturity and declared channels do not prove package inclusion or installed runtime availability.",
     "source_workflow_count": 19,
-    "registered_workflow_count": 16
+    "registered_workflow_count": 19
   },
   "skills": [
     {
@@ -1105,12 +1105,24 @@
       "name": "presentation-production",
       "source": "workflows/presentation-production/WORKFLOW.md",
       "source_status": "present",
-      "runtime_registration": "not_registered",
-      "maturity": "unknown",
-      "version": "unknown",
-      "description": "Produce an audience-specific, evidence-backed, deliberately art-directed **presentation artifact** in a connected native presentation platform (Figma Slides, Canva, Google Slides, or another verified destination), when explicitly requested. This workflow owns orchestration and stage gates, not all specialist reasoning/rendering.",
-      "declared_channels": {},
-      "required_dependencies": [],
+      "runtime_registration": "registered",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Orchestrate an evidence-backed presentation from brief and story through art direction, native slide authoring, review and export verification. Use when a user requests a new or substantially rebuilt presentation artifact; do not use for a report, isolated chart or storyline-only request.",
+      "declared_channels": {
+        "chatgpt-zip": "unavailable",
+        "lab": "supported",
+        "plugin": "unavailable"
+      },
+      "required_dependencies": [
+        "presentation-brief",
+        "presentation-deck-review",
+        "presentation-evidence-review",
+        "presentation-exhibit-design",
+        "presentation-export-verification",
+        "presentation-slide-authoring",
+        "presentation-storyline"
+      ],
       "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
@@ -1118,12 +1130,20 @@
       "name": "report-production",
       "source": "workflows/report-production/WORKFLOW.md",
       "source_status": "present",
-      "runtime_registration": "not_registered",
-      "maturity": "unknown",
-      "version": "unknown",
-      "description": "Produce an **audience-specific, source-faithful, professionally authored long-form document** when the user explicitly requests a report file or an external editable/paginated document. This workflow owns orchestration; it delegates subject analysis, report semantics, exhibits and actual file actions.",
-      "declared_channels": {},
-      "required_dependencies": [],
+      "runtime_registration": "registered",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Orchestrate a long-form report from brief and source analysis through document architecture, native authoring, review and export verification. Use when a user requests an external report artifact; do not use for a slide deck or a short response in chat.",
+      "declared_channels": {
+        "chatgpt-zip": "unavailable",
+        "lab": "supported",
+        "plugin": "unavailable"
+      },
+      "required_dependencies": [
+        "report-document-architecture",
+        "report-document-authoring",
+        "report-document-review"
+      ],
       "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
@@ -1131,12 +1151,23 @@
       "name": "skill-development",
       "source": "workflows/skill-development/WORKFLOW.md",
       "source_status": "present",
-      "runtime_registration": "not_registered",
-      "maturity": "unknown",
-      "version": "unknown",
-      "description": "Create or materially change a skill using a repeatable engineering process that covers need and scope;; standards research;; behavioral contract;; authoring;; static validation;; routing tests;; behavioral evals;; regression analysis;; security / surprise review;; production readiness..",
-      "declared_channels": {},
-      "required_dependencies": [],
+      "runtime_registration": "registered",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Run the complete skill-development lifecycle for defining, authoring, validating, evaluating and releasing a reusable skill. Use when a skill is created, materially changed or considered for promotion; do not use for routine execution of an existing skill.",
+      "declared_channels": {
+        "chatgpt-zip": "unavailable",
+        "lab": "supported",
+        "plugin": "unavailable"
+      },
+      "required_dependencies": [
+        "skill-authoring",
+        "skill-evaluation",
+        "skill-release-review",
+        "skill-specification",
+        "skill-test-design",
+        "skill-validation"
+      ],
       "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     }

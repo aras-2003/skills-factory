@@ -8,7 +8,7 @@ Reusable AI capability library for repeatable work across projects.
 - A **Skill** stores one reusable procedure.
 - A **Workflow** composes skills with gates and stop conditions.
 - **Scripts** calculate and validate deterministic logic.
-- **Runtime packages** expose a maturity/channel-specific subset of source capabilities.
+- **Runtime packages** expose channel-specific capabilities; each package's generated manifest is the exact runtime allow-list.
 - GitHub source is authoritative; generated plugins/ZIPs are build outputs, not editing targets.
 
 Rule: **LLM interprets; code calculates and validates.**
@@ -32,7 +32,7 @@ The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) preser
 
 The source tree is not the runtime allow-list.
 
-Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS source-only components; 19 workflow definitions, of which three (skill-development, presentation-production and report-production) are not runtime-registered. The existing implemented domains are `career`, `commerce`, `investing`, `meta` and `oaf`. Presentation/Report OS remains draft source. Lab availability is determined by its generated manifest. Other domain README files describe design/backlog intent unless stated otherwise.
+Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS components, and 19 workflow definitions. Lab 0.35.0 and its bundled MCP expose every source skill and workflow regardless of maturity for isolated testing. Presentation/Report OS, skill-development and report-production remain draft; their Lab exposure does not promote them to the production plugin. The production plugin continues to use its explicit maturity and channel allow-list. Other domain README files describe design/backlog intent unless stated otherwise.
 
 ## Branches, maturity and installed capability
 
@@ -52,7 +52,7 @@ Do not infer installed availability from branch membership alone.
 Production builders currently support:
 
 1. **Plugin channel** — production skills plus workflow entrypoints allowed by `workflows/runtime-registry.yaml`.
-2. **Lab channel** — isolated evaluation package containing candidate targets, required production dependencies, executor-only eval inputs, and explicitly allow-listed draft test targets.
+2. **Lab channel** — isolated evaluation package containing every source skill and registered workflow regardless of maturity, plus executor-only eval inputs. Do not enable it in the same runtime session as the production plugin.
 3. **ChatGPT ZIP channel** — individual production skill ZIPs. Workflow availability is declared explicitly in the channel manifest; unsupported workflows are not silently implied.
 4. **Chat/mobile-safe plugin profile** — the same production skills without a bundled MCP server. This is the portable profile for ordinary Chat surfaces where local MCP cannot run.
 5. **Cloud MCP plugin profile** — the same production skills with an externally hosted HTTPS MCP endpoint. This profile is for supported web/desktop/Work surfaces; it is not the mobile runtime.

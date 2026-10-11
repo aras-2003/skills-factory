@@ -35,6 +35,8 @@ def write_json(path: Path, value):
 
 
 def component_sources(root=ROOT):
+    # The closure-v12 campaign remains bound to its 70-entry historical baseline;
+    # the all-status Lab package has its own current-source packaging validation.
     package = read_yaml(root / 'release/package.yaml')
     draft_targets = set(package['lab']['draft_test_targets'])
     result = {}
@@ -43,7 +45,7 @@ def component_sources(root=ROOT):
         if fm.get('metadata', {}).get('maturity') in ('candidate', 'production') or fm['name'] in draft_targets:
             result[fm['name']] = path
     for row in read_yaml(root / 'workflows/runtime-registry.yaml')['workflows']:
-        if row.get('channels', {}).get('lab') == 'supported':
+        if row.get('channels', {}).get('lab') == 'supported' and (row.get('metadata') or {}).get('maturity') != 'draft':
             result[row['name']] = root / row['workflow']
     return result
 

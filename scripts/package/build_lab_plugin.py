@@ -9,27 +9,16 @@ from pathlib import Path
 import yaml
 
 from build_utils import atomic_output, capability_assessment, capability_contract_metadata, ensure_source_valid, package_runtime_mcp, package_version, sha256_tree, source_revision, write_json
-from build_plugin import copy_skill, discover_skills
+from build_plugin import copy_skill
 from workflow_entrypoints import add_workflow_entrypoints, load_registry
 
 
 PLUGIN_NAME = "skills-factory-lab"
 PLUGIN_VERSION = "0.2.1"
 
-def discover_draft_test_skills(root: Path) -> list[Path]:
-    package = yaml.safe_load((root / "release" / "package.yaml").read_text(encoding="utf-8")) or {}
-    lab = package.get("lab") or {}
-    targets = lab.get("draft_test_targets") or []
-    if not isinstance(targets, list) or not targets or not all(isinstance(name, str) and name for name in targets):
-        raise ValueError("release/package.yaml: lab.draft_test_targets must be a non-empty list of names")
-    if len(targets) != len(set(targets)):
-        raise ValueError("release/package.yaml: lab.draft_test_targets must be unique")
-
-    drafts = {path.name: path for path in discover_skills(root, "draft")}
-    missing = sorted(set(targets) - drafts.keys())
-    if missing:
-        raise ValueError("Lab draft test targets are missing or not draft: " + ", ".join(missing))
-    return [drafts[name] for name in targets]
+def discover_all_skills(root: Path) -> list[Path]:
+    """Return every source skill; Lab/MCP exposure is independent of maturity."""
+    return [path.parent for path in sorted((root / "skills").rglob("SKILL.md"))]
 
 
 def add_runtime_eval_fixtures(root: Path, package_root: Path) -> int:
@@ -110,30 +99,23 @@ def main() -> int:
     ensure_source_valid(root)
     out = root / args.output
 
-    candidate_skills = discover_skills(root, "candidate")
-    production_skills = discover_skills(root, "production")
-    draft_test_skills = discover_draft_test_skills(root)
-    if not candidate_skills:
-        raise SystemExit("No candidate skills found; refusing to build empty lab plugin")
+    all_skills = discover_all_skills(root)
+    if not all_skills:
+        raise SystemExit("No source skills found; refusing to build empty lab plugin")
 
     with atomic_output(root, out) as stage:
         skills_out = stage / "skills"
         skills_out.mkdir(parents=True)
 
         skill_capabilities: dict[str, dict] = {}
-        for skill_dir in candidate_skills + production_skills + draft_test_skills:
+        for skill_dir in all_skills:
             item = copy_skill(skill_dir, skills_out)
             skill_capabilities[item["name"]] = item
 
         available_names = {p.name for p in skills_out.iterdir() if p.is_dir()}
-        candidate_workflows = add_workflow_entrypoints(
-            root, "candidate", skills_out, channel="lab", available_names=available_names
+        workflow_names = add_workflow_entrypoints(
+            root, "all", skills_out, channel="lab", available_names=available_names
         )
-        available_names.update(candidate_workflows)
-        production_workflows = add_workflow_entrypoints(
-            root, "production", skills_out, channel="lab", available_names=available_names
-        )
-        workflow_names = candidate_workflows + production_workflows
 
         runtime_eval_fixtures = add_runtime_eval_fixtures(root, stage)
 
@@ -181,7 +163,7 @@ def main() -> int:
         interface = {
             "displayName": "Skills Factory Lab",
             "shortDescription": "Candidate skills for runtime evaluation and discovery.",
-            "longDescription": "A self-contained non-production lab package built from main for isolated behavioral testing, including only explicitly selected draft test targets. Do not enable it in the same session as the production plugin because duplicate capability names may compete.",
+            "longDescription": "A self-contained non-production Lab/MCP package built from main for isolated behavioral testing. It exposes every source skill and registered workflow regardless of maturity. Do not enable it in the same session as the production plugin because duplicate capability names may compete.",
             "websiteURL": "https://aras-2003.github.io/skills-factory/",
             "brandColor": "#C6812C",
             "brandColorDark": "#F0C982",
@@ -192,7 +174,7 @@ def main() -> int:
             "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
             "name": PLUGIN_NAME,
             "version": version,
-            "description": "Isolated lab package with candidate targets, explicitly selected draft test targets, and their production dependencies for controlled behavioral testing.",
+            "description": "Isolated Lab/MCP package with every source skill and registered workflow, across all maturity statuses, for controlled behavioral testing.",
             "skills": "./skills/",
             "author": {"name": "Arkadiusz Kamrowski"},
             "repository": "https://github.com/aras-2003/skills-factory",
@@ -279,8 +261,8 @@ def main() -> int:
         )
 
     print(
-        f"Packaged {len(candidate_skills)} candidate + {len(production_skills)} production dependency skills + "
-        f"{len(candidate_workflows) + len(production_workflows)} workflow entrypoints + "
+        f"Packaged {len(all_skills)} skills across all maturity statuses + "
+        f"{len(workflow_names)} workflow entrypoints across all maturity statuses + "
         f"{runtime_eval_fixtures} runtime eval inputs into {out}"
     )
     return 0
