@@ -10,3 +10,4 @@ assertions:
   must_not:
     - Route to investment-security-review solely because the prompt contains the Polish word akcje.
     - Invent holdings, weights, goals, or risk preferences.
+    - Do not present HOLD / ADD / TRIM / EXIT or equivalent action labels before the user identifies the decision route.
