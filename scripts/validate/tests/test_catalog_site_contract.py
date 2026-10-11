@@ -169,6 +169,17 @@ lab:
             self.assertTrue(expected <= actual)
             self.assertTrue(all(p["maturity"] == "draft" for p in paths))
 
+    def test_new_domain_icons_use_local_transparent_assets(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        self.assertIn('./assets/domain-icons.svg', page)
+        for domain in ("presentations", "reports"):
+            path = ROOT / "docs/assets" / f"{domain}.png"
+            data = path.read_bytes()
+            self.assertIn(f'./assets/{domain}.png', page)
+            self.assertEqual(b"\x89PNG\r\n\x1a\n", data[:8])
+            self.assertEqual(6, data[25], "new icons must preserve RGBA transparency")
+            self.assertLess(len(data), 2_000_000)
+
     def test_lab_packager_uploads_an_immutable_candidate_without_branch_writes(self) -> None:
         workflow = (ROOT / ".github/workflows/package-main-lab-plugin.yml").read_text(encoding="utf-8")
         self.assertIn("cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json", workflow)

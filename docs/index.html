@@ -20,7 +20,7 @@
     @media(max-width:640px){.shell{padding:18px 17px 35px}.topbar{padding-bottom:17px}.brand img{width:34px;height:34px}.repo-link{font-size:0;width:38px;height:38px;justify-content:center;padding:0}.repo-link svg{width:17px;height:17px}.hero{grid-template-columns:1fr;padding:38px 0 24px;gap:23px}.hero h1{font-size:47px;max-width:480px}.hero p{font-size:14px}.summary{grid-template-columns:repeat(2,1fr);max-width:340px}.summary article{min-height:69px;padding:10px 12px}.summary strong{font-size:26px}.toolbar{flex-wrap:wrap;padding:10px}.search{flex-basis:100%}.toolbar select{flex:1;min-width:0}.filters{margin-right:-17px;padding-right:17px}.grid{grid-template-columns:1fr;gap:9px}.card{min-height:0;padding:16px}.card h3{margin-top:13px}.card p{-webkit-line-clamp:2}.footer{flex-direction:column;gap:7px}.dialog-inner{padding:21px}.dialog-head h2{font-size:26px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
     .area-card{position:relative;overflow:hidden}.area-card:before{position:absolute;content:"";width:140px;height:140px;right:-64px;top:-82px;border-radius:50%;background:var(--area-bg);filter:blur(8px);pointer-events:none}.area-card>*{position:relative}
-    .runtime-note{padding:15px 18px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:13px;background:#ffffff03}.runtime-note a{color:var(--accent)}.process-badge.draft{color:#e6ade0;background:#e6ade015}.icon-presentations{background-image:url("./assets/presentations.svg");background-size:100% 100%;background-position:center}.icon-reports{background-image:url("./assets/reports.svg");background-size:100% 100%;background-position:center}#workflows-view>.search{margin:15px 0 20px}.workflow-source{color:var(--accent);text-decoration:none;font-size:12px}.view-switch{flex-wrap:wrap}@media(max-width:640px){.view-switch button{flex:1 1 42%}.runtime-note{font-size:12px}}
+    .runtime-note{padding:15px 18px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:13px;background:#ffffff03}.runtime-note a{color:var(--accent)}.process-badge.draft{color:#e6ade0;background:#e6ade015}.icon-presentations{background-image:url("./assets/presentations.png");background-size:115% 115%;background-position:center}.icon-reports{background-image:url("./assets/reports.png");background-size:115% 115%;background-position:center}#workflows-view>.search{margin:15px 0 20px}.workflow-source{color:var(--accent);text-decoration:none;font-size:12px}.view-switch{flex-wrap:wrap}@media(max-width:640px){.view-switch button{flex:1 1 42%}.runtime-note{font-size:12px}}
   </style>
 </head>
 <body>
@@ -148,14 +148,15 @@
     document.querySelector("#maturity").addEventListener("change",event=>{state.maturity=event.target.value;renderCards()});
     document.querySelector(".dialog-close").addEventListener("click",()=>dialog.close());
     dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
+    const workflowDomain=name=>name.startsWith("presentation-")?"presentations":name.startsWith("report-")?"reports":name.startsWith("investment-")?"investing":name.startsWith("commerce-")?"commerce":name.startsWith("oaf-")?"oaf":"meta";
     function renderWorkflows(){
       const q=state.workflowQuery.trim().toLocaleLowerCase("pl");
-      const result=state.workflows.filter(w=>!q||`${w.name} ${w.description}`.toLocaleLowerCase("pl").includes(q));
+      const result=state.workflows.filter(w=>!q||`${w.name} ${w.description} ${domainNames[workflowDomain(w.name)]}`.toLocaleLowerCase("pl").includes(q));
       document.querySelector("#workflow-count").textContent=`${result.length} z ${state.workflows.length} workflowów`;
       const list=document.querySelector("#workflow-cards");list.setAttribute("aria-busy","false");
       if(!result.length){list.innerHTML='<div class="empty">Nie znaleziono workflowów. Zmień hasło.</div>';return}
       list.innerHTML=result.map(w=>{
-        const domain=w.name.startsWith("presentation-")?"presentations":w.name.startsWith("report-")?"reports":w.name.startsWith("investment-")?"investing":w.name.startsWith("commerce-")?"commerce":w.name.startsWith("oaf-")?"oaf":"meta";
+        const domain=workflowDomain(w.name);
         const [color,bg]=domainColors[domain];
         const registered=w.runtime_registration==="registered";
         const status=registered?(maturityNames[w.maturity]||"Źródło"):"Źródło · bez rejestracji";
