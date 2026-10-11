@@ -1,60 +1,46 @@
 {
   "schema_version": 1,
-  "site_version": 22,
-  "site_source_revision": "bca3b379e382df857009a380d30bcac3d839f6e5",
-  "verified_at": "2026-10-11T15:09:26.953Z",
+  "site_version": 23,
+  "site_source_revision": "08d20006371b1f255331fd7ca2988abf616d43d1",
+  "verified_at": "2026-10-11T22:13:42.927Z",
   "attestation_status": "verified",
   "site_url": "https://skills-factory-cloud-next.arek2003.chatgpt.site",
   "lab_release": {
     "channel": "lab",
-    "version": "0.34.0",
-    "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
-    "skill_count": 70,
-    "catalog_digest": "dcc87a8f20efcc0de91aab8e640709f1c72c8553fbcf0c32623be2908fb5a7bb",
-    "artifact_sha256": "faef2c217e8c1c82ad50d9f63021896e2020b5e93cad7e85c5faec98055069d3"
+    "version": "0.35.0",
+    "source_revision": "e1c4b8462c519f1fa25a9af5980b6786ed590029",
+    "skill_count": 83,
+    "catalog_digest": "697002d5a10a9f3d07dcb27c2bc6feb4f5b28f9714c6f1f282e2c6d80e1a7a15",
+    "artifact_sha256": "01a4610bf790ab7226c8e7efccc9b025e07a37011419d2c60b4c114086db23a1"
   },
   "runtime_release": {
-    "channel": "private-lab-with-drafts",
-    "version": "0.34.0",
-    "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
-    "skill_count": 82,
-    "catalog_digest": "97a658ffa272e5621085ae9e25da0d6a1d25fa0cda0ccb8a1675c551017d850a",
-    "artifact_sha256": "faef2c217e8c1c82ad50d9f63021896e2020b5e93cad7e85c5faec98055069d3",
-    "artifact_scope": "base_lab_only"
+    "channel": "lab",
+    "version": "0.35.0",
+    "source_revision": "e1c4b8462c519f1fa25a9af5980b6786ed590029",
+    "skill_count": 83,
+    "catalog_digest": "697002d5a10a9f3d07dcb27c2bc6feb4f5b28f9714c6f1f282e2c6d80e1a7a15",
+    "artifact_sha256": "01a4610bf790ab7226c8e7efccc9b025e07a37011419d2c60b4c114086db23a1",
+    "artifact_scope": "complete_lab"
   },
-  "draft_extension": {
-    "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
-    "component_count": 12,
-    "components": [
-      "presentation-brief",
-      "presentation-storyline",
-      "presentation-evidence-review",
-      "presentation-exhibit-design",
-      "presentation-slide-authoring",
-      "presentation-deck-review",
-      "presentation-export-verification",
-      "presentation-production",
-      "report-document-architecture",
-      "report-document-authoring",
-      "report-document-review",
-      "report-production"
-    ],
-    "maturity": "draft"
-  },
+  "draft_extension": null,
   "checks": {
     "catalog_loads": {
-      "PASS": 82,
+      "PASS": 83,
       "FAIL": 0
     },
     "contracts": {
       "PASS": 12,
       "FAIL": 0
     },
+    "live_probes": {
+      "PASS": 4,
+      "FAIL": 0
+    },
     "model_campaign": "NOT_RUN",
     "authoring_export_campaign": "NOT_RUN"
   },
-  "catalog_observed_at": "2026-10-11T15:30:46.977Z",
-  "catalog_receipt_sha256": "03b9b20ebf740f73b93f03b6ede16a56bf97729c5851788c985882c9c20d9bd6",
+  "catalog_observed_at": "2026-10-11T22:13:42.944Z",
+  "catalog_receipt_sha256": "e7eaf3c8a1f333fcbd8548312a9ff93cf3d182c4c2463f1dcec1c1ed040e04b8",
   "catalog_entries": [
     {
       "name": "acquisition-fit-review",
@@ -453,7 +439,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "c5133f02243f35191c202905f5416da225e6a4392e571dc36ad7cc473e871eb5",
+      "content_sha256": "dd8f810b3919cb8fe9bdff924e796c77dbd42c6e13c7add9bac8de59f7d108af",
       "domain": "presentations"
     },
     {
@@ -461,7 +447,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "d01cde542c30c97d649b1c901043840427407e404a63fcc379bc1efc24438bb9",
+      "content_sha256": "88695e09e4dda6ae14116c2174a6b06789d4e5c673271b3efd063827d8c34fa6",
       "domain": "presentations"
     },
     {
@@ -469,7 +455,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "ea148f3c8cfaa0fb313b8b34e6b6aa0d9ff970ecf88cb26d661e8cd89a8ca044",
+      "content_sha256": "1ac96c39cf68146fb166916424d86624e276f49fea27cfd3ec2518437cf735e5",
       "domain": "presentations"
     },
     {
@@ -477,7 +463,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "b38607243085d90a669a96feb6e7aeb2ebc16edb232394e52dfaa26132f592eb",
+      "content_sha256": "f452ccc110ebc3dd5e7bfe3269ddc07b62fc9ce93552624dc56e911e002309c5",
       "domain": "presentations"
     },
     {
@@ -485,7 +471,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "5b3fafb7eb883e259629558dd285f799fa073e7be5bd9fee2247bb7e0897cb5d",
+      "content_sha256": "a1dc446f721f7d1be8f9e69156fd1b6b28a98f3e07a9e0575bc1d1a7448881cf",
       "domain": "presentations"
     },
     {
@@ -493,7 +479,7 @@
       "kind": "workflow",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "ae2b459826294ed9bb2e304d4bc1e3606774a589e3a5d0689334aafd66eb3f56",
+      "content_sha256": "b7f726e7d4b223173904acbe0bd68ce68af429df897146b10dbcfc12a203bb0b",
       "domain": "presentations"
     },
     {
@@ -501,7 +487,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "b03affa4dd09822a0cd2e4f3e4daa6d98fe7c87b5dbace75e8c7c893d048575b",
+      "content_sha256": "b1f8b7129c12b511a28d9589c69fc20018e78d336af0be0f6db2ae6315e92038",
       "domain": "presentations"
     },
     {
@@ -509,7 +495,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "9120809b2bb8e650712097cee3ec8eee05eec0eb7f491098178c07c5bc3cee65",
+      "content_sha256": "3de4b383e55bf542a963097de9c3a7cd8ca31863c6d083e6f6830b6ca8170da7",
       "domain": "presentations"
     },
     {
@@ -549,7 +535,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "d01d6ee8ab92fc47b823c80eb0eb4b1265f8066353a11dc261c34566c0edb74d",
+      "content_sha256": "aafc1348cd3a8ba959c0aad1e4d5ef07ead5814bc043045a61ea3aecd97e380a",
       "domain": "reports"
     },
     {
@@ -557,7 +543,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "b22e1754eb12901d34de6830f38fc872c08e3dd76ccca32d11d6f8a9f96238c4",
+      "content_sha256": "54d09d43399e85ca2418d8e93484eaebb105273b53a2f2443b677f9a6fb87720",
       "domain": "reports"
     },
     {
@@ -565,7 +551,7 @@
       "kind": "skill",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "89c2b4ff8167f6ff8612d95f09219388a0af02941ebc4d7ac13f18506bfa59ae",
+      "content_sha256": "cc259b7479e92fe2407d9f5885f9af7ee650b92070b8c7dc42da4b4ab7e7a9b3",
       "domain": "reports"
     },
     {
@@ -573,7 +559,7 @@
       "kind": "workflow",
       "version": "0.1.0",
       "maturity": "draft",
-      "content_sha256": "9fff8c34c91abee4a070c2d5a857175377ecfcad633ea8976c70bbd454adc226",
+      "content_sha256": "c22b9e375961b546766dde8e993664b533c0409f9c87d48ae30304e9858a3bb9",
       "domain": "reports"
     },
     {
@@ -590,6 +576,14 @@
       "version": "1.0.1",
       "maturity": "production",
       "content_sha256": "6866b4dad4af4b1a72632b076d4ea8d74717114eba10ff1a61edf42f14349fb1",
+      "domain": "meta"
+    },
+    {
+      "name": "skill-development",
+      "kind": "workflow",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "ac1a287b26c1d22ddc60124a1bada9e8b4dc3f59f246e4fcaf37ab9a15257f4e",
       "domain": "meta"
     },
     {
@@ -712,5 +706,8 @@
       "content_sha256": "7f760fe6e4808ce6843a4d44c2d4acd20ac7cf72f79575a924b96e41d035ea7a",
       "domain": "meta"
     }
-  ]
+  ],
+  "github_main_revision": "9a7f4132baeaf226944747876f47e1bfb283d4d7",
+  "tool_schema_digest": "sha256:d0a9033873c4cce8a2644465091d71d77b71050a782b07f38faea4ecff87a798",
+  "deployment_id": "appgdep_6acc09f4ff2c8191a80ce36cb36a660b"
 }
