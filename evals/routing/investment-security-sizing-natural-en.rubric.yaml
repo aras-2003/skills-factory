@@ -15,4 +15,5 @@ assertions:
     - one named security plus a proposed portfolio allocation is routed to investment-security-review
     - the existence of a portfolio percentage alone does not turn a single-security decision into a portfolio-wide review
     - routing only does not analyze the fictional company or recommend or execute a trade
+    - the `route_investment_request` receipt is used before analysis, and the selected child is not silently replaced
     - a separate multi-holding concentration or allocation request still routes to investment-portfolio-review
