@@ -63,6 +63,11 @@ Use `investment-attention-review` when the user brings new company/industry/mark
 ### Policy route
 Use `investment-policy-design` when the decision is about portfolio rules, risk limits, target bands, sizing constraints or investment governance rather than reviewing current holdings.
 
+### Clarify before routing
+If the user refers to existing shares but does not specify whether they want an observation, a portfolio risk review, analysis of a named security, or policy help, ask one short question to establish the decision object. Do not offer HOLD / ADD / TRIM / EXIT (or equivalent actions) before that clarification. Ask for holdings, weights, or risk preferences only after the user selects a route.
+
+For one named security, thesis, valuation, downside, portfolio fit or a stated position size belongs to security review. An incidental percentage for that security does not by itself make the task portfolio-wide. Use portfolio review when the user asks about concentration, diversification, exposure, overlap, or decisions across multiple holdings.
+
 ## Orchestration rules
 1. Run the runtime routing preflight when available; otherwise use the routing matrix.
 2. Select the primary route before doing substantive analysis and load the exact matching child workflow/skill by name.
