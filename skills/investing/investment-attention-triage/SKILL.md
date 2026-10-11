@@ -28,7 +28,7 @@ Convert noisy new information into a decision-focused queue: what changed, wheth
 6. Classify direction separately: STRENGTHENS / WEAKENS / MIXED / NEUTRAL.
 7. Assess market reaction and whether the evidence may already be priced in only as interpretations, not proof.
 8. State the smallest next research question and specialist path, plus the decision it could change (for example, no action, monitor, or deeper review).
-9. Persist only material items through investment-record-store.
+9. Keep this workflow read-only unless the user explicitly authorizes persistence for this run. If authorized, persist only material items through investment-record-store and report its actual canonical receipt; never claim a write from a planned or unavailable integration.
 
 If the user has not supplied a ticker, the new information, or the prior thesis/expectation, do not stop at an intake form. State a provisional decision rule using the relevant dimensions above, name the exact missing inputs, and ask only for the minimum needed to apply it. Mark the conclusion provisional; do not invent company facts or imply that a materiality assessment has already been completed.
 
@@ -39,6 +39,7 @@ If the user has not supplied a ticker, the new information, or the prior thesis/
 - Company good news can coexist with worse valuation.
 - Portfolio concentration can raise decision relevance.
 - `NOISE`, `MONITOR`, `REVIEW`, and `ESCALATE` are the complete allowed materiality enum; do not create alternate labels.
+- When a user supplies multiple items for triage, classify each item; use `NOISE` for immaterial items and never replace the rubric's `NOISE` label with `IGNORE`.
 
 ## Output contract
 For each item assessed, show: what changed versus prior expectation; relevant decision dimension(s); materiality enum with a brief rationale; direction; priced-in view when evidence permits; decision consequence; provenance; next research question and smallest escalation path. Suppress noise. When inputs are missing, show a provisional decision rule and the minimum missing inputs instead of returning only a questionnaire. Include the canonical persistence receipt when a write is attempted.
