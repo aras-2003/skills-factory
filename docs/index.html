@@ -20,6 +20,7 @@
     @media(max-width:640px){.shell{padding:18px 17px 35px}.topbar{padding-bottom:17px}.brand img{width:34px;height:34px}.repo-link{font-size:0;width:38px;height:38px;justify-content:center;padding:0}.repo-link svg{width:17px;height:17px}.hero{grid-template-columns:1fr;padding:38px 0 24px;gap:23px}.hero h1{font-size:47px;max-width:480px}.hero p{font-size:14px}.summary{grid-template-columns:repeat(2,1fr);max-width:340px}.summary article{min-height:69px;padding:10px 12px}.summary strong{font-size:26px}.toolbar{flex-wrap:wrap;padding:10px}.search{flex-basis:100%}.toolbar select{flex:1;min-width:0}.filters{margin-right:-17px;padding-right:17px}.grid{grid-template-columns:1fr;gap:9px}.card{min-height:0;padding:16px}.card h3{margin-top:13px}.card p{-webkit-line-clamp:2}.footer{flex-direction:column;gap:7px}.dialog-inner{padding:21px}.dialog-head h2{font-size:26px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
     .area-card{position:relative;overflow:hidden}.area-card:before{position:absolute;content:"";width:140px;height:140px;right:-64px;top:-82px;border-radius:50%;background:var(--area-bg);filter:blur(8px);pointer-events:none}.area-card>*{position:relative}
+    .runtime-note{padding:15px 18px;border:1px solid var(--line);border-radius:14px;color:var(--muted);font-size:13px;background:#ffffff03}.runtime-note a{color:var(--accent)}.process-badge.draft{color:#e6ade0;background:#e6ade015}.icon-presentations{background-image:url("./assets/presentations.svg");background-size:100% 100%;background-position:center}.icon-reports{background-image:url("./assets/reports.svg");background-size:100% 100%;background-position:center}#workflows-view>.search{margin:15px 0 20px}.workflow-source{color:var(--accent);text-decoration:none;font-size:12px}.view-switch{flex-wrap:wrap}@media(max-width:640px){.view-switch button{flex:1 1 42%}.runtime-note{font-size:12px}}
   </style>
 </head>
 <body>
@@ -49,10 +50,11 @@
       </section>
       <figure class="capability-visual">
         <img src="./assets/capability-map.svg" alt="Mapa kompetencji łącząca obszary strategii, inwestowania, e-commerce, organizacji i kariery wokół wspólnego punktu decyzyjnego." width="1440" height="960">
-        <figcaption>Jeden katalog. Pięć obszarów pracy. Workflow dobrane do decyzji, którą chcesz podjąć.</figcaption>
+        <figcaption>Jeden katalog. Od analizy i decyzji po prezentacje i raporty. Wybierz obszar pracy poniżej.</figcaption>
       </figure>
       <div class="source-version" aria-label="Wersje kanałów i źródła"><span>Wersje kanałów</span><strong id="source-versions" aria-live="polite">Ładowanie…</strong><span>Katalog <a id="source-revision" target="_blank" rel="noopener noreferrer">—</a></span><span id="lab-provenance">Lab source <a id="lab-source-revision" target="_blank" rel="noopener noreferrer">ładowanie…</a> · <a id="lab-release-link" target="_blank" rel="noopener noreferrer">manifest</a></span></div>
-      <nav class="view-switch" aria-label="Widok katalogu"><button type="button" data-view="areas" aria-pressed="true">Obszary pracy</button><button type="button" data-view="paths" aria-pressed="false">Ścieżki funkcjonalne</button><button type="button" data-view="catalog" aria-pressed="false">Wszystkie skills</button></nav>
+      <p id="cloud-provenance" class="runtime-note" aria-live="polite">Ładowanie ostatnio zweryfikowanego wdrożenia MCP…</p>
+      <nav class="view-switch" aria-label="Widok katalogu"><button type="button" data-view="areas" aria-pressed="true">Obszary pracy</button><button type="button" data-view="paths" aria-pressed="false">Ścieżki funkcjonalne</button><button type="button" data-view="catalog" aria-pressed="false">Wszystkie skills</button><button type="button" data-view="workflows" aria-pressed="false">Wszystkie workflowy</button></nav>
       <section id="areas-view" aria-labelledby="areas-title">
         <div class="section-head"><div><h2 id="areas-title">Obszary pracy</h2><p>Najpierw wybierz domenę. Liczniki pokazują dojrzałość skills; flow prowadzą przez powiązane etapy.</p></div></div>
         <div id="area-cards" class="area-grid" aria-live="polite" aria-busy="true"></div>
@@ -72,6 +74,11 @@
       <section id="skill-results-view" aria-labelledby="results-title">
         <div class="section-head"><h2 id="results-title">Wszystkie skills</h2><p id="result-count" aria-live="polite"></p></div>
         <div id="cards" class="grid" aria-live="polite" aria-busy="true"></div>
+      </section>
+      <section id="workflows-view" hidden aria-labelledby="workflows-title">
+        <div class="section-head"><div><h2 id="workflows-title">Wszystkie workflowy</h2><p>Pełna lista definicji z repozytorium. Status źródła i rejestracja nie zastępują testów zachowania.</p></div><p id="workflow-count" aria-live="polite"></p></div>
+        <label class="search"><span class="sr-only">Szukaj workflowu</span><input id="workflow-search" type="search" placeholder="Szukaj workflowu lub zakresu…" autocomplete="off"></label>
+        <div id="workflow-cards" class="grid" aria-live="polite" aria-busy="true"></div>
       </section>
       <section id="pathways-view" hidden aria-labelledby="pathways-title">
         <div class="section-head"><div><h2 id="pathways-title">Ścieżki funkcjonalne</h2><p>Procesy, bramki i skille, które wspólnie prowadzą do wyniku.</p></div><button id="clear-pathway-filters" class="clear" type="button">Wyczyść filtry</button></div>
@@ -94,11 +101,11 @@
     </div>
   </dialog>
   <script>
-    const domainNames={career:"Kariera i rekrutacja",commerce:"E-commerce",investing:"Inwestowanie",meta:"Projektowanie Agent Skills",oaf:"Architektura organizacyjna"};
-    const domainColors={career:["#ffd18a","#ffd18a22"],commerce:["#ff9a84","#ff8b7222"],investing:["#a8a0ff","#9588f722"],meta:["#aee4c5","#94d4b322"],oaf:["#a9c8ff","#83a9ff22"]};
+    const domainNames={career:"Kariera i rekrutacja",commerce:"E-commerce",investing:"Inwestowanie",meta:"Projektowanie Agent Skills",oaf:"Architektura organizacyjna",presentations:"Prezentacje i narracja",reports:"Raporty i dokumenty"};
+    const domainColors={career:["#ffd18a","#ffd18a22"],commerce:["#ff9a84","#ff8b7222"],investing:["#a8a0ff","#9588f722"],meta:["#aee4c5","#94d4b322"],oaf:["#a9c8ff","#83a9ff22"],presentations:["#e6ade0","#e6ade022"],reports:["#a7dedf","#a7dedf22"]};
     const maturityNames={production:"Production",candidate:"Candidate",draft:"Draft"};
     const acronyms=new Set(["ai","cac","cogs","cv","kpi","oaf","os","vat","xtb"]);
-    const state={skills:[],domain:"all",maturity:"all",query:"",metadata:{}};
+    const state={skills:[],workflows:[],domain:"all",maturity:"all",query:"",workflowQuery:"",metadata:{}};
     const cards=document.querySelector("#cards"),filters=document.querySelector("#filters"),dialog=document.querySelector("#skill-dialog");
     const escapeHtml=value=>String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
     const labelFor=domainNames;
@@ -141,8 +148,30 @@
     document.querySelector("#maturity").addEventListener("change",event=>{state.maturity=event.target.value;renderCards()});
     document.querySelector(".dialog-close").addEventListener("click",()=>dialog.close());
     dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
+    function renderWorkflows(){
+      const q=state.workflowQuery.trim().toLocaleLowerCase("pl");
+      const result=state.workflows.filter(w=>!q||`${w.name} ${w.description}`.toLocaleLowerCase("pl").includes(q));
+      document.querySelector("#workflow-count").textContent=`${result.length} z ${state.workflows.length} workflowów`;
+      const list=document.querySelector("#workflow-cards");list.setAttribute("aria-busy","false");
+      if(!result.length){list.innerHTML='<div class="empty">Nie znaleziono workflowów. Zmień hasło.</div>';return}
+      list.innerHTML=result.map(w=>{
+        const domain=w.name.startsWith("presentation-")?"presentations":w.name.startsWith("report-")?"reports":w.name.startsWith("investment-")?"investing":w.name.startsWith("commerce-")?"commerce":w.name.startsWith("oaf-")?"oaf":"meta";
+        const [color,bg]=domainColors[domain];
+        const registered=w.runtime_registration==="registered";
+        const status=registered?(maturityNames[w.maturity]||"Źródło"):"Źródło · bez rejestracji";
+        return `<article class="card" style="--domain-color:${color};--domain-bg:${bg}"><div class="card-top"><span class="domain">${escapeHtml(domainNames[domain])}</span><span class="maturity ${escapeHtml(registered?w.maturity:"draft")}">${escapeHtml(status)}</span></div><h3>${escapeHtml(skillTitle(w.name))}</h3><p>${escapeHtml(w.description||"Definicja procesu i jego granic w repozytorium.")}</p><div class="card-bottom"><span>${registered?"Zarejestrowany workflow":"Definicja źródłowa"}</span><a class="workflow-source" href="https://github.com/aras-2003/skills-factory/blob/main/${escapeHtml(w.source)}" target="_blank" rel="noopener noreferrer">Otwórz workflow ↗</a></div></article>`;
+      }).join("");
+    }
+    document.querySelector("#workflow-search").addEventListener("input",event=>{state.workflowQuery=event.target.value;renderWorkflows()});
+    fetch("./cloud-release.json").then(response=>{if(!response.ok)throw new Error("MCP receipt unavailable");return response.json()}).then(release=>{
+      if(release.schema_version!==1||release.attestation_status!=="verified"||!Number.isInteger(release.site_version)||!Number.isInteger(release.runtime_release?.skill_count)||!Number.isInteger(release.lab_release?.skill_count)||!Number.isInteger(release.draft_extension?.component_count)||!/^[0-9a-f]{40}$/i.test(release.site_source_revision||"")||!Number.isFinite(Date.parse(release.verified_at)))throw new Error("Invalid MCP receipt");
+      const note=document.querySelector("#cloud-provenance");
+      note.textContent=`Ostatnio zweryfikowane MCP: wersja ${release.site_version} · ${release.runtime_release.skill_count} pozycji (${release.lab_release.skill_count} Lab + ${release.draft_extension.component_count} draftów) · ${new Date(release.verified_at).toLocaleDateString("pl-PL",{timeZone:"Europe/Warsaw"})}. Testy ładowania: ${release.checks.catalog_loads.PASS} PASS / ${release.checks.catalog_loads.FAIL} FAIL. Testy modeli oraz tworzenia i eksportu plików: niewykonane. `;
+      const link=document.createElement("a");link.href="./cloud-release.json";link.textContent="Dane wdrożenia";note.append(link);
+    }).catch(()=>{document.querySelector("#cloud-provenance").textContent="Dane ostatniego wdrożenia MCP są niedostępne. Katalog źródeł pozostaje dostępny."});
     fetch("./catalog.json").then(response=>{if(!response.ok)throw new Error("catalog unavailable");return response.json()}).then(data=>{
       state.skills=Array.isArray(data.skills)?data.skills:[];
+      state.workflows=Array.isArray(data.workflows)?data.workflows:[];
       state.metadata=data.metadata||{};
       const packages=state.metadata.packages||{};
       document.querySelector("#source-versions").textContent="Production "+(packages.production?.version||"—")+" · Lab "+(packages.lab?.version||"—");
@@ -150,7 +179,7 @@
       const revisionLink=document.querySelector("#source-revision");revisionLink.textContent=fullRevision.slice(0,12);revisionLink.href=fullRevision==="unknown"?"https://github.com/aras-2003/skills-factory/commits/main":"https://github.com/aras-2003/skills-factory/commit/"+encodeURIComponent(fullRevision);
       document.querySelector("#total-count").textContent=state.skills.length;
       document.querySelector("#domain-count").textContent=new Set(state.skills.map(s=>s.domain)).size;
-      renderFilters();renderCards();renderAreas();renderProcesses();
+      renderFilters();renderCards();renderAreas();renderProcesses();renderWorkflows();
     }).catch(()=>{cards.setAttribute("aria-busy","false");document.querySelector("#area-cards").setAttribute("aria-busy","false");document.querySelector("#area-cards").innerHTML='<div class="load-error"><strong>Katalog jest chwilowo niedostępny</strong>Odśwież stronę za chwilę.</div>';cards.innerHTML='<div class="load-error"><strong>Katalog jest chwilowo niedostępny</strong>Odśwież stronę za chwilę.</div>'});
 
     fetch("./lab-release.json").then(response=>{if(!response.ok)throw new Error("Lab release receipt unavailable");return response.json()}).then(release=>{
@@ -162,10 +191,11 @@
     const pathState={processes:[],domain:"all",query:""};
     const pathwaysView=document.querySelector("#pathways-view"), processList=document.querySelector("#processes"),pathFilters=document.querySelector("#pathway-filters");
     function setView(view){
-      const paths=view==="paths",areas=view==="areas";
+      const paths=view==="paths",areas=view==="areas",workflows=view==="workflows";
       document.querySelector("#areas-view").hidden=!areas;
-      document.querySelector("#skill-filters-view").hidden=paths||areas;
-      document.querySelector("#skill-results-view").hidden=paths||areas;
+      document.querySelector("#skill-filters-view").hidden=paths||areas||workflows;
+      document.querySelector("#skill-results-view").hidden=paths||areas||workflows;
+      document.querySelector("#workflows-view").hidden=!workflows;
       pathwaysView.hidden=!paths;
       document.querySelectorAll(".view-switch button").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.view===view)));
     }
@@ -175,7 +205,9 @@
       commerce:"E-commerce: odkrycie problemu, walidacja popytu, economics, oferta i skalowanie.",
       investing:"Inwestowanie: od triage i odkrywania szans po underwriting, portfel i monitoring.",
       meta:"Projektowanie i governance biblioteki Agent Skills: specyfikacja, budowa, testy i release.",
-      oaf:"Architektura organizacyjna i transformacja: diagnoza, model docelowy, governance i realizacja."
+      oaf:"Architektura organizacyjna i transformacja: diagnoza, model docelowy, governance i realizacja.",
+      presentations:"Prezentacje: od celu i odbiorcy przez argumentację i projekt slajdów po sprawdzony deck i eksport.",
+      reports:"Raporty i dokumenty: od materiałów źródłowych przez strukturę i authoring po kontrolę stron i eksportu."
     };
     function renderAreas(){
       const domains=[...new Set(state.skills.map(s=>s.domain))].sort((a,b)=>(labelFor[a]||a).localeCompare(labelFor[b]||b,"pl"));
@@ -225,8 +257,8 @@
       const usage={};pathState.processes.forEach(p=>p.lanes.forEach(l=>l.steps.forEach(s=>[...(s.skills||[]),...(s.optionalSkills||[])].forEach(id=>{(usage[id]??=new Set()).add(l.id)}))));
       processList.innerHTML=result.map(p=>{
         const isCandidate=p.maturity==="candidate"||p.lanes.some(l=>l.maturity==="candidate");
-        const type=p.basis.includes("Proponowana")?"proposed":isCandidate?"candidate":"production";
-        const badge=type==="proposed"?"Ścieżka sugerowana":isCandidate?"Kandydat w Lab":p.runtime.includes("Proces repozytoryjny")?"Proces repozytoryjny":"Workflow z repo";
+        const type=p.maturity==="draft"?"draft":p.basis.includes("Proponowana")?"proposed":isCandidate?"candidate":"production";
+        const badge=type==="draft"?"Draft · testowe MCP":type==="proposed"?"Ścieżka sugerowana":isCandidate?"Kandydat w Lab":p.runtime.includes("Proces repozytoryjny")?"Proces repozytoryjny":"Workflow z repo";
         const sourceLinks=(p.sources||[]).map(s=>'<a href="https://github.com/aras-2003/skills-factory/blob/main/'+s.path+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(s.label)+' ↗</a>').join("");
         const lanes=p.lanes.map(l=>{
           const steps=l.steps.map(step=>{

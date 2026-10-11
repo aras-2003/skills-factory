@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "site_version": 22,
+  "site_source_revision": "bca3b379e382df857009a380d30bcac3d839f6e5",
+  "verified_at": "2026-10-11T15:09:26.953Z",
+  "attestation_status": "verified",
+  "site_url": "https://skills-factory-cloud-next.arek2003.chatgpt.site",
+  "lab_release": {
+    "channel": "lab",
+    "version": "0.34.0",
+    "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
+    "skill_count": 70,
+    "catalog_digest": "dcc87a8f20efcc0de91aab8e640709f1c72c8553fbcf0c32623be2908fb5a7bb",
+    "artifact_sha256": "faef2c217e8c1c82ad50d9f63021896e2020b5e93cad7e85c5faec98055069d3"
+  },
+  "runtime_release": {
+    "channel": "private-lab-with-drafts",
+    "version": "0.34.0",
+    "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
+    "skill_count": 82,
+    "catalog_digest": "97a658ffa272e5621085ae9e25da0d6a1d25fa0cda0ccb8a1675c551017d850a",
+    "artifact_sha256": "faef2c217e8c1c82ad50d9f63021896e2020b5e93cad7e85c5faec98055069d3",
+    "artifact_scope": "base_lab_only"
+  },
+  "draft_extension": {
+    "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
+    "component_count": 12,
+    "components": [
+      "presentation-brief",
+      "presentation-storyline",
+      "presentation-evidence-review",
+      "presentation-exhibit-design",
+      "presentation-slide-authoring",
+      "presentation-deck-review",
+      "presentation-export-verification",
+      "presentation-production",
+      "report-document-architecture",
+      "report-document-authoring",
+      "report-document-review",
+      "report-production"
+    ],
+    "maturity": "draft"
+  },
+  "checks": {
+    "catalog_loads": {
+      "PASS": 82,
+      "FAIL": 0
+    },
+    "contracts": {
+      "PASS": 12,
+      "FAIL": 0
+    },
+    "model_campaign": "NOT_RUN",
+    "authoring_export_campaign": "NOT_RUN"
+  }
+}

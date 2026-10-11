@@ -797,6 +797,144 @@
           ]
         }
       ]
+    },
+    {
+      "id": "presentation-production",
+      "domain": "presentations",
+      "title": "Od briefu do zweryfikowanej prezentacji",
+      "basis": "Workflow źródłowy — draft",
+      "runtime": "Draft do testów w prywatnym MCP; authoring i eksport wymagają dostępnych narzędzi.",
+      "maturity": "draft",
+      "summary": "Narracja, dowody i forma prowadzą do edytowalnego decka; wynik wymaga rzeczywistego renderu i sprawdzenia eksportu.",
+      "sources": [
+        {
+          "label": "Presentation Production",
+          "path": "workflows/presentation-production/WORKFLOW.md"
+        }
+      ],
+      "lanes": [
+        {
+          "id": "presentation-main",
+          "title": "Produkcja prezentacji",
+          "entry": "presentation-production",
+          "sourcePath": "workflows/presentation-production/WORKFLOW.md",
+          "steps": [
+            {
+              "title": "Ustal odbiorcę i cel",
+              "skills": [
+                "presentation-brief"
+              ],
+              "output": "Wystarczający brief i oczekiwana decyzja."
+            },
+            {
+              "title": "Zbuduj argumentację",
+              "skills": [
+                "presentation-storyline"
+              ],
+              "output": "Storyline i tytuły prowadzące przez argument."
+            },
+            {
+              "title": "Sprawdź dowody",
+              "skills": [
+                "presentation-evidence-review"
+              ],
+              "output": "Źródła, liczby i uprawnienia do materiałów."
+            },
+            {
+              "title": "Zaprojektuj eksponaty",
+              "skills": [
+                "presentation-exhibit-design"
+              ],
+              "optionalSkills": [
+                "visual-output-design"
+              ],
+              "output": "Specyfikacje wykresów i diagramów wierne danym."
+            },
+            {
+              "title": "Utwórz deck",
+              "skills": [
+                "presentation-slide-authoring"
+              ],
+              "output": "Rzeczywisty edytowalny artefakt lub konkretny BLOCKED."
+            },
+            {
+              "title": "Oceń i popraw",
+              "skills": [
+                "presentation-deck-review"
+              ],
+              "output": "Przegląd treści i wyrenderowanych slajdów."
+            },
+            {
+              "title": "Zweryfikuj eksport",
+              "skills": [
+                "presentation-export-verification"
+              ],
+              "output": "Sprawdzone PPTX/PDF, edytowalność i ograniczenia."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "report-production",
+      "domain": "reports",
+      "title": "Od materiałów do dopracowanego raportu",
+      "basis": "Workflow źródłowy — draft",
+      "runtime": "Draft do testów w prywatnym MCP; tworzenie i kontrola DOCX/PDF wymagają dostępnych narzędzi.",
+      "maturity": "draft",
+      "summary": "Przekształć istniejącą analizę w spójny, edytowalny dokument, z kontrolą dowodów, stron i eksportu.",
+      "sources": [
+        {
+          "label": "Report Production",
+          "path": "workflows/report-production/WORKFLOW.md"
+        }
+      ],
+      "lanes": [
+        {
+          "id": "report-main",
+          "title": "Produkcja dokumentu",
+          "entry": "report-production",
+          "sourcePath": "workflows/report-production/WORKFLOW.md",
+          "steps": [
+            {
+              "title": "Ustal medium i brief",
+              "skills": [],
+              "output": "Cel, czytelnik, materiał źródłowy i dostępne narzędzia."
+            },
+            {
+              "title": "Ułóż architekturę",
+              "skills": [
+                "report-document-architecture"
+              ],
+              "optionalSkills": [
+                "report-composer"
+              ],
+              "output": "Hierarchia rozdziałów i mapa dowodów."
+            },
+            {
+              "title": "Przygotuj ilustracje danych",
+              "skills": [
+                "visual-output-design"
+              ],
+              "output": "Eksponaty oparte na rzeczywistych danych."
+            },
+            {
+              "title": "Utwórz dokument",
+              "skills": [
+                "report-document-authoring"
+              ],
+              "output": "Edytowalny DOCX/Google Docs i wymagany eksport lub BLOCKED."
+            },
+            {
+              "title": "Sprawdź każdą stronę",
+              "skills": [
+                "report-document-review"
+              ],
+              "output": "Treść, układ, źródła i zgodność eksportu; poprawki z retestem."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

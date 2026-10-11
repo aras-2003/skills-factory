@@ -128,12 +128,46 @@ lab:
         ):
             self.assertIn(marker, page)
 
-    def test_site_lab_receipt_matches_the_exact_packaged_lab_identity(self) -> None:
+    def test_site_lab_receipt_has_source_bound_identity(self) -> None:
         receipt = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
-        manifest = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
-        for field in ("channel", "version", "release_id", "source_revision", "payload_content_sha256"):
-            self.assertEqual(manifest[field], receipt[field], field)
+        # Pages publishes the last verified immutable Lab build receipt. The
+        # checked-in plugin snapshot can intentionally lag that independent build.
         self.assertEqual("lab", receipt["channel"])
+        self.assertRegex(receipt["source_revision"], r"^[0-9a-f]{40}$")
+        self.assertRegex(receipt["payload_content_sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(f"{receipt['version']}+{receipt['source_revision'][:12]}", receipt["release_id"])
+        self.assertEqual(70, len(receipt["components"]))
+
+    def test_private_mcp_receipt_covers_the_complete_test_catalog(self) -> None:
+        receipt = json.loads((ROOT / "docs/cloud-release.json").read_text(encoding="utf-8"))
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        lab = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
+        source_names = {item["name"] for item in catalog["skills"] + catalog["workflows"]}
+        lab_names = {item["name"] for item in lab["components"]}
+        drafts = receipt["draft_extension"]["components"]
+        self.assertEqual(12, len(drafts))
+        self.assertEqual(12, len(set(drafts)))
+        self.assertFalse(lab_names.intersection(drafts))
+        self.assertTrue(set(drafts) <= source_names)
+        self.assertEqual(82, receipt["runtime_release"]["skill_count"])
+        self.assertEqual(82, len(lab_names | set(drafts)))
+        self.assertEqual(lab["source_revision"], receipt["lab_release"]["source_revision"])
+        self.assertEqual(lab["version"], receipt["lab_release"]["version"])
+        self.assertEqual("NOT_RUN", receipt["checks"]["model_campaign"])
+
+    def test_new_domains_have_named_areas_and_complete_pathways(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        processes = json.loads((ROOT / "docs/processes.json").read_text(encoding="utf-8"))
+        for name in ("Prezentacje i narracja", "Raporty i dokumenty", 'data-view="workflows"', 'id="workflow-search"'):
+            self.assertIn(name, page)
+        for domain in ("presentations", "reports"):
+            expected = {skill["name"] for skill in catalog["skills"] if skill["domain"] == domain}
+            paths = [p for p in processes["processes"] if p["domain"] == domain]
+            self.assertTrue(paths)
+            actual = {name for p in paths for lane in p["lanes"] for step in lane["steps"] for name in step.get("skills", []) + step.get("optionalSkills", [])}
+            self.assertTrue(expected <= actual)
+            self.assertTrue(all(p["maturity"] == "draft" for p in paths))
 
     def test_lab_packager_uploads_an_immutable_candidate_without_branch_writes(self) -> None:
         workflow = (ROOT / ".github/workflows/package-main-lab-plugin.yml").read_text(encoding="utf-8")
