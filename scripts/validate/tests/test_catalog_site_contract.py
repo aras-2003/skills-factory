@@ -8,6 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from scripts.catalog.generate_site_catalog import build_catalog, collect_workflow_sources  # noqa: E402
+from scripts.catalog.sync_cloud_catalog import build_snapshot  # noqa: E402
 
 
 class SiteCatalogContractTests(unittest.TestCase):
@@ -130,12 +131,90 @@ lab:
         ):
             self.assertIn(marker, page)
 
-    def test_site_lab_receipt_matches_the_exact_packaged_lab_identity(self) -> None:
+    def test_site_lab_receipt_has_source_bound_identity(self) -> None:
         receipt = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
-        manifest = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
-        for field in ("channel", "version", "release_id", "source_revision", "payload_content_sha256"):
-            self.assertEqual(manifest[field], receipt[field], field)
+        # Pages publishes the last verified immutable Lab build receipt. The
+        # checked-in plugin snapshot can intentionally lag that independent build.
         self.assertEqual("lab", receipt["channel"])
+        self.assertRegex(receipt["source_revision"], r"^[0-9a-f]{40}$")
+        self.assertRegex(receipt["payload_content_sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(f"{receipt['version']}+{receipt['source_revision'][:12]}", receipt["release_id"])
+        self.assertEqual(70, len(receipt["components"]))
+
+    def test_private_mcp_receipt_covers_the_complete_test_catalog(self) -> None:
+        receipt = json.loads((ROOT / "docs/cloud-release.json").read_text(encoding="utf-8"))
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        lab = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
+        source_names = {item["name"] for item in catalog["skills"] + catalog["workflows"]}
+        lab_names = {item["name"] for item in lab["components"]}
+        drafts = receipt["draft_extension"]["components"]
+        self.assertEqual(12, len(drafts))
+        self.assertEqual(12, len(set(drafts)))
+        self.assertFalse(lab_names.intersection(drafts))
+        self.assertTrue(set(drafts) <= source_names)
+        self.assertEqual(82, receipt["runtime_release"]["skill_count"])
+        self.assertEqual(82, len(lab_names | set(drafts)))
+        self.assertEqual(lab["source_revision"], receipt["lab_release"]["source_revision"])
+        self.assertEqual(lab["version"], receipt["lab_release"]["version"])
+        self.assertEqual("NOT_RUN", receipt["checks"]["model_campaign"])
+        entries = receipt["catalog_entries"]
+        self.assertEqual(receipt["runtime_release"]["skill_count"], len(entries))
+        self.assertEqual(64, sum(entry["kind"] == "skill" for entry in entries))
+        self.assertEqual(18, sum(entry["kind"] == "workflow" for entry in entries))
+        self.assertEqual(7, len({entry["domain"] for entry in entries}))
+
+    def test_runtime_snapshot_rejects_unverified_mismatched_or_duplicate_catalogs(self) -> None:
+        import copy
+        receipt = json.loads((ROOT / "docs/cloud-release.json").read_text())
+        source = json.loads((ROOT / "docs/catalog.json").read_text())
+        runtime = {"attestation_status": "verified", "source_revision": receipt["site_source_revision"], "runtime_release": receipt["runtime_release"]}
+        catalog = {"skills": receipt["catalog_entries"], "skill_count": len(receipt["catalog_entries"]), "catalog_digest": receipt["runtime_release"]["catalog_digest"], "source_revision": receipt["runtime_release"]["source_revision"], "tool_receipt": {"source_revision": runtime["source_revision"], "completed_at": receipt["catalog_observed_at"], "output_sha256": receipt["catalog_receipt_sha256"]}}
+        snapshot = build_snapshot(runtime, catalog, source)
+        self.assertEqual(catalog["skills"], snapshot["catalog_entries"])
+        for mutate in (
+            lambda r, c: r.update(attestation_status="unattested"),
+            lambda r, c: c["tool_receipt"].update(source_revision="different"),
+            lambda r, c: c["skills"].append(c["skills"][0]),
+            lambda r, c: c.update(catalog_digest="invalid"),
+            lambda r, c: c["skills"][0].update(kind="invented"),
+        ):
+            r, c = copy.deepcopy(runtime), copy.deepcopy(catalog)
+            mutate(r, c)
+            with self.assertRaises(ValueError):
+                build_snapshot(r, c, source)
+
+    def test_hero_counts_actual_runtime_entries_instead_of_source_files(self) -> None:
+        page = (ROOT / "docs/index.html").read_text()
+        self.assertIn('pozycji w MCP', page)
+        self.assertIn('id="runtime-breakdown"', page)
+        self.assertIn('new Set(entries.map(entry=>entry.domain)).size', page)
+        self.assertIn('state.runtimeEntries=release.catalog_entries', page)
+        self.assertNotIn('document.querySelector("#total-count").textContent=state.skills.length', page)
+
+    def test_new_domains_have_named_areas_and_complete_pathways(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        processes = json.loads((ROOT / "docs/processes.json").read_text(encoding="utf-8"))
+        for name in ("Prezentacje i narracja", "Raporty i dokumenty", 'data-view="workflows"', 'id="workflow-search"'):
+            self.assertIn(name, page)
+        for domain in ("presentations", "reports"):
+            expected = {skill["name"] for skill in catalog["skills"] if skill["domain"] == domain}
+            paths = [p for p in processes["processes"] if p["domain"] == domain]
+            self.assertTrue(paths)
+            actual = {name for p in paths for lane in p["lanes"] for step in lane["steps"] for name in step.get("skills", []) + step.get("optionalSkills", [])}
+            self.assertTrue(expected <= actual)
+            self.assertTrue(all(p["maturity"] == "draft" for p in paths))
+
+    def test_new_domain_icons_use_local_transparent_assets(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        self.assertIn('./assets/domain-icons.svg', page)
+        for domain in ("presentations", "reports"):
+            path = ROOT / "docs/assets" / f"{domain}.png"
+            data = path.read_bytes()
+            self.assertIn(f'./assets/{domain}.png', page)
+            self.assertEqual(b"\x89PNG\r\n\x1a\n", data[:8])
+            self.assertEqual(6, data[25], "new icons must preserve RGBA transparency")
+            self.assertLess(len(data), 2_000_000)
 
     def test_lab_packager_uploads_an_immutable_candidate_without_branch_writes(self) -> None:
         workflow = (ROOT / ".github/workflows/package-main-lab-plugin.yml").read_text(encoding="utf-8")

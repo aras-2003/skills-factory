@@ -10,7 +10,7 @@
         "version": "0.35.0"
       }
     },
-    "source_revision": "89db15ef94cf",
+    "source_revision": "9b457bd68bcd",
     "capability_contract": "repository-side-v1",
     "capability_assessment": "UNASSESSED",
     "runtime_installation": "NOT_OBSERVED",

@@ -34,11 +34,11 @@ def _workflow_summary(text: str) -> str:
         if not in_purpose or not stripped:
             continue
         if not heading and not stripped.startswith(("#", "-", "*")):
-            heading = " ".join(stripped.split()).rstrip(":")
+            heading = " ".join(stripped.split()).rstrip(".:;")
         elif stripped.startswith(("-", "*")):
             topic = stripped[1:].strip()
             if topic:
-                topics.append(" ".join(topic.split()))
+                topics.append(" ".join(topic.split()).rstrip(".;"))
         elif heading:
             break
     if not heading:
