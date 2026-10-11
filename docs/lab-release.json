@@ -849,6 +849,142 @@
         },
         "status": "UNASSESSED"
       },
+      "content_sha256": "c0f77fdbd12d622e4d44e011c88ebbc53a5f5f9e3e9be48b003ae50194427711",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-brief",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "375b6fbf484a15252f90671a8a8b9bad8afd2c042c3d5ea8b43198b2771dcc76",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-deck-review",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "ca8fff67054086c7be4e6ee290f7da849a619cbfded8fc07159359ae0bca438c",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-evidence-review",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "bdad28494b2b9ed1d690480459cfa3239d8218e8270d72afef6ba4b7e20c5ee8",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-exhibit-design",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "3838bdc280054ca443868da4ffa36a60caec86c76d64a4cd65b5997fa22ff445",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-export-verification",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "ce67de3675cdc10cb8d9f13806eb79b7af2d7fbd4a3b9ca4e3a8c0e720a293ba",
+      "kind": "workflow",
+      "maturity": "draft",
+      "name": "presentation-production",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "6a711dce6761e9c38d51aefbdd3158527d08bbac51474c9d10393fea3f784d1f",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-slide-authoring",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "c4af6c709dc879fa555eb69cbebb547de2e0d47b8dbc73a241913448ee16a7d1",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "presentation-storyline",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
       "content_sha256": "a527060d17e72f633846d0fc7953d9a4f739de5701dd878613b8f8ed5746f1af",
       "kind": "skill",
       "maturity": "production",
@@ -917,6 +1053,74 @@
         },
         "status": "UNASSESSED"
       },
+      "content_sha256": "5cadcb9a96fd06b0dcae55a26eebabacffd43b6016e7bde7115085ea7e7e0881",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "report-document-architecture",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "a4adc26feeff43e7f4f25cdeff0e945c1ba441e1088f8af81e55beb9e3088a6f",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "report-document-authoring",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "76751d6fd4e4e7158cb63ac4e8180b018a0fd883d0e77f798446711c60efd19a",
+      "kind": "skill",
+      "maturity": "draft",
+      "name": "report-document-review",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "b30214d08b9dd2eb82dd8e9b6ad16b6328f5b243e287ff06f4d271bb9e3d385f",
+      "kind": "workflow",
+      "maturity": "draft",
+      "name": "report-production",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
       "content_sha256": "72962dd265bea72ff0777c3e1510b6ef10dc937ba3b56b8578d95000fd76d4ba",
       "kind": "skill",
       "maturity": "production",
@@ -939,6 +1143,23 @@
       "maturity": "production",
       "name": "skill-authoring",
       "version": "1.0.1"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "c72bdc6eb0fe0b621fc0477f29c51c63507e177632e29abf0237fb1a3b3d4416",
+      "kind": "workflow",
+      "maturity": "draft",
+      "name": "skill-development",
+      "version": "0.1.0"
     },
     {
       "capability_assessment": {
@@ -1197,9 +1418,9 @@
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "065e4adfbab7c64f9284387786063dc6b57a1b0f6469cd049199227cd104b915",
-  "release_id": "0.34.0+9b457bd68bcd",
+  "payload_content_sha256": "2cf9a08d3d6d5adb941b6def66df959e421ad3e5d434daf822dbd012d36e1fde",
+  "release_id": "0.35.0+e1c4b8462c51",
   "schema_version": "1.0",
-  "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
-  "version": "0.34.0"
+  "source_revision": "e1c4b8462c519f1fa25a9af5980b6786ed590029",
+  "version": "0.35.0"
 }
