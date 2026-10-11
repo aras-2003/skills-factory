@@ -143,35 +143,36 @@ lab:
         manifest = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest, receipt)
 
-    def test_private_mcp_receipt_remains_historical_until_a_new_deployment_is_observed(self) -> None:
+    def test_private_mcp_receipt_describes_observed_deployment_independently_of_candidate(self) -> None:
         receipt = json.loads((ROOT / "docs/cloud-release.json").read_text(encoding="utf-8"))
         catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
         lab = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
         source_names = {item["name"] for item in catalog["skills"] + catalog["workflows"]}
         current_lab_names = {item["name"] for item in lab["components"]}
         observed_names = {item["name"] for item in receipt["catalog_entries"]}
-        drafts = receipt["draft_extension"]["components"]
-        # The cloud receipt is evidence for the last observed 0.34.0 deployment.
-        # It must remain truthful until a new runtime catalog is actually observed.
-        self.assertEqual("0.34.0", receipt["runtime_release"]["version"])
-        self.assertEqual(70, receipt["lab_release"]["skill_count"])
-        self.assertEqual(82, len(observed_names))
-        self.assertEqual(12, len(drafts))
-        self.assertEqual(12, len(set(drafts)))
+        drafts = (receipt.get("draft_extension") or {}).get("components", [])
+        # This receipt describes an observed deployment, not an automatic
+        # promotion whenever the candidate Lab manifest changes.
+        self.assertEqual("verified", receipt["attestation_status"])
+        self.assertRegex(receipt["site_source_revision"], r"^[a-f0-9]{40}$")
+        self.assertEqual(len(drafts), len(set(drafts)))
         self.assertTrue(set(drafts) <= source_names)
-        self.assertEqual(82, receipt["runtime_release"]["skill_count"])
-        self.assertEqual(82, len(observed_names))
-        self.assertNotEqual(lab["source_revision"], receipt["lab_release"]["source_revision"])
-        self.assertNotEqual(lab["version"], receipt["lab_release"]["version"])
-        self.assertEqual(83, len(current_lab_names))
+        self.assertEqual(receipt["lab_release"]["skill_count"] + len(drafts), receipt["runtime_release"]["skill_count"])
+        self.assertEqual(receipt["runtime_release"]["skill_count"], len(observed_names))
+        self.assertTrue(observed_names <= source_names)
+        if not drafts:
+            self.assertEqual(receipt["lab_release"]["catalog_digest"], receipt["runtime_release"]["catalog_digest"])
+            self.assertEqual("complete_lab", receipt["runtime_release"]["artifact_scope"])
+        if lab["source_revision"] == receipt["lab_release"]["source_revision"]:
+            self.assertEqual(current_lab_names, observed_names - set(drafts))
+            self.assertEqual(lab["version"], receipt["lab_release"]["version"])
         self.assertTrue(set(drafts) <= current_lab_names)
         self.assertTrue({"skill-development", "presentation-production", "report-production"} <= current_lab_names)
         self.assertEqual("NOT_RUN", receipt["checks"]["model_campaign"])
         entries = receipt["catalog_entries"]
         self.assertEqual(receipt["runtime_release"]["skill_count"], len(entries))
-        self.assertEqual(64, sum(entry["kind"] == "skill" for entry in entries))
-        self.assertEqual(18, sum(entry["kind"] == "workflow" for entry in entries))
-        self.assertEqual(7, len({entry["domain"] for entry in entries}))
+        self.assertEqual(receipt["runtime_release"]["skill_count"], sum(entry["kind"] in {"skill", "workflow"} for entry in entries))
+        self.assertTrue(all(entry["domain"] for entry in entries))
 
     def test_runtime_snapshot_rejects_unverified_mismatched_or_duplicate_catalogs(self) -> None:
         import copy
