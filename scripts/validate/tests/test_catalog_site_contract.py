@@ -8,6 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from scripts.catalog.generate_site_catalog import build_catalog, collect_workflow_sources  # noqa: E402
+from scripts.catalog.sync_cloud_catalog import build_snapshot  # noqa: E402
 
 
 class SiteCatalogContractTests(unittest.TestCase):
@@ -154,6 +155,39 @@ lab:
         self.assertEqual(lab["source_revision"], receipt["lab_release"]["source_revision"])
         self.assertEqual(lab["version"], receipt["lab_release"]["version"])
         self.assertEqual("NOT_RUN", receipt["checks"]["model_campaign"])
+        entries = receipt["catalog_entries"]
+        self.assertEqual(receipt["runtime_release"]["skill_count"], len(entries))
+        self.assertEqual(64, sum(entry["kind"] == "skill" for entry in entries))
+        self.assertEqual(18, sum(entry["kind"] == "workflow" for entry in entries))
+        self.assertEqual(7, len({entry["domain"] for entry in entries}))
+
+    def test_runtime_snapshot_rejects_unverified_mismatched_or_duplicate_catalogs(self) -> None:
+        import copy
+        receipt = json.loads((ROOT / "docs/cloud-release.json").read_text())
+        source = json.loads((ROOT / "docs/catalog.json").read_text())
+        runtime = {"attestation_status": "verified", "source_revision": receipt["site_source_revision"], "runtime_release": receipt["runtime_release"]}
+        catalog = {"skills": receipt["catalog_entries"], "skill_count": len(receipt["catalog_entries"]), "catalog_digest": receipt["runtime_release"]["catalog_digest"], "source_revision": receipt["runtime_release"]["source_revision"], "tool_receipt": {"source_revision": runtime["source_revision"], "completed_at": receipt["catalog_observed_at"], "output_sha256": receipt["catalog_receipt_sha256"]}}
+        snapshot = build_snapshot(runtime, catalog, source)
+        self.assertEqual(catalog["skills"], snapshot["catalog_entries"])
+        for mutate in (
+            lambda r, c: r.update(attestation_status="unattested"),
+            lambda r, c: c["tool_receipt"].update(source_revision="different"),
+            lambda r, c: c["skills"].append(c["skills"][0]),
+            lambda r, c: c.update(catalog_digest="invalid"),
+            lambda r, c: c["skills"][0].update(kind="invented"),
+        ):
+            r, c = copy.deepcopy(runtime), copy.deepcopy(catalog)
+            mutate(r, c)
+            with self.assertRaises(ValueError):
+                build_snapshot(r, c, source)
+
+    def test_hero_counts_actual_runtime_entries_instead_of_source_files(self) -> None:
+        page = (ROOT / "docs/index.html").read_text()
+        self.assertIn('pozycji w MCP', page)
+        self.assertIn('id="runtime-breakdown"', page)
+        self.assertIn('new Set(entries.map(entry=>entry.domain)).size', page)
+        self.assertIn('state.runtimeEntries=release.catalog_entries', page)
+        self.assertNotIn('document.querySelector("#total-count").textContent=state.skills.length', page)
 
     def test_new_domains_have_named_areas_and_complete_pathways(self) -> None:
         page = (ROOT / "docs/index.html").read_text(encoding="utf-8")

@@ -52,5 +52,665 @@
     },
     "model_campaign": "NOT_RUN",
     "authoring_export_campaign": "NOT_RUN"
-  }
+  },
+  "catalog_observed_at": "2026-10-11T15:30:46.977Z",
+  "catalog_receipt_sha256": "03b9b20ebf740f73b93f03b6ede16a56bf97729c5851788c985882c9c20d9bd6",
+  "catalog_entries": [
+    {
+      "name": "acquisition-fit-review",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "4149d7c4f15aa29e17871fc5c77a612c8a58488f0248c6e92fd80a35514f58c6",
+      "domain": "commerce"
+    },
+    {
+      "name": "architecture-review",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "7b51635affc6fc4006410cb77c9345b377e16bee7efb566d0642535dd5536993",
+      "domain": "oaf"
+    },
+    {
+      "name": "capability-gap-analysis",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "ae385976c09276d4c6d0db7e53fca29ea2007ea644c5d5235f50500b9909cb73",
+      "domain": "oaf"
+    },
+    {
+      "name": "capability-map-review",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "24b77286461583f21d7a80b90c0d57fe0bb6c1f6314f6c47204363608fde8b3e",
+      "domain": "oaf"
+    },
+    {
+      "name": "commerce-opportunity-review",
+      "kind": "workflow",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "da933044eff8dd1ec7fb5426b1b84cb6843db57304d28e75fd957412014058ad",
+      "domain": "commerce"
+    },
+    {
+      "name": "commerce-product-deep-dive",
+      "kind": "workflow",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "3a3057ce61d5cd611472d3e131476a2e57e8de83e605df6082815162d73e373b",
+      "domain": "commerce"
+    },
+    {
+      "name": "commerce-regulatory-risk-review",
+      "kind": "skill",
+      "version": "1.1.1",
+      "maturity": "production",
+      "content_sha256": "d464b1371a06b07ef59a1321612d546a1e9d4ce86e50a264812c412e99a453b8",
+      "domain": "commerce"
+    },
+    {
+      "name": "company-context-research",
+      "kind": "skill",
+      "version": "1.0.2",
+      "maturity": "production",
+      "content_sha256": "899535379e31fe4954c16f1a6f5b31df2bcc441f846100c73e21610d9854c363",
+      "domain": "career"
+    },
+    {
+      "name": "competition-landscape-review",
+      "kind": "skill",
+      "version": "1.1.1",
+      "maturity": "production",
+      "content_sha256": "308a17617e891179074af70440eab539942262ee4d9aeb6828333b889bd47947",
+      "domain": "commerce"
+    },
+    {
+      "name": "cv-gap-analysis",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "candidate",
+      "content_sha256": "ae138623dcb52369804f9d40d9215c59c5caf50eac5b07f75bd16869d86a3371",
+      "domain": "career"
+    },
+    {
+      "name": "cv-tailoring",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "candidate",
+      "content_sha256": "4dacfb98006a9a286927f738fa447b33be0308ee879dbe5bc6dc2112f8673d42",
+      "domain": "career"
+    },
+    {
+      "name": "decision-bottleneck-analysis",
+      "kind": "skill",
+      "version": "1.1.2",
+      "maturity": "production",
+      "content_sha256": "a8b6ed0242c8b22512781246274fa881d6c5537e2d23b0c0f470e3787d1fb1b9",
+      "domain": "oaf"
+    },
+    {
+      "name": "decision-journal-update",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "production",
+      "content_sha256": "37ffaa1fba765256ee141577f146fe6a132b75bd114da10f1d3b0cd8399cdd78",
+      "domain": "investing"
+    },
+    {
+      "name": "decision-rights-review",
+      "kind": "skill",
+      "version": "1.1.1",
+      "maturity": "production",
+      "content_sha256": "099357d3139b177aa8df03ef9764d915cefe17193a3a4711194591c73e75997f",
+      "domain": "oaf"
+    },
+    {
+      "name": "differentiation-review",
+      "kind": "skill",
+      "version": "1.1.1",
+      "maturity": "production",
+      "content_sha256": "3c9d3c106109a2810c7d503ec0cc1f04ffaf667d51ac58a129501d3f73eb4216",
+      "domain": "commerce"
+    },
+    {
+      "name": "evidence-loop-review",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "d0f5832a97a14c9517c0b6191fc03efefad01e411f416d798110539ad8e53967",
+      "domain": "oaf"
+    },
+    {
+      "name": "executive-role-evaluator",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "3535b4780025b8ec16586f9dc74cadc3347998bc07131c90c90179cb96684eee",
+      "domain": "career"
+    },
+    {
+      "name": "global-local-model-review",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "70a745a5aceb2b560be040a330a5c6a1e4693f008ab2bb7ac4a2869e93740580",
+      "domain": "oaf"
+    },
+    {
+      "name": "governance-design",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "a3265d3ce627bd3c85959c6c7f7bac3a0f5c0e09fec7900481d55934800d07fa",
+      "domain": "oaf"
+    },
+    {
+      "name": "interview-brief",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "candidate",
+      "content_sha256": "2692b6566edc4a488200c2a9a38d132688bac4cdebced80970915b1b7f549a6f",
+      "domain": "career"
+    },
+    {
+      "name": "investment-attention-review",
+      "kind": "workflow",
+      "version": "0.2.1",
+      "maturity": "production",
+      "content_sha256": "1049df0a9fc5443b7d441cc9ca54d8a3b4ea5fa5a589e6721a10baaac950226c",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-attention-triage",
+      "kind": "skill",
+      "version": "0.2.3",
+      "maturity": "production",
+      "content_sha256": "0ee0a81d37836fdf7922347811bad400e43a21a72ce4ca9dbd2275b9dd202989",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-opportunity-hunter",
+      "kind": "workflow",
+      "version": "0.5.1",
+      "maturity": "production",
+      "content_sha256": "fe9b8fc6d43af2a2a709186ccbaa6341b55fcab1eeddcdf593691abe81172d93",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-os-review",
+      "kind": "workflow",
+      "version": "0.3.1",
+      "maturity": "production",
+      "content_sha256": "06b4fe309faa903f2ef1be86e307cff5fc0cd3ccb4d15a4537ef1136c6301f42",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-policy-design",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "production",
+      "content_sha256": "475b6a7439e99d403699205d724126b6f9c10989f827750b35f9d1148d405877",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-portfolio-observation",
+      "kind": "workflow",
+      "version": "0.2.1",
+      "maturity": "production",
+      "content_sha256": "dfc26a23866f8defa114c16a181ecd0ef4af0ed4dc66a814ee7d791072f3b758",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-portfolio-review",
+      "kind": "workflow",
+      "version": "0.5.1",
+      "maturity": "production",
+      "content_sha256": "b995ee862c4148dbda239cc5b91e8352c106073d06dcb97063ffa6a39e0f24b4",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-record-store",
+      "kind": "skill",
+      "version": "1.0.1",
+      "maturity": "production",
+      "content_sha256": "34ea488f5815e1f29b6e6c47ba5381890f6f782ff1a025886fdd6333c697385b",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-security-review",
+      "kind": "workflow",
+      "version": "0.4.0",
+      "maturity": "production",
+      "content_sha256": "ca8eee63ac7187d61a332376a6049c16e12931a4c0d755f5c8caf15c7ce67d22",
+      "domain": "investing"
+    },
+    {
+      "name": "investment-theme-discovery",
+      "kind": "workflow",
+      "version": "0.2.0",
+      "maturity": "production",
+      "content_sha256": "6ab6619985725e0da603319f75ff54e1a5e58ba2534232b62e0c21714607a2b2",
+      "domain": "investing"
+    },
+    {
+      "name": "investor-pattern-research",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "production",
+      "content_sha256": "9b26ab06dc99258091c525a5f8d1a844c3d4b4f3784d82a985dcdf2bdd0eed66",
+      "domain": "investing"
+    },
+    {
+      "name": "job-discovery",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "candidate",
+      "content_sha256": "4b9fb4c0ee247a370cb4c342884871f4c8a88b77d1d976e875e5c2e5de618204",
+      "domain": "career"
+    },
+    {
+      "name": "job-validity-check",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "candidate",
+      "content_sha256": "798105c92a8722217ddb1fadad25cac242069f2d8812ec1deacd8b84d53434a9",
+      "domain": "career"
+    },
+    {
+      "name": "kpi-quality-review",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "candidate",
+      "content_sha256": "09ec281e0db831f7d9a5a94ba4859c637378341195e8291cd92f3b875213d932",
+      "domain": "oaf"
+    },
+    {
+      "name": "market-opportunity-scan",
+      "kind": "skill",
+      "version": "0.3.1",
+      "maturity": "production",
+      "content_sha256": "1528b18a19750288d855ede04de0aa00de2973b767b7e83f84e2593b56ee41ab",
+      "domain": "investing"
+    },
+    {
+      "name": "market-transferability-review",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "42777692a989d8de53d766eaf3bc55e678f13f16ee3163260c03625d31283b74",
+      "domain": "commerce"
+    },
+    {
+      "name": "oaf-enterprise-architecture-review",
+      "kind": "workflow",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "ce1b99052271f97e760fc55a6838538d84aee3f4a95b49541be4702f51a000d8",
+      "domain": "oaf"
+    },
+    {
+      "name": "oaf-enterprise-change-review",
+      "kind": "workflow",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "55103a3e449b80d465340028bb64dd4e9c53eb7d624146cb9187552d5ac21739",
+      "domain": "oaf"
+    },
+    {
+      "name": "oaf-governance-redesign",
+      "kind": "workflow",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "697f31367edd4adea50594ea7c4203d57bcbaa601647d9eb7e64daa05097e519",
+      "domain": "oaf"
+    },
+    {
+      "name": "oaf-health-check",
+      "kind": "workflow",
+      "version": "1.5.0",
+      "maturity": "production",
+      "content_sha256": "fdf392c262cb35ec222bc79e5eb8516021611912bfc1682a7bac00ae9c85644e",
+      "domain": "oaf"
+    },
+    {
+      "name": "oaf-operating-model-redesign",
+      "kind": "workflow",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "63965cc23424af75f5ad66f397311aae59c17e8f93bd8140c4e96c80b1ff915e",
+      "domain": "oaf"
+    },
+    {
+      "name": "oaf-strategy-execution-reset",
+      "kind": "workflow",
+      "version": "0.1.0",
+      "maturity": "candidate",
+      "content_sha256": "8b74cb773c427e2d9f5fad71677edb40611479d7de274fb7edac8e78fe202227",
+      "domain": "oaf"
+    },
+    {
+      "name": "oaf-transformation-design",
+      "kind": "workflow",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "a36cce3e49187bedb4a4002d9430f913caf945d8076a2d8ee6a20df1bcbbca4f",
+      "domain": "oaf"
+    },
+    {
+      "name": "operating-model-review",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "3292c3d87c067e59987854a6c56170bbccf08bc4de2a90b3bd0cd533bb04619a",
+      "domain": "oaf"
+    },
+    {
+      "name": "organizational-interface-review",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "candidate",
+      "content_sha256": "70b2f9e3d4ee2db28e98650b41e0db960fad4076eb240cb5305ae510efe8b28d",
+      "domain": "oaf"
+    },
+    {
+      "name": "portfolio-health-review",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "0cf644d956feb2e04a5069f4691e185dfae83bdb7d13f91f27bd165f01ed7ea7",
+      "domain": "oaf"
+    },
+    {
+      "name": "portfolio-prioritization",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "e079ac51316e83e5d4009aed81ad6080ca295aa6417b6541915796fe4fa36d10",
+      "domain": "oaf"
+    },
+    {
+      "name": "portfolio-state-review",
+      "kind": "skill",
+      "version": "0.7.1",
+      "maturity": "production",
+      "content_sha256": "7a976eea221e22032babc7f043f711eb4c189e145c8d970bb46132130afeff19",
+      "domain": "investing"
+    },
+    {
+      "name": "position-sizing-review",
+      "kind": "skill",
+      "version": "0.3.1",
+      "maturity": "production",
+      "content_sha256": "d6b9e40dd0a280e500e6421629ea7592dc398e45235a82c5ec8e6185dc14521e",
+      "domain": "investing"
+    },
+    {
+      "name": "presentation-brief",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "c5133f02243f35191c202905f5416da225e6a4392e571dc36ad7cc473e871eb5",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-deck-review",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "d01cde542c30c97d649b1c901043840427407e404a63fcc379bc1efc24438bb9",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-evidence-review",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "ea148f3c8cfaa0fb313b8b34e6b6aa0d9ff970ecf88cb26d661e8cd89a8ca044",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-exhibit-design",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "b38607243085d90a669a96feb6e7aeb2ebc16edb232394e52dfaa26132f592eb",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-export-verification",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "5b3fafb7eb883e259629558dd285f799fa073e7be5bd9fee2247bb7e0897cb5d",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-production",
+      "kind": "workflow",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "ae2b459826294ed9bb2e304d4bc1e3606774a589e3a5d0689334aafd66eb3f56",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-slide-authoring",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "b03affa4dd09822a0cd2e4f3e4daa6d98fe7c87b5dbace75e8c7c893d048575b",
+      "domain": "presentations"
+    },
+    {
+      "name": "presentation-storyline",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "9120809b2bb8e650712097cee3ec8eee05eec0eb7f491098178c07c5bc3cee65",
+      "domain": "presentations"
+    },
+    {
+      "name": "problem-demand-validation",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "a89bb9625ae20ac332851a17853b4d44d5466846cbd324f04f3bf678a801eb66",
+      "domain": "commerce"
+    },
+    {
+      "name": "process-update",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "candidate",
+      "content_sha256": "a5840c04810091c8ac529aa4fca14fc35426b6403093138394faede002146864",
+      "domain": "career"
+    },
+    {
+      "name": "product-opportunity-discovery",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "16e71f4595b3cc0495af08236081d4d0ed1b1150241a83f8039b66a2ed545455",
+      "domain": "commerce"
+    },
+    {
+      "name": "report-composer",
+      "kind": "skill",
+      "version": "0.11.1",
+      "maturity": "candidate",
+      "content_sha256": "d4d3b2f58042e51d68d9a20cb291547b76ea589a850d69d2cf733ef8f2343ba7",
+      "domain": "meta"
+    },
+    {
+      "name": "report-document-architecture",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "d01d6ee8ab92fc47b823c80eb0eb4b1265f8066353a11dc261c34566c0edb74d",
+      "domain": "reports"
+    },
+    {
+      "name": "report-document-authoring",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "b22e1754eb12901d34de6830f38fc872c08e3dd76ccca32d11d6f8a9f96238c4",
+      "domain": "reports"
+    },
+    {
+      "name": "report-document-review",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "89c2b4ff8167f6ff8612d95f09219388a0af02941ebc4d7ac13f18506bfa59ae",
+      "domain": "reports"
+    },
+    {
+      "name": "report-production",
+      "kind": "workflow",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "content_sha256": "9fff8c34c91abee4a070c2d5a857175377ecfcad633ea8976c70bbd454adc226",
+      "domain": "reports"
+    },
+    {
+      "name": "security-underwriting",
+      "kind": "skill",
+      "version": "0.5.1",
+      "maturity": "production",
+      "content_sha256": "b52895dd07200382e749c311715de6ca708836fcbe35fb2845b1ab9451a2c580",
+      "domain": "investing"
+    },
+    {
+      "name": "skill-authoring",
+      "kind": "skill",
+      "version": "1.0.1",
+      "maturity": "production",
+      "content_sha256": "6866b4dad4af4b1a72632b076d4ea8d74717114eba10ff1a61edf42f14349fb1",
+      "domain": "meta"
+    },
+    {
+      "name": "skill-evaluation",
+      "kind": "skill",
+      "version": "0.3.4",
+      "maturity": "draft",
+      "content_sha256": "584d9d29cf0bb39fddc7b9e6cdecbf8233d6fe3f4e4c0a501d5c8944b72f0658",
+      "domain": "meta"
+    },
+    {
+      "name": "skill-release-review",
+      "kind": "skill",
+      "version": "0.3.0",
+      "maturity": "draft",
+      "content_sha256": "d326eb2ace8b478c8cb3303b4682ce5f3170c354995955df5410e246e841f189",
+      "domain": "meta"
+    },
+    {
+      "name": "skill-specification",
+      "kind": "skill",
+      "version": "1.0.1",
+      "maturity": "production",
+      "content_sha256": "17630060bec77d3f1b94a162ce4848fdced858bc6d1273a7decca42e37bc7346",
+      "domain": "meta"
+    },
+    {
+      "name": "skill-test-design",
+      "kind": "skill",
+      "version": "0.3.1",
+      "maturity": "draft",
+      "content_sha256": "f97c11194ca9cf304dcce267a05446030bfbd1cb6c214f34a071781985c4b8ba",
+      "domain": "meta"
+    },
+    {
+      "name": "skill-validation",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "b79780e3d891ca64d45afbb25acc991735ea8da88d1da55d63c2d078823a020a",
+      "domain": "meta"
+    },
+    {
+      "name": "skills-factory-diagnostic",
+      "kind": "skill",
+      "version": "1.0.1",
+      "maturity": "production",
+      "content_sha256": "9e64d3297afe6ec58fd27e585200cbfd939a2d1c9dfe9d5fdb7f09caf336cfac",
+      "domain": "meta"
+    },
+    {
+      "name": "strategy-to-execution-diagnostic",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "candidate",
+      "content_sha256": "b495c4c922ddd838ed647f2b4442e16f0c06538a5ebd9cf41fc31f03bf32a77c",
+      "domain": "oaf"
+    },
+    {
+      "name": "supplier-viability-review",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "944c8c60ac920f0fc99d71372d9cc3c4e0b743a2dac9ebc41809cdf3fb0e39c7",
+      "domain": "commerce"
+    },
+    {
+      "name": "thesis-challenge",
+      "kind": "skill",
+      "version": "0.1.1",
+      "maturity": "production",
+      "content_sha256": "1c741e2ae413e3145b626b622a4fc154f379112dab78527aebe3123ffc0e6297",
+      "domain": "investing"
+    },
+    {
+      "name": "thesis-monitor",
+      "kind": "skill",
+      "version": "0.3.2",
+      "maturity": "production",
+      "content_sha256": "cd68e7263584779dec842a438bafe6ac841ec0bce0f0adae2b7f688b99bde5ad",
+      "domain": "investing"
+    },
+    {
+      "name": "transformation-blueprint",
+      "kind": "skill",
+      "version": "1.0.0",
+      "maturity": "production",
+      "content_sha256": "3e82e21f65921a461ade785d90a5c3015b6001cd7d1061e7077f00838c5d5296",
+      "domain": "oaf"
+    },
+    {
+      "name": "trend-theme-research",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "production",
+      "content_sha256": "9ce42aab9f40f9c9785cac6b6d3e1deff9571c428c993f170681e3aee830b628",
+      "domain": "investing"
+    },
+    {
+      "name": "unit-economics-review",
+      "kind": "skill",
+      "version": "1.1.0",
+      "maturity": "production",
+      "content_sha256": "d3b6ef58b8a63c5fd951f59e33d8e115ceb7dfadf6bac824eeac861a8f41b56e",
+      "domain": "commerce"
+    },
+    {
+      "name": "valuation-scenario-review",
+      "kind": "skill",
+      "version": "0.1.0",
+      "maturity": "production",
+      "content_sha256": "89e88c4f8a0dc2f3a6a705b4161b2d7995d73bfcca86dfd3132604765e38c734",
+      "domain": "investing"
+    },
+    {
+      "name": "visual-output-design",
+      "kind": "skill",
+      "version": "0.12.1",
+      "maturity": "candidate",
+      "content_sha256": "7f760fe6e4808ce6843a4d44c2d4acd20ac7cf72f79575a924b96e41d035ea7a",
+      "domain": "meta"
+    }
+  ]
 }
