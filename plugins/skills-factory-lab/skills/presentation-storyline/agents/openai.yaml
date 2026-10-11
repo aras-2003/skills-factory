@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Storyline
+  short_description: Design and stress-test a slide deck's audience-specific…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

@@ -1,0 +1,5 @@
+interface:
+  display_name: Report Production
+  short_description: Orchestrate a long-form report from brief and source…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#8AB5D7'

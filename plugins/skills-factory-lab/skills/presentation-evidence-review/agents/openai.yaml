@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Evidence Review
+  short_description: Check source-to-slide fidelity, citations, claim…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

@@ -16,8 +16,11 @@ class WorkflowProcessAuditTests(unittest.TestCase):
     def test_all_registered_workflows_and_runtime_remain_unverified(self):
         root = SCRIPT.parents[2]
         report = mod.audit(root)
-        self.assertEqual(16, report["total"])
-        self.assertEqual(16, len({x["name"] for x in report["workflows"]}))
+        self.assertEqual(19, report["total"])
+        self.assertEqual(19, len({x["name"] for x in report["workflows"]}))
+        self.assertTrue({"skill-development", "presentation-production", "report-production"}.issubset(
+            {x["name"] for x in report["workflows"]}
+        ))
         self.assertEqual("NOT_RUN", report["runtime"])
         self.assertEqual("REQUIRED", report["semantic_review"])
         self.assertFalse(report["statuses"].get("STATIC_BLOCKER", 0), report["workflows"])
@@ -83,10 +86,25 @@ class WorkflowProcessAuditTests(unittest.TestCase):
             self.assertIn("registered WORKFLOW.md missing", r["workflows"][0]["errors"])
 
     def test_unregistered_workflow_is_not_silently_included(self):
-        root = SCRIPT.parents[2]
-        r = mod.audit(root)
-        self.assertNotIn("skill-development", [x["name"] for x in r["workflows"]])
-        self.assertTrue((root / "workflows/skill-development/WORKFLOW.md").is_file())
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "workflows" / "registered").mkdir(parents=True)
+            (root / "workflows" / "unregistered").mkdir(parents=True)
+            (root / "workflows" / "registered" / "WORKFLOW.md").write_text(
+                "# Registered\n\n## Purpose\nReview.\n\n## Sequence\nCheck.\n\n## Output contract\nReport.\n## Stop conditions\nStop.\n",
+                encoding="utf-8",
+            )
+            (root / "workflows" / "unregistered" / "WORKFLOW.md").write_text("# Unregistered\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                'workflows:\n  - name: registered\n    workflow: workflows/registered/WORKFLOW.md\n'
+                '    description: "Use this workflow to review a bounded request."\n'
+                '    metadata: {owner: team, version: "1.0", maturity: draft, risk: low, last_reviewed: "2026-10-09"}\n'
+                '    channels: {plugin: supported}\n'
+                '    dependencies: {required: [], optional: []}\n',
+                encoding="utf-8",
+            )
+            r = mod.audit(root)
+            self.assertEqual(["registered"], [x["name"] for x in r["workflows"]])
 
 
 if __name__ == "__main__":

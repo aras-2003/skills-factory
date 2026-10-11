@@ -10,7 +10,7 @@ Use this workflow for ordinary portfolio-review requests even when the user does
 - "what requires attention in my portfolio?";
 - a list/table of holdings or weights followed by a request for risk, concentration, diversification or next decisions.
 
-When activated naturally, do not replace the workflow with a generic investment commentary answer. Run the canonical/evidence path first, then integrated reporting and the required visual-floor path.
+When activated naturally, do not replace the workflow with a generic investment commentary answer. Run the canonical/evidence path first, then integrated reporting and the required visual-floor path. Do not mark the workflow complete until the composition visual slot has a renderer receipt or an explicit `BLOCKED_NO_RENDERER` result.
 
 ## Required skills
 - portfolio-state-review
@@ -46,6 +46,7 @@ When activated naturally, do not replace the workflow with a generic investment 
 10. Surface only positions requiring action review.
 11. Persist new snapshot, signals, thesis-monitor records and user-confirmed decisions through investment-record-store only.
 12. Emit canonical WRITE receipt.
+13. After analytical synthesis, call `report-composer` and satisfy the required composition/concentration visual slot with a callable renderer. Record `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`; client display is `NOT_OBSERVABLE` unless directly observed. Do not close the workflow with an unreported visual slot.
 
 ## Decision rules
 - analytics layer reads/derives; it does not become the system of record;
@@ -70,7 +71,7 @@ Stop when every material alert is tied to evidence or policy.
 ## Integrated report presentation
 Render the report directly in the chat response by default. External HTML/PDF/Figma/deck/file output is allowed only when the user explicitly requests that artifact or format.
 
-After analytical synthesis, call `report-composer` to produce one portfolio decision report. Use `visual-output-design` for inline components only. This step is mandatory for substantial portfolio reviews; do not stop after a prose-only analytical answer when the visual floor applies.
+After analytical synthesis, call `report-composer` to produce one portfolio decision report. Use `visual-output-design` for inline components only. This step is mandatory for substantial portfolio reviews; do not stop after a prose-only analytical answer when the visual floor applies. Before marking the workflow complete, record the required composition/concentration visual as `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`. Renderer output does not establish that the client displayed it; report display as `NOT_OBSERVABLE` unless directly observed.
 
 Default profile:
 - portfolio decision headline + KPI strip;

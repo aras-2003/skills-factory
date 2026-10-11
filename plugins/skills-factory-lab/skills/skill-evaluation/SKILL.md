@@ -10,10 +10,10 @@ description: 'Evaluate an Agent Skill''s routing and behavior using predeclared 
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.3.3
+  version: 0.3.4
   maturity: draft
   risk: medium
-  last_reviewed: '2026-10-06'
+  last_reviewed: '2026-10-09'
 ---
 
 # Skill Evaluation
@@ -62,6 +62,8 @@ Apply this precedence table before interpreting candidate output:
 **Invalid result invariant:** `execution_state` other than `executed` combined with `outcome: passed/failed`, `evaluation.status: PASS/FAIL`, or an overall PASS is internally contradictory. Mark that evaluation result incorrect; do not preserve its claimed pass as a partial or conditional pass. In particular, “Case outcome: Pass / Execution state: queued or no_steps” must be corrected to `outcome: null`, `NOT_RUN`, and overall `ITERATE` when the case is required. Use the exact enum `no_steps` as the primary state if the job has no executable steps, and record missing runner separately.
 
 Use `outcome: passed` or `outcome: failed` only when `execution_state: executed`. For every non-executed state, leave `outcome` null and record the specific reason and evidence. A queued job with no runner is `awaiting_runner`; a job with no executable steps is `no_steps` and has invalid configuration. If both are true, use `no_steps` as the primary state and record the missing runner as an additional condition. An expected result or queued status is not execution evidence. Never repeat the candidate’s expected result as the case outcome, and never say the overall evaluation “can pass” while required evidence is unobserved.
+
+For every non-executed case, also set `compatibility_status: NOT_RUN`; do not infer compatibility from expected routing, package metadata, a queued job, or another case. For a behavioral failure, include the observed output/evidence and criterion violated. When judging a single positive example, do not declare skill value from routing success alone: include a no-skill or accepted-version comparator and at least one realistic near-miss/competing route, or keep the evaluation at `ITERATE` with the missing comparison stated.
 
 When writing an evidence receipt, keep the compatibility field `evaluation.status` consistent: use `PASS` or `FAIL` only for an executed outcome; use `NOT_RUN` for non-execution states, with `outcome: null`, the corresponding `execution_state`, and a reason. Do not translate `NOT_RUN`, `BLOCKED`, `awaiting_runner`, or `no_steps` into a behavioral failure.
 

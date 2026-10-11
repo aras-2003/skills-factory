@@ -7,13 +7,15 @@ description: 'Test whether an e-commerce offer has a credible reason to win vers
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 1.1.0
+  version: 1.1.1
   maturity: production
   risk: low
-  last_reviewed: '2026-09-30'
+  last_reviewed: '2026-10-09'
 ---
 
 # Differentiation Review
+
+Treat the current product and evidence set as an isolated case. Do not carry values, claims or conclusions from prior prompts/cases into this review. Verify marketplace-specific claims against dated primary/authoritative evidence; absent evidence remains `UNVERIFIED` and cannot support a differentiation conclusion.
 
 ## Purpose
 Determine why a customer should choose this offer rather than a cheaper or better-known alternative.

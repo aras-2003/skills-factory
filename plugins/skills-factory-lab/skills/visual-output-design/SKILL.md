@@ -9,10 +9,10 @@ description: 'Convert an already-supported analysis or workflow result into a pr
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.12.0
+  version: 0.12.1
   maturity: candidate
   risk: low
-  last_reviewed: '2026-10-05'
+  last_reviewed: '2026-10-09'
 ---
 
 # Visual Output Design
@@ -31,13 +31,13 @@ Preserve the source analysis, evidence, uncertainty and canonical data contracts
 ## Procedure
 1. Identify the local decision/comprehension job supplied by the calling workflow or `report-composer`.
 2. Decide whether a visual materially improves the result and whether the caller marks it as required by the visual floor.
-3. Run `capability_preflight` against the capabilities actually exposed by the host runtime:
+3. Run `capability_preflight` against the capabilities actually exposed by the host runtime and return its status explicitly in the output:
    - inspect callable tools and host-native components actually documented and exposed in the current runtime;
    - bind the slot to a concrete renderer and classify it as static, hover-interactive, or control-interactive only when those behaviors are documented or observed;
    - do not invent a native `chart` call or response syntax because a platform is known to support charts elsewhere;
    - a quantitative renderer must deterministically encode supplied numeric series/categories;
    - `image_gen`, image viewing, generic media generation and Figma diagram/design capabilities do not qualify as quantitative data-chart renderers;
-   - return `AVAILABLE`, `UNAVAILABLE`, or `UNKNOWN` for each requested interaction level, separately from ordinary static-renderer availability.
+   - return `AVAILABLE`, `UNAVAILABLE`, or `UNKNOWN` for each requested interaction level, separately from ordinary static-renderer availability; include the concrete renderer/capability inspected and evidence or reason.
 4. If the visual is optional and no deterministic renderer exists, use the truthful text/table fallback.
 5. For a **required investment price/KPI visual**:
    - render verified data with the best concrete renderer available;
@@ -117,6 +117,10 @@ If the renderer returns no embeddable image/chart, or the response surface canno
 - Do not expose raw Mermaid code fences to the user. Mermaid is acceptable only when the runtime renders it as an embedded visual; avoid Mermaid xychart when a better native chart/widget is available.
 - Do not create a single composite score merely to simplify a visual when the underlying dimensions should remain separate.
 - Never infer missing values, dates, hierarchy, weights or causal links just to make a chart or diagram look complete.
+- For organizational or operating-model diagrams, encode only relationships, reporting lines, ownership and decision rights present in the source evidence. Mark absent or disputed links `UNKNOWN`/`UNRESOLVED`; never add a plausible reporting line, hierarchy, or accountability relationship to make the diagram look complete.
+- In dashboard HTML, keep the source payload and its provenance separate from presentation code. Every displayed value must map to a supplied payload field or a reproducible transformation; presentation labels/statuses must not be written back as observed business data.
+- Every emitted slot must explicitly label interaction as exactly `STATIC`, `HOVER`, `CONTROLLED`, or `UNKNOWN`. `CONTROLLED` requires a real, operated control that changed the view; an apparent selector or a static image is not sufficient.
+- `capability_preflight` is a required step and output field even when no qualifying renderer is exposed. When unavailable, report that state and stop the render claim; do not invent a capability or silently skip preflight.
 
 ## Inputs
 - analysis result or workflow synthesis;
@@ -170,6 +174,8 @@ Return or render:
 - [ ] No base64 image data or serialized visual payload leaked into user-facing text.
 - [ ] Every required visual slot has an actual inline visual element, or an explicit blocked/failed state.
 - [ ] Client display is always `NOT_OBSERVABLE` from the model unless explicit external evidence is supplied.
+- [ ] Each slot has an explicit STATIC / HOVER / CONTROLLED / UNKNOWN classification and a completed capability preflight.
+- [ ] Organization diagrams contain no unsupported hierarchy, reporting, ownership, or authority links.
 - [ ] Do not emit `UI_CONFIRMED`, `UI_RENDER_UNCONFIRMED`, `VISIBLE` or `BROKEN` as model-owned facts.
 - [ ] Do not describe a visual as visible/rendered "above" merely because the tool returned an image payload.
 

@@ -15,6 +15,33 @@ dimensions:
   external_actions: [none, approval_required, unassessed]
 availability_states: [supported, unavailable, requiring_approval, unknown]
 component_declarations:
+  skill-development:
+    source: workflows/skill-development/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  presentation-production:
+    source: workflows/presentation-production/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  report-production:
+    source: workflows/report-production/WORKFLOW.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
   acquisition-fit-review:
     source: skills/commerce/growth/acquisition-fit-review/SKILL.md
     review_state: STATIC_PARTIAL

@@ -1,0 +1,44 @@
+schema_version: "1.0"
+campaign: presentation-os-creative-direction-2026-10
+purpose: scope-presentation-and-report-lab-changes-outside-the-pinned-r20-runtime-receipt
+runtime_status: NOT_RUN
+out_of_scope_behavior_paths:
+  - skills/presentations/presentation-deck-review/SKILL.md
+  - skills/presentations/presentation-exhibit-design/SKILL.md
+  - skills/presentations/presentation-slide-authoring/SKILL.md
+  - skills/presentations/presentation-storyline/SKILL.md
+  - skills/reports/report-document-architecture/SKILL.md
+  - skills/reports/report-document-authoring/SKILL.md
+  - skills/reports/report-document-review/SKILL.md
+  - workflows/presentation-production/WORKFLOW.md
+  - workflows/presentation-production/references/artifact-contract.md
+  - workflows/presentation-production/references/creative-direction.md
+  - workflows/presentation-production/references/quality-standard.md
+  - workflows/report-production/WORKFLOW.md
+  - workflows/report-production/references/document-contract.md
+  - workflows/report-production/references/quality-standard.md
+  - workflows/runtime-registry.yaml
+case_suites:
+  - path: workflows/presentation-production/tests/cases.yaml
+    required_case_ids:
+      - pres-e2e-22
+      - pres-e2e-23
+      - pres-e2e-24
+  - path: skills/presentations/presentation-deck-review/tests/cases.yaml
+    required_case_ids:
+      - review-high-impact-art-direction
+  - path: skills/presentations/presentation-exhibit-design/tests/cases.yaml
+    required_case_ids:
+      - exhibit-focal-point-and-variety
+  - path: skills/presentations/presentation-slide-authoring/tests/cases.yaml
+    required_case_ids:
+      - authoring-creative-brief
+      - authoring-google-slides
+  - path: skills/presentations/presentation-storyline/tests/cases.yaml
+    required_case_ids:
+      - story-visual-arc
+  - path: workflows/report-production/tests/cases.yaml
+    required_case_ids:
+      - rep-e2e-01
+      - rep-e2e-07
+      - rep-e2e-10

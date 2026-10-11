@@ -75,6 +75,26 @@ class RuntimeCampaignTests(unittest.TestCase):
         )
         self.assertIn("release/package.yaml", campaign.separately_validated_engineering_paths())
 
+    def test_presentation_os_exclusion_requires_draft_status_and_exact_cases(self) -> None:
+        cfg = yaml.safe_load(
+            (ROOT / "evals/campaigns/presentation-os-creative-direction-2026-10/source-coverage.yaml").read_text()
+        )
+        self.assertEqual(cfg["out_of_scope_behavior_paths"], sorted(campaign.separately_validated_presentation_paths()))
+        self.assertEqual("NOT_RUN", cfg["runtime_status"])
+
+        with tempfile.TemporaryDirectory(dir=(ROOT / ".tmp")) as td:
+            temp_root = Path(td)
+            campaign_path = temp_root / campaign.PRESENTATION_OS_CAMPAIGN_REL
+            campaign_path.parent.mkdir(parents=True)
+            campaign_path.write_text(
+                "campaign: presentation-os-creative-direction-2026-10\n"
+                "runtime_status: NOT_RUN\n"
+                "out_of_scope_behavior_paths: []\n"
+                "case_suites: []\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(set(), campaign.separately_validated_presentation_paths(temp_root))
+
 
     def test_explicit_fallback_requires_target_name_in_executor_input(self) -> None:
         case = {

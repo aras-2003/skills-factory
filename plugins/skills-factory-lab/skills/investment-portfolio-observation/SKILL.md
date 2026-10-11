@@ -7,10 +7,10 @@ description: Lightweight portfolio observation child workflow for natural reques
   a fixed target allocation.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.2.0
+  version: 0.2.1
   maturity: production
   risk: high
-  last_reviewed: '2026-10-03'
+  last_reviewed: '2026-10-10'
 ---
 
 # Investment Portfolio Observation Runtime Entrypoint

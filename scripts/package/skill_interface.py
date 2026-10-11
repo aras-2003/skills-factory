@@ -11,6 +11,8 @@ DOMAIN_COLORS = {
     "investing": "#9588F7",
     "meta": "#94D4B3",
     "oaf": "#83A9FF",
+    "presentations": "#F0C982",
+    "reports": "#8AB5D7",
 }
 ACRONYMS = {"ai", "cac", "cogs", "cv", "kpi", "oaf", "os", "vat", "xtb"}
 
@@ -48,6 +50,10 @@ def skill_domain(root: Path, skill_dir: Path) -> str:
 
 
 def workflow_domain(name: str) -> str:
+    if name.startswith("presentation-"):
+        return "presentations"
+    if name.startswith("report-"):
+        return "reports"
     if name.startswith("commerce-"):
         return "commerce"
     if name.startswith(("investment-", "investing-")):

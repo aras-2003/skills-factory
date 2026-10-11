@@ -6,10 +6,10 @@ description: Child workflow for Investment OS opportunity discovery. Use when se
   point for broad natural investment requests.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.5.0
+  version: 0.5.1
   maturity: production
   risk: high
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-10'
 ---
 
 # Investment Opportunity Hunter Runtime Entrypoint

@@ -7,13 +7,15 @@ description: 'Triage regulatory, claims, safety and compliance risk for consumer
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 1.1.0
+  version: 1.1.1
   maturity: production
   risk: high
-  last_reviewed: '2026-09-30'
+  last_reviewed: '2026-10-09'
 ---
 
 # Commerce Regulatory Risk Review
+
+Keep each review bound to the named product, market, channel and supplied product facts. Never carry claims, ingredient values, certification, country, or regulatory conclusions from a prior product/case into the current review. If identity or product-specific evidence is missing, return `UNRESOLVED` and request the minimum missing inputs; do not infer a generic product profile.
 
 ## Purpose
 Identify whether regulatory burden, product classification or claims risk can invalidate an otherwise attractive product thesis.

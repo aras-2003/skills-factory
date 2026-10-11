@@ -9,10 +9,10 @@ description: 'Research how credible investors or investment organizations make d
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: 0.1.1
   maturity: production
   risk: medium
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-09'
 ---
 
 # Investor Pattern Research
@@ -31,6 +31,7 @@ Learn decision principles from strong practitioners without cargo-culting portfo
 
 ## Decision rules
 - Holdings are examples, not instructions.
+- Never turn observed holdings, a disclosed watchlist, or a position list into a copy-trading shortlist. Discuss holdings only as dated evidence of behavior and context, and derive transferable principles separately; do not label a holding a user opportunity without a separate, explicitly requested underwriting.
 - Famous investor != universally applicable practice.
 - Primary letters/interviews/filings outrank quote aggregators.
 - Contradictory schools should remain contradictory when their assumptions differ.

@@ -18,10 +18,7 @@ Optional workflow dependencies carry an explicit reduced-scope behavior. Missing
 
 ## Lab channel
 
-Use the Lab for isolated behavioral evaluation. It intentionally packages:
-- candidate targets;
-- required production dependencies;
-- registered executor-only `.input.md` eval fixtures.
+Use the Lab for isolated behavioral evaluation. Lab 0.35.0 packages every source skill and workflow registered for the Lab channel, irrespective of maturity, plus registered executor-only `.input.md` eval fixtures. Its bundled MCP catalog exposes that same complete package inventory.
 
 Do **not** enable the Lab and production plugin together for the same evaluation session when they expose duplicate names. The Lab manifest records this session rule.
 

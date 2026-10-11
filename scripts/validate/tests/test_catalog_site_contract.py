@@ -34,20 +34,22 @@ class SiteCatalogContractTests(unittest.TestCase):
         self.assertTrue(catalog["skills"])
         self.assertTrue(catalog["workflows"])
         self.assertEqual(len(self.workflow_sources()), catalog["metadata"]["source_workflow_count"])
-        self.assertEqual(16, catalog["metadata"]["registered_workflow_count"])
+        self.assertEqual(19, catalog["metadata"]["registered_workflow_count"])
         skill_development = next(item for item in catalog["workflows"] if item["name"] == "skill-development")
-        self.assertEqual("not_registered", skill_development["runtime_registration"])
-        self.assertEqual("unknown", skill_development["maturity"])
+        self.assertEqual("registered", skill_development["runtime_registration"])
+        self.assertEqual("draft", skill_development["maturity"])
+        self.assertEqual({"lab": "supported", "plugin": "unavailable", "chatgpt-zip": "unavailable"}, skill_development["declared_channels"])
         presentation = next(item for item in catalog["workflows"] if item["name"] == "presentation-production")
-        self.assertEqual("not_registered", presentation["runtime_registration"])
-        self.assertEqual({}, presentation["declared_channels"])
+        self.assertEqual("registered", presentation["runtime_registration"])
+        self.assertEqual("draft", presentation["maturity"])
+        self.assertEqual({"lab": "supported", "plugin": "unavailable", "chatgpt-zip": "unavailable"}, presentation["declared_channels"])
         report_production = next(item for item in catalog["workflows"] if item["name"] == "report-production")
-        self.assertEqual("not_registered", report_production["runtime_registration"])
-        self.assertEqual({}, report_production["declared_channels"])
+        self.assertEqual("registered", report_production["runtime_registration"])
+        self.assertEqual("draft", report_production["maturity"])
+        self.assertEqual({"lab": "supported", "plugin": "unavailable", "chatgpt-zip": "unavailable"}, report_production["declared_channels"])
         self.assertEqual("UNASSESSED", catalog["metadata"]["capability_assessment"])
         self.assertTrue(all(item["capability_assessment"] == "UNASSESSED" for item in catalog["skills"]))
         self.assertTrue(all(item["declared_channels"] for item in catalog["workflows"] if item["runtime_registration"] == "registered"))
-        self.assertEqual({}, skill_development["declared_channels"])
         self.assertEqual("NOT_OBSERVED", catalog["metadata"]["runtime_installation"])
 
     def test_site_catalog_does_not_promote_partial_capability_declaration(self) -> None:
@@ -137,23 +139,33 @@ lab:
         self.assertRegex(receipt["source_revision"], r"^[0-9a-f]{40}$")
         self.assertRegex(receipt["payload_content_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(f"{receipt['version']}+{receipt['source_revision'][:12]}", receipt["release_id"])
-        self.assertEqual(70, len(receipt["components"]))
+        self.assertEqual(83, len(receipt["components"]))
+        manifest = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest, receipt)
 
-    def test_private_mcp_receipt_covers_the_complete_test_catalog(self) -> None:
+    def test_private_mcp_receipt_remains_historical_until_a_new_deployment_is_observed(self) -> None:
         receipt = json.loads((ROOT / "docs/cloud-release.json").read_text(encoding="utf-8"))
         catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
         lab = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
         source_names = {item["name"] for item in catalog["skills"] + catalog["workflows"]}
-        lab_names = {item["name"] for item in lab["components"]}
+        current_lab_names = {item["name"] for item in lab["components"]}
+        observed_names = {item["name"] for item in receipt["catalog_entries"]}
         drafts = receipt["draft_extension"]["components"]
+        # The cloud receipt is evidence for the last observed 0.34.0 deployment.
+        # It must remain truthful until a new runtime catalog is actually observed.
+        self.assertEqual("0.34.0", receipt["runtime_release"]["version"])
+        self.assertEqual(70, receipt["lab_release"]["skill_count"])
+        self.assertEqual(82, len(observed_names))
         self.assertEqual(12, len(drafts))
         self.assertEqual(12, len(set(drafts)))
-        self.assertFalse(lab_names.intersection(drafts))
         self.assertTrue(set(drafts) <= source_names)
         self.assertEqual(82, receipt["runtime_release"]["skill_count"])
-        self.assertEqual(82, len(lab_names | set(drafts)))
-        self.assertEqual(lab["source_revision"], receipt["lab_release"]["source_revision"])
-        self.assertEqual(lab["version"], receipt["lab_release"]["version"])
+        self.assertEqual(82, len(observed_names))
+        self.assertNotEqual(lab["source_revision"], receipt["lab_release"]["source_revision"])
+        self.assertNotEqual(lab["version"], receipt["lab_release"]["version"])
+        self.assertEqual(83, len(current_lab_names))
+        self.assertTrue(set(drafts) <= current_lab_names)
+        self.assertTrue({"skill-development", "presentation-production", "report-production"} <= current_lab_names)
         self.assertEqual("NOT_RUN", receipt["checks"]["model_campaign"])
         entries = receipt["catalog_entries"]
         self.assertEqual(receipt["runtime_release"]["skill_count"], len(entries))

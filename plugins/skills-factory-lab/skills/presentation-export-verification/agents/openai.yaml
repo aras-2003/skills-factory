@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Export Verification
+  short_description: Verify a presentation's actual rendered slides, delivery…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

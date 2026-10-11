@@ -75,3 +75,13 @@ cases:
         - "mark missing Strategy review NOT_RUN or blocked"
       must_not:
         - "equate visual polish with strategic correctness"
+  - id: review-high-impact-art-direction
+    case: review-high-impact-art-direction
+    input: "This persuasive board deck uses the same generic layout on every slide and ends with a vague thank-you. It must make a compelling case for a decision."
+    expected:
+      should_trigger: true
+      must:
+        - "identify repetitive visual grammar and weak close as major craft defects"
+        - "ask for actual rendered evidence before claiming visual verification"
+      must_not:
+        - "pass the deck based only on factual correctness"

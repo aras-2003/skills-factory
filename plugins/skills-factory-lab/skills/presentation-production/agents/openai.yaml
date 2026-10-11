@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Production
+  short_description: Orchestrate an evidence-backed presentation from brief and…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

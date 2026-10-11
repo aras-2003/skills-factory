@@ -8,10 +8,10 @@ description: 'Design and maintain routing, behavioral, edge-case, adversarial, a
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.3.0
+  version: 0.3.1
   maturity: draft
   risk: low
-  last_reviewed: '2026-10-05'
+  last_reviewed: '2026-10-09'
 ---
 
 # Skill Test Design
@@ -40,7 +40,7 @@ If the contract is not agreed, clarify or flag that gap before encoding assumpti
    - **Regression:** concrete previous failures, preserved as durable cases.
 3. **Cover the change.** Description-only changes require positive and negative routing regression. Procedure/output changes require behavior coverage. Changes to tools, permissions, claims or external actions require failure and boundary coverage. Do not add unrelated tests without a risk-based reason.
 4. **Choose cases for discrimination.** Use plausible prompts that separate the target skill from its closest alternatives. A negative should share enough domain vocabulary to be a real routing challenge. Avoid trivia and unrelated prompts.
-5. **Write stable assertions.** Prefer semantic must/must-not expectations, required evidence or fields, explicit route, and required stop/action boundaries. Avoid exact wording, hidden reasoning, cosmetic preferences and tests that a vaguely on-topic answer could pass.
+5. **Write stable assertions.** Prefer semantic must/must-not expectations, required evidence or fields, explicit route, and required stop/action boundaries. Avoid exact wording, hidden reasoning, cosmetic preferences and tests that a vaguely on-topic answer could pass. Make every case executable without evaluator guesswork: include the exact user input, required fixture/setup, expected behavior, forbidden behavior, evidence source and a discriminating near-miss/competing route where routing is under test. Avoid generic expectations such as “be accurate”, “do research”, or “handle edge cases”.
 6. **Set severity and evidence.** Mark which cases are smoke, routing, behavioral, regression or high-risk in the case ID/name or suite documentation. Keep high-risk failures visible; do not hide them inside an average.
 7. **Validate the cases.** Ensure inputs are self-contained, expected outcomes are unambiguous, references/fixtures exist, case IDs are unique, and the schema is accepted by the repository validator.
 8. **Define execution evidence.** For every criterion that requires an actual browser, API, runtime or external action trace, specify the observable receipt needed (tool trace, URL or resource, check time, and observed result as relevant). A plan or narrative claim is not execution evidence.
@@ -51,8 +51,9 @@ If the contract is not agreed, clarify or flag that gap before encoding assumpti
 
 Design assertions so execution state cannot be mistaken for outcome:
 - `NOT_RUN`: execution has not started, including a queued job with no runner/steps.
-- `BLOCKED` / `NOT TESTABLE`: execution cannot test the criterion because a required runtime, tool or fixture is unavailable.
-- `PASS` / `FAIL`: use only after observing the criterion in an execution that actually ran.
+- `BLOCKED` / `NOT TESTABLE`: execution cannot test the criterion because a required runtime, tool or fixture is unavailable. Record which prerequisite is unavailable.
+- `UNVERIFIED`: execution ran, but its evidence does not establish the criterion or the required status; name the missing/ambiguous evidence. Do not use this to describe a browser that was unavailable.
+- `PASS` / `FAIL`: use only after observing sufficient evidence in an execution that actually ran. A listing status can be PASS/FAIL only after the page was inspected and an observed status was compared with the expected one.
 - If a criterion explicitly requires checking a live source, a model explanation or stated plan cannot satisfy it. Define the trace, source/URL, check time and observed value needed to pass.
 
 ## Minimum production-candidate coverage

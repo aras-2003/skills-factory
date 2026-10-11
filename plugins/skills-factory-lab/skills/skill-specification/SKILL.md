@@ -8,10 +8,10 @@ description: 'Decide whether a repeatable task should become an Agent Skill and 
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 1.0.0
+  version: 1.0.1
   maturity: production
   risk: low
-  last_reviewed: '2026-09-30'
+  last_reviewed: '2026-10-09'
 ---
 
 # Skill Specification
@@ -30,7 +30,7 @@ Prevent premature skill creation and define a testable contract before instructi
    - use a **workflow** for orchestration across multiple independently useful stages;
    - use a **skill** for one reusable reasoning/execution/control method.
 4. Define trigger conditions in user-goal language.
-5. Define near-miss and competing cases that must not trigger.
+5. Define near-miss and competing cases that must not trigger. State the concrete user-goal signal and one realistic adjacent request that belongs to a named competing skill or to no skill; do not leave trigger conditions implied by the proposed name or domain alone.
 6. Define required and optional inputs.
 7. Define preconditions.
 8. Define the output contract.

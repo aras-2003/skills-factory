@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 import os
 import shutil
 import tempfile
@@ -21,7 +22,7 @@ import build_chatgpt_skills
 import build_lab_plugin
 import build_plugin
 from build_utils import assert_source_revision, validate_output_path
-from workflow_entrypoints import dependency_availability
+from workflow_entrypoints import dependency_availability, load_registry
 
 
 class PackagingTests(unittest.TestCase):
@@ -247,6 +248,44 @@ class PackagingTests(unittest.TestCase):
             errors = artifact_validation.validate_tree(out, allow_lab_evals=True)
             self.assertEqual([], errors)
 
+            lab_manifest = json.loads((out / "release-manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual("0.35.0", lab_manifest["version"])
+            source_skill_names = {path.name for path in build_lab_plugin.discover_all_skills(ROOT)}
+            self.assertEqual(source_skill_names, {
+                item["name"] for item in lab_manifest["components"] if item["kind"] == "skill"
+            })
+            self.assertEqual(
+                {"production", "candidate", "draft"},
+                {item["maturity"] for item in lab_manifest["components"] if item["kind"] == "skill"},
+            )
+            self.assertTrue((out / "skills" / "presentation-slide-authoring" / "assets" / "skills-factory-domain-icon.svg").is_file())
+            workflow_source_names = {path.parent.name for path in (ROOT / "workflows").rglob("WORKFLOW.md")}
+            self.assertEqual(
+                workflow_source_names,
+                {item["name"] for item in lab_manifest["components"] if item["kind"] == "workflow"},
+            )
+            self.assertTrue((out / "skills" / "presentation-production" / "references" / "creative-direction.md").is_file())
+            self.assertTrue((out / "skills" / "report-production" / "references" / "document-contract.md").is_file())
+
+            catalog_path = ROOT / "runtime" / "mcp" / "skill_catalog.py"
+            catalog_spec = importlib.util.spec_from_file_location("lab_package_skill_catalog", catalog_path)
+            self.assertIsNotNone(catalog_spec)
+            self.assertIsNotNone(catalog_spec.loader if catalog_spec else None)
+            catalog_module = importlib.util.module_from_spec(catalog_spec)
+            catalog_spec.loader.exec_module(catalog_module)
+            old_skills_root = os.environ.get("SKILLS_FACTORY_SKILLS_ROOT")
+            os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = str(out / "skills")
+            try:
+                catalog = catalog_module.list_skills()
+                self.assertEqual(source_skill_names | workflow_source_names, {item["name"] for item in catalog["skills"]})
+                loaded_workflow = catalog_module.load_skill("presentation-production")
+                self.assertTrue(any(item["path"] == "references/creative-direction.md" for item in loaded_workflow["reference_files"]))
+            finally:
+                if old_skills_root is None:
+                    os.environ.pop("SKILLS_FACTORY_SKILLS_ROOT", None)
+                else:
+                    os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = old_skills_root
+
             index_path = out / "executor-inputs.json"
             index = json.loads(index_path.read_text(encoding="utf-8"))
             original_index = json.dumps(index, ensure_ascii=False, indent=2) + "\n"
@@ -277,7 +316,11 @@ class PackagingTests(unittest.TestCase):
             self.assertTrue(workflows)
             self.assertTrue(all(x.get("version") for x in workflows))
 
-            draft_targets = {"skill-test-design", "skill-evaluation", "skill-release-review"}
+            draft_targets = {
+                item["name"]
+                for item in lab_manifest["components"]
+                if item.get("kind") == "skill" and item.get("maturity") == "draft"
+            }
             draft_components = {
                 x["name"]: x
                 for x in capabilities["capabilities"]

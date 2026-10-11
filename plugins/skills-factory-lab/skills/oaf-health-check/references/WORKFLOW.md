@@ -56,6 +56,8 @@ Build a short claim ledger before writing prose. Every material statement must b
 
 `claim | epistemic status | evidence | confidence rationale`
 
+Calibrate confidence per claim to evidence quality, scope and sample coverage: use `high` only when direct, sufficiently representative evidence strongly supports the specific claim and credible alternatives have been checked. High confidence is allowed when those conditions hold; do not mechanically downgrade strong observed evidence. Thin, indirect, conflicting, or single-case evidence remains medium/low and should narrow the claim.
+
 Allowed epistemic status:
 - `observed` — direct paraphrase of the input or evidence actually collected;
 - `supported` — mechanism directly supported by reviewed evidence;

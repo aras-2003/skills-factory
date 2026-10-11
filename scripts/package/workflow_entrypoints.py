@@ -6,6 +6,7 @@ from typing import Any
 
 import yaml
 
+from build_utils import include_runtime_file
 from portable import portable_metadata
 from skill_interface import workflow_domain, write_skill_interface
 
@@ -30,7 +31,7 @@ def select_workflows(root: Path, maturity: str, channel: str = "plugin") -> list
     selected = []
     for item in load_registry(root):
         metadata = item.get("metadata") or {}
-        if metadata.get("maturity") == maturity and channel_supported(item, channel):
+        if (maturity == "all" or metadata.get("maturity") == maturity) and channel_supported(item, channel):
             selected.append(item)
     return selected
 
@@ -94,6 +95,23 @@ def build_entrypoint(
     refs = dst / "references"
     refs.mkdir(parents=True, exist_ok=True)
     shutil.copy2(workflow, refs / "WORKFLOW.md")
+    source_refs = workflow.parent / "references"
+    if source_refs.is_dir():
+        for source in sorted(source_refs.rglob("*")):
+            if not source.is_file():
+                continue
+            if source.is_symlink():
+                raise ValueError(f"workflow support symlinks are not allowed: {source}")
+            relative = source.relative_to(source_refs)
+            package_relative = Path("references") / relative
+            if (
+                not include_runtime_file(package_relative)
+                or any(part in {"tests", "evals"} for part in relative.parts)
+            ):
+                continue
+            target = refs / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, target)
 
     fm = yaml.safe_dump(
         {
