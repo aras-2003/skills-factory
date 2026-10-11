@@ -102,16 +102,16 @@ jobs:
           python scripts/eval/campaign.py validate
           python scripts/eval/skill_release_campaign.py validate
           python -m unittest discover -s scripts/eval/tests -p 'test_*.py'
-          python scripts/eval/campaign.py prepare --output .tmp/runtime-campaign-r19
+          python scripts/eval/campaign.py prepare --output .tmp/runtime-campaign-r20
           python scripts/eval/campaign.py validate-evidence
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
-          cp -R .tmp/runtime-campaign-r19/production-plugin .tmp/runtime-retest-pack/production
-          cp -R .tmp/runtime-campaign-r19/lab-plugin .tmp/runtime-retest-pack/lab
-          cp .tmp/runtime-campaign-r19/lock.json .tmp/runtime-retest-pack/lock.json
-          cp .tmp/runtime-campaign-r19/smoke-production-template.json .tmp/runtime-retest-pack/smoke-production-template.json
-          cp .tmp/runtime-campaign-r19/smoke-lab-template.json .tmp/runtime-retest-pack/smoke-lab-template.json
+          cp -R .tmp/runtime-campaign-r20/production-plugin .tmp/runtime-retest-pack/production
+          cp -R .tmp/runtime-campaign-r20/lab-plugin .tmp/runtime-retest-pack/lab
+          cp .tmp/runtime-campaign-r20/lock.json .tmp/runtime-retest-pack/lock.json
+          cp .tmp/runtime-campaign-r20/smoke-production-template.json .tmp/runtime-retest-pack/smoke-production-template.json
+          cp .tmp/runtime-campaign-r20/smoke-lab-template.json .tmp/runtime-retest-pack/smoke-lab-template.json
           cp evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-strategy-production-002.input.md .tmp/runtime-retest-pack/executor-inputs/01-fallback-strategy-explicit.input.md
           if find .tmp/runtime-retest-pack -type f \( -name '*.rubric.yaml' -o -name '*.rubric.yml' \) | grep -q .; then
             echo "rubric leaked into executor pack"
@@ -120,7 +120,7 @@ jobs:
       - name: Upload executor-only runtime retest pack
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: runtime-retest-pack-r19
+          name: runtime-retest-pack-r20
           path: .tmp/runtime-retest-pack
           if-no-files-found: error
           retention-days: 14
