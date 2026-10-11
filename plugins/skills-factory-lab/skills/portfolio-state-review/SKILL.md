@@ -9,10 +9,10 @@ description: 'Reconstruct and review the current investment portfolio plus histo
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.7.0
+  version: 0.7.1
   maturity: production
   risk: high
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-09'
 ---
 
 # Portfolio State Review
@@ -24,6 +24,7 @@ Turn canonical holdings/history into a decision-useful portfolio state while pre
 1. Use investment-record-store to read canonical `current_positions`, latest portfolio snapshot, current policy and relevant exposure data.
 2. If the configured canonical backend or prior snapshot is unavailable, state exactly what comparison is blocked. Do not substitute chat/local files or analytics cache.
 3. Reconcile position, quantity, cost basis, market value, portfolio weight, account and currency.
+   - Return a row-level view for each holding with the available quantity, market value, weight, account, currency, and as-of date; name each missing field rather than silently omitting affected rows. Show prior-period/history rows only when the corresponding snapshot was actually retrieved.
 4. Use Data/analytics tooling when useful for aggregation, look-through, concentration, overlap and historical trend analysis; treat all outputs as derived analytics.
 5. Review single-name, sector/theme, geography, currency, factor/cyclicality and ETF/stock overlap where supported.
    - For coverage statements, prefer `portfolio_exposure_source_coverage`.
@@ -45,8 +46,8 @@ Turn canonical holdings/history into a decision-useful portfolio state while pre
    - never infer "market-driven", "no-trade" or "no transaction occurred" from the absence of observed transaction data.
 9. Treat soft reference bands as observation heuristics only unless the active canonical policy explicitly defines a hard rule. A soft trigger is not a breach and does not imply rebalancing.
 10. Flag explicit canonical policy breaches or review thresholds when they truly exist; do not automatically translate a breach into a sell action.
-11. Persist a new snapshot/event through investment-record-store; do not write directly from analytics tooling.
-12. Return explicit canonical read/write receipts.
+11. Persist a new snapshot/event through investment-record-store only when explicitly authorized by the user or this workflow's declared contract. A review/report request alone is not authorization. Never write during evaluation, a controlled test, preview, or an unknown write boundary; use a verified isolated test store or read-only mode.
+12. Return explicit canonical read receipts and, only when an authorized write was attempted, a write receipt.
 
 ## Decision rules
 - A good company can become a poor portfolio position through concentration.
@@ -71,3 +72,5 @@ As-of date; canonical-read status; reconciled portfolio summary; material exposu
 - [ ] Trade-driven and market-driven changes are separated only when causal evidence is sufficient; otherwise attribution is UNKNOWN.
 - [ ] Historical state is not overwritten.
 - [ ] Persistence writes route only through investment-record-store.
+- [ ] A review/report request alone did not trigger a canonical write.
+- [ ] Controlled tests and previews did not modify canonical state.

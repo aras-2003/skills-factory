@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Deck Review
+  short_description: Critique a real or draft presentation for strategy, audience…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

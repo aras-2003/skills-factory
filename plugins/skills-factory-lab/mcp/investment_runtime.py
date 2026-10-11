@@ -19,13 +19,17 @@ stocks, securities, ETFs, investment themes, investment opportunities, investmen
 policy/risk limits, or new information about an existing investment:
 
 1. Before substantive investment analysis, call route_investment_request with the
-   user's full request.
-2. Follow the returned child_workflow and load/use the matching packaged workflow.
-3. Do not replace the selected workflow with generic investment commentary.
-4. For portfolio requests:
+   user's full request. This call is the auditable front-door routing receipt.
+2. Load the returned child_workflow by its exact packaged name before analysis;
+   the route result alone is not execution. If it cannot be loaded, stop and state
+   that the workflow did not run. Do not silently substitute another specialist.
+3. Follow the loaded workflow's sequence and evidence gates. Do not claim that a
+   child workflow ran unless its own load/execution is present in the tool trace.
+4. Do not replace the selected workflow with generic investment commentary.
+5. For portfolio requests:
    - observation/change/monitoring intent -> investment-portfolio-observation;
    - full risk/concentration/decision review -> investment-portfolio-review.
-5. This router does not make buy/sell decisions. It only chooses the Investment OS
+6. This router does not make buy/sell decisions. It only chooses the Investment OS
    workflow that owns the request.
 
 Do not call this router for unrelated finance questions such as banking mechanics,
@@ -65,7 +69,9 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     It does not provide investment advice or replace the selected workflow.
     """
     raw = user_request.strip()
-    text = raw.lower()
+    # Route the requested task, excluding clauses that explicitly reject an
+    # alternative (for example "not my portfolio" or "nie ... rebalancingu").
+    text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*", "", raw.lower())
 
     if not raw:
         return {
@@ -135,7 +141,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "what changed", "what should i watch", "monitor my holdings",
         "monitor my portfolio", "portfolio drift", "observe my portfolio",
         "co się dzieje z portfelem", "co sie dzieje z portfelem",
-        "co się zmieniło", "co sie zmienilo", "co mam obserwować",
+        "co się zmieniło", "co sie zmienilo", "co zmieniło się", "co zmienilo sie",
+        "warto obserwować", "warto obserwowac", "co mam obserwować",
         "co mam obserwowac", "obserwuj moje pozycje", "obserwuj portfel",
         "zmiany w portfelu", "monitoruj portfel",
     )
@@ -144,9 +151,16 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "my portfolio", "this portfolio", "portfolio review", "review portfolio",
         "portfolio risk", "portfolio concentration", "portfolio diversification",
         "holdings", "weights", "allocation", "top 2", "top 5", "other holdings",
-        "etf overlap", "what requires attention", "portfel", "moj portfel",
+        "etf overlap", "what requires attention", "review my portfolio", "portfel", "moj portfel",
         "mój portfel", "wagi", "udziały", "udzialy", "koncentracja",
         "dywersyfikacja", "pozycje w portfelu",
+    )
+    single_security_intent = (
+        _contains(text, "stock", "security", "spółk", "spolk", "akcj", "good investment")
+        and (
+            re.search(r"(?:review|assess|analy[sz]e|analiz|oceń|ocen|wyceń|wycen).{0,60}(?:stock|security|spółk|spolk|akcj)", text)
+            or _contains(text, "thesis", "valuation", "underwriting", "good investment")
+        )
     )
 
     # Multiple security-like tickers plus weights/percentages strongly indicates portfolio.
@@ -165,6 +179,12 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
             "attention",
             "investment-attention-review",
             "request asks whether new information changes an existing investment thesis or deserves escalation",
+        )
+    elif single_security_intent and not (_ticker_count(raw) >= 2 and "%" in raw):
+        route, child, reason = (
+            "security",
+            "investment-security-review",
+            "one security's thesis, valuation or portfolio fit is the decision object",
         )
     elif observation:
         route, child, reason = (
@@ -208,6 +228,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
             "child_workflow": "investment-os-review",
             "reason": "investment intent detected but the decision object is ambiguous; use the Investment OS front door",
             "must_invoke_child_workflow": True,
+            "routing_receipt": "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_skill(investment-os-review)",
         }
 
     return {
@@ -216,6 +237,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "child_workflow": child,
         "reason": reason,
         "must_invoke_child_workflow": True,
+        "routing_receipt": f"ROUTE={route}; CHILD={child}; NEXT_ACTION=load_skill({child})",
     }
 
 

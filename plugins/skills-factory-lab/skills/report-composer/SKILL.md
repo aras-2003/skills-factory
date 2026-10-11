@@ -9,10 +9,10 @@ description: 'Compose one integrated decision report from an already-supported w
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.11.0
+  version: 0.11.1
   maturity: candidate
   risk: low
-  last_reviewed: '2026-10-05'
+  last_reviewed: '2026-10-09'
 ---
 
 # Report Composer
@@ -28,7 +28,7 @@ Do not create a second "visual report" beside the chat answer. Do not create an 
 - The composer may reorganize presentation, but must not silently change analytical conclusions.
 
 ## Procedure
-1. Identify the audience, decision and minimum report depth.
+1. Identify the audience, decision and minimum report depth. For a narrow factual or explanatory request, answer directly at the requested depth; do not expand it into an integrated investment report, dashboard, candidate ranking, or additional analysis unless the user asks or a required evidence gate needs it.
 2. Apply `references/report-quality-standard.md` and `references/report-state-and-evidence-contract.md` as mandatory contracts.
 3. Build the evidence ledger before presentation:
    - classify each decision-relevant claim as CANONICAL / USER_PROVIDED / EXTERNAL_VERIFIED / DERIVED / UNKNOWN;

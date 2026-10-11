@@ -9,10 +9,10 @@ description: Default Investment OS front door for natural investment requests. U
   with generic investment commentary.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.3.0
+  version: 0.3.1
   maturity: production
   risk: high
-  last_reviewed: '2026-10-03'
+  last_reviewed: '2026-10-09'
 ---
 
 # Investment Os Review Runtime Entrypoint

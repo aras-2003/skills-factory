@@ -50,7 +50,7 @@ Actively discover new investment opportunities globally, with XTB availability s
    - sources and evidence links that support material verified claims;
    - research events/signals only for material new or changed evidence;
    - promoted candidates as canonical opportunities with research status RESEARCH_CANDIDATE, WATCH, DEFER or REJECT.
-   A direct user request to run discovery, scan or produce the integrated opportunity report authorizes these bounded research-state writes by default. Do not write for a read-only, preview-only or explicitly no-save request. Do not persist the generated report itself as canonical state.
+   A direct user request to run discovery, scan or produce a report is **not by itself** write authorization. Require an explicit user instruction to save research state or a previously documented, verifiable standing mandate covering this exact workflow, record type and canonical target. Read-only, preview, test, no-save, or unknown boundaries are always non-writing. Do not persist the generated report itself as canonical state.
 17. Before writing, pass the evidence gates, deduplicate by stable instrument identity against current/prior opportunities, and write only new or materially changed research state. Update disposition/history instead of creating a duplicate. Do not write speculative candidates that remain in raw discovery.
 18. Emit a canonical WRITE receipt listing each entity class written, skipped or failed. Data/analytics outputs and local files are NONCANONICAL.
 19. Do not size or label BUY/SELL here; route portfolio action to investment-security-review or position-sizing-review.
@@ -64,7 +64,7 @@ Actively discover new investment opportunities globally, with XTB availability s
 - critical figures require primary-source sanity checks;
 - XTB availability must be confirmed before a candidate is called actionable;
 - a promoted research candidate may still be persisted as `RESEARCH_CANDIDATE` while XTB status remains unverified;
-- a report/discovery request is not a reason to suppress canonical research-state persistence;
+- a report/discovery request alone is not write authorization; without an explicit or verified standing mandate, return `NOT_WRITTEN` and do not persist canonical research state;
 - social/news attention alone cannot pass discovery.
 
 ## Output contract
@@ -81,7 +81,7 @@ Ticker | WHY THIS | WHY NOW | measurable evidence | valuation/expectations | fai
 - material event timeline;
 - observed moves vs likely causes + confidence;
 - thesis/setup, catalyst, strongest countercase and next evidence gate;
-- canonical persistence receipts, including which promoted candidates were written/updated as research-state opportunities.
+- canonical persistence status `NOT_WRITTEN`, `SAVED`, or `WRITE_FAILED`, with actual receipts only for attempted writes; identify which promoted candidates were written or updated when authorized.
 
 ## Stop conditions
 Stop broad discovery when roughly 10-15 credible research candidates remain.

@@ -8,10 +8,10 @@ description: 'Append a structured investment decision record capturing what was 
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: 0.1.1
   maturity: production
   risk: medium
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-09'
 ---
 
 # Decision Journal Update
@@ -23,7 +23,7 @@ Create the learning loop required to distinguish skill from luck and identify re
 1. Capture decision timestamp, instrument, action/lifecycle state, price/context, position weight and horizon.
 2. Store the contemporaneous thesis, assumptions, catalysts, risks, kill criteria and confidence.
 3. Link evidence and source dates used at decision time.
-4. Append the record; never alter the original rationale after outcomes are known.
+4. Append the record only after an explicit user request to save it and a verified safe canonical target. Drafting or discussing a decision is not permission to persist. Never write to production during controlled tests, previews, or an unknown write boundary. Never alter the original rationale after outcomes are known.
 5. On review, add a separate outcome record: thesis quality, timing quality, sizing quality, process adherence and lessons.
 6. Distinguish a good process/bad outcome from bad process/good outcome.
 
@@ -32,6 +32,7 @@ Create the learning loop required to distinguish skill from luck and identify re
 - P/L alone is not decision quality.
 - Missing rationale at entry is itself a process defect.
 - Hindsight commentary must be stored separately.
+- A request to analyze, summarize, or draft a decision journal entry does not itself authorize a canonical write.
 
 ## Output contract
 Decision record ID; contemporaneous context; thesis; action; sizing rationale; invalidation; evidence links; later review fields when applicable.

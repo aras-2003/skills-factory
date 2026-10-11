@@ -72,7 +72,7 @@ Do not require the user to ask for policy enforcement, rebalancing or a full por
 9. Run thesis-monitor only when an ACTIVE thesis exists. If only DRAFT exists, state that thesis monitoring is not yet active.
 10. Suppress unchanged/noise items from the main attention queue; summarize them compactly under no material change.
 11. Do not create buy/sell/rebalance instructions unless the user separately asks for a portfolio decision.
-12. Persist only new canonical observations/signals that are materially useful and non-duplicative; do not write merely because the workflow ran.
+12. Canonical persistence is optional and never implied by running a portfolio observation. If the user explicitly authorizes a material observation/signal write, or a specific verified standing mandate covers it, deduplicate and write through the verified investment-record-store only. Otherwise remain read-only and return `NOT_WRITTEN`. A request to monitor or report drift alone is not authorization; never write for no-save/preview/test or an unknown write boundary. Record `SAVED` only with a successful canonical WRITE receipt, and `WRITE_FAILED` on an observed failure.
 
 ## Observation dimensions
 Use the minimum dimensions supported by evidence:
@@ -123,7 +123,7 @@ Only gaps that materially limit observation quality.
 When reporting look-through gaps, state source coverage separately from decomposition completeness.
 
 ### Receipts
-Canonical read/write status and relevant evidence limitations.
+Canonical READ status, independent `NOT_WRITTEN`/`SAVED`/`WRITE_FAILED` state and actual WRITE receipt only if attempted; retain evidence limitations.
 
 ## Stop conditions
 Stop when:

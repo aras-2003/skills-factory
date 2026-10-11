@@ -1,0 +1,5 @@
+interface:
+  display_name: Skill Development
+  short_description: Run the complete skill-development lifecycle for defining…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#94D4B3'

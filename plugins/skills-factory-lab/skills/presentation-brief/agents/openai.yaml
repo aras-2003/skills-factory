@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Brief
+  short_description: Establish the audience, communication objective, intended…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

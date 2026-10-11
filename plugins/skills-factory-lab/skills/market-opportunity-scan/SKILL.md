@@ -10,10 +10,10 @@ description: 'Screen the XTB-investable equity and ETF universe for research can
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.3.0
+  version: 0.3.1
   maturity: production
   risk: medium
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-09'
 ---
 
 # Market Opportunity Scan
@@ -60,7 +60,7 @@ Do not treat any research plugin as the canonical portfolio store.
 10. Verify decision-relevant claims in primary sources before promotion to the shortlist.
 11. Evaluate portfolio relevance and overlap only after the candidate has passed the standalone evidence gate.
 12. Remove ideas supported only by cheapness, price decline, momentum, social attention or narrative.
-13. Produce a broad research radar of roughly 10-15 candidates, then promote only the best 2-3 to detailed analysis by default.
+13. Produce a broad research radar of roughly 10-15 candidates, then promote only the best 2-3 to detailed analysis by default. Match the requested coverage; if the evidence or available tools cannot support the minimum breadth or history, state the actual coverage and mark the scan incomplete rather than presenting a partial scan as the full universe.
 14. Return an explicit reject/defer rationale for attractive-looking but unsupported names.
 
 ## Decision rules
@@ -73,6 +73,7 @@ Do not treat any research plugin as the canonical portfolio store.
 - Price down + valuation down is not automatically attractive if fundamentals/expectations deteriorated proportionally or worse.
 - XTB availability is required before a candidate is called actionable, but not before it can enter the research radar.
 - Historical price/KPI moves require evidence-aware attribution; use UNKNOWN instead of a convenient narrative.
+- Missing historical series or an unavailable source is a coverage limitation, not a zero-change result. Do not claim a full 5Y or 12–20 quarter analysis unless the dates/periods are present; block promotion when missing history is decision-critical.
 - Analytics output cannot overwrite canonical records except through investment-record-store.
 
 ## Output contract

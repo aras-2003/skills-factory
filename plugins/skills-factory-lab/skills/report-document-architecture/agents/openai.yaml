@@ -1,0 +1,5 @@
+interface:
+  display_name: Report Document Architecture
+  short_description: Plan the section hierarchy and evidence-backed reading flow…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#8AB5D7'

@@ -1,0 +1,5 @@
+interface:
+  display_name: Report Document Authoring
+  short_description: Turn an approved long-form report model into a real editable…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#8AB5D7'

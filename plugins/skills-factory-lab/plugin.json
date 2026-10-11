@@ -3,7 +3,7 @@
   "author": {
     "name": "Arkadiusz Kamrowski"
   },
-  "description": "Isolated lab package with candidate targets, explicitly selected draft test targets, and their production dependencies for controlled behavioral testing.",
+  "description": "Isolated Lab/MCP package with every source skill and registered workflow, across all maturity statuses, for controlled behavioral testing.",
   "extensions": {
     "com.openai": {
       "interface": {
@@ -12,7 +12,7 @@
         "composerIcon": "./assets/brand-mark.svg",
         "displayName": "Skills Factory Lab",
         "logo": "./assets/brand-mark.svg",
-        "longDescription": "A self-contained non-production lab package built from main for isolated behavioral testing, including only explicitly selected draft test targets. Do not enable it in the same session as the production plugin because duplicate capability names may compete.",
+        "longDescription": "A self-contained non-production Lab/MCP package built from main for isolated behavioral testing. It exposes every source skill and registered workflow regardless of maturity. Do not enable it in the same session as the production plugin because duplicate capability names may compete.",
         "shortDescription": "Candidate skills for runtime evaluation and discovery.",
         "websiteURL": "https://aras-2003.github.io/skills-factory/"
       }
@@ -28,5 +28,5 @@
   "name": "skills-factory-lab",
   "repository": "https://github.com/aras-2003/skills-factory",
   "skills": "./skills/",
-  "version": "0.33.5"
+  "version": "0.35.0"
 }

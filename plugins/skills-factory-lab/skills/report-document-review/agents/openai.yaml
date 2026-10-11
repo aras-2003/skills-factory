@@ -1,0 +1,5 @@
+interface:
+  display_name: Report Document Review
+  short_description: Critique and verify actual long-form DOCX/PDF report…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#8AB5D7'

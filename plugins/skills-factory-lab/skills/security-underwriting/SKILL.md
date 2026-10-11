@@ -8,10 +8,10 @@ description: 'Underwrite one equity or ETF as an investment using structured equ
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.5.0
+  version: 0.5.1
   maturity: production
   risk: high
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-09'
 ---
 
 # Security Underwriting
@@ -50,6 +50,7 @@ Produce an evidence-backed investment case that can later be challenged, valued,
    - classify research state as VERIFY / RESEARCH;
    - do not compute P/E, FCF yield, numeric valuation scenarios or numeric sizing from those figures;
    - state exactly what must be verified next.
+   - If an event, company-specific fact, or key input remains unresolved, identify it as a blocking uncertainty and limit downstream conclusions; do not bury it in a generic risk list or continue to a definitive thesis/valuation conclusion.
 9. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations.
 10. Evaluate valuation relative to history, peers and scenario economics.
 11. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.

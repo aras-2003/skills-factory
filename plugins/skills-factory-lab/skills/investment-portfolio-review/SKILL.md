@@ -8,10 +8,10 @@ description: Child workflow for full portfolio review. Use when selected by inve
   should enter through investment-os-review.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.5.0
+  version: 0.5.1
   maturity: production
   risk: high
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-09'
 ---
 
 # Investment Portfolio Review Runtime Entrypoint

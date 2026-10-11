@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Exhibit Design
+  short_description: Choose data-faithful charts, diagrams and presentation…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'

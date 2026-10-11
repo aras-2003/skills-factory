@@ -1,0 +1,5 @@
+interface:
+  display_name: Presentation Slide Authoring
+  short_description: Create or revise an editable presentation in a supported…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F0C982'
