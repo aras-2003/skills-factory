@@ -19,7 +19,7 @@ This is a **Presentation OS adapter contract**, not a claim that Strategy's plan
 `UpstreamChallenge{finding_id?,option_id?,observed_conflict,evidence,proposed_correction,status{UPSTREAM_REVIEW_REQUIRED|ADJUDICATED}}`. Presentation composition never silently mutates a domain pack; accepted upstream updates require a revision/receipt before presentation propagation.
 
 ## Storyline / Slide
-`deck_id, communicated_thesis, source_pack_refs[], source_decision_status?, governing_question, structure_choice, why_choice, audience_objections[], upstream_challenges[], slides:[{id,section,role,action_title,claim_ids[],source_finding_ids[],source_option_ids[],reader_question,transition,proof_required[],exhibit_specs[],speaker_notes?,source_line?,layout_id?,alternative_text?,output_state}]`.
+`deck_id, communicated_thesis, source_pack_refs[], source_decision_status?, governing_question, structure_choice, why_choice, audience_objections[], upstream_challenges[], creative_direction{creative_thesis,audience_feeling,design_system,visual_arc,signature_moment,motion_plan,tool_plan}, slides:[{id,section,role,action_title,claim_ids[],source_finding_ids[],source_option_ids[],reader_question,transition,visual_role,proof_required[],exhibit_specs[],speaker_notes?,source_line?,layout_id?,alternative_text?,output_state}]`.
 `action_title` is an evidence-anchored assertion on analytic slides; title/agenda/teaching slides may legitimately use labels/questions.
 
 ## Exhibit
@@ -38,7 +38,7 @@ Note: `COMMUNICATION_QA_APPROVED` cannot automatically imply `DOMAIN_VALIDATION=
 - Strategy OS (planned STR-06/07/09/10/16) owns strategic analysis, options, recommendation, challenge and approval state; source status is distinct from actual installed capability.
 - Storyline owns *communication argument order* and ghost deck, not substantive strategy choice.
 - Domain/shared research owns factual and decision-material analysis; presentation evidence owns source-to-slide fidelity, provenance and uncertainty checks.
-- Exhibit owns semantic mapping and calls existing visual-output-design.
+- Exhibit owns semantic mapping and calls existing visual-output-design; the deck orchestrator owns overall creative direction, visual pacing and tool selection.
 - Authoring owns vendor actions and editability implementation.
 - Review owns presentation editorial/visual critique and per-slide corrections; strategic quality review belongs to Strategy OS and STR-17, independently of the deck QA.
 - Export verification owns media round-trip and delivery receipts.

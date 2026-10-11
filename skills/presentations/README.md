@@ -7,11 +7,11 @@ Seven narrowly routed skills:
 - `presentation-storyline` — argument, flow and action-title ghost deck.
 - `presentation-evidence-review` — sources, numeric integrity, contradictions and permissions.
 - `presentation-exhibit-design` — evidence-faithful chart/diagram specifications; reuses existing `visual-output-design`.
-- `presentation-slide-authoring` — Figma/Canva connected authoring preflight, editable native deck.
+- `presentation-slide-authoring` — Figma Slides/Canva/Google Slides connected authoring preflight, editable native deck.
 - `presentation-deck-review` — skeptical consultant/editorial and visual QC; targeted repair loop.
 - `presentation-export-verification` — actual render, PPTX/PDF parity, editability, animation/notes limitations.
 
-Orchestration: [presentation-production](../../workflows/presentation-production/WORKFLOW.md).
+Orchestration: [presentation-production](../../workflows/presentation-production/WORKFLOW.md), with the creative brief and destination/tool-selection rules in its [creative direction reference](../../workflows/presentation-production/references/creative-direction.md).
 
 **Integration with planned Strategy OS:** Strategy owns strategic evidence, alternatives, recommended choices and approval status; Presentation owns audience-specific story, design and native delivery. Handoffs follow STR-16 proposal, preserve finding/option IDs and must be validated against its eventual released schema. STR-12–STR-15 supply semantic analysis/report profiles, not deck rendering. STR-17 measures Strategy quality independently of Presentation OS deck benchmarks. When Strategy workflows are not actually available in the runtime, report that missing capability instead of substituting presentation persuasion for strategy development.
 

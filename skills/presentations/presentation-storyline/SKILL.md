@@ -22,10 +22,10 @@ A brief with audience, objective and intended outcome; factual claims have evide
 1. Name the core audience question, domain-supported or user-provided answer (or unresolved thesis) and a credible **audience** objection. New strategic alternatives or recommendation require upstream Strategy OS, not this storyline skill.
 2. Select fitting logic deliberately: **answer-first / pyramid** for decisions and leave-behinds; **situation→complication→resolution** where context matters; **problem→insight→options→ask** for choices; **journey/demo** for product or keynote; **learn→practice→recall** for teaching. Hybrid only with explicit reason.
 3. Build a mutually distinguishable argument tree: conclusion → 2–5 necessary supporting reasons → evidence gaps and potential disconfirmers. MECE is a test for needless overlap, not a ritual that suppresses nuance.
-4. Create *ghost deck*: ordered slide `slide_id, role, action_title, proof_needed, audience_question_answered, transition`. Write titles as informative claims **only where warranted**; for agenda, cover and teaching instructions, a label or question can be preferable to a fabricated conclusion.
+4. Create *ghost deck*: ordered slide `slide_id, role, action_title, proof_needed, audience_question_answered, transition, visual_role`. Write titles as informative claims **only where warranted**; for agenda, cover and teaching instructions, a label or question can be preferable to a fabricated conclusion. Give each slide one communication job and a visual role that supports that job.
 5. Perform the **titles-only read-through**. Do they advance a coherent argument without needing slide bodies? Remove redundant slides, expose unexplained jumps, show the decision and trade-offs near the moment readers need them.
 6. Stress-test: contradictory evidence, omitted alternative, audience objection, non sequitur, recommendation unsupported by evidence, misplaced appendix-level detail, and "why now"/"so what."
-7. Set opening, turning points, final requested action and minimum appendix for anticipated questions. Do not default to 20 slides or force an agenda slide.
+7. Set the opening promise, narrative turn(s), proof/reveal, final requested action and minimum appendix for anticipated questions. Mark one evidence-backed signature moment for recall. Give the story an intentional visual/pacing arc; do not default to 20 slides or force an agenda slide.
 8. When weak evidence prevents a strong title, mark `PROVISIONAL` or pose a question rather than asserting certainty. Return missing-evidence handoff.
 
 ## Decision rules
@@ -36,8 +36,8 @@ For board/consulting leave-behind, default to answer-first; for live storytellin
 Brief, claim/evidence ledger, user hypothesis, constraints, source material, optional domain pack ID/revision/approval state.
 
 ## Output contract
-Return `Storyline{communicated_thesis,source_pack_refs,source_decision_status,structure_choice,why_this_structure,governing_question,opening,ghost_deck[],audience_objections,upstream_challenges[],required_proof,appendix_plan,closing_ask,revision_decisions}`.
-Each ghost deck item has `id,role,action_title,evidence_ids,reader_question,transition,uncertainty`.
+Return `Storyline{communicated_thesis,source_pack_refs,source_decision_status,structure_choice,why_this_structure,governing_question,opening,ghost_deck[],audience_objections,upstream_challenges[],required_proof,appendix_plan,closing_ask,signature_moment,visual_arc,revision_decisions}`.
+Each ghost deck item has `id,role,action_title,evidence_ids,reader_question,transition,visual_role,uncertainty`.
 
 ## Evidence and uncertainty
 No invented market/customer findings; label unsupported claims. Handoff unresolved evidence to `presentation-evidence-review`.

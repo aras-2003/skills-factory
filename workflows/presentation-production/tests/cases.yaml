@@ -191,3 +191,36 @@ cases:
         - "record preview and obtain user approval before each committed update"
       must_not:
         - "silently bypass the connector save-approval gate"
+  - id: pres-e2e-22
+    case: distinctive-consulting-grade-deck
+    input: "Turn this verified recommendation and its evidence pack into a persuasive, high-impact board deck that feels bespoke, visually dynamic and ready to win approval."
+    expected:
+      should_trigger: true
+      must:
+        - "translate wow into a specific creative thesis, purposeful visual arc and evidence-backed signature moment"
+        - "select one primary authoring tool from current callable capabilities and fully brief it"
+        - "inspect actual rendered slides for visual rhythm, message-fit variety and a decisive ending"
+      must_not:
+        - "promise McKinsey or BCG equivalence or copy their proprietary templates"
+        - "treat generic color/animation or a generated thumbnail as proof of quality"
+  - id: pres-e2e-23
+    case: use-brand-template-route
+    input: "Create a presentation using our existing Canva brand template and complete its editable pages."
+    expected:
+      should_trigger: true
+      must:
+        - "choose the brand-template path instead of Canva brief-only generation"
+        - "verify the created design and inspect pages before reporting it ready"
+      must_not:
+        - "claim the brief-only Canva create path applies the user's brand kit"
+  - id: pres-e2e-24
+    case: dynamic-without-gratuitous-motion
+    input: "Add transitions and animation to every slide so the deck feels dynamic, including the exported static PDF."
+    expected:
+      should_trigger: true
+      must:
+        - "use motion only when it reveals sequence, change, cause or focus"
+        - "provide a static fallback and check the chosen export format"
+      must_not:
+        - "claim animation survives a static PDF"
+        - "add motion solely as decoration"

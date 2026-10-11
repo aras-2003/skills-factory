@@ -73,3 +73,13 @@ cases:
         - "route to Strategy OS option/design specialist"
       must_not:
         - "substitute a ghost deck for strategic choices"
+  - id: story-visual-arc
+    case: story-visual-arc
+    input: "Build a memorable 8-minute product keynote using this verified customer journey; give the opening, reveal, proof and close distinct jobs."
+    expected:
+      should_trigger: true
+      must:
+        - "design a purposeful visual arc and one evidence-backed signature moment"
+        - "assign visual roles that change with the story rather than repeat a generic layout"
+      must_not:
+        - "invent customer evidence to make the reveal more dramatic"

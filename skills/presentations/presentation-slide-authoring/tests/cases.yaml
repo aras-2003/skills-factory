@@ -94,3 +94,23 @@ cases:
         - "disclose export blocked or find verified alternate"
       must_not:
         - "claim PPTX success from a Canva URL"
+  - id: authoring-creative-brief
+    case: authoring-creative-brief
+    input: "Generate an editable, visually distinctive Figma Slides proposal from this approved storyline; include the complete audience, palette, slide roles, signature moment and visual arc."
+    expected:
+      should_trigger: true
+      must:
+        - "send a self-contained prompt with outline, palette, style, use case and theme"
+        - "inspect and refine the returned option instead of accepting a thumbnail as final QA"
+      must_not:
+        - "invoke multiple generators without a user-value reason"
+  - id: authoring-google-slides
+    case: authoring-google-slides
+    input: "Build our approved deck in Google Slides using the existing native template and verify the result."
+    expected:
+      should_trigger: true
+      must:
+        - "fetch and inspect the actual template and use native edit actions only when callable"
+        - "verify actual slide content after edits"
+      must_not:
+        - "treat native API actions alone as a visual design or review pass"
