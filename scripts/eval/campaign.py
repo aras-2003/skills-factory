@@ -89,7 +89,7 @@ def separately_validated_engineering_paths() -> set[str]:
 
 
 def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
-    """Return the draft Presentation OS paths covered by exact source behavior cases."""
+    """Return explicitly case-covered Presentation/Report OS Lab source paths."""
     path = root / PRESENTATION_OS_CAMPAIGN_REL
     if not path.is_file():
         return set()
@@ -103,6 +103,13 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
         "workflows/presentation-production/references/artifact-contract.md",
         "workflows/presentation-production/references/creative-direction.md",
         "workflows/presentation-production/references/quality-standard.md",
+        "skills/reports/report-document-architecture/SKILL.md",
+        "skills/reports/report-document-authoring/SKILL.md",
+        "skills/reports/report-document-review/SKILL.md",
+        "workflows/report-production/WORKFLOW.md",
+        "workflows/report-production/references/document-contract.md",
+        "workflows/report-production/references/quality-standard.md",
+        "workflows/runtime-registry.yaml",
     }
     declared_paths = cfg.get("out_of_scope_behavior_paths") or []
     if (
@@ -114,7 +121,7 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
     ):
         return set()
     for rel in expected_paths:
-        if not rel.startswith("skills/presentations/") or not rel.endswith("/SKILL.md"):
+        if not rel.startswith(("skills/presentations/", "skills/reports/")) or not rel.endswith("/SKILL.md"):
             continue
         source = (root / rel).read_text(encoding="utf-8")
         if not source.startswith("---\n"):
@@ -129,17 +136,16 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
     if not readme.is_file() or "Lab 0.35.0 and its bundled MCP expose every source skill and workflow regardless of maturity" not in readme.read_text(encoding="utf-8"):
         return set()
     registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text(encoding="utf-8")) or {}
-    presentation_workflow = next(
-        (item for item in registry.get("workflows", []) if item.get("name") == "presentation-production"),
-        None,
-    )
-    if (
-        presentation_workflow is None
-        or (presentation_workflow.get("metadata") or {}).get("maturity") != "draft"
-        or (presentation_workflow.get("channels") or {}).get("lab") != "supported"
-        or (presentation_workflow.get("channels") or {}).get("plugin") != "unavailable"
-    ):
-        return set()
+    registered = {item.get("name"): item for item in registry.get("workflows", []) if isinstance(item, dict)}
+    for workflow_name in ("skill-development", "presentation-production", "report-production"):
+        workflow = registered.get(workflow_name)
+        if (
+            workflow is None
+            or (workflow.get("metadata") or {}).get("maturity") != "draft"
+            or (workflow.get("channels") or {}).get("lab") != "supported"
+            or (workflow.get("channels") or {}).get("plugin") != "unavailable"
+        ):
+            return set()
 
     for suite in cfg.get("case_suites") or []:
         source = root / str(suite.get("path") or "")
