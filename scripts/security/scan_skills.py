@@ -35,7 +35,7 @@ DYNAMIC_EXEC_RE = re.compile(r"\b(?:exec|eval|compile)\s*\(|\b(?:subprocess\.(?:
 # Detect a remote download piped to a shell even if line continuation hides the pipe.
 # Require a nearby literal shell interpreter; this is a bounded static heuristic.
 REMOTE_SHELL_MULTILINE_RE = re.compile(
-    r"\\b(?:curl|wget)\\b[^\\n|;]*(?:\\\\[ \\t]*\\n[ \\t]*\\|[ \\t]*|\\|[ \\t]*\\\\?[ \\t]*\\n[ \\t]*)(?:sudo[ \\t]+)?(?:sh|bash)\\b",
+    r"\b(?:curl|wget)\b[^\n|;]*(?:\\[ \t]*\n[ \t]*\|[ \t]*|\|[ \t]*\\?[ \t]*\n[ \t]*)(?:sudo[ \t]+)?(?:sh|bash)\b",
     re.I,
 )
 TOKEN_LITERAL_RE = re.compile(r"(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)")
@@ -114,7 +114,7 @@ def _scan_file(root: Path, path: Path) -> list[Finding]:
             findings.append(Finding("SEC003", "high", rel, number, _message("SEC003"), _fingerprint("SEC003", rel, line)))
 
     for match in REMOTE_SHELL_MULTILINE_RE.finditer(text):
-        number = text.count("\\n", 0, match.start()) + 1
+        number = text.count("\n", 0, match.start()) + 1
         # The fingerprint covers both sides of the continued pipeline.
         findings.append(Finding("SEC001", "high", rel, number, _message("SEC001"),
                                 _fingerprint("SEC001", rel, match.group(0))))
