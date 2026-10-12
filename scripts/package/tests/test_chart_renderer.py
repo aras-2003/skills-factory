@@ -86,6 +86,52 @@ class ChartRendererTests(unittest.TestCase):
                 values=[1.0],
             )
 
+    def test_site_compatible_chart_boundaries(self) -> None:
+        # Smallest and upper-limit numeric values must be representable.
+        self._assert_png_result(self.renderer.render_bar_chart(
+            labels=["lower", "upper"], values=[-1_000_000_000_000, 1_000_000_000_000],
+            unit="PLN",
+        ))
+        self._assert_png_result(self.renderer.render_line_chart(
+            x_labels=["before", "after"], series_names=["synthetic"],
+            series_values=[[-1_000_000_000_000, 1_000_000_000_000]],
+        ))
+
+    def test_rejects_values_outside_site_schema_limits(self) -> None:
+        for value in (-1_000_000_000_000.01, 1_000_000_000_000.01):
+            with self.subTest(value=value):
+                with self.assertRaises(Exception):
+                    self.renderer.render_bar_chart(labels=["a"], values=[value])
+                with self.assertRaises(Exception):
+                    self.renderer.render_line_chart(
+                        x_labels=["a", "b"], series_names=["s"],
+                        series_values=[[0, value]],
+                    )
+
+    def test_rejects_site_incompatible_dimensions(self) -> None:
+        with self.assertRaises(Exception):
+            self.renderer.render_bar_chart(
+                labels=["item"] * 61, values=[1] * 61,
+            )
+        with self.assertRaises(Exception):
+            self.renderer.render_bar_chart(labels=["a"], values=[1], unit="x" * 31)
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(
+                x_labels=[str(x) for x in range(101)], series_names=["s"],
+                series_values=[[1] * 101],
+            )
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(
+                x_labels=["before", "after"],
+                series_names=[f"s{i}" for i in range(9)],
+                series_values=[[1, 2]] * 9,
+            )
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(
+                x_labels=["before", "after"], series_names=["s"],
+                series_values=[[1, 2]], unit="x" * 31,
+            )
+
     def test_non_finite_and_boolean_chart_values_fail_closed(self) -> None:
         for value in (math.nan, math.inf, -math.inf, True):
             with self.subTest(value=value):
