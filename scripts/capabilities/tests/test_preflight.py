@@ -82,6 +82,16 @@ class CapabilityPreflightTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             preflight(contract, "fixture", {"not_a_dimension": "supported"})
 
+    def test_host_manifest_with_nonstring_key_fails_closed(self) -> None:
+        contract = self.configured(self.requirements(network="read"))
+        with self.assertRaisesRegex(ValueError, "dimensions must be strings"):
+            preflight(contract, "fixture", {"network": "supported", 42: "supported"})
+
+    def test_host_manifest_with_unhashable_invalid_value_fails_closed(self) -> None:
+        contract = self.configured(self.requirements(network="read"))
+        with self.assertRaises(ValueError):
+            preflight(contract, "fixture", {"network": ["supported"]})
+
     def test_existing_unassessed_inventory_is_never_auto_green(self) -> None:
         outcome = preflight(self.base, "investment-record-store", {
             "network": "supported", "external_actions": "supported",
