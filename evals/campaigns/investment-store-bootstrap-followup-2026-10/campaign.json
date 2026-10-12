@@ -96,5 +96,9 @@
       "requirement": "Execute in fresh chats against exact Lab candidate; retain route/tool traces, exact config read, and READ/WRITE receipts; evaluate independently. Runtime acceptance remains open until all cases pass."
     }
   ],
-  "total_repetitions": 9
+  "total_repetitions": 9,
+  "runtime_status": "NOT_RUN",
+  "out_of_scope_behavior_paths": [
+    "skills/investing/investment-record-store/SKILL.md"
+  ]
 }
