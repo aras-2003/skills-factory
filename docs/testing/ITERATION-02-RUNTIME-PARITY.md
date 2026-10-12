@@ -48,3 +48,23 @@ tool never edits external systems and never authorizes publishing.
 
 The current Site release may lag GitHub main; in that case the correct result
 is **MISMATCH**, not a fabricated cross-channel parity PASS.
+
+## Runtime identity and source consistency (new source gate)
+
+The local MCP `runtime_info` now rejects non-40-hex source revisions, non-SHA-256
+tool schema digests and timestamps without timezone. It exposes
+`attestation_basis: unsigned_runtime_environment_fields_only` and
+`installation_behavior_verified: false`. A well-formed `attestation_status:
+verified` is **not cryptographic proof** of provider deployment or an observed
+behavioral trace. Site Worker attestation is a distinct provider-origin claim.
+
+`scripts/catalog/validate_runtime_registry_parity.py` checks all source
+`WORKFLOW.md`, `SKILL.md`, `runtime-registry.yaml`,
+`capability-contract.yaml` and `docs/catalog.json` without calling external
+tools. Its best state is `SOURCE_PARITY_ONLY_REVIEW_REQUIRED`. A source-only
+declaration does not grant network, credential, write or production permission.
+
+`scripts/eval/r17_disposition.py` reads the immutable R17 transcript receipts,
+checks their exact count/status and hashes, and emits the historical nine-FAIL
+retest queue. R17's 36/9 summary is historical, not a new-version verdict;
+Production-only exclusions remain separately blocked.
