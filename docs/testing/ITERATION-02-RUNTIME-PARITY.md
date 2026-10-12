@@ -16,14 +16,14 @@ JSON object with:
  "observation_source":"real provider tool output URL / immutable trace ID",
  "source_revision":"<40-hex>", "release_id":"<Lab release ID>",
  "payload_content_sha256":"<64-hex>",
- "catalog_digest":"<64-hex>", "tool_schema_digest":"<64-hex>",
+ "catalog_digest":"<64-hex>", "tool_schema_digest":"sha256:<64-hex>",
  "capabilities":["runtime_info","load_skill","render_bar_chart"],
  "flows":[{"flow":"routing","execution_state":"executed",
            "tool_trace_sha256":"<64-hex>", "semantic_result_sha256":"<64-hex>",
            "client_display_state":"not_applicable"}]}
 ```
 
-Include **four flows** in each: `routing`, `architecture-review`,
+A tool schema digest with the public `sha256:` prefix or raw 64-hex form is accepted and normalized. Never accept another algorithm or infer actual capability from a source-only catalog.\n\nInclude **four flows** in each: `routing`, `architecture-review`,
 `bar-chart`, `line-chart`. Chart receipts require actual client-visible
 observation; a returned SVG/PNG payload alone is insufficient. The
 `semantic_result_sha256` must be constructed from the same normalized,
