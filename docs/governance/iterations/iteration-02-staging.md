@@ -1,0 +1,52 @@
+# Iteration 02 — staged development and acceptance register
+
+**Status: STAGED / NOT ACTIVE / NOT MERGED.** Prepared on 2026-10-13 at user's explicit direction while Iteration 01 remains **not formally CLOSED**. This is a documented scheduling exception to [Iteration delivery](../ITERATION-DELIVERY.md), not a retroactive lock, not production approval, and not permission to change historical acceptance evidence.
+
+- Baseline for initial PRs: `main@3554f12fbe2f0a51c00ce739f757e537ba7576d7`; do not assume this will remain the post-Iteration-01 final baseline.
+- Two *draft*, unmerged implementation lanes: [#338](https://github.com/aras-2003/skills-factory/pull/338) runtime/registry/identity parity and [#339](https://github.com/aras-2003/skills-factory/pull/339) fault injection/chart hardening. **No pull request may merge to main until Iteration 01 closure, scope-lock decision, exact-head CI and explicit authorization.**
+- Audit intake is all **18 historical Iteration 2 Issues**, across `02-runtime` and `02-runtime-followup`. Native Project Iteration items/status must be verified separately; this GitHub search/issue-text inventory is not Project V2 readback.
+- Test manifest: [campaign.json](../../../evals/campaigns/iteration-02-runtime-2026-10/campaign.json), **18 synthetic cases and 34 planned runs**, plus 6 external/manual gate groups. **11 Lab cases** enter the executor-only artifact; **7 cases** (Site/browser/Desktop/Production) remain outside Lab until separately authorized and attested. No real execution evidence exists by generating this pack.
+
+## Coverage and residual implementation
+
+| Issue | Original intent | Source/development path | Required after PRs | Disposition |
+| --- | --- | --- | --- | --- |
+| [#149](https://github.com/aras-2003/skills-factory/issues/149) | Cloud MCP parity & chart | PR #338 (parity) + #339 (failure / chart); merged historical improvements | Approved Site/client smoke & deployment | PARTIAL |
+| [#240](https://github.com/aras-2003/skills-factory/issues/240) | Local Desktop/browser runner | Existing offline preflight, no actual runtime execution in this increment | Idempotent model runner + observable steps + receipts | BLOCKED |
+| [#242](https://github.com/aras-2003/skills-factory/issues/242) | Flow visibility | Generated catalog existing; PR #338 parity source audit | Installed/declared channel comparison & owner review | PARTIAL |
+| [#243](https://github.com/aras-2003/skills-factory/issues/243) | AIS/RT historical gaps | Source/result inventory and planned I02 case | Per-finding historical→candidate exact-version disposition | NOT_RUN |
+| [#247](https://github.com/aras-2003/skills-factory/issues/247) | Generated registry | Existing runtime-registry and catalog; PR #338 avoids duplicate registry | Catalog/package/live tool parity for all entries | PARTIAL |
+| [#250](https://github.com/aras-2003/skills-factory/issues/250) | Runtime attestation | Existing MCP runtime_info + PR #338 cross-channel comparison | Installed exact candidate Work and Site observation | PARTIAL |
+| [#251](https://github.com/aras-2003/skills-factory/issues/251) | Browser MCP E2E | Existing MCP fixtures and I02 browser slot; no simulated browser PASS | Fresh independent UI/tool/child traces | BLOCKED |
+| [#252](https://github.com/aras-2003/skills-factory/issues/252) | Controlled failure paths | PR #339 simulated failures + actual MCP wrapper negative tests | TEST-only provider failure execution and receipts | PARTIAL |
+| [#253](https://github.com/aras-2003/skills-factory/issues/253) | Work Lab ↔ Site parity | PR #338 exact source/manifest/schema/flow comparator | Actual Work + Site sessions on same candidate | PARTIAL |
+| [#254](https://github.com/aras-2003/skills-factory/issues/254) | Bar/line client rendering | PR #339 Python renderer hardening and source tests | Real Chat screenshot + accessible chart values | PARTIAL |
+| [#256](https://github.com/aras-2003/skills-factory/issues/256) | Nine R17 Lab failures | Historical R17 unchanged; I02 re-test definition | Nine identity-bound reruns, comparisons/independent eval | NOT_RUN |
+| [#257](https://github.com/aras-2003/skills-factory/issues/257) | Production-only fallback | Explicitly external lane; not in Lab executor pack | Approved Production channel exact-version tests | BLOCKED |
+| [#259](https://github.com/aras-2003/skills-factory/issues/259) | Site publication/regression | No publish triggered; I02 publication gate | Approved Site deployment/rollback and attested rerun | BLOCKED |
+| [#286](https://github.com/aras-2003/skills-factory/issues/286) | All-skills lifecycle | Existing source lifecycle validator and historical 54-result | Exact-current 64+ scope and non-static quality evidence | PARTIAL |
+| [#287](https://github.com/aras-2003/skills-factory/issues/287) | Per-domain routing semantics | I02 near-miss fixture; prior source router tests | Domain-by-domain independent model and tool traces | NOT_RUN |
+| [#289](https://github.com/aras-2003/skills-factory/issues/289) | 54-skill behavioral campaign | Existing historical source audit, I02 coverage starter | Risk-based broad model campaign with observed receipts | BLOCKED |
+| [#290](https://github.com/aras-2003/skills-factory/issues/290) | Workflow lifecycle | Existing validator; historical 16-workflow read | Exact-current 19-workflow audit and behavior receipts | PARTIAL |
+| [#311](https://github.com/aras-2003/skills-factory/issues/311) | Campaign remediation | Prior R20/source work and immutable historical receipts | Source-locked reruns of affected FAIL/BLOCKED cases | BLOCKED |
+
+`PARTIAL` means a real source/test increment exists but full acceptance is **not** established. `NOT_RUN` means missing real runtime evidence, not a PASS/FAIL. `BLOCKED` means a required tool, provider, permission, or independent trace is unavailable; it is not an instruction to deploy or bypass controls.
+
+## TEST acceptance sequence
+
+1. Freeze the **prospective** issue/case scope and named owner/reviewer once Iteration 01 has been formally closed or explicitly ABORTED. Do not reconstruct a prior lock date.
+2. Resolve exact main baseline drift. Rebase each draft branch; inspect merge conflicts and all dependency surfaces.
+3. Run `Validate skills`, `Domain integrity`, and `Eval integrity` on each exact head; correct failures on the branch. The generated Iteration 2 pack is **source-only** and must include no evaluator rubrics.
+4. After explicit permission to merge, run integrated main checks on the merged SHA and verify exact Lab package/release/payload.
+5. Execute the **11 Lab cases** on the observed candidate in fresh unassisted sessions; hold rubrics with a different assessor and preserve per-case trace/source SHA and all fail/blocked outcomes.
+6. Execute the **7 provider-specific cases** only in the intended approved, disposable/synthetic channel. Site, browser and client-visible chart evidence require real correlated provider/client observations. Production fallback cases require separate explicit authorization.
+7. Reconcile R17/R18/R20 and the 2026-10-10 campaign without rewriting historical receipts. Re-run failed items only with comparable exact-revision inputs and independent evaluation.
+8. Complete admin/source review and every original Issue's acceptance criteria; maintain linked PR relationships and statuses. Mark Done **only** after confirmed complete criteria. Production release/publishing remains a separate authorized action.
+
+## Stop conditions
+
+- Iteration 1 still open → keep PR #338/#339 draft and unmerged unless the owner explicitly changes iteration policy.
+- No Work Lab/Site identical release digest → `MISMATCH/BLOCKED`, not parity PASS.
+- No browser/client trace → chart `PAYLOAD_RENDERED` may be true but `CLIENT_RENDERED` is unverified.
+- Model job queued, source CI PASS, synthetic injected failure, or QA ZIP generated → **not** a real execution receipt.
+- No approved Site/Production permission or disposable TEST fixture → do not call live failure/deploy/write tools.
