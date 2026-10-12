@@ -71,7 +71,7 @@ class ChartRendererTests(unittest.TestCase):
                 with self.assertRaises(Exception):
                     self.renderer.render_bar_chart(labels=bad, values=[1] * len(bad))
         with self.assertRaises(Exception):
-            self.renderer.render_bar_chart(labels=["A"], values=[1], title="\\x00bad")
+            self.renderer.render_bar_chart(labels=["A"], values=[1], title=chr(0) + "bad")
         with self.assertRaises(Exception):
             self.renderer.render_line_chart(x_labels=["first"], series_names=["s"], series_values=[[1]])
         with self.assertRaises(Exception):
