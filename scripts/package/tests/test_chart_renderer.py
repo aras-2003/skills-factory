@@ -53,6 +53,32 @@ class ChartRendererTests(unittest.TestCase):
         )
         self._assert_png_result(result)
 
+    def test_zero_and_negative_values_are_preserved_in_chart_payload(self) -> None:
+        image = self.renderer.render_bar_chart(
+            labels=["zero", "negative", "positive"], values=[0, -5, 3],
+            title="Signed bar chart",
+        )
+        self._assert_png_result(image)
+        line = self.renderer.render_line_chart(
+            x_labels=["first", "second"], series_names=["series"],
+            series_values=[[-2.0, 0.0]], title="Signed line chart",
+        )
+        self._assert_png_result(line)
+
+    def test_malformed_labels_and_bad_titles_fail_before_render(self) -> None:
+        for bad in (["A", 42], [""], "not-a-list"):
+            with self.subTest(bad=bad):
+                with self.assertRaises(Exception):
+                    self.renderer.render_bar_chart(labels=bad, values=[1] * len(bad))
+        with self.assertRaises(Exception):
+            self.renderer.render_bar_chart(labels=["A"], values=[1], title="\\x00bad")
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(x_labels=["first"], series_names=["s"], series_values=[[1]])
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(x_labels=["x", "y"], series_names=[None], series_values=[[1, 2]])
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(x_labels=["x", "y"], series_names=["s"], series_values=[123])
+
     def test_invalid_parallel_data_fails_closed(self) -> None:
         with self.assertRaises(Exception):
             self.renderer.render_bar_chart(
