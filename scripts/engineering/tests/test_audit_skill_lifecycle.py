@@ -50,6 +50,20 @@ SUITE = """cases:
 
 
 class LifecycleAuditTests(unittest.TestCase):
+    def test_exact_current_source_inventory_is_audited_without_runtime_claim(self):
+        root = HERE.parents[2]
+        report = mod.audit(root)
+        current_files = list((root / "skills").rglob("SKILL.md"))
+        observed = {row["source"] for row in report["skills"]}
+        self.assertEqual(len(current_files), report["total_skills"])
+        self.assertEqual(len(current_files), len(observed))
+        self.assertEqual(
+            {path.relative_to(root).as_posix() for path in current_files},
+            observed,
+        )
+        self.assertEqual("NOT_RUN", report["runtime_execution"])
+        self.assertEqual("NOT_VERIFIED", report["runtime_behavioral_acceptance"])
+
     def test_complete_static_fixture_does_not_claim_runtime_pass(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
