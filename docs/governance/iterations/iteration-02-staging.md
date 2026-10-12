@@ -50,3 +50,19 @@
 - No browser/client trace → chart `PAYLOAD_RENDERED` may be true but `CLIENT_RENDERED` is unverified.
 - Model job queued, source CI PASS, synthetic injected failure, or QA ZIP generated → **not** a real execution receipt.
 - No approved Site/Production permission or disposable TEST fixture → do not call live failure/deploy/write tools.
+
+## Runtime receipt intake — evidence integrity
+
+`scripts/eval/iteration02_result_intake.py` is a **read-only validator** of per-attempt receipts against the exact `lock.json` emitted by the campaign pack. It does not run the model, MCP, browser, publisher, or evaluator. It refuses duplicate attempt numbers, false PASS from queued/no-step jobs, stale release/prompt/rubric hashes, missing tool/output/evaluator receipts, assisted PASS and self-evaluation. Site/browser cases with mandatory chart evidence also require observed client display.
+
+Run after a **separate, authorized executor** has submitted a JSON array of attempted executions (not during the source CI run):
+
+```bash
+python scripts/eval/iteration02_result_intake.py \
+  --lock .tmp/iteration02-test-handoff/lock.json \
+  --records .tmp/iteration02-results/observations.json \
+  --output .tmp/iteration02-results/receipt-structure-review.json
+```
+
+The intake returns `NO_EXECUTION_RECEIPTS`, `INCOMPLETE`, `INVALID_RECEIPTS`, or `EVIDENCE_STRUCTURALLY_COMPLETE_REVIEW_REQUIRED`. Even the structurally complete state does **not** independently authenticate observation origins, evaluate rubric semantics, close manual gates or approve a release. Reviewer checks immutable raw outputs, real provider identity, tool-call traces, client-visible artifacts, input/rubric isolation and historical comparisons. Preserve results append-only, never overwrite pinned R17/R18/R20 evidence.
+
