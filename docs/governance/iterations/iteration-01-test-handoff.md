@@ -28,7 +28,7 @@ The normal `Validate skills` Action also builds, validates and uploads this **ex
 
 ## Run sequence and evidence requirements
 
-1. **Offline combination gate:** confirm the final `main` SHA after all merges; validate exact-main `Validate skills`, `Domain integrity` (manual dispatch if not automatic), package, skill scan, capability preflight, 90-ID map, unit tests, isolation and manifest-digest binding. PR-head PASS is not combined-main PASS.
+1. **Offline combination gate:** confirm the final `main` SHA after all merges; validate exact-main `Validate skills`, `Domain integrity` (automatic main-push workflow; verify the run's exact SHA), package, skill scan, capability preflight, 90-ID map, unit tests, isolation and manifest-digest binding. PR-head PASS is not combined-main PASS.
 2. **Identity smoke:** load the **same** exact Lab candidate in a new isolated TEST session. Independently observe release ID, source SHA, payload digest, catalog/tool identity, provider/model/reasoning and available capabilities. Inability to observe identity means `NOT_RUN/BLOCKED`, not a passing assumption.
 3. **Unassisted execution:** run each of the 15 executor prompts in a **fresh session without evaluator rubrics**. Repeat the eight critical stochastic cases three times; use different run IDs. Persist each input/trace/output hash, actual tool path, external reads/writes or their verified absence, latency, tool availability, client display evidence when applicable and timestamps.
 4. **Independent evaluation:** reviewer reads assertions only from source at the frozen manifest SHA. Check all `must`, `must_not`, provenance and forbidden side effects; verify execution state separately from verdict. Never award PASS from a queued job, source CI or an unsigned narrative.
