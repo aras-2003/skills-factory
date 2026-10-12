@@ -1,0 +1,17 @@
+schema_version: "1.0"
+id: authoring-essential-provider-unavailable
+target: skill-authoring
+mode: explicit
+source_legacy: evals/meta/skill-authoring/essential-provider-unavailable.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  Assess whether the authored skill preflights essential providers and stops safely when Strategy OS is unavailable.
+assertions:
+  manual:
+    - require checking essential and optional capabilities before dependent work
+    - require a blocked outcome when Strategy OS is unavailable
+    - prohibit simulating the unavailable provider or implying it ran
+    - permit a substitute only when it preserves the outcome and is authorized
