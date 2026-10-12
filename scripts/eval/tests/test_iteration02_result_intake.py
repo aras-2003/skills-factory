@@ -95,6 +95,32 @@ class EvidenceIntakeTests(unittest.TestCase):
         row["client_display_state"] = "observed"
         self.assertEqual("INCOMPLETE", module.assess(lock, [row])["status"])
 
+    def test_malformed_unhashable_receipt_fields_fail_closed(self):
+        for field, value in (
+            ("decision", ["PASS"]),
+            ("execution_state", ["executed"]),
+            ("decision", {"PASS": True}),
+        ):
+            with self.subTest(field=field):
+                row = execution()
+                row[field] = value
+                report = module.assess(fixture(), [row])
+                self.assertEqual("INVALID_RECEIPTS", report["status"])
+                self.assertFalse(report["release_approved"])
+
+    def test_malformed_lock_channel_or_gate_does_not_crash(self):
+        for key, value in (
+            ("channel", ["lab"]),
+            ("channel", {"name": "browser"}),
+        ):
+            with self.subTest(key=key):
+                lock = fixture()
+                lock["cases"][0][key] = value
+                self.assertEqual("INVALID_RECEIPTS", module.assess(lock, [execution()])["status"])
+        lock = fixture()
+        lock["manual_gates"][0]["status"] = ["BLOCKED"]
+        self.assertEqual("INVALID_RECEIPTS", module.assess(lock, [])["status"])
+
     def test_synthetic_fixture_is_not_proof(self):
         row = execution()
         row["synthetic_fixture"] = True
