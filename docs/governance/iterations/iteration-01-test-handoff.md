@@ -24,7 +24,7 @@ SOURCE_REVISION="$(git rev-parse HEAD)" python scripts/eval/iteration01_handoff.
 python scripts/eval/validate_isolation.py --artifact .tmp/iteration01-test-handoff
 ```
 
-The normal `Validate skills` Action also builds, validates and uploads this **executor-only** pack as `iteration-01-executor-handoff-<CI SHA>` (14-day retention). Archive a durable copy with SHA-256 evidence before the artifact expires. The pack contains the **full exact Lab**, `lock.json`, an input-only queue and per-case `.input.md` files. **It contains no evaluator assertions or `.rubric.yaml` files.** The assessor uses the matching manifest from repository source, *outside* the executor context, and binds each result to the rubric digest listed in the lock.
+The normal `Validate skills` Action also builds, validates and uploads this **executor-only** pack as `iteration-01-executor-handoff-<source SHA>` (14-day retention). Archive a durable copy with SHA-256 evidence before the artifact expires. The pack contains the **full exact Lab**, `lock.json`, an input-only queue and per-case `.input.md` files. **It contains no evaluator assertions or `.rubric.yaml` files.** The assessor uses the matching manifest from repository source, *outside* the executor context, and binds each result to the rubric digest listed in the lock.
 
 ## Run sequence and evidence requirements
 
