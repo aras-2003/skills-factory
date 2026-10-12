@@ -46,3 +46,36 @@ cases:
         - hand off to skill-evaluation and compare observed evidence
       must_not:
         - rewrite the candidate instructions
+
+  - id: author-004
+    case: essential-provider-unavailable
+    input: "Create a deck using Strategy OS, but no Strategy OS tool or runtime is available."
+    expected:
+      should_trigger: true
+      must:
+        - check essential capabilities before dependent work
+        - report blocked when an essential capability is unavailable
+        - never simulate the unavailable provider or imply it ran
+        - use a substitute only when goal-compatible and authorized
+
+  - id: author-005
+    case: incomplete-or-conflicting-brief
+    input: "Prepare a strategy presentation; audience and objective are missing, and the request says CAC is 70 while the source data says CAC is 20."
+    expected:
+      should_trigger: true
+      must:
+        - ask for material missing inputs
+        - surface conflicting source facts and pause dependent work
+        - avoid inventing decision-driving facts or silently reconciling the conflict
+        - label assumptions only when authorized
+
+  - id: author-006
+    case: source-artifact-missing
+    input: "Revise the original presentation and update every dependent output, but no source deck or revision is identifiable."
+    expected:
+      should_trigger: true
+      must:
+        - locate the authoritative source artifact and revision before updating
+        - distinguish a proposed change from a persisted change
+        - identify dependent outputs
+        - never claim an update or retest without evidence
