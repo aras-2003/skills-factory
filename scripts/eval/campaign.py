@@ -181,6 +181,50 @@ def filter_behavior_paths(paths: list[str], separately_validated: set[str]) -> l
     return [path for path in paths if path not in separately_validated]
 
 
+def separately_validated_investment_store_paths(root: Path = ROOT) -> set[str]:
+    """Allow only the exact investment-record-store behavior path covered by its follow-up campaign."""
+    campaign_path = root / "evals/campaigns/investment-store-bootstrap-followup-2026-10/campaign.json"
+    skill_path = root / "skills/investing/investment-record-store/SKILL.md"
+    if not campaign_path.is_file() or not skill_path.is_file():
+        return set()
+    try:
+        cfg = json.loads(campaign_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    expected = ["skills/investing/investment-record-store/SKILL.md"]
+    source = skill_path.read_text(encoding="utf-8")
+    cases = cfg.get("cases") or []
+    if (
+        cfg.get("campaign") != "investment-store-bootstrap-followup-2026-10"
+        or cfg.get("source_status") != "PLANNED_NOT_EXECUTED"
+        or cfg.get("execution_channel") != "lab"
+        or cfg.get("runtime_status") != "NOT_RUN"
+        or cfg.get("out_of_scope_behavior_paths") != expected
+        or 'version: "1.0.2"' not in source
+        or len(cases) != 4
+        or sum(int(case.get("repetitions") or 0) for case in cases) != 9
+    ):
+        return set()
+    ids = set()
+    for case in cases:
+        cid = str(case.get("id") or "")
+        assertions = case.get("assertions") or {}
+        if (
+            not cid or cid in ids
+            or case.get("issue") not in {291, 303}
+            or case.get("execution_state") != "NOT_RUN"
+            or case.get("requires_isolated_test_store") is not True
+            or not case.get("input")
+            or not assertions.get("must")
+            or not assertions.get("must_not")
+        ):
+            return set()
+        ids.add(cid)
+    if ids != {"AUD06-001", "AUD06-002", "AUD07-001", "AUD07-002"}:
+        return set()
+    return set(expected)
+
+
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     exists = subprocess.run(
         ["git", "cat-file", "-e", pinned + "^{commit}"],
@@ -211,6 +255,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
             separate_meta_targets = set(expected_paths)
     separate_meta_targets.update(separately_validated_engineering_paths())
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
+    separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
         if not path:
