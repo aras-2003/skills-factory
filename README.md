@@ -13,6 +13,10 @@ Reusable AI capability library for repeatable work across projects.
 
 Rule: **LLM interprets; code calculates and validates.**
 
+## Public repository governance
+
+This repository is public, but **no open-source license grant has been verified**; public visibility is not permission to redistribute or relicense its contents. Read the [governance decision record](docs/governance/PUBLIC-REPOSITORY-REVIEW.md), [security reporting policy](SECURITY.md), and [contributor workflow](CONTRIBUTING.md). Ownership routing in `.github/CODEOWNERS` does not by itself establish independent review or GitHub branch protection.
+
 ## Visual catalog
 
 Browse skills by domain and maturity in the [Skills Factory catalog](https://aras-2003.github.io/skills-factory/). The catalog is generated from the source metadata in `SKILL.md`.
