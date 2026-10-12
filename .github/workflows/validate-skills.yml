@@ -102,6 +102,18 @@ jobs:
         run: python scripts/validate/validate_all.py
       - name: Validator mutation tests
         run: python -m unittest discover -s scripts/validate/tests -p 'test_*.py'
+      - name: Compare runtime registry with catalog and capability inventory (source only)
+        run: |
+          python scripts/catalog/validate_runtime_registry_parity.py --output .tmp/iteration02-registry-parity.json
+          python -m unittest discover -s scripts/catalog/tests -p 'test_*.py'
+      - name: Archive source-only runtime registry parity receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-registry-source-parity
+          path: .tmp/iteration02-registry-parity.json
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Output policy router deterministic unit tests
         run: python -m unittest discover -s scripts/output/tests -p 'test_*.py'
       - name: Eval isolation, evidence and runtime campaign tests
