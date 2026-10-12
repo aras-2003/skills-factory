@@ -1,6 +1,6 @@
 # Project metadata automation
 
-**Status:** proposed in PR; not live until merged, authenticated and verified.
+**Status:** workflow merged and live metadata readback verified during the 2026-10-12 backlog review. This is metadata automation, not iteration acceptance enforcement.
 
 - Target: user Project https://github.com/users/aras-2003/projects/1 and Issues in `aras-2003/skills-factory`.
 - GitHub's built-in Auto-add handles Issue membership. This workflow **does not** add items; it waits for built-in Auto-add.
@@ -9,14 +9,16 @@
 - GitHub Project **Size** exists; no duplicate `Effort` field.
 - Workflow triggers when issues open/edit/labels change, or manually via workflow_dispatch for a specific issue number.
 - A new issue may need a few seconds to be automatically attached before sync. The action retries up to 50 seconds and fails visibly if the item is still absent.
-- It does not set `Status`, write backlog JSON, create/close issues, promote releases or touch evidence.
+- A dedicated `Project status:` marker or explicit status label controls `Status`; historical narrative status is not authoritative. Keep exactly one current marker and avoid conflicting labels. It does not set native `Iteration`, enforce scope locks, validate iteration closure, write backlog JSON, create/close issues, promote releases or touch evidence.
+- After updates, verify workflow completion and the real Project field. Issue closure events are not included in this workflow; keep the current marker and Project Done consistent and verify the configured Project workflows.
+- See [iteration delivery policy](ITERATION-DELIVERY.md) for work transitions and iteration gates.
 
 ## Required one-time authentication
 GitHub Actions default `GITHUB_TOKEN` cannot reliably write to a user-owned Project V2. Configure an account-scoped credential **as an Actions secret called `PROJECTS_TOKEN`** under repository Settings → Secrets and variables → Actions. Prefer a narrowly scoped GitHub App installation token with owner project write access; otherwise use a **fine-grained PAT** authorized for account Projects (write), and read Issues/metadata for the repo. Exact permission options are determined by the current GitHub UI; check the token is limited to the correct owner, repository, and project. Never commit or post the token.
 
 If `PROJECTS_TOKEN` is absent the job **fails closed** (no silent green success). Restrict who may modify workflows and review third-party code before enabling a Project-writer token.
 
-## Rollout
+## Historical rollout checklist (retain as provenance)
 1. Review PR, run offline syntax/unit tests, merge after approval.
 2. Configure secret in GitHub UI, run manual dispatch for issue #162.
 3. Confirm that Priority=P1, Area=Engineering, Size=L appear in Project #1. If not, inspect Action logs for missing GraphQL schema/permission/option mapping.

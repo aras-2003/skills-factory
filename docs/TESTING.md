@@ -139,3 +139,8 @@ Once the library is used regularly, measure:
 - percentage of outputs accepted without restructuring.
 
 These metrics matter more than raw number of skills.
+
+
+## Iteration-level acceptance
+
+Follow [Iteration delivery and quality gates](governance/ITERATION-DELIVERY.md) for frozen scope, the single active increment, exact-candidate test coverage, corrective work, failure severity and closure before starting the next iteration. Main integration after offline checks remains separate from runtime acceptance and production promotion.
