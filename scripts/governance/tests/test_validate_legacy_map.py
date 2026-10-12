@@ -57,6 +57,21 @@ class HistoricalMapValidationTests(unittest.TestCase):
         self.assertTrue(any("duplicate IDs" in item for item in errors))
         self.assertTrue(any("same GitHub Issue" in item for item in errors))
 
+    def test_malformed_source_id_fails_closed_without_type_error(self) -> None:
+        self.write_fixture(ids=("A", {"nested": ["not an ID"]}))
+        report, errors = validate(self.root)
+        self.assertEqual("BLOCKED_SCHEMA", report["status"])
+        self.assertTrue(any("nonempty strings" in error for error in errors))
+
+    def test_malformed_mapping_id_fails_closed_without_sort_error(self) -> None:
+        self.write_fixture(rows=[
+            {"legacy_id": "A", "issue": 1, "review_required": False},
+            {"legacy_id": 2, "issue": 2, "review_required": True},
+        ])
+        report, errors = validate(self.root)
+        self.assertEqual("BLOCKED_SCHEMA", report["status"])
+        self.assertTrue(any("nonempty strings" in error for error in errors))
+
     def test_must_not_silently_repin_stale_source(self) -> None:
         self.write_fixture(valid_sha=False)
         _, errors = validate(self.root)
