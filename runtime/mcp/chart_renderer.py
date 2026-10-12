@@ -29,9 +29,26 @@ mcp = MCPServer(
 )
 
 
+def _validate_text(value: object, field: str, limit: int = 160) -> None:
+    if not isinstance(value, str) or len(value) > limit or any(
+        ord(c) < 32 and c not in "\\t" for c in value
+    ):
+        raise ToolError(f"{field} must be a bounded string without control characters")
+
+
+def _validate_labels(labels: Sequence[str], name: str, limit: int = 80) -> None:
+    if isinstance(labels, (str, bytes)) or not isinstance(labels, (list, tuple)):
+        raise ToolError(f"{name} must be a sequence of labels")
+    if any(not isinstance(x, str) or not x.strip() for x in labels):
+        raise ToolError(f"{name} must have nonempty string labels")
+    for label in labels:
+        _validate_text(label, name, limit)
+
+
 def _validate_parallel(labels: Sequence[str], values: Sequence[float]) -> None:
-    if not labels or not values:
-        raise ToolError("labels and values must be non-empty")
+    _validate_labels(labels, "labels")
+    if not labels or not isinstance(values, (list, tuple)) or not values:
+        raise ToolError("labels and values must be non-empty sequences")
     if len(labels) != len(values):
         raise ToolError("labels and values must have equal length")
     if len(labels) > 80:
@@ -78,6 +95,8 @@ def render_bar_chart(
 ) -> list[str | Image]:
     """Render a deterministic factual bar chart from explicit labels and numeric values."""
     _validate_parallel(labels, values)
+    _validate_text(title, "title")
+    _validate_text(unit, "unit", 60)
 
     width = 8.0
     height = max(3.2, min(10.0, 0.42 * len(labels) + 1.8))
@@ -115,9 +134,13 @@ def render_line_chart(
     unit: str = "",
 ) -> list[str | Image]:
     """Render a deterministic factual line chart from explicit x labels and one or more numeric series."""
-    if not x_labels:
-        raise ToolError("x_labels must be non-empty")
-    if not series_names or not series_values:
+    _validate_labels(x_labels, "x_labels")
+    _validate_labels(series_names, "series_names")
+    _validate_text(title, "title")
+    _validate_text(unit, "unit", 60)
+    if len(x_labels) < 2:
+        raise ToolError("line charts require at least two x-axis points")
+    if not series_names or not isinstance(series_values, (list, tuple)) or not series_values:
         raise ToolError("series_names and series_values must be non-empty")
     if len(series_names) != len(series_values):
         raise ToolError("series_names and series_values must have equal length")
@@ -126,6 +149,8 @@ def render_line_chart(
     if len(series_names) > 12:
         raise ToolError("maximum 12 series per chart")
     for values in series_values:
+        if not isinstance(values, (list, tuple)):
+            raise ToolError("series_values must be sequences of numbers")
         if len(values) != len(x_labels):
             raise ToolError("every series must match x_labels length")
         if any(
