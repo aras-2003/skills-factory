@@ -23,7 +23,7 @@ Browse skills by domain and maturity in the [Skills Factory catalog](https://ara
 
 ## Expansion roadmap
 
-The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) preserves the architecture analysis, proposed flows and 84-task development backlog. Start there before implementing expansion work; task state is maintained in its `BACKLOG.json`.
+The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) is a dated analysis with **90 historical IDs**, preserved in `BACKLOG.json`. Active tracking and PR evidence are maintained in [GitHub Issues](https://github.com/aras-2003/skills-factory/issues) and viewed through [Project #1](https://github.com/users/aras-2003/projects/1). **Full Project-field and historical-source cutover remain unverified**; see the [readiness record](docs/governance/BACKLOG-CUTOVER-READINESS.md). Do not update the historical JSON to simulate current task status.
 
 ## Current source domains
 
