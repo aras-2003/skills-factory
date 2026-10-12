@@ -13,13 +13,17 @@ Reusable AI capability library for repeatable work across projects.
 
 Rule: **LLM interprets; code calculates and validates.**
 
+## Public repository governance
+
+This repository is public, but **no open-source license grant has been verified**; public visibility is not permission to redistribute or relicense its contents. Read the [governance decision record](docs/governance/PUBLIC-REPOSITORY-REVIEW.md), [security reporting policy](SECURITY.md), and [contributor workflow](CONTRIBUTING.md). Ownership routing in `.github/CODEOWNERS` does not by itself establish independent review or GitHub branch protection.
+
 ## Visual catalog
 
 Browse skills by domain and maturity in the [Skills Factory catalog](https://aras-2003.github.io/skills-factory/). The catalog is generated from the source metadata in `SKILL.md`.
 
 ## Expansion roadmap
 
-The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) preserves the architecture analysis, proposed flows and 84-task development backlog. Start there before implementing expansion work; task state is maintained in its `BACKLOG.json`.
+The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) is a dated analysis with **90 historical IDs**, preserved in `BACKLOG.json`. Active tracking and PR evidence are maintained in [GitHub Issues](https://github.com/aras-2003/skills-factory/issues) and viewed through [Project #1](https://github.com/users/aras-2003/projects/1). **Full Project-field and historical-source cutover remain unverified**; see the [readiness record](docs/governance/BACKLOG-CUTOVER-READINESS.md). Do not update the historical JSON to simulate current task status.
 
 ## Current source domains
 
