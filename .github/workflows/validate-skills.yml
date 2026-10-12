@@ -124,6 +124,18 @@ jobs:
           python -m unittest discover -s scripts/eval/tests -p 'test_*.py'
           python scripts/eval/campaign.py prepare --output .tmp/runtime-campaign-r20
           python scripts/eval/campaign.py validate-evidence
+      - name: Reconcile immutable historical R17 transcript receipts
+        run: |
+          python scripts/eval/r17_disposition.py --output .tmp/iteration02-r17-history.json
+          python -m unittest discover -s scripts/eval/tests -p 'test_r17_disposition.py'
+      - name: Archive historical R17 exact-source retest ledger
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-r17-historical-evidence
+          path: .tmp/iteration02-r17-history.json
+          if-no-files-found: ignore
+          retention-days: 30
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
