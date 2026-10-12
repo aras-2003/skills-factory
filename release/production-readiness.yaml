@@ -76,7 +76,7 @@ components:
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact deployed-runtime receipt for remediation campaign R17 is pending."
+    evidence_gap: "Exact deployed-runtime receipt for investment-store-bootstrap-followup-2026-10 is pending."
     limitation: "Lab-only candidate; exact R17 runtime validation is required before any production promotion."
   - name: supplier-viability-review
     kind: skill
@@ -458,7 +458,7 @@ components:
 
   - name: investment-record-store
     kind: skill
-    version: "1.0.1"
+    version: "1.0.2"
     source: skills/investing/investment-record-store/SKILL.md
     declared_maturity: production
     static_contract: present
