@@ -58,3 +58,8 @@ Promote when there is a useful coherent increment, not for every edit. The expec
 - one known `production` snapshot;
 - explicit Lab runtime evidence for every production promotion;
 - continuous learning from real use.
+
+
+## Iteration delivery
+
+Follow [Iteration delivery and quality gates](governance/ITERATION-DELIVERY.md) for frozen scope, the single active increment, exact-candidate test coverage, corrective work, failure severity and closure before starting the next iteration. Main integration after offline checks remains separate from runtime acceptance and production promotion.

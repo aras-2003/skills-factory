@@ -125,6 +125,7 @@ has enabled plugins; that remains an installation and product-availability gate.
 - Remote MCP deployment: `docs/REMOTE-MCP.md`
 - Lifecycle: `docs/LIFECYCLE.md`
 - Testing: `docs/TESTING.md`
+- Iteration delivery and closure: [quality gates](docs/governance/ITERATION-DELIVERY.md)
 - Runtime evals: `docs/RUNTIME-EVALS.md`
 - Static skill security scan: `scripts/security/README.md`
 - Active R16 runbook: `evals/campaigns/runtime-validation-2026-10-r16/RUNBOOK.md`
