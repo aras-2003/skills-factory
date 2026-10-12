@@ -31,3 +31,18 @@ not-available case that reports blocked rather than claiming visible chart.
 Re-run #251's browser MCP suite and #149's Site publication route only when an
 approved exact candidate is installed. All such provider cases are NOT_RUN in
 source CI.
+
+## Chart-schema compatibility with the currently connected Site
+
+Local renderer validation is aligned to the Site MCP's observed input limits:
+bar charts allow 1–60 rows, line charts 2–100 categorical x-points and 1–8
+series; each finite numeric value is in the inclusive range −10¹²…10¹²;
+textual labels have at most 80 characters and units at most 30.
+These are **schema-equivalent source bounds**, not a claim of identical PNG/SVG
+pixel output or client rendering across the two runtimes.
+
+Negative tests cover invalid labels, control characters, NaN/Infinity,
+out-of-range values, mismatched series lengths, dimension overflow and tool
+failure receipts. Synthetic MCP exception injection is never counted as a
+live provider error-path execution. Actual client display, missing renderer
+handling and browser tool-call receipts still require exact-version E2E tests.
