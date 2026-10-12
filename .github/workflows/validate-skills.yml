@@ -49,6 +49,11 @@ jobs:
             .tmp/routing-collision-report.json
           if-no-files-found: ignore
           retention-days: 30
+      - name: Verify historical backlog ID-to-Issue map
+        run: |
+          mkdir -p .tmp
+          python scripts/governance/validate_legacy_map.py --output .tmp/legacy-id-map-audit.json
+          python -m unittest discover -s scripts/governance/tests -p 'test_*.py'
       - name: Historical P0 backlog structural audit
         run: |
           python scripts/roadmap/audit_p0.py --output .tmp/p0-backlog-audit.json
