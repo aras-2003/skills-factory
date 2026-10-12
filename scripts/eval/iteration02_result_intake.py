@@ -48,7 +48,8 @@ def assess(lock: object, records: object) -> dict:
         if type(n) is not int or n < 1 or n > 100:
             errors.append(f"lock: invalid repetitions for {item['id']}")
             continue
-        if item.get("channel") not in {"lab", *EXTERNAL}:
+        channel = item.get("channel")
+        if not isinstance(channel, str) or channel not in {"lab", *EXTERNAL}:
             errors.append(f"lock: invalid channel for {item['id']}")
         if not is_digest(item.get("input_sha256")) or not is_digest(item.get("rubric_sha256")):
             errors.append(f"lock: missing frozen input/rubric digest for {item['id']}")
@@ -83,7 +84,7 @@ def assess(lock: object, records: object) -> dict:
                 errors.append(prefix + f": stale/unmatched {field}")
         decision = record.get("decision")
         state = record.get("execution_state")
-        if decision not in REPORT_STATUSES or state not in EXECUTED | UNRUN:
+        if not isinstance(decision, str) or decision not in REPORT_STATUSES or not isinstance(state, str) or state not in EXECUTED | UNRUN:
             errors.append(prefix + ": invalid status/execution state")
             continue
         execution_counts[decision] += 1
@@ -103,9 +104,9 @@ def assess(lock: object, records: object) -> dict:
                 errors.append(prefix + ": independent evaluator is required")
             if record.get("assisted") is True and decision == "PASS":
                 errors.append(prefix + ": assisted execution cannot be PASS")
-            if case["channel"] in EXTERNAL and not record.get("approval_reference"):
+            if isinstance(case.get("channel"), str) and case["channel"] in EXTERNAL and not record.get("approval_reference"):
                 errors.append(prefix + ": external provider needs scoped approval")
-            if case["channel"] in {"site", "browser"} and name in {
+            if isinstance(case.get("channel"), str) and case["channel"] in {"site", "browser"} and name in {
                 "I02-149-cloud-e2e", "I02-251-browser-mcp", "I02-253-parity", "I02-254-charts"
             } and record.get("client_display_state") != "observed":
                 errors.append(prefix + ": required client-visible evidence absent")
@@ -114,7 +115,12 @@ def assess(lock: object, records: object) -> dict:
 
     missing = sorted(expected - observed)
     gates = lock.get("manual_gates") or []
-    if not isinstance(gates, list) or any(not isinstance(item, dict) or item.get("status") not in {"NOT_RUN", "BLOCKED"} for item in gates):
+    if not isinstance(gates, list) or any(
+        not isinstance(item, dict)
+        or not isinstance(item.get("status"), str)
+        or item["status"] not in {"NOT_RUN", "BLOCKED"}
+        for item in gates
+    ):
         errors.append("lock: manual gates not in original unresolved state")
     status = "INVALID_RECEIPTS" if errors else ("INCOMPLETE" if missing else "EVIDENCE_STRUCTURALLY_COMPLETE_REVIEW_REQUIRED")
     if not records and not errors:
