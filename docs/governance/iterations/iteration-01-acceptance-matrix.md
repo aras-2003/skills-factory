@@ -32,4 +32,4 @@
 `REVIEW_REQUIRED` is not a failing code assertion. `BLOCKED` means a required external prerequisite is not available. Every row must be individually resolved or its nonapplicability approved under the source-lock protocol; do not label required rows N/A merely to close the iteration.
 
 ## Counts and compatibility
-Distinct planned criterion rows: **25**; the count is a preliminary audit inventory, not execution coverage. No final integrated candidate or complete runtime source/trace/receiver evidence exists. The owner must expand this into the policy's exact per-surface case IDs, run repetition counts, input/rubric SHA isolation and immutable receipts before freezing or closing the iteration.
+Distinct planned criterion rows: **24**; the count is a preliminary audit inventory, not execution coverage. No final integrated candidate or complete runtime source/trace/receiver evidence exists. The owner must expand this into the policy's exact per-surface case IDs, run repetition counts, input/rubric SHA isolation and immutable receipts before freezing or closing the iteration.
