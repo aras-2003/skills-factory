@@ -1,0 +1,14 @@
+# Source ownership, not proof of independent review.
+# Verified repository owner on 2026-10-12: @aras-2003.
+# CODEOWNERS requests review only when GitHub rules require it and the owner is eligible.
+# With a single verified maintainer, no independent reviewer is established.
+* @aras-2003
+/.github/ @aras-2003
+/scripts/security/ @aras-2003
+/scripts/capabilities/ @aras-2003
+/scripts/package/ @aras-2003
+/runtime/ @aras-2003
+/release/ @aras-2003
+/skills/ @aras-2003
+/workflows/ @aras-2003
+/evals/ @aras-2003
