@@ -29,6 +29,10 @@ def preflight(contract: dict, component: str, availability: Mapping[str, str]) -
     if not isinstance(allowed_states, list):
         raise ValueError("capability contract must define availability states")
 
+    # Host-provided manifests are untrusted until verified. Reject malformed
+    # keys before sorting: mixed int/str keys must never cause a TypeError.
+    if any(not isinstance(key, str) for key in availability):
+        raise ValueError("availability dimensions must be strings")
     unexpected = set(availability) - set(DIMENSIONS)
     if unexpected:
         raise ValueError(f"unknown availability dimensions: {', '.join(sorted(unexpected))}")
