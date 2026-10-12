@@ -223,7 +223,7 @@
       "name": "investment-record-store",
       "domain": "investing",
       "maturity": "production",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Read and persist canonical Investment OS records in Supabase/Postgres, including portfolio state, transactions, research, signals, theses, decisions, policy, themes and sources. Use whenever an investing workflow needs durable state or history. Google Drive is raw-document/legacy migration storage, not the canonical relational store after cutover.",
       "source": "skills/investing/investment-record-store/SKILL.md",
       "source_status": "present",
