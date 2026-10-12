@@ -72,7 +72,7 @@ jobs:
         run: |
           python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
           python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
-      - name: Lab lifecycle compliance audit (54 source skills)
+      - name: Lab lifecycle compliance audit (all source skills, dynamic inventory)
         run: |
           mkdir -p .tmp
           python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
