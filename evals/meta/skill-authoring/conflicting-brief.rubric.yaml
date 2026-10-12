@@ -1,0 +1,17 @@
+schema_version: "1.0"
+id: authoring-conflicting-brief
+target: skill-authoring
+mode: explicit
+source_legacy: evals/meta/skill-authoring/conflicting-brief.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  Assess whether the authored skill asks for material missing inputs and surfaces contradictions before producing dependent outputs.
+assertions:
+  manual:
+    - require clarification for the missing audience and objective
+    - explicitly surface CAC 70 versus CAC 20 and pause dependent work
+    - prohibit silently resolving the conflict or inventing decision-driving facts
+    - label assumptions only when authorized

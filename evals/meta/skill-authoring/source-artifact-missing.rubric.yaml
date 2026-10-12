@@ -1,0 +1,17 @@
+schema_version: "1.0"
+id: authoring-source-artifact-missing
+target: skill-authoring
+mode: explicit
+source_legacy: evals/meta/skill-authoring/source-artifact-missing.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  Assess whether the authored skill requires locating the authoritative source before updating and distinguishes proposals from persisted changes.
+assertions:
+  manual:
+    - require identifying the authoritative artifact and revision first
+    - require mapping dependent outputs before claiming a complete update
+    - distinguish a proposed edit from a persisted artifact change
+    - prohibit claiming an update or retest without verifiable evidence

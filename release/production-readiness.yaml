@@ -149,7 +149,7 @@ components:
     limitation: "Lab-only candidate; exact R17 runtime validation is required before any production promotion."
   - name: skill-authoring
     kind: skill
-    version: "1.0.1"
+    version: "1.0.2"
     source: skills/meta/skill-authoring/SKILL.md
     declared_maturity: production
     static_contract: present

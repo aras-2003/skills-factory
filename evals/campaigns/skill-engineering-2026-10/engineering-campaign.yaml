@@ -2,11 +2,18 @@ schema_version: "1.0"
 campaign: skill-engineering-2026-10
 purpose: repository-validation-and-runtime-input-registration
 out_of_scope_behavior_paths:
+  - skills/meta/skill-authoring/SKILL.md
   - skills/meta/skill-test-design/SKILL.md
   - skills/meta/skill-evaluation/SKILL.md
   - workflows/skill-development/WORKFLOW.md
   - release/package.yaml
 runtime_targets:
+  skill-authoring:
+    version: "1.0.2"
+    required_cases:
+      - authoring-essential-provider-unavailable
+      - authoring-conflicting-brief
+      - authoring-source-artifact-missing
   skill-test-design:
     version: "0.3.1"
     required_cases:

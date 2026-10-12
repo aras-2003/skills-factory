@@ -1,0 +1,1 @@
+Create a reusable Agent Skill for preparing a strategy presentation from a brief. It must handle this request safely: audience and objective are unspecified; one instruction sets CAC to 70, while the supplied source data says CAC is 20. The skill should not silently choose a value or invent missing strategic facts.

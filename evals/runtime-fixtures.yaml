@@ -1,5 +1,18 @@
 schema_version: "2.0"
 targets:
+  skill-authoring:
+    - id: authoring-essential-provider-unavailable
+      mode: explicit
+      input: evals/meta/skill-authoring/essential-provider-unavailable.input.md
+      rubric: evals/meta/skill-authoring/essential-provider-unavailable.rubric.yaml
+    - id: authoring-conflicting-brief
+      mode: explicit
+      input: evals/meta/skill-authoring/conflicting-brief.input.md
+      rubric: evals/meta/skill-authoring/conflicting-brief.rubric.yaml
+    - id: authoring-source-artifact-missing
+      mode: explicit
+      input: evals/meta/skill-authoring/source-artifact-missing.input.md
+      rubric: evals/meta/skill-authoring/source-artifact-missing.rubric.yaml
   skill-test-design:
     - id: testdesign-description-only-routing
       mode: explicit

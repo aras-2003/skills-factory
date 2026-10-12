@@ -37,6 +37,7 @@ def separately_validated_engineering_paths() -> set[str]:
     cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     declared = cfg.get("out_of_scope_behavior_paths") or []
     expected = {
+        "skills/meta/skill-authoring/SKILL.md",
         "skills/meta/skill-test-design/SKILL.md",
         "skills/meta/skill-evaluation/SKILL.md",
         "workflows/skill-development/WORKFLOW.md",
@@ -47,7 +48,7 @@ def separately_validated_engineering_paths() -> set[str]:
     fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8")) or {}
     targets = fixtures.get("targets") or {}
     declared_targets = cfg.get("runtime_targets") or {}
-    for target in ("skill-test-design", "skill-evaluation"):
+    for target in ("skill-authoring", "skill-test-design", "skill-evaluation"):
         skill = ROOT / f"skills/meta/{target}/SKILL.md"
         declared = declared_targets.get(target) or {}
         version = str(declared.get("version") or "")
