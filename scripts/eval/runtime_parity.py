@@ -20,7 +20,12 @@ PLACEHOLDERS = {"", "unknown", "unattested", "not_observable", "not_verified", "
 
 
 def valid_sha(value: object, size: int = 64) -> bool:
-    return isinstance(value, str) and bool((HEX40 if size == 40 else HEX64).fullmatch(value))
+    if not isinstance(value, str):
+        return False
+    # Site runtime_info currently advertises tool_schema_digest as sha256:<hex>.
+    # Canonicalize the public digest prefix, never accept other algorithms.
+    raw = value.removeprefix("sha256:") if size == 64 else value
+    return bool((HEX40 if size == 40 else HEX64).fullmatch(raw))
 
 
 def normalize_observation(raw: dict, label: str) -> tuple[dict, list[str]]:
@@ -75,7 +80,10 @@ def normalize_observation(raw: dict, label: str) -> tuple[dict, list[str]]:
             errors.append(f"{label}: {name} requires client-observed chart receipt")
     for missing in sorted(set(FLOWS) - seen):
         errors.append(f"{label}: missing representative flow {missing}")
-    return {**raw, "flows_by_name": flow_map}, errors
+    normalized = dict(raw)
+    if isinstance(normalized.get("tool_schema_digest"), str):
+        normalized["tool_schema_digest"] = normalized["tool_schema_digest"].removeprefix("sha256:")
+    return {**normalized, "flows_by_name": flow_map}, errors
 
 
 def assess(candidate: dict, work: dict, site: dict) -> dict:
