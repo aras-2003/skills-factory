@@ -12,3 +12,10 @@ Template only. Follow [iteration delivery](../ITERATION-DELIVERY.md). The comple
 Use existing receipt semantics for execution state and verdict; do not invent PASS for absent execution. Split cases and surfaces into separately reviewable rows. The table is an index, not a replacement for detailed receipts.
 
 Completeness review: every frozen criterion mapped; every required case/surface accounted for; verdicts compatible with final candidate; no duplicate row IDs or unreviewed N/A; no required FAIL/NOT_RUN/BLOCKED/REVIEW_REQUIRED; durable evidence links verified. Retain prior candidate tables or link immutable snapshots when superseded.
+
+## Inventory and execution totals
+
+| Layer / surface | Required distinct scenarios | Planned executions / repetitions | Executed PASS | Executed FAIL | NOT_RUN / BLOCKED / REVIEW_REQUIRED | Reviewed N/A | Evidence compatibility |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+Count actual rows; shared-case reuse requires explicit assertion mapping. Each repeated attempt has a unique run ID and retained verdict. Zero failing/missing required rows, not a pass percentage, is the close gate. Include fixed sentinels, two rotating unchanged-domain probes, affected consumers and full-baseline applicability with last baseline candidate.

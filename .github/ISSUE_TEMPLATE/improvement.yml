@@ -1,7 +1,12 @@
 name: Improvement / research
-description: Proposed capability, engineering task or research spike
+description: New capability or research for a PLANNED iteration; use Bug / regression for broken existing behavior
 title: "[IMPROVEMENT] "
 body:
+  - type: input
+    id: iteration
+    attributes:
+      label: Proposed future iteration
+      description: New ideas cannot expand ACTIVE, VALIDATING or BLOCKED iteration scope.
   - type: input
     id: legacy
     attributes:

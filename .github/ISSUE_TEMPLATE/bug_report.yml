@@ -4,6 +4,16 @@ title: "[BUG] "
 labels: ["bug"]
 body:
   - type: input
+    id: iteration
+    attributes:
+      label: Discovery iteration / tracking issue
+      description: Report bugs to the current iteration even after scope freeze; triage decides fixes or accepted deferral.
+  - type: input
+    id: contract
+    attributes:
+      label: Violated contract / acceptance criterion
+      description: Link frozen acceptance, an existing behavior contract or regression; distinguish from a new desired capability.
+  - type: input
     id: legacy
     attributes:
       label: Historical ID / related issue

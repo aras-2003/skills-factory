@@ -42,8 +42,12 @@ Record the baseline main SHA, fixed Issue list, explicit inclusions/exclusions, 
 | State | Allowed |
 | --- | --- |
 | PLANNED | Add/remove/reprioritize work and update tests/dependencies before start. |
-| ACTIVE / VALIDATING / BLOCKED | No new capability, Issue commitment or acceptance relaxation. Clarifications may make existing intent explicit, with a logged diff and reviewer confirmation. |
+| ACTIVE / VALIDATING / BLOCKED | No new capability commitment or acceptance relaxation. Defect intake is always allowed, separately from frozen capability scope. Clarifications may make existing intent explicit, with a logged diff and reviewer confirmation. |
 | CLOSED / ABORTED | No rewriting history; use a new record. |
+
+Report every discovered defect to the current iteration, including pre-existing or cross-framework failures. Use the bug form and `bug` label; record discovery iteration, candidate identity, severity, reproduction and violated contract. New ideas use the improvement form and a PLANNED iteration. A missing desired capability is an idea unless it violates an existing accepted contract.
+
+Triage before closure: defects blocking frozen acceptance or critical regressions are fixed within the current iteration. Unrelated minor defects may be deferred only with impact assessment, named owner/reviewer acceptance and linked future delivery work; retain discovery attribution in the current record. Reporting does not automatically make a defect blocking, and deferral does not mean fixed.
 
 A defect preventing an existing frozen criterion is corrective work within the same iteration: link a new defect Issue to the frozen parent and criterion, without increasing committed capability. The defect may use the same native iteration, but is identified as corrective rather than a new commitment. Strengthening a test for that defect is allowed; deleting a failed case, changing its expected result to permit the failure, or marking a required surface N/A is not.
 
@@ -139,3 +143,62 @@ Production promotion remains separate: a closed iteration is eligible for a prom
 Adopt through this PR; link this policy from #233 and relevant governance Issues. The current calendar iteration is not deemed started by this PR. Before the first implementation, create its record and test matrix and verify all other records are PLANNED/terminal.
 
 Minimum manual process is usable immediately after adoption. Recommended next bounded governance increment: a deterministic validator for unique active state, locked-scope diff and matrix completeness, connected to PR CI; Project reconciliation with readback; durable evidence retention checks. Implement and test those controls separately, without replacing the existing campaign/promotion validators or expanding credentials implicitly. They are not delivered by this documentation change.
+
+## Minimum test inventory and run counts
+
+These are planning floors, not proof that a fixed count is sufficient. Cover every frozen criterion and critical failure mode; add cases when a minimum case cannot cover them. Count distinct scenarios separately from repeated executions. Reuse applicable cases by stable ID rather than duplicating them to meet quotas.
+
+| Change / risk | Minimum inventory |
+| --- | --- |
+| New skill or materially changed behavior | 6 scenarios per changed skill: happy path, missing input, ambiguity, adjacent non-trigger, adversarial/edge, conflicting/stale evidence. If inapplicable, justify at lock and replace with a relevant risk case. |
+| Routing change | 4 per changed trigger: explicit positive, indirect positive, adjacent negative, competing-skill conflict; include affected competitors. May overlap the 6 behavior cases if both assertions are evaluated. |
+| Deterministic helper / resource | Per changed contract: normal, invalid input, boundary, error/fallback; plus one integration case per distinct affected consumer contract. Avoid implementation-mirroring tests. |
+| Authorization / persistent writes / security | At least 4: authorized action, missing authorization, stale/wrong authorization, unavailable permission/tool. Add injection and partial-write/recovery cases when relevant. Zero unauthorized side effects. |
+| Multi-skill workflow | At least 3 E2E scenarios per changed workflow: successful handoff, prerequisite/evidence failure, downstream failure/recovery; assert routing and stop conditions. |
+| Defect | At least 1 reproducible regression per root cause plus affected-consumer coverage. Preserve real runtime failures; add deterministic reproducers only when faithful. |
+| Shared final-candidate baseline | At least 5 cases: routing, authorization, evidence integrity, output/delivery, unchanged critical capability. Plus 1 identity/invocation smoke per required surface and 2 rotating non-impacted capability probes. |
+
+Run configured deterministic suites once per PR revision and in the applicable final-main gates. Ordinary runtime scenarios execute at least once per required surface on the final candidate. Critical stochastic routing, authorization and evidence-integrity scenarios execute at least 3 independent unassisted times per required surface with fixed declared model/settings. Every run must pass; retain failures and investigate rather than retrying until green. Three runs are an initial risk policy, not a statistical reliability guarantee. Increase repetitions based on observed instability.
+
+Name supported model/surface configurations at lock; do not multiply by every available model. Separate observations are needed where tools/rendering differ. Runtime N/A follows the applicability rules above.
+
+Example: one changed skill on one required surface starts with 6 scoped + 5 shared + 1 smoke + 2 rotating probe scenarios = 14 distinct scenarios, plus consumer/risk cases and repetitions. A scenario may serve several criteria only with explicit assertion mapping. Record counts by layer/surface in the matrix; acceptance requires every required row passing, never a percentage threshold.
+
+## Regression selection without executing the full runtime catalog
+
+Run all existing configured offline CI suites on each PR. Select external runtime cases by impact; reducing runtime scope is not permission to skip configured offline jobs.
+
+Before implementation record changed paths/contracts and their consumers. Inspect workflow references, routing/catalog registrations, helper imports, schemas, permissions, packaging and campaigns. Follow direct consumers and transitive E2E paths until an unchanged contract boundary is demonstrated. Text searches help discover dependencies but do not prove their absence. Include negative routing neighbors and shared-state interactions.
+
+Runtime selection is the union of:
+
+1. Changed acceptance scenarios and applicable previously failing cases.
+2. Direct consumer contracts and transitive E2E paths across the changed boundary.
+3. Competing/adjacent routing and impacted security/output/evidence cases.
+4. Fixed shared sentinels and smoke on every required surface.
+5. At least 2 unchanged, non-impacted capability probes per iteration, chosen before execution from a recorded rotation list. Cover registered domains over successive iterations; expand if the catalog outgrows the rotation.
+
+Record included case IDs, exclusions, dependency evidence and reviewer rationale before execution. Unjustified omissions are coverage gaps. Keep shared sentinels stable across iterations; review changes against the previous set. Defect fixtures join the persistent regression inventory rather than disappearing with an iteration.
+
+| Impact | Required runtime regression breadth |
+| --- | --- |
+| Isolated skill change with unchanged interfaces | Scoped cases, routing neighbors, actual consumers, sentinels and rotating probes. |
+| Shared helper, output/evidence schema or workflow handoff | All dependent consumer contracts and E2E paths, sentinels and probes. |
+| Global router/catalog, authorization/persistence, infrastructure, packaging/dependencies/runtime adapter | Full affected channel/domain baseline; full supported runtime baseline if consumers cannot be reliably enumerated. |
+| Unknown impact, failure in an “unaffected” probe, multiple cross-domain failures | Stop bounded acceptance and expand to affected domains; full supported baseline if cause/boundary remains uncertain. |
+
+Also run a full supported runtime baseline before production promotion changing behavior/runtime artifacts, and after every 4 closed behavior-bearing iterations if no full baseline ran during that interval. Log the last full-baseline candidate and interval. This is an initial risk policy to revisit with observed defects/cost; it is not existing automation. Full means all registered supported cases/surfaces across applicable campaigns, not R20 alone. Incomplete inventory blocks a full-coverage claim.
+
+Scoped regression cannot prove absence of distant defects. Sentinels detect shared drift, rotating probes challenge dependency assumptions, and periodic/promotion baselines limit accumulated blind spots. Record residual risk at closure.
+
+## CI/CD gate map
+
+| Stage | Existing mechanism | Acceptance evidence |
+| --- | --- | --- |
+| PR offline | `validate-skills.yml` (`validate`), `domain-integrity.yml` (`domain`), path-filtered `eval-integrity.yml` | Green applicable jobs at exact PR revision; unit/static/security/packaging reports linked to matrix. A filtered job that did not run is not PASS. |
+| Final main candidate | Main push Validate skills + `package-main-lab-plugin.yml`; Domain integrity dispatch when needed | Matching source SHA, run IDs, artifact/release ID and digest. Failed checks/build block runtime acceptance. |
+| Runtime | Existing external executor and campaign lock/smoke/receipt tooling | Scoped/shared/full matrix executed on observed candidate, all attempts preserved, evaluator isolated. This is not currently an Actions runtime job. |
+| Closure | Evidence-only PR and completeness review | Compatible receipts, execution counts, locked scope, defect triage, no blocking rows. Ordinary green CI does not grant CLOSED. |
+| Production | `package-production.yml` and promotion validator | Existing provenance/runtime gates plus applicable full baseline; explicit merge/publish authorization. Sites publishing and observed deployed identity remain separate. |
+
+Required integration follow-up: add a deterministic `iteration-integrity` PR gate checking one active record, frozen commitment, bug-vs-idea classification, criterion-to-case completeness and planned counts. Closure checking must reconcile executed rows, final identity, severity and linked receipts, without equating receipt schema validity with behavioral PASS. Import existing runtime receipts rather than creating a competing format. Missing required rows must fail closed; retain artifacts durably. Configure a required branch-rule context only after this job is implemented and observed working. No workflow, permissions or branch protection change is delivered by this documentation PR; these controls remain explicit manual gates meanwhile.

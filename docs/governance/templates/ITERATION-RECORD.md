@@ -27,12 +27,22 @@ Link completed acceptance matrix. List required surfaces/models/tools, shared se
 | --- | --- | --- | --- | --- | --- |
 | <C1> | <SHA> | <identity> | <run links> | <receipt> | <none or case IDs> |
 
-## Corrective defects and clarifications (append)
+## Regression selection and counts
 
-| Finding Issue | Frozen parent + criterion | Severity / impact | Fix PR | Retest rows | Scope clarification reviewer |
+- Changed contracts / direct and transitive consumers (evidence links):
+- Included cases / exclusions with bounded-impact rationale:
+- Fixed sentinels / rotating unchanged-domain probes (minimum 2):
+- Last full runtime baseline candidate / behavior iterations since baseline (maximum 4):
+- Planned distinct scenarios / executions by layer and required surface:
+- Critical stochastic scenarios repeated at least 3 times / instability history:
+- PR CI / final-main checks and build / external runtime runs:
+
+## Defect intake and clarifications (append; intake always open)
+
+| Bug Issue / discovery iteration | Existing contract / frozen criterion or unrelated | Severity / closure blocking | Fix PR or accepted deferral owner + future delivery iteration | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
 
-New capability requests go to a different PLANNED increment. Do not edit the frozen commitment to incorporate them.
+Report all discovered bugs here, including unrelated/pre-existing failures. Keep discovery attribution when delivery is deferred; record rationale and acceptance. New capabilities use the improvement form and go to a different PLANNED increment. Do not edit the frozen commitment to incorporate them.
 
 ## Closure / abort decision
 
