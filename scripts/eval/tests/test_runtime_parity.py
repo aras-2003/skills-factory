@@ -62,6 +62,19 @@ class RuntimeParityTests(unittest.TestCase):
         site["flows"][2]["client_display_state"] = "not_observable"
         self.assertEqual("BLOCKED", mod.assess(self.candidate, observation(), site)["status"])
 
+    def test_site_prefixed_sha256_tool_schema_digest_is_normalized(self):
+        site = observation()
+        site["tool_schema_digest"] = "sha256:" + T
+        report = mod.assess(self.candidate, observation(), site)
+        self.assertEqual("MATCH_PENDING_INDEPENDENT_REVIEW", report["status"])
+        self.assertFalse(report["release_approved"])
+
+    def test_other_hash_algorithm_is_not_accepted(self):
+        site = observation()
+        site["tool_schema_digest"] = "md5:" + T
+        report = mod.assess(self.candidate, observation(), site)
+        self.assertEqual("BLOCKED", report["status"])
+
     def test_tool_schema_change_is_explicit_mismatch(self):
         site = observation()
         site["tool_schema_digest"] = "f" * 64
