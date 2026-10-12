@@ -63,7 +63,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: p0-backlog-structural-audit
-          path: .tmp/p0-backlog-audit.json
+          path: |
+            .tmp/p0-backlog-audit.json
+            .tmp/legacy-id-map-audit.json
           if-no-files-found: ignore
           retention-days: 30
       - name: Skill development change-class regression
