@@ -147,6 +147,23 @@ class CloudRuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(Exception, '"artifact_state": "FAIL_RENDERER_INVOCATION"'):
                 self.server.render_bar_chart(["A"], [1.0])
 
+    def test_controlled_mcp_failure_receipts_never_claim_client_display(self) -> None:
+        for exc in (
+            TimeoutError("fixture timeout"),
+            PermissionError("fixture denied"),
+            ValueError("fixture schema mismatch"),
+            RuntimeError("fixture renderer unavailable"),
+        ):
+            with self.subTest(exception=type(exc).__name__):
+                with patch.object(self.server, "_render_bar_chart", side_effect=exc):
+                    with self.assertRaises(Exception) as context:
+                        self.server.render_bar_chart(["A"], [1.0])
+                message = str(context.exception)
+                self.assertIn('"status": "FAILURE"', message)
+                self.assertIn('"artifact_state": "FAIL_RENDERER_INVOCATION"', message)
+                self.assertIn('"client_display_state": "not_applicable"', message)
+                self.assertNotIn('"artifact_state": "rendered"', message)
+
     def test_route_receipt_distinguishes_routing_from_child_execution(self) -> None:
         result = self.server.route_investment_request("ETF risk policy")
         self.assertEqual("not_executed", result["workflow_execution_state"])
