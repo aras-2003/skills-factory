@@ -43,8 +43,12 @@ def validate(root: Path, mapping_file: Path = MAP) -> tuple[dict, list[str]]:
 
     expected = [item.get("id") if isinstance(item, dict) else None for item in items]
     actual = [item.get("legacy_id") if isinstance(item, dict) else None for item in mapped]
+    # Malformed input is untrusted. Validate types before hashing/sorting IDs;
+    # dict/list/int IDs must yield a blocker instead of crashing the CI step.
     if any(not isinstance(value, str) or not value for value in expected + actual):
-        issues.append("IDs must be nonempty strings")
+        return {"schema_version": 1, "status": "BLOCKED_SCHEMA"}, [
+            "all historical and mapped IDs must be nonempty strings"
+        ]
     if len(expected) != len(set(expected)):
         issues.append("duplicate IDs in historical source")
     if len(actual) != len(set(actual)):
