@@ -128,6 +128,16 @@ class FullBehaviorCampaignTests(unittest.TestCase):
             self.assertIn("executor-inputs.json", [x.name for x in path.iterdir()])
             raw = (path / "executor-inputs.json").read_text(encoding="utf-8")
             self.assertNotIn("respond without writing", raw.replace("Positive synthetic", ""))
+            queue = json.loads((path / "executor-queue.json").read_text(encoding="utf-8"))
+            self.assertEqual(report["case_count"], queue["case_count"])
+            self.assertFalse(queue["writes_authorized"])
+            self.assertEqual("NOT_RUN", queue["provider_execution"])
+            for item in queue["cases"]:
+                bytes_ = (path / item["input_path"]).read_bytes()
+                self.assertEqual(hashlib.sha256(bytes_).hexdigest(), item["input_sha256"])
+                self.assertFalse(item["provider_call_allowed"])
+                self.assertFalse(item["writes_authorized"])
+            self.assertEqual(len(list((path / "executor-cases").glob("*.input.md"))), report["case_count"])
             with self.assertRaisesRegex(ValueError, "exists"):
                 mod.write_outputs(self.root, REV, path)
 
