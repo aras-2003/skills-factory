@@ -1,0 +1,91 @@
+# Iteration 02 — Chat browser chart evidence binder (#251, #253, #254)
+
+This is a **read-only offline evidence checker**. It does not open a browser,
+invoke MCP, test private users, capture images or certify client display.
+
+## Protocol
+
+Use exact `external-lock.json` from the Iteration 2 external handoff artifact,
+plus an independent TEST client capture object. Its `case_id` must be one of
+`I02-251-browser-mcp`, `I02-253-parity`, or `I02-254-charts`. The capture
+contains the exact locked source/release/payload/input digest, fresh UTC or
+offset-aware timestamp, installed identity observation reference, chat
+reference and capture source. All data must be synthetic/approved.
+
+For each chart observation store three separate immutable *source files*
+inside an evidence root: raw MCP tool receipt JSON, screenshot PNG, and
+captured accessible/semantic chart JSON. Capture `tool_receipt_sha256`,
+`screenshot_sha256` and `accessibility_sha256` over original file bytes.
+Connect chart-tool and client records with a nonempty correlation ID in
+`correlation_id`, `tool_call_correlation_id`, and
+`client_capture_correlation_id` — all three must agree. The tool receipt
+itself will normally report `client_display_state: not_observable`; only
+the client capture can independently report an observed display.
+
+Example capture shape (values are illustrative, not a real executed test):
+
+~~~json
+{
+  "case_id": "I02-254-charts",
+  "source_revision": "<40-hex>",
+  "release_id": "<exact Lab release>",
+  "payload_content_sha256": "<64-hex>",
+  "input_sha256": "<locked input SHA>",
+  "installed_attestation": "verified",
+  "installed_observation_reference": "<immutable TEST receipt URL/ID>",
+  "capture_source": "<independent TEST browser observer>",
+  "chat_reference": "<specific TEST chat URL/ID>",
+  "captured_at": "2026-10-13T12:00:00Z",
+  "chart_checks": [
+    {"kind":"bar", "correlation_id":"bar-call-1",
+     "tool_call_correlation_id":"bar-call-1",
+     "client_capture_correlation_id":"bar-call-1",
+     "client_display_state":"observed",
+     "tool_receipt_path":"bar-tool.json",
+     "tool_receipt_sha256":"<raw file SHA>",
+     "screenshot_path":"bar.png",
+     "screenshot_sha256":"<raw file SHA>",
+     "accessibility_path":"bar-accessible.json",
+     "accessibility_sha256":"<raw file SHA>",
+     "expected_data":{"title":"Signed bar fixture",
+                      "labels":["negative","zero","positive"],
+                      "values":[-5,0,3]}},
+    {"kind":"line", "correlation_id":"line-call-1",
+     "tool_call_correlation_id":"line-call-1",
+     "client_capture_correlation_id":"line-call-1",
+     "client_display_state":"observed",
+     "tool_receipt_path":"line-tool.json",
+     "tool_receipt_sha256":"<raw file SHA>",
+     "screenshot_path":"line.png",
+     "screenshot_sha256":"<raw file SHA>",
+     "accessibility_path":"line-accessible.json",
+     "accessibility_sha256":"<raw file SHA>",
+     "expected_data":{"title":"Signed line fixture",
+                      "x_labels":["before","after"],
+                      "series_names":["synthetic"],
+                      "series_values":[[-2,0]]}}
+  ]
+}
+~~~
+
+Run only **after** real TEST browser capture:
+
+~~~bash
+python scripts/eval/iteration02_browser_evidence.py \
+  --external-lock external-lock.json \
+  --capture browser-capture.json \
+  --evidence-root ./captured-files \
+  --output browser-evidence-review.json
+~~~
+
+Output `BLOCKED_EVIDENCE` means evidence integrity/identity/values are
+incomplete. `STRUCTURALLY_CORRELATED_INDEPENDENT_REVIEW_REQUIRED` is
+**not** runtime PASS or a claim that the screenshot is authentic.
+Independent reviewer must authenticate the raw provider trace,
+capture tools, accessible tree, screenshot/client visibility and
+correlation with the actual installed candidate.
+
+For #254, both signed chart probes (bar [-5,0,3] and line [-2,0])
+are required. This binder does not replace routing/child MCP evidence
+for #251, or all four Work↔Site parity flows for #253.
+Never use it as an unattended browser runner or production deployment gate.
