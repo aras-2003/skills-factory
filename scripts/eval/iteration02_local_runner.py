@@ -56,6 +56,8 @@ def verified_case(pack: Path, case_id: str, attempt: int) -> tuple[dict, dict, b
     lock = json.loads(manifest.read_text(encoding="utf-8"))
     if (not isinstance(lock, dict) or not HEX40.fullmatch(str(lock.get("source_revision", "")))
             or not HEX64.fullmatch(str(lock.get("payload_content_sha256", "")))
+            or not isinstance(lock.get("release_id"), str)
+            or not lock["release_id"]
             or lock.get("runtime_execution_state") != "NOT_RUN"
             or lock.get("release_approved") is not False):
         raise RunBlocked("unverified or malformed source-locked campaign")
@@ -128,7 +130,7 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
     runs.mkdir(parents=True, exist_ok=True)
     run_dir = runs / f"{attempt:03d}"
     try:
-        run_dir.mkdir()  # atomic reservation: duplicate invocation never reruns
+        run_dir.mkdir(mode=0o700)  # atomic reservation: duplicate invocation never reruns
     except FileExistsError:
         recorded = run_dir / "record.json"
         if not _regular(recorded):
@@ -139,8 +141,11 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
                 or previous.get("input_sha256") != item["input_sha256"]
                 or previous.get("adapter_sha256") != adapter_sha256):
             raise RunBlocked("prior run identity mismatch; refuse overwrite")
-        return {"status": "ALREADY_ARCHIVED_NO_REEXECUTION",
-                "record_path": recorded.as_posix(),
+        previous_status = previous.get("status")
+        replay_status = ("ALREADY_ARCHIVED_NO_REEXECUTION"
+                         if previous_status == "ADAPTER_REPORTED_EXECUTED_REVIEW_REQUIRED"
+                         else "PRIOR_BLOCKED_NO_REEXECUTION")
+        return {"status": replay_status, "record_path": recorded.as_posix(),
                 "model_behavior_verdict": "NOT_EVALUATED"}
 
     request = {
@@ -157,7 +162,7 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
         "SKILLS_FACTORY_EVAL_MODE": "isolated_test",
         "PYTHONNOUSERSITE": "1",
     }
-    status, reported = "BLOCKED_ADAPTER", {}
+    status, reported, response_bytes = "BLOCKED_ADAPTER", {}, None
     try:
         result = invoke([str(executable)], input=request_data, stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE, cwd=run_dir, env=env, timeout=timeout,
@@ -183,6 +188,7 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
         if response["execution_state"] != "executed" and steps:
             raise RunBlocked("nonexecuted adapter must not invent steps")
         status = "ADAPTER_REPORTED_EXECUTED_REVIEW_REQUIRED" if steps else "ADAPTER_REPORTED_NOT_RUN"
+        response_bytes = result.stdout
         # These are adapter-reported, unverified assertions, not runtime PASS.
         reported = {
             "execution_state": response["execution_state"],
@@ -205,6 +211,15 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
         "external_write_authorized": False, "release_approved": False,
         "operator_must_provide_isolated_test_machine": True,
     }
+    # Preserve the exact bounded adapter response so an independent evaluator
+    # can inspect actual bytes, not just a self-reported summary or digest.
+    # Synthetic TEST data only. Private outputs require approved private storage.
+    if response_bytes is not None:
+        raw_path = run_dir / "adapter-response.json"
+        with raw_path.open("xb") as handle:
+            handle.write(response_bytes)
+        raw_path.chmod(0o600)
+        record["adapter_response_path"] = raw_path.name
     target = run_dir / "record.json"
     # Atomic snapshot. Never overwrite existing evidence.
     temp = run_dir / "record.json.pending"
@@ -212,6 +227,7 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
         json.dump(record, handle, sort_keys=True, indent=2, ensure_ascii=False)
         handle.write("\n")
     temp.rename(target)
+    target.chmod(0o600)
     return {"status": status, "record_path": target.as_posix(),
             "model_behavior_verdict": "NOT_EVALUATED"}
 
