@@ -63,6 +63,11 @@ class BrowserEvidenceTests(unittest.TestCase):
         tool = self.root / f"{kind}.tool.json"
         accessible = self.root / f"{kind}.accessibility.json"
         screenshot = self.root / f"{kind}.png"
+        raw_output = self.root / f"{kind}.output.json"
+        chart_payload = self.root / f"{kind}.chart.png"
+        corr = f"{kind}-fixture-call"
+        raw_output.write_text(json.dumps(expected), encoding="utf-8")
+        chart_payload.write_bytes(PNG + b"-" + kind.encode())
         tool.write_text(json.dumps({
             "tool_receipt": {
                 "tool_name": mod.TOOLS[kind],
@@ -70,11 +75,15 @@ class BrowserEvidenceTests(unittest.TestCase):
                 "artifact_state": "rendered",
                 "client_display_state": "not_observable",
                 "source_revision": SOURCE,
+                "release_id": self.lock["release_id"],
+                "payload_content_sha256": DIGEST,
+                "correlation_id": corr,
+                "output_sha256": hashlib.sha256(raw_output.read_bytes()).hexdigest(),
+                "chart_payload_sha256": hashlib.sha256(chart_payload.read_bytes()).hexdigest(),
             },
         }), encoding="utf-8")
         accessible.write_text(json.dumps(expected), encoding="utf-8")
         screenshot.write_bytes(PNG)
-        corr = f"{kind}-fixture-call"
         self.capture["chart_checks"].append({
             "kind": kind, "correlation_id": corr,
             "tool_call_correlation_id": corr,
@@ -86,6 +95,10 @@ class BrowserEvidenceTests(unittest.TestCase):
             "screenshot_sha256": hashlib.sha256(screenshot.read_bytes()).hexdigest(),
             "accessibility_path": accessible.name,
             "accessibility_sha256": hashlib.sha256(accessible.read_bytes()).hexdigest(),
+            "tool_output_path": raw_output.name,
+            "tool_output_sha256": hashlib.sha256(raw_output.read_bytes()).hexdigest(),
+            "chart_payload_path": chart_payload.name,
+            "chart_payload_sha256": hashlib.sha256(chart_payload.read_bytes()).hexdigest(),
             "expected_data": expected,
         })
 
@@ -145,6 +158,42 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.capture["chart_checks"][0]["screenshot_path"] = "bar.png"
         original.unlink()
         original.symlink_to(self.root / "line.png")
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+
+    def test_raw_tool_output_values_do_not_match_accessible_ui(self):
+        tool_output = self.root / "bar.output.json"
+        forged = {"title": "Signed bar fixture", "labels": ["negative", "zero", "positive"], "values": [5, 0, 3]}
+        tool_output.write_text(json.dumps(forged), encoding="utf-8")
+        check = self.capture["chart_checks"][0]
+        check["tool_output_sha256"] = hashlib.sha256(tool_output.read_bytes()).hexdigest()
+        tool_path = self.root / check["tool_receipt_path"]
+        receipt = json.loads(tool_path.read_text())
+        receipt["tool_receipt"]["output_sha256"] = check["tool_output_sha256"]
+        tool_path.write_text(json.dumps(receipt), encoding="utf-8")
+        check["tool_receipt_sha256"] = hashlib.sha256(tool_path.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+
+    def test_chart_payload_digest_and_call_correlation_mismatch_block(self):
+        check = self.capture["chart_checks"][0]
+        chart = self.root / check["chart_payload_path"]
+        chart.write_bytes(PNG + b"tampered")
+        check["chart_payload_sha256"] = hashlib.sha256(chart.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        self.create_check("bar", {"title":"Signed bar fixture","labels":["negative","zero","positive"],"values":[-5,0,3]})
+        # Replace the old check with the freshly created fixture.
+        self.capture["chart_checks"][0] = self.capture["chart_checks"].pop()
+        tool_path = self.root / "bar.tool.json"
+        receipt = json.loads(tool_path.read_text())
+        receipt["tool_receipt"]["correlation_id"] = "forged-call"
+        tool_path.write_text(json.dumps(receipt), encoding="utf-8")
+        self.capture["chart_checks"][0]["tool_receipt_sha256"] = hashlib.sha256(tool_path.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+
+    def test_missing_renderer_artifact_and_path_escaping_block(self):
+        check = self.capture["chart_checks"][0]
+        (self.root / check["chart_payload_path"]).unlink()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        check["tool_output_path"] = "../outside.json"
         self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
     def test_stale_capture_and_missing_chat_reference_block(self):
