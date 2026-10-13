@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import hashlib
 import json
+import re
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
@@ -71,6 +72,21 @@ def _runtime_value(name: str, default: str = "unattested") -> str:
     value = os.environ.get(name, "").strip()
     return value or default
 
+
+def _runtime_identity_is_well_formed(values: Mapping[str, str]) -> bool:
+    """Validate unsigned runtime identity fields, not deployment authenticity."""
+    if any(values.get(field) in {None, "", "unattested", "unknown"} for field in RUNTIME_FIELDS):
+        return False
+    if not re.fullmatch(r"[0-9a-f]{40}", values["source_revision"]):
+        return False
+    digest = values["tool_schema_digest"].removeprefix("sha256:")
+    if not re.fullmatch(r"[0-9a-f]{64}", digest):
+        return False
+    try:
+        observed = datetime.fromisoformat(values["deployed_at"].replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return False
+    return observed.tzinfo is not None
 
 def _digest_value(value: Any) -> Any:
     """Return a stable, content-only representation suitable for receipt hashing."""
@@ -170,10 +186,10 @@ def runtime_info() -> dict[str, str]:
         "deployed_at": _runtime_value("SKILLS_FACTORY_DEPLOYED_AT"),
     }
     values["attestation_status"] = (
-        "verified"
-        if all(values[field] not in {"unattested", "unknown"} for field in RUNTIME_FIELDS)
-        else "unattested"
+        "verified" if _runtime_identity_is_well_formed(values) else "unattested"
     )
+    values["attestation_basis"] = "unsigned_runtime_environment_fields_only"
+    values["installation_behavior_verified"] = False
     return _with_tool_receipt("runtime_info", {}, values)
 
 
