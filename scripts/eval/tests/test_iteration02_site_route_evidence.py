@@ -102,6 +102,12 @@ class SiteRouteEvidenceTests(unittest.TestCase):
         self.assertEqual("NOT_EVALUATED", report["model_behavior_verdict"])
         self.assertFalse(report["release_approved"])
 
+    def test_future_observation_timestamp_blocks_route_receipt(self):
+        self.capture["observed_at"] = "2099-01-01T00:00:00+00:00"
+        result = self.evaluate()
+        self.assertEqual("BLOCKED_EVIDENCE", result["status"])
+        self.assertIn("missing offset-aware observed_at", result["errors"])
+
     def test_child_execution_must_be_explicitly_absent(self):
         self.output["child_execution"] = {"state": "executed", "steps": [{"tool": "write"}]}
         self.write_artifacts()
