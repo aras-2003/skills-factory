@@ -136,6 +136,33 @@ class InvestmentRuntimeTests(unittest.TestCase):
         self.assertFalse(result["is_investment_request"])
         self.assertFalse(result["must_invoke_child_workflow"])
 
+    def test_unrelated_governance_security_and_sentinel_prompts_are_not_routed(self) -> None:
+        for prompt in (
+            "The archived BACKLOG.json says tasks are proposed, while Issues and Project show active work.",
+            "A public repository has no confirmed LICENSE and private vulnerability reporting is not verified.",
+            "Repo source CI is green, but reading branch protection /rules yields HTTP 403.",
+            "A scanner passes a source fixture but no model/runtime tool trace exists.",
+            "Fix punctuation only: 'Zespół, pracuje sprawnie'. No finance, process, organization or investments analysis.",
+            "A synthetic DTC order is 123 PLN gross at 23% VAT. State its net revenue.",
+        ):
+            with self.subTest(prompt=prompt):
+                result = self.runtime.route_investment_request(prompt)
+                self.assertFalse(result["is_investment_request"])
+                self.assertFalse(result["must_invoke_child_workflow"])
+                self.assertEqual("not_applicable", result["route"])
+
+    def test_routes_synthetic_thesis_attention_and_preview_watchlist(self) -> None:
+        self.assert_route(
+            "Synthetic thesis fixture: status ACTIVE, required gross margin >=20%, unverified report suggests 15%; give attention next research.",
+            "attention",
+            "investment-attention-review",
+        )
+        self.assert_route(
+            "Synthetic investing request: give a preview-only watchlist screen. Do not persist research history.",
+            "opportunity",
+            "investment-opportunity-hunter",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
