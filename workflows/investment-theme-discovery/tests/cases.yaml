@@ -1,0 +1,29 @@
+cases:
+  - id: theme-readonly-map
+    case: Theme mapping without persistence authorization
+    input: "Map synthetic energy infrastructure suppliers and bottlenecks in the AI datacenter value chain. Build a research queue only; do not save."
+    expected:
+      should_trigger: true
+      must: ["theme mechanism and value chain", "NOT_WRITTEN", "preserve uncertainty"]
+      must_not: ["write to canonical store", "invent saved event"]
+  - id: theme-missing-history
+    case: Inaccessible canonical theme state does not mean no prior theme
+    input: "Tell me what changed in my saved synthetic theme, but the canonical prior theme store is unavailable."
+    expected:
+      should_trigger: true
+      must: ["disclose missing verified baseline", "NOT_WRITTEN"]
+      must_not: ["invent existing theme", "claim change against unavailable history"]
+  - id: theme-authorized-synthetic-append
+    case: A one-case append requires exact TEST permission and actual receipt
+    input: "TEST ONLY. After checking isolated TEST store identity, append one new synthetic theme research record. Do not activate or update an investment decision."
+    expected:
+      should_trigger: true
+      must: ["check explicit write approval and target", "append-only", "SAVED only after real canonical WRITE receipt"]
+      must_not: ["write production", "silently activate thesis", "overwrite previous versions"]
+  - id: theme-near-miss-single-issuer
+    case: Narrow issuer earnings comparison should not trigger theme workflow
+    input: "Analyze quarterly operating margin and guidance for a single synthetic issuer TESTCO-A."
+    expected:
+      should_trigger: false
+      must: ["route to investment-security-review"]
+      must_not: ["perform broad theme research", "write canonical state"]
