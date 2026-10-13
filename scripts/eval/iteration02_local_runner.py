@@ -132,15 +132,25 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
     try:
         run_dir.mkdir(mode=0o700)  # atomic reservation: duplicate invocation never reruns
     except FileExistsError:
+        if run_dir.is_symlink() or not run_dir.is_dir():
+            raise RunBlocked("unsafe prior attempt directory")
         recorded = run_dir / "record.json"
         if not _regular(recorded):
             raise RunBlocked("incomplete prior run; manual recovery required, no automatic retry")
         previous = json.loads(recorded.read_text(encoding="utf-8"))
         if (previous.get("source_revision") != lock["source_revision"]
+                or previous.get("release_id") != lock["release_id"]
+                or previous.get("payload_content_sha256") != lock["payload_content_sha256"]
                 or previous.get("case_id") != case_id or previous.get("attempt") != attempt
                 or previous.get("input_sha256") != item["input_sha256"]
+                or previous.get("rubric_sha256") != item["rubric_sha256"]
                 or previous.get("adapter_sha256") != adapter_sha256):
             raise RunBlocked("prior run identity mismatch; refuse overwrite")
+        if previous.get("status") == "ADAPTER_REPORTED_EXECUTED_REVIEW_REQUIRED":
+            raw = run_dir / "adapter-response.json"
+            details = previous.get("reported") or {}
+            if not _regular(raw) or sha(raw.read_bytes()) != details.get("response_sha256"):
+                raise RunBlocked("prior adapter evidence was modified or lost")
         previous_status = previous.get("status")
         replay_status = ("ALREADY_ARCHIVED_NO_REEXECUTION"
                          if previous_status == "ADAPTER_REPORTED_EXECUTED_REVIEW_REQUIRED"
