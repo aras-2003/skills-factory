@@ -152,6 +152,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "nowe spółki", "nowe spolki", "kandydatów do researchu",
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
         "watchlist screen", "screen my watchlist", "screen watchlist",
+        "preview the screen", "preview-only screen", "screen these candidates",
     )
     observation = _contains(
         text,
