@@ -91,6 +91,9 @@ class LocalRunnerControllerTests(unittest.TestCase):
         self.assertFalse(report["provider_execution_attested"])
         self.assertFalse(report["release_approved"])
         self.assertEqual(1, report["reported"]["steps_reported"])
+        raw_response = (run / "adapter-response.json").read_bytes()
+        self.assertEqual(hashlib.sha256(raw_response).hexdigest(),
+                         report["reported"]["response_sha256"])
         self.assertEqual(1, (run / "called.marker").read_text().count("call"))
         second = self.call()
         self.assertEqual("ALREADY_ARCHIVED_NO_REEXECUTION", second["status"])
@@ -129,7 +132,7 @@ class LocalRunnerControllerTests(unittest.TestCase):
         result = self.call()
         self.assertEqual("BLOCKED_ADAPTER", result["status"])
         self.assertEqual("NOT_EVALUATED", result["model_behavior_verdict"])
-        self.assertEqual("ALREADY_ARCHIVED_NO_REEXECUTION", self.call()["status"])
+        self.assertEqual("PRIOR_BLOCKED_NO_REEXECUTION", self.call()["status"])
 
     def test_adapter_claim_with_wrong_source_blocks(self):
         self.write_adapter(stale=True)
