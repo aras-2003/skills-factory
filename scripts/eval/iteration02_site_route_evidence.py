@@ -61,7 +61,8 @@ def iso_time(value: object) -> bool:
         t = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
     except ValueError:
         return False
-    return t.tzinfo is not None
+    return (t.tzinfo is not None and t.utcoffset() is not None
+            and t <= dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=5))
 
 
 def assess(lock: object, capture: object, root: Path) -> dict:
