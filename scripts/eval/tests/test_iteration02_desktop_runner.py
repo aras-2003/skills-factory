@@ -135,6 +135,13 @@ class DesktopAdapterTests(unittest.TestCase):
                     self.execute()
         self.assertFalse(self.archive.exists())
 
+    def test_previously_executed_external_case_is_not_dispatched(self):
+        self.item["execution_state"] = "executed"
+        self.save_lock()
+        with self.assertRaisesRegex(desktop.RunBlocked, "pristine, pinned"):
+            self.execute()
+        self.assertFalse(self.archive.exists())
+
     def test_installed_identity_must_match_and_be_fresh(self):
         self.raw_identity["source_revision"] = "f" * 40
         self.save_identity()
