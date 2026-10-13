@@ -1,10 +1,10 @@
 # Public repository governance (ENG-21)
 
-Status: **PARTIAL — maintainer decisions required**. This page describes the source governance baseline, not a verified GitHub branch-protection configuration or an independent security audit.
+Status: **PARTIAL — distribution and intake resolved; closing review pending**. This page describes the source governance baseline, not an independent security audit.
 
 ## Distribution and licensing decision
 
-The repository is public, but **public visibility does not itself grant an open-source license**. No `LICENSE` file was present at the repository root at the source inspection on 2026-10-12. The owner has not authorized choosing a license in this iteration. Until a documented decision, do not describe this project as MIT/Apache/GPL licensed or assume redistribution rights. Owner decision: open source under an explicitly chosen license, reference-only access, or another policy, after reviewing third-party assets and dependencies.
+The owner approved **D1-A, personal/proprietary toolkit with no general third-party reuse grant**; see the [decision record](../DISTRIBUTION-LICENSE-DECISION.md). Public visibility, applicable law, GitHub platform rights and third-party licenses are unaffected. Do not describe this project as MIT/Apache/GPL licensed or invent a proprietary license text.
 
 ## Responsibility and review capacity
 
@@ -20,9 +20,9 @@ The repository is public, but **public visibility does not itself grant an open-
 
 ## Outstanding owner/admin gates
 
-- Choose and approve license/distribution rights. **NOT_DECIDED**.
-- Verify GitHub private vulnerability reporting works; otherwise establish an actual private contact route. **UNVERIFIED**.
-- Read back branch protection, required checks and review requirements for `main`/`production` with sufficient GitHub permissions; do not claim them from the CODEOWNERS file. **UNVERIFIED**.
-- Verify whether another qualified reviewer is available; until then, report independent review as **NOT_VERIFIED**.
+- Distribution choice: **OWNER_APPROVED D1-A**, recorded 2026-10-14.
+- Private vulnerability intake: **ENABLED, UI readback 2026-10-14**. The owner approved D2-A; the existing enabled setting needed no change. No fictitious vulnerability report was submitted.
+- Branch protection: **API + UI READBACK 2026-10-14**. Both branches require PRs, current branches, required checks, prohibit force pushes/deletion and enforce rules for admins. `main`: `validate` and `domain`; `production`: additionally `promotion`. Approval count is zero and conversation resolution is not required. The connector's historical HTTP 403 is preserved; authenticated GitHub CLI API reads supplied the authoritative current configuration. See the [evidence report](../../evals/results/iteration-01-safety-governance-2026-10/2026-10-14-continuation-report.md).
+- Review capacity: owner selected **D4-A, explicit sole-maintainer closing review**. Independence remains **NOT_VERIFIED**. This selects the reviewer; it does not sign the final candidate or waive failed/blocked criteria.
 
 Related: [ENG-21 #249](https://github.com/aras-2003/skills-factory/issues/249), [ENG-20 #248](https://github.com/aras-2003/skills-factory/issues/248).

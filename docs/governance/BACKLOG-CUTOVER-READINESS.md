@@ -22,3 +22,11 @@
 - Older backlog files = historical sources, never runtime PASS evidence.
 
 **Status: ID-MAPPED, CUTOVER BLOCKED.** Migration completeness of IDs is not repository-cleanup readiness.
+
+## Native Iteration readback — 2026-10-14
+
+Project #1, view “By Iteration”, showed **01 | Safety + governance**, dated **2026-10-09 through 2026-10-22**, with ten native items: #160, #233, #234, #245, #246, #248, #249, #258, #291 and #303. Priority, Size, Area and Status were visible for all ten; #233 was Done, #160/#258 In progress, and the other seven Validation. This is a bounded native readback, not a claim of 90/90 membership or dependencies.
+
+The source-bound legacy-map validator again passed with 90 distinct historical IDs mapped to 90 unique Issues. The initial full Project read lacked `read:project`; the owner subsequently approved adding only that scope and completed GitHub authentication. The resulting native API read contains 140 Project items and confirms **90/90 mapped Issues present exactly once**. All mapped items expose Priority, Area and Status; ENG-22/#335 has no Size or Iteration. Those fields were not invented for an untriaged, review-required item.
+
+Native `blockedBy`, `blocking`, `subIssues` and `parent` reads completed for all 90 Issues without pagination or missing nodes: every relationship was empty. The historical source contains **153 proposed dependency edges**. These are not automatically current intended dependencies; their disposition still needs reconciliation. Membership is verified, but field completeness, dependency reconciliation, overlap review and owner cutover remain open. See the [public continuation summary](../../evals/results/iteration-01-safety-governance-2026-10/2026-10-14-continuation-report.md); native readback and dependency receipts are retained in the owner's local private evidence package.
