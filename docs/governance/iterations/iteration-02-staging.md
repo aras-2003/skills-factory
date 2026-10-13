@@ -32,6 +32,21 @@
 
 `PARTIAL` means a real source/test increment exists but full acceptance is **not** established. `NOT_RUN` means missing real runtime evidence, not a PASS/FAIL. `BLOCKED` means a required tool, provider, permission, or independent trace is unavailable; it is not an instruction to deploy or bypass controls.
 
+## Exact-revision TEST handoff envelopes
+
+- Source CI builds a Lab executor-only pack with 11 Lab cases, locked prompts,
+  prompt/rubric digest separation and release/source identity. Lab execution is NOT_RUN.
+- The separate **iteration-02-external-handoff-<SOURCE_REVISION>** artifact contains
+  seven synthetic input-only cases across Site, browser, Desktop and Production.
+  No evaluator rubrics or provider credentials are sent; every external case
+  is BLOCKED_PENDING_APPROVAL_AND_INSTALLED_IDENTITY. A generated prompt is
+  **not** permission to invoke Production or a client.
+- Source-only Site promotion/rollback preflight is at
+  docs/testing/ITERATION-02-SITE-PROMOTION.md; it cannot publish or attest a deploy.
+- This validation package can be used to plan the whole 18-case campaign;
+  independent per-provider execution, traces, rubric assessment and human
+  acceptance are *separate* prerequisites. Use PR #340 for combined source
+  checks across PR #338 and PR #339. No merge to main has occurred.
 ## TEST acceptance sequence
 
 1. Freeze the **prospective** issue/case scope and named owner/reviewer once Iteration 01 has been formally closed or explicitly ABORTED. Do not reconstruct a prior lock date.
