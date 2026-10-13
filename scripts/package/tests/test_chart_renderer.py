@@ -53,11 +53,83 @@ class ChartRendererTests(unittest.TestCase):
         )
         self._assert_png_result(result)
 
+    def test_zero_and_negative_values_are_preserved_in_chart_payload(self) -> None:
+        image = self.renderer.render_bar_chart(
+            labels=["zero", "negative", "positive"], values=[0, -5, 3],
+            title="Signed bar chart",
+        )
+        self._assert_png_result(image)
+        line = self.renderer.render_line_chart(
+            x_labels=["first", "second"], series_names=["series"],
+            series_values=[[-2.0, 0.0]], title="Signed line chart",
+        )
+        self._assert_png_result(line)
+
+    def test_malformed_labels_and_bad_titles_fail_before_render(self) -> None:
+        for bad in (["A", 42], [""], "not-a-list"):
+            with self.subTest(bad=bad):
+                with self.assertRaises(Exception):
+                    self.renderer.render_bar_chart(labels=bad, values=[1] * len(bad))
+        with self.assertRaises(Exception):
+            self.renderer.render_bar_chart(labels=["A"], values=[1], title=chr(0) + "bad")
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(x_labels=["first"], series_names=["s"], series_values=[[1]])
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(x_labels=["x", "y"], series_names=[None], series_values=[[1, 2]])
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(x_labels=["x", "y"], series_names=["s"], series_values=[123])
+
     def test_invalid_parallel_data_fails_closed(self) -> None:
         with self.assertRaises(Exception):
             self.renderer.render_bar_chart(
                 labels=["A", "B"],
                 values=[1.0],
+            )
+
+    def test_site_compatible_chart_boundaries(self) -> None:
+        # Smallest and upper-limit numeric values must be representable.
+        self._assert_png_result(self.renderer.render_bar_chart(
+            labels=["lower", "upper"], values=[-1_000_000_000_000, 1_000_000_000_000],
+            unit="PLN",
+        ))
+        self._assert_png_result(self.renderer.render_line_chart(
+            x_labels=["before", "after"], series_names=["synthetic"],
+            series_values=[[-1_000_000_000_000, 1_000_000_000_000]],
+        ))
+
+    def test_rejects_values_outside_site_schema_limits(self) -> None:
+        for value in (-1_000_000_000_000.01, 1_000_000_000_000.01):
+            with self.subTest(value=value):
+                with self.assertRaises(Exception):
+                    self.renderer.render_bar_chart(labels=["a"], values=[value])
+                with self.assertRaises(Exception):
+                    self.renderer.render_line_chart(
+                        x_labels=["a", "b"], series_names=["s"],
+                        series_values=[[0, value]],
+                    )
+
+    def test_rejects_site_incompatible_dimensions(self) -> None:
+        with self.assertRaises(Exception):
+            self.renderer.render_bar_chart(
+                labels=["item"] * 61, values=[1] * 61,
+            )
+        with self.assertRaises(Exception):
+            self.renderer.render_bar_chart(labels=["a"], values=[1], unit="x" * 31)
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(
+                x_labels=[str(x) for x in range(101)], series_names=["s"],
+                series_values=[[1] * 101],
+            )
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(
+                x_labels=["before", "after"],
+                series_names=[f"s{i}" for i in range(9)],
+                series_values=[[1, 2]] * 9,
+            )
+        with self.assertRaises(Exception):
+            self.renderer.render_line_chart(
+                x_labels=["before", "after"], series_names=["s"],
+                series_values=[[1, 2]], unit="x" * 31,
             )
 
     def test_non_finite_and_boolean_chart_values_fail_closed(self) -> None:
