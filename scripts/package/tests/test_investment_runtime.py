@@ -163,6 +163,14 @@ class InvestmentRuntimeTests(unittest.TestCase):
             "investment-opportunity-hunter",
         )
 
+    def test_candidate_screen_is_not_misrouted_by_incidental_xtb_history(self) -> None:
+        self.assert_route(
+            "Synthetic investing request: Candidate TESTCO-A has two synthetic confirmed contracts and a growing synthetic backlog; "
+            "margins, valuation and XTB history are UNKNOWN. Preview the screen and preserve uncertainty.",
+            "opportunity",
+            "investment-opportunity-hunter",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
