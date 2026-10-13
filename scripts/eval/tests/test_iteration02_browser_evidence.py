@@ -1,35 +1,22 @@
 from __future__ import annotations
 
-import copy
+import datetime as dt
 import hashlib
 import importlib.util
 import json
-import os
 import tempfile
 import unittest
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location("iteration02_browser_evidence", HERE / "iteration02_browser_evidence.py")
-checker = importlib.util.module_from_spec(spec)
+FILE = Path(__file__).resolve().parents[1] / "iteration02_browser_evidence.py"
+spec = importlib.util.spec_from_file_location("iteration02_browser_evidence", FILE)
+mod = importlib.util.module_from_spec(spec)
 assert spec.loader
-spec.loader.exec_module(checker)
+spec.loader.exec_module(mod)
 
-SRC = "a" * 40
-PAYLOAD = "b" * 64
-INPUT = "c" * 64
-RUBRIC = "d" * 64
-DATA = "f" * 64
-CASE = "I02-254-charts"
-PNG = b"\x89PNG\r\n\x1a\n" + b"synthetic-bitmap-fixture-no-real-client-UI"
-CHART_PNG = PNG + b"-chart"
-RAW_TOOL_OUTPUT = b'{"fixture":true,"state":"synthetic_output"}'
-CHART = hashlib.sha256(CHART_PNG).hexdigest()
-OUTPUT = hashlib.sha256(RAW_TOOL_OUTPUT).hexdigest()
-
-
-def sha(payload: bytes) -> str:
-    return hashlib.sha256(payload).hexdigest()
+SOURCE = "a" * 40
+DIGEST = "b" * 64
+PNG = b"\x89PNG\r\n\x1a\n" + b"synthetic-fixture-not-a-real-screenshot"
 
 
 class BrowserEvidenceTests(unittest.TestCase):
@@ -37,175 +24,191 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
+        self.now = dt.datetime(2026, 10, 13, 12, 0, tzinfo=dt.timezone.utc)
+        self.case_id = "I02-254-charts"
         self.lock = {
-            "kind": "external_test_inputs_only",
-            "source_revision": SRC, "release_id": "fixture-1",
-            "payload_content_sha256": PAYLOAD,
-            "provider_calls_executed": False, "runtime_evidence": "NOT_RUN",
+            "source_revision": SOURCE, "release_id": "synthetic-release",
+            "payload_content_sha256": DIGEST, "runtime_evidence": "NOT_RUN",
+            "release_approved": False,
             "cases": [{
-                "case_id": CASE, "channel": "browser", "repetitions": 3,
-                "input_sha256": INPUT, "rubric_sha256": RUBRIC,
+                "case_id": self.case_id, "channel": "browser",
+                "input_sha256": DIGEST, "repetitions": 1,
             }],
         }
-        self.observation = {
-            "case_id": CASE, "attempt": 1, "channel": "browser",
-            "source_revision": SRC, "release_id": "fixture-1",
-            "payload_content_sha256": PAYLOAD,
-            "input_sha256": INPUT, "rubric_sha256": RUBRIC,
-            "execution_state": "executed", "decision": "REVIEW_REQUIRED",
-            "observation_source": "synthetic reference ONLY - not verified provider",
-            "approval_reference": "synthetic TEST-only fixture",
-            "executor": "simulated-executor", "evaluator": "separate-simulated-reviewer",
-            "observed_at": "2026-10-13T12:30:00+02:00",
-            "correlation_id": "fixture-corr-123",
+        self.capture = {
+            "case_id": self.case_id,
+            "source_revision": SOURCE, "release_id": "synthetic-release",
+            "payload_content_sha256": DIGEST,
+            "input_sha256": DIGEST,
+            "installed_attestation": "verified",
+            "installed_observation_reference": "synthetic identity receipt",
+            "capture_source": "synthetic browser test harness only",
+            "chat_reference": "test://fixture/not-real-chat-url",
+            "captured_at": "2026-10-13T12:00:00Z",
+            "chart_checks": [],
         }
-        self.trace = {
-            "case_id": CASE, "attempt": 1,
-            "source_revision": SRC, "release_id": "fixture-1",
-            "payload_content_sha256": PAYLOAD, "input_sha256": INPUT,
-            "correlation_id": "fixture-corr-123",
-            "tool_calls": [{
-                "id": "call-1", "tool_name": "render_line_chart",
-                "execution_state": "executed", "output_sha256": OUTPUT,
-                "chart_payload_sha256": CHART, "normalized_data_sha256": DATA,
-            }],
-        }
-        self.client = {
-            "case_id": CASE, "attempt": 1,
-            "source_revision": SRC, "release_id": "fixture-1",
-            "payload_content_sha256": PAYLOAD, "input_sha256": INPUT,
-            "correlation_id": "fixture-corr-123",
-            "observed_tool_call_id": "call-1", "client_display_state": "observed",
-            "accessible_text": "fixture title, negative zero positive values",
-            "chart_payload_sha256": CHART, "normalized_data_sha256": DATA,
-        }
-        self.write_evidence()
+        self.create_check("bar", {
+            "title": "Signed bar fixture",
+            "labels": ["negative", "zero", "positive"],
+            "values": [-5, 0, 3],
+        })
+        self.create_check("line", {
+            "title": "Signed line fixture",
+            "x_labels": ["before", "after"],
+            "series_names": ["synthetic"],
+            "series_values": [[-2, 0]],
+        })
 
-    def store(self, rel, contents, *, raw=False):
-        path = self.root / rel
-        path.parent.mkdir(parents=True, exist_ok=True)
-        data = contents if raw else json.dumps(contents, sort_keys=True).encode("utf-8")
-        path.write_bytes(data)
-        return {"path": rel, "sha256": sha(data)}
+    def create_check(self, kind, expected):
+        tool = self.root / f"{kind}.tool.json"
+        accessible = self.root / f"{kind}.accessibility.json"
+        screenshot = self.root / f"{kind}.png"
+        raw_output = self.root / f"{kind}.output.json"
+        chart_payload = self.root / f"{kind}.chart.png"
+        corr = f"{kind}-fixture-call"
+        raw_output.write_text(json.dumps(expected), encoding="utf-8")
+        chart_payload.write_bytes(PNG + b"-" + kind.encode())
+        tool.write_text(json.dumps({
+            "tool_receipt": {
+                "tool_name": mod.TOOLS[kind],
+                "execution_state": "executed", "status": "SUCCESS",
+                "artifact_state": "rendered",
+                "client_display_state": "not_observable",
+                "source_revision": SOURCE,
+                "release_id": self.lock["release_id"],
+                "payload_content_sha256": DIGEST,
+                "correlation_id": corr,
+                "output_sha256": hashlib.sha256(raw_output.read_bytes()).hexdigest(),
+                "chart_payload_sha256": hashlib.sha256(chart_payload.read_bytes()).hexdigest(),
+            },
+        }), encoding="utf-8")
+        accessible.write_text(json.dumps(expected), encoding="utf-8")
+        screenshot.write_bytes(PNG)
+        self.capture["chart_checks"].append({
+            "kind": kind, "correlation_id": corr,
+            "tool_call_correlation_id": corr,
+            "client_capture_correlation_id": corr,
+            "client_display_state": "observed",
+            "tool_receipt_path": tool.name,
+            "tool_receipt_sha256": hashlib.sha256(tool.read_bytes()).hexdigest(),
+            "screenshot_path": screenshot.name,
+            "screenshot_sha256": hashlib.sha256(screenshot.read_bytes()).hexdigest(),
+            "accessibility_path": accessible.name,
+            "accessibility_sha256": hashlib.sha256(accessible.read_bytes()).hexdigest(),
+            "tool_output_path": raw_output.name,
+            "tool_output_sha256": hashlib.sha256(raw_output.read_bytes()).hexdigest(),
+            "chart_payload_path": chart_payload.name,
+            "chart_payload_sha256": hashlib.sha256(chart_payload.read_bytes()).hexdigest(),
+            "expected_data": expected,
+        })
 
-    def write_evidence(self):
-        self.observation["trace"] = self.store("trace.json", self.trace)
-        self.observation["client"] = self.store("client.json", self.client)
-        self.observation["capture"] = self.store("screen.png", PNG, raw=True)
-        self.observation["tool_output"] = self.store("output.json", RAW_TOOL_OUTPUT, raw=True)
-        self.observation["chart"] = self.store("chart.png", CHART_PNG, raw=True)
+    def assess(self):
+        return mod.assess(self.lock, self.capture, self.root, now=self.now)
 
-    def check(self):
-        return checker.validate(self.lock, [self.observation], self.root)
+    def test_synthetic_complete_is_not_authenticity_or_runtime_pass(self):
+        report = self.assess()
+        self.assertEqual("STRUCTURALLY_CORRELATED_INDEPENDENT_REVIEW_REQUIRED", report["status"], report["issues"])
+        self.assertEqual("NOT_EVALUATED", report["model_behavior_verdict"])
+        self.assertEqual("NOT_VERIFIED", report["screenshot_visual_authenticity"])
+        self.assertFalse(report["release_approved"])
+        self.assertEqual(2, len(report["bound_files"]))
 
-    def test_synthetic_consistent_receipt_remains_unverified(self):
-        result = self.check()
-        self.assertEqual("STRUCTURAL_EVIDENCE_REVIEW_REQUIRED", result["status"], result["errors"])
-        self.assertEqual("NOT_VERIFIED", result["provider_authenticity"])
-        self.assertEqual("NOT_PERFORMED", result["pixel_accessibility_inspection"])
-        self.assertFalse(result["release_approved"])
-        self.assertEqual("NOT_PERFORMED_BY_VALIDATOR", result["runtime_execution"])
+    def test_missing_one_chart_blocks(self):
+        self.capture["chart_checks"].pop()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_empty_receipts_not_pass(self):
-        result = checker.validate(self.lock, [], self.root)
-        self.assertEqual("NO_EXECUTION_EVIDENCE", result["status"])
-
-    def test_stale_site_source_or_release_fails(self):
-        for field, value in [("source_revision", "0" * 40), ("release_id", "other")]:
+    def test_wrong_client_label_or_signed_value_blocks(self):
+        for field, wrong in (("values", [5, 0, 3]), ("labels", ["a", "b", "c"])):
             with self.subTest(field=field):
-                self.observation[field] = value
-                self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-                self.observation[field] = self.lock[field]
+                data = {"title": "Signed bar fixture", "labels": ["negative", "zero", "positive"],
+                        "values": [-5, 0, 3]}
+                data[field] = wrong
+                (self.root / "bar.accessibility.json").write_text(json.dumps(data), encoding="utf-8")
+                # Rebind correct accessibility hash: data mismatch, not hash mismatch.
+                self.capture["chart_checks"][0]["accessibility_sha256"] = hashlib.sha256(
+                    (self.root / "bar.accessibility.json").read_bytes()).hexdigest()
+                self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_wrong_tool_call_id_or_correlation_blocks(self):
-        self.client["observed_tool_call_id"] = "unknown"
-        self.write_evidence()
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.client["observed_tool_call_id"] = "call-1"
-        self.client["correlation_id"] = "another-session"
-        self.write_evidence()
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_mismatched_digest_or_tool_source_blocks(self):
+        self.capture["chart_checks"][0]["screenshot_sha256"] = "f" * 64
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        self.capture["chart_checks"][0]["screenshot_sha256"] = hashlib.sha256(PNG).hexdigest()
+        self.capture["source_revision"] = "c" * 40
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_chart_data_mismatch_blocks(self):
-        self.client["normalized_data_sha256"] = "0" * 64
-        self.write_evidence()
-        result = self.check()
-        self.assertEqual("INVALID_EVIDENCE", result["status"])
-        self.assertTrue(any("normalized data" in x for x in result["errors"]))
+    def test_fabricated_client_display_in_tool_receipt_blocks(self):
+        path = self.root / "bar.tool.json"
+        raw = json.loads(path.read_text())
+        raw["tool_receipt"]["client_display_state"] = "observed"
+        path.write_text(json.dumps(raw), encoding="utf-8")
+        self.capture["chart_checks"][0]["tool_receipt_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_tool_output_file_must_match_selected_tool_trace(self):
-        self.observation["tool_output"] = self.store("output.json", b'{"forged":true}', raw=True)
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_missing_correlated_client_screenshot_blocks(self):
+        self.capture["chart_checks"][0]["client_capture_correlation_id"] = "different"
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        self.capture["chart_checks"][0]["client_capture_correlation_id"] = "bar-fixture-call"
+        (self.root / "bar.png").unlink()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_chart_payload_file_must_match_tool_receipt(self):
-        self.observation["chart"] = self.store("chart.png", PNG + b"forged-content", raw=True)
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_path_traversal_and_symlink_block(self):
+        self.capture["chart_checks"][0]["screenshot_path"] = "../outside.png"
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        original = self.root / "bar.png"
+        self.capture["chart_checks"][0]["screenshot_path"] = "bar.png"
+        original.unlink()
+        original.symlink_to(self.root / "line.png")
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_missing_chart_payload_or_traversal_blocks(self):
-        self.observation.pop("chart")
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.write_evidence()
-        self.observation["tool_output"]["path"] = "../outside.json"
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_raw_tool_output_values_do_not_match_accessible_ui(self):
+        tool_output = self.root / "bar.output.json"
+        forged = {"title": "Signed bar fixture", "labels": ["negative", "zero", "positive"], "values": [5, 0, 3]}
+        tool_output.write_text(json.dumps(forged), encoding="utf-8")
+        check = self.capture["chart_checks"][0]
+        check["tool_output_sha256"] = hashlib.sha256(tool_output.read_bytes()).hexdigest()
+        tool_path = self.root / check["tool_receipt_path"]
+        receipt = json.loads(tool_path.read_text())
+        receipt["tool_receipt"]["output_sha256"] = check["tool_output_sha256"]
+        tool_path.write_text(json.dumps(receipt), encoding="utf-8")
+        check["tool_receipt_sha256"] = hashlib.sha256(tool_path.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_claimed_execution_without_steps_blocks(self):
-        self.trace["tool_calls"] = []
-        self.write_evidence()
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_chart_payload_digest_and_call_correlation_mismatch_block(self):
+        check = self.capture["chart_checks"][0]
+        chart = self.root / check["chart_payload_path"]
+        chart.write_bytes(PNG + b"tampered")
+        check["chart_payload_sha256"] = hashlib.sha256(chart.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        self.create_check("bar", {"title":"Signed bar fixture","labels":["negative","zero","positive"],"values":[-5,0,3]})
+        # Replace the old check with the freshly created fixture.
+        self.capture["chart_checks"][0] = self.capture["chart_checks"].pop()
+        tool_path = self.root / "bar.tool.json"
+        receipt = json.loads(tool_path.read_text())
+        receipt["tool_receipt"]["correlation_id"] = "forged-call"
+        tool_path.write_text(json.dumps(receipt), encoding="utf-8")
+        self.capture["chart_checks"][0]["tool_receipt_sha256"] = hashlib.sha256(tool_path.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_no_client_screenshot_or_bad_hash_blocks(self):
-        os.unlink(self.root / "screen.png")
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.observation["capture"] = self.store("screen.png", b"not an image", raw=True)
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.write_evidence()
-        self.observation["capture"]["sha256"] = "0" * 64
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_missing_renderer_artifact_and_path_escaping_block(self):
+        check = self.capture["chart_checks"][0]
+        (self.root / check["chart_payload_path"]).unlink()
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        check["tool_output_path"] = "../outside.json"
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_symlink_and_outside_evidence_are_rejected(self):
-        (self.root / "screen.png").unlink()
-        other = self.root / "other.png"
-        other.write_bytes(PNG)
-        (self.root / "screen.png").symlink_to(other)
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.observation["capture"] = {"path": "../elsewhere.png", "sha256": sha(PNG)}
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+    def test_stale_capture_and_missing_chat_reference_block(self):
+        self.capture["captured_at"] = "2026-10-09T12:00:00Z"
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        self.capture["captured_at"] = "2026-10-13T12:00:00Z"
+        self.capture["chat_reference"] = ""
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
-    def test_queued_or_false_behavioral_pass_blocks(self):
-        self.observation["execution_state"] = "awaiting_runner"
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.observation["execution_state"] = "executed"
-        self.observation["decision"] = "PASS"
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-
-    def test_approval_and_independent_evaluator_are_required(self):
-        self.observation["approval_reference"] = ""
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.observation["approval_reference"] = "synthetic TEST fixture"
-        self.observation["evaluator"] = self.observation["executor"]
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-
-    def test_nonbrowser_lane_or_duplicate_attempt_blocks(self):
-        self.lock["cases"][0]["channel"] = "desktop"
-        self.observation["channel"] = "desktop"
-        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
-        self.lock["cases"][0]["channel"] = "browser"
-        self.observation["channel"] = "browser"
-        self.assertEqual("INVALID_EVIDENCE",
-                         checker.validate(self.lock, [self.observation, copy.deepcopy(self.observation)], self.root)["status"])
-
-    def test_route_only_site_may_have_no_chart_but_needs_screen_and_tool(self):
-        self.lock["cases"][0].update(case_id="I02-149-cloud-e2e", channel="site")
-        self.observation.update(case_id="I02-149-cloud-e2e", channel="site")
-        self.trace["case_id"] = "I02-149-cloud-e2e"
-        self.trace["tool_calls"][0].pop("chart_payload_sha256")
-        self.trace["tool_calls"][0].pop("normalized_data_sha256")
-        self.client["case_id"] = "I02-149-cloud-e2e"
-        self.client.pop("chart_payload_sha256")
-        self.client.pop("normalized_data_sha256")
-        self.write_evidence()
-        self.observation.pop("chart")
-        self.assertEqual("STRUCTURAL_EVIDENCE_REVIEW_REQUIRED", self.check()["status"])
+    def test_bad_nested_input_blocks_instead_of_crashing(self):
+        self.capture["chart_checks"][0]["kind"] = ["bar"]
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        self.capture["chart_checks"][0]["kind"] = "bar"
+        self.capture["chart_checks"][0]["expected_data"] = None
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
 
 if __name__ == "__main__":
