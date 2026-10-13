@@ -16,8 +16,8 @@ workflow_versions:
 source_case_file: evals/campaigns/iteration-02-workflow-hardening-2026-10/cases.yaml
 required_cases_per_workflow: 4
 required_case_dimensions:
-  - authorized-limited-write
-  - no-write
+  - positive
+  - read-only
   - missing-source
   - near-miss
 release_approved: false
