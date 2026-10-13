@@ -195,8 +195,12 @@ def execute_desktop(
         state, steps = response.get("execution_state"), response.get("steps")
         if state not in {"executed", "blocked", "awaiting_runner", "no_steps", "not_executed"}:
             raise RunBlocked("Desktop adapter execution state invalid")
-        if not isinstance(steps, list) or any(not isinstance(x, dict) for x in steps):
-            raise RunBlocked("Desktop adapter steps malformed")
+        if (not isinstance(steps, list) or len(steps) > 100
+                or any(not isinstance(x, dict)
+                       or not isinstance(x.get("tool"), str) or not x["tool"].strip()
+                       or not isinstance(x.get("status"), str) or not x["status"].strip()
+                       for x in steps)):
+            raise RunBlocked("Desktop adapter steps malformed or unbounded")
         if (state == "executed") != bool(steps):
             raise RunBlocked("Desktop adapter execution state inconsistent with steps")
         info = {"adapter_reported_state": state, "steps_reported": len(steps)}
