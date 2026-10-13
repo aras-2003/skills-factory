@@ -242,9 +242,44 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
             "model_behavior_verdict": "NOT_EVALUATED"}
 
 
+
+def ensure_locked_pack(lab_candidate: Path, pack: Path,
+                       source_root: Path = Path(__file__).resolve().parents[2]) -> dict:
+    """Prepare once from exact Lab; on resume refuse candidate identity drift."""
+    lab_release_path = lab_candidate / "release-manifest.json"
+    if not _regular(lab_release_path):
+        raise RunBlocked("exact Lab candidate manifest required")
+    release = json.loads(lab_release_path.read_text(encoding="utf-8"))
+    if not isinstance(release, dict) or release.get("channel") != "lab":
+        raise RunBlocked("only a Lab candidate can be used")
+    if pack.exists():
+        saved = pack / "lab-plugin/release-manifest.json"
+        if not _regular(saved):
+            raise RunBlocked("existing pack has no frozen Lab release")
+        previous = json.loads(saved.read_text(encoding="utf-8"))
+        if previous != release:
+            raise RunBlocked("existing pack belongs to a different Lab release")
+        return {"prepared": False, "reason": "EXACT_PACK_ALREADY_EXISTS"}
+    # Existing repository contract owns preparation/source SHA/prompt-rubric
+    # isolation. Do not recreate that packaging logic here.
+    import importlib.util
+    source = Path(__file__).with_name("iteration02_handoff.py")
+    spec = importlib.util.spec_from_file_location("iteration02_handoff", source)
+    if spec is None or spec.loader is None:
+        raise RunBlocked("repository handoff packer unavailable")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    lock = module.prepare(lab_candidate, pack, root=source_root)
+    if lock["release_id"] != release.get("release_id"):
+        raise RunBlocked("prepared pack release mismatched provided candidate")
+    return {"prepared": True, "reason": "EXACT_LAB_PACK_PREPARED"}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pack", type=Path, required=True)
+    parser.add_argument("--lab-candidate-dir", type=Path,
+                        help="Prepare exact executor pack if absent, then run case")
     parser.add_argument("--archive-root", type=Path, required=True)
     parser.add_argument("--case-id", required=True)
     parser.add_argument("--attempt", type=int, required=True)
@@ -254,6 +289,8 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=90)
     args = parser.parse_args()
     try:
+        if args.lab_candidate_dir is not None:
+            ensure_locked_pack(args.lab_candidate_dir, args.pack)
         result = run_one(args.pack, args.archive_root, args.case_id, args.attempt,
                          args.adapter, args.adapter_sha256,
                          authorized=args.approve_isolated_lab_exec,
