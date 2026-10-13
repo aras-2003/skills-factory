@@ -61,6 +61,7 @@ class LocalRunnerControllerTests(unittest.TestCase):
         }), encoding="utf-8")
 
     def write_adapter(self, *, state="executed", steps=True, stale=False):
+        revision_expr = "'0' * 40" if stale else "data['source_revision']"
         code = (
             "#!/usr/bin/env python3\n"
             "import json,sys,pathlib\n"
@@ -69,7 +70,7 @@ class LocalRunnerControllerTests(unittest.TestCase):
             f"state={state!r}\n"
             f"steps={{'step':'synthetic_adapter_only'}} if {steps!r} else None\n"
             "out={'case_id':data['case_id'],'attempt':data['attempt'],"
-            f"'source_revision':{'\"0\"*40' if stale else 'data[\"source_revision\"]'},"
+            f"'source_revision':{revision_expr},"
             "'execution_state':state,'steps':[steps] if steps else []}\n"
             "print(json.dumps(out))\n"
         )
