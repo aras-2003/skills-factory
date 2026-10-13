@@ -127,8 +127,17 @@ def execute_desktop(
     lock, item, prompt = verify_external_case(package, case_id, attempt)
     identity, identity_sha256 = verify_installed_identity(identity_path, lock, now=now)
     exe = verify_adapter(adapter, adapter_sha256)
-    target = archive / "desktop" / case_id / f"{attempt:03d}"
-    target.parent.mkdir(parents=True, exist_ok=True)
+    # Never let an existing symlink redirect evidence outside the archive.
+    archive.mkdir(mode=0o700, parents=True, exist_ok=True)
+    desktop_dir = archive / "desktop"
+    if desktop_dir.is_symlink():
+        raise RunBlocked("Desktop archive directory must not be symlink")
+    desktop_dir.mkdir(mode=0o700, exist_ok=True)
+    runs = desktop_dir / case_id
+    if runs.is_symlink():
+        raise RunBlocked("Desktop case archive directory must not be symlink")
+    runs.mkdir(mode=0o700, exist_ok=True)
+    target = runs / f"{attempt:03d}"
     try:
         target.mkdir(mode=0o700)
     except FileExistsError:
