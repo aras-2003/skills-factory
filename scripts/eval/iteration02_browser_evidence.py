@@ -113,7 +113,7 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
             continue
         kind = check.get("kind")
         corr = check.get("correlation_id")
-        if kind not in TOOLS or not isinstance(corr, str) or not corr.strip() or corr in correlations:
+        if not isinstance(kind, str) or kind not in TOOLS or not isinstance(corr, str) or not corr.strip() or corr in correlations:
             issues.append(prefix + " unsupported/duplicate correlation")
             continue
         correlations.add(corr)
@@ -149,9 +149,9 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
         if not isinstance(expected, dict) or not content_matches(kind, accessibility, expected):
             issues.append(prefix + ": accessible UI does not match frozen expected numbers/labels/title")
         if case == "I02-254-charts":
-            if kind == "bar" and (expected.get("values") != [-5, 0, 3]):
+            if kind == "bar" and (not isinstance(expected, dict) or expected.get("values") != [-5, 0, 3]):
                 issues.append(prefix + ": signed bar fixture diverges")
-            if kind == "line" and expected.get("series_values") != [[-2, 0]]:
+            if kind == "line" and (not isinstance(expected, dict) or expected.get("series_values") != [[-2, 0]]):
                 issues.append(prefix + ": signed line fixture diverges")
         evidence.append({"kind": kind, "correlation_id": corr,
                          "tool_receipt_sha256": sha(tool_raw), "screenshot_sha256": sha(screenshot),
