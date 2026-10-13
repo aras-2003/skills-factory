@@ -167,6 +167,15 @@ class DesktopAdapterTests(unittest.TestCase):
         self.assertEqual("BLOCKED_ADAPTER", self.execute()["status"])
         self.assertEqual("PRIOR_BLOCKED_NO_REEXECUTION", self.execute()["status"])
 
+    def test_malformed_adapter_step_receipt_blocks(self):
+        self.make_adapter()
+        source = self.adapter.read_text(encoding="utf-8")
+        source = source.replace("'status':'stub'", "'status':None")
+        self.adapter.write_text(source, encoding="utf-8")
+        self.adapter_sha = hashlib.sha256(self.adapter.read_bytes()).hexdigest()
+        self.assertEqual("BLOCKED_ADAPTER", self.execute()["status"])
+        self.assertEqual("PRIOR_BLOCKED_NO_REEXECUTION", self.execute()["status"])
+
     def test_stale_adapter_output_blocks(self):
         self.make_adapter(stale=True)
         self.assertEqual("BLOCKED_ADAPTER", self.execute()["status"])
