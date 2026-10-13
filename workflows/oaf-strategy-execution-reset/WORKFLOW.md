@@ -3,10 +3,6 @@
 ## Purpose
 Restore traceability from strategic outcomes to capabilities, portfolio choices, ownership, funding and evidence.
 
-## Entry criteria
-Use only when the request involves a broken outcome-to-capability/portfolio/funding chain, cross-domain strategy execution accountability, or an enterprise-wide execution reset.
-For one bounded implementation architecture question, individual funding ranking with already comparable cases, or a single decision-rights dispute, route directly to the relevant specialist instead. Missing strategy or governance facts are questions, not license to invent an operating model.
-
 ## Stages
 1. Run `strategy-to-execution-diagnostic`.
 2. Identify the small set of strategic outcomes that require repair.
