@@ -178,6 +178,15 @@ class DesktopAdapterTests(unittest.TestCase):
         with self.assertRaisesRegex(desktop.RunBlocked, "altered"):
             self.execute()
 
+    def test_symlinked_archive_parent_cannot_redirect_evidence(self):
+        elsewhere = self.root / "elsewhere"
+        elsewhere.mkdir()
+        self.archive.mkdir()
+        (self.archive / "desktop").symlink_to(elsewhere, target_is_directory=True)
+        with self.assertRaisesRegex(desktop.RunBlocked, "must not be symlink"):
+            self.execute()
+        self.assertFalse(list(elsewhere.iterdir()))
+
     def test_crashed_reservation_is_not_rerun(self):
         prior = self.archive / "desktop" / CASE / "001"
         prior.mkdir(parents=True)
