@@ -98,6 +98,7 @@ class BrowserEvidenceTests(unittest.TestCase):
             "tool_output_path": raw_output.name,
             "tool_output_sha256": hashlib.sha256(raw_output.read_bytes()).hexdigest(),
             "chart_payload_path": chart_payload.name,
+            "chart_payload_format": "png",
             "chart_payload_sha256": hashlib.sha256(chart_payload.read_bytes()).hexdigest(),
             "expected_data": expected,
         })
@@ -112,6 +113,58 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.assertEqual("NOT_VERIFIED", report["screenshot_visual_authenticity"])
         self.assertFalse(report["release_approved"])
         self.assertEqual(2, len(report["bound_files"]))
+
+    def test_real_site_svg_payload_structure_is_accepted_as_unverified(self):
+        check = self.capture["chart_checks"][0]
+        svg_bytes = (
+            b'<svg xmlns="http://www.w3.org/2000/svg" role="img">'
+            b'<title>Signed bar fixture</title>'
+            b'<desc>negative -5; zero 0; positive 3</desc>'
+            b'<rect x="0" y="0" width="1" height="1"/>'
+            b'</svg>'
+        )
+        path = self.root / "bar.chart.svg"
+        path.write_bytes(svg_bytes)
+        check["chart_payload_path"] = path.name
+        check["chart_payload_format"] = "svg"
+        check["chart_payload_sha256"] = hashlib.sha256(svg_bytes).hexdigest()
+        tool = self.root / check["tool_receipt_path"]
+        receipt = json.loads(tool.read_text(encoding="utf-8"))
+        receipt["tool_receipt"]["chart_payload_sha256"] = check["chart_payload_sha256"]
+        tool.write_text(json.dumps(receipt), encoding="utf-8")
+        check["tool_receipt_sha256"] = hashlib.sha256(tool.read_bytes()).hexdigest()
+        result = self.assess()
+        self.assertEqual("STRUCTURALLY_CORRELATED_INDEPENDENT_REVIEW_REQUIRED", result["status"], result["issues"])
+        self.assertEqual("svg", result["bound_files"][0]["chart_payload_format"])
+        self.assertEqual("NOT_EVALUATED", result["model_behavior_verdict"])
+
+    def test_svg_script_doctype_external_references_and_bad_xml_are_blocked(self):
+        check = self.capture["chart_checks"][0]
+        for svg_bytes in (
+            b'<svg xmlns="http://www.w3.org/2000/svg"><script>evil()</script></svg>',
+            b'<!DOCTYPE svg [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><svg xmlns="http://www.w3.org/2000/svg"/>',
+            b'<svg xmlns="http://www.w3.org/2000/svg"><use href="https://example.com/a"/></svg>',
+            b'<svg xmlns="http://www.w3.org/2000/svg"><g></svg>',
+        ):
+            with self.subTest(svg=svg_bytes[:60]):
+                path = self.root / "bar.chart.svg"
+                path.write_bytes(svg_bytes)
+                check["chart_payload_path"] = path.name
+                check["chart_payload_format"] = "svg"
+                check["chart_payload_sha256"] = hashlib.sha256(svg_bytes).hexdigest()
+                tool = self.root / check["tool_receipt_path"]
+                receipt = json.loads(tool.read_text(encoding="utf-8"))
+                receipt["tool_receipt"]["chart_payload_sha256"] = check["chart_payload_sha256"]
+                tool.write_text(json.dumps(receipt), encoding="utf-8")
+                check["tool_receipt_sha256"] = hashlib.sha256(tool.read_bytes()).hexdigest()
+                self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+
+    def test_mismatched_chart_extension_or_format_blocks(self):
+        check = self.capture["chart_checks"][0]
+        check["chart_payload_format"] = "svg"  # PNG bytes with .png suffix.
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
+        check["chart_payload_format"] = "pdf"
+        self.assertEqual("BLOCKED_EVIDENCE", self.assess()["status"])
 
     def test_missing_one_chart_blocks(self):
         self.capture["chart_checks"].pop()
