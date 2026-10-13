@@ -61,8 +61,10 @@ def verify_external_case(package: Path, case_id: str, attempt: int) -> tuple[dic
     if len(rows) != 1:
         raise RunBlocked("missing or duplicate external case")
     item = rows[0]
-    if item.get("channel") != "desktop" or item.get("provider_dispatch") != "BLOCKED_PENDING_APPROVAL_AND_INSTALLED_IDENTITY":
-        raise RunBlocked("only pinned Desktop TEST cases allowed")
+    if (item.get("channel") != "desktop"
+            or item.get("provider_dispatch") != "BLOCKED_PENDING_APPROVAL_AND_INSTALLED_IDENTITY"
+            or item.get("execution_state") != "NOT_RUN"):
+        raise RunBlocked("only pristine, pinned Desktop TEST cases allowed")
     count = item.get("repetitions")
     if type(attempt) is not int or type(count) is not int or not (1 <= attempt <= count):
         raise RunBlocked("invalid attempt for frozen case")
