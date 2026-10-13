@@ -130,3 +130,22 @@ Source CI uses synthetic fixtures, not actual Chat UI or MCP traces.
 **Still unverified:** a genuine tool-output receipt, screenshot visual
 correctness, accessibility provenance, real installed runtime, and
 independent evaluator signature. Structural matching is not behavioral PASS.
+
+## Observed Site MCP SVG vs offline PNG evidence compatibility (2026-10-13)
+
+Site MCP `render_bar_chart` was observed returning an **SVG artifact** and
+an unsigned tool receipt with `artifact_state: rendered` and
+`client_display_state: not_observable`. The source-only validator accepts
+`chart_payload_format: svg` **or** `png`, with a matching `.svg`/`.png`
+artifact path and SHA-256 of the **actual saved bytes**. SVG inputs are
+parsed without external entity fetch; DTD, entity declarations, scripts,
+foreignObject, event handlers, and linked external resources are rejected.
+Chart **client screenshots still must be PNG** and must independently
+show the rendered result; neither a well-formed SVG nor matching JSON
+proves a client actually displayed it.
+
+The site's runtime `tool_receipt.source_revision` can identify Site server
+code, separately from its embedded Lab `source_revision`. Always record
+both in provider identity receipts; do not silently equate the two.
+An unsigned Site tool receipt alone does not prove the provider executed
+the candidate model nor that the screenshot is authentic.
