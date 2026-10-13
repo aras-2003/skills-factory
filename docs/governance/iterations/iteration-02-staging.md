@@ -47,6 +47,24 @@
   independent per-provider execution, traces, rubric assessment and human
   acceptance are *separate* prerequisites. Use PR #340 for combined source
   checks across PR #338 and PR #339. No merge to main has occurred.
+## Development checkpoint — Desktop adapter controller and full source coverage
+
+- #240: `iteration02_desktop_runner.py` now has a separate, approval-gated
+  Desktop TEST adapter protocol using the seven-case **external** handoff;
+  it validates fresh installed source/release/payload metadata, a pinned
+  executable, exact Desktop scenario, controlled subprocess response and
+  immutable receipt. Stub-subprocess tests demonstrate the controller,
+  NOT an actual Desktop/Work model binding, sandbox or behavioral PASS.
+  See `docs/testing/ITERATION-02-DESKTOP-RUNNER.md`.
+- #286/#287/#289/#290: `iteration02_semantic_coverage.py` inventories all
+  **64 current SKILL.md and 19 registered workflows** from the existing
+  source lifecycle audits. The CI artifact lists observed fixture counts,
+  missing negative/edge signals and missing local/central suites. It never
+  replaces the 54-skill behavior campaign or its independent evaluator;
+  all model verdicts are `NOT_RUN`.
+- PR #340 remains the **combined integration/validation lane** for #338 +
+  #339; `main` remains unchanged. A green CI run proves source compatibility
+  and deterministic fixtures only, not user-visible/runtime acceptance.
 ## TEST acceptance sequence
 
 1. Freeze the **prospective** issue/case scope and named owner/reviewer once Iteration 01 has been formally closed or explicitly ABORTED. Do not reconstruct a prior lock date.
