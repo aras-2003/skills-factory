@@ -34,7 +34,7 @@ def _digest(value: object, length: int = 64) -> bool:
 
 
 def _read(root: Path, rel: object, digest: object, *, png: bool = False) -> bytes:
-    if not isinstance(rel, str) or not rel or Path(rel).is_absolute():
+    if not isinstance(rel, str) or not rel or Path(rel).is_absolute() or any(part in {".", ".."} for part in Path(rel).parts):
         raise ValueError("artifact path must be relative")
     candidate = root / rel
     root_abs = root.resolve()
@@ -120,7 +120,7 @@ def validate(lock: object, observations: object, evidence_root: Path) -> dict:
             errors.append(f"{key_label}: duplicate receipt")
             continue
         seen.add((name, attempt))
-        if name not in BROWSER_CASES or case.get("channel") not in {"site", "browser"}:
+        if name not in BROWSER_CASES or not isinstance(case.get("channel"), str) or case["channel"] not in {"site", "browser"}:
             errors.append(f"{key_label}: not a Browser/Site client case")
         if type(case.get("repetitions")) is not int or attempt > case["repetitions"]:
             errors.append(f"{key_label}: attempt exceeds locked repetitions")
@@ -130,7 +130,7 @@ def validate(lock: object, observations: object, evidence_root: Path) -> dict:
                 errors.append(f"{key_label}: identity drift {field}")
         if obs.get("channel") != case.get("channel"):
             errors.append(f"{key_label}: channel drift")
-        if obs.get("execution_state") != "executed" or obs.get("decision") not in {None, "REVIEW_REQUIRED"}:
+        if obs.get("execution_state") != "executed" or (obs.get("decision") is not None and obs.get("decision") != "REVIEW_REQUIRED"):
             errors.append(f"{key_label}: executed trace with no behavioral PASS/FAIL required")
         if not _instant(obs.get("observed_at")):
             errors.append(f"{key_label}: offset-aware observation time required")
@@ -141,7 +141,7 @@ def validate(lock: object, observations: object, evidence_root: Path) -> dict:
             errors.append(f"{key_label}: evaluator must be independent")
         try:
             blobs = {}
-            for field in ("trace", "client", "capture"):
+            for field in ("trace", "client", "capture", "tool_output"):
                 ref = obs.get(field)
                 if not isinstance(ref, dict):
                     raise ValueError(f"{field}: path and sha256 required")
@@ -171,16 +171,23 @@ def validate(lock: object, observations: object, evidence_root: Path) -> dict:
             call_ids = [x["id"] for x in calls]
             if len(call_ids) != len(set(call_ids)) or client.get("observed_tool_call_id") not in call_ids:
                 errors.append(f"{key_label}: UI not correlated to unique executed tool call")
+            selected = [x for x in calls if x["id"] == client.get("observed_tool_call_id")]
+            if selected and _sha(blobs["tool_output"]) != selected[0]["output_sha256"]:
+                errors.append(f"{key_label}: raw tool output hash differs from selected tool receipt")
             if client.get("client_display_state") != "observed" or not isinstance(client.get("accessible_text"), str) or not client["accessible_text"].strip():
                 errors.append(f"{key_label}: missing client-visible display/accessibility claim")
             if name in CHART_CASES:
-                selected = [x for x in calls if x["id"] == client.get("observed_tool_call_id")]
+                if not isinstance(obs.get("chart"), dict):
+                    errors.append(f"{key_label}: chart artifact file is required")
+                    chart_bytes = b""
+                else:
+                    chart_bytes = _read(evidence_root, obs["chart"].get("path"), obs["chart"].get("sha256"), png=True)
                 if not selected:
                     errors.append(f"{key_label}: selected chart tool call missing")
                 else:
                     call = selected[0]
-                    if not _digest(call.get("chart_payload_sha256")) or client.get("chart_payload_sha256") != call.get("chart_payload_sha256"):
-                        errors.append(f"{key_label}: chart payload/client correlation mismatch")
+                    if not _digest(call.get("chart_payload_sha256")) or client.get("chart_payload_sha256") != call.get("chart_payload_sha256") or (chart_bytes and _sha(chart_bytes) != call.get("chart_payload_sha256")):
+                        errors.append(f"{key_label}: chart payload/client/file correlation mismatch")
                     if not _digest(call.get("normalized_data_sha256")) or client.get("normalized_data_sha256") != call.get("normalized_data_sha256"):
                         errors.append(f"{key_label}: chart normalized data differs between tool and client")
             matches.append({"case_id": name, "attempt": attempt, "channel": case.get("channel"),
