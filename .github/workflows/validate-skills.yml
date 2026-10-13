@@ -148,6 +148,32 @@ jobs:
           path: .tmp/iteration02-semantic-coverage.json
           if-no-files-found: ignore
           retention-days: 30
+      - name: Build all-component executable source-fixture campaign (no model execution)
+        run: |
+          python scripts/eval/iteration02_full_behavior_campaign.py \
+            --source-revision "$SOURCE_REVISION" \
+            --output .tmp/iteration02-all-component-campaign
+          python -m unittest discover -s scripts/eval/tests -p 'test_iteration02_full_behavior_campaign.py'
+          test -f .tmp/iteration02-all-component-campaign/executor-inputs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('.tmp/iteration02-all-component-campaign')
+          data=json.loads((root/'source-audit.json').read_text())
+          assert data['status']=='INPUTS_READY_RUNTIME_NOT_RUN', data['errors']
+          assert data['skill_count']==64 and data['registered_workflow_count']==19
+          assert data['case_count']>0 and not data['release_approved']
+          assert not json.loads((root/'executor-inputs.json').read_text())['writes_authorized']
+          PY
+      - name: Archive all-skill/workflow executor prompts only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-all-component-executor-${{ env.SOURCE_REVISION }}
+          path: |
+            .tmp/iteration02-all-component-campaign/source-audit.json
+            .tmp/iteration02-all-component-campaign/executor-inputs.json
+          if-no-files-found: error
+          retention-days: 14
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
