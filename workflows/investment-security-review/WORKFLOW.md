@@ -3,6 +3,10 @@
 ## Purpose
 Evaluate one XTB security from thesis creation through falsification, valuation, portfolio fit and a policy-consistent lifecycle/sizing state.
 
+## Entry criteria
+Enter for one explicitly identified security needing integrated underwriting, valuation and challenge; do not choose it for mere ticker news, watchlist preview or broad theme mapping.
+The default is **analysis only**. A user request to research, analyze, review, screen, size or evaluate does NOT authorize writing to any canonical store. Missing canonical read is BLOCKED_CANONICAL_READ, not a fabricated empty history.
+
 ## Required skills
 - security-underwriting
 - valuation-scenario-review
@@ -32,9 +36,10 @@ Evaluate one XTB security from thesis creation through falsification, valuation,
 9. Run thesis-challenge independently.
 10. Classify research state: REJECT / WATCH / RESEARCHED / THESIS SURVIVES / THESIS WEAKENED / INVALIDATED.
 11. If portfolio action is considered, parse policy semantics literally and run portfolio-state-review/position-sizing-review as needed.
-12. Persist sources, research events, signals and a new thesis version through investment-record-store.
-13. If the user makes a lifecycle decision, append it via decision-journal-update.
-14. Emit canonical WRITE receipt. Research plugins, Data analytics and local files never count as canonical persistence.
+12. Determine persistence scope **after** analysis. Without explicit per-action approval or a verified standing write mandate for the exact canonical target and operation, do not write; return NOT_WRITTEN (including read-only, preview-only, unspecified, or unknown permissions).
+13. When and only when separately authorized, append research events/sources/signals via investment-record-store. A **new thesis version**, thesis activation or an owner lifecycle decision requires its own explicitly approved operation. Do not overwrite prior thesis history or reuse past test/production authorization.
+14. If an independently approved lifecycle decision was made, append only the decision-journal event within that approved scope.
+15. Report SAVED only with a real successful canonical WRITE receipt including target/time/id; otherwise WRITE_FAILED or NOT_WRITTEN. Research plugins, Data analytics and local files never count as canonical persistence.
 
 ## Decision rules
 - company quality, security attractiveness and portfolio fit are different questions;
@@ -50,6 +55,7 @@ WHY THIS / WHY NOW | historical price/KPI/valuation context | material event tim
 ## Stop conditions
 Stop before sizing if policy/portfolio context is missing.
 Stop valuation and numeric sizing if critical evidence is unresolved.
+Do not write when the user requested advice only or canonical identity/authorization is unverified. A failed or inaccessible canonical read must not be treated as a verified empty store; explain the missing baseline and limit analysis.
 
 ## Integrated report presentation
 Render the report directly in the chat response by default. External HTML/PDF/Figma/deck/file output is allowed only when the user explicitly requests that artifact or format.
