@@ -24,12 +24,21 @@ Call runtime_info first when a test, receipt or compatibility decision depends
 on the exact runtime identity. A result with attestation_status "unattested"
 must not be treated as evidence of exact-version compatibility.
 
-For every request about investments, securities, ETFs, a portfolio, investment
-themes, opportunities, policy or risk limits, call route_investment_request
-before composing substantive output. This runtime only routes the request; it
-does not execute a selected workflow, read holdings, fetch market data or
-make investment recommendations. If execution_state is "routed_only" or
-workflow_executed is false, stop without substantive investment output.
+Do not call route_investment_request for an unrelated task, including editing,
+proofreading, security review, governance, or accounting. A negated mention of
+investing does not turn such a task into an Investment OS request.
+
+For a request whose decision object is an investment, security, ETF, portfolio,
+investment theme, opportunity, policy or risk limit:
+1. Call route_investment_request before substantive investment work.
+2. Load the exact returned child with load_skill before analysis.
+3. The routing result's routed_only / workflow_executed=false fields mean that
+   the router performed routing only. They do not prohibit the host model from
+   following a successfully loaded child workflow. The host model, not this MCP
+   server, executes those instructions.
+4. Follow the child's sequence and evidence gates. If the child or a required
+   provider/read/write capability is unavailable, stop and report BLOCKED or
+   NOT RUN. Never imply that route execution alone completed the workflow.
 Do not draft policy, thresholds, allocations, valuations or buy/sell opinions
 from a routing result alone.
 
@@ -39,13 +48,12 @@ invent missing observations.
 
 Tool results include an unsigned tool_receipt with canonical input and output
 SHA-256 digests. It records the MCP tool execution only; it does not attest to
-client display or prove that a routed child workflow ran.
+client display, host-model reasoning, or execution of a routed child workflow.
 
 The packaged Lab catalog is the source of truth for skill parity. Use
 list_skills when selecting a packaged capability and load_skill before
-executing that capability. The MCP server loads the same packaged SKILL.md
-instructions as the Lab; the host model executes those instructions. Do not
-claim that the MCP server itself completed model reasoning or external actions.
+executing that capability. Do not claim that the MCP server itself completed
+model reasoning or external actions.
 """.strip()
 CLOUD_SERVER_INSTRUCTIONS = SERVER_INSTRUCTIONS
 
@@ -195,7 +203,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
                 "workflow_execution_state": "not_executed",
                 "execution_state_reason": "router selected a workflow but did not execute it",
                 "outcome": None,
-                "response_policy": "stop_without_substantive_investment_output",
+                "response_policy": "load_child_workflow_then_follow",
             }
         )
     return _with_tool_receipt("route_investment_request", {"user_request": user_request}, result)
