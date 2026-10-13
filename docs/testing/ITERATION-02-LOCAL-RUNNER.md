@@ -7,8 +7,10 @@ Drive/write authorization has not been carried into this component.
 
 ## Supported flow
 
-1. Build and validate a **source-locked Lab executor pack** with
-   iteration02_handoff.py prepare and the existing CI artifact.
+1. Obtain a **source-locked Lab candidate** from CI or build_lab_plugin.py.
+   The one-command controller can prepare its executor pack through the
+   existing iteration02_handoff.py protocol when
+   --lab-candidate-dir is supplied; or use a previously prepared, pinned pack.
 2. Install the pack in a **disposable, approved, network-/secret-restricted
    TEST environment**. The runner cannot enforce an external OS sandbox.
 3. Provide an **absolute path and SHA-256 digest** for a reviewed executable
@@ -22,6 +24,7 @@ Drive/write authorization has not been carried into this component.
    ~~~bash
    python scripts/eval/iteration02_local_runner.py \
      --pack .tmp/iteration02-test-handoff \
+     --lab-candidate-dir .tmp/lab \
      --archive-root .tmp/iteration02-observations \
      --case-id I02-240-local-runner --attempt 1 \
      --adapter /absolute/approved/test-executor \
@@ -61,7 +64,7 @@ Drive/write authorization has not been carried into this component.
 
 | Criterion | Current implementation | Remaining |
 | --- | --- | --- |
-| One command prepares, executes, archives | Existing pack prepare + local controller archive | Single combined operator command, approved real adapter; PARTIAL |
+| One command prepares, executes, archives | Existing pack prepare + local controller archive | Combined pack preparation + isolated fixture adapter execution implemented; approved real model adapter pending, PARTIAL |
 | Resume does not duplicate run | Atomic attempt reservation and regression tests | Multi-process crash/recovery smoke |
 | Unassisted executor cannot see rubric | Prompt-only pack; rubric SHA only | Real model input/trace inspection |
 | CLI and Desktop separate receipts | CLI adapter observations only | Actual Desktop/Work runtime trace |
