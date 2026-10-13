@@ -27,6 +27,32 @@ class RuntimeCampaignTests(unittest.TestCase):
     def setUp(self) -> None:
         (ROOT / ".tmp").mkdir(exist_ok=True)
 
+    def test_historical_campaign_without_optional_routing_registry_does_not_read_repo_directory(self) -> None:
+        from unittest.mock import patch
+        from common import load_campaign_cases
+        # Legacy campaign has explicit fallbacks/commerce but no routing file.
+        with patch("common.load_campaign_config", return_value={
+            "campaign": "historical-no-routing",
+            "commerce_case_ids": [], "routing_case_ids": [],
+            "executive_case_ids": [],
+            "fallback_cases": [{
+                "id": "fallback-synthetic", "target": "test",
+                "mode": "explicit", "input": "fixture", "rubric": "fixture-rubric",
+            }],
+        }):
+            cases = load_campaign_cases(ROOT, "historical-no-routing")
+        self.assertIn("fallback-synthetic", cases)
+        self.assertEqual("production-fallback", cases["fallback-synthetic"]["suite"])
+
+    def test_orphaned_routing_ids_fail_closed(self) -> None:
+        with patch("common.load_campaign_config", return_value={
+            "campaign": "invalid-no-registry",
+            "commerce_case_ids": [], "routing_case_ids": ["routing-001"],
+            "executive_case_ids": [],
+        }):
+            with self.assertRaisesRegex(ValueError, "routing_case_ids set without"):
+                load_campaign_cases(ROOT, "invalid-no-registry")
+
     def test_r20_preserves_r18_pin_and_rejects_future_behavior_drift(self) -> None:
         historical = yaml.safe_load((ROOT / 'evals/campaigns/runtime-validation-2026-10-r18/campaign.yaml').read_text())
         self.assertEqual('e51df8120031726a59f6f2acabf1bf7c021c94a4', historical['behavior_source_revision'])
