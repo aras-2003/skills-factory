@@ -8,7 +8,7 @@
 - Every present local `tests/cases.yaml` and central `evals/runtime-fixtures.yaml` is read for exact prompt and existing expected rubric. A missing or malformed fixture blocks the build. Generator never synthesizes a prompt, answer, successful write, model behavior, or evaluator result.
 - Skill polarity: at least two real source positive and two negative/near-miss cases are required; workflow case coverage must have local or central fixtures. Audit counts must cover the exact source inventory.
 - Case identity + source + prompt SHA + separate rubric SHA allow isolated evaluator lookup later. Reviewers should inspect data consistency and known class boundaries, not assume quality because metadata match.
-- Only `source-audit.json` and `executor-inputs.json` are uploaded in the **executor** artifact. `evaluator-only/rubrics.json` stays separate in the local CI workspace and is not uploaded to the unassisted executor. The rubrics remain reproducible from versioned repository source for an independent evaluator.
+- The **executor** artifact contains `source-audit.json`, `executor-inputs.json`, `executor-queue.json` and exact one-file-per-case `executor-cases/*.input.md`, each SHA-pinned with explicit `NOT_RUN`/no-write state. `evaluator-only/rubrics.json` stays separate in the local CI workspace and is not uploaded to the unassisted executor. The rubrics remain reproducible from versioned repository source for an independent evaluator.
 
 ## Exact-head evidence
 
