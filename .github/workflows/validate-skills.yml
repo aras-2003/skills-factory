@@ -172,6 +172,8 @@ jobs:
           path: |
             .tmp/iteration02-all-component-campaign/source-audit.json
             .tmp/iteration02-all-component-campaign/executor-inputs.json
+            .tmp/iteration02-all-component-campaign/executor-queue.json
+            .tmp/iteration02-all-component-campaign/executor-cases/
           if-no-files-found: error
           retention-days: 14
       - name: Assemble executor-only runtime retest pack
