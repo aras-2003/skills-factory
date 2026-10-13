@@ -7,6 +7,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[3]
 FILE = ROOT / "scripts/eval/iteration02_local_runner.py"
@@ -81,6 +82,36 @@ class LocalRunnerControllerTests(unittest.TestCase):
     def call(self, **kwargs):
         return mod.run_one(self.pack, self.archive, CASE, 1, self.adapter, self.pin,
                            authorized=True, **kwargs)
+
+    def test_one_command_pack_preparation_plus_exec_controller_flow(self):
+        lab = self.root / "lab-candidate"
+        lab.mkdir()
+        (lab / "release-manifest.json").write_text(json.dumps({
+            "source_revision": SHA, "release_id": "lab-fixture",
+            "payload_content_sha256": PAYLOAD, "channel": "lab",
+        }), encoding="utf-8")
+        (lab / "plugin.json").write_text('{"test":true}', encoding="utf-8")
+        generated = self.root / "newpack"
+        with patch.dict(os.environ, {"SOURCE_REVISION": SHA}):
+            prepared = mod.ensure_locked_pack(lab, generated, source_root=ROOT)
+        self.assertTrue(prepared["prepared"])
+        self.assertTrue((generated / "lock.json").is_file())
+        self.assertEqual("NOT_RUN", json.loads((generated / "lock.json").read_text())["runtime_execution_state"])
+        result = mod.run_one(generated, self.archive, CASE, 1,
+                             self.adapter, self.pin, authorized=True)
+        self.assertEqual("ADAPTER_REPORTED_EXECUTED_REVIEW_REQUIRED", result["status"])
+        with patch.dict(os.environ, {"SOURCE_REVISION": SHA}):
+            resumed = mod.ensure_locked_pack(lab, generated, source_root=ROOT)
+        self.assertFalse(resumed["prepared"])
+        self.assertEqual("ALREADY_ARCHIVED_NO_REEXECUTION",
+                         mod.run_one(generated, self.archive, CASE, 1,
+                                     self.adapter, self.pin, authorized=True)["status"])
+        release_file = lab / "release-manifest.json"
+        altered = json.loads(release_file.read_text(encoding="utf-8"))
+        altered["source_revision"] = "f" * 40
+        release_file.write_text(json.dumps(altered), encoding="utf-8")
+        with self.assertRaisesRegex(mod.RunBlocked, "different Lab release"):
+            mod.ensure_locked_pack(lab, generated, source_root=ROOT)
 
     def test_adapter_execution_archives_once_no_behavioral_pass(self):
         first = self.call()
