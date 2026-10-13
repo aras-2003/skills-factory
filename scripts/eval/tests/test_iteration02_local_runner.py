@@ -204,6 +204,15 @@ class LocalRunnerControllerTests(unittest.TestCase):
         self.assertNotIn("rubric_sha256", raw)
         self.assertNotIn("evaluation", raw)
 
+    def test_symlinked_archive_parent_cannot_redirect_evidence(self):
+        elsewhere = self.root / "elsewhere"
+        elsewhere.mkdir()
+        self.archive.mkdir()
+        (self.archive / "runs").symlink_to(elsewhere, target_is_directory=True)
+        with self.assertRaisesRegex(mod.RunBlocked, "evidence root is a symlink"):
+            self.call()
+        self.assertFalse(list(elsewhere.iterdir()))
+
     def test_attempts_strict_and_archive_cannot_modify_pack(self):
         with self.assertRaisesRegex(mod.RunBlocked, "attempt exceeds"):
             mod.run_one(self.pack, self.archive, CASE, 3, self.adapter, self.pin,
