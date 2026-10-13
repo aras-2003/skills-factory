@@ -97,14 +97,20 @@ class LocalRunnerControllerTests(unittest.TestCase):
         self.assertTrue(prepared["prepared"])
         self.assertTrue((generated / "lock.json").is_file())
         self.assertEqual("NOT_RUN", json.loads((generated / "lock.json").read_text())["runtime_execution_state"])
-        result = mod.run_one(generated, self.archive, CASE, 1,
+        # The real iteration manifest correctly routes ENG-08 #240 to Desktop.
+        # This Lab-only controller must NOT silently convert it into a Lab case.
+        with self.assertRaisesRegex(mod.RunBlocked, "external/unauthorized"):
+            mod.run_one(generated, self.archive, CASE, 1,
+                        self.adapter, self.pin, authorized=True)
+        lab_case = "I02-242-catalog-flow"
+        result = mod.run_one(generated, self.archive, lab_case, 1,
                              self.adapter, self.pin, authorized=True)
         self.assertEqual("ADAPTER_REPORTED_EXECUTED_REVIEW_REQUIRED", result["status"])
         with patch.dict(os.environ, {"SOURCE_REVISION": SHA}):
             resumed = mod.ensure_locked_pack(lab, generated, source_root=ROOT)
         self.assertFalse(resumed["prepared"])
         self.assertEqual("ALREADY_ARCHIVED_NO_REEXECUTION",
-                         mod.run_one(generated, self.archive, CASE, 1,
+                         mod.run_one(generated, self.archive, lab_case, 1,
                                      self.adapter, self.pin, authorized=True)["status"])
         release_file = lab / "release-manifest.json"
         altered = json.loads(release_file.read_text(encoding="utf-8"))
