@@ -1,64 +1,132 @@
-# Iteration 02 — Browser / Site MCP-to-client evidence intake
+# Iteration 02 — Chat browser chart evidence binder (#251, #253, #254)
 
-Scope: #251, #253, #254; route-only Site test #149. Source contract only.
-Script: `scripts/eval/iteration02_browser_evidence.py`.
+This is a **read-only offline evidence checker**. It does not open a browser,
+invoke MCP, test private users, capture images or certify client display.
 
-## Inputs
+## Protocol
 
-Provide the **original unexecuted** external handoff `external-lock.json`
-for the same candidate, a JSON array of per-attempt observations and a separate
-directory holding exact tool trace, selected tool response, client observation
-and client screenshot. Chart scenarios additionally need the render artifact.
+Use exact `external-lock.json` from the Iteration 2 external handoff artifact,
+plus an independent TEST client capture object. Its `case_id` must be one of
+`I02-251-browser-mcp`, `I02-253-parity`, or `I02-254-charts`. The capture
+contains the exact locked source/release/payload/input digest, fresh UTC or
+offset-aware timestamp, installed identity observation reference, chat
+reference and capture source. All data must be synthetic/approved.
 
-Each observation has these fields:
+For each chart observation store three separate immutable *source files*
+inside an evidence root: raw MCP tool receipt JSON, screenshot PNG, and
+captured accessible/semantic chart JSON. Capture `tool_receipt_sha256`,
+`screenshot_sha256` and `accessibility_sha256` over original file bytes.
+Connect chart-tool and client records with a nonempty correlation ID in
+`correlation_id`, `tool_call_correlation_id`, and
+`client_capture_correlation_id` — all three must agree. The tool receipt
+itself will normally report `client_display_state: not_observable`; only
+the client capture can independently report an observed display.
 
-- `case_id`, `attempt`, `channel` (`site` or `browser`), exact
-  `source_revision`, `release_id`, `payload_content_sha256`,
-  `input_sha256`, `rubric_sha256` from the unmodified external lock.
-- `execution_state: executed`, `decision: REVIEW_REQUIRED`, timezone-aware
-  `observed_at`, `observation_source`, `approval_reference`, distinct
-  `executor` and `evaluator`, and a stable `correlation_id`.
-- `trace`, `client`, `capture`, `tool_output`: each an object containing
-  `path` relative to the evidence root and exact `sha256` digest.
-- For chart cases `I02-251-browser-mcp`, `I02-253-parity` and
-  `I02-254-charts`, an additional `chart` artifact path/SHA-256 is mandatory.
+Example capture shape (values are illustrative, not a real executed test):
 
-The tool trace is a JSON object repeating locked case/attempt/source/release/
-payload/input and correlation IDs, plus nonempty `tool_calls` with unique
-`id`, `tool_name`, `execution_state: executed` and `output_sha256`.
-The selected tool call must correspond to the actual saved `tool_output` bytes.
-Chart calls additionally contain `chart_payload_sha256` and
-`normalized_data_sha256`. The saved chart PNG hash and client observation
-must agree with both digests. Normalized data is produced by the independent
-test runner; the validator does not calculate it from pixels.
+~~~json
+{
+  "case_id": "I02-254-charts",
+  "source_revision": "<40-hex>",
+  "release_id": "<exact Lab release>",
+  "payload_content_sha256": "<64-hex>",
+  "input_sha256": "<locked input SHA>",
+  "installed_attestation": "verified",
+  "installed_observation_reference": "<immutable TEST receipt URL/ID>",
+  "capture_source": "<independent TEST browser observer>",
+  "chat_reference": "<specific TEST chat URL/ID>",
+  "captured_at": "2026-10-13T12:00:00Z",
+  "chart_checks": [
+    {"kind":"bar", "correlation_id":"bar-call-1",
+     "tool_call_correlation_id":"bar-call-1",
+     "client_capture_correlation_id":"bar-call-1",
+     "client_display_state":"observed",
+     "tool_receipt_path":"bar-tool.json",
+     "tool_receipt_sha256":"<raw file SHA>",
+     "screenshot_path":"bar.png",
+     "screenshot_sha256":"<raw file SHA>",
+     "accessibility_path":"bar-accessible.json",
+     "accessibility_sha256":"<raw file SHA>",
+     "expected_data":{"title":"Signed bar fixture",
+                      "labels":["negative","zero","positive"],
+                      "values":[-5,0,3]}},
+    {"kind":"line", "correlation_id":"line-call-1",
+     "tool_call_correlation_id":"line-call-1",
+     "client_capture_correlation_id":"line-call-1",
+     "client_display_state":"observed",
+     "tool_receipt_path":"line-tool.json",
+     "tool_receipt_sha256":"<raw file SHA>",
+     "screenshot_path":"line.png",
+     "screenshot_sha256":"<raw file SHA>",
+     "accessibility_path":"line-accessible.json",
+     "accessibility_sha256":"<raw file SHA>",
+     "expected_data":{"title":"Signed line fixture",
+                      "x_labels":["before","after"],
+                      "series_names":["synthetic"],
+                      "series_values":[[-2,0]]}}
+  ]
+}
+~~~
 
-The client JSON repeats the same locked identifiers and correlation ID, with
-`observed_tool_call_id`, `client_display_state: observed` and nonempty
-`accessible_text`. A saved PNG `capture` is mandatory even for route-only
-Site cases. Merely storing a file whose header resembles PNG is **not proof
-that a human actually saw the correct chart**.
-
-## Example command
+Run only **after** real TEST browser capture:
 
 ~~~bash
 python scripts/eval/iteration02_browser_evidence.py \
-  --external-lock ./external-handoff/external-lock.json \
-  --observations ./observations.json \
-  --evidence-root ./recorded-browser-evidence \
-  --output ./browser-structural-review.json
+  --external-lock external-lock.json \
+  --capture browser-capture.json \
+  --evidence-root ./captured-files \
+  --output browser-evidence-review.json
 ~~~
 
-## Decision boundary
+Output `BLOCKED_EVIDENCE` means evidence integrity/identity/values are
+incomplete. `STRUCTURALLY_CORRELATED_INDEPENDENT_REVIEW_REQUIRED` is
+**not** runtime PASS or a claim that the screenshot is authentic.
+Independent reviewer must authenticate the raw provider trace,
+capture tools, accessible tree, screenshot/client visibility and
+correlation with the actual installed candidate.
 
-- `INVALID_EVIDENCE` rejects missing, tampered, stale, mismatched, or unsafe
-  artifacts, including symlink/path traversal, absent client capture,
-  duplicate tool IDs, missing execution steps, and wrong normalized chart data.
-- `NO_EXECUTION_EVIDENCE` means no observations; **not FAIL/PASS**.
-- `STRUCTURAL_EVIDENCE_REVIEW_REQUIRED` verifies only the integrity and
-  cross-references of **caller-supplied** files, not their authenticity.
+For #254, both signed chart probes (bar [-5,0,3] and line [-2,0])
+are required. This binder does not replace routing/child MCP evidence
+for #251, or all four Work↔Site parity flows for #253.
+Never use it as an unattended browser runner or production deployment gate.
 
-Independent assessor must compare the original provider tool log,
-accessible client/UI rendering, actual chart labels and values, claimed
-authorization, execution state and normalized data against the frozen rubric.
-Do not promote to runtime PASS, mark an Issue Done, or publish to Site based
-on this structural validator. TEST fixtures in source CI are synthetic only.
+## Route → child load evidence (I02-251 and I02-253)
+
+An additional offline script, iteration02_route_evidence.py, correlates the
+source-locked raw route_investment_request MCP receipt with the selected
+load_skill child receipt and a shared independently recorded browser
+correlation ID. Router must report workflow_execution_state=not_executed
+and response_policy=load_child_workflow_then_follow; a load alone must
+**never** be treated as completed child workflow/model behavior.
+
+The capture JSON identifies exact case_id, source/release/payload/input
+digests, chat_reference, installed_identity_reference, correlation_id,
+router_correlation_id and child_correlation_id; router_raw_path and
+child_raw_path reference separate JSON files, with matching raw SHA256.
+Run with --external-lock, --capture, --evidence-root and --output.
+
+ROUTE_AND_LOAD_STRUCTURALLY_LINKED_REVIEW_REQUIRED still requires a
+separately authenticated TEST provider execution trace, observed final
+answer, independent evaluator and the full Work↔Site parity suite. The
+script only detects mismatches and never certifies actual child execution.
+
+## Artifact-byte binding added for combined Iteration 2 candidate
+
+Each `chart_checks` row must also carry `tool_output_path`,
+`tool_output_sha256`, `chart_payload_path`, and `chart_payload_sha256`.
+The raw `tool_output` is a JSON data object; the validator compares its
+labels, signed numbers, series and title against both expected frozen
+values in the capture and the accessible client observation.
+
+`tool_receipt` must include the exact `release_id`, `payload_content_sha256`,
+`correlation_id`, `output_sha256`, and `chart_payload_sha256`.
+Those digests MUST match the actual saved tool-output JSON bytes and saved
+PNG chart bytes; capture-level digests alone are not sufficient.
+
+Substitute artifact files, missing chart PNGs, wrong tool-call correlation
+or values changed on either tool/client side yield BLOCKED_EVIDENCE.
+Source CI uses synthetic fixtures, not actual Chat UI or MCP traces.
+
+**Still unverified:** a genuine tool-output receipt, screenshot visual
+correctness, accessibility provenance, real installed runtime, and
+independent evaluator signature. Structural matching is not behavioral PASS.
