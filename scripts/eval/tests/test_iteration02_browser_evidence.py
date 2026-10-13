@@ -19,11 +19,13 @@ SRC = "a" * 40
 PAYLOAD = "b" * 64
 INPUT = "c" * 64
 RUBRIC = "d" * 64
-CHART = "e" * 64
 DATA = "f" * 64
-OUTPUT = "1" * 64
 CASE = "I02-254-charts"
 PNG = b"\x89PNG\r\n\x1a\n" + b"synthetic-bitmap-fixture-no-real-client-UI"
+CHART_PNG = PNG + b"-chart"
+RAW_TOOL_OUTPUT = b'{"fixture":true,"state":"synthetic_output"}'
+CHART = hashlib.sha256(CHART_PNG).hexdigest()
+OUTPUT = hashlib.sha256(RAW_TOOL_OUTPUT).hexdigest()
 
 
 def sha(payload: bytes) -> str:
@@ -90,6 +92,8 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.observation["trace"] = self.store("trace.json", self.trace)
         self.observation["client"] = self.store("client.json", self.client)
         self.observation["capture"] = self.store("screen.png", PNG, raw=True)
+        self.observation["tool_output"] = self.store("output.json", RAW_TOOL_OUTPUT, raw=True)
+        self.observation["chart"] = self.store("chart.png", CHART_PNG, raw=True)
 
     def check(self):
         return checker.validate(self.lock, [self.observation], self.root)
@@ -128,6 +132,21 @@ class BrowserEvidenceTests(unittest.TestCase):
         result = self.check()
         self.assertEqual("INVALID_EVIDENCE", result["status"])
         self.assertTrue(any("normalized data" in x for x in result["errors"]))
+
+    def test_tool_output_file_must_match_selected_tool_trace(self):
+        self.observation["tool_output"] = self.store("output.json", b'{"forged":true}', raw=True)
+        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+
+    def test_chart_payload_file_must_match_tool_receipt(self):
+        self.observation["chart"] = self.store("chart.png", PNG + b"forged-content", raw=True)
+        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+
+    def test_missing_chart_payload_or_traversal_blocks(self):
+        self.observation.pop("chart")
+        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
+        self.write_evidence()
+        self.observation["tool_output"]["path"] = "../outside.json"
+        self.assertEqual("INVALID_EVIDENCE", self.check()["status"])
 
     def test_claimed_execution_without_steps_blocks(self):
         self.trace["tool_calls"] = []
@@ -185,6 +204,7 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.client.pop("chart_payload_sha256")
         self.client.pop("normalized_data_sha256")
         self.write_evidence()
+        self.observation.pop("chart")
         self.assertEqual("STRUCTURAL_EVIDENCE_REVIEW_REQUIRED", self.check()["status"])
 
 
