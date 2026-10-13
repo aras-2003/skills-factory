@@ -131,7 +131,7 @@ class DesktopAdapterTests(unittest.TestCase):
             with self.subTest(channel=channel):
                 self.item["channel"] = channel
                 self.save_lock()
-                with self.assertRaisesRegex(desktop.RunBlocked, "only pinned Desktop"):
+                with self.assertRaisesRegex(desktop.RunBlocked, "only pristine, pinned Desktop"):
                     self.execute()
         self.assertFalse(self.archive.exists())
 
