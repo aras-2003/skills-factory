@@ -126,8 +126,14 @@ def run_one(pack: Path, archive_root: Path, case_id: str, attempt: int,
     # The controller cannot prove an OS sandbox. A separate disposable TEST
     # machine/container with denied secrets/network is REQUIRED by operator.
     archive_root.mkdir(parents=True, exist_ok=True)
-    runs = archive_root / "runs" / case_id
-    runs.mkdir(parents=True, exist_ok=True)
+    runs_root = archive_root / "runs"
+    if runs_root.is_symlink():
+        raise RunBlocked("runner evidence root is a symlink")
+    runs_root.mkdir(mode=0o700, exist_ok=True)
+    runs = runs_root / case_id
+    if runs.is_symlink():
+        raise RunBlocked("runner case evidence directory is a symlink")
+    runs.mkdir(mode=0o700, exist_ok=True)
     run_dir = runs / f"{attempt:03d}"
     try:
         run_dir.mkdir(mode=0o700)  # atomic reservation: duplicate invocation never reruns
