@@ -3,10 +3,6 @@
 ## Purpose
 Research a structural or cyclical trend, map where economics accrue and create an XTB-focused research queue without equating narrative strength with investability.
 
-## Entry criteria
-Enter for a bounded thesis about a structural/cyclical mechanism, value-chain economics, beneficiary exposures and research candidates. A single issuer or portfolio sizing request belongs to a specialist.
-Default to **read-only discovery**. A request to investigate or produce a watchlist is not authorization to persist. Require a verified canonical baseline if stating a theme changed versus its previous version.
-
 ## Required skills
 - trend-theme-research
 - market-opportunity-scan
@@ -26,23 +22,20 @@ Default to **read-only discovery**. A request to investigate or produce a watchl
 6. Compare new evidence with prior theme state.
 7. Intersect candidate beneficiaries with the XTB-investable universe.
 8. Run market-opportunity-scan to identify favorable security-level setup rather than theme exposure alone.
-9. Determine persistence permission separately. If the user has not explicitly authorized append to an identified canonical TEST/production target (or a separately verified standing policy), do not write; report NOT_WRITTEN and preserve output in the conversation only. Preview, analysis, read-only and unknown-permission contexts must never inherit previous write consent.
-10. For an authorized operation only, append a new theme version/sources/candidates via investment-record-store without rewriting history. Return SAVED solely with a verified canonical WRITE receipt containing identity/time; if the operation fails, return WRITE_FAILED. Theme activation or an investment decision needs its own separate authorization.
-11. Underwrite only the few candidates where theme economics and security setup justify deeper work.
+9. Persist a new theme version, sources and candidate opportunities through investment-record-store.
+10. Underwrite only the few candidates where theme economics and security setup justify deeper work.
 
 ## Decision rules
 - demand growth can coexist with bad supplier economics;
 - second-order beneficiary claims require evidence of value capture;
 - thematic-provider output is discovery evidence, not canonical state;
-- theme discovery never issues position sizes;
-- external-write permission is distinct from canonical read permission and from an analytical request.
+- theme discovery never issues position sizes.
 
 ## Output contract
 Theme mechanism | changes since prior view | indicators | value chain | beneficiaries/losers | crowded assumptions | invalidation | XTB research queue | provenance | persistence receipt.
 
 ## Stop conditions
 Stop once a falsifiable theme map and bounded research queue exist.
-If canonical data/permissions are missing, do not fabricate a prior theme or saved version; give provisional analysis and NOT_WRITTEN. No background persistence or unconditional side effects.
 
 ## Integrated report presentation
 Render the report directly in the chat response by default. External HTML/PDF/Figma/deck/file output is allowed only when the user explicitly requests that artifact or format.
