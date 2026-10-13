@@ -5,6 +5,10 @@ For actionable security follow-up, v1 remains constrained to the XTB-investable 
 
 Answer: **what changed since the last review, what actually matters, and where is deeper research worth the time?** It is not a news digest.
 
+## Entry criteria
+Enter for a materiality/attention triage across existing holdings, active theses or a watchlist. Ask for the minimum missing baseline when no verified canonical snapshot is available; do not convert inability to read a store into absence of a thesis.
+A single security valuation, original thesis creation or position-sizing decision belongs to its specialist. Default to read-only; persistence is a separate gated operation, not part of the definition of "review".
+
 ## Required skills
 - investment-attention-triage
 - investment-record-store
