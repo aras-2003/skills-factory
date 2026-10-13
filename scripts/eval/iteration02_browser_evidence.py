@@ -11,6 +11,7 @@ import datetime as dt
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 CASES = {"I02-251-browser-mcp", "I02-253-parity", "I02-254-charts"}
@@ -81,8 +82,14 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
     case = capture.get("case_id")
     entries = lock.get("cases")
     matched = [c for c in entries if isinstance(c, dict) and c.get("case_id") == case] if isinstance(entries, list) else []
-    if case not in CASES or len(matched) != 1 or matched[0].get("channel") != "browser":
+    if not isinstance(case, str) or case not in CASES or len(matched) != 1 or matched[0].get("channel") != "browser":
         issues.append("case not in frozen browser handoff")
+    if not isinstance(lock.get("source_revision"), str) or not re.fullmatch(r"[0-9a-f]{40}", lock["source_revision"]):
+        issues.append("frozen source SHA missing/invalid")
+    if not isinstance(lock.get("release_id"), str) or not lock["release_id"]:
+        issues.append("frozen release ID missing/invalid")
+    if not isinstance(lock.get("payload_content_sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", lock["payload_content_sha256"]):
+        issues.append("frozen payload digest missing/invalid")
     for key in ("source_revision", "release_id", "payload_content_sha256"):
         if capture.get(key) != lock.get(key):
             issues.append(f"stale release identity: {key}")
@@ -92,7 +99,7 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
         issues.append("external lock is not pristine")
     if capture.get("installed_attestation") != "verified" or not capture.get("installed_observation_reference"):
         issues.append("installed client/provider identity not observed")
-    if not capture.get("chat_reference") or not capture.get("capture_source"):
+    if any(not isinstance(capture.get(k), str) or not capture[k].strip() for k in ("chat_reference", "capture_source")):
         issues.append("missing client chat reference/capture source")
     now = now or dt.datetime.now(dt.timezone.utc)
     try:
