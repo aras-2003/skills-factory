@@ -15,7 +15,7 @@ Rule: **LLM interprets; code calculates and validates.**
 
 ## Public repository governance
 
-This repository is public, but **no open-source license grant has been verified**; public visibility is not permission to redistribute or relicense its contents. Read the [governance decision record](docs/governance/PUBLIC-REPOSITORY-REVIEW.md), [security reporting policy](SECURITY.md), and [contributor workflow](CONTRIBUTING.md). Ownership routing in `.github/CODEOWNERS` does not by itself establish independent review or GitHub branch protection.
+The owner approved the **personal / proprietary toolkit** distribution model on 2026-10-13. No general third-party reuse license is granted for owner-controlled original material; applicable law, GitHub platform rights and third-party licenses remain unaffected. See the [approved distribution decision](docs/DISTRIBUTION-LICENSE-DECISION.md). Read the [governance decision record](docs/governance/PUBLIC-REPOSITORY-REVIEW.md), [security reporting policy](SECURITY.md), and [contributor workflow](CONTRIBUTING.md). Ownership routing in `.github/CODEOWNERS` does not by itself establish independent review or GitHub branch protection.
 
 ## Visual catalog
 
