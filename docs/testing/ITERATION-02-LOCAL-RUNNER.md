@@ -26,7 +26,7 @@ Drive/write authorization has not been carried into this component.
      --pack .tmp/iteration02-test-handoff \
      --lab-candidate-dir .tmp/lab \
      --archive-root .tmp/iteration02-observations \
-     --case-id I02-240-local-runner --attempt 1 \
+     --case-id I02-242-catalog-flow --attempt 1 \
      --adapter /absolute/approved/test-executor \
      --adapter-sha256 <verified-64-hex> \
      --approve-isolated-lab-exec
@@ -34,6 +34,9 @@ Drive/write authorization has not been carried into this component.
 
    Never use Production, real user accounts, connected Drive, Supabase or
    Site/browser/desktop lanes. Only frozen lab cases may be dispatched.
+   The actual #240 scenario I02-240-local-runner is intentionally Desktop-
+   scoped in the campaign and must BLOCK in this Lab controller; the example
+   above uses a separate genuine Lab case (I02-242-catalog-flow).
 5. For each attempt the controller creates
    runs/<case-id>/<attempt>/record.json plus adapter-response.json when the
    adapter response was valid. Both preserve source/release/payload, adapter,
