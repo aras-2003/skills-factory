@@ -54,10 +54,13 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
             if identity in seen:
                 errors.append(f"{kind}: duplicate {name}")
             seen.add(identity)
-            if source not in (sources_s if kind == "skill" else sources_w):
-                errors.append(f"{kind}: source absent {name}")
-            original = root / source
-            file_digest = hashlib.sha256(original.read_bytes()).hexdigest() if original.is_file() else None
+            permitted_sources = sources_s if kind == "skill" else sources_w
+            if source not in permitted_sources:
+                errors.append(f"{kind}: source absent or untrusted {name}")
+                file_digest = None
+            else:
+                original = root / source
+                file_digest = hashlib.sha256(original.read_bytes()).hexdigest() if original.is_file() else None
             signals = []
             if kind == "skill":
                 count = row.get("case_count")
