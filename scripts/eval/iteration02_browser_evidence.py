@@ -25,11 +25,19 @@ def sha(raw: bytes) -> str:
 
 def read_evidence(root: Path, rel: object, *, binary: bool = False):
     """Refuse symlinks, path traversal and oversized attacker-supplied inputs."""
-    if not isinstance(rel, str) or not rel or rel.startswith("/") or "\\" in rel:
+    if (not isinstance(rel, str) or not rel or rel.startswith("/")
+            or "\\" in rel or any(part in {".", ".."} for part in Path(rel).parts)):
         raise ValueError("evidence path invalid")
     path = root / rel
     if not path.resolve().is_relative_to(root.resolve()):
         raise ValueError("evidence path leaves root")
+    current = path
+    while current != root:
+        if current.is_symlink():
+            raise ValueError("symlink in evidence path")
+        if current.parent == current:
+            raise ValueError("invalid evidence root")
+        current = current.parent
     if path.is_symlink() or not path.is_file():
         raise ValueError("evidence path must be a regular file")
     raw = path.read_bytes()
@@ -129,6 +137,8 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
             tool, tool_raw = read_evidence(root, check.get("tool_receipt_path"))
             screenshot = read_evidence(root, check.get("screenshot_path"), binary=True)
             accessibility, accessibility_raw = read_evidence(root, check.get("accessibility_path"))
+            tool_output, tool_output_raw = read_evidence(root, check.get("tool_output_path"))
+            chart_payload_raw = read_evidence(root, check.get("chart_payload_path"), binary=True)
         except (OSError, ValueError, UnicodeError, TypeError) as error:
             issues.append(prefix + ": invalid/missing file " + type(error).__name__)
             continue
@@ -138,6 +148,12 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
             issues.append(prefix + ": screenshot hash mismatch")
         if sha(accessibility_raw) != check.get("accessibility_sha256"):
             issues.append(prefix + ": accessibility hash mismatch")
+        if sha(tool_output_raw) != check.get("tool_output_sha256"):
+            issues.append(prefix + ": raw tool output hash mismatch")
+        if sha(chart_payload_raw) != check.get("chart_payload_sha256"):
+            issues.append(prefix + ": renderer artifact hash mismatch")
+        if not chart_payload_raw.startswith(b"\x89PNG\r\n\x1a\n"):
+            issues.append(prefix + ": rendered artifact is not PNG evidence")
         if not screenshot.startswith(b"\x89PNG\r\n\x1a\n"):
             issues.append(prefix + ": client screenshot is not a PNG file")
         receipt = tool.get("tool_receipt")
@@ -146,8 +162,14 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
             continue
         if (receipt.get("tool_name") != TOOLS[kind] or receipt.get("execution_state") != "executed"
             or receipt.get("status") != "SUCCESS" or receipt.get("artifact_state") != "rendered"
-            or receipt.get("source_revision") != lock.get("source_revision")):
+            or receipt.get("source_revision") != lock.get("source_revision")
+            or receipt.get("release_id") != lock.get("release_id")
+            or receipt.get("payload_content_sha256") != lock.get("payload_content_sha256")):
             issues.append(prefix + ": tool did not render on exact locked source")
+        if (receipt.get("correlation_id") != corr
+            or receipt.get("output_sha256") != sha(tool_output_raw)
+            or receipt.get("chart_payload_sha256") != sha(chart_payload_raw)):
+            issues.append(prefix + ": raw renderer/tool artifact not bound to MCP call ID")
         if receipt.get("client_display_state") != "not_observable":
             issues.append(prefix + ": tool receipt must not claim client visibility")
         if check.get("client_display_state") != "observed" or check.get("tool_call_correlation_id") != corr or check.get("client_capture_correlation_id") != corr:
@@ -155,6 +177,8 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
         expected = check.get("expected_data")
         if not isinstance(expected, dict) or not content_matches(kind, accessibility, expected):
             issues.append(prefix + ": accessible UI does not match frozen expected numbers/labels/title")
+        if not isinstance(expected, dict) or not content_matches(kind, tool_output, expected):
+            issues.append(prefix + ": original tool data differs from client-visible expected data")
         if case == "I02-254-charts":
             if kind == "bar" and (not isinstance(expected, dict) or expected.get("values") != [-5, 0, 3]):
                 issues.append(prefix + ": signed bar fixture diverges")
@@ -162,7 +186,9 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
                 issues.append(prefix + ": signed line fixture diverges")
         evidence.append({"kind": kind, "correlation_id": corr,
                          "tool_receipt_sha256": sha(tool_raw), "screenshot_sha256": sha(screenshot),
-                         "accessibility_sha256": sha(accessibility_raw)})
+                         "accessibility_sha256": sha(accessibility_raw),
+                         "tool_output_sha256": sha(tool_output_raw),
+                         "chart_payload_sha256": sha(chart_payload_raw)})
     if case in {"I02-253-parity", "I02-254-charts"} and encountered != {"bar", "line"}:
         issues.append("bar and line client captures both required")
     return {
