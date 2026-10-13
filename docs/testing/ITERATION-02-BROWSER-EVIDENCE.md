@@ -109,3 +109,24 @@ ROUTE_AND_LOAD_STRUCTURALLY_LINKED_REVIEW_REQUIRED still requires a
 separately authenticated TEST provider execution trace, observed final
 answer, independent evaluator and the full Work↔Site parity suite. The
 script only detects mismatches and never certifies actual child execution.
+
+## Artifact-byte binding added for combined Iteration 2 candidate
+
+Each `chart_checks` row must also carry `tool_output_path`,
+`tool_output_sha256`, `chart_payload_path`, and `chart_payload_sha256`.
+The raw `tool_output` is a JSON data object; the validator compares its
+labels, signed numbers, series and title against both expected frozen
+values in the capture and the accessible client observation.
+
+`tool_receipt` must include the exact `release_id`, `payload_content_sha256`,
+`correlation_id`, `output_sha256`, and `chart_payload_sha256`.
+Those digests MUST match the actual saved tool-output JSON bytes and saved
+PNG chart bytes; capture-level digests alone are not sufficient.
+
+Substitute artifact files, missing chart PNGs, wrong tool-call correlation
+or values changed on either tool/client side yield BLOCKED_EVIDENCE.
+Source CI uses synthetic fixtures, not actual Chat UI or MCP traces.
+
+**Still unverified:** a genuine tool-output receipt, screenshot visual
+correctness, accessibility provenance, real installed runtime, and
+independent evaluator signature. Structural matching is not behavioral PASS.
