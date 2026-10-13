@@ -121,6 +121,13 @@ def execute_desktop(
         raise RunBlocked("Desktop TEST execution needs explicit flag and scoped approval reference")
     if type(timeout) is not int or timeout < 1 or timeout > 120:
         raise RunBlocked("Desktop adapter timeout outside bounds")
+    # Refuse existing symlinks BEFORE resolving paths: resolve() otherwise
+    # erases evidence of a redirected archive root or input package.
+    for label, path in (("external package", package), ("archive root", archive)):
+        absolute = path.absolute()
+        for node in (absolute, *absolute.parents):
+            if node.is_symlink():
+                raise RunBlocked(f"{label}: symlink path component forbidden")
     package, archive = package.resolve(), archive.resolve()
     if _inside(package, archive) or _inside(archive, package):
         raise RunBlocked("Desktop receipts must be outside input package")
