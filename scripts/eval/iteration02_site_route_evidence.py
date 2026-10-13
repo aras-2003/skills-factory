@@ -124,6 +124,8 @@ def assess(lock: object, capture: object, root: Path) -> dict:
                 or tool_call.get("execution_state") != "executed"
                 or tool_call.get("output_sha256") != hashlib.sha256(raw["tool_output"]).hexdigest()):
             errors.append("selected tool call not bound to exact raw output bytes")
+        if tool_call.get("side_effects") != "none" or output.get("writes") != []:
+            errors.append("route-only request has missing or nonzero write-effects proof")
         if receipt.get("tool_call_id") != tool_call.get("id") or client.get("observed_tool_call_id") != tool_call.get("id"):
             errors.append("client-to-MCP call correlation mismatch")
         child = output.get("child_execution")
