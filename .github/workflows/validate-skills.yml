@@ -275,6 +275,26 @@ jobs:
           path: .tmp/iteration02-external-handoff
           if-no-files-found: error
           retention-days: 14
+      - name: Freeze full skill + workflow source-fixture campaign (no runtime execution)
+        run: |
+          python scripts/eval/iteration02_full_semantic_campaign.py \
+            --executor-output .tmp/iteration02-full-executor \
+            --evaluator-output .tmp/iteration02-full-evaluator \
+            --source-revision "${{ env.SOURCE_REVISION }}"
+      - name: Archive full skill/workflow executor inputs (no rubrics)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-full-semantic-executor-${{ env.SOURCE_REVISION }}
+          path: .tmp/iteration02-full-executor
+          if-no-files-found: error
+          retention-days: 14
+      - name: Archive evaluator-only rubrics separately
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-full-semantic-evaluator-${{ env.SOURCE_REVISION }}
+          path: .tmp/iteration02-full-evaluator
+          if-no-files-found: error
+          retention-days: 14
       - name: Build ChatGPT ZIP channel
         run: python scripts/package/build_chatgpt_skills.py --maturity production --output .tmp/chatgpt-skills
       - name: Validate ZIP channel
