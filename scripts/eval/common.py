@@ -95,8 +95,14 @@ def load_campaign_cases(root: Path | None = None, campaign: str | None = None) -
                 }
 
     routing_ids_raw = config.get("routing_case_ids")
-    routing_ids = set(routing_ids_raw) if isinstance(routing_ids_raw, list) else None
-    result.update(_routing_cases(root, str(config.get("routing_registry") or ""), routing_ids, "routing"))
+    routing_registry = config.get("routing_registry")
+    if routing_registry:
+        if not isinstance(routing_registry, str):
+            raise ValueError("routing_registry must be a relative file path")
+        routing_ids = set(routing_ids_raw) if isinstance(routing_ids_raw, list) else None
+        result.update(_routing_cases(root, routing_registry, routing_ids, "routing"))
+    elif routing_ids_raw:
+        raise ValueError("routing_case_ids set without a routing_registry")
 
     campaign_name = str(config.get("campaign") or campaign or ACTIVE_CAMPAIGN)
     base_rel = config.get("executive_case_dir") or f"evals/campaigns/{campaign_name}/executive"
