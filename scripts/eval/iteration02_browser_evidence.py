@@ -12,11 +12,41 @@ import hashlib
 import json
 import math
 import re
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 CASES = {"I02-251-browser-mcp", "I02-253-parity", "I02-254-charts"}
 TOOLS = {"bar": "render_bar_chart", "line": "render_line_chart"}
 MAX_BLOB = 2_000_000
+SVG_NS = "{http://www.w3.org/2000/svg}svg"
+
+
+def valid_render_artifact(raw: bytes, path: object, kind: object) -> bool:
+    """Check structural SVG/PNG identity, not whether a client displayed it."""
+    if not isinstance(path, str) or kind not in {"svg", "png"}:
+        return False
+    if not path.lower().endswith("." + kind):
+        return False
+    if kind == "png":
+        return raw.startswith(b"\x89PNG\r\n\x1a\n")
+    if b"<!DOCTYPE" in raw.upper() or b"<!ENTITY" in raw.upper():
+        return False
+    try:
+        svg = ET.fromstring(raw)
+    except (ValueError, ET.ParseError, UnicodeError):
+        return False
+    if svg.tag != SVG_NS:
+        return False
+    for element in svg.iter():
+        name = str(element.tag).lower()
+        if any(token in name for token in ("script", "foreignobject", "iframe")):
+            return False
+        for attr, value in element.attrib.items():
+            key, val = attr.lower(), value.strip().lower()
+            if (key.startswith("on") or key.endswith("}href") or key == "href"
+                    or "javascript:" in val or "url(" in val):
+                return False
+    return True
 
 
 def sha(raw: bytes) -> str:
@@ -152,8 +182,9 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
             issues.append(prefix + ": raw tool output hash mismatch")
         if sha(chart_payload_raw) != check.get("chart_payload_sha256"):
             issues.append(prefix + ": renderer artifact hash mismatch")
-        if not chart_payload_raw.startswith(b"\x89PNG\r\n\x1a\n"):
-            issues.append(prefix + ": rendered artifact is not PNG evidence")
+        chart_format = check.get("chart_payload_format")
+        if not valid_render_artifact(chart_payload_raw, check.get("chart_payload_path"), chart_format):
+            issues.append(prefix + ": renderer payload format/structure invalid (expected svg or png)")
         if not screenshot.startswith(b"\x89PNG\r\n\x1a\n"):
             issues.append(prefix + ": client screenshot is not a PNG file")
         receipt = tool.get("tool_receipt")
@@ -188,7 +219,8 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
                          "tool_receipt_sha256": sha(tool_raw), "screenshot_sha256": sha(screenshot),
                          "accessibility_sha256": sha(accessibility_raw),
                          "tool_output_sha256": sha(tool_output_raw),
-                         "chart_payload_sha256": sha(chart_payload_raw)})
+                         "chart_payload_sha256": sha(chart_payload_raw),
+                         "chart_payload_format": chart_format})
     if case in {"I02-253-parity", "I02-254-charts"} and encountered != {"bar", "line"}:
         issues.append("bar and line client captures both required")
     return {
