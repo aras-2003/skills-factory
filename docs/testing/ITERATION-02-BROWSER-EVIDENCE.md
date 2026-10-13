@@ -89,3 +89,23 @@ For #254, both signed chart probes (bar [-5,0,3] and line [-2,0])
 are required. This binder does not replace routing/child MCP evidence
 for #251, or all four Work↔Site parity flows for #253.
 Never use it as an unattended browser runner or production deployment gate.
+
+## Route → child load evidence (I02-251 and I02-253)
+
+An additional offline script, iteration02_route_evidence.py, correlates the
+source-locked raw route_investment_request MCP receipt with the selected
+load_skill child receipt and a shared independently recorded browser
+correlation ID. Router must report workflow_execution_state=not_executed
+and response_policy=load_child_workflow_then_follow; a load alone must
+**never** be treated as completed child workflow/model behavior.
+
+The capture JSON identifies exact case_id, source/release/payload/input
+digests, chat_reference, installed_identity_reference, correlation_id,
+router_correlation_id and child_correlation_id; router_raw_path and
+child_raw_path reference separate JSON files, with matching raw SHA256.
+Run with --external-lock, --capture, --evidence-root and --output.
+
+ROUTE_AND_LOAD_STRUCTURALLY_LINKED_REVIEW_REQUIRED still requires a
+separately authenticated TEST provider execution trace, observed final
+answer, independent evaluator and the full Work↔Site parity suite. The
+script only detects mismatches and never certifies actual child execution.
