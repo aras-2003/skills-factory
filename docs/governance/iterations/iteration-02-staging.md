@@ -12,7 +12,7 @@
 | Issue | Original intent | Source/development path | Required after PRs | Disposition |
 | --- | --- | --- | --- | --- |
 | [#149](https://github.com/aras-2003/skills-factory/issues/149) | Cloud MCP parity & chart | PR #338 (parity) + #339 (failure / chart); merged historical improvements | Approved Site/client smoke & deployment | PARTIAL |
-| [#240](https://github.com/aras-2003/skills-factory/issues/240) | Local Desktop/browser runner | Existing offline preflight, no actual runtime execution in this increment | Idempotent model runner + observable steps + receipts | BLOCKED |
+| [#240](https://github.com/aras-2003/skills-factory/issues/240) | Local Desktop/browser runner | PR #338: isolated Lab-only adapter controller, optional one-command pinned-pack preparation, atomic evidence archiving and 14+ synthetic adapter integration/negative tests | Approved Desktop/Work executor, actual independent model/tool/OS-isolated receipts; Lab controller deliberately refuses Desktop channel | PARTIAL |
 | [#242](https://github.com/aras-2003/skills-factory/issues/242) | Flow visibility | Generated catalog existing; PR #338 parity source audit | Installed/declared channel comparison & owner review | PARTIAL |
 | [#243](https://github.com/aras-2003/skills-factory/issues/243) | AIS/RT historical gaps | Source/result inventory and planned I02 case | Per-finding historical→candidate exact-version disposition | NOT_RUN |
 | [#247](https://github.com/aras-2003/skills-factory/issues/247) | Generated registry | Existing runtime-registry and catalog; PR #338 avoids duplicate registry | Catalog/package/live tool parity for all entries | PARTIAL |
