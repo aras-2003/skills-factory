@@ -25,9 +25,15 @@ def sha(value: object, length: int = 64) -> bool:
 
 
 def time_ok(value: object) -> bool:
+    if not isinstance(value, str):
+        return False
     try:
-        return dt.datetime.fromisoformat(value.replace("Z", "+00:00")).tzinfo is not None
-    except (AttributeError, ValueError, TypeError):
+        observed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+        if observed.tzinfo is None or observed.utcoffset() is None:
+            return False
+        # A future-dated capture is not evidence of execution already observed.
+        return observed <= dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=5)
+    except (ValueError, OverflowError):
         return False
 
 
