@@ -151,8 +151,8 @@ def build(root: Path, source_revision: str) -> tuple[dict, list[dict], list[dict
                     polarity["positive" if c["expected"].get("should_trigger") is True else
                              "negative" if c["expected"].get("should_trigger") is False else "unclassified"] += 1
                     case_key = f"{kind}--{name}--{c['id']}"
-                    if len(case_key) > 250:
-                        raise ValueError("case key too long")
+                    if len(case_key) > 225:
+                        raise ValueError("case key too long for portable executor file path")
                     prompt_bytes = c["input"].encode("utf-8")
                     rubric_bytes = canonical(c["expected"])
                     pin, rubric_pin = digest(prompt_bytes), digest(rubric_bytes)
@@ -217,6 +217,33 @@ def write_outputs(root: Path, source_revision: str, out: Path) -> dict:
         "provider_authentication": "NOT_VERIFIED", "evaluator_rubric_content": "EXCLUDED",
         "writes_authorized": False,
     }, sort_keys=True, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # Materialize each original prompt in a portable, explicit executor queue:
+    # no rubric content, shell commands, permission claims or runtime assertions.
+    files = out / "executor-cases"
+    files.mkdir()
+    jobs = []
+    for item in executor:
+        rel = "executor-cases/" + item["key"] + ".input.md"
+        target = out / rel
+        raw = item["input"].encode("utf-8")
+        if digest(raw) != item["input_sha256"]:
+            raise ValueError("executor prompt digest changed before packaging")
+        with target.open("xb") as handle:
+            handle.write(raw)
+        jobs.append({
+            "key": item["key"], "source_revision": source_revision,
+            "input_path": rel, "input_sha256": item["input_sha256"],
+            "rubric_sha256": item["rubric_sha256"],
+            "channel": item["channel"], "execution_state": "NOT_RUN",
+            "provider_call_allowed": False, "writes_authorized": False,
+        })
+    (out / "executor-queue.json").write_text(json.dumps({
+        "schema_version": "1.0", "source_revision": source_revision,
+        "kind": "all_component_executor_only_queue",
+        "case_count": len(jobs), "cases": jobs,
+        "provider_execution": "NOT_RUN", "independent_evaluator": "NOT_RUN",
+        "provider_authentication": "NOT_VERIFIED", "writes_authorized": False,
+    }, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     # Isolated evaluator folder must NOT be shipped as executor artifact.
     separate = out / "evaluator-only"
     separate.mkdir()
