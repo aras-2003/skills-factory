@@ -136,6 +136,18 @@ jobs:
           path: .tmp/iteration02-r17-history.json
           if-no-files-found: ignore
           retention-days: 30
+      - name: Inventory all current skill and workflow semantic source coverage
+        run: |
+          python scripts/eval/iteration02_semantic_coverage.py --output .tmp/iteration02-semantic-coverage.json
+          python -m unittest discover -s scripts/eval/tests -p 'test_iteration02_semantic_coverage.py'
+      - name: Archive 64-skill 19-workflow semantic test coverage ledger
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-semantic-source-coverage
+          path: .tmp/iteration02-semantic-coverage.json
+          if-no-files-found: ignore
+          retention-days: 30
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
