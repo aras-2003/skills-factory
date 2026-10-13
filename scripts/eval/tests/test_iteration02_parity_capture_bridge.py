@@ -100,6 +100,16 @@ class ParityCaptureBridgeTests(unittest.TestCase):
         b["tool_receipt"]["source_revision"] = OLD
         self.assertEqual("BLOCKED_EVIDENCE", self.call(a, b, c)["status"])
 
+    def test_future_capture_cannot_be_treated_as_observed_evidence(self):
+        a, b, c = fixture()
+        result = bridge.normalize(
+            a, b, c, label="site",
+            observation_source="TEST future-dated fixture",
+            observed_at="2099-01-01T00:00:00+00:00",
+        )
+        self.assertEqual("BLOCKED_EVIDENCE", result["status"])
+        self.assertIn("observation source and offset-aware time required", result["errors"])
+
     def test_no_provenance_missing_candidate_or_wrong_channel(self):
         a, b, c = fixture()
         self.assertEqual("BLOCKED_EVIDENCE", bridge.normalize(
