@@ -57,6 +57,7 @@ class SiteRouteEvidenceTests(unittest.TestCase):
         self.output = {
             **common,
             "selected_child": "synthetic-child",
+            "writes": [],
             "child_execution": {"state": "not_executed", "steps": []},
         }
         self.client = {
@@ -71,6 +72,7 @@ class SiteRouteEvidenceTests(unittest.TestCase):
             "tool_call_id": "call-123",
             "tool_call": {
                 "id": "call-123", "tool_name": "route_synthetic_request",
+                "side_effects": "none",
                 "execution_state": "executed", "output_sha256": "",
             },
         }
@@ -105,6 +107,15 @@ class SiteRouteEvidenceTests(unittest.TestCase):
         self.write_artifacts()
         self.assertEqual("BLOCKED_EVIDENCE", self.evaluate()["status"])
         self.output.pop("child_execution")
+        self.write_artifacts()
+        self.assertEqual("BLOCKED_EVIDENCE", self.evaluate()["status"])
+
+    def test_route_side_effects_and_undisclosed_writes_block(self):
+        self.output["writes"] = [{"synthetic": "mutation"}]
+        self.write_artifacts()
+        self.assertEqual("BLOCKED_EVIDENCE", self.evaluate()["status"])
+        self.output["writes"] = []
+        self.receipt["tool_call"]["side_effects"] = "supported"
         self.write_artifacts()
         self.assertEqual("BLOCKED_EVIDENCE", self.evaluate()["status"])
 
