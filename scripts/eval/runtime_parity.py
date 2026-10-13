@@ -48,8 +48,9 @@ def normalize_observation(raw: dict, label: str) -> tuple[dict, list[str]]:
     when = raw.get("observed_at")
     try:
         date = dt.datetime.fromisoformat(when.replace("Z", "+00:00"))
-        if date.tzinfo is None:
-            raise ValueError("naive")
+        if (date.tzinfo is None or date.utcoffset() is None
+                or date > dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=5)):
+            raise ValueError("naive or future-dated")
     except (AttributeError, ValueError, TypeError):
         errors.append(f"{label}: observed_at must be timezone-aware ISO8601")
     if not isinstance(raw.get("observation_source"), str) or not raw["observation_source"].strip():
