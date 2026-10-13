@@ -29,13 +29,13 @@ Source PR #338/#339 own the Issues; combined PR #340 and #342 are validation/int
 | [#259](https://github.com/aras-2003/skills-factory/issues/259) Site publish and rollback / Validation | **EXTERNAL_AUTHORIZATION** | Site identity/rollback offline preflight and approved Sites runbook | Obtain publisher tool/access, old immutable rollback artifact + payload digest and separate Site source, then canary/publish/rollback receipts. Branch protection API 403. |
 | [#286](https://github.com/aras-2003/skills-factory/issues/286) Skill lifecycle audit / Validation | **SOURCE_READY_FOR_RUNTIME** | 64-skill source lifecycle audit and source coverage matrix (original ticket 54) | Independent semantic review of REVIEW_REQUIRED subset; user acceptance and controlled runtime follow-up as separately scoped. |
 | [#287](https://github.com/aras-2003/skills-factory/issues/287) Domain routing semantics / In progress | **RESIDUAL_DEVELOPMENT** | Semantic inventory and near-miss source screening; issue 303 write authorization remediation history | Complete domain-by-domain human semantic contract review and implement any confirmed routing/authorization corrections, then fresh boundary tests. |
-| [#289](https://github.com/aras-2003/skills-factory/issues/289) 54-skill behavior/routing campaign / Validation | **RESIDUAL_DEVELOPMENT** | Full source inventory, synthetic 18-case triage runner, receipts/rubric isolation | Freeze risk-prioritized executable 54/64-skill positive/negative/near-miss/tool-denial campaign and independent evaluator sampling; 18-case triage cannot substitute. |
-| [#290](https://github.com/aras-2003/skills-factory/issues/290) Registered workflow lifecycle / In progress | **RESIDUAL_DEVELOPMENT** | 19-workflow source audit, contract parity and source fixtures (original ticket 16) | Resolve four known REVIEW_REQUIRED workflow entrypoint/precondition findings with actual scoped source edits or explicit documented waiver; confirm semantic tests. |
+| [#289](https://github.com/aras-2003/skills-factory/issues/289) 54-skill behavior/routing campaign / Validation | **SOURCE_READY_FOR_RUNTIME** (pending exact-head CI) | Canonical `iteration02_full_behavior_campaign.py` exports all current skill/workflow fixture prompts and version-pinned executor-only queue, separate evaluator plan; source regression checks | Execute those frozen cases with approved model/provider and independent evaluator, prioritize high-risk near misses/tool denials, record sample variance; 18-case triage remains separate. |
+| [#290](https://github.com/aras-2003/skills-factory/issues/290) Registered workflow lifecycle / In progress | **SOURCE_READY_FOR_RUNTIME** (pending exact-head CI) | Registered 19-workflow source lifecycle audit; formerly flagged `oaf-strategy-execution-reset`, `investment-attention-review`, `investment-security-review`, `investment-theme-discovery` now each contain explicit `## Entry criteria` and bounded negative/routing scope; integrated full-case executor queue | Fresh independent semantic tests and workflow step/side-effect traces, human disposition of any newer audit REVIEW_REQUIRED signals; not automatically accepted from headings. |
 | [#311](https://github.com/aras-2003/skills-factory/issues/311) Campaign remediation / Validation | **CONDITIONAL_REMEDIATION** | Historic per-case campaign evidence retained; guarded intake, TEST-only source input packages | Independent adjudication of historical 44 FAIL + 72 BLOCKED (2026-10-10 baseline), prioritize true source failures, repair and retest; unapproved real writes stay blocked. |
 
 ## Summary
 
-**6 SOURCE_READY_FOR_RUNTIME, 7 RESIDUAL_DEVELOPMENT, 3 CONDITIONAL_REMEDIATION, 2 EXTERNAL_AUTHORIZATION = 18.**
+**8 SOURCE_READY_FOR_RUNTIME, 5 RESIDUAL_DEVELOPMENT, 3 CONDITIONAL_REMEDIATION, 2 EXTERNAL_AUTHORIZATION = 18.**
 
 This count describes **source next-actions**, not how many Issues may be marked Done.
 All 18 original Issues remain OPEN; no model/runtime PASS or approval inferred.
@@ -60,3 +60,10 @@ field check is required to certify board synchronization.
    a previous PR SHA; all runtime tests use that exact postmerge release.
 
 See [merge/Site/QA runbook](MERGE-SITE-QA-RUNBOOK.md) for release sequence.
+
+## Latest source development increment
+
+- Historical campaign loader no longer attempts to parse the repository root when `routing_registry` is omitted; orphan routing IDs remain fail-closed and regression-covered.
+- `iteration02_parity_capture_bridge.py` adapts raw, independently captured Work Lab/Site runtime_info and four flow receipts to the parity contract without equating worker source/release, ZIP digest or Lab payload; synthetic negative tests cover missing fields and client-visible chart evidence.
+- Source fixture campaign already exists canonically as `iteration02_full_behavior_campaign.py` (and its workflow CI artifact); removed a newly introduced redundant second generator to prevent conflicting queues/rubrics.
+- #289 and #290 source dispositions are provisional until all required CI checks complete on the **final exact candidate SHA**. They do not claim a model run, approved release or semantic quality PASS.
