@@ -25,10 +25,15 @@ reasoning; it loads the same instructions that the Lab packages, while the
 host model executes them. Routing does not execute the selected workflow. For
 investment requests, the server returns
 `execution_state: routed_only` and `workflow_executed: false`. The host must
-stop without substantive investment output until it actually executes the
-selected workflow. These instructions are model-facing guidance rather than a
+load the exact selected child with `load_skill` and then follow its instructions.
+The routing fields describe the router tool call; they do not mean the host must
+stop after successfully loading the child. If the child or a required provider
+is unavailable, the host must report BLOCKED/NOT RUN and must not invent an
+execution receipt. These instructions are model-facing guidance rather than a
 technical enforcement boundary, so each supported host still needs a runtime
-evaluation that proves routing and stop behavior in a fresh chat.
+evaluation that proves routing, child loading, and stop behavior for missing
+providers in a fresh chat. Unrelated tasks must not be routed merely because
+they contain a negated or quoted investment term.
 
 Lab executor inputs are stored outside the `skills/` tree in `executor-inputs/`
 and indexed by `executor-inputs.json`; they are not returned by `load_skill`.
