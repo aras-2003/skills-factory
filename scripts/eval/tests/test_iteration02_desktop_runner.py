@@ -196,6 +196,25 @@ class DesktopAdapterTests(unittest.TestCase):
             self.execute()
         self.assertFalse(list(elsewhere.iterdir()))
 
+    def test_symlinked_archive_root_rejected_before_resolve(self):
+        outside = self.root / "outside"
+        outside.mkdir()
+        self.archive.symlink_to(outside, target_is_directory=True)
+        with self.assertRaisesRegex(desktop.RunBlocked, "symlink path component"):
+            self.execute()
+        self.assertEqual([], list(outside.iterdir()))
+
+    def test_symlinked_input_package_root_rejected_before_resolve(self):
+        alias = self.root / "alias"
+        alias.symlink_to(self.pack, target_is_directory=True)
+        with self.assertRaisesRegex(desktop.RunBlocked, "symlink path component"):
+            desktop.execute_desktop(
+                alias, self.archive, self.identity, CASE, 1,
+                self.adapter, self.adapter_sha,
+                approval_reference="fixture", approved=True, now=self.now,
+            )
+        self.assertFalse(self.archive.exists())
+
     def test_crashed_reservation_is_not_rerun(self):
         prior = self.archive / "desktop" / CASE / "001"
         prior.mkdir(parents=True)
