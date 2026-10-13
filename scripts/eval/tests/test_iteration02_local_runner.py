@@ -145,6 +145,28 @@ class LocalRunnerControllerTests(unittest.TestCase):
             self.call()
         self.assertFalse((path / "called.marker").exists())
 
+    def test_tampered_completed_adapter_response_is_not_reused(self):
+        self.call()
+        output = self.archive / "runs" / CASE / "001" / "adapter-response.json"
+        output.write_text('{"forged": true}', encoding="utf-8")
+        with self.assertRaisesRegex(mod.RunBlocked, "evidence was modified"):
+            self.call()
+
+    def test_incomplete_or_corrupted_prior_record_cannot_resume(self):
+        self.call()
+        record = self.archive / "runs" / CASE / "001" / "record.json"
+        data = json.loads(record.read_text(encoding="utf-8"))
+        data["release_id"] = "other-release"
+        record.write_text(json.dumps(data), encoding="utf-8")
+        with self.assertRaisesRegex(mod.RunBlocked, "identity mismatch"):
+            self.call()
+
+    def test_executor_does_not_receive_evaluator_rubric(self):
+        self.call()
+        raw = (self.archive / "runs" / CASE / "001" / "adapter-response.json").read_text(encoding="utf-8")
+        self.assertNotIn("rubric_sha256", raw)
+        self.assertNotIn("evaluation", raw)
+
     def test_attempts_strict_and_archive_cannot_modify_pack(self):
         with self.assertRaisesRegex(mod.RunBlocked, "attempt exceeds"):
             mod.run_one(self.pack, self.archive, CASE, 3, self.adapter, self.pin,
