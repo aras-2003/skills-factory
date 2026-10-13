@@ -84,7 +84,7 @@ class CloudRuntimeTests(unittest.TestCase):
         self.assertFalse(result["workflow_executed"])
         self.assertEqual("routed_only", result["execution_state"])
         self.assertEqual(
-            "stop_without_substantive_investment_output",
+            "load_child_workflow_then_follow",
             result["response_policy"],
         )
 
@@ -125,14 +125,35 @@ class CloudRuntimeTests(unittest.TestCase):
         self.assertNotIn("execution_state", result)
         self.assertNotIn("response_policy", result)
 
-    def test_cloud_instructions_define_stop_condition_and_no_execution(self) -> None:
+    def test_punctuation_only_request_is_not_misrouted_by_negated_investment_word(self) -> None:
+        result = self.server.route_investment_request(
+            "Fix punctuation only: 'Zespół, pracuje sprawnie'. No finance, process, organization or investments analysis."
+        )
+
+        self.assertFalse(result["is_investment_request"])
+        self.assertEqual("not_applicable", result["route"])
+
+    def test_unrelated_governance_and_security_prompts_are_not_investment_requests(self) -> None:
+        for prompt in (
+            "The archived BACKLOG.json says tasks are proposed, while Issues and Project show active work.",
+            "A public repository has no confirmed LICENSE and private vulnerability reporting is not verified.",
+            "Repo source CI is green, but reading branch protection /rules yields HTTP 403.",
+            "A scanner passes a source fixture but no model/runtime tool trace exists.",
+        ):
+            with self.subTest(prompt=prompt):
+                result = self.server.route_investment_request(prompt)
+                self.assertFalse(result["is_investment_request"])
+                self.assertEqual("not_applicable", result["route"])
+
+    def test_cloud_instructions_separate_routing_from_loaded_workflow_execution(self) -> None:
         instructions = " ".join(self.server.CLOUD_SERVER_INSTRUCTIONS.lower().split())
 
-        self.assertIn('execution_state is "routed_only"', instructions)
-        self.assertIn("workflow_executed is false", instructions)
-        self.assertIn("stop", instructions)
+        self.assertIn("do not call route_investment_request for an unrelated task", instructions)
+        self.assertIn("load the exact returned child with load_skill", instructions)
+        self.assertIn("they do not prohibit the host model", instructions)
+        self.assertIn("if the child or a required", instructions)
         self.assertIn("do not draft policy", instructions)
-        self.assertIn("does not execute a", instructions)
+        self.assertIn("does not attest to", instructions)
         self.assertIn("runtime_info", instructions)
         self.assertIn('attestation_status "unattested"', instructions)
 
