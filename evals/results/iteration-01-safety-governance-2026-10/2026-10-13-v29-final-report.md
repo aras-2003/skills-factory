@@ -65,3 +65,9 @@ Publisher rollback and current installed identity are evidenced. Admin/Legal/Pro
 ## Evidence and interruption
 Sanitized 31-run conversation traces and hashes were written before interruption to local repository results file `2026-10-13-v29-model-traces.json`; raw private browser checkpoint remains local and must not be published (sidebar contains unrelated chat history). Receipt file `2026-10-13-v29-receipts.json` was being saved. Environment subsequently returned **environment_offline**; local files could not be re-read/uploaded in this continuation. This report and connector receipts are persisted separately through GitHub. Do not claim the full trace attachment was uploaded.
 Earlier readiness reports predate v29; this report supersedes their deployment and campaign-status statements, while preserving historical evidence.
+
+
+## Recovery addendum — 2026-10-13 18:51 Europe/Warsaw
+Execution environment recovered. Complete sanitized 31-run traces are now attached on this evidence branch as 2026-10-13-v29-model-traces.json; all 31 input/output hashes verified. This supersedes the earlier interrupted-upload limitation. Current runtime_info independently reconfirmed Site93ceb6c/Labf72. Admin protection retry still returns403.
+
+Owner options/recommendations and exact new TEST authorization boundaries are in 2026-10-13-owner-decisions.md; no option is approved by document creation. Initial GOV-001/MON-001 case traces show no visible load_skill invocation. thesis-monitor already requires BLOCKED_CANONICAL_READ; failure of a loaded skill was not established by those initial traces. Explicit-load supplemental diagnostic is separate evidence and does not silently replace frozen inputs/grades.
