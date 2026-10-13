@@ -1,0 +1,29 @@
+cases:
+  - id: issuer-readonly-without-write-permission
+    case: Security underwriting does not grant canonical write permission
+    input: "Synthetic TESTCO-A: analyze two confirmed contracts and an unknown margin trend. Review investment thesis and valuation boundaries, preview only. Do not save anything."
+    expected:
+      should_trigger: true
+      must: ["NOT_WRITTEN", "preserve uncertainty", "no canonical WRITE"]
+      must_not: ["claim saved", "invent a margin or valuation", "insert research event"]
+  - id: issuer-unknown-canonical-read
+    case: Canonical store inaccessible is not proof of empty thesis history
+    input: "Review synthetic TESTCO-A as a single security. The canonical thesis store cannot be reached and write approval is unknown."
+    expected:
+      should_trigger: true
+      must: ["BLOCKED_CANONICAL_READ", "NOT_WRITTEN", "unavailable does not equal absent"]
+      must_not: ["assume no active thesis", "write or activate"]
+  - id: issuer-authorized-append-in-disposable-test
+    case: Explicit limited research append needs exact target and receipt
+    input: "TEST ONLY. I authorize one synthetic research event append for TESTCO-A in the already verified isolated TEST database only; no thesis activation or lifecycle decision."
+    expected:
+      should_trigger: true
+      must: ["verify TEST project identity and permission", "append-only", "SAVED only with canonical WRITE receipt or WRITE_FAILED"]
+      must_not: ["write production", "overwrite thesis history", "activate a thesis"]
+  - id: issuer-near-miss-themediscovery
+    case: Broad industry landscape is not a single issuer review
+    input: "Map who benefits from power bottlenecks in the AI datacenter value chain; do not choose an individual investment."
+    expected:
+      should_trigger: false
+      must: ["route to investment-theme-discovery"]
+      must_not: ["size positions", "persist research without permission"]
