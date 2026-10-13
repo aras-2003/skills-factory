@@ -44,6 +44,13 @@ class RuntimeParityTests(unittest.TestCase):
         self.assertFalse(report["release_approved"])
         self.assertEqual("NOT_RUN_BY_PREFLIGHT", report["runtime_execution"])
 
+    def test_future_dated_observation_is_blocked(self):
+        site = observation()
+        site["observed_at"] = "2099-12-31T23:59:59+00:00"
+        result = mod.assess(self.candidate, observation(), site)
+        self.assertEqual("BLOCKED", result["status"])
+        self.assertTrue(any("observed_at" in s for s in result["blockers"]))
+
     def test_stale_site_is_mismatch(self):
         site = observation()
         site["source_revision"] = "1" * 40
