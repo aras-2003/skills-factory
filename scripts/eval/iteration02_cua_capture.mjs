@@ -8,7 +8,7 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const hex = (value, length) => typeof value === 'string' && new RegExp(`^[0-9a-f]{${length}}$`).test(value);
 
 export function verifyRequest(request, installed, approval) {
-  if (!approval?.approved || !approval.reference || !['browser', 'desktop', 'work'].includes(request.channel)) throw new Error('Explicit scoped host TEST approval required');
+  if (approval?.approved !== true || typeof approval.reference !== 'string' || !approval.reference.trim() || !['browser', 'desktop', 'work'].includes(request.channel)) throw new Error('Explicit scoped host TEST approval required');
   if (request.environment !== 'TEST' || !/^I02-[0-9]{3}-[a-z0-9-]+$/.test(request.case_id) || !Number.isSafeInteger(request.attempt) || request.attempt < 1) throw new Error('Invalid frozen TEST case');
   if (typeof request.prompt !== 'string' || !request.prompt || Buffer.byteLength(request.prompt) > 256000 || sha(request.prompt) !== request.input_sha256) throw new Error('Frozen input digest mismatch');
   for (const [key, size] of [['source_revision', 40], ['payload_content_sha256', 64]]) {
