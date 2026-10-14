@@ -133,7 +133,8 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
             issues.append(f"stale release identity: {key}")
     if len(matched) == 1 and capture.get("input_sha256") != matched[0].get("input_sha256"):
         issues.append("mismatched frozen prompt digest")
-    if lock.get("runtime_evidence") != "NOT_RUN" or lock.get("release_approved") is not False:
+    if (lock.get("runtime_evidence") != "NOT_RUN" or lock.get("release_approved") is not False
+            or lock.get("provider_calls_executed") is not False):
         issues.append("external lock is not pristine")
     if capture.get("installed_attestation") != "verified" or not capture.get("installed_observation_reference"):
         issues.append("installed client/provider identity not observed")
