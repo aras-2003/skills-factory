@@ -1,0 +1,18 @@
+{
+  "source_revision": "9b457bd68bcd9ff00aece141dbf7f0864b88a723",
+  "domains": {
+    "presentations": {
+      "skills": ["presentation-brief", "presentation-storyline", "presentation-evidence-review", "presentation-exhibit-design", "presentation-slide-authoring", "presentation-deck-review", "presentation-export-verification"],
+      "workflow": "presentation-production",
+      "description": "Orchestrate an evidence-backed presentation from audience brief through storyline, authoring, independent review and export verification. Draft for private runtime testing; actual connector capabilities must be verified.",
+      "references": ["artifact-contract.md", "quality-standard.md", "canva-connector-contract.md"]
+    },
+    "reports": {
+      "skills": ["report-document-architecture", "report-document-authoring", "report-document-review"],
+      "workflow": "report-production",
+      "description": "Orchestrate an evidence-backed long-form editable report from source material through document architecture, authoring, page review and export verification. Draft for private runtime testing; actual connector capabilities must be verified.",
+      "references": ["document-contract.md", "quality-standard.md"]
+    }
+  },
+  "shared_reference": "docs/architecture/content-to-artifact-contract.md"
+}

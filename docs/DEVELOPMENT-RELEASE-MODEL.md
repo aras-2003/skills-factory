@@ -32,7 +32,7 @@ For normal incremental work:
 
 1. create a short-lived branch from `main` and open a PR;
 2. merge only after `Validate skills` and `Domain integrity` pass;
-3. `.github/workflows/package-main-lab-plugin.yml` builds a Lab artifact from the exact merged `main` commit and uploads it as an immutable Actions artifact; it does not write to a branch;
+3. `.github/workflows/package-main-lab-plugin.yml` builds the Lab artifact from the exact merged `main` commit and uploads the immutable Lab artifact; it does not write to a branch or publish the Site;
 4. install/run that exact Lab candidate and retain its runtime receipt;
 5. fix blockers rather than weakening validators;
 6. production is released only after an explicit user request. Prepare a promotion PR containing production packages built from the exact Lab `source_revision`; include `release/promotion-evidence.json` bound to the Lab release id and digest;
@@ -40,7 +40,7 @@ For normal incremental work:
 
 The promotion validator rejects mismatched revisions, missing runtime evidence, missing package digests, or missing run identity. Production PR merge is a human-triggered release action, not an automatic consequence of a `main` merge.
 
-Behavior-bearing paths currently include `skills/`, `workflows/`, and `release/package.yaml`; changing them invalidates the active campaign pin and requires a new behavior baseline.
+Behavior-bearing paths include `skills/`, `workflows/`, and `release/package.yaml`; changing them invalidates the active campaign pin and requires a new behavior baseline. Changes under `sites/skills-factory-cloud-next/` require the dedicated `.github/workflows/validate-cloud-next-site.yml` catalog generation, MCP contract, typecheck, lint and build gates and a new Site runtime version; this workflow does not upload test artifacts. Site code changes do not by themselves invalidate a host-model campaign for skill behavior.
 
 ## Evidence discipline
 

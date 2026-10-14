@@ -45,11 +45,14 @@ skills-factory/
 ├── release/
 │   ├── package.yaml
 │   └── production-readiness.yaml
+├── sites/
+│   └── skills-factory-cloud-next/  # canonical Site/MCP source; host copy is a deployment mirror
 ├── docs/
 └── CATALOG.md
 ```
 
 Generated `plugins/` and `dist/` artifacts are outputs, not source editing targets.
+The Cloud Next Site source is maintained in `sites/skills-factory-cloud-next/`. Its loadable MCP catalog and canonical source revision are generated from the exact Lab and repository commit used for the build. The provider-managed Site repository is a deployment mirror, not a second authoring source.
 
 ## Skill package
 

@@ -1,0 +1,63 @@
+name: Validate Cloud Next Site
+
+on:
+  pull_request:
+    paths:
+      - "sites/skills-factory-cloud-next/**"
+      - "scripts/package/build_cloud_next_site.py"
+      - "scripts/package/build_lab_plugin.py"
+      - ".github/workflows/validate-cloud-next-site.yml"
+  push:
+    branches: [main]
+    paths:
+      - "sites/skills-factory-cloud-next/**"
+      - "scripts/package/build_cloud_next_site.py"
+      - "scripts/package/build_lab_plugin.py"
+      - ".github/workflows/validate-cloud-next-site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Checkout exact source revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install locked Python dependencies
+        run: python -m pip install --require-hashes -r requirements-dev.lock
+      - name: Build Lab from this source revision
+        run: python scripts/package/build_lab_plugin.py --output .tmp/lab
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.14.0
+          cache: pnpm
+          cache-dependency-path: sites/skills-factory-cloud-next/pnpm-lock.yaml
+      - name: Activate the pinned pnpm version
+        run: |
+          corepack enable
+          corepack prepare pnpm@11.25.0 --activate
+      - name: Install Site dependencies
+        run: pnpm --dir sites/skills-factory-cloud-next install --frozen-lockfile
+      - name: Generate Site MCP catalog and source attestation
+        run: python scripts/package/build_cloud_next_site.py --lab-artifact .tmp/lab --write-generated
+      - name: Typecheck Site
+        run: pnpm --dir sites/skills-factory-cloud-next exec tsc --noEmit --incremental false
+      - name: Test MCP contracts
+        run: pnpm --dir sites/skills-factory-cloud-next exec node scripts/check-contracts.mjs
+      - name: Test canonical source synchronization
+        run: pnpm --dir sites/skills-factory-cloud-next exec node --test tests/source-sync.test.mjs
+      - name: Lint Site
+        run: pnpm --dir sites/skills-factory-cloud-next lint
+      - name: Build Site Worker
+        run: pnpm --dir sites/skills-factory-cloud-next build
