@@ -177,7 +177,7 @@ jobs:
           retention-days: 14
 
   build-optional-profiles:
-    name: CI / Optional profile: ${{ matrix.profile }}
+    name: "CI / Optional profile: ${{ matrix.profile }}"
     needs: preflight
     runs-on: ubuntu-latest
     strategy:
