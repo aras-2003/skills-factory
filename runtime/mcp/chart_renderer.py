@@ -30,11 +30,18 @@ mcp = MCPServer(
 
 
 def _validate_text(value: str, field: str, maximum: int, *, allow_empty: bool = False) -> None:
-    if not isinstance(value, str) or (not allow_empty and not value.strip()) or len(value) > maximum:
+    if (
+        not isinstance(value, str)
+        or (not allow_empty and not value.strip())
+        or len(value) > maximum
+        or any(ord(char) < 32 or ord(char) == 127 for char in value)
+    ):
         raise ToolError(f"{field} must be a string of at most {maximum} characters")
 
 
 def _validate_parallel(labels: Sequence[str], values: Sequence[float], expected_points: int, title: str, unit: str) -> None:
+    if not isinstance(labels, list) or not isinstance(values, list):
+        raise ToolError("labels and values must be arrays")
     if not labels or not values:
         raise ToolError("labels and values must be non-empty")
     if len(labels) != len(values):
@@ -45,7 +52,7 @@ def _validate_parallel(labels: Sequence[str], values: Sequence[float], expected_
         raise ToolError("received chart data length does not match expected_points; refusing partial render")
     for label in labels:
         _validate_text(label, "labels", 80)
-    _validate_text(title, "title", 160)
+    _validate_text(title, "title", 160, allow_empty=True)
     _validate_text(unit, "unit", 30, allow_empty=True)
     if any(
         isinstance(value, bool)
@@ -131,6 +138,8 @@ def render_line_chart(
     unit: str,
 ) -> list[str | Image]:
     """Render a deterministic factual line chart from explicit x labels and one or more numeric series."""
+    if not all(isinstance(value, list) for value in (x_labels, series_names, series_values)):
+        raise ToolError("x_labels, series_names, and series_values must be arrays")
     if not x_labels:
         raise ToolError("x_labels must be non-empty")
     if len(x_labels) < 2:
@@ -147,7 +156,7 @@ def render_line_chart(
         raise ToolError("received chart data shape does not match expected counts; refusing partial render")
     for label in (*x_labels, *series_names):
         _validate_text(label, "chart labels", 80)
-    _validate_text(title, "title", 160)
+    _validate_text(title, "title", 160, allow_empty=True)
     _validate_text(unit, "unit", 30, allow_empty=True)
     for values in series_values:
         if len(values) < 2:
