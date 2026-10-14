@@ -1,4 +1,4 @@
-name: Package candidate skill lab
+name: Skills Factory / Lab packaging
 
 on:
   push:
@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   package:
+    name: Release / Build, validate and upload Lab candidate
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     env:

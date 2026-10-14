@@ -18,7 +18,7 @@ env:
 
 jobs:
   preflight:
-    name: CI / Preflight
+    name: CI / Exact source checkout
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -32,7 +32,7 @@ jobs:
         run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
 
   source-contracts:
-    name: CI / Source Contracts
+    name: CI / Source, registry and catalog contracts
     needs: preflight
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +47,7 @@ jobs:
           git diff --exit-code -- CATALOG.md docs/catalog.json
 
   security-capabilities:
-    name: CI / Security and Capabilities
+    name: CI / Security and capability checks
     needs: preflight
     runs-on: ubuntu-latest
     steps:
@@ -72,7 +72,7 @@ jobs:
           retention-days: 30
 
   governance-lifecycle:
-    name: CI / Governance and Lifecycle
+    name: CI / Governance and lifecycle audits
     needs: preflight
     runs-on: ubuntu-latest
     steps:
@@ -99,7 +99,7 @@ jobs:
           retention-days: 30
 
   domain-tests:
-    name: CI / Domain Tests
+    name: CI / Domain, readiness and release tests
     needs: preflight
     runs-on: ubuntu-latest
     steps:
@@ -115,7 +115,7 @@ jobs:
           python scripts/readiness/validate_readiness.py
 
   eval-integrity:
-    name: CI / Eval Integrity
+    name: CI / Eval campaigns and packaging safety
     needs: preflight
     runs-on: ubuntu-latest
     steps:
@@ -151,7 +151,7 @@ jobs:
           PY_ASSERT
 
   build-core-artifacts:
-    name: CI / Build Core Artifacts
+    name: CI / Lab and production artifacts
     needs: preflight
     runs-on: ubuntu-latest
     steps:
@@ -177,7 +177,7 @@ jobs:
           retention-days: 14
 
   build-optional-profiles:
-    name: CI / Build ${{ matrix.profile }} Profile
+    name: CI / Optional profile: ${{ matrix.profile }}
     needs: preflight
     runs-on: ubuntu-latest
     strategy:
@@ -220,7 +220,7 @@ jobs:
           retention-days: 14
 
   runtime-campaign:
-    name: CI / Prepare Runtime Handoffs
+    name: CI / Iteration 1–2 test handoffs
     needs: [preflight, build-core-artifacts]
     runs-on: ubuntu-latest
     steps:
@@ -274,7 +274,7 @@ jobs:
           retention-days: 14
 
   validate:
-    name: CI / Quality Gate
+    name: CI / Required quality gate
     if: always()
     needs: [preflight, source-contracts, security-capabilities, governance-lifecycle, domain-tests, eval-integrity, build-core-artifacts, build-optional-profiles, runtime-campaign]
     runs-on: ubuntu-latest

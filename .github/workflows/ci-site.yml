@@ -33,6 +33,7 @@ permissions:
 
 jobs:
   site:
+    name: Site / Catalog, contracts and Worker build
     runs-on: ubuntu-latest
     env:
       SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}

@@ -1,4 +1,4 @@
-name: Validate production promotion
+name: Skills Factory / Production promotion
 
 on:
   pull_request:
@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
   promotion:
+    name: Release / Production promotion gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout promotion candidate
