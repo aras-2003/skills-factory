@@ -4,15 +4,23 @@ on:
   pull_request:
     paths:
       - "sites/skills-factory-cloud-next/**"
-      - "scripts/package/build_cloud_next_site.py"
-      - "scripts/package/build_lab_plugin.py"
+      - "skills/**"
+      - "workflows/**"
+      - "plugins/skills-factory-lab/**"
+      - "runtime/mcp/**"
+      - "scripts/package/**"
+      - "requirements-dev.lock"
       - ".github/workflows/validate-cloud-next-site.yml"
   push:
     branches: [main]
     paths:
       - "sites/skills-factory-cloud-next/**"
-      - "scripts/package/build_cloud_next_site.py"
-      - "scripts/package/build_lab_plugin.py"
+      - "skills/**"
+      - "workflows/**"
+      - "plugins/skills-factory-lab/**"
+      - "runtime/mcp/**"
+      - "scripts/package/**"
+      - "requirements-dev.lock"
       - ".github/workflows/validate-cloud-next-site.yml"
   workflow_dispatch:
 
