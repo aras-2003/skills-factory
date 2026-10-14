@@ -5,9 +5,12 @@ import unittest
 from pathlib import Path
 import sys
 import zipfile
+import json
+import subprocess
 
 HERE = Path(__file__).resolve()
 PACKAGE_DIR = HERE.parents[1]
+ROOT = HERE.parents[3]
 if str(PACKAGE_DIR) not in sys.path:
     sys.path.insert(0, str(PACKAGE_DIR))
 
@@ -16,6 +19,38 @@ from build_utils import atomic_output, sha256_file, validate_output_path
 
 
 class BuildIntegrityTests(unittest.TestCase):
+    def test_site_catalog_generation_does_not_mutate_lab_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            artifact = root / "lab"
+            mcp = artifact / "mcp"
+            mcp.mkdir(parents=True)
+            (mcp / "skill_catalog.py").write_text(
+                "def entries(): return [{'name': 'sample', 'content_sha256': 'a' * 64, 'kind': 'skill', 'domain': 'sample', 'description': 'sample', 'version': '1.0.0', 'maturity': 'production'}]\n"
+                "def load_skill(_name): return {'name': 'sample', 'content_sha256': 'a' * 64, 'kind': 'skill', 'domain': 'sample', 'description': 'sample', 'version': '1.0.0', 'maturity': 'production', 'instructions': 'hello', 'reference_files': [], 'execution_mode': 'host_model_executes_loaded_instructions', 'source_revision': 'b' * 40}\n"
+                "def catalog_digest(): return 'c' * 64\n",
+                encoding="utf-8",
+            )
+            (artifact / "release-manifest.json").write_text(json.dumps({
+                "channel": "lab", "version": "0.37.0", "source_revision": "b" * 40,
+                "release_id": "0.37.0+test", "payload_content_sha256": "d" * 64,
+                "components": [{"name": "sample", "kind": "skill"}],
+            }), encoding="utf-8")
+            archive = root / "lab.zip"
+            archive.write_bytes(b"synthetic archive")
+            site = root / "site"
+            (site / "lib").mkdir(parents=True)
+            before = {path.relative_to(artifact).as_posix() for path in artifact.rglob("*") if path.is_file()}
+
+            subprocess.run(
+                [sys.executable, str(ROOT / "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py"), str(artifact), str(archive), "--site-root", str(site)],
+                check=True,
+            )
+
+            after = {path.relative_to(artifact).as_posix() for path in artifact.rglob("*") if path.is_file()}
+            self.assertEqual(before, after)
+            self.assertFalse((mcp / "__pycache__").exists())
+
     def test_source_root_and_nested_source_tree_are_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td).resolve()

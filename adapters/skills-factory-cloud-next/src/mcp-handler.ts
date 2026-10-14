@@ -5,6 +5,14 @@ import { callTool, TOOLS, type SiteVersionMetadata } from "./cloud-tools";
 const LIMIT = 128 * 1024;
 const versions = ["2026-07-28", "2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
 const json = (v: unknown, status = 200) => Response.json(v, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
+const base64Utf8 = (value: string) => {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
+  }
+  return btoa(binary);
+};
 const error = (id: unknown, code: number, message: string, status = 200) => {
   const headers = status === 401 ? { "WWW-Authenticate": "Bearer" } : undefined;
   return Response.json({ jsonrpc: "2.0", id: id ?? null, error: { code, message } }, {
@@ -49,9 +57,14 @@ export async function handleMcp(request: Request, versionMetadata?: SiteVersionM
       try {
         const value = await callTool(params.name, params.arguments, versionMetadata);
         const output = { ...value, tool_receipt: await toolReceipt(params.name, params.arguments, value, versionMetadata) };
-        const summary = "svg" in output ? { ...output, svg: "[embedded SVG resource]" } : output;
+        const summary = "svg" in output ? { ...output, svg: "[inline SVG image content]" } : output;
         const content: unknown[] = [{ type: "text", text: JSON.stringify(summary) }];
-        if ("svg" in output) content.push({ type: "resource", resource: { uri: `skills-factory-cloud://charts/${output.kind}`, mimeType: "image/svg+xml", text: output.svg } });
+        if ("svg" in output) content.push({
+          type: "image",
+          data: base64Utf8(output.svg),
+          mimeType: "image/svg+xml",
+          annotations: { audience: ["user"], priority: 0.9 },
+        });
         result = { content, structuredContent: output, isError: false };
       } catch (e) {
         const message = e instanceof Error ? e.message : "Invalid tool arguments";

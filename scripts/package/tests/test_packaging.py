@@ -21,7 +21,7 @@ import artifact_validation
 import build_chatgpt_skills
 import build_lab_plugin
 import build_plugin
-from build_utils import assert_source_revision, validate_output_path
+from build_utils import assert_source_revision, package_version, validate_output_path
 from workflow_entrypoints import dependency_availability, load_registry
 
 
@@ -249,7 +249,7 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual([], errors)
 
             lab_manifest = json.loads((out / "release-manifest.json").read_text(encoding="utf-8"))
-            self.assertEqual("0.36.0", lab_manifest["version"])
+            self.assertEqual(package_version(ROOT, "lab"), lab_manifest["version"])
             source_skill_names = {path.name for path in build_lab_plugin.discover_all_skills(ROOT)}
             self.assertEqual(source_skill_names, {
                 item["name"] for item in lab_manifest["components"] if item["kind"] == "skill"

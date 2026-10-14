@@ -11,6 +11,9 @@ artifact=Path(args.extracted_lab_plugin).resolve()
 archive=Path(args.artifact_zip).resolve()
 site_root=args.site_root.resolve()
 os.environ['PLUGIN_ROOT']=str(artifact)
+# The generated Site must not mutate the Lab artifact while loading its catalog.
+# Otherwise later archive hashes include interpreter-specific __pycache__ files.
+sys.dont_write_bytecode=True
 spec=importlib.util.spec_from_file_location('catalog',artifact/'mcp/skill_catalog.py')
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 manifest=json.loads((artifact/'release-manifest.json').read_text())
