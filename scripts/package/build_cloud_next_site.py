@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
 import re
 import shutil
@@ -12,7 +14,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SITE = ROOT / "sites" / "skills-factory-cloud-next"
+SITE = ROOT / "sites" / "skills-factory-site"
+ADAPTER = ROOT / "adapters" / "skills-factory-cloud-next"
 IGNORED = shutil.ignore_patterns(
     ".git",
     ".next",
@@ -55,7 +58,7 @@ def generate_catalog(lab: Path, work_dir: Path) -> Path:
     run(
         [
             sys.executable,
-            str(generated_site / "scripts" / "sync-lab-catalog.py"),
+            str(ADAPTER / "scripts" / "sync-lab-catalog.py"),
             str(lab),
             str(lab_archive),
             "--site-root",
@@ -65,11 +68,16 @@ def generate_catalog(lab: Path, work_dir: Path) -> Path:
     run(
         [
             "node",
-            str(generated_site / "scripts" / "sync-lab-references.mjs"),
+            str(ADAPTER / "scripts" / "sync-lab-references.mjs"),
             str(lab),
             str(generated_site),
         ]
     )
+    adapter_out = generated_site / "lib" / "skills-factory-adapter"
+    adapter_out.mkdir(parents=True, exist_ok=True)
+    for source in sorted(ADAPTER.joinpath("src").glob("*.ts")):
+        shutil.copyfile(source, adapter_out / source.name)
+    shutil.copyfile(generated_site / "lib" / "skill-catalog.ts", adapter_out / "skill-catalog.ts")
     return generated_site / "lib" / "skill-catalog.ts"
 
 
@@ -95,12 +103,12 @@ def routing_contract_blob() -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Verify or refresh the Site's generated MCP catalog from this commit's Lab build."
+        description="Verify or refresh the Cloud Next adapter bundle from this commit's Lab build."
     )
     parser.add_argument("--lab-artifact", type=Path, help="Existing extracted Lab artifact; built when omitted.")
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--check", action="store_true", help="Fail if the committed Site catalog is stale (default).")
-    group.add_argument("--write-generated", action="store_true", help="Write the generated catalog into the Site source.")
+    group.add_argument("--check", action="store_true", help="Fail if the adapter bundle is stale (default).")
+    group.add_argument("--write-generated", action="store_true", help="Write the generated adapter bundle into the Site workspace.")
     args = parser.parse_args()
 
     SITE.joinpath(".openai", "hosting.json").read_text(encoding="utf-8")
@@ -118,25 +126,49 @@ def main() -> int:
         if not (lab / "release-manifest.json").is_file():
             raise FileNotFoundError(f"Lab artifact is missing a release manifest: {lab}")
 
-        generated_catalog = generate_catalog(lab, work_dir).read_bytes()
-        generated_provenance = (
+        generated_catalog_path = generate_catalog(lab, work_dir)
+        generated_site = generated_catalog_path.parents[1]
+        adapter_generated = generated_site / "lib" / "skills-factory-adapter"
+        adapter_provenance = (
             f'// Generated from this Skills Factory commit before the Site build.\n'
             f'export const CANONICAL_SOURCE_REVISION = "{source_revision()}" as const;\n'
             f'export const ROUTING_CONTRACT_BLOB_SHA = "{routing_contract_blob()}" as const;\n'
         ).encode()
-        catalog_path = SITE / "lib" / "skill-catalog.ts"
-        provenance_path = SITE / "lib" / "canonical-provenance.ts"
+        (adapter_generated / "canonical-provenance.ts").write_bytes(adapter_provenance)
+        source_digests = {
+            path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(ADAPTER.joinpath("src").glob("*.ts"))
+        }
+        adapter_manifest = {
+            "schema_version": "1.0",
+            "adapter": "skills-factory-cloud-next",
+            "source_revision": source_revision(),
+            "lab_release_id": json.loads((lab / "release-manifest.json").read_text(encoding="utf-8"))["release_id"],
+            "source_files": source_digests,
+        }
+        (adapter_generated / "adapter-manifest.json").write_text(
+            json.dumps(adapter_manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        generated_files = {
+            f"lib/skills-factory-adapter/{path.name}": path.read_bytes()
+            for path in sorted(adapter_generated.iterdir()) if path.is_file()
+        }
         if args.write_generated:
-            catalog_path.write_bytes(generated_catalog)
-            provenance_path.write_bytes(generated_provenance)
-            print("Generated the Site catalog and canonical source revision from this Skills Factory build.")
+            for relative, content in generated_files.items():
+                target = SITE / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(content)
+            print("Generated the Cloud Next adapter bundle, catalog and source attestation from this Skills Factory build.")
             return 0
-        if catalog_path.read_bytes() != generated_catalog or provenance_path.read_bytes() != generated_provenance:
+        stale = [relative for relative, content in generated_files.items()
+                 if not (SITE / relative).is_file() or (SITE / relative).read_bytes() != content]
+        if stale:
             raise SystemExit(
-                "Cloud Next's generated source is stale. Run "
+                "Cloud Next's generated adapter bundle or catalog is stale. Run "
                 "python scripts/package/build_cloud_next_site.py --write-generated and include the result."
             )
-        print("Cloud Next catalog, allow-listed references and source revision match this Skills Factory build.")
+        print("Cloud Next adapter bundle, catalog, references and provenance match this Skills Factory build.")
     return 0
 
 

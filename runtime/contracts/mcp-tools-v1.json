@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "contract": "skills-factory-mcp-tools-v1",
+  "tools": {
+    "runtime_info": [],
+    "list_skills": [],
+    "load_skill": ["skill_name"],
+    "route_investment_request": ["user_request"],
+    "render_bar_chart": ["expected_points", "horizontal", "labels", "title", "unit", "values"],
+    "render_line_chart": ["expected_points_per_series", "expected_series", "expected_x_labels", "series_names", "series_values", "title", "unit", "x_labels"]
+  }
+}

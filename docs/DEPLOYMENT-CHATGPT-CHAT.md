@@ -54,7 +54,7 @@ feature branch
   -> PR to main
   -> validation + behavioral eval
   -> promotion to production
-  -> package-production-plugin.yml
+  -> release-production-plugin.yml
   -> plugins/skills-factory/
 
   -> package-chatgpt-skills.yml

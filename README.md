@@ -33,10 +33,10 @@ The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) is a d
 - `skills/meta/` — skill engineering/control skills
 - `skills/investing/` — personal Investment OS: market attention, research, portfolio, sizing, monitoring and learning
 - `skills/core/`, `skills/ecommerce/`, `skills/learning/`, `skills/product-research/`, `skills/strategy-ea/`, `skills/tender/`, `skills/web-design/` — additional source domains at mixed maturity
+- `adapters/skills-factory-cloud-next/` — Cloud Next's MCP transport and tool facade; its runtime bundle is generated into the Site build from this repository's canonical Lab artifact
+- `sites/skills-factory-site/` — standalone Site application workspace; provider-managed hosting remains a deployment mirror
 
-- `sites/skills-factory-cloud-next/` — canonical source for the Skills Factory Cloud Next Site and MCP Worker; its embedded Lab catalog and source attestation are generated from this repository during build.
-
-The Skills Factory repository is the single authoring source for skills, workflows, build scripts, and the Cloud Next Site. Site hosting retains a separate provider-managed Git mirror for deployment only. Update Site code through reviewed changes here, then synchronize the merged source with the official Sites workflow; do not author code fixes directly in the provider mirror.
+The Skills Factory repository is the single authoring source for skills, workflows, adapters, build scripts, and Site code. The Cloud Next MCP facade lives under `adapters/`; the Site UI and hosting application live under `sites/skills-factory-site/`. Site hosting retains a separate provider-managed Git mirror for deployment only. Update both projects through reviewed changes here, then synchronize the merged Site build with the official Sites workflow; never author fixes directly in the provider mirror.
 
 The source tree is not the runtime allow-list.
 
@@ -84,16 +84,9 @@ Current runtime validation campaign: `runtime-validation-2026-10-r16`, pinned to
 
 ## Quality and build
 
-Required PR validation is defined in `.github/workflows/validate-skills.yml` and covers:
-- source/static contracts;
-- skill-source static security scan and scanner mutation tests;
-- validator mutation tests;
-- eval input/rubric isolation;
-- active runtime campaign definition, imported evidence validation and offline campaign regressions;
-- package safety/reproducibility;
-- catalog freshness;
-- production plugin, Lab and ChatGPT ZIP builds plus artifact validation;
-- deterministic Commerce unit-economics tests.
+Required PR validation is defined in `.github/workflows/ci-validate.yml` and fans out source contracts, security/capabilities, governance/lifecycle, domain tests, eval integrity, artifact builds and runtime handoff preparation after a shared preflight. Lab and production artifacts are built once per validation run and reused by runtime campaign preparation; optional package profiles build in a matrix. `.github/workflows/ci-site.yml` separately checks the Cloud Next adapter bundle and Site app. Its separate workflow currently rebuilds the Lab artifact because GitHub Actions artifacts are scoped to a workflow run.
+
+Repository ownership, all source domains, all registered workflows and the workflow naming convention are mapped in [Repository Map](docs/architecture/repository-map.md).
 
 The Site source has a dedicated PR gate in `.github/workflows/validate-cloud-next-site.yml`: it generates the embedded MCP catalog from the same commit's Lab build, typechecks, runs contract and source-sync tests, lints and builds the Worker. It does not upload test artifacts.
 

@@ -32,15 +32,15 @@ For normal incremental work:
 
 1. create a short-lived branch from `main` and open a PR;
 2. merge only after `Validate skills` and `Domain integrity` pass;
-3. `.github/workflows/package-main-lab-plugin.yml` builds the Lab artifact from the exact merged `main` commit and uploads the immutable Lab artifact; it does not write to a branch or publish the Site;
+3. `.github/workflows/release-lab-plugin.yml` builds the Lab artifact from the exact merged `main` commit and uploads the immutable Lab artifact; it does not write to a branch or publish the Site;
 4. install/run that exact Lab candidate and retain its runtime receipt;
 5. fix blockers rather than weakening validators;
 6. production is released only after an explicit user request. Prepare a promotion PR containing production packages built from the exact Lab `source_revision`; include `release/promotion-evidence.json` bound to the Lab release id and digest;
-7. `.github/workflows/package-production.yml` validates the PR, all generated package manifests, the exact Lab-to-production source chain, and the runtime receipt. It never pushes or merges.
+7. `.github/workflows/release-production-plugin.yml` validates the PR, all generated package manifests, the exact Lab-to-production source chain, and the runtime receipt. It never pushes or merges.
 
 The promotion validator rejects mismatched revisions, missing runtime evidence, missing package digests, or missing run identity. Production PR merge is a human-triggered release action, not an automatic consequence of a `main` merge.
 
-Behavior-bearing paths include `skills/`, `workflows/`, and `release/package.yaml`; changing them invalidates the active campaign pin and requires a new behavior baseline. Changes under `sites/skills-factory-cloud-next/` require the dedicated `.github/workflows/validate-cloud-next-site.yml` catalog generation, MCP contract, typecheck, lint and build gates and a new Site runtime version; this workflow does not upload test artifacts. Site code changes do not by themselves invalidate a host-model campaign for skill behavior.
+The active model-output campaign pins changes under `skills/`, `workflows/` and `release/package.yaml`. Changes under `runtime/mcp/` or `runtime/contracts/` require deterministic MCP contract tests; Cloud Next adapter changes additionally require Site typecheck, lint and build gates. If such a runtime change alters model-visible instructions or outcomes, add it to a scoped behavior campaign before claiming runtime compatibility. Site-only UI changes do not by themselves invalidate a host-model campaign for skill behavior. The CI workflow builds Lab and production artifacts once and reuses them for runtime handoffs; the separately required Site workflow builds Lab independently.
 
 ## Evidence discipline
 

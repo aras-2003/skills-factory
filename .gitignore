@@ -1,0 +1,20 @@
+# Python and local test output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+
+# Local build and scratch artifacts
+.tmp/
+dist/
+build/
+
+# JavaScript package installs
+node_modules/
+**/node_modules/
+
+# Local environments and credentials
+.venv/
+.env
+.env.*
+!.env.example

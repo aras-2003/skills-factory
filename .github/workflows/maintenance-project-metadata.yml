@@ -1,0 +1,48 @@
+name: Skills Factory / Project metadata sync
+on:
+  pull_request:
+    paths:
+      - 'scripts/governance/sync_project_metadata.py'
+      - 'tests/governance/test_project_metadata_sync.py'
+      - '.github/workflows/maintenance-project-metadata.yml'
+  issues:
+    types: [opened, edited, labeled, unlabeled, reopened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: Existing issue to resync
+        required: true
+        type: number
+permissions:
+  contents: read
+  issues: read
+concurrency:
+  group: project-metadata-${{ github.event.issue.number || inputs.issue_number }}
+  cancel-in-progress: false
+jobs:
+  test-mapping:
+    name: Governance / Validate issue-to-project mapping
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - run: python3 -m unittest discover -s tests/governance -p 'test_project_metadata_sync.py' -v
+  sync:
+    name: Governance / Sync issue metadata
+    runs-on: ubuntu-latest
+    if: github.repository == 'aras-2003/skills-factory' && github.event_name != 'pull_request'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      GH_REPOSITORY: ${{ github.repository }}
+      ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+      PROJECT_OWNER: aras-2003
+      PROJECT_NUMBER: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Sync project metadata (fail closed if token missing)
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::PROJECTS_TOKEN secret missing. Configure a scoped GitHub App token or fine-grained PAT with Projects write permission."
+            exit 1
+          fi
+          python3 scripts/governance/sync_project_metadata.py

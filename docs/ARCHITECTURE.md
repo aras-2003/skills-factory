@@ -45,14 +45,19 @@ skills-factory/
 ├── release/
 │   ├── package.yaml
 │   └── production-readiness.yaml
+├── runtime/
+│   ├── contracts/                      # canonical cross-adapter MCP tool contract
+│   └── mcp/                            # Python MCP implementation used by Lab/local profiles
+├── adapters/
+│   └── skills-factory-cloud-next/      # remote HTTP MCP facade
 ├── sites/
-│   └── skills-factory-cloud-next/  # canonical Site/MCP source; host copy is a deployment mirror
+│   └── skills-factory-site/            # standalone Site UI/workspace; host copy is a deployment mirror
 ├── docs/
 └── CATALOG.md
 ```
 
 Generated `plugins/` and `dist/` artifacts are outputs, not source editing targets.
-The Cloud Next Site source is maintained in `sites/skills-factory-cloud-next/`. Its loadable MCP catalog and canonical source revision are generated from the exact Lab and repository commit used for the build. The provider-managed Site repository is a deployment mirror, not a second authoring source.
+The Cloud Next MCP transport and tool facade are maintained in `adapters/skills-factory-cloud-next/`; the Site application is maintained independently in `sites/skills-factory-site/`. Both facades are checked against `runtime/contracts/mcp-tools-v1.json` and consume a catalog generated from Lab source. The Site build embeds the Cloud adapter and provenance from a Lab artifact built at the same repository commit. Generated bundles are build outputs, not editing targets. The provider-managed Site repository is a deployment mirror, not a second authoring source. Runtime implementations remain language-specific and require adapter-specific behavior tests; the chart facades intentionally return different image formats.
 
 ## Skill package
 

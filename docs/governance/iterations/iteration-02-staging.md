@@ -98,4 +98,3 @@ python scripts/eval/iteration02_result_intake.py \
 ```
 
 The intake returns `NO_EXECUTION_RECEIPTS`, `INCOMPLETE`, `INVALID_RECEIPTS`, or `EVIDENCE_STRUCTURALLY_COMPLETE_REVIEW_REQUIRED`. Even the structurally complete state does **not** independently authenticate observation origins, evaluate rubric semantics, close manual gates or approve a release. Reviewer checks immutable raw outputs, real provider identity, tool-call traces, client-visible artifacts, input/rubric isolation and historical comparisons. Preserve results append-only, never overwrite pinned R17/R18/R20 evidence.
-

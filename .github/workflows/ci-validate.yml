@@ -1,0 +1,287 @@
+name: Validate skills
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skills-factory-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+
+jobs:
+  preflight:
+    name: CI / Exact source checkout
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.SOURCE_REVISION }}
+      - uses: ./.github/actions/python-environment
+        with:
+          install-dev-dependencies: "false"
+      - name: Validate exact source identity
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
+
+  source-contracts:
+    name: CI / Source, registry and catalog contracts
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { fetch-depth: 0, ref: "${{ env.SOURCE_REVISION }}" }
+      - uses: ./.github/actions/python-environment
+      - name: Validate source and registry contracts
+        run: |
+          python scripts/validate/validate_all.py
+          python -m unittest discover -s scripts/validate/tests -p 'test_*.py'
+          python scripts/catalog/generate_catalog.py
+          git diff --exit-code -- CATALOG.md docs/catalog.json
+
+  security-capabilities:
+    name: CI / Security and capability checks
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { fetch-depth: 0, ref: "${{ env.SOURCE_REVISION }}" }
+      - uses: ./.github/actions/python-environment
+      - name: Scan source and validate capability declarations
+        run: |
+          python scripts/security/validate_actions_pins.py
+          mkdir -p .tmp
+          python scripts/security/scan_skills.py --report .tmp/skill-security-report.json
+          python -m unittest discover -s scripts/security/tests -p 'test_*.py'
+          python scripts/capabilities/validate_contract.py --report .tmp/capability-assessment-report.json
+          python -m unittest discover -s scripts/capabilities/tests -p 'test_*.py'
+          python scripts/eval/routing_collision_report.py --output .tmp/routing-collision-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: sf-security-reports-${{ env.SOURCE_REVISION }}
+          path: .tmp/*-report.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+  governance-lifecycle:
+    name: CI / Governance and lifecycle audits
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { fetch-depth: 0, ref: "${{ env.SOURCE_REVISION }}" }
+      - uses: ./.github/actions/python-environment
+      - name: Audit governance and lifecycle contracts
+        run: |
+          mkdir -p .tmp
+          python scripts/roadmap/audit_p0.py --output .tmp/p0-backlog-audit.json
+          python scripts/governance/validate_legacy_map.py --output .tmp/legacy-id-map-audit.json
+          python -m unittest discover -s scripts/governance/tests -p 'test_*.py'
+          python -m unittest discover -s scripts/roadmap/tests -p 'test_*.py'
+          python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
+          python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
+          python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
+          python scripts/engineering/audit_workflow_lifecycle.py --output .tmp/workflow-lifecycle-audit.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: sf-governance-reports-${{ env.SOURCE_REVISION }}
+          path: .tmp/*audit.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+  domain-tests:
+    name: CI / Domain, readiness and release tests
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { fetch-depth: 0, ref: "${{ env.SOURCE_REVISION }}" }
+      - uses: ./.github/actions/python-environment
+      - name: Run domain, readiness and release tests
+        run: |
+          python -m unittest discover -s scripts/output/tests -p 'test_*.py'
+          python -m unittest discover -s skills/commerce/economics/unit-economics-review/tests -p 'test_*.py'
+          python -m unittest discover -s scripts/readiness/tests -p 'test_*.py'
+          python -m unittest discover -s scripts/release/tests -p 'test_*.py'
+          python scripts/readiness/validate_readiness.py
+
+  eval-integrity:
+    name: CI / Eval campaigns and packaging safety
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.SOURCE_REVISION }}
+      - uses: ./.github/actions/python-environment
+      - name: Validate evaluation campaigns and packaging safety
+        run: |
+          python scripts/eval/validate_isolation.py
+          python scripts/eval/campaign.py validate
+          python scripts/eval/skill_release_campaign.py validate
+          python -m unittest discover -s scripts/eval/tests -p 'test_*.py'
+          python -m unittest discover -s scripts/package/tests -p 'test_*.py'
+          python -m unittest discover -s runtime/mcp/tests -p 'test_*.py'
+          node --test scripts/eval/tests/test_iteration02_cua_capture.mjs
+          python scripts/eval/campaign.py validate-evidence
+          python scripts/eval/iteration01_handoff.py validate
+          python scripts/eval/iteration02_handoff.py validate
+          python scripts/eval/iteration02_semantic_coverage.py --output .tmp/iteration02-semantic-coverage.json
+          python scripts/eval/r17_disposition.py --output .tmp/iteration02-r17-history.json
+          python scripts/eval/iteration02_full_behavior_campaign.py --source-revision "$SOURCE_REVISION" --output .tmp/iteration02-all-component-campaign
+          python - <<'PY_ASSERT'
+          import json
+          from pathlib import Path
+          root = Path('.tmp/iteration02-all-component-campaign')
+          data = json.loads((root / 'source-audit.json').read_text())
+          assert data['status'] == 'INPUTS_READY_RUNTIME_NOT_RUN', data.get('errors')
+          assert data['skill_count'] == 64 and data['registered_workflow_count'] == 19
+          assert data['case_count'] > 0 and not data['release_approved']
+          assert not json.loads((root / 'executor-inputs.json').read_text())['writes_authorized']
+          PY_ASSERT
+
+  build-core-artifacts:
+    name: CI / Lab and production artifacts
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.SOURCE_REVISION }}
+      - uses: ./.github/actions/python-environment
+      - name: Build Lab and production artifacts once
+        run: |
+          python scripts/package/build_lab_plugin.py --output .tmp/core/lab-plugin
+          python scripts/package/build_plugin.py --maturity production --output .tmp/core/production-plugin
+      - name: Validate built artifacts and isolation
+        run: |
+          python scripts/package/artifact_validation.py .tmp/core/lab-plugin --lab
+          python scripts/eval/validate_isolation.py --artifact .tmp/core/lab-plugin
+          python scripts/package/artifact_validation.py .tmp/core/production-plugin
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: sf-core-${{ env.SOURCE_REVISION }}
+          path: .tmp/core/
+          if-no-files-found: error
+          retention-days: 14
+
+  build-optional-profiles:
+    name: "CI / Optional profile: ${{ matrix.profile }}"
+    needs: preflight
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [skills-only, remote-mcp, chatgpt-zips]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.SOURCE_REVISION }}
+      - uses: ./.github/actions/python-environment
+      - name: Build skills-only profile
+        if: matrix.profile == 'skills-only'
+        run: python scripts/package/build_plugin.py --runtime-mode skills-only --output .tmp/profile
+      - name: Build remote MCP profile
+        if: matrix.profile == 'remote-mcp'
+        run: python scripts/package/build_plugin.py --runtime-mode remote --remote-mcp-url https://mcp.example.invalid/mcp --output .tmp/profile
+      - name: Build ChatGPT ZIP profile
+        if: matrix.profile == 'chatgpt-zips'
+        run: python scripts/package/build_chatgpt_skills.py --maturity production --output .tmp/profile
+      - name: Validate profile
+        run: |
+          if [ "${{ matrix.profile }}" = "chatgpt-zips" ]; then
+            python scripts/package/artifact_validation.py .tmp/profile --zips
+          else
+            python scripts/package/artifact_validation.py .tmp/profile
+          fi
+      - name: Check ZIP reproducibility
+        if: matrix.profile == 'chatgpt-zips'
+        run: |
+          cp -R .tmp/profile .tmp/profile-first
+          python scripts/package/build_chatgpt_skills.py --maturity production --output .tmp/profile
+          diff -qr .tmp/profile-first .tmp/profile
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: sf-profile-${{ matrix.profile }}-${{ env.SOURCE_REVISION }}
+          path: .tmp/profile/
+          if-no-files-found: error
+          retention-days: 14
+
+  runtime-campaign:
+    name: CI / Iteration 1–2 test handoffs
+    needs: [preflight, build-core-artifacts]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.SOURCE_REVISION }}
+      - uses: ./.github/actions/python-environment
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: sf-core-${{ env.SOURCE_REVISION }}
+          path: .tmp/core
+      - name: Prepare campaign from the already validated artifacts
+        run: |
+          python scripts/eval/campaign.py prepare \
+            --output .tmp/runtime-campaign-r20 \
+            --production-plugin .tmp/core/production-plugin \
+            --lab-plugin .tmp/core/lab-plugin
+          python scripts/eval/campaign.py validate-evidence
+          python scripts/eval/skill_release_campaign.py prepare --lab .tmp/core/lab-plugin --output .tmp/runtime-campaign-skill-release-review
+          python scripts/eval/iteration01_handoff.py prepare --lab .tmp/core/lab-plugin --output .tmp/iteration01-test-handoff
+          python scripts/eval/validate_isolation.py --artifact .tmp/iteration01-test-handoff
+          python scripts/eval/iteration02_handoff.py prepare --lab .tmp/core/lab-plugin --output .tmp/iteration02-test-handoff
+          python scripts/eval/validate_isolation.py --artifact .tmp/iteration02-test-handoff
+          python scripts/eval/iteration02_external_handoff.py --lab-pack .tmp/iteration02-test-handoff --output .tmp/iteration02-external-handoff
+      - name: Assemble executor-only runtime retest pack
+        run: |
+          mkdir -p .tmp/runtime-retest-pack/executor-inputs
+          cp -R .tmp/core/production-plugin .tmp/runtime-retest-pack/production
+          cp -R .tmp/core/lab-plugin .tmp/runtime-retest-pack/lab
+          cp .tmp/runtime-campaign-r20/lock.json .tmp/runtime-retest-pack/lock.json
+          cp .tmp/runtime-campaign-r20/smoke-production-template.json .tmp/runtime-retest-pack/smoke-production-template.json
+          cp .tmp/runtime-campaign-r20/smoke-lab-template.json .tmp/runtime-retest-pack/smoke-lab-template.json
+          cp evals/campaigns/runtime-validation-2026-10-r2/fallback/fallback-strategy-production-002.input.md .tmp/runtime-retest-pack/executor-inputs/01-fallback-strategy-explicit.input.md
+          if find .tmp/runtime-retest-pack -type f \( -name '*.rubric.yaml' -o -name '*.rubric.yml' \) | grep -q .; then echo 'rubric leaked into executor pack'; exit 1; fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: sf-runtime-handoffs-${{ env.SOURCE_REVISION }}
+          path: |
+            .tmp/runtime-retest-pack/
+            .tmp/runtime-campaign-skill-release-review/
+            .tmp/iteration01-test-handoff/
+            .tmp/iteration02-test-handoff/
+            .tmp/iteration02-external-handoff/
+            .tmp/iteration02-all-component-campaign/source-audit.json
+            .tmp/iteration02-all-component-campaign/executor-inputs.json
+            .tmp/iteration02-all-component-campaign/executor-queue.json
+            .tmp/iteration02-all-component-campaign/executor-cases/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  validate:
+    if: always()
+    needs: [preflight, source-contracts, security-capabilities, governance-lifecycle, domain-tests, eval-integrity, build-core-artifacts, build-optional-profiles, runtime-campaign]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preserve required check and require every branch
+        env:
+          RESULTS: ${{ needs.preflight.result }} ${{ needs.source-contracts.result }} ${{ needs.security-capabilities.result }} ${{ needs.governance-lifecycle.result }} ${{ needs.domain-tests.result }} ${{ needs.eval-integrity.result }} ${{ needs.build-core-artifacts.result }} ${{ needs.build-optional-profiles.result }} ${{ needs.runtime-campaign.result }}
+        run: |
+          for result in $RESULTS; do
+            if [ "$result" != success ]; then echo "Validation branch ended with: $result"; exit 1; fi
+          done

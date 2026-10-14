@@ -1,0 +1,56 @@
+name: Skills Factory / Lab packaging
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "plugins/skills-factory-lab/**"
+      - "docs/lab-release.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: main-lab-packaging
+  cancel-in-progress: false
+
+jobs:
+  package:
+    name: Release / Build, validate and upload Lab candidate
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_REVISION: ${{ github.sha }}
+    steps:
+      - name: Checkout exact main source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --require-hashes -r requirements-dev.lock
+      - name: Build and validate isolated Lab
+        run: |
+          python scripts/package/build_lab_plugin.py --output plugins/skills-factory-lab
+          python scripts/package/artifact_validation.py plugins/skills-factory-lab --lab
+          python scripts/eval/validate_isolation.py --artifact plugins/skills-factory-lab
+          cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json
+      - name: Upload immutable Lab candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skills-factory-lab-${{ github.sha }}
+          path: |
+            plugins/skills-factory-lab
+            docs/lab-release.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90
+      - name: Record candidate identity
+        run: |
+          echo "## Lab candidate" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Source revision: \`$SOURCE_REVISION\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Release ID: \`$(python -c 'import json; print(json.load(open("docs/lab-release.json"))["release_id"])')\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Package digest: \`$(python -c 'import json; print(json.load(open("docs/lab-release.json"))["payload_content_sha256"])')\`" >> "$GITHUB_STEP_SUMMARY"

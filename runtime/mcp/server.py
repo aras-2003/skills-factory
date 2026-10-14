@@ -1,3 +1,8 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["mcp==2.3.0", "matplotlib==3.11.2", "PyYAML==6.0.3"]
+# ///
+
 """Single Skills Factory MCP runtime for local stdio and remote HTTP profiles."""
 
 from __future__ import annotations
@@ -246,14 +251,16 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
 def render_bar_chart(
     labels: list[str],
     values: list[float],
-    title: str = "",
-    unit: str = "",
-    horizontal: bool = True,
+    expected_points: int,
+    title: str,
+    unit: str,
+    horizontal: bool,
 ):
     """Render a deterministic factual bar chart from explicit values."""
     arguments = {
         "labels": labels,
         "values": values,
+        "expected_points": expected_points,
         "title": title,
         "unit": unit,
         "horizontal": horizontal,
@@ -261,7 +268,7 @@ def render_bar_chart(
     return _render_with_receipt(
         "render_bar_chart",
         arguments,
-        lambda: _render_bar_chart(labels, values, title, unit, horizontal),
+        lambda: _render_bar_chart(labels, values, expected_points, title, unit, horizontal),
     )
 
 
@@ -270,21 +277,31 @@ def render_line_chart(
     x_labels: list[str],
     series_names: list[str],
     series_values: list[list[float]],
-    title: str = "",
-    unit: str = "",
+    expected_x_labels: int,
+    expected_series: int,
+    expected_points_per_series: int,
+    title: str,
+    unit: str,
 ):
     """Render a deterministic factual line chart from explicit values."""
     arguments = {
         "x_labels": x_labels,
         "series_names": series_names,
         "series_values": series_values,
+        "expected_x_labels": expected_x_labels,
+        "expected_series": expected_series,
+        "expected_points_per_series": expected_points_per_series,
         "title": title,
         "unit": unit,
     }
     return _render_with_receipt(
         "render_line_chart",
         arguments,
-        lambda: _render_line_chart(x_labels, series_names, series_values, title, unit),
+        lambda: _render_line_chart(
+            x_labels, series_names, series_values,
+            expected_x_labels, expected_series, expected_points_per_series,
+            title, unit,
+        ),
     )
 
 
