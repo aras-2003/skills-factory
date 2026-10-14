@@ -36,7 +36,7 @@ The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) is a d
 
 The source tree is not the runtime allow-list.
 
-Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS components, and 19 workflow definitions. Lab 0.35.0 and its bundled MCP expose every source skill and workflow regardless of maturity for isolated testing. Presentation/Report OS, skill-development and report-production remain draft; their Lab exposure does not promote them to the production plugin. The production plugin continues to use its explicit maturity and channel allow-list. Other domain README files describe design/backlog intent unless stated otherwise.
+Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS components, and 19 workflow definitions. Lab 0.35.1 and its bundled MCP expose every source skill and workflow regardless of maturity for isolated testing. Presentation/Report OS, skill-development and report-production remain draft; their Lab exposure does not promote them to the production plugin. The production plugin continues to use its explicit maturity and channel allow-list. Other domain README files describe design/backlog intent unless stated otherwise.
 
 ## Branches, maturity and installed capability
 

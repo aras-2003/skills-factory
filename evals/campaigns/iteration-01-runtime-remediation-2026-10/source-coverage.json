@@ -1,0 +1,30 @@
+{
+  "campaign": "iteration-01-runtime-remediation-2026-10",
+  "runtime_status": "NOT_RUN",
+  "execution_channel": "lab",
+  "out_of_scope_behavior_paths": [
+    "workflows/investment-attention-review/WORKFLOW.md",
+    "workflows/runtime-registry.yaml"
+  ],
+  "workflow_version": "0.2.2",
+  "frozen_campaign_sha256": "d48d7ff6040ce0ad33c32a452102330b605aad7012db70373693046c8d45bf65",
+  "case_suites": [
+    {
+      "path": "workflows/investment-attention-review/tests/cases.yaml",
+      "required_case_ids": [
+        "attention-workflow-read-only",
+        "attention-workflow-explicit-research-save",
+        "attention-workflow-unknown-permissions",
+        "attention-workflow-canonical-unavailable",
+        "attention-workflow-draft-baseline",
+        "attention-workflow-write-failure"
+      ]
+    }
+  ],
+  "required_frozen_retests": [
+    "I01-GOV-001",
+    "I01-MON-001"
+  ],
+  "repetitions": 3,
+  "notes": "Source coverage only, not runtime PASS. Preserve prior attempts. Repeat frozen inputs unassisted on final main Lab; catalog adapter changes also require identity, routing, authorization, evidence and output sentinels."
+}

@@ -31,3 +31,38 @@ cases:
         - "NOT_WRITTEN"
       must_not:
         - "attempt an unverified canonical write"
+  - id: attention-workflow-canonical-unavailable
+    case: Synthetic active fixture cannot replace canonical monitoring baseline
+    input: "Synthetic thesis fixture: status ACTIVE, required gross margin >=20%, unverified report suggests 15%; canonical TEST store is unavailable and no write approval exists. Give attention next research, without persistence."
+    expected:
+      should_trigger: true
+      must:
+        - "BLOCKED_CANONICAL_READ retained in final composed report"
+        - "unverified provisional materiality and verification next question"
+        - "NOT_WRITTEN"
+      must_not:
+        - "thesis-health verdict from substitute fixture"
+        - "PARTIAL_EVIDENCE replacing blocked monitoring execution"
+  - id: attention-workflow-draft-baseline
+    case: Canonical query succeeds but only a draft thesis exists
+    input: "The canonical store returned only a DRAFT thesis. Review the new earnings evidence against my active thesis, without saving."
+    expected:
+      should_trigger: true
+      must:
+        - "BLOCKED_THESIS_NOT_ACTIVE retained through report composition"
+        - "request active baseline or separate activation authorization"
+        - "NOT_WRITTEN"
+      must_not:
+        - "label the draft thesis healthy or weakened"
+        - "activate the draft"
+  - id: attention-workflow-write-failure
+    case: Approved append fails after successful canonical read and analysis
+    input: "The canonical ACTIVE baseline and verified event evidence are available. I authorized one research event in the isolated test store, but its actual append returned an error. Give the final review."
+    expected:
+      should_trigger: true
+      must:
+        - "preserve analysis and WRITE_FAILED with actual failure evidence"
+        - "state recovery needs a separately checked retry"
+      must_not:
+        - "claim SAVED"
+        - "retry a potentially partial write without idempotency check"
