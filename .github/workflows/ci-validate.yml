@@ -1,4 +1,4 @@
-name: Skills Factory CI
+name: Validate skills
 
 on:
   pull_request:
@@ -274,7 +274,6 @@ jobs:
           retention-days: 14
 
   validate:
-    name: CI / Required quality gate
     if: always()
     needs: [preflight, source-contracts, security-capabilities, governance-lifecycle, domain-tests, eval-integrity, build-core-artifacts, build-optional-profiles, runtime-campaign]
     runs-on: ubuntu-latest
