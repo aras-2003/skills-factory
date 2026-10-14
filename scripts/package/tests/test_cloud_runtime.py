@@ -193,7 +193,7 @@ class CloudRuntimeTests(unittest.TestCase):
         self.assertIn('attestation_status "unattested"', instructions)
 
     def test_chart_receipt_distinguishes_rendered_artifact_from_client_display(self) -> None:
-        result = self.server.render_bar_chart(["A"], [1.0])
+        result = self.server.render_bar_chart(["A"], [1.0], 1, "", "", False)
         receipt_text = next(item for item in result if isinstance(item, str) and item.startswith("MCP_TOOL_RECEIPT "))
         self.assertIn('"artifact_state": "rendered"', receipt_text)
         self.assertIn('"client_display_state": "not_observable"', receipt_text)
@@ -201,7 +201,7 @@ class CloudRuntimeTests(unittest.TestCase):
     def test_chart_renderer_error_has_explicit_failure_receipt(self) -> None:
         with patch.object(self.server, "_render_bar_chart", side_effect=RuntimeError("renderer unavailable")):
             with self.assertRaisesRegex(Exception, '"artifact_state": "FAIL_RENDERER_INVOCATION"'):
-                self.server.render_bar_chart(["A"], [1.0])
+                self.server.render_bar_chart(["A"], [1.0], 1, "", "", False)
 
     def test_controlled_mcp_failure_receipts_never_claim_client_display(self) -> None:
         for exc in (
@@ -213,7 +213,7 @@ class CloudRuntimeTests(unittest.TestCase):
             with self.subTest(exception=type(exc).__name__):
                 with patch.object(self.server, "_render_bar_chart", side_effect=exc):
                     with self.assertRaises(Exception) as context:
-                        self.server.render_bar_chart(["A"], [1.0])
+                        self.server.render_bar_chart(["A"], [1.0], 1, "", "", False)
                 message = str(context.exception)
                 self.assertIn('"status": "FAILURE"', message)
                 self.assertIn('"artifact_state": "FAIL_RENDERER_INVOCATION"', message)
