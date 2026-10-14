@@ -8,7 +8,7 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const hex = (value, length) => typeof value === 'string' && new RegExp(`^[0-9a-f]{${length}}$`).test(value);
 
 export function verifyRequest(request, installed, approval) {
-  if (!approval?.approved || !approval.reference || !['browser', 'desktop', 'work'].includes(request.channel)) throw new Error('Explicit scoped host TEST approval required');
+  if (approval?.approved !== true || typeof approval.reference !== 'string' || !approval.reference.trim() || !['browser', 'desktop', 'work'].includes(request.channel)) throw new Error('Explicit scoped host TEST approval required');
   if (request.environment !== 'TEST' || !/^I02-[0-9]{3}-[a-z0-9-]+$/.test(request.case_id) || !Number.isSafeInteger(request.attempt) || request.attempt < 1) throw new Error('Invalid frozen TEST case');
   if (typeof request.prompt !== 'string' || !request.prompt || Buffer.byteLength(request.prompt) > 256000 || sha(request.prompt) !== request.input_sha256) throw new Error('Frozen input digest mismatch');
   for (const [key, size] of [['source_revision', 40], ['payload_content_sha256', 64]]) {
@@ -95,6 +95,7 @@ export async function executeAndArchive(root,target,request,installed,approval,c
   verifyRequest(request,installed,approval);
   await safeRoot(root);
   const dir=resolve(root,request.case_id,String(request.attempt).padStart(3,'0'));
+  await safeRoot(dir);
   await mkdir(dirname(dir),{recursive:true,mode:0o700});
   await mkdir(dir,{mode:0o700}); // reserve BEFORE submission; existing = no retry
   try {
@@ -110,7 +111,7 @@ export async function archiveCapture(root, record, reservedDirectory) {
   // Atomic new directory reserves the attempt. A crash never triggers a retry.
   if (!/^I02-[0-9]{3}-[a-z0-9-]+$/.test(record.case_id) || !Number.isSafeInteger(record.attempt) || record.attempt < 1) throw new Error('Invalid archive identity');
   const dir = resolve(root, record.case_id, String(record.attempt).padStart(3,'0'));
-  await safeRoot(root);
+  await safeRoot(dir);
   if (reservedDirectory !== dir) {
     await mkdir(resolve(root, record.case_id), {recursive:true,mode:0o700});
     await mkdir(dir, {mode:0o700});

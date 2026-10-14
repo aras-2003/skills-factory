@@ -43,7 +43,7 @@ def collect(candidate: dict, identity: dict, plan: list, root: Path, *, channel:
         if row["flow"].endswith("chart"):
             client, _ = read_evidence(root, row.get("client_observation_path"))
             screenshot = read_evidence(root, row.get("screenshot_path"), binary=True)
-            if (not screenshot.startswith(b"\x89PNG\r\n\x1a\n")
+            if (not (screenshot.startswith(b"\x89PNG\r\n\x1a\n") or screenshot.startswith(b"\xff\xd8"))
                     or client.get("client_display_state") != "observed"
                     or client.get("observed_tool_trace_sha256") != hashlib.sha256(raw_trace).hexdigest()):
                 raise ValueError("chart client visibility not independently observed/bound")
