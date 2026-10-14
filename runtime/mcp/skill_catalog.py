@@ -113,6 +113,11 @@ def list_skills() -> dict[str, Any]:
     items = entries()
     return {
         "catalog_name": "Skills Factory Lab parity catalog",
+        "evidence_boundary": {
+            "scope": "Packaged capabilities only; not historical backlog or GitHub Project membership/acceptance.",
+            "reconciliation": "For a source/backlog count mismatch, request the exact source revision and both ID sets. Report only verified set differences; counts alone cannot identify the missing ID. Keep source mapping, live Project fields/dependencies and runtime acceptance separate.",
+            "unverified_revision": "If a required source revision is unavailable, mark that comparison BLOCKED_SOURCE_REVISION and ask for it; never guess the authoritative version.",
+        },
         "catalog_digest": catalog_digest(items),
         "source_revision": os.environ.get("SKILLS_FACTORY_SOURCE_REVISION", "unattested"),
         "channel": os.environ.get("SKILLS_FACTORY_CHANNEL", "unknown"),

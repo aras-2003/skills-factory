@@ -50,6 +50,11 @@ Tool results include an unsigned tool_receipt with canonical input and output
 SHA-256 digests. It records the MCP tool execution only; it does not attest to
 client display, host-model reasoning, or execution of a routed child workflow.
 
+For source/backlog reconciliation, request the exact source revision and ID sets
+before identifying a missing item. Catalog counts do not prove GitHub Project
+membership, native fields/dependencies, or runtime acceptance. Missing revision
+means BLOCKED_SOURCE_REVISION for that comparison, not an invented source match.
+
 The packaged Lab catalog is the source of truth for skill parity. Use
 list_skills when selecting a packaged capability and load_skill before
 executing that capability. Do not claim that the MCP server itself completed
