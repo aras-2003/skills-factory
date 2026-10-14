@@ -4,7 +4,7 @@
 
 **Do not post exploit details, credentials, private datasets, or reproducible attacks in public issues, discussions, or pull requests.**
 
-Use [GitHub private vulnerability reporting](https://github.com/aras-2003/skills-factory/security/advisories/new) **only if the repository has enabled it**. Availability of this private channel has not been independently confirmed. If it is unavailable, request a private intake channel from the repository owner without including vulnerability details in the public request. Do not assume public comments or Issues are confidential.
+Use [GitHub private vulnerability reporting](https://github.com/aras-2003/skills-factory/security/advisories/new), with repository owner `aras-2003` as intake maintainer. Enabled status was independently observed in the repository's Advanced Security settings on 2026-10-14; the advisory entry point also showed private visibility before publication. No fictitious report was submitted. If the private entry point becomes unavailable, request a private intake channel from the owner without including vulnerability details in the public request. Public comments and Issues are not confidential.
 
 Include the affected component and release or source revision, a minimal reproduction that contains no secrets, impact, and suggested mitigations. Never test against third-party or production accounts without approval.
 
