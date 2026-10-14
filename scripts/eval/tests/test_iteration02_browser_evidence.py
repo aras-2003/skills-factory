@@ -29,7 +29,7 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.lock = {
             "source_revision": SOURCE, "release_id": "synthetic-release",
             "payload_content_sha256": DIGEST, "runtime_evidence": "NOT_RUN",
-            "release_approved": False,
+            "release_approved": False, "provider_calls_executed": False,
             "cases": [{
                 "case_id": self.case_id, "channel": "browser",
                 "input_sha256": DIGEST, "repetitions": 1,
@@ -113,6 +113,12 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.assertEqual("NOT_VERIFIED", report["screenshot_visual_authenticity"])
         self.assertFalse(report["release_approved"])
         self.assertEqual(2, len(report["bound_files"]))
+
+    def test_nonpristine_provider_execution_lock_blocks(self):
+        self.lock["provider_calls_executed"] = True
+        result = self.assess()
+        self.assertEqual("BLOCKED_EVIDENCE", result["status"])
+        self.assertIn("external lock is not pristine", result["issues"])
 
     def test_real_site_svg_payload_structure_is_accepted_as_unverified(self):
         check = self.capture["chart_checks"][0]
