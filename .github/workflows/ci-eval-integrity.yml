@@ -1,4 +1,4 @@
-name: Eval integrity
+name: Skills Factory Evaluation CI
 
 on:
   pull_request:

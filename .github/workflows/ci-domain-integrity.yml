@@ -1,4 +1,4 @@
-name: Domain integrity
+name: Skills Factory Domain CI
 
 on:
   pull_request:
