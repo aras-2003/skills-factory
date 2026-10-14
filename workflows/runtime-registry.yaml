@@ -497,7 +497,7 @@ workflows:
       version: "0.2.2"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-13
+      last_reviewed: 2026-10-14
       execution:
         default_model_class: standard
   - name: investment-opportunity-hunter

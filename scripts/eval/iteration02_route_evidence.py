@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 
 from iteration02_browser_evidence import read_evidence, sha
+from iteration02_site_native_receipt import verify_identity, verify_call
 
 ROUTING_CASES = {"I02-251-browser-mcp", "I02-253-parity"}
 
@@ -54,13 +55,30 @@ def assess(lock: object, observation: object, root: Path) -> dict:
         else:
             child = data
         sources.append({"stage": name, "receipt_sha256": sha(raw)})
+    native = observation.get("receipt_profile") == "site-native-v1"
+    receipt_source = lock.get("source_revision")
+    if native:
+        try:
+            identity, identity_raw = read_evidence(root, observation.get("site_runtime_info_path"))
+            if sha(identity_raw) != observation.get("site_runtime_info_sha256"):
+                raise ValueError("native runtime hash mismatch")
+            identity = verify_identity(identity, lock)
+            receipt_source = identity["source_revision"]
+            router = verify_call(router, "route_investment_request", receipt_source)
+            child = verify_call(child, "load_skill", receipt_source)
+            if child.get("source_revision") != lock.get("source_revision"):
+                raise ValueError("native child embedded source drift")
+            if router.get("source", {}).get("github_main_revision") != lock.get("source_revision"):
+                raise ValueError("native router embedded source drift")
+        except (OSError, ValueError, TypeError, KeyError, AttributeError) as error:
+            problems.append("native Site binding: " + str(error))
     if router is not None:
         receipt = router.get("tool_receipt")
         if not isinstance(receipt, dict) or any([
             receipt.get("tool_name") != "route_investment_request",
             receipt.get("status") != "SUCCESS",
             receipt.get("execution_state") != "executed",
-            receipt.get("source_revision") != lock.get("source_revision"),
+            receipt.get("source_revision") != receipt_source,
             router.get("workflow_execution_state") != "not_executed",
             router.get("outcome") is not None,
             router.get("response_policy") != "load_child_workflow_then_follow",
@@ -79,7 +97,7 @@ def assess(lock: object, observation: object, root: Path) -> dict:
             receipt.get("tool_name") != "load_skill",
             receipt.get("status") != "SUCCESS",
             receipt.get("execution_state") != "executed",
-            receipt.get("source_revision") != lock.get("source_revision"),
+            receipt.get("source_revision") != receipt_source,
         ]):
             problems.append("child load receipt is not an executed exact-source load_skill")
     if observation.get("router_correlation_id") != corr or observation.get("child_correlation_id") != corr:

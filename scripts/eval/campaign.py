@@ -134,7 +134,7 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
         if metadata.get("maturity") != "draft":
             return set()
     readme = root / "README.md"
-    if not readme.is_file() or "Lab 0.35.0 and its bundled MCP expose every source skill and workflow regardless of maturity" not in readme.read_text(encoding="utf-8"):
+    if not readme.is_file() or "Lab 0.35.1 and its bundled MCP expose every source skill and workflow regardless of maturity" not in readme.read_text(encoding="utf-8"):
         return set()
     registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text(encoding="utf-8")) or {}
     registered = {item.get("name"): item for item in registry.get("workflows", []) if isinstance(item, dict)}
@@ -312,6 +312,44 @@ def separately_validated_investment_store_paths(root: Path = ROOT) -> set[str]:
     return set(expected)
 
 
+def separately_validated_iteration01_paths(root: Path = ROOT) -> set[str]:
+    """Keep historical R20 pin intact; new monitoring behavior has its own NOT_RUN campaign."""
+    path = root / "evals/campaigns/iteration-01-runtime-remediation-2026-10/source-coverage.json"
+    expected = {"workflows/investment-attention-review/WORKFLOW.md", "workflows/runtime-registry.yaml"}
+    try:
+        cfg = json.loads(path.read_text(encoding="utf-8"))
+        frozen = root / "evals/campaigns/iteration-01-safety-governance-2026-10/campaign.json"
+        import hashlib
+        if (cfg.get("campaign") != "iteration-01-runtime-remediation-2026-10"
+            or cfg.get("runtime_status") != "NOT_RUN" or cfg.get("execution_channel") != "lab"
+            or cfg.get("out_of_scope_behavior_paths") != sorted(expected)
+            or cfg.get("frozen_campaign_sha256") != hashlib.sha256(frozen.read_bytes()).hexdigest()
+            or cfg.get("required_frozen_retests") != ["I01-GOV-001", "I01-MON-001"]
+            or cfg.get("repetitions") != 3 or cfg.get("workflow_version") != "0.2.2"):
+            return set()
+        registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text()) or {}
+        row = next(w for w in registry.get("workflows", []) if w.get("name") == "investment-attention-review")
+        if str((row.get("metadata") or {}).get("version")) != cfg["workflow_version"]:
+            return set()
+        suite = cfg.get("case_suites") or []
+        if len(suite) != 1 or suite[0].get("path") != "workflows/investment-attention-review/tests/cases.yaml":
+            return set()
+        cases = (yaml.safe_load((root / suite[0]["path"]).read_text()) or {}).get("cases", [])
+        required = {"attention-workflow-read-only", "attention-workflow-explicit-research-save",
+                    "attention-workflow-unknown-permissions", "attention-workflow-canonical-unavailable",
+                    "attention-workflow-draft-baseline", "attention-workflow-write-failure"}
+        if set(suite[0].get("required_case_ids") or []) != required:
+            return set()
+        by_id = {c.get("id"): c for c in cases}
+        if any(cid not in by_id or not by_id[cid].get("input") or
+               any(not by_id[cid].get("expected", {}).get(k) for k in ("must", "must_not"))
+               for cid in required):
+            return set()
+        return expected if all((root / rel).is_file() for rel in expected) else set()
+    except (OSError, ValueError, KeyError, TypeError, StopIteration):
+        return set()
+
+
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     exists = subprocess.run(
         ["git", "cat-file", "-e", pinned + "^{commit}"],
@@ -344,6 +382,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
+    separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
         if not path:

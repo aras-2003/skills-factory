@@ -1,0 +1,31 @@
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/career/company-context-research/evals/2026-09-30.md: Supporting files should live under scripts/, references/, assets/ or tests/
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/career/executive-role-evaluator/evals/2026-09-30.md: Supporting files should live under scripts/, references/, assets/ or tests/
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/career/executive-role-evaluator/evals/2026-09-30-runtime-regressions.md: Supporting files should live under scripts/, references/, assets/ or tests/
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/career/executive-role-evaluator/evals/2026-09-30-output-gate.md: Supporting files should live under scripts/, references/, assets/ or tests/
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/investing/investment-attention-triage/SKILL.md: description does not explicitly state a routing context
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/investing/thesis-monitor/SKILL.md: description does not explicitly state a routing context
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-authoring/SKILL.md: Recommended heading missing: ## Purpose
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-authoring/SKILL.md: Recommended heading missing: ## Procedure
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-authoring/SKILL.md: Recommended heading missing: ## Output contract
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-release-review/SKILL.md: Recommended heading missing: ## Procedure
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-release-review/SKILL.md: Recommended heading missing: ## Output contract
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-test-design/SKILL.md: Recommended heading missing: ## Procedure
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-test-design/SKILL.md: Recommended heading missing: ## Output contract
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-validation/SKILL.md: Recommended heading missing: ## Procedure
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/meta/skill-validation/SKILL.md: Recommended heading missing: ## Output contract
+[LOW] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/skills/oaf/enterprise-architecture/capability-map-review/SKILL.md: description does not explicitly state a routing context
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/workflows/investment-attention-review/tests/cases.yaml: Test suite has no should-not-trigger case
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/workflows/investment-opportunity-hunter/tests/cases.yaml: Test suite has no should-not-trigger case
+[MEDIUM] /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/workflows/oaf-health-check/tests/cases.yaml: Test suite has no should-not-trigger case
+Catalog: 64 unique skills
+Investing architecture validation passed: 13 skills, 7 workflows, 6 isolated workflow evals, 20 relational entities.
+
+==> validate_skill.py
+
+==> validate_tests.py
+
+==> validate_catalog.py
+
+==> validate_investing.py
+
+==> validate_runtime.py

@@ -118,6 +118,7 @@ jobs:
         run: python -m unittest discover -s scripts/output/tests -p 'test_*.py'
       - name: Eval isolation, evidence and runtime campaign tests
         run: |
+          node --test scripts/eval/tests/test_iteration02_cua_capture.mjs
           python scripts/eval/validate_isolation.py
           python scripts/eval/campaign.py validate
           python scripts/eval/skill_release_campaign.py validate

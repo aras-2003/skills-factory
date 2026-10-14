@@ -599,7 +599,7 @@ components:
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    evidence_gap: "Iteration 1 remediation preserves canonical-read stop states through composed reports; exact-version runtime evidence is NOT_RUN."
     limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: investment-opportunity-hunter

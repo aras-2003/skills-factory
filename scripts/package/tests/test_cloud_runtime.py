@@ -97,6 +97,17 @@ class CloudRuntimeTests(unittest.TestCase):
         self.assertEqual("unattested", result["source_revision"])
         self.assertEqual("runtime_info", result["tool_receipt"]["tool_name"])
 
+    def test_installed_lab_manifest_is_bound_only_to_matching_runtime_environment(self):
+        installed={"source_revision":"a"*40,"release_id":"fixture","payload_content_sha256":"b"*64,"channel":"lab","version":"0.36.0"}
+        with patch.object(self.server,"packaged_release_identity",return_value=installed), patch.object(self.server,"catalog_digest",return_value="c"*64), patch.dict("os.environ",{"SKILLS_FACTORY_CHANNEL":"lab","SKILLS_FACTORY_SOURCE_REVISION":"a"*40,"SKILLS_FACTORY_RELEASE_ID":"fixture"},clear=True):
+            r=self.server.runtime_info()
+            self.assertEqual("b"*64,r["payload_content_sha256"])
+            self.assertEqual("installed_manifest_matches_runtime_environment",r["manifest_binding"])
+        with patch.object(self.server,"packaged_release_identity",return_value=installed),patch.dict("os.environ",{"SKILLS_FACTORY_CHANNEL":"lab","SKILLS_FACTORY_SOURCE_REVISION":"d"*40,"SKILLS_FACTORY_RELEASE_ID":"fixture"},clear=True):
+            r=self.server.runtime_info()
+            self.assertNotIn("payload_content_sha256",r)
+            self.assertEqual("unavailable_or_mismatched",r["manifest_binding"])
+
     def test_runtime_info_verifies_only_when_all_identity_fields_are_present(self) -> None:
         with patch.dict(
             "os.environ",

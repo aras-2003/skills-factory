@@ -32,6 +32,15 @@ class SkillCatalogTests(unittest.TestCase):
         self.assertIn("skill-evaluation", names)
         self.assertTrue(result["catalog_digest"])
 
+    def test_catalog_keeps_packaged_inventory_distinct_from_governance_acceptance(self) -> None:
+        result = self.catalog.list_skills()
+        boundary = result["evidence_boundary"]
+        self.assertIn("not historical backlog", boundary["scope"])
+        self.assertIn("exact source revision", boundary["reconciliation"])
+        self.assertIn("BLOCKED_SOURCE_REVISION", boundary["unverified_revision"])
+        self.assertNotIn("project_membership_verified", result)
+        self.assertNotIn("runtime_acceptance", result)
+
     def test_load_skill_returns_exact_instructions_and_digest(self) -> None:
         result = self.catalog.load_skill("skill-test-design")
         self.assertIn("Skill Test Design", result["instructions"])

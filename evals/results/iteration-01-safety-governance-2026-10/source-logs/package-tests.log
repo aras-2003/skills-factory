@@ -1,0 +1,9 @@
+......../Users/arkadiuszkamrowski/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/tx/3j95mz9j2yjgvl4ww02c59t80000gn/T/matplotlib-60xpxb4v because there was an issue with the default path (/Users/arkadiuszkamrowski/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
+.......................................................
+----------------------------------------------------------------------
+Ran 63 tests in 185.425s
+
+OK
+Packaged 64 skills across all maturity statuses + 19 workflow entrypoints across all maturity statuses + 36 runtime eval inputs into /Users/arkadiuszkamrowski/Documents/Codex/2026-10-14/do/work/skills-factory/.tmp/tmpyu996poi/lab

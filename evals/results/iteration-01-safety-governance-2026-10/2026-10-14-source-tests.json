@@ -1,0 +1,107 @@
+{
+  "behavior_source_revision": "f72e27af7c4dcd35e34170162281cb84c5aa9653",
+  "python": "3.12.14",
+  "dependencies": "requirements-dev.lock --require-hashes",
+  "total": 352,
+  "suites": [
+    {
+      "suite": "eval-tests",
+      "count": 84,
+      "passed": true,
+      "log_sha256": "b9b0c282e075a20f7ea077684a11d3bee9d3d4a22441e01d15cf627722a554e9",
+      "log_file": "source-logs/eval-tests.log"
+    },
+    {
+      "suite": "package-tests",
+      "count": 63,
+      "passed": true,
+      "log_sha256": "71a7f5afd8cb67f43d97940c5569645407bf3a54906f8dae1c3a83f2b1337db7",
+      "log_file": "source-logs/package-tests.log"
+    },
+    {
+      "suite": "security-tests",
+      "count": 28,
+      "passed": true,
+      "log_sha256": "612cdc348c82484f0a7863bbd57d51beb5d3a1f6fdb5b49fc34602998f3c45f9",
+      "log_file": "source-logs/security-tests.log"
+    },
+    {
+      "suite": "capability-tests",
+      "count": 16,
+      "passed": true,
+      "log_sha256": "b4d02e0821c843126e1b9fb6bbb5de62fbeaa4f11b560dbf68dde6378643050e",
+      "log_file": "source-logs/capability-tests.log"
+    },
+    {
+      "suite": "governance-tests",
+      "count": 8,
+      "passed": true,
+      "log_sha256": "33ca2b73d673d9a7d76182af185f32365af7fd88428484659efd7dd739daaf6a",
+      "log_file": "source-logs/governance-tests.log"
+    },
+    {
+      "suite": "validator-tests",
+      "count": 63,
+      "passed": true,
+      "log_sha256": "aaf53105cad07d48cd6e02b517fc9033670b41d1975f11ec24aaaa102e39701c",
+      "log_file": "source-logs/validator-tests.log"
+    },
+    {
+      "suite": "scripts/engineering/tests",
+      "count": 17,
+      "passed": true,
+      "duration_seconds": 0.9,
+      "log_sha256": "1d207b3d44c440a9fdbe22e7fc46468ccfa3ed4923dd58769ab27171d1e0bd56",
+      "log_file": "source-logs/scripts-engineering-tests.log"
+    },
+    {
+      "suite": "scripts/output/tests",
+      "count": 27,
+      "passed": true,
+      "duration_seconds": 0.216,
+      "log_sha256": "33f1994ac245e9f1b7cec896c07d61917cc5e40a29417c7337d3a50c524852e7",
+      "log_file": "source-logs/scripts-output-tests.log"
+    },
+    {
+      "suite": "scripts/readiness/tests",
+      "count": 11,
+      "passed": true,
+      "duration_seconds": 1.171,
+      "log_sha256": "85ca96fb207a9acf727b042ed3fd6fdb6890b8cc0d45810393b27db424a95d19",
+      "log_file": "source-logs/scripts-readiness-tests.log"
+    },
+    {
+      "suite": "scripts/release/tests",
+      "count": 6,
+      "passed": true,
+      "duration_seconds": 0.377,
+      "log_sha256": "f8a706b81b9d5a7063df2bdbb739f0d79cf585a8cb8d6b50d373a43340619273",
+      "log_file": "source-logs/scripts-release-tests.log"
+    },
+    {
+      "suite": "scripts/roadmap/tests",
+      "count": 5,
+      "passed": true,
+      "duration_seconds": 0.282,
+      "log_sha256": "888a0c0ed615e57d32cf72be501b0c355f33b8613c81dfdaa99db33d7959487e",
+      "log_file": "source-logs/scripts-roadmap-tests.log"
+    },
+    {
+      "suite": "skills/commerce/economics/unit-economics-review/tests",
+      "count": 12,
+      "passed": true,
+      "duration_seconds": 0.256,
+      "log_sha256": "ddbc5bf15c26bf2c15a86c04aa1c4eb9dbb31a4d245c800b95a5282be426a476",
+      "log_file": "source-logs/skills-commerce-economics-unit-economics-review-tests.log"
+    },
+    {
+      "suite": "tests/governance",
+      "count": 12,
+      "passed": true,
+      "duration_seconds": 0.331,
+      "log_sha256": "4e9583fbd8b7dfd17b1b52f963bca5e078ab351e78d6c9726b2c05ff184c10db",
+      "log_file": "source-logs/tests-governance.log"
+    }
+  ],
+  "runtime_acceptance": false
+}

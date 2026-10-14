@@ -14,6 +14,9 @@ import math
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from iteration02_site_native_receipt import verify_identity, verify_call
 
 CASES = {"I02-251-browser-mcp", "I02-253-parity", "I02-254-charts"}
 TOOLS = {"bar": "render_bar_chart", "line": "render_line_chart"}
@@ -186,19 +189,33 @@ def assess(lock: object, capture: object, root: Path, *, now: dt.datetime | None
         chart_format = check.get("chart_payload_format")
         if not valid_render_artifact(chart_payload_raw, check.get("chart_payload_path"), chart_format):
             issues.append(prefix + ": renderer payload format/structure invalid (expected svg or png)")
-        if not screenshot.startswith(b"\x89PNG\r\n\x1a\n"):
-            issues.append(prefix + ": client screenshot is not a PNG file")
+        if not (screenshot.startswith(b"\x89PNG\r\n\x1a\n") or screenshot.startswith(b"\xff\xd8")):
+            issues.append(prefix + ": client screenshot is not a PNG/JPEG file")
+        native = capture.get("receipt_profile") == "site-native-v1"
+        if native:
+            try:
+                identity, identity_raw = read_evidence(root, capture.get("site_runtime_info_path"))
+                if sha(identity_raw) != capture.get("site_runtime_info_sha256"):
+                    raise ValueError("raw Site identity hash mismatch")
+                identity = verify_identity(identity, lock)
+                tool = verify_call(tool, TOOLS[kind], identity["source_revision"])
+                if (corr != sha(tool_raw) or tool.get("data") != tool_output
+                        or tool.get("svg", "").encode() != chart_payload_raw):
+                    raise ValueError("native raw tool/data/SVG correspondence mismatch")
+            except (OSError, ValueError, TypeError, KeyError) as error:
+                issues.append(prefix + ": native Site receipt mismatch: " + str(error))
+                continue
         receipt = tool.get("tool_receipt")
         if not isinstance(receipt, dict):
             issues.append(prefix + ": missing raw MCP tool receipt")
             continue
         if (receipt.get("tool_name") != TOOLS[kind] or receipt.get("execution_state") != "executed"
             or receipt.get("status") != "SUCCESS" or receipt.get("artifact_state") != "rendered"
-            or receipt.get("source_revision") != lock.get("source_revision")
-            or receipt.get("release_id") != lock.get("release_id")
-            or receipt.get("payload_content_sha256") != lock.get("payload_content_sha256")):
+            or (not native and (receipt.get("source_revision") != lock.get("source_revision")
+                or receipt.get("release_id") != lock.get("release_id")
+                or receipt.get("payload_content_sha256") != lock.get("payload_content_sha256")))):
             issues.append(prefix + ": tool did not render on exact locked source")
-        if (receipt.get("correlation_id") != corr
+        if not native and (receipt.get("correlation_id") != corr
             or receipt.get("output_sha256") != sha(tool_output_raw)
             or receipt.get("chart_payload_sha256") != sha(chart_payload_raw)):
             issues.append(prefix + ": raw renderer/tool artifact not bound to MCP call ID")

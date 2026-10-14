@@ -13,6 +13,9 @@ import json
 import re
 import stat
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from iteration02_site_native_receipt import verify_identity, verify_call
 
 CASE_ID = "I02-149-cloud-e2e"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
@@ -49,8 +52,8 @@ def evidence(root: Path, relative: object, expected: object, *, image: bool = Fa
     contents = target.read_bytes()
     if hashlib.sha256(contents).hexdigest() != expected:
         raise ValueError("artifact hash mismatch")
-    if image and not contents.startswith(PNG):
-        raise ValueError("not PNG capture evidence")
+    if image and not (contents.startswith(PNG) or contents.startswith(b"\xff\xd8")):
+        raise ValueError("not PNG/JPEG capture evidence")
     return contents
 
 
@@ -100,6 +103,36 @@ def assess(lock: object, capture: object, root: Path) -> dict:
             errors.append(f"missing {field}")
     if capture.get("executor") == capture.get("evaluator"):
         errors.append("independent evaluator required")
+    if capture.get("receipt_profile") == "site-native-v1":
+        try:
+            raw = {}
+            for name in ("tool_receipt", "tool_output", "client_observation", "screenshot", "site_runtime_info"):
+                item = capture.get(name, {})
+                raw[name] = evidence(root, item.get("path"), item.get("sha256"), image=name == "screenshot")
+            identity = verify_identity(json.loads(raw["site_runtime_info"]), lock)
+            output = verify_call(json.loads(raw["tool_receipt"]), "route_investment_request", identity["source_revision"])
+            body = {k:v for k,v in output.items() if k != "tool_receipt"}
+            if json.loads(raw["tool_output"]) != body:
+                raise ValueError("raw native tool output differs")
+            if (body.get("workflow_execution_state") != "not_executed"
+                    or body.get("workflow_executed") is not False
+                    or body.get("source", {}).get("github_main_revision") != lock.get("source_revision")):
+                raise ValueError("route-only/embedded source mismatch")
+            client = json.loads(raw["client_observation"])
+            if (client.get("observed_tool_export_sha256") != hashlib.sha256(raw["tool_receipt"]).hexdigest()
+                    or client.get("selected_child") != body.get("child_workflow")
+                    or client.get("client_display_state") != "observed"
+                    or not client.get("accessible_text")):
+                raise ValueError("client-to-native route binding missing")
+            if capture.get("observed_tool_names") != ["route_investment_request"]:
+                raise ValueError("route-only capture has missing/extra tool observations")
+        except (OSError, ValueError, TypeError, KeyError, AttributeError) as error:
+            errors.append("native Site route binding: " + str(error))
+        return {"schema_version":"1.0", "kind":"native_site_route_capture",
+                "status":"BLOCKED_EVIDENCE" if errors else "STRUCTURAL_REVIEW_REQUIRED",
+                "errors":errors, "runtime_execution":"NOT_PERFORMED_BY_CHECKER",
+                "provider_attestation":"UNSIGNED_REVIEW_REQUIRED",
+                "model_behavior_verdict":"NOT_EVALUATED", "release_approved":False}
     raw = {}
     try:
         for name in ("tool_receipt", "tool_output", "client_observation", "screenshot"):

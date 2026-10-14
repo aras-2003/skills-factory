@@ -114,6 +114,35 @@ class BrowserEvidenceTests(unittest.TestCase):
         self.assertFalse(report["release_approved"])
         self.assertEqual(2, len(report["bound_files"]))
 
+    def native_profile(self):
+        from iteration02_site_native_receipt import canonical_sha
+        worker = "c" * 40
+        identity = {"channel":"site", "attestation_status":"verified", "identity_source":"site_environment", "source_revision":worker,
+                    "lab_release":{k:self.lock[k] for k in ("source_revision","release_id","payload_content_sha256")}}
+        def receipt(tool, body):
+            return {"kind":"unsigned_mcp_tool_call_receipt", "tool_name":tool, "status":"SUCCESS", "execution_state":"executed", "source_revision":worker, "output_sha256":canonical_sha(body)}
+        identity["tool_receipt"] = receipt("runtime_info", identity)
+        path=self.root/"runtime.json"; path.write_text(json.dumps(identity))
+        self.capture.update(receipt_profile="site-native-v1",site_runtime_info_path=path.name,site_runtime_info_sha256=mod.sha(path.read_bytes()))
+        for check in self.capture["chart_checks"]:
+            svg='<svg xmlns="http://www.w3.org/2000/svg"><title>Synthetic</title></svg>'
+            payload=self.root/(check["kind"]+".svg");payload.write_text(svg)
+            body={"kind":check["kind"],"data":check["expected_data"],"svg":svg}
+            r=receipt(mod.TOOLS[check["kind"]],body);r.update(artifact_state="rendered",client_display_state="not_observable")
+            tool=self.root/check["tool_receipt_path"];tool.write_text(json.dumps({**body,"tool_receipt":r}))
+            digest=mod.sha(tool.read_bytes())
+            check.update(tool_receipt_sha256=digest,correlation_id=digest,tool_call_correlation_id=digest,client_capture_correlation_id=digest,chart_payload_path=payload.name,chart_payload_format="svg",chart_payload_sha256=mod.sha(payload.read_bytes()))
+
+    def test_native_site_svg_and_worker_lab_split_bind_without_forged_receipt(self):
+        self.native_profile()
+        r=self.assess()
+        self.assertEqual("STRUCTURALLY_CORRELATED_INDEPENDENT_REVIEW_REQUIRED",r["status"],r["issues"])
+        self.assertEqual("NOT_EVALUATED",r["model_behavior_verdict"])
+
+    def test_native_identity_file_tampering_blocks(self):
+        self.native_profile();self.capture["site_runtime_info_sha256"]="f"*64
+        self.assertEqual("BLOCKED_EVIDENCE",self.assess()["status"])
+
     def test_nonpristine_provider_execution_lock_blocks(self):
         self.lock["provider_calls_executed"] = True
         result = self.assess()
