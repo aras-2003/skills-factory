@@ -4,7 +4,7 @@ on:
     paths:
       - 'scripts/governance/sync_project_metadata.py'
       - 'tests/governance/test_project_metadata_sync.py'
-      - '.github/workflows/project-metadata-sync.yml'
+      - '.github/workflows/maintenance-project-metadata.yml'
   issues:
     types: [opened, edited, labeled, unlabeled, reopened]
   workflow_dispatch:

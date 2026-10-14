@@ -544,7 +544,13 @@ def validate_lock_file(path: Path, root: Path = ROOT) -> dict:
     return lock
 
 
-def prepare(out: Path, *, require_pinned_commit: bool = True) -> None:
+def prepare(
+    out: Path,
+    *,
+    require_pinned_commit: bool = True,
+    production_plugin: Path | None = None,
+    lab_plugin: Path | None = None,
+) -> None:
     errors = validate_campaign()
     if errors:
         raise ValueError("; ".join(errors))
@@ -553,24 +559,27 @@ def prepare(out: Path, *, require_pinned_commit: bool = True) -> None:
     changed = behavior_changes(pinned, require_commit=require_pinned_commit)
     if changed:
         raise ValueError("behavior changed after pinned SHA: " + ", ".join(changed))
-    production = out / "production-plugin"
-    lab = out / "lab-plugin"
+    production = production_plugin or out / "production-plugin"
+    lab = lab_plugin or out / "lab-plugin"
     out.mkdir(parents=True, exist_ok=True)
 
-    old = os.environ.get("SOURCE_REVISION")
-    os.environ["SOURCE_REVISION"] = pinned
-    try:
-        build_plugin.build(ROOT, production, "production")
-        env = dict(os.environ)
-        subprocess.run(
-            [sys.executable, str(ROOT / "scripts/package/build_lab_plugin.py"), "--output", str(lab)],
-            cwd=ROOT, env=env, check=True,
-        )
-    finally:
-        if old is None:
-            os.environ.pop("SOURCE_REVISION", None)
-        else:
-            os.environ["SOURCE_REVISION"] = old
+    if production_plugin is None or lab_plugin is None:
+        old = os.environ.get("SOURCE_REVISION")
+        os.environ["SOURCE_REVISION"] = pinned
+        try:
+            if production_plugin is None:
+                build_plugin.build(ROOT, production, "production")
+            if lab_plugin is None:
+                env = dict(os.environ)
+                subprocess.run(
+                    [sys.executable, str(ROOT / "scripts/package/build_lab_plugin.py"), "--output", str(lab)],
+                    cwd=ROOT, env=env, check=True,
+                )
+        finally:
+            if old is None:
+                os.environ.pop("SOURCE_REVISION", None)
+            else:
+                os.environ["SOURCE_REVISION"] = old
 
     for package_path, is_lab in ((production, False), (lab, True)):
         artifact_errors = artifact_validation.validate_tree(package_path, allow_lab_evals=is_lab)
@@ -985,6 +994,8 @@ def main() -> int:
     q.add_argument("--include-supplemental", action="store_true")
     prep = s.add_parser("prepare")
     prep.add_argument("--output", type=Path, default=ROOT / ".tmp/runtime-campaign")
+    prep.add_argument("--production-plugin", type=Path, help="Reuse a production package built from this exact source.")
+    prep.add_argument("--lab-plugin", type=Path, help="Reuse a Lab package built from this exact source.")
     lock_cmd = s.add_parser("validate-lock")
     lock_cmd.add_argument("--lock", required=True, type=Path)
     smoke = s.add_parser("verify-smoke")
@@ -1021,7 +1032,7 @@ def main() -> int:
             print(text, end="")
         return 0
     if args.cmd == "prepare":
-        prepare(args.output)
+        prepare(args.output, production_plugin=args.production_plugin, lab_plugin=args.lab_plugin)
         print(args.output)
         return 0
     if args.cmd == "validate-lock":

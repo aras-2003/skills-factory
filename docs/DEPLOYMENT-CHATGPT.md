@@ -32,7 +32,7 @@ feature branch
   -> behavioral eval
   -> release review
   -> promotion to production
-  -> package-production-plugin.yml
+  -> release-production-plugin.yml
   -> plugins/skills-factory/
   -> repo marketplace
 ```

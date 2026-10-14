@@ -29,7 +29,7 @@ class ChangeGateTests(unittest.TestCase):
             "release/capability-contract.yaml",
             "evals/routing/registry.yaml",
             "docs/catalog.json",
-            ".github/workflows/validate-skills.yml",
+            ".github/workflows/ci-validate.yml",
         ):
             with self.subTest(path=path):
                 report = module.plan("DOCS", [path])

@@ -7,7 +7,7 @@ on:
       - "evals/**"
       - "scripts/eval/**"
       - "scripts/package/build_lab_plugin.py"
-      - ".github/workflows/eval-integrity.yml"
+      - ".github/workflows/ci-eval-integrity.yml"
 
 permissions:
   contents: read

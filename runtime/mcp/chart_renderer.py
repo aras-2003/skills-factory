@@ -29,20 +29,32 @@ mcp = MCPServer(
 )
 
 
-def _validate_parallel(labels: Sequence[str], values: Sequence[float]) -> None:
+def _validate_text(value: str, field: str, maximum: int, *, allow_empty: bool = False) -> None:
+    if not isinstance(value, str) or (not allow_empty and not value.strip()) or len(value) > maximum:
+        raise ToolError(f"{field} must be a string of at most {maximum} characters")
+
+
+def _validate_parallel(labels: Sequence[str], values: Sequence[float], expected_points: int, title: str, unit: str) -> None:
     if not labels or not values:
         raise ToolError("labels and values must be non-empty")
     if len(labels) != len(values):
         raise ToolError("labels and values must have equal length")
-    if len(labels) > 80:
-        raise ToolError("maximum 80 data points per chart")
+    if len(labels) > 60:
+        raise ToolError("maximum 60 data points per chart")
+    if expected_points != len(labels) or expected_points != len(values):
+        raise ToolError("received chart data length does not match expected_points; refusing partial render")
+    for label in labels:
+        _validate_text(label, "labels", 80)
+    _validate_text(title, "title", 160)
+    _validate_text(unit, "unit", 30, allow_empty=True)
     if any(
         isinstance(value, bool)
         or not isinstance(value, (int, float))
         or not math.isfinite(value)
+        or abs(value) > 1e12
         for value in values
     ):
-        raise ToolError("values must contain only finite numbers")
+        raise ToolError("values must contain only finite numbers between -1e12 and 1e12")
 
 
 def _png(fig) -> list[str | Image]:
@@ -72,12 +84,13 @@ def _png(fig) -> list[str | Image]:
 def render_bar_chart(
     labels: list[str],
     values: list[float],
-    title: str = "",
-    unit: str = "",
-    horizontal: bool = True,
+    expected_points: int,
+    title: str,
+    unit: str,
+    horizontal: bool,
 ) -> list[str | Image]:
     """Render a deterministic factual bar chart from explicit labels and numeric values."""
-    _validate_parallel(labels, values)
+    _validate_parallel(labels, values, expected_points, title, unit)
 
     width = 8.0
     height = max(3.2, min(10.0, 0.42 * len(labels) + 1.8))
@@ -111,30 +124,46 @@ def render_line_chart(
     x_labels: list[str],
     series_names: list[str],
     series_values: list[list[float]],
-    title: str = "",
-    unit: str = "",
+    expected_x_labels: int,
+    expected_series: int,
+    expected_points_per_series: int,
+    title: str,
+    unit: str,
 ) -> list[str | Image]:
     """Render a deterministic factual line chart from explicit x labels and one or more numeric series."""
     if not x_labels:
         raise ToolError("x_labels must be non-empty")
+    if len(x_labels) < 2:
+        raise ToolError("x_labels must contain at least two points")
     if not series_names or not series_values:
         raise ToolError("series_names and series_values must be non-empty")
     if len(series_names) != len(series_values):
         raise ToolError("series_names and series_values must have equal length")
-    if len(x_labels) > 200:
-        raise ToolError("maximum 200 x-axis points per chart")
-    if len(series_names) > 12:
-        raise ToolError("maximum 12 series per chart")
+    if len(x_labels) > 100:
+        raise ToolError("maximum 100 x-axis points per chart")
+    if len(series_names) > 8:
+        raise ToolError("maximum 8 series per chart")
+    if len(x_labels) != expected_x_labels or len(series_names) != expected_series or len(series_values) != expected_series:
+        raise ToolError("received chart data shape does not match expected counts; refusing partial render")
+    for label in (*x_labels, *series_names):
+        _validate_text(label, "chart labels", 80)
+    _validate_text(title, "title", 160)
+    _validate_text(unit, "unit", 30, allow_empty=True)
     for values in series_values:
+        if len(values) < 2:
+            raise ToolError("each series must contain at least two points")
         if len(values) != len(x_labels):
             raise ToolError("every series must match x_labels length")
+        if len(values) != expected_points_per_series:
+            raise ToolError("received chart data length does not match expected_points_per_series; refusing partial render")
         if any(
             isinstance(value, bool)
             or not isinstance(value, (int, float))
             or not math.isfinite(value)
+            or abs(value) > 1e12
             for value in values
         ):
-            raise ToolError("series_values must contain only finite numbers")
+            raise ToolError("series_values must contain only finite numbers between -1e12 and 1e12")
 
     fig, ax = plt.subplots(figsize=(8.5, 4.8))
     x = list(range(len(x_labels)))

@@ -228,7 +228,7 @@ lab:
             self.assertLess(len(data), 2_000_000)
 
     def test_lab_packager_uploads_an_immutable_candidate_without_branch_writes(self) -> None:
-        workflow = (ROOT / ".github/workflows/package-main-lab-plugin.yml").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github/workflows/release-lab-plugin.yml").read_text(encoding="utf-8")
         self.assertIn("cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json", workflow)
         self.assertIn("actions/upload-artifact@", workflow)
         self.assertIn("include-hidden-files: true", workflow)
