@@ -249,8 +249,8 @@ jobs:
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
-          cp -R .tmp/runtime-campaign-r20/production-plugin .tmp/runtime-retest-pack/production
-          cp -R .tmp/runtime-campaign-r20/lab-plugin .tmp/runtime-retest-pack/lab
+          cp -R .tmp/core/production-plugin .tmp/runtime-retest-pack/production
+          cp -R .tmp/core/lab-plugin .tmp/runtime-retest-pack/lab
           cp .tmp/runtime-campaign-r20/lock.json .tmp/runtime-retest-pack/lock.json
           cp .tmp/runtime-campaign-r20/smoke-production-template.json .tmp/runtime-retest-pack/smoke-production-template.json
           cp .tmp/runtime-campaign-r20/smoke-lab-template.json .tmp/runtime-retest-pack/smoke-lab-template.json
