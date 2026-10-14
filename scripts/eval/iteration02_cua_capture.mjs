@@ -95,6 +95,7 @@ export async function executeAndArchive(root,target,request,installed,approval,c
   verifyRequest(request,installed,approval);
   await safeRoot(root);
   const dir=resolve(root,request.case_id,String(request.attempt).padStart(3,'0'));
+  await safeRoot(dir);
   await mkdir(dirname(dir),{recursive:true,mode:0o700});
   await mkdir(dir,{mode:0o700}); // reserve BEFORE submission; existing = no retry
   try {
@@ -110,7 +111,7 @@ export async function archiveCapture(root, record, reservedDirectory) {
   // Atomic new directory reserves the attempt. A crash never triggers a retry.
   if (!/^I02-[0-9]{3}-[a-z0-9-]+$/.test(record.case_id) || !Number.isSafeInteger(record.attempt) || record.attempt < 1) throw new Error('Invalid archive identity');
   const dir = resolve(root, record.case_id, String(record.attempt).padStart(3,'0'));
-  await safeRoot(root);
+  await safeRoot(dir);
   if (reservedDirectory !== dir) {
     await mkdir(resolve(root, record.case_id), {recursive:true,mode:0o700});
     await mkdir(dir, {mode:0o700});
