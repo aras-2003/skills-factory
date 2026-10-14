@@ -1,0 +1,25 @@
+campaign: iteration-02-workflow-hardening-2026-10
+schema_version: "1.0"
+scope: source_only_next_version
+runtime_status: NOT_RUN
+historical_r20_immutable: true
+out_of_scope_behavior_paths:
+  - workflows/oaf-strategy-execution-reset/WORKFLOW.md
+  - workflows/investment-attention-review/WORKFLOW.md
+  - workflows/investment-security-review/WORKFLOW.md
+  - workflows/investment-theme-discovery/WORKFLOW.md
+workflow_versions:
+  oaf-strategy-execution-reset: "0.1.1"
+  investment-attention-review: "0.2.2"
+  investment-security-review: "0.4.1"
+  investment-theme-discovery: "0.2.1"
+source_case_file: evals/campaigns/iteration-02-workflow-hardening-2026-10/cases.yaml
+required_cases_per_workflow: 4
+required_case_dimensions:
+  - positive
+  - read-only
+  - missing-source
+  - near-miss
+release_approved: false
+provider_execution: NOT_RUN
+independent_evaluation: NOT_RUN

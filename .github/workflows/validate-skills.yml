@@ -72,7 +72,7 @@ jobs:
         run: |
           python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
           python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
-      - name: Lab lifecycle compliance audit (54 source skills)
+      - name: Lab lifecycle compliance audit (all source skills, dynamic inventory)
         run: |
           mkdir -p .tmp
           python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
@@ -102,16 +102,81 @@ jobs:
         run: python scripts/validate/validate_all.py
       - name: Validator mutation tests
         run: python -m unittest discover -s scripts/validate/tests -p 'test_*.py'
+      - name: Compare runtime registry with catalog and capability inventory (source only)
+        run: |
+          python scripts/catalog/validate_runtime_registry_parity.py --output .tmp/iteration02-registry-parity.json
+          python -m unittest discover -s scripts/catalog/tests -p 'test_*.py'
+      - name: Archive source-only runtime registry parity receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-registry-source-parity
+          path: .tmp/iteration02-registry-parity.json
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Output policy router deterministic unit tests
         run: python -m unittest discover -s scripts/output/tests -p 'test_*.py'
       - name: Eval isolation, evidence and runtime campaign tests
         run: |
+          node --test scripts/eval/tests/test_iteration02_cua_capture.mjs
           python scripts/eval/validate_isolation.py
           python scripts/eval/campaign.py validate
           python scripts/eval/skill_release_campaign.py validate
           python -m unittest discover -s scripts/eval/tests -p 'test_*.py'
           python scripts/eval/campaign.py prepare --output .tmp/runtime-campaign-r20
           python scripts/eval/campaign.py validate-evidence
+      - name: Reconcile immutable historical R17 transcript receipts
+        run: |
+          python scripts/eval/r17_disposition.py --output .tmp/iteration02-r17-history.json
+          python -m unittest discover -s scripts/eval/tests -p 'test_r17_disposition.py'
+      - name: Archive historical R17 exact-source retest ledger
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-r17-historical-evidence
+          path: .tmp/iteration02-r17-history.json
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Inventory all current skill and workflow semantic source coverage
+        run: |
+          python scripts/eval/iteration02_semantic_coverage.py --output .tmp/iteration02-semantic-coverage.json
+          python -m unittest discover -s scripts/eval/tests -p 'test_iteration02_semantic_coverage.py'
+      - name: Archive 64-skill 19-workflow semantic test coverage ledger
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-semantic-source-coverage
+          path: .tmp/iteration02-semantic-coverage.json
+          if-no-files-found: ignore
+          retention-days: 30
+      - name: Build all-component executable source-fixture campaign (no model execution)
+        run: |
+          python scripts/eval/iteration02_full_behavior_campaign.py \
+            --source-revision "$SOURCE_REVISION" \
+            --output .tmp/iteration02-all-component-campaign
+          python -m unittest discover -s scripts/eval/tests -p 'test_iteration02_full_behavior_campaign.py'
+          test -f .tmp/iteration02-all-component-campaign/executor-inputs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('.tmp/iteration02-all-component-campaign')
+          data=json.loads((root/'source-audit.json').read_text())
+          assert data['status']=='INPUTS_READY_RUNTIME_NOT_RUN', data['errors']
+          assert data['skill_count']==64 and data['registered_workflow_count']==19
+          assert data['case_count']>0 and not data['release_approved']
+          assert not json.loads((root/'executor-inputs.json').read_text())['writes_authorized']
+          PY
+      - name: Archive all-skill/workflow executor prompts only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration02-all-component-executor-${{ env.SOURCE_REVISION }}
+          path: |
+            .tmp/iteration02-all-component-campaign/source-audit.json
+            .tmp/iteration02-all-component-campaign/executor-inputs.json
+            .tmp/iteration02-all-component-campaign/executor-queue.json
+            .tmp/iteration02-all-component-campaign/executor-cases/
+          if-no-files-found: error
+          retention-days: 14
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
@@ -186,6 +251,29 @@ jobs:
         with:
           name: iteration-01-executor-handoff-${{ env.SOURCE_REVISION }}
           path: .tmp/iteration01-test-handoff
+          if-no-files-found: error
+          retention-days: 14
+      - name: Validate and prepare Iteration 2 exact-source test handoff (no execution)
+        run: |
+          python scripts/eval/iteration02_handoff.py validate
+          python scripts/eval/iteration02_handoff.py prepare --lab .tmp/lab --output .tmp/iteration02-test-handoff
+          python scripts/eval/validate_isolation.py --artifact .tmp/iteration02-test-handoff
+      - name: Upload Iteration 2 executor-only test handoff
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration-02-executor-handoff-${{ env.SOURCE_REVISION }}
+          path: .tmp/iteration02-test-handoff
+          if-no-files-found: error
+          retention-days: 14
+      - name: Prepare external QA input envelopes (NO provider execution)
+        run: |
+          python scripts/eval/iteration02_external_handoff.py --lab-pack .tmp/iteration02-test-handoff --output .tmp/iteration02-external-handoff
+          test -f .tmp/iteration02-external-handoff/external-lock.json
+      - name: Archive external-only tester inputs
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: iteration-02-external-handoff-${{ env.SOURCE_REVISION }}
+          path: .tmp/iteration02-external-handoff
           if-no-files-found: error
           retention-days: 14
       - name: Build ChatGPT ZIP channel

@@ -1,0 +1,387 @@
+{
+  "schema_version": "1.0",
+  "campaign": "iteration-02-runtime-2026-10",
+  "stage": "DRAFT_NOT_LOCKED",
+  "source_scope": "synthetic-only; no user data; no live provider execution",
+  "no_main_merge": true,
+  "legacy_issues": [
+    149,
+    240,
+    242,
+    243,
+    247,
+    250,
+    251,
+    252,
+    253,
+    254,
+    256,
+    257,
+    259,
+    286,
+    287,
+    289,
+    290,
+    311
+  ],
+  "cases": [
+    {
+      "id": "I02-149-cloud-e2e",
+      "issue": 149,
+      "channel": "site",
+      "repetitions": 3,
+      "input": "Synthetic Site MCP route-only request. Verify route tool, child workflow not executed, source identity and client result; do not claim live provider from text alone.",
+      "assertions": {
+        "must": [
+          "Must produce correlated Site tool and browser evidence."
+        ],
+        "must_not": [
+          "Do not claim client display from payload."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-240-local-runner",
+      "issue": 240,
+      "channel": "desktop",
+      "repetitions": 1,
+      "input": "Execute a synthetic offline task in a disposable Desktop runner and retain steps, output hash and evaluator isolation.",
+      "assertions": {
+        "must": [
+          "A scheduled job without execution steps stays NOT_RUN."
+        ],
+        "must_not": [
+          "Do not claim model execution from preflight."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-242-catalog-flow",
+      "issue": 242,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Locate registered workflow and its runtime channels in the generated catalog. Contrast draft suggested flow vs installed availability.",
+      "assertions": {
+        "must": [
+          "Maturity, registration and channel availability differ."
+        ],
+        "must_not": [
+          "Do not claim a draft is production-installed."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-243-ais-rt",
+      "issue": 243,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Given archived R17 FAIL and current source revisions, assess whether they can be treated as current PASS without an exact-version rerun.",
+      "assertions": {
+        "must": [
+          "Historical source and receipt identity must be preserved."
+        ],
+        "must_not": [
+          "Do not discard prior FAIL."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-247-registry",
+      "issue": 247,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Compare a generated source registry with the package catalog. Some capabilities are UNASSESSED. Are these observed provider permissions?",
+      "assertions": {
+        "must": [
+          "UNASSESSED must block installed/ready claims."
+        ],
+        "must_not": [
+          "Do not create duplicate live registry."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-250-attestation",
+      "issue": 250,
+      "channel": "lab",
+      "repetitions": 3,
+      "input": "The Site MCP release_id differs from Work Lab artifact source revision. Is it an exact version match?",
+      "assertions": {
+        "must": [
+          "Reject stale identity and require observed revision and digest."
+        ],
+        "must_not": [
+          "Do not infer parity from matching product name."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-251-browser-mcp",
+      "issue": 251,
+      "channel": "browser",
+      "repetitions": 3,
+      "input": "Synthetic Chat MCP chart and routing probe. Collect actual browser-visible result, tool receipt and installed Site identity.",
+      "assertions": {
+        "must": [
+          "Distinguish tool payload from UI render."
+        ],
+        "must_not": [
+          "Do not declare PASS without client screenshot/trace."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-252-failure-flows",
+      "issue": 252,
+      "channel": "lab",
+      "repetitions": 3,
+      "input": "Synthetic unavailable provider, timeout and denied tool. Distinguish an executed failure from a blocked/unrun attempt.",
+      "assertions": {
+        "must": [
+          "Return explicit blocked/NOT_RUN vs FAIL with reason."
+        ],
+        "must_not": [
+          "Do not manufacture provider trace."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-253-parity",
+      "issue": 253,
+      "channel": "browser",
+      "repetitions": 3,
+      "input": "Compare Work Lab and Site MCP route/architecture/bar/line flows for the same candidate using independently observed digests.",
+      "assertions": {
+        "must": [
+          "Requires exact release/payload and client-visible chart evidence."
+        ],
+        "must_not": [
+          "Do not compare a stale Site as PASS."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-254-charts",
+      "issue": 254,
+      "channel": "browser",
+      "repetitions": 3,
+      "input": "Synthetic bar values -5, 0, 3 and line values -2,0 across two periods. Verify chart numbers and display.",
+      "assertions": {
+        "must": [
+          "Preserve zero and negative values and actual accessible labels."
+        ],
+        "must_not": [
+          "Do not claim client-visible from renderer payload."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-256-r17-nine",
+      "issue": 256,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Nine historical R17 failing runs have newer similar titles but no exact reexecution. Reconcile disposition.",
+      "assertions": {
+        "must": [
+          "Original nine FAIL remain until comparable version-bound evidence."
+        ],
+        "must_not": [
+          "Do not mark fixed from newer unrelated PASS."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-257-production-fallback",
+      "issue": 257,
+      "channel": "production",
+      "repetitions": 1,
+      "input": "Two historical Production-only fallback cases cannot be meaningfully exercised in Lab. What is the next test?",
+      "assertions": {
+        "must": [
+          "Require approved Production-only matching source and real receipts."
+        ],
+        "must_not": [
+          "Do not execute on Production without authorization."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-259-site-publication",
+      "issue": 259,
+      "channel": "site",
+      "repetitions": 1,
+      "input": "Site release differs from current main. Explain required scoped publishing, smoke and rollback before parity rerun.",
+      "assertions": {
+        "must": [
+          "Deployment and test consent separate from source merge."
+        ],
+        "must_not": [
+          "Do not publish or mutate Site automatically."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-286-skill-lifecycle",
+      "issue": 286,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Static source audit reports a subset of skills. Can 54 audited skills certify all 64 installed skills?",
+      "assertions": {
+        "must": [
+          "Distinguish count, source identity and behavioral evidence."
+        ],
+        "must_not": [
+          "Do not declare 100% lifecycle from incomplete set."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-287-domain-routing",
+      "issue": 287,
+      "channel": "lab",
+      "repetitions": 3,
+      "input": "Synthetic near-miss: investment thesis monitor vs opportunity search. Select one child without performing a write.",
+      "assertions": {
+        "must": [
+          "Honor request-specific boundaries and read-only restriction."
+        ],
+        "must_not": [
+          "Do not silently execute the other workflow."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-289-54-behavior",
+      "issue": 289,
+      "channel": "lab",
+      "repetitions": 3,
+      "input": "A 54-skill source audit passed checks but no independent model traces exist. Report readiness.",
+      "assertions": {
+        "must": [
+          "Require risk-based coverage and independent version-pinned model receipts."
+        ],
+        "must_not": [
+          "Do not infer behavior PASS from static source screen."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-290-workflow-lifecycle",
+      "issue": 290,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Historical 16-workflow lifecycle audit compares with current 19 registered workflows. What can be certified?",
+      "assertions": {
+        "must": [
+          "Reconcile exact current workflow set and review flags."
+        ],
+        "must_not": [
+          "Do not declare all current workflows accepted."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    },
+    {
+      "id": "I02-311-campaign-followup",
+      "issue": 311,
+      "channel": "lab",
+      "repetitions": 1,
+      "input": "Historical campaign had PASS, FAIL and BLOCKED cases. A current candidate changes source; how are blockers dispositioned?",
+      "assertions": {
+        "must": [
+          "Preserve pinned history; rerun only affected cases on observed identity."
+        ],
+        "must_not": [
+          "Do not rewrite historical scores."
+        ]
+      },
+      "execution_state": "NOT_RUN"
+    }
+  ],
+  "manual_gates": [
+    {
+      "id": "I02-LIVE-IDENTITY",
+      "issues": [
+        149,
+        250,
+        251,
+        253,
+        259
+      ],
+      "status": "BLOCKED",
+      "reason": "Observe exact Work Lab and Site identity, tool schema and catalog in fresh independent live sessions."
+    },
+    {
+      "id": "I02-CLIENT-DISPLAY",
+      "issues": [
+        149,
+        251,
+        253,
+        254
+      ],
+      "status": "NOT_RUN",
+      "reason": "Client-visible SVG/PNG chart receipt and accessible data assertions for bar and line."
+    },
+    {
+      "id": "I02-RUNNER",
+      "issues": [
+        240,
+        243,
+        256,
+        257,
+        287,
+        289,
+        311
+      ],
+      "status": "NOT_RUN",
+      "reason": "Runner/Desktop/browser execution steps and independent evaluator; historical FAIL remains bound to original version."
+    },
+    {
+      "id": "I02-PUBLISH",
+      "issues": [
+        149,
+        253,
+        259
+      ],
+      "status": "BLOCKED",
+      "reason": "Approved Site/Production publish/rollback, access and full release evidence; no change to live Site or production."
+    },
+    {
+      "id": "I02-COVERAGE",
+      "issues": [
+        242,
+        247,
+        286,
+        290
+      ],
+      "status": "NOT_RUN",
+      "reason": "Compare current source count/digests against installed artifacts; enumerate remaining review-required components."
+    },
+    {
+      "id": "I02-SECURITY",
+      "issues": [
+        252,
+        254
+      ],
+      "status": "NOT_RUN",
+      "reason": "Controlled denied/timeout/incompatible-schema negative tool trace; never induce failures on production."
+    }
+  ],
+  "test_surface_rule": "Only lab cases enter executor-only Lab pack; browser/site/desktop/production cases remain NOT_RUN until separately authorized, attested runtime."
+}

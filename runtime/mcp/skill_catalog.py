@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import re
 from pathlib import Path
@@ -13,6 +14,23 @@ import yaml
 
 _SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 _REFERENCE_SUFFIXES = {".md", ".txt", ".yaml", ".yml", ".json", ".csv"}
+
+
+def packaged_release_identity() -> dict[str, Any]:
+    """Expose actual installed manifest fields; never substitute ZIP hashes."""
+    path = _plugin_root() / "release-manifest.json"
+    if not path.is_file() or path.is_symlink():
+        return {}
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, UnicodeError):
+        return {}
+    fields = ("channel", "version", "release_id", "source_revision", "payload_content_sha256")
+    if not isinstance(value, dict) or any(not isinstance(value.get(k), str) or not value[k] for k in fields):
+        return {}
+    if not re.fullmatch(r"[0-9a-f]{40}", value["source_revision"]) or not re.fullmatch(r"[0-9a-f]{64}", value["payload_content_sha256"]):
+        return {}
+    return {k: value[k] for k in fields}
 
 
 def _plugin_root() -> Path:

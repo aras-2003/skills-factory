@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import hashlib
 import json
+import re
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
@@ -14,6 +15,7 @@ from chart_renderer import render_line_chart as _render_line_chart
 from investment_runtime import route_investment_request as _route_investment_request
 from skill_catalog import list_skills as _list_skills
 from skill_catalog import load_skill as _load_skill
+from skill_catalog import packaged_release_identity, catalog_digest
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
@@ -76,6 +78,21 @@ def _runtime_value(name: str, default: str = "unattested") -> str:
     value = os.environ.get(name, "").strip()
     return value or default
 
+
+def _runtime_identity_is_well_formed(values: Mapping[str, str]) -> bool:
+    """Validate unsigned runtime identity fields, not deployment authenticity."""
+    if any(values.get(field) in {None, "", "unattested", "unknown"} for field in RUNTIME_FIELDS):
+        return False
+    if not re.fullmatch(r"[0-9a-f]{40}", values["source_revision"]):
+        return False
+    digest = values["tool_schema_digest"].removeprefix("sha256:")
+    if not re.fullmatch(r"[0-9a-f]{64}", digest):
+        return False
+    try:
+        observed = datetime.fromisoformat(values["deployed_at"].replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return False
+    return observed.tzinfo is not None
 
 def _digest_value(value: Any) -> Any:
     """Return a stable, content-only representation suitable for receipt hashing."""
@@ -161,7 +178,7 @@ mcp = MCPServer(
 
 
 @mcp.tool()
-def runtime_info() -> dict[str, str]:
+def runtime_info() -> dict[str, Any]:
     """Return deployment identity without performing any external action."""
     values = {
         "runtime_name": "Skills Factory runtime",
@@ -175,10 +192,21 @@ def runtime_info() -> dict[str, str]:
         "deployed_at": _runtime_value("SKILLS_FACTORY_DEPLOYED_AT"),
     }
     values["attestation_status"] = (
-        "verified"
-        if all(values[field] not in {"unattested", "unknown"} for field in RUNTIME_FIELDS)
-        else "unattested"
+        "verified" if _runtime_identity_is_well_formed(values) else "unattested"
     )
+    values["attestation_basis"] = "unsigned_runtime_environment_fields_only"
+    values["installation_behavior_verified"] = False
+    installed = packaged_release_identity()
+    values["lab_release"] = installed or None
+    values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "render_bar_chart", "render_line_chart"]
+    if (installed and values["channel"] == "lab"
+            and installed["source_revision"] == values["source_revision"]
+            and installed["release_id"] == values["release_id"]):
+        values["payload_content_sha256"] = installed["payload_content_sha256"]
+        values["catalog_digest"] = catalog_digest()
+        values["manifest_binding"] = "installed_manifest_matches_runtime_environment"
+    else:
+        values["manifest_binding"] = "unavailable_or_mismatched"
     return _with_tool_receipt("runtime_info", {}, values)
 
 

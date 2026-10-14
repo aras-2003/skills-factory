@@ -177,6 +177,93 @@ def config(root: Path = ROOT):
     return yaml.safe_load((root / CONFIG_REL).read_text(encoding="utf-8")) or {}
 
 
+def separately_validated_iteration02_workflow_paths(root: Path = ROOT) -> set[str]:
+    """Exclude only four explicitly versioned + fixture-validated I02 paths from historical R20.
+
+    Does not change the pinned R20 revision/receipts, confer behavioral PASS,
+    or allow a new workflow path to silently bypass the historical gate.
+    """
+    cfg_path = root / "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml"
+    if not cfg_path.is_file():
+        return set()
+    try:
+        cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+        declared = cfg.get("out_of_scope_behavior_paths") or []
+        expected = {
+            "workflows/oaf-strategy-execution-reset/WORKFLOW.md",
+            "workflows/investment-attention-review/WORKFLOW.md",
+            "workflows/investment-security-review/WORKFLOW.md",
+            "workflows/investment-theme-discovery/WORKFLOW.md",
+        }
+        if (cfg.get("campaign") != "iteration-02-workflow-hardening-2026-10"
+                or cfg.get("runtime_status") != "NOT_RUN"
+                or cfg.get("historical_r20_immutable") is not True
+                or cfg.get("release_approved") is not False
+                or set(declared) != expected or len(declared) != len(expected)):
+            return set()
+        registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text(encoding="utf-8")) or {}
+        versions = cfg.get("workflow_versions") or {}
+        entries = registry.get("workflows") or []
+        if set(versions) != {Path(p).parent.name for p in expected}:
+            return set()
+        by_name = {item.get("name"): item for item in entries if isinstance(item, dict)}
+        fixture_path = root / "evals/campaigns/iteration-02-workflow-hardening-2026-10/cases.yaml"
+        cases_doc = yaml.safe_load(fixture_path.read_text(encoding="utf-8")) or {}
+        cases = cases_doc.get("cases") or []
+        if not isinstance(cases, list):
+            return set()
+        dimensions = set(cfg.get("required_case_dimensions") or [])
+        if dimensions != {"positive", "read-only", "missing-source", "near-miss"}:
+            return set()
+        minimum = cfg.get("required_cases_per_workflow")
+        if type(minimum) is not int or minimum < 4 or len(cases) != minimum * len(expected):
+            return set()
+        grouped: dict[str, list] = {}
+        seen = set()
+        for row in cases:
+            if not isinstance(row, dict):
+                return set()
+            name, ident, dimension = row.get("workflow"), row.get("id"), row.get("dimension")
+            exp = row.get("expected")
+            if (name not in versions or not isinstance(ident, str) or ident in seen
+                    or dimension not in dimensions or not isinstance(row.get("input"), str)
+                    or not row["input"].strip() or not isinstance(exp, dict)
+                    or type(exp.get("should_trigger")) is not bool
+                    or not isinstance(exp.get("must"), list) or not exp["must"]
+                    or not isinstance(exp.get("must_not"), list) or not exp["must_not"]):
+                return set()
+            seen.add(ident)
+            grouped.setdefault(name, []).append(row)
+        for rel in expected:
+            path = root / rel
+            name = path.parent.name
+            item = by_name.get(name)
+            if not isinstance(item, dict) or item.get("workflow") != rel:
+                return set()
+            meta = item.get("metadata")
+            if not isinstance(meta, dict) or str(meta.get("version")) != str(versions[name]):
+                return set()
+            content = path.read_text(encoding="utf-8")
+            if not all(token in content for token in ("## Entry criteria", "## Stop conditions", "## Output contract")):
+                return set()
+            if len(grouped.get(name, [])) != minimum or {c["dimension"] for c in grouped[name]} != dimensions:
+                return set()
+            if name.startswith("investment"):
+                if not all(token in content for token in ("NOT_WRITTEN", "canonical", "explicit")):
+                    return set()
+            if name in {"investment-security-review", "investment-theme-discovery"}:
+                if not all(token in content for token in ("WRITE_FAILED", "canonical WRITE receipt", "append")):
+                    return set()
+                if any(token in content for token in (
+                    "12. Persist sources, research events, signals",
+                    "9. Persist a new theme version, sources and candidate opportunities",
+                )):
+                    return set()
+        return expected
+    except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
+        return set()
+
+
 def filter_behavior_paths(paths: list[str], separately_validated: set[str]) -> list[str]:
     return [path for path in paths if path not in separately_validated]
 
@@ -294,6 +381,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_engineering_paths())
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
+    separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
