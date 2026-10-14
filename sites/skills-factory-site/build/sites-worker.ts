@@ -1,7 +1,7 @@
 import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
-import { handleMcp } from "../lib/mcp-handler";
+import { handleMcp } from "../lib/skills-factory-adapter/mcp-handler";
 
 type RuntimeEnvironment = Cloudflare.Env & {
   CF_VERSION_METADATA?: { id?: string; tag?: string; timestamp?: string | number };
