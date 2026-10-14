@@ -13,13 +13,17 @@ Reusable AI capability library for repeatable work across projects.
 
 Rule: **LLM interprets; code calculates and validates.**
 
+## Public repository governance
+
+The owner has chosen a **personal / proprietary toolkit**, with **no general third-party reuse license grant**. Public visibility does not itself grant redistribution or relicensing rights; applicable law, GitHub platform rights and third-party licenses remain unaffected. Read the [distribution decision](docs/DISTRIBUTION-LICENSE-DECISION.md), [governance decision record](docs/governance/PUBLIC-REPOSITORY-REVIEW.md), [security reporting policy](SECURITY.md), and [contributor workflow](CONTRIBUTING.md). Ownership routing in `.github/CODEOWNERS` does not by itself establish independent review or GitHub branch protection.
+
 ## Visual catalog
 
 Browse skills by domain and maturity in the [Skills Factory catalog](https://aras-2003.github.io/skills-factory/). The catalog is generated from the source metadata in `SKILL.md`.
 
 ## Expansion roadmap
 
-The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) preserves the architecture analysis, proposed flows and 84-task development backlog. Start there before implementing expansion work; task state is maintained in its `BACKLOG.json`.
+The [Skills Factory expansion roadmap](docs/roadmap/2026-10-05/README.md) is a dated analysis with **90 historical IDs**, preserved in `BACKLOG.json`. Active tracking and PR evidence are maintained in [GitHub Issues](https://github.com/aras-2003/skills-factory/issues) and viewed through [Project #1](https://github.com/users/aras-2003/projects/1). **Full Project-field and historical-source cutover remain unverified**; see the [readiness record](docs/governance/BACKLOG-CUTOVER-READINESS.md). Do not update the historical JSON to simulate current task status.
 
 ## Current source domains
 
@@ -36,7 +40,7 @@ The Skills Factory repository is the single authoring source for skills, workflo
 
 The source tree is not the runtime allow-list.
 
-Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS components, and 19 workflow definitions. Lab 0.35.0 and its bundled MCP expose every source skill and workflow regardless of maturity for isolated testing. Presentation/Report OS, skill-development and report-production remain draft; their Lab exposure does not promote them to the production plugin. The production plugin continues to use its explicit maturity and channel allow-list. Other domain README files describe design/backlog intent unless stated otherwise.
+Current source catalog: **64 skills**, including ten **draft** Presentation/Report OS components, and 19 workflow definitions. Lab 0.35.1 and its bundled MCP expose every source skill and workflow regardless of maturity for isolated testing. Presentation/Report OS, skill-development and report-production remain draft; their Lab exposure does not promote them to the production plugin. The production plugin continues to use its explicit maturity and channel allow-list. Other domain README files describe design/backlog intent unless stated otherwise.
 
 ## Branches, maturity and installed capability
 
@@ -84,6 +88,8 @@ Required PR validation is defined in `.github/workflows/ci-validate.yml` and fan
 
 Repository ownership, all source domains, all registered workflows and the workflow naming convention are mapped in [Repository Map](docs/architecture/repository-map.md).
 
+The Site source has a dedicated PR gate in `.github/workflows/validate-cloud-next-site.yml`: it generates the embedded MCP catalog from the same commit's Lab build, typechecks, runs contract and source-sync tests, lints and builds the Worker. It does not upload test artifacts.
+
 Generated artifacts are built atomically and include source provenance.
 
 ## Chat, web and mobile portability
@@ -117,6 +123,8 @@ the presence of a generated package as proof that a ChatGPT account or surface
 has enabled plugins; that remains an installation and product-availability gate.
 
 ## Key docs
+
+- Cloud Next source ownership: `docs/SITE-CANONICAL-SOURCE.md`
 
 - Architecture: `docs/ARCHITECTURE.md`
 - Remote MCP deployment: `docs/REMOTE-MCP.md`

@@ -32,6 +32,12 @@ NETWORK_RE = re.compile(r"\b(?:requests\.(?:post|put|patch)|httpx\.(?:post|put|p
 SECRET_READ_RE = re.compile(r"(?:os\.environ|getenv\s*\(|process\.env|\$env:)[^\n]*(?:secret|token|password|credential|api.?key|private.?key)", re.I)
 OBFUSCATION_RE = re.compile(r"\b(?:base64\.b64decode|b64decode|atob\s*\(|fromhex\s*\(|marshal\.loads)\b", re.I)
 DYNAMIC_EXEC_RE = re.compile(r"\b(?:exec|eval|compile)\s*\(|\b(?:subprocess\.(?:run|Popen|call)|os\.system)\b", re.I)
+# Detect a remote download piped to a shell even if line continuation hides the pipe.
+# Require a nearby literal shell interpreter; this is a bounded static heuristic.
+REMOTE_SHELL_MULTILINE_RE = re.compile(
+    r"\b(?:curl|wget)\b[^\n|;]*(?:\\[ \t]*\n[ \t]*\|[ \t]*|\|[ \t]*\\?[ \t]*\n[ \t]*)(?:sudo[ \t]+)?(?:sh|bash)\b",
+    re.I,
+)
 TOKEN_LITERAL_RE = re.compile(r"(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)")
 
 
@@ -95,8 +101,9 @@ def _scan_file(root: Path, path: Path) -> list[Finding]:
     rel = path.relative_to(root).as_posix()
     lines = text.splitlines()
     findings: list[Finding] = []
-    # Bidi controls can reorder visible text. ZWJ/ZWNJ are intentionally excluded.
-    bidi_controls = {0x061C, 0x200E, 0x200F, 0x202A, 0x202B, 0x202C, 0x202D, 0x202E, 0x2066, 0x2067, 0x2068, 0x2069}
+    # Bidi controls reorder visible text; zero-width space/word-joiner can conceal
+    # token boundaries. ZWJ/ZWNJ are intentionally excluded for natural languages.
+    bidi_controls = {0x061C, 0x200B, 0x200E, 0x200F, 0x202A, 0x202B, 0x202C, 0x202D, 0x202E, 0x2060, 0x2066, 0x2067, 0x2068, 0x2069}
     for number, line in enumerate(lines, 1):
         if any(ord(char) in bidi_controls or (ord(char) == 0xFEFF and number > 1) for char in line):
             findings.append(Finding("SEC010", "medium", rel, number, _message("SEC010"), _fingerprint("SEC010", rel, line)))
@@ -105,6 +112,12 @@ def _scan_file(root: Path, path: Path) -> list[Finding]:
                 findings.append(Finding(rule_id, severity, rel, number, _message(rule_id), _fingerprint(rule_id, rel, line)))
         if TOKEN_LITERAL_RE.search(line) and not any(item.rule_id == "SEC003" and item.line == number for item in findings):
             findings.append(Finding("SEC003", "high", rel, number, _message("SEC003"), _fingerprint("SEC003", rel, line)))
+
+    for match in REMOTE_SHELL_MULTILINE_RE.finditer(text):
+        number = text.count("\n", 0, match.start()) + 1
+        # The fingerprint covers both sides of the continued pipeline.
+        findings.append(Finding("SEC001", "high", rel, number, _message("SEC001"),
+                                _fingerprint("SEC001", rel, match.group(0))))
 
     if path.name == "package.json":
         try:

@@ -7,7 +7,7 @@
       },
       "lab": {
         "name": "skills-factory-lab",
-        "version": "0.35.0"
+        "version": "0.36.0"
       }
     },
     "source_revision": "9b457bd68bcd",
@@ -223,7 +223,7 @@
       "name": "investment-record-store",
       "domain": "investing",
       "maturity": "production",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Read and persist canonical Investment OS records in Supabase/Postgres, including portfolio state, transactions, research, signals, theses, decisions, policy, themes and sources. Use whenever an investing workflow needs durable state or history. Google Drive is raw-document/legacy migration storage, not the canonical relational store after cutover.",
       "source": "skills/investing/investment-record-store/SKILL.md",
       "source_status": "present",
@@ -727,7 +727,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "description": "Child workflow for Investment OS attention triage. Use when selected by investment-os-review, explicitly requested, or when the user clearly asks whether new company/industry/market information changes existing holdings or theses. Do not use as the default entry point for broad natural investment requests.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
@@ -865,7 +865,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "description": "Child workflow for one-security review. Use when selected by investment-os-review, explicitly requested, or when a single named security is already the clear decision object. Do not use as the default entry point for broad natural investment requests.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
@@ -894,7 +894,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "Child workflow for Investment OS theme research. Use when selected by investment-os-review, explicitly requested, or when thematic/value-chain research is already the clear decision object. Do not use as the default entry point for broad natural investment requests.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
@@ -1059,7 +1059,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "candidate",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Run an OAF strategy-execution reset linking strategic outcomes, capabilities, portfolio, decision rights, funding and evidence loops.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",

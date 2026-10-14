@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "source": "docs/roadmap/2026-10-05/BACKLOG.json",
-  "source_blob_sha": "7ffb6f45b97be90e3e039ad493bdaaa2f2a26d0f",
-  "generated_date": "2026-10-09",
-  "mapping_status": "id-complete, evidence-review-incomplete",
+  "source_blob_sha": "7724d6bdc86f64188b4dcf522225253b54bc564c",
+  "generated_date": "2026-10-12",
+  "mapping_status": "id-complete-90-of-90; project-membership-field-and-evidence-review-incomplete",
   "items": [
     {
       "legacy_id": "CON-01",
@@ -218,6 +218,11 @@
     {
       "legacy_id": "ENG-21",
       "issue": 249,
+      "review_required": true
+    },
+    {
+      "legacy_id": "ENG-22",
+      "issue": 335,
       "review_required": true
     },
     {

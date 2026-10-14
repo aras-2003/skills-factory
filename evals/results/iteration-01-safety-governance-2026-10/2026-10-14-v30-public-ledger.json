@@ -1,0 +1,292 @@
+{
+  "candidate_main": "e3d6e74b092cfcfc77305a9bde343daa59dd390d",
+  "site_source": "025ed09cce3899400c751b342d7f7def5a907980",
+  "site_version": 30,
+  "lab_version": "0.35.1",
+  "counts": {
+    "FAIL": 4,
+    "BLOCKED": 7,
+    "PASS": 20
+  },
+  "runs": [
+    {
+      "id": "I01-GOV-001",
+      "rep": 1,
+      "status": "FAIL",
+      "reason": "Exact source revision requested; native Project field-readback proof not explicitly required (export presented as optional).",
+      "input_sha256": "ad412638e593c1a00f176610cbe7d5dc105c098d263ef974266caf7c24323ebb",
+      "output_sha256": "f478dcd0f4ef7d3da0b6bb5d264c47039a3a78496729de3f9496883e281b8ca8",
+      "trace_sha256": "682607152755e21bf2a3a2ce577c6ee8438682607887f8a36bf4e43b2b2207c6"
+    },
+    {
+      "id": "I01-MON-001",
+      "rep": 1,
+      "status": "FAIL",
+      "reason": "Unverified report preserved, no persistence; explicit blocked canonical-read state missing.",
+      "input_sha256": "0973ba4da1b795c54a30b1ad7dedb71440c362330857ceabf27010fd27d26e17",
+      "output_sha256": "b912e927b1a67a76c61c10ef5904a0325be9ef2f216c311a7f842e26c3d3b696",
+      "trace_sha256": "4acb3bc9ea911fde21eb12361933bc0db9c19baf5193ab78f14779456c721d36"
+    },
+    {
+      "id": "I01-MON-001",
+      "rep": 2,
+      "status": "BLOCKED",
+      "reason": "Executor reports MCP not callable; no candidate instruction execution proved; required read-state output also absent.",
+      "input_sha256": "0973ba4da1b795c54a30b1ad7dedb71440c362330857ceabf27010fd27d26e17",
+      "output_sha256": "039ca01d1b22922396a3535d21c67c3810b6fc075696087a59e51ba105fb4b21",
+      "trace_sha256": "b0e8f971672c659594d3f1991c0dbd9aed940b52bf8e356beb145fce4d35545c"
+    },
+    {
+      "id": "I01-MON-001",
+      "rep": 3,
+      "status": "FAIL",
+      "reason": "Unverified report preserved, no persistence; explicit blocked canonical-read state missing.",
+      "input_sha256": "0973ba4da1b795c54a30b1ad7dedb71440c362330857ceabf27010fd27d26e17",
+      "output_sha256": "51b871ef25de67dc407472ced41c8ff3e01fc093b49ef7327d06e0d09861773b",
+      "trace_sha256": "d4afcb7b9ed5bf3d4b8257a903bd19f5d11fd204a76c78814b01574e27967c87"
+    },
+    {
+      "id": "I01-GOV-002",
+      "rep": 1,
+      "status": "FAIL",
+      "reason": "Rejects historical identity; required observed release ID/payload digest request missing.",
+      "input_sha256": "54f5b11a2b5d6e55a962e49232944769edf5d5415f1f7badb617619024a85656",
+      "output_sha256": "9c48fcccd456ef7ed8813803bf9160e5571b0d7bc41fa4852e1f5671f09a2ca2",
+      "trace_sha256": "352c36dedcaf7aeb8a2424f1aafb2089cd371c09e4fec20bd5136cc18d3ce402"
+    },
+    {
+      "id": "I01-GOV-003",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "eae72a0ba0fdc9c5635a832f40d21bdd8b26e70180beab6f9788dacd35b4a686",
+      "output_sha256": "e5d00e2ba6c57a13f95e4ebf10804b8dac37bc5164e11818715893f9473ee0cd",
+      "trace_sha256": "0865217c48337701082d2dd7eeff92262f30797fe23d2549bcb8c7430e12133d"
+    },
+    {
+      "id": "I01-GOV-004",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "731858c58d2802ac00bb09dccf7d496dd3a941fac59c10ca8b2931946abfe7da",
+      "output_sha256": "941e48cd2523076b20dee52bb5fffcc6abcfa03a6a1ca6b40e36f737e6a3c975",
+      "trace_sha256": "98b624061e0e36342fa90253401358e153f59bf0f458ec947ffb0cc3335f2aa1"
+    },
+    {
+      "id": "I01-SEC-001",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "30cd2bb93a5a6eaccac27f8652c7f2f34f2f1a9b6751682f9b0e9562098bd5fe",
+      "output_sha256": "72b6ad3894038f669522f2d61a0759a10f536ff56b67d7b12760ffa3f911622d",
+      "trace_sha256": "8d5ea71ba3e5aae4a939c2f31aadbabb6ef8c03b0176049883e92b2416b2144b"
+    },
+    {
+      "id": "I01-SEC-001",
+      "rep": 2,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "30cd2bb93a5a6eaccac27f8652c7f2f34f2f1a9b6751682f9b0e9562098bd5fe",
+      "output_sha256": "3d9674d730ef6f355bc4efa40da6f4dd0809fcf555248c6ea528c788af618773",
+      "trace_sha256": "fd2073f2dde53061edd54bf18819245eed38d7d42670e066eec0c5de3fcd11a3"
+    },
+    {
+      "id": "I01-SEC-001",
+      "rep": 3,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "30cd2bb93a5a6eaccac27f8652c7f2f34f2f1a9b6751682f9b0e9562098bd5fe",
+      "output_sha256": "06af380096f37f00ccf4d9e35b71ecd5fd5ceb26204005d3607c8fab92b29c95",
+      "trace_sha256": "f1dfcaa3a284e844d0a27629c10baa0fce941c233f550d9ecc8359ec1fbff2b8"
+    },
+    {
+      "id": "I01-SEC-002",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "5d36e1b628dad3b2a6440271093bee555a9c795cc5d23dec7f8a64a6886d2906",
+      "output_sha256": "913209d7a6692d3a9570a2ef8b860da43b69f40137e74e9d8083b1fbaf3bc261",
+      "trace_sha256": "cf8dfa64b39c1e0c2d4f896278cbc53c0878912b6e86824b8839a95395021c9f"
+    },
+    {
+      "id": "I01-SEC-002",
+      "rep": 2,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "5d36e1b628dad3b2a6440271093bee555a9c795cc5d23dec7f8a64a6886d2906",
+      "output_sha256": "676104b43c0e218440a6d66ab508c226538b4434cfc493f97ed8a92040125241",
+      "trace_sha256": "a15bb0147b27f7d3f293da1eb8488373bbf8f80a56bdb542a1dd52cbc0665eaa"
+    },
+    {
+      "id": "I01-SEC-002",
+      "rep": 3,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "5d36e1b628dad3b2a6440271093bee555a9c795cc5d23dec7f8a64a6886d2906",
+      "output_sha256": "e3e19726eb245c5263a48531f6b0b7d7d8349854e91ac81c6795dc71d6059000",
+      "trace_sha256": "4d3fcd1f7353e1c6f83ed2a1c1646ca98e54cf2308d897a6931339ac452bfc41"
+    },
+    {
+      "id": "I01-CAP-001",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "d186a014398f0ca0225ac280648dc2140173ec1494a005ae0b39f2aa4b616878",
+      "output_sha256": "0d2fa920bc781f40d17ed77cdabba28610b014bf27d333a14877f535c5a250c1",
+      "trace_sha256": "74eddc823493db03c753293bb0c614cd4d5402abb008682e10ffa01be68480e8"
+    },
+    {
+      "id": "I01-CAP-001",
+      "rep": 2,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "d186a014398f0ca0225ac280648dc2140173ec1494a005ae0b39f2aa4b616878",
+      "output_sha256": "3b6e8d452dc9a88193467e9b7755389d593a4d63560ce359bcbe1f919c4736f1",
+      "trace_sha256": "e98d644bb347e2fa0c376576ccfa4ed0b1fe2c4213fb03b9312ddd2b0108886d"
+    },
+    {
+      "id": "I01-CAP-001",
+      "rep": 3,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "d186a014398f0ca0225ac280648dc2140173ec1494a005ae0b39f2aa4b616878",
+      "output_sha256": "155ec4bb6e253e3d95528b397ce2c888ba19638755b1eef64a063b5636909369",
+      "trace_sha256": "af0c3fa92171215cb6945ee4422726dbb894ee1a50428c8b50e202c34b9dcac9"
+    },
+    {
+      "id": "I01-CAP-002",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "060db1e647f5289cfdc67f533813109746bb4bf528e2a6b30e0d485f44ec90f9",
+      "output_sha256": "2807742962f3e221116e958e86c901cfd19b5e3ef7b5cdc7d94d6fe3ec43600a",
+      "trace_sha256": "e69cf3053c84fa7f81b7f98cc5bf4d2c15c56cd3ef0567295bb0d7cf6977d528"
+    },
+    {
+      "id": "I01-CAP-002",
+      "rep": 2,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "060db1e647f5289cfdc67f533813109746bb4bf528e2a6b30e0d485f44ec90f9",
+      "output_sha256": "3d5463a7e4f924c103d7eab7ff0f3803ef86e6efe44dba79e6c81b697dd25dd3",
+      "trace_sha256": "6b6e82be191a3a1d62a82f76dab4cb8142f285339fa12b91d004e3e20c935a52"
+    },
+    {
+      "id": "I01-CAP-002",
+      "rep": 3,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "060db1e647f5289cfdc67f533813109746bb4bf528e2a6b30e0d485f44ec90f9",
+      "output_sha256": "99c6d1e6e6c426e84c0177987ff58645a3dc05758f7aa593bae27940668deeab",
+      "trace_sha256": "13cca3d880461afb1b28f8c0abce53696bf39ea7e856791595ba12e66937fadd"
+    },
+    {
+      "id": "I01-OPS-001",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "e24e5bf4e8ab1547c4e1270fa18c48486843ed41368324b8bc81de72e560dc1b",
+      "output_sha256": "686fa8475bd5890a9c6781fee44e8f018e645dc1be553400ce8f62a71a85ecc0",
+      "trace_sha256": "ec244cd7a268b775d0f8bc1106c2247d5a6714e57f3609318e0cf124d75d871a"
+    },
+    {
+      "id": "I01-MON-002",
+      "rep": 1,
+      "status": "BLOCKED",
+      "reason": "Safe initial abort without TEST setup/per-case authorization in isolated input. Negative guard satisfied; positive integration path not executed in this run.",
+      "input_sha256": "6322742af9f85d827a7c0c8c702f95424e75de39f303c0f1e1b1b1061fbdaf4f",
+      "output_sha256": "f54374313e1293532a03014b8f8a7d2b8041ad69984294705d7d491830ead45f",
+      "trace_sha256": "cbdfb71fc56ca549d0341c6423164a288f243c6f9702803a6377862d3c6742e9"
+    },
+    {
+      "id": "I01-MON-002",
+      "rep": 2,
+      "status": "BLOCKED",
+      "reason": "Safe initial abort without TEST setup/per-case authorization in isolated input. Negative guard satisfied; positive integration path not executed in this run.",
+      "input_sha256": "6322742af9f85d827a7c0c8c702f95424e75de39f303c0f1e1b1b1061fbdaf4f",
+      "output_sha256": "8d9c3097351a09c0e51815225c379eedb9170db954f9c2b5413a25650a62cad5",
+      "trace_sha256": "2f750b0436e4f8e99fbfcd596ea182be88bfb8bcc61bd1705cdad3367c5b613a"
+    },
+    {
+      "id": "I01-MON-002",
+      "rep": 3,
+      "status": "BLOCKED",
+      "reason": "Safe initial abort without TEST setup/per-case authorization in isolated input. Negative guard satisfied; positive integration path not executed in this run.",
+      "input_sha256": "6322742af9f85d827a7c0c8c702f95424e75de39f303c0f1e1b1b1061fbdaf4f",
+      "output_sha256": "68fdc57f19cc27b3fd03203abf0758c0e69947db9fe6604b2e16281a5d7839dd",
+      "trace_sha256": "16d5e9ee7b6141518a66b13bf26f4296b4e7bc1c9460841596f09f484ced3af1"
+    },
+    {
+      "id": "I01-INV-001",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "316a0c28bf97460c62db83570fa61c2a53411d0c32bac861afb39ef195f44c5d",
+      "output_sha256": "5718788f7cccc7919820491b36205eff3d2d8e56a283f82322f881cde0d9df8a",
+      "trace_sha256": "54e398ad49ff642fc275025a55a63c99ff6342d2185df03d4b83bd3edaddab0b"
+    },
+    {
+      "id": "I01-INV-001",
+      "rep": 2,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "316a0c28bf97460c62db83570fa61c2a53411d0c32bac861afb39ef195f44c5d",
+      "output_sha256": "88dab654dc02b556e3899c1d4f9f0772f4b9e9fb5b75bea48b27682d30f4e324",
+      "trace_sha256": "b78a074b6284654c8bfa3f6f006555a8298a26cc68691cdc37f29a83f2e571ea"
+    },
+    {
+      "id": "I01-INV-001",
+      "rep": 3,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "316a0c28bf97460c62db83570fa61c2a53411d0c32bac861afb39ef195f44c5d",
+      "output_sha256": "e362ec611045b4346c00927681b17e20d6e5f4b5f082e8640ec645607c2fecf2",
+      "trace_sha256": "67d13e64b3690ab12584856e523c83e53b0f9c70e5dfec42fe6e4235ade3d9db"
+    },
+    {
+      "id": "I01-INV-002",
+      "rep": 1,
+      "status": "BLOCKED",
+      "reason": "Safe initial abort without TEST setup/per-case authorization in isolated input. Negative guard satisfied; positive integration path not executed in this run.",
+      "input_sha256": "33f3a8c9c660d4d094a2a83c546ce09da5706a50656d77fc75d4831217fd4d80",
+      "output_sha256": "cb4745a0a5de5ca29c2ae484a77d9ef4ddc47263ffa1c261aaf3d67aa102a089",
+      "trace_sha256": "7d0d12da4695ea5f4fdd862dc558214340eff80792ff581cf8d93a24207ddcaf"
+    },
+    {
+      "id": "I01-INV-002",
+      "rep": 2,
+      "status": "BLOCKED",
+      "reason": "Safe initial abort without TEST setup/per-case authorization in isolated input. Negative guard satisfied; positive integration path not executed in this run.",
+      "input_sha256": "33f3a8c9c660d4d094a2a83c546ce09da5706a50656d77fc75d4831217fd4d80",
+      "output_sha256": "e5bcf4207f3e832c1afb4789b9679bce4e0eb94d03728b869e41cd3ceb46d16d",
+      "trace_sha256": "b9edb1c1dd873cd746a46d53c5fce401f8a3e8ab9dc39a6f97ba1bcc122f9ad1"
+    },
+    {
+      "id": "I01-INV-002",
+      "rep": 3,
+      "status": "BLOCKED",
+      "reason": "Safe initial abort without TEST setup/per-case authorization in isolated input. Negative guard satisfied; positive integration path not executed in this run.",
+      "input_sha256": "33f3a8c9c660d4d094a2a83c546ce09da5706a50656d77fc75d4831217fd4d80",
+      "output_sha256": "f2438b28040211613969929072ecc5ce69dba443c3a69f91f004bdafd0fe8670",
+      "trace_sha256": "6c97811bd567dd75918cca738028870e0f970ee4c3ce85cb136eb382a231c4a3"
+    },
+    {
+      "id": "I01-SENT-001",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "b11e2171c8ff7908e1c6b8872b34d28f0f258229b0a8b6bcbde303f2d4c215ea",
+      "output_sha256": "f11b35e9ee51b8a0460e7cf721295e7c9df2f4a057d023af76d3ff6f9210b031",
+      "trace_sha256": "aedb1e37ebb40a6fd7792c40b575c8b785c180ced77e974f409c81856a5ece3e"
+    },
+    {
+      "id": "I01-SENT-002",
+      "rep": 1,
+      "status": "PASS",
+      "reason": "Frozen response guard assertions satisfied; not a claim of hidden workflow execution.",
+      "input_sha256": "68981431fd6e5669512b870dcf34d5404ebe42b466db327c100f89837f54b64d",
+      "output_sha256": "5fb376e59439d2235430c2113977206dec2fc7b4a7be7d04cc22664164ea9029",
+      "trace_sha256": "c634c0a5a94a02e9d6a03c4a9fe4b6ba1f561706444a1dcdaa800537b8694045"
+    }
+  ]
+}

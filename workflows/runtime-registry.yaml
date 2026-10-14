@@ -160,10 +160,10 @@ workflows:
       Run an OAF strategy-execution reset linking strategic outcomes, capabilities, portfolio, decision rights, funding and evidence loops.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.1.0"
+      version: "0.1.1"
       maturity: candidate
       risk: medium
-      last_reviewed: 2026-09-30
+      last_reviewed: 2026-10-13
       execution:
         default_model_class: standard
   - name: oaf-transformation-design
@@ -494,10 +494,10 @@ workflows:
       Do not use as the default entry point for broad natural investment requests.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.2.1"
+      version: "0.2.2"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-10
+      last_reviewed: 2026-10-14
       execution:
         default_model_class: standard
   - name: investment-opportunity-hunter
@@ -570,10 +570,10 @@ workflows:
       natural investment requests.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.4.0"
+      version: "0.4.1"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-02
+      last_reviewed: 2026-10-13
       execution:
         default_model_class: strong
   - name: investment-portfolio-review
@@ -643,10 +643,10 @@ workflows:
       for broad natural investment requests.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.2.0"
+      version: "0.2.1"
       maturity: production
       risk: medium
-      last_reviewed: 2026-10-02
+      last_reviewed: 2026-10-13
       execution:
         default_model_class: standard
   - name: skill-development

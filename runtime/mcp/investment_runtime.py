@@ -69,6 +69,20 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     It does not provide investment advice or replace the selected workflow.
     """
     raw = user_request.strip()
+    # Strong, explicit non-investment task forms take precedence over words
+    # quoted in a scope exclusion (for example, "No investment analysis").
+    if re.match(
+        r"^(?:fix|correct|proofread|edit)\s+(?:(?:only|just)\s+)?(?:the\s+)?(?:punctuation|grammar|spelling)\b",
+        raw,
+        flags=re.IGNORECASE,
+    ):
+        return {
+            "is_investment_request": False,
+            "route": "not_applicable",
+            "child_workflow": "investment-os-review",
+            "reason": "request is limited to a non-investment editing task",
+            "must_invoke_child_workflow": False,
+        }
     # Route the requested task, excluding clauses that explicitly reject an
     # alternative (for example "not my portfolio" or "nie ... rebalancingu").
     text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*", "", raw.lower())
@@ -93,9 +107,11 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     )
     explicit_investment_context = _contains(
         text,
-        "investment", "portfolio", "stock", "stocks", "security", "securities",
+        "investment", "investing", "portfolio", "stock", "stocks", "security", "securities",
         "etf", "fund", "holdings", "investment policy", "risk limit",
-        "inwestyc", "portfel", "spółk", "spolk", "akcj", "fundusz",
+        "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
+        "share", "thesis", "gross margin", "marża brutto", "marza brutto",
+        "research candidates", "kandydatów do researchu", "kandydatow do researchu",
     )
     if non_investment_finance and not explicit_investment_context:
         return {
@@ -119,7 +135,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "new information", "new news", "does this news", "does this change the thesis",
         "changes the thesis", "materiality", "headline", "nowe informacje",
         "zmieniają tezę", "zmienia teze", "czy to zmienia", "wymaga głębszej analizy",
-        "wymaga glebszej analizy",
+        "wymaga glebszej analizy", "give attention", "attention next", "next research",
+        "research next", "attention review",
     )
     theme = _contains(
         text,
@@ -134,6 +151,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "znaleźć kilka nowych spółek", "znalezc kilka nowych spolek",
         "nowe spółki", "nowe spolki", "kandydatów do researchu",
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
+        "watchlist screen", "screen my watchlist", "screen watchlist",
+        "preview the screen", "preview-only screen", "screen these candidates",
     )
     observation = _contains(
         text,
@@ -166,6 +185,18 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     # Multiple security-like tickers plus weights/percentages strongly indicates portfolio.
     if _ticker_count(raw) >= 2 and ("%" in raw or portfolio):
         portfolio = True
+
+    # This endpoint is an investment router, not a universal ambiguity
+    # resolver. Do not misroute unrelated prompts just because they contain a
+    # financial word in a negation, quoted string or explanation.
+    if not explicit_investment_context:
+        return {
+            "is_investment_request": False,
+            "route": "not_applicable",
+            "child_workflow": "investment-os-review",
+            "reason": "no investment decision object was identified",
+            "must_invoke_child_workflow": False,
+        }
 
     # Ordering reflects decision ownership, not business priority.
     if policy:

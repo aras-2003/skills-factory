@@ -6,10 +6,10 @@ description: >
   state or history. Google Drive is raw-document/legacy migration storage, not the canonical relational store after cutover.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "1.0.1"
+  version: "1.0.2"
   maturity: production
   risk: high
-  last_reviewed: "2026-10-09"
+  last_reviewed: "2026-10-12"
   execution:
     default_model_class: fast
 ---
@@ -39,6 +39,8 @@ A local artifact may be created for convenience, but it must be labeled `NONCANO
    - emit backend + project + schema + config source in the READ receipt.
    - do not report the bootstrap table as empty unless an explicit query to `public.system_config` returned zero rows;
    - if subsequent canonical `public.*` reads succeed after an "empty bootstrap" observation, treat that as contradictory evidence and retry the exact bootstrap read before finalizing the receipt.
+   - **Fail-closed hard stop:** if the exact bootstrap read returns zero rows, cannot be read, has duplicate/conflicting active configuration, or does not verify the connected project ID, canonical schema, and cutover state, stop before every normalized read and write. Return `BLOCKED_CANONICAL_TARGET` (or `UNAVAILABLE` when the bootstrap itself is unavailable) with the observed reason and no persistence call.
+   - User authorization, an isolated TEST project ID supplied in the prompt, visible target tables, previous successful runs, or a successful direct SQL connection do not override a missing or mismatched bootstrap. Do not try direct table SQL, another schema, Sheets, or another tool as a write fallback. A failed preflight means zero write attempts.
 2. If Supabase is the configured canonical backend:
    - use only the resolved canonical schema for normalized Investment OS records;
    - never discover the canonical schema by scanning for whichever schema contains rows;
@@ -104,7 +106,7 @@ For every read/write operation return a Persistence receipt with:
 
 ## Quality checks
 - [ ] Exactly one canonical backend and one canonical Supabase schema are active.
-- [ ] Canonical target was resolved from `public.system_config`, not inferred from row presence.
+- [ ] Canonical target was resolved from `public.system_config`, not inferred from row presence.\n- [ ] Missing, unreadable, duplicate/conflicting, or mismatched bootstrap ended the operation before any normalized read/write attempt.
 - [ ] No silent Supabase->Sheets or cross-schema fallback occurred.
 - [ ] READ and WRITE outcomes are explicit.
 - [ ] Append-only history was not overwritten.

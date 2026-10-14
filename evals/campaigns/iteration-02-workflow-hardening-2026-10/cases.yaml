@@ -1,0 +1,257 @@
+{
+  "schema_version": "1.0",
+  "kind": "workflow_hardening_source_cases",
+  "cases": [
+    {
+      "id": "oaf-strategy-execution-reset-positive",
+      "workflow": "oaf-strategy-execution-reset",
+      "dimension": "positive",
+      "input": "Our strategic outcomes are disconnected from funding, capability ownership and portfolio governance. Diagnose a bounded reset.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "trace outcomes to capabilities and funding",
+          "show unknowns"
+        ],
+        "must_not": [
+          "invent ownership"
+        ]
+      }
+    },
+    {
+      "id": "oaf-strategy-execution-reset-read-only",
+      "workflow": "oaf-strategy-execution-reset",
+      "dimension": "read-only",
+      "input": "Review our strategy-execution traceability and propose options; do not write files, change portfolio states or create projects.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "read-only diagnostic",
+          "clarify evidence"
+        ],
+        "must_not": [
+          "mutate systems"
+        ]
+      }
+    },
+    {
+      "id": "oaf-strategy-execution-reset-missing-source",
+      "workflow": "oaf-strategy-execution-reset",
+      "dimension": "missing-source",
+      "input": "We have inconsistent stakeholder reports and no decision-rights baseline. Diagnose gaps without making up our architecture.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "surface missing evidence",
+          "conditional recommendations"
+        ],
+        "must_not": [
+          "fabricate baseline"
+        ]
+      }
+    },
+    {
+      "id": "oaf-strategy-execution-reset-near-miss",
+      "workflow": "oaf-strategy-execution-reset",
+      "dimension": "near-miss",
+      "input": "Five projects have verified comparable ROI and delivery budgets; simply rank them, do not reset strategy.",
+      "expected": {
+        "should_trigger": false,
+        "must": [
+          "portfolio-prioritization"
+        ],
+        "must_not": [
+          "organization-wide transformation program"
+        ]
+      }
+    },
+    {
+      "id": "investment-attention-review-positive",
+      "workflow": "investment-attention-review",
+      "dimension": "positive",
+      "input": "Review synthetic material earnings surprises versus our ACTIVE canonical theses and prioritize research, no automatic saves.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "triage material changes",
+          "concrete next research question"
+        ],
+        "must_not": [
+          "news digest"
+        ]
+      }
+    },
+    {
+      "id": "investment-attention-review-read-only",
+      "workflow": "investment-attention-review",
+      "dimension": "read-only",
+      "input": "Review changes in my synthetic TEST account and keep everything read-only; do not store events.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "append canonical event"
+        ]
+      }
+    },
+    {
+      "id": "investment-attention-review-missing-source",
+      "workflow": "investment-attention-review",
+      "dimension": "missing-source",
+      "input": "Canonical thesis database cannot be read. Based only on unverified news, decide whether my ACTIVE thesis changed.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "BLOCKED_CANONICAL_READ",
+          "distinguish inaccessible from absent"
+        ],
+        "must_not": [
+          "invent baseline"
+        ]
+      }
+    },
+    {
+      "id": "investment-attention-review-near-miss",
+      "workflow": "investment-attention-review",
+      "dimension": "near-miss",
+      "input": "Analyze intrinsic valuation of one synthetic issuer and determine whether it is priced in.",
+      "expected": {
+        "should_trigger": false,
+        "must": [
+          "investment-security-review"
+        ],
+        "must_not": [
+          "expand into full attention-monitoring campaign"
+        ]
+      }
+    },
+    {
+      "id": "investment-security-review-positive",
+      "workflow": "investment-security-review",
+      "dimension": "positive",
+      "input": "Research synthetic TESTCO-A from verified filings, challenge thesis and valuation, with incomplete cash-flow data.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "evidence sanity",
+          "uncertainty",
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "invent cash flow"
+        ]
+      }
+    },
+    {
+      "id": "investment-security-review-read-only",
+      "workflow": "investment-security-review",
+      "dimension": "read-only",
+      "input": "Underwrite TESTCO-A but do not save records, activate a thesis or change the decision journal.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "write canonical store"
+        ]
+      }
+    },
+    {
+      "id": "investment-security-review-missing-source",
+      "workflow": "investment-security-review",
+      "dimension": "missing-source",
+      "input": "Evaluate issuer history even though canonical store is unavailable; no write credentials are verified.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "BLOCKED_CANONICAL_READ",
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "claim empty thesis history"
+        ]
+      }
+    },
+    {
+      "id": "investment-security-review-near-miss",
+      "workflow": "investment-security-review",
+      "dimension": "near-miss",
+      "input": "Map economic beneficiaries across AI datacenter power bottlenecks without selecting any one security.",
+      "expected": {
+        "should_trigger": false,
+        "must": [
+          "investment-theme-discovery"
+        ],
+        "must_not": [
+          "size a position"
+        ]
+      }
+    },
+    {
+      "id": "investment-theme-discovery-positive",
+      "workflow": "investment-theme-discovery",
+      "dimension": "positive",
+      "input": "Map verified synthetic infrastructure bottlenecks and identify who captures margins across the value chain.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "value chain",
+          "invalidation",
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "invent demand data"
+        ]
+      }
+    },
+    {
+      "id": "investment-theme-discovery-read-only",
+      "workflow": "investment-theme-discovery",
+      "dimension": "read-only",
+      "input": "Explore a synthetic theme and draft watchlist for review, explicitly do not persist anything.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "save new theme version"
+        ]
+      }
+    },
+    {
+      "id": "investment-theme-discovery-missing-source",
+      "workflow": "investment-theme-discovery",
+      "dimension": "missing-source",
+      "input": "Tell me what changed since the prior saved theme, but historical canonical theme state cannot be read.",
+      "expected": {
+        "should_trigger": true,
+        "must": [
+          "unavailable baseline",
+          "NOT_WRITTEN"
+        ],
+        "must_not": [
+          "claim confirmed theme change"
+        ]
+      }
+    },
+    {
+      "id": "investment-theme-discovery-near-miss",
+      "workflow": "investment-theme-discovery",
+      "dimension": "near-miss",
+      "input": "Review margins and guidance for one synthetic company's quarterly report, not an industry theme.",
+      "expected": {
+        "should_trigger": false,
+        "must": [
+          "investment-security-review"
+        ],
+        "must_not": [
+          "expand to a broad theme map"
+        ]
+      }
+    }
+  ]
+}

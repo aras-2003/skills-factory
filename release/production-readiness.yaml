@@ -76,7 +76,7 @@ components:
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact deployed-runtime receipt for remediation campaign R17 is pending."
+    evidence_gap: "Exact deployed-runtime receipt for investment-store-bootstrap-followup-2026-10 is pending."
     limitation: "Lab-only candidate; exact R17 runtime validation is required before any production promotion."
   - name: supplier-viability-review
     kind: skill
@@ -458,7 +458,7 @@ components:
 
   - name: investment-record-store
     kind: skill
-    version: "1.0.1"
+    version: "1.0.2"
     source: skills/investing/investment-record-store/SKILL.md
     declared_maturity: production
     static_contract: present
@@ -592,14 +592,14 @@ components:
 
   - name: investment-attention-review
     kind: workflow
-    version: "0.2.1"
+    version: "0.2.2"
     source: workflows/investment-attention-review/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Release bundle 2026-10-10 changed authorization behavior; exact-version runtime evidence is NOT_RUN."
+    evidence_gap: "Iteration 1 remediation preserves canonical-read stop states through composed reports; exact-version runtime evidence is NOT_RUN."
     limitation: "Private Lab candidate only; no production promotion before isolated authorization/read/write failure tests and release review."
 
   - name: investment-opportunity-hunter
@@ -616,7 +616,7 @@ components:
 
   - name: investment-security-review
     kind: workflow
-    version: "0.4.0"
+    version: "0.4.1"
     source: workflows/investment-security-review/WORKFLOW.md
     declared_maturity: production
     static_contract: present
@@ -653,7 +653,7 @@ components:
 
   - name: investment-theme-discovery
     kind: workflow
-    version: "0.2.0"
+    version: "0.2.1"
     source: workflows/investment-theme-discovery/WORKFLOW.md
     declared_maturity: production
     static_contract: present

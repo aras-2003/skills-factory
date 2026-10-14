@@ -84,6 +84,8 @@ jobs:
         run: |
           mkdir -p .tmp
           python scripts/roadmap/audit_p0.py --output .tmp/p0-backlog-audit.json
+          python scripts/governance/validate_legacy_map.py --output .tmp/legacy-id-map-audit.json
+          python -m unittest discover -s scripts/governance/tests -p 'test_*.py'
           python -m unittest discover -s scripts/roadmap/tests -p 'test_*.py'
           python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
           python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
@@ -131,6 +133,23 @@ jobs:
           python -m unittest discover -s scripts/eval/tests -p 'test_*.py'
           python -m unittest discover -s scripts/package/tests -p 'test_*.py'
           python -m unittest discover -s runtime/mcp/tests -p 'test_*.py'
+          node --test scripts/eval/tests/test_iteration02_cua_capture.mjs
+          python scripts/eval/campaign.py validate-evidence
+          python scripts/eval/iteration01_handoff.py validate
+          python scripts/eval/iteration02_handoff.py validate
+          python scripts/eval/iteration02_semantic_coverage.py --output .tmp/iteration02-semantic-coverage.json
+          python scripts/eval/r17_disposition.py --output .tmp/iteration02-r17-history.json
+          python scripts/eval/iteration02_full_behavior_campaign.py --source-revision "$SOURCE_REVISION" --output .tmp/iteration02-all-component-campaign
+          python - <<'PY_ASSERT'
+          import json
+          from pathlib import Path
+          root = Path('.tmp/iteration02-all-component-campaign')
+          data = json.loads((root / 'source-audit.json').read_text())
+          assert data['status'] == 'INPUTS_READY_RUNTIME_NOT_RUN', data.get('errors')
+          assert data['skill_count'] == 64 and data['registered_workflow_count'] == 19
+          assert data['case_count'] > 0 and not data['release_approved']
+          assert not json.loads((root / 'executor-inputs.json').read_text())['writes_authorized']
+          PY_ASSERT
 
   build-core-artifacts:
     name: CI / Build Core Artifacts
@@ -223,6 +242,11 @@ jobs:
             --lab-plugin .tmp/core/lab-plugin
           python scripts/eval/campaign.py validate-evidence
           python scripts/eval/skill_release_campaign.py prepare --lab .tmp/core/lab-plugin --output .tmp/runtime-campaign-skill-release-review
+          python scripts/eval/iteration01_handoff.py prepare --lab .tmp/core/lab-plugin --output .tmp/iteration01-test-handoff
+          python scripts/eval/validate_isolation.py --artifact .tmp/iteration01-test-handoff
+          python scripts/eval/iteration02_handoff.py prepare --lab .tmp/core/lab-plugin --output .tmp/iteration02-test-handoff
+          python scripts/eval/validate_isolation.py --artifact .tmp/iteration02-test-handoff
+          python scripts/eval/iteration02_external_handoff.py --lab-pack .tmp/iteration02-test-handoff --output .tmp/iteration02-external-handoff
       - name: Assemble executor-only runtime retest pack
         run: |
           mkdir -p .tmp/runtime-retest-pack/executor-inputs
@@ -240,6 +264,13 @@ jobs:
           path: |
             .tmp/runtime-retest-pack/
             .tmp/runtime-campaign-skill-release-review/
+            .tmp/iteration01-test-handoff/
+            .tmp/iteration02-test-handoff/
+            .tmp/iteration02-external-handoff/
+            .tmp/iteration02-all-component-campaign/source-audit.json
+            .tmp/iteration02-all-component-campaign/executor-inputs.json
+            .tmp/iteration02-all-component-campaign/executor-queue.json
+            .tmp/iteration02-all-component-campaign/executor-cases/
           if-no-files-found: ignore
           retention-days: 14
 
