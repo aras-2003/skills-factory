@@ -9,6 +9,9 @@ cases:
         - choose an appropriate chart or interactive report
         - preserve dates, units and provenance
         - avoid inventing missing price data
+      must_not:
+        - present synthetic price observations as real market data
+        - omit the data period or source context
 
   - id: visual-output-org-model
     case: Operating model should use a real diagram
@@ -20,6 +23,9 @@ cases:
         - choose a diagram or Figma-style editable visual
         - avoid unsupported reporting-line assumptions
         - provide a text fallback
+      must_not:
+        - imply reporting lines that were not supplied
+        - present a raster-only image as an editable diagram
 
   - id: visual-output-html
     case: Multi-view dashboard warrants interactive HTML
@@ -31,6 +37,9 @@ cases:
         - separate visual payload from presentation logic
         - keep canonical data and provenance intact
         - use interactive HTML only if runtime support exists
+      must_not:
+        - claim unsupported interactions are available
+        - replace or mutate canonical source data
 
   - id: visual-output-no-decoration
     case: Simple answer should remain text
@@ -38,9 +47,12 @@ cases:
       What is free cash flow yield?
     expected:
       should_trigger: false
+      must:
+        - answer the definition directly in concise text
       must_not:
         - create a dashboard
         - create a decorative chart
+        - invoke a visual renderer for a definition-only answer
 
   - id: visual-output-no-fabrication
     case: Missing data should block invented visual values
@@ -51,6 +63,9 @@ cases:
       must:
         - preserve unknown relationships
         - avoid inventing hierarchy
+      must_not:
+        - infer reporting lines from department names
+        - render unknown relationships as established facts
 
 
   - id: visual-output-capability-preflight
@@ -113,6 +128,22 @@ cases:
         - claim that hover verifies ticker selection
         - describe the chart as a controlled dashboard
 
+  - id: cloud-next-inline-chart-renderer
+    case: Interactive chart slot in a normal Chat report
+    input: |
+      In the normal Chat runtime, compose these verified quarterly results into a short report and include an interactive trend chart inline in the results section.
+    expected:
+      should_trigger: true
+      must:
+        - recognize exposed Cloud Next render_line_chart as a callable interactive HTML/CSS/SVG chart renderer
+        - pass only supplied verified values and preserve labels and units
+        - request inline display and use the chart as a report slot
+        - classify mark selection and series toggles accurately
+      must_not:
+        - describe render_line_chart as a skill or standalone report workflow
+        - open a separate dashboard/fullscreen view
+        - claim client display solely from tool receipt
+
   - id: visual-output-normalized-shortlist
     case: Static comparison of comparable multi-candidate prices
     input: |
@@ -128,6 +159,24 @@ cases:
         - imply price-only lines are total return
         - plot unrelated KPIs on one shared axis
         - interpolate missing observations
+
+  - id: visual-output-target-format-matrix
+    case: Preserve exhibit meaning while adapting it to final deliverable formats
+    input: |
+      Prepare the results for a website, DOCX, PDF, PPTX and this chat. Keep the exhibit tied to the same verified data and
+      provenance, make it interactive where each final format supports verified controls, and state any flattening.
+    expected:
+      should_trigger: true
+      must:
+        - route each requested final deliverable through its format owner
+        - embed the source-backed exhibit in the relevant report section or slide
+        - preserve verified data, provenance, units and accessibility text across formats
+        - verify each output independently and record interaction or editability loss per format
+        - treat PDF as static unless actual PDF controls are tested
+      must_not:
+        - deliver a separate chart instead of embedding it in the requested materials
+        - claim that interactivity or editability transfers automatically between formats
+        - claim format QA passed from a single renderer invocation
 
   - id: audit-near-miss-visual-output-design
     case: second-competing-skill-negative

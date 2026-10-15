@@ -240,6 +240,8 @@ jobs:
             --production-plugin .tmp/core/production-plugin \
             --lab-plugin .tmp/core/lab-plugin
           python scripts/eval/campaign.py validate-evidence
+          python scripts/eval/interactive_report_exhibit_campaign.py validate
+          python scripts/eval/interactive_report_exhibit_campaign.py prepare --lab .tmp/core/lab-plugin --output .tmp/interactive-report-exhibit-campaign
           python scripts/eval/skill_release_campaign.py prepare --lab .tmp/core/lab-plugin --output .tmp/runtime-campaign-skill-release-review
           python scripts/eval/iteration01_handoff.py prepare --lab .tmp/core/lab-plugin --output .tmp/iteration01-test-handoff
           python scripts/eval/validate_isolation.py --artifact .tmp/iteration01-test-handoff
@@ -263,6 +265,7 @@ jobs:
           path: |
             .tmp/runtime-retest-pack/
             .tmp/runtime-campaign-skill-release-review/
+            .tmp/interactive-report-exhibit-campaign/
             .tmp/iteration01-test-handoff/
             .tmp/iteration02-test-handoff/
             .tmp/iteration02-external-handoff/

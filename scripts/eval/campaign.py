@@ -27,6 +27,12 @@ CONFIG = ROOT / CONFIG_REL
 SEPARATE_META_CAMPAIGN_REL = Path("evals/campaigns/skill-release-review-2026-10/release-review-campaign.yaml")
 SKILL_ENGINEERING_CAMPAIGN_REL = Path("evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml")
 PRESENTATION_OS_CAMPAIGN_REL = Path("evals/campaigns/presentation-os-creative-direction-2026-10/source-coverage.yaml")
+INTERACTIVE_REPORT_EXHIBIT_CAMPAIGN_REL = Path("evals/campaigns/interactive-report-exhibits-2026-10/campaign.yaml")
+EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS = {
+    "skills/meta/report-composer/SKILL.md",
+    "skills/meta/visual-output-design/SKILL.md",
+    "skills/meta/visual-output-design/references/tool-routing.md",
+}
 
 
 def separately_validated_engineering_paths() -> set[str]:
@@ -171,6 +177,76 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
     if not cfg.get("case_suites"):
         return set()
     return expected_paths
+
+
+def separately_validated_interactive_report_exhibit_paths(root: Path = ROOT) -> set[str]:
+    """Return only the exact source paths covered by the dedicated report-exhibit runtime handoff."""
+    path = root / INTERACTIVE_REPORT_EXHIBIT_CAMPAIGN_REL
+    if not path.is_file():
+        return set()
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    declared = cfg.get("out_of_scope_behavior_paths") or []
+    if (
+        cfg.get("campaign") != "interactive-report-exhibits-2026-10"
+        or set(declared) != EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS
+        or len(declared) != len(EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS)
+        or cfg.get("runtime_status") != "NOT_RUN"
+        or cfg.get("release_approved") is not False
+    ):
+        return set()
+    for rel in EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS:
+        if not (root / rel).is_file():
+            return set()
+    skills = cfg.get("candidate_skills") or {}
+    expected_skills = {
+        "report-composer": ("0.12.0", "skills/meta/report-composer/SKILL.md", "skills/meta/report-composer/tests/cases.yaml"),
+        "visual-output-design": ("0.13.0", "skills/meta/visual-output-design/SKILL.md", "skills/meta/visual-output-design/tests/cases.yaml"),
+    }
+    if set(skills) != set(expected_skills):
+        return set()
+    declared_suites = {
+        str(item.get("path")): list(map(str, item.get("required_case_ids") or []))
+        for item in cfg.get("case_suites") or []
+        if isinstance(item, dict)
+    }
+    expected_suites = {
+        spec["test_cases"]: list(map(str, spec.get("required_case_ids") or []))
+        for spec in skills.values()
+    }
+    if declared_suites != expected_suites:
+        return set()
+    for name, (version, source_rel, tests_rel) in expected_skills.items():
+        spec = skills[name]
+        if spec.get("version") != version or spec.get("source") != source_rel or spec.get("test_cases") != tests_rel:
+            return set()
+        source = root / source_rel
+        tests = root / tests_rel
+        if not source.is_file() or not tests.is_file() or f'version: "{version}"' not in source.read_text(encoding="utf-8"):
+            return set()
+        suite = yaml.safe_load(tests.read_text(encoding="utf-8")) or {}
+        by_id = {str(case.get("id")): case for case in suite.get("cases", []) if isinstance(case, dict) and case.get("id")}
+        required = list(map(str, spec.get("required_case_ids") or []))
+        if len(required) < 6 or len(set(required)) != len(required):
+            return set()
+        for case_id in required:
+            case = by_id.get(case_id)
+            expected = (case or {}).get("expected") or {}
+            if (
+                not case
+                or not str(case.get("input") or "").strip()
+                or not isinstance(expected.get("should_trigger"), bool)
+                or not expected.get("must")
+                or not expected.get("must_not")
+            ):
+                return set()
+    policy = cfg.get("evaluator_policy") or {}
+    if any(policy.get(key) is not True for key in (
+        "executor_must_not_receive_rubrics",
+        "runtime_model_and_surface_must_be_recorded",
+        "runtime_receipts_required_before_release",
+    )):
+        return set()
+    return EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS
 
 
 def config(root: Path = ROOT):
@@ -380,6 +456,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
             separate_meta_targets = set(expected_paths)
     separate_meta_targets.update(separately_validated_engineering_paths())
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
+    separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))

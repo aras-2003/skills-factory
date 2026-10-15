@@ -22,9 +22,9 @@ Slide claim/purpose, audience, source-supported numbers/relationships and a know
 1. For each slide, select the single comprehension job: compare magnitude, show composition, change over time, trade-off, causal mechanism, flow, hierarchy, architecture, scenario, decision or illustrative context. State the visual focal point and what the viewer should notice first.
 2. Match grammar: ranked bars for categories; time-series only for real dated sequences; waterfall for mathematically valid bridges; range/dots for uncertainty; matrix for choices/trade-offs; step-flow for process; network only for evidenced relationships. Avoid 3D, meaningless decoration and unsupported composite scores.
 3. Define semantic exhibit `type,reason,claim_id,source_ids,fields,units,labels,denominators,as_of,uncertainty,annotations,interaction`. A visual summary must not imply greater certainty than the ledger.
-4. Call `visual-output-design` for actual component rendering where available. Follow its `capability_preflight` and `renderer_execution_status`: distinguish specification from emitted payload and client display. Quantitative charts require deterministic numeric renderer; image/video generation is **not** a factual chart renderer.
+4. Call `visual-output-design` for actual component rendering where available. It selects the medium-specific specialized tool (chart, diagram, illustration/motion) and emits the component. Follow its `capability_preflight` and `renderer_execution_status`: distinguish specification from emitted payload and client display. Quantitative charts require a deterministic numeric renderer; image/video generation is **not** a factual chart renderer.
 5. For non-quantitative illustrations, optionally use tools/media generators only when it helps understanding, with license, provenance and prompt/asset manifest. Do not render customer/org facts through artistic generation.
-6. Ensure typography, plot labels, source line, legend, visual encoding and annotations are readable at the intended device/distance; show uncertainty and accessible alternative text. Vary exhibit form when the reasoning changes; do not force all slides into the same card/grid pattern. Mark the small set of exhibits that should carry the visual arc or signature moment.
+6. Ensure typography, plot labels, source line, legend, visual encoding and annotations are readable at the intended device/distance; show uncertainty and accessible alternative text. Use the chosen authoring tool and design tokens to achieve polished spacing, hierarchy, contrast and editability at the actual slide size. Vary exhibit form when the reasoning changes; do not force all slides into the same card/grid pattern. Mark the small set of exhibits that should carry the visual arc or signature moment.
 7. Prefer editable native shapes/charts/text where proven supported by the authoring adapter. If a visual is raster, label `RASTER_ASSET`, not `EDITABLE_NATIVE`.
 8. Send exhibit plan and verified payload receipts to `presentation-slide-authoring`.
 
@@ -35,7 +35,7 @@ A visual is justified by information value. Slides may be text-led where that be
 Slide semantic model, evidence ledger, desired authoring tool and design tokens.
 
 ## Output contract
-`ExhibitSpec{slide_id,claim_id,visual_job,visual_type,data_schema,provenance,as_of,units,annotations,focal_point,visual_role,alternative_text,editability_expected,capability_status,renderer_execution_status,asset_receipt,blocked_reason}`.
+`ExhibitSpec{slide_id,claim_id,visual_job,visual_type,data_schema,provenance,as_of,units,annotations,focal_point,visual_role,target_format,embedding_mode,interaction_level,alternative_text,editability_expected,capability_status,renderer_execution_status,asset_receipt,interaction_or_editability_loss,blocked_reason}`.
 
 ## Evidence and failure handling
 If numeric chart renderer is absent: `BLOCKED_NO_RENDERER` for required exhibits and explicit non-visual diagnostic fallback. If sources are incomplete, do not construct phantom curves, charts or hierarchies. A design mockup is not an emitted chart.

@@ -22,7 +22,7 @@ Evidence / canonical state
 -> Chat-native report by default; external artifact only on explicit user request
 
 `report-composer` owns document structure and placement.
-`visual-output-design` owns visual encoding and rendering.
+`visual-output-design` is the specialized exhibit selector and renderer for all report/presentation media: it chooses suitable chart, diagram, illustration, motion or interactive component tools and returns a source-linked exhibit. Report Composer owns narrative structure; format owners embed the same exhibit semantics into Chat, a website, DOCX, PDF or PPTX. In normal Chat, Cloud Next chart MCP Apps are its inline interactive renderer primitives—not a separate user-facing tool or dashboard.
 
 ## Semantic report model
 A report contains:
@@ -46,7 +46,7 @@ A section contains:
 
 ### Chat-native report
 Use when the runtime can render suitable charts/widgets inline.
-The narrative remains in chat and visuals appear next to the relevant sections.
+The narrative remains in chat and visuals appear in the same conversation flow beside the relevant report section. Cloud Next chart tools request inline display and provide selectable marks/series controls. ChatGPT places an app in its inline app slot; the host does not guarantee arbitrary insertion in the middle of a prose message, so keep related interpretation adjacent in the report text. When converting to DOCX/PDF/PPTX, the owning authoring workflow embeds an appropriate native or static version and records any interaction/editability loss.
 
 ### External artifact
 Use only when the user explicitly requests HTML, PDF, Figma, a deck, a downloadable file or another external format.
@@ -66,7 +66,7 @@ Examples:
 Do not add filters/tabs solely because HTML supports them.
 
 ## Cross-domain adoption
-Investment OS, OAF and Commerce workflows should call Report Composer after analytical synthesis. Their default delivery target is the chat response.
+Investment OS, OAF, Commerce, and presentation-of-results workflows should call Report Composer after analytical synthesis. This includes an interactive chart embedded in a chat report; it does not convert a request for a native slide deck into a chat report. Their default delivery target is the chat response.
 Visual Output Design remains a shared renderer utility.
 New skills/workflows should specify report/visual affordances during specification and authoring.
 
