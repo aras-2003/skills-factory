@@ -19,6 +19,8 @@ cases:
     case: Interactive chart is an integrated report element in normal Chat
     input: |
       Summarize these verified quarterly results here in Chat. Include an interactive trend chart in the results section and explain the key movement beside it; do not create a separate dashboard or file.
+
+      Apple fiscal 2024 quarterly total net sales (USD millions): Q1 119575, Q2 90753, Q3 85777, Q4 94930. Use these exact values and labels. Primary sources: Apple's consolidated financial statements for Q1 https://www.apple.com/newsroom/pdfs/fy2024-q1/FY24_Q1_Consolidated_Financial_Statements.pdf, Q2 https://www.apple.com/newsroom/pdfs/fy2024-q2/FY24_Q2_Consolidated_Financial_Statements.pdf, Q3 https://www.apple.com/newsroom/pdfs/fy2024-q3/FY24_Q3_Consolidated_Financial_Statements.pdf, and Q4 https://www.apple.com/newsroom/pdfs/fy2024-q4/FY24_Q4_Consolidated_Financial_Statements.pdf.
     expected:
       should_trigger: true
       must:
@@ -87,10 +89,12 @@ cases:
         - DOCX and PPTX owners embed the exhibit using target-native/editable forms when verified
         - report and presentation outputs receive separate format-specific QA
         - interaction/editability loss is recorded per output
+        - each artifact's generation and QA status is reported separately with evidence of the actual output review
       must_not:
         - assume a chart editable in one format is editable in another
         - treat a flattened PDF/image as an editable component
         - claim both artifacts pass based on one renderer invocation
+        - call an artifact ready or verified when it has not been opened/rendered and reviewed by its format-specific QA path
 
   - id: simple-answer-no-report
     case: Narrow concept question

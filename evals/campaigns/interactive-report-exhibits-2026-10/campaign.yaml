@@ -9,7 +9,7 @@ out_of_scope_behavior_paths:
   - skills/meta/visual-output-design/references/tool-routing.md
 candidate_skills:
   report-composer:
-    version: "0.12.0"
+    version: "0.12.1"
     source: skills/meta/report-composer/SKILL.md
     test_cases: skills/meta/report-composer/tests/cases.yaml
     required_case_ids:
@@ -35,6 +35,7 @@ evaluator_policy:
   executor_must_not_receive_rubrics: true
   runtime_model_and_surface_must_be_recorded: true
   runtime_receipts_required_before_release: true
+  client_display_must_be_scored_from_independent_evaluator_UI_evidence_not_model_claim_or_tool_receipt: true
 case_suites:
   - path: skills/meta/report-composer/tests/cases.yaml
     required_case_ids:

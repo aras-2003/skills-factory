@@ -33,6 +33,8 @@ Do not use `visual-output-design` to create a second full dashboard beside an al
 
 No single renderer should generate every modality or own every output format. `visual-output-design` routes a shared semantic exhibit contract to specialized renderers; target-format owners embed it in the final report, website or deck and report capability, execution, editability and display states separately.
 
+Runtime receipts and client display evidence have different owners: the model/tool receipt establishes payload generation, while the external evaluator establishes whether the target client actually displayed it. Record evaluator UI evidence separately (for example, a timestamped screenshot or DOM observation); never ask the model to infer that observation or treat its `NOT_OBSERVABLE` status as proof that display failed.
+
 ## Domain patterns
 Investment OS: normalized performance, allocation/concentration, overlap, valuation ranges, catalyst/risk timelines and opportunity cards.
 

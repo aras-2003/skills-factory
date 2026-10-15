@@ -323,7 +323,7 @@
       "name": "report-composer",
       "domain": "meta",
       "maturity": "candidate",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "description": "Compose one integrated decision report from an already-supported workflow result by interleaving narrative, evidence, decisions and contextually placed visual slots. Use when the user needs a coherent report where charts, diagrams, interactive components or Figma outputs appear inside the relevant sections instead of as a separate parallel artifact.",
       "source": "skills/meta/report-composer/SKILL.md",
       "source_status": "present",
