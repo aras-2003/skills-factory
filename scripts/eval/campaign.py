@@ -199,7 +199,7 @@ def separately_validated_interactive_report_exhibit_paths(root: Path = ROOT) -> 
             return set()
     skills = cfg.get("candidate_skills") or {}
     expected_skills = {
-        "report-composer": ("0.12.0", "skills/meta/report-composer/SKILL.md", "skills/meta/report-composer/tests/cases.yaml"),
+        "report-composer": ("0.12.1", "skills/meta/report-composer/SKILL.md", "skills/meta/report-composer/tests/cases.yaml"),
         "visual-output-design": ("0.13.0", "skills/meta/visual-output-design/SKILL.md", "skills/meta/visual-output-design/tests/cases.yaml"),
     }
     if set(skills) != set(expected_skills):
