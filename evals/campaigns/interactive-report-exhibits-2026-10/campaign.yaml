@@ -1,0 +1,37 @@
+schema_version: "1.0"
+campaign: interactive-report-exhibits-2026-10
+purpose: independently-versioned-runtime-handoff-for-integrated-report-exhibits
+runtime_status: NOT_RUN
+release_approved: false
+out_of_scope_behavior_paths:
+  - skills/meta/report-composer/SKILL.md
+  - skills/meta/visual-output-design/SKILL.md
+  - skills/meta/visual-output-design/references/tool-routing.md
+candidate_skills:
+  report-composer:
+    version: "0.12.0"
+    source: skills/meta/report-composer/SKILL.md
+    test_cases: skills/meta/report-composer/tests/cases.yaml
+    required_case_ids:
+      - cloud-next-inline-interactive-report
+      - integrated-oaf-report
+      - explicit-html-report
+      - no-unsolicited-artifact
+      - exhibit-adapts-to-requested-output-format
+      - integrated-investment-report
+  visual-output-design:
+    version: "0.13.0"
+    source: skills/meta/visual-output-design/SKILL.md
+    test_cases: skills/meta/visual-output-design/tests/cases.yaml
+    required_case_ids:
+      - visual-output-chart
+      - visual-output-org-model
+      - visual-output-html
+      - visual-output-no-decoration
+      - visual-output-no-fabrication
+      - cloud-next-inline-chart-renderer
+      - visual-output-target-format-matrix
+evaluator_policy:
+  executor_must_not_receive_rubrics: true
+  runtime_model_and_surface_must_be_recorded: true
+  runtime_receipts_required_before_release: true

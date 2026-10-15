@@ -145,6 +145,24 @@ cases:
         - plot unrelated KPIs on one shared axis
         - interpolate missing observations
 
+  - id: visual-output-target-format-matrix
+    case: Preserve exhibit meaning while adapting it to final deliverable formats
+    input: |
+      Prepare the results for a website, DOCX, PDF, PPTX and this chat. Keep the exhibit tied to the same verified data and
+      provenance, make it interactive where each final format supports verified controls, and state any flattening.
+    expected:
+      should_trigger: true
+      must:
+        - route each requested final deliverable through its format owner
+        - embed the source-backed exhibit in the relevant report section or slide
+        - preserve verified data, provenance, units and accessibility text across formats
+        - verify each output independently and record interaction or editability loss per format
+        - treat PDF as static unless actual PDF controls are tested
+      must_not:
+        - deliver a separate chart instead of embedding it in the requested materials
+        - claim that interactivity or editability transfers automatically between formats
+        - claim format QA passed from a single renderer invocation
+
   - id: audit-near-miss-visual-output-design
     case: second-competing-skill-negative
     input: "Turn my findings into a structured executive report with sections, logical flow, decisions and evidence. I am not asking to render charts or diagrams."
