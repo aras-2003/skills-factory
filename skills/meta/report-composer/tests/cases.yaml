@@ -43,6 +43,9 @@ cases:
         - report sections
         - inline structural visual
         - avoid inventing reporting lines
+      must_not:
+        - place the diagram in a separate unreferenced artifact
+        - imply reporting lines that were not supplied
 
   - id: explicit-html-report
     case: External HTML report is allowed only when explicitly requested
