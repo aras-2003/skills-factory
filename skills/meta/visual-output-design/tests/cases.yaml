@@ -47,6 +47,8 @@ cases:
       What is free cash flow yield?
     expected:
       should_trigger: false
+      must:
+        - answer the definition directly in concise text
       must_not:
         - create a dashboard
         - create a decorative chart
