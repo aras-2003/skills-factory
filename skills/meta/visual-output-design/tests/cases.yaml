@@ -113,6 +113,22 @@ cases:
         - claim that hover verifies ticker selection
         - describe the chart as a controlled dashboard
 
+  - id: cloud-next-inline-chart-renderer
+    case: Interactive chart slot in a normal Chat report
+    input: |
+      In the normal Chat runtime, compose these verified quarterly results into a short report and include an interactive trend chart inline in the results section.
+    expected:
+      should_trigger: true
+      must:
+        - recognize exposed Cloud Next render_line_chart as a callable interactive HTML/CSS/SVG chart renderer
+        - pass only supplied verified values and preserve labels and units
+        - request inline display and use the chart as a report slot
+        - classify mark selection and series toggles accurately
+      must_not:
+        - describe render_line_chart as a skill or standalone report workflow
+        - open a separate dashboard/fullscreen view
+        - claim client display solely from tool receipt
+
   - id: visual-output-normalized-shortlist
     case: Static comparison of comparable multi-candidate prices
     input: |

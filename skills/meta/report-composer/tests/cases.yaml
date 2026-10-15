@@ -15,6 +15,23 @@ cases:
         - duplicate full visual dashboard beside the text report
         - create HTML/PDF/Figma/deck/file unless explicitly requested
 
+  - id: cloud-next-inline-interactive-report
+    case: Interactive chart is an integrated report element in normal Chat
+    input: |
+      Summarize these verified quarterly results here in Chat. Include an interactive trend chart in the results section and explain the key movement beside it; do not create a separate dashboard or file.
+    expected:
+      should_trigger: true
+      must:
+        - report-composer owns one coherent narrative and section placement
+        - visual-output-design invokes the exposed Cloud Next chart renderer with the supplied verified values
+        - chart is requested in inline display and used as a report element
+        - interpretation and chart remain in the same conversation flow
+        - report notes host display only when independently observed
+      must_not:
+        - expose render_bar_chart as a separate user-facing workflow or skill
+        - create a parallel dashboard, fullscreen chart or external artifact
+        - claim arbitrary insertion inside prose is guaranteed by the host
+
   - id: integrated-oaf-report
     case: Operating-model report with embedded editable diagram
     input: |
@@ -55,6 +72,22 @@ cases:
         - create Figma file
         - create deck
         - replace chat report with an external artifact
+
+  - id: exhibit-adapts-to-requested-output-format
+    case: Preserve semantic exhibit while embedding it in the requested final format
+    input: |
+      Prepare the same results as a DOCX report and a PPTX summary. Reuse the exact sourced chart data and make each chart editable where the target tool supports it.
+    expected:
+      should_trigger: true
+      must:
+        - one source-backed ExhibitSpec carries through both output pipelines
+        - DOCX and PPTX owners embed the exhibit using target-native/editable forms when verified
+        - report and presentation outputs receive separate format-specific QA
+        - interaction/editability loss is recorded per output
+      must_not:
+        - assume a chart editable in one format is editable in another
+        - treat a flattened PDF/image as an editable component
+        - claim both artifacts pass based on one renderer invocation
 
   - id: simple-answer-no-report
     case: Narrow concept question
