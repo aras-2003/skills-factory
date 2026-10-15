@@ -20,7 +20,7 @@ metadata:
 ## Purpose
 Select and render one evidence-backed exhibit for an already-defined local information need. This shared exhibit specialist
 is called by `report-composer` for chat, `report-document-architecture` for long-form documents, and
-`presentation-exhibit-design` for slides. It does not own the structure of a report, document, deck or full interactive site.
+`presentation-exhibit-design` for slides. It does not own the structure of a full report, document, deck or full interactive site.
 
 Preserve the source analysis, evidence, uncertainty and canonical data contracts while choosing the best visual medium available in the runtime. Follow `../report-composer/references/report-state-and-evidence-contract.md` for renderer/client-state semantics.
 
