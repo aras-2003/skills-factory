@@ -204,6 +204,17 @@ def separately_validated_interactive_report_exhibit_paths(root: Path = ROOT) -> 
     }
     if set(skills) != set(expected_skills):
         return set()
+    declared_suites = {
+        str(item.get("path")): list(map(str, item.get("required_case_ids") or []))
+        for item in cfg.get("case_suites") or []
+        if isinstance(item, dict)
+    }
+    expected_suites = {
+        spec["test_cases"]: list(map(str, spec.get("required_case_ids") or []))
+        for spec in skills.values()
+    }
+    if declared_suites != expected_suites:
+        return set()
     for name, (version, source_rel, tests_rel) in expected_skills.items():
         spec = skills[name]
         if spec.get("version") != version or spec.get("source") != source_rel or spec.get("test_cases") != tests_rel:

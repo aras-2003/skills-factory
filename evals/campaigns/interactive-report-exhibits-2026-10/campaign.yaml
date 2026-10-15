@@ -35,3 +35,21 @@ evaluator_policy:
   executor_must_not_receive_rubrics: true
   runtime_model_and_surface_must_be_recorded: true
   runtime_receipts_required_before_release: true
+case_suites:
+  - path: skills/meta/report-composer/tests/cases.yaml
+    required_case_ids:
+      - cloud-next-inline-interactive-report
+      - integrated-oaf-report
+      - explicit-html-report
+      - no-unsolicited-artifact
+      - exhibit-adapts-to-requested-output-format
+      - integrated-investment-report
+  - path: skills/meta/visual-output-design/tests/cases.yaml
+    required_case_ids:
+      - visual-output-chart
+      - visual-output-org-model
+      - visual-output-html
+      - visual-output-no-decoration
+      - visual-output-no-fabrication
+      - cloud-next-inline-chart-renderer
+      - visual-output-target-format-matrix
