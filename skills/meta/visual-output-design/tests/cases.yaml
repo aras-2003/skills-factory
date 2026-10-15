@@ -132,6 +132,8 @@ cases:
     case: Interactive chart slot in a normal Chat report
     input: |
       In the normal Chat runtime, compose these verified quarterly results into a short report and include an interactive trend chart inline in the results section.
+
+      Apple fiscal 2024 quarterly total net sales (USD millions): Q1 119575, Q2 90753, Q3 85777, Q4 94930. Use these exact values and labels. Primary sources: Apple's consolidated financial statements for Q1 https://www.apple.com/newsroom/pdfs/fy2024-q1/FY24_Q1_Consolidated_Financial_Statements.pdf, Q2 https://www.apple.com/newsroom/pdfs/fy2024-q2/FY24_Q2_Consolidated_Financial_Statements.pdf, Q3 https://www.apple.com/newsroom/pdfs/fy2024-q3/FY24_Q3_Consolidated_Financial_Statements.pdf, and Q4 https://www.apple.com/newsroom/pdfs/fy2024-q4/FY24_Q4_Consolidated_Financial_Statements.pdf.
     expected:
       should_trigger: true
       must:
@@ -172,6 +174,7 @@ cases:
         - embed the source-backed exhibit in the relevant report section or slide
         - preserve verified data, provenance, units and accessibility text across formats
         - verify each output independently and record interaction or editability loss per format
+        - report each output as UNVERIFIED until its actual artifact is opened/rendered and reviewed by the matching format-specific QA path
         - treat PDF as static unless actual PDF controls are tested
       must_not:
         - deliver a separate chart instead of embedding it in the requested materials
