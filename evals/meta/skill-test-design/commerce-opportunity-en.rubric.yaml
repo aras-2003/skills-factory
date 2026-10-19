@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: testdesign-commerce-opportunity-en
+target: skill-test-design
+mode: explicit
+source_legacy: evals/meta/skill-test-design/commerce-opportunity-en.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  Assess whether the suite discriminates a business opportunity review from consumer product advice and tests evidence limits.
+assertions:
+  manual:
+    - include a positive commercial-opportunity case grounded in business viability inputs
+    - include a consumer-shopping near-miss that should not trigger the commercial skill
+    - require missing supplier, cost, or demand evidence to remain unknown rather than invented

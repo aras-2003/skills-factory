@@ -1,0 +1,1 @@
+Projektuję skill do fact-checkingu artykułów technologicznych. Powinien sprawdzać ważne twierdzenia w kilku wiarygodnych źródłach, a przy częściowych wynikach wyszukiwania jawnie ograniczać wnioski. Zaprojektuj testy obejmujące także konkurencyjną intencję zwykłej korekty tekstu.

@@ -22,6 +22,26 @@ targets:
       mode: explicit
       input: evals/meta/skill-test-design/live-source-evidence.input.md
       rubric: evals/meta/skill-test-design/live-source-evidence.rubric.yaml
+    - id: testdesign-meta-contract-boundary-pl
+      mode: explicit
+      input: evals/meta/skill-test-design/meta-contract-boundary-pl.input.md
+      rubric: evals/meta/skill-test-design/meta-contract-boundary-pl.rubric.yaml
+    - id: testdesign-commerce-opportunity-en
+      mode: explicit
+      input: evals/meta/skill-test-design/commerce-opportunity-en.input.md
+      rubric: evals/meta/skill-test-design/commerce-opportunity-en.rubric.yaml
+    - id: testdesign-consumer-purchase-nearmiss-pl
+      mode: explicit
+      input: evals/meta/skill-test-design/consumer-purchase-nearmiss-pl.input.md
+      rubric: evals/meta/skill-test-design/consumer-purchase-nearmiss-pl.rubric.yaml
+    - id: testdesign-article-factcheck-pl
+      mode: explicit
+      input: evals/meta/skill-test-design/article-factcheck-pl.input.md
+      rubric: evals/meta/skill-test-design/article-factcheck-pl.rubric.yaml
+    - id: testdesign-article-edit-nearmiss-en
+      mode: explicit
+      input: evals/meta/skill-test-design/article-edit-nearmiss-en.input.md
+      rubric: evals/meta/skill-test-design/article-edit-nearmiss-en.rubric.yaml
   skill-evaluation:
     - id: evaluation-queued-not-run
       mode: explicit

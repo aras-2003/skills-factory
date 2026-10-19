@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: testdesign-article-edit-nearmiss-en
+target: skill-test-design
+mode: explicit
+source_legacy: evals/meta/skill-test-design/article-edit-nearmiss-en.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  This is a bounded copy-editing request, not a request to design skill tests or verify factual claims.
+assertions:
+  manual:
+    - do not invoke skill-test-design or invent test cases
+    - edit the supplied paragraph while preserving its intended meaning
+    - do not add external research or unsupported claims

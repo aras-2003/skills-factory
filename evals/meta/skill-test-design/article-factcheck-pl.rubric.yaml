@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: testdesign-article-factcheck-pl
+target: skill-test-design
+mode: explicit
+source_legacy: evals/meta/skill-test-design/article-factcheck-pl.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  Assess whether test design makes fact-checking claims and partial-source behavior observable while separating copy-editing intent.
+assertions:
+  manual:
+    - map claim verification and multi-source evidence to observable assertions
+    - include a partial-search-result failure case that limits the conclusion
+    - include a realistic editing-only near-miss and avoid requiring research for that case
