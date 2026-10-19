@@ -1,0 +1,415 @@
+{
+  "schema_version": "0.1",
+  "selection_policy": "original_semantic_recipes_only",
+  "styles": [
+    {
+      "id": "executive-classic",
+      "tags": [
+        "board",
+        "executive",
+        "strategy",
+        "decision"
+      ],
+      "palette": [
+        "#102438",
+        "#FFFFFF",
+        "#177E89",
+        "#E8EEF2"
+      ],
+      "heading_font": "inter",
+      "body_font": "source-sans-3",
+      "data_font": "inter",
+      "novelty": 1,
+      "density": [
+        "medium",
+        "high"
+      ],
+      "layouts": [
+        "decision-title",
+        "claim-proof",
+        "options-matrix",
+        "risk-register",
+        "decision-ask"
+      ]
+    },
+    {
+      "id": "analytical-modern",
+      "tags": [
+        "investment",
+        "finance",
+        "data",
+        "research"
+      ],
+      "palette": [
+        "#16263A",
+        "#F7F9FC",
+        "#196DAD",
+        "#E57B36"
+      ],
+      "heading_font": "inter",
+      "body_font": "inter",
+      "data_font": "ibm-plex-mono",
+      "novelty": 2,
+      "density": [
+        "medium",
+        "high"
+      ],
+      "layouts": [
+        "metric-hero",
+        "data-chart",
+        "scenario-range",
+        "claim-proof",
+        "appendix-source"
+      ]
+    },
+    {
+      "id": "editorial-perspective",
+      "tags": [
+        "keynote",
+        "thought-leadership",
+        "storytelling"
+      ],
+      "palette": [
+        "#151515",
+        "#FAF8F3",
+        "#D05C42",
+        "#DAD5CC"
+      ],
+      "heading_font": "source-serif-4",
+      "body_font": "source-sans-3",
+      "data_font": "inter",
+      "novelty": 4,
+      "density": [
+        "low",
+        "medium"
+      ],
+      "layouts": [
+        "hero-message",
+        "visual-metaphor",
+        "quote-proof",
+        "single-number",
+        "closing-ask"
+      ]
+    },
+    {
+      "id": "technology-architecture",
+      "tags": [
+        "technical",
+        "architecture",
+        "transformation",
+        "engineering"
+      ],
+      "palette": [
+        "#101B2D",
+        "#F7FBFF",
+        "#2F90B7",
+        "#6B7280"
+      ],
+      "heading_font": "manrope",
+      "body_font": "inter",
+      "data_font": "ibm-plex-mono",
+      "novelty": 2,
+      "density": [
+        "medium",
+        "high"
+      ],
+      "layouts": [
+        "system-map",
+        "layer-model",
+        "interface-flow",
+        "migration-roadmap",
+        "claim-proof"
+      ]
+    },
+    {
+      "id": "learning-clear",
+      "tags": [
+        "training",
+        "learning",
+        "workshop",
+        "education"
+      ],
+      "palette": [
+        "#213B46",
+        "#FFFFFF",
+        "#27A397",
+        "#F5BA67"
+      ],
+      "heading_font": "manrope",
+      "body_font": "source-sans-3",
+      "data_font": "inter",
+      "novelty": 3,
+      "density": [
+        "low",
+        "medium"
+      ],
+      "layouts": [
+        "learning-objective",
+        "concept-model",
+        "worked-example",
+        "exercise",
+        "takeaway"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "id": "decision-title",
+      "role": "decision",
+      "content": [
+        "action_title",
+        "decision_context"
+      ],
+      "constraints": [
+        "one_clear_ask"
+      ]
+    },
+    {
+      "id": "claim-proof",
+      "role": "argument",
+      "content": [
+        "claim",
+        "evidence",
+        "implication"
+      ],
+      "constraints": [
+        "claim_id_required"
+      ]
+    },
+    {
+      "id": "options-matrix",
+      "role": "tradeoffs",
+      "content": [
+        "alternatives",
+        "criteria",
+        "evidence"
+      ],
+      "constraints": [
+        "no_invented_scores"
+      ]
+    },
+    {
+      "id": "risk-register",
+      "role": "risks",
+      "content": [
+        "risk",
+        "impact",
+        "mitigation"
+      ],
+      "constraints": [
+        "material_only"
+      ]
+    },
+    {
+      "id": "decision-ask",
+      "role": "closing",
+      "content": [
+        "specific_ask",
+        "owner",
+        "next_step"
+      ],
+      "constraints": [
+        "explicit_action"
+      ]
+    },
+    {
+      "id": "metric-hero",
+      "role": "quantitative",
+      "content": [
+        "value",
+        "unit",
+        "period",
+        "source"
+      ],
+      "constraints": [
+        "source_required"
+      ]
+    },
+    {
+      "id": "data-chart",
+      "role": "quantitative",
+      "content": [
+        "series",
+        "unit",
+        "date",
+        "source"
+      ],
+      "constraints": [
+        "deterministic_numbers"
+      ]
+    },
+    {
+      "id": "scenario-range",
+      "role": "scenarios",
+      "content": [
+        "bear",
+        "base",
+        "bull",
+        "assumptions"
+      ],
+      "constraints": [
+        "assumptions_visible"
+      ]
+    },
+    {
+      "id": "appendix-source",
+      "role": "provenance",
+      "content": [
+        "claim_ids",
+        "sources",
+        "as_of"
+      ],
+      "constraints": [
+        "nonempty_sources"
+      ]
+    },
+    {
+      "id": "hero-message",
+      "role": "narrative",
+      "content": [
+        "headline",
+        "support"
+      ],
+      "constraints": [
+        "low_density"
+      ]
+    },
+    {
+      "id": "visual-metaphor",
+      "role": "narrative",
+      "content": [
+        "illustration_spec",
+        "literal_explanation"
+      ],
+      "constraints": [
+        "not_for_data"
+      ]
+    },
+    {
+      "id": "quote-proof",
+      "role": "evidence",
+      "content": [
+        "quotation",
+        "attribution",
+        "source"
+      ],
+      "constraints": [
+        "permission_and_accuracy"
+      ]
+    },
+    {
+      "id": "single-number",
+      "role": "quantitative",
+      "content": [
+        "value",
+        "unit",
+        "definition",
+        "source"
+      ],
+      "constraints": [
+        "exact_source"
+      ]
+    },
+    {
+      "id": "closing-ask",
+      "role": "closing",
+      "content": [
+        "audience_action"
+      ],
+      "constraints": []
+    },
+    {
+      "id": "system-map",
+      "role": "architecture",
+      "content": [
+        "entities",
+        "relationships",
+        "unknowns"
+      ],
+      "constraints": [
+        "no_invented_reporting_lines"
+      ]
+    },
+    {
+      "id": "layer-model",
+      "role": "architecture",
+      "content": [
+        "layers",
+        "dependencies"
+      ],
+      "constraints": [
+        "source_backed"
+      ]
+    },
+    {
+      "id": "interface-flow",
+      "role": "architecture",
+      "content": [
+        "actors",
+        "interfaces",
+        "direction"
+      ],
+      "constraints": [
+        "source_backed"
+      ]
+    },
+    {
+      "id": "migration-roadmap",
+      "role": "planning",
+      "content": [
+        "stages",
+        "dependencies",
+        "owners"
+      ],
+      "constraints": [
+        "dates_labeled_if_assumed"
+      ]
+    },
+    {
+      "id": "learning-objective",
+      "role": "teaching",
+      "content": [
+        "objective",
+        "success_criterion"
+      ],
+      "constraints": []
+    },
+    {
+      "id": "concept-model",
+      "role": "teaching",
+      "content": [
+        "model",
+        "explanation"
+      ],
+      "constraints": []
+    },
+    {
+      "id": "worked-example",
+      "role": "teaching",
+      "content": [
+        "problem",
+        "steps",
+        "answer"
+      ],
+      "constraints": []
+    },
+    {
+      "id": "exercise",
+      "role": "teaching",
+      "content": [
+        "task",
+        "expected_output"
+      ],
+      "constraints": []
+    },
+    {
+      "id": "takeaway",
+      "role": "teaching",
+      "content": [
+        "key_point",
+        "application"
+      ],
+      "constraints": []
+    }
+  ]
+}
