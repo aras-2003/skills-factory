@@ -30,8 +30,8 @@ Name: **Skills Factory — Product & Engineering**. Current status options: Back
 - **Ready:** outcome, scope, dependencies, owner and testable acceptance criteria are explicit; implementation belongs to the single active locked iteration.
 - **In review:** diff and relevant checks are available; reviewer identified.
 - **Validation:** evidence is tied to correct source revision, runtime/channel/surface and campaign.
-- **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime. A main merge moves runtime-bearing work to Validation, not Done. CI/static PASS alone does not imply deployed/running PASS.
-- **Release:** release artifacts, provenance and production deployment evidence verified separately.
+- **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime tests on an authorized, version-pinned surface. Production deployment is not required. A main merge moves runtime-bearing work to Validation, not Done. CI/static PASS alone does not imply runtime PASS.
+- **Release:** release artifacts, provenance and any required production deployment evidence verified separately; production promotion is not implied by Done.
 
 ## Wiki policy
 No independent duplication of technical specs. Wiki optional; for a public repo it can be a handbook containing links to canonical docs. Prefer GitHub Pages/catalog that already exists for generated content.
