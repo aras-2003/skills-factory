@@ -72,9 +72,9 @@
 3. Run `Validate skills`, `Domain integrity`, and `Eval integrity` on each exact head; correct failures on the branch. The generated Iteration 2 pack is **source-only** and must include no evaluator rubrics.
 4. After explicit permission to merge, run integrated main checks on the merged SHA and verify exact Lab package/release/payload.
 5. Execute the **11 Lab cases** on the observed candidate in fresh unassisted sessions; hold rubrics with a different assessor and preserve per-case trace/source SHA and all fail/blocked outcomes.
-6. Execute the **7 provider-specific cases** only in the intended approved, disposable/synthetic channel. Site, browser and client-visible chart evidence require real correlated provider/client observations. Production fallback cases require separate explicit authorization.
+6. Execute the **7 provider-specific cases** only in the intended approved, disposable/synthetic channel. Site, browser and client-visible chart evidence require real correlated provider/client observations. Production deployment is not a Done prerequisite: where a case was originally labelled Production-only, use a safe equivalent runtime test on an authorized, version-pinned non-production surface when it can validate the same behavior. If no valid equivalent exists, keep that criterion blocked; do not silently skip it or claim Done.
 7. Reconcile R17/R18/R20 and the 2026-10-10 campaign without rewriting historical receipts. Re-run failed items only with comparable exact-revision inputs and independent evaluation.
-8. Complete admin/source review and every original Issue's acceptance criteria; maintain linked PR relationships and statuses. Mark Done **only** after confirmed complete criteria. Production release/publishing remains a separate authorized action.
+8. Complete admin/source review and every original Issue's acceptance criteria; maintain linked PR relationships and statuses. Mark Done **only** after confirmed complete criteria, including required runtime PASS evidence on an authorized, version-pinned surface. Production release/publishing remains a separate authorized action and is not required for Done.
 
 ## Stop conditions
 
