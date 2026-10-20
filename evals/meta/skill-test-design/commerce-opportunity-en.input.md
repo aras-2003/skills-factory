@@ -1,0 +1,1 @@
+I'm designing an Agent Skill that evaluates whether a small-batch home-goods product is commercially viable using supplier quotes, landed cost, demand evidence, and a launch channel. Design the smallest discriminating test suite, including a realistic consumer-shopping near-miss.

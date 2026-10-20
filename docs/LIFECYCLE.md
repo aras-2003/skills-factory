@@ -122,6 +122,8 @@ Do not promote based on one impressive example.
 
 A personal-beta continuation is a time-bounded exception for already-declared production components only. The matching readiness record must identify the component/version, evidence gap, limitation, named owner and expiry. The record's component/version fields bind the exception to that component; it cannot extend to another version or a wider audience. Missing runtime evidence remains `pending`/`NOT_RUN`; it is never a PASS. The exception cannot cover a known unresolved high-severity failure, create a new production promotion, or extend to changed behavior/version or a wider audience. Stop or re-review when its scope or expiry is reached.
 
+For a new or changed production promotion, the machine-readable `policy` in `release/production-readiness.yaml` mirrors these hard gates: require current-version runtime evidence, reject historical summaries as current receipts, and forbid exceptions for known high-severity failures. The readiness validator fails closed if any required policy flag is missing or weakened.
+
 A new or changed component follows the ordinary lifecycle gates. A candidate may be exercised in the Lab for evaluation, but candidate status and personal-beta use do not equal production readiness or authorize publication.
 
 ## 8. Step 7 — Production promotion
