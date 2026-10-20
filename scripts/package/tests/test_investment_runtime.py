@@ -69,6 +69,11 @@ class InvestmentRuntimeTests(unittest.TestCase):
                 self.assertEqual("investment-os-review", result["child_workflow"])
                 self.assertIn("ambiguous", result["reason"])
                 self.assertTrue(result["must_invoke_child_workflow"])
+                self.assertEqual("load_front_door_then_clarify", result["next_action"])
+                self.assertEqual(
+                    "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_front_door_then_clarify",
+                    result["routing_receipt"],
+                )
 
     def test_direct_stock_review_still_routes(self) -> None:
         self.assert_route("Review stock ACN", "security", "investment-security-review")

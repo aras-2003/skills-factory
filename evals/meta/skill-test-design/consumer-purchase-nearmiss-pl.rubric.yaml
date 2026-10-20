@@ -12,5 +12,6 @@ criteria_text: |
 assertions:
   manual:
     - do not invoke skill-test-design or create evaluation cases
-    - answer or route the consumer product comparison request using the available product-research capability
+    - answer or route the consumer product comparison request using available consumer-shopping research; general web search is acceptable when no dedicated packaged product-research skill is exposed
+    - if no research tool is available, state that limitation and ask whether the user wants a general comparison without live offers
     - do not reframe a one-time purchase as a commercial opportunity

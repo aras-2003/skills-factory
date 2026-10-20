@@ -45,6 +45,14 @@ def load_cloud_server():
     module = importlib.util.module_from_spec(spec)
     fake_investment = types.ModuleType("investment_runtime")
     def fake_route(request):
+        if "Mam akcje" in request:
+            return {
+                "is_investment_request": True,
+                "route": "unknown",
+                "child_workflow": "investment-os-review",
+                "must_invoke_child_workflow": True,
+                "next_action": "load_front_door_then_clarify",
+            }
         if "ETF risk policy" in request:
             return {
                 "is_investment_request": True,
@@ -87,6 +95,18 @@ class CloudRuntimeTests(unittest.TestCase):
             "load_child_workflow_then_follow",
             result["response_policy"],
         )
+
+    def test_ambiguous_route_requires_front_door_clarification_before_analysis(self) -> None:
+        result = self.server.route_investment_request("Mam akcje. Co zrobić?")
+
+        self.assertEqual("unknown", result["route"])
+        self.assertEqual("investment-os-review", result["child_workflow"])
+        self.assertEqual("load_front_door_then_clarify", result["next_action"])
+        self.assertEqual(
+            "load_front_door_then_clarify_before_analysis",
+            result["response_policy"],
+        )
+        self.assertFalse(result["workflow_executed"])
 
     def test_runtime_info_is_explicitly_unattested_without_deployment_identity(self) -> None:
         with patch.dict("os.environ", {}, clear=True):

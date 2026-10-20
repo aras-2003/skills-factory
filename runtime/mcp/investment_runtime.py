@@ -23,6 +23,8 @@ policy/risk limits, or new information about an existing investment:
 2. Load the returned child_workflow by its exact packaged name before analysis;
    the route result alone is not execution. If it cannot be loaded, stop and state
    that the workflow did not run. Do not silently substitute another specialist.
+   If next_action is load_front_door_then_clarify, load the front door and ask the
+   user to clarify before any substantive analysis or recommendation.
 3. Follow the loaded workflow's sequence and evidence gates. Do not claim that a
    child workflow ran unless its own load/execution is present in the tool trace.
 4. Do not replace the selected workflow with generic investment commentary.
@@ -259,7 +261,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
             "child_workflow": "investment-os-review",
             "reason": "investment intent detected but the decision object is ambiguous; use the Investment OS front door",
             "must_invoke_child_workflow": True,
-            "routing_receipt": "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_skill(investment-os-review)",
+            "next_action": "load_front_door_then_clarify",
+            "routing_receipt": "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_front_door_then_clarify",
         }
 
     return {
