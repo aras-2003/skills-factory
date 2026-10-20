@@ -14,6 +14,22 @@ sys.path.insert(0, str(EVAL))
 import receipt as eval_receipt  # noqa: E402
 
 MAX_EXCEPTION_DAYS = 30
+REQUIRED_POLICY_FLAGS = (
+    "current_runtime_receipt_required",
+    "historical_summary_is_not_current_receipt",
+    "no_exception_for_known_high_severity_failure",
+)
+
+
+def validate_policy(policy: Any) -> list[str]:
+    """Fail closed when the machine-readable release policy weakens a hard gate."""
+    if not isinstance(policy, dict):
+        return ["policy must be a mapping"]
+    return [
+        f"policy.{flag} must be true"
+        for flag in REQUIRED_POLICY_FLAGS
+        if policy.get(flag) is not True
+    ]
 
 
 def split_frontmatter(text: str) -> tuple[dict[str, Any], str]:
@@ -166,6 +182,7 @@ def validate(root: Path, *, today: dt.date | None = None) -> list[str]:
     today = today or dt.datetime.now(dt.timezone.utc).date()
     path = root / "release" / "production-readiness.yaml"
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    errors.extend(validate_policy(data.get("policy")))
     records = data.get("components") or []
     if not isinstance(records, list):
         return ["components must be a list"]
