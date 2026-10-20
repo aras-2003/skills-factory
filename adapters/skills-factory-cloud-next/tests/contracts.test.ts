@@ -78,6 +78,10 @@ test("ambiguous share ownership requests ask for clarification, while a direct s
     assert.deepEqual(result.candidates, [], request);
     assert.ok(result.clarification, request);
     assert.equal(result.workflow_executed, false);
+    assert.equal(result.must_invoke_child_workflow, true);
+    assert.equal(result.next_action, "load_front_door_then_clarify");
+    assert.equal(result.response_policy, "load_front_door_then_clarify_before_analysis");
+    assert.equal(result.routing_receipt, "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_front_door_then_clarify");
   }
   for (const request of ["Review stock ACN", "Review Micron's thesis and valuation", "Should I buy NVDA shares?", "Oceń spółkę ASML.", "Przeanalizuj akcje NVDA.", "Oceń akcje Allegro."]) {
     assert.equal(routeInvestment(request).child_workflow, "investment-security-review", request);
@@ -86,6 +90,15 @@ test("ambiguous share ownership requests ask for clarification, while a direct s
     assert.equal(routeInvestment(request).child_workflow, "investment-security-review", request);
     assert.equal(routeInvestment(request).status, "routed", request);
   }
+});
+test("ambiguous MCP calls tell the host to load the front door and clarify before analysis", async () => {
+  const response = await (await handleMcp(rpc("tools/call", { name: "route_investment_request", arguments: { user_request: "investment-security-review and investment-portfolio-review" } }, { "oai-authenticated-user-id": "test-only" }))).json();
+  assert.equal(response.result.structuredContent.status, "clarification_required");
+  assert.equal(response.result.structuredContent.child_workflow, "investment-os-review");
+  assert.equal(response.result.structuredContent.next_action, "load_front_door_then_clarify");
+  assert.equal(response.result.structuredContent.response_policy, "load_front_door_then_clarify_before_analysis");
+  const init = await (await handleMcp(rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } }))).json();
+  assert.match(init.result.instructions, /load the front door and ask the clarification question before substantive analysis/);
 });
 test("charts preserve explicit numbers, negative/zero/extreme/flat data", () => {
   for (const args of [bar, { ...bar, horizontal: false }, { ...bar, values: [0, 0, 0] }, { ...bar, values: [-1e12, 1e12, 5e-324] }]) {
