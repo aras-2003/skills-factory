@@ -31,6 +31,33 @@ class ReadinessPolicyTests(unittest.TestCase):
             "exception_expires": "2026-10-14",
         }
 
+    def test_machine_policy_requires_all_non_negotiable_release_gates(self) -> None:
+        policy = {
+            "current_runtime_receipt_required": True,
+            "historical_summary_is_not_current_receipt": True,
+            "no_exception_for_known_high_severity_failure": True,
+        }
+        self.assertEqual([], validate_readiness.validate_policy(policy))
+
+        for flag in policy:
+            with self.subTest(flag=flag):
+                weakened = {**policy, flag: False}
+                self.assertEqual(
+                    [f"policy.{flag} must be true"],
+                    validate_readiness.validate_policy(weakened),
+                )
+                missing = {key: value for key, value in policy.items() if key != flag}
+                self.assertEqual(
+                    [f"policy.{flag} must be true"],
+                    validate_readiness.validate_policy(missing),
+                )
+
+    def test_machine_policy_must_be_a_mapping(self) -> None:
+        self.assertEqual(
+            ["policy must be a mapping"],
+            validate_readiness.validate_policy(None),
+        )
+
     def test_verified_without_receipt_is_blocked(self) -> None:
         rec = {
             "current_runtime_receipt": "verified",
