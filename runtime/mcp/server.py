@@ -43,6 +43,8 @@ investment theme, opportunity, policy or risk limit:
    the router performed routing only. They do not prohibit the host model from
    following a successfully loaded child workflow. The host model, not this MCP
    server, executes those instructions.
+   When next_action is load_front_door_then_clarify, load the front door and ask
+   the user to clarify before substantive analysis or recommendations.
 4. Follow the child's sequence and evidence gates. If the child or a required
    provider/read/write capability is unavailable, stop and report BLOCKED or
    NOT RUN. Never imply that route execution alone completed the workflow.
@@ -241,7 +243,11 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
                 "workflow_execution_state": "not_executed",
                 "execution_state_reason": "router selected a workflow but did not execute it",
                 "outcome": None,
-                "response_policy": "load_child_workflow_then_follow",
+                "response_policy": (
+                    "load_front_door_then_clarify_before_analysis"
+                    if result.get("next_action") == "load_front_door_then_clarify"
+                    else "load_child_workflow_then_follow"
+                ),
             }
         )
     return _with_tool_receipt("route_investment_request", {"user_request": user_request}, result)

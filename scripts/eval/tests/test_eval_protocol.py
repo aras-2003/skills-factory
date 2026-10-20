@@ -275,6 +275,15 @@ class EvalProtocolTests(unittest.TestCase):
             )
         self.assertTrue(any("output digest mismatch" in e for e in errors))
 
+    def test_executed_verdict_cannot_be_created_without_model_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            output = Path(td) / "output.txt"
+            output.write_text("Decision: TEST\n", encoding="utf-8")
+            args = self._runtime_args(output)
+            args.model_id = None
+            with self.assertRaisesRegex(ValueError, "model_id"):
+                receipt.create_receipt(args)
+
     def test_historical_receipt_is_not_misrepresented_as_current_version_proof(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             output = Path(td) / "output.txt"
