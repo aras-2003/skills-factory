@@ -129,6 +129,14 @@ class InvestmentRuntimeTests(unittest.TestCase):
             "investment-attention-review",
         )
 
+    def test_watchlist_earnings_information_routes_to_attention(self) -> None:
+        for prompt in (
+            "A company in my watchlist just reported earnings. Triage whether it changes my thesis and what deserves deeper research.",
+            "Spółka z mojej watchlisty opublikowała nowe wyniki. Oceń ich wpływ na tezę i powiedz, co wymaga dalszej analizy.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
     def test_routes_policy_design(self) -> None:
         self.assert_route(
             "Pomóż mi ustalić zasady portfela: maksymalny udział jednej spółki i limity sektorowe.",
