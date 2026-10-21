@@ -112,7 +112,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "investment", "investing", "portfolio", "stock", "stocks", "security", "securities",
         "etf", "fund", "holdings", "investment policy", "risk limit",
         "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
-        "share", "thesis", "gross margin", "marża brutto", "marza brutto",
+        "share", "thesis", "gross margin", "marża brutto", "marza brutto", "watchlist",
         "research candidates", "kandydatów do researchu", "kandydatow do researchu",
     )
     if non_investment_finance and not explicit_investment_context:
@@ -139,7 +139,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "zmieniają tezę", "zmienia teze", "czy to zmienia", "wymaga głębszej analizy",
         "wymaga glebszej analizy", "give attention", "attention next", "next research",
         "research next", "attention review",
-    )
+    ) or ("watchlist" in text and _contains(text, "earnings", "results", "news", "information", "wynik", "informacj"))
     theme = _contains(
         text,
         "investment theme", "investment themes", "theme research", "value chain",

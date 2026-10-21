@@ -276,7 +276,12 @@ test("main runtime delta: unrelated tasks and host child execution", () => {
   for (const request of ["Fix punctuation only: The team, works well. No investment analysis.", "Create a SECURITY.md and CODEOWNERS governance plan.", "The SKILL.md source and mock artifacts exist; certify Report OS as production-ready."]) {
     const r = routeInvestment(request); assert.equal(r.route, "not_applicable"); assert.equal(r.is_investment_request, false);
   }
-  for (const [request, expected] of [["Give attention to this thesis and suggest next research", "investment-attention-review"], ["Screen my watchlist, preview only", "investment-opportunity-hunter"]]) {
+  for (const [request, expected] of [
+    ["Give attention to this thesis and suggest next research", "investment-attention-review"],
+    ["Screen my watchlist, preview only", "investment-opportunity-hunter"],
+    ["A company in my watchlist just reported earnings. Triage whether it changes my thesis and what deserves deeper research.", "investment-attention-review"],
+    ["Spółka z mojej watchlisty opublikowała nowe wyniki. Oceń ich wpływ na tezę i powiedz, co wymaga dalszej analizy.", "investment-attention-review"],
+  ]) {
     const r=routeInvestment(request); assert.equal(r.child_workflow, expected); assert.equal(r.response_policy, "load_child_workflow_then_follow"); assert.equal(r.workflow_executed, false);
   }
 });
