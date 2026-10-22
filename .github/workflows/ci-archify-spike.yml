@@ -77,6 +77,10 @@ jobs:
           import hashlib, json
           from pathlib import Path
           receipt=Path("finalize-receipt.json").read_text()
+          data=json.loads(receipt)
+          assert data.get("ok") is True and data.get("status") == "pass", data
+          assert all(data.get("gates", {}).get(k) == "pass" for k in ("validate","deliver","check","browser-check")), data.get("gates")
+          assert data.get("browserCheck", {}).get("ran") is True, data.get("browserCheck")
           html=Path("synthetic-architecture.html").read_bytes()
           assert len(html)>1000, "Archify output unusually short"
           assert "<html" in html.decode("utf-8").lower(), "missing HTML document"
@@ -84,6 +88,12 @@ jobs:
           print("receipt_sha256="+hashlib.sha256(receipt.encode()).hexdigest())
           print("html_bytes="+str(len(html)))
           PY
+      - name: Real browser screenshots for visual inspection (not perceptual PASS)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/arc01"
+          node "$RUNNER_TEMP/archify-upstream/archify/bin/archify.mjs" visual-check synthetic-architecture.html --summary --require-provenance > visual-check-receipt.json
+          test -s visual-check-receipt.json
       - name: Archive actual evidence (no fabricated PASS)
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -92,5 +102,7 @@ jobs:
           path: |
             ${{ runner.temp }}/arc01/finalize-receipt.json
             ${{ runner.temp }}/arc01/synthetic-architecture.html
+            ${{ runner.temp }}/arc01/visual-check-receipt.json
+            ${{ runner.temp }}/arc01/*.png
           if-no-files-found: ignore
           retention-days: 14
