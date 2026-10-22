@@ -125,7 +125,7 @@ def main():
         if name == "Iteration":
             if not f or not (f.get("configuration") or {}).get("iterations"):
                 raise RuntimeError("Required native Iteration field unavailable")
-            choices = [v for v in f["configuration"]["iterations"] if v["title"].casefold() == value.casefold()]
+            choices = [v for v in f["configuration"]["iterations"] if v["title"].casefold() == value.casefold()]\n            if not choices and re.fullmatch(r"\\d{1,2}", value):\n                choices = [v for v in f["configuration"]["iterations"] if re.match(r"^0*" + re.escape(value.lstrip("0") or "0") + r"(?=\\D|$)", v["title"])]
             if len(choices) != 1:
                 raise RuntimeError(f"Iteration title {value!r} missing/ambiguous; existing options: {[v['title'] for v in f['configuration']['iterations']]}")
             updates.append((name, value, f["id"], choices[0]["id"]))
