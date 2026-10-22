@@ -19,7 +19,7 @@ The following do **not** qualify as quantitative chart renderers:
 - text, markdown tables or ASCII/punctuation pseudo-charts.
 
 Known bundled static renderer:
-- MCP server: `skills-factory-runtime`;
+- MCP server: `skills-factory-runtime` (Lab/runtime deployments may expose it under another adapter name);
 - tools: `render_bar_chart`, `render_line_chart`;
 - these tools qualify for ordinary static quantitative visual slots only when exposed by the current runtime.
 - they **do not qualify** for a slot that explicitly requires chat-native interactivity.
@@ -40,9 +40,10 @@ If the user specifically asks for controls but the runtime exposes only a static
 
 ## Investment shortlist renderer choice
 
-1. Use a real callable interactive component only when its controls and output behavior are documented in the current runtime.
-2. Otherwise use the bundled static `skills-factory-runtime` when exposed. Its `render_line_chart` and `render_bar_chart` tools produce static visuals, not filters or selectors.
-3. If no deterministic chart renderer is callable, mark the visual slot `BLOCKED_NO_RENDERER` and give a compact table as diagnostic fallback only.
+1. In normal Chat, use the exposed Cloud Next inline chart MCP App when the needed chart type is supported; its marks/series controls are documented above.
+2. In other runtimes, use another real callable interactive renderer only when its controls and output behavior are documented in that runtime.
+3. Otherwise use the bundled static `skills-factory-runtime` when exposed. Its `render_line_chart` and `render_bar_chart` tools produce static visuals, not filters or selectors.
+4. If no deterministic chart renderer is callable, mark the visual slot `BLOCKED_NO_RENDERER` and give a compact table as diagnostic fallback only.
 
 For the static fallback:
 - when verified price series for at least two candidates overlap on comparable dates and use compatible adjustment definitions, plot each series indexed to 100 at the first common observation;
@@ -57,20 +58,22 @@ For the static fallback:
 - A static chart image is not interactive. Record its renderer class accurately and never describe it as an interactive dashboard.
 - PAYLOAD_RENDERED means a native chart/image payload was produced and included in the response. It does not prove client display; keep client display NOT_OBSERVABLE.
 
-## 1. Native interactive chart widget
-Preferred for investment price/KPI history when the host runtime exposes the native `chart` widget.
+## 1. Skills Factory Cloud Next inline interactive chart app
+When the Cloud Next MCP exposes `render_bar_chart` or `render_line_chart`, use it as the shared interactive renderer for chart slots in normal Chat reports and presentation-of-results workflows. It accepts explicit structured data and returns a self-contained HTML/CSS/SVG MCP App. The app supports selecting marks and toggling line-series visibility. The renderer is an internal visual-output-design primitive coordinated by `report-composer`, not a separate skill, dashboard or report workflow. The component requests inline display; do not request fullscreen or create a parallel dashboard.
 
 Use:
-- `chartType: "line"` for price and KPI time series;
+- `render_line_chart` for time-series results and `render_bar_chart` for categorical comparisons;
 - one chart per analytical question;
 - multiple series only when units and comparison are genuinely compatible;
-- inline data rows with source-backed values;
-- user-friendly time labels;
-- tooltips/hover supplied by the host renderer.
+- source-backed values, readable labels and explicit units;
+- chart narrative/interpretation adjacent in the same chat report.
 
-This is the default renderer for required interactive investment-history slots.
+The widget appears in the host's inline app slot in the conversation flow. The host may not support inserting it at an arbitrary location inside a prose message; keep the relevant report text adjacent and do not claim otherwise. Client display still requires external UI observation.
 
-## 2. Static native/MCP chart renderer
+## 2. Other native interactive chart components
+Use another real callable interactive component only when its controls and output behavior are documented in the current runtime. Do not infer support from the product name, documentation for a different host, or JSON-shaped chart data.
+
+## 3. Static native/MCP chart renderer
 Use for:
 - bar/ranked comparisons;
 - line/time-series and normalized performance;
@@ -86,7 +89,7 @@ Do not use for:
 - multi-panel dashboards requiring filters;
 - arbitrary diagrams.
 
-## 3. Figma / FigJam diagram
+## 4. Figma / FigJam diagram
 Use only when the user explicitly requests an editable Figma/FigJam artifact, or the calling task explicitly requires Figma output. Use a connected Figma diagram capability for:
 - flowcharts;
 - decision trees;
@@ -98,7 +101,7 @@ Use only when the user explicitly requests an editable Figma/FigJam artifact, or
 For org charts, operating-model maps, capability maps and other layouts that exceed the supported diagram grammar,
 use an editable Figma design canvas rather than forcing the content into an unsupported Mermaid form.
 
-## 4. Figma design
+## 5. Figma design
 Use only when the user explicitly requests an editable Figma artifact. Use when:
 - the output should be editable and executive-grade;
 - a reusable visual language/design system matters;
@@ -107,7 +110,7 @@ Use only when the user explicitly requests an editable Figma artifact. Use when:
 
 Do not invoke it for a simple two-series chart that the native chart renderer can handle better.
 
-## 5. Figma Slides / deck
+## 6. Figma Slides / deck
 Use only when the user explicitly requests a deck/presentation. Use for:
 - board/executive presentations;
 - multi-slide narratives;
@@ -117,7 +120,7 @@ Use only when the user explicitly requests a deck/presentation. Use for:
 
 A deck is a communication artifact, not the canonical analytical record.
 
-## 6. Interactive HTML/CSS report
+## 7. Interactive HTML/CSS report
 Use only when the user explicitly requests HTML, a downloadable file or an external interactive report. Use when the result benefits from:
 - tabs or scenario switching;
 - filters;

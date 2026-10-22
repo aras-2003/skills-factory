@@ -1,15 +1,15 @@
 ---
 name: visual-output-design
-description: 'Convert an already-supported analysis or workflow result into a professional
-  decision-useful visual presentation. Use when charts, diagrams, interactive HTML,
-  Figma/FigJam, executive dashboards, matrices, timelines or decks would materially
-  improve comprehension or decision quality. Do not use visuals merely for decoration
-  and never invent data to make a visual complete.
+description: 'Select and render one source-backed exhibit for a report, presentation
+  or local interactive component. Route quantitative charts, diagrams, illustrative
+  imagery, motion and interactive HTML to suitable specialized renderers while preserving
+  evidence. Use beneath report-composer, report-document-architecture or presentation-exhibit-design;
+  do not replace those workflows or invent data for visual balance.
 
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.12.1
+  version: 0.13.0
   maturity: candidate
   risk: low
   last_reviewed: '2026-10-09'
@@ -18,10 +18,17 @@ metadata:
 # Visual Output Design
 
 ## Purpose
-Render one evidence-backed visual component or visual system for an already-defined local information need.
-This skill is the renderer/router beneath `report-composer`; it does not own the structure of a full report.
+Select and render one evidence-backed exhibit for an already-defined local information need. This shared exhibit specialist
+is called by `report-composer` for chat, `report-document-architecture` for long-form documents, and
+`presentation-exhibit-design` for slides. It does not own the structure of a full report, document, deck or full interactive site.
 
 Preserve the source analysis, evidence, uncertainty and canonical data contracts while choosing the best visual medium available in the runtime. Follow `../report-composer/references/report-state-and-evidence-contract.md` for renderer/client-state semantics.
+
+## Modality routing and finish
+- Choose the medium from the reader job and target surface before choosing a tool: chart, diagram, table, illustration, motion/GIF or interactive HTML component.
+- Use the most specialized available renderer for that medium. For diagrams use the diagram authoring capability; for illustrative assets use a suitable image/video generation capability; for actual slides use presentation authoring tools. Invoke these only when the requested visual needs that medium.
+- Preserve one semantic `ExhibitSpec` across renderers: purpose, claim/evidence IDs, data or source asset, provenance/license, as-of context, labels/units, interaction, accessibility text and renderer receipt. A specialized renderer improves execution; it does not establish factual validity.
+- Keep visual quality intentional: clear focal point, restrained palette, readable labels at target size, alignment/spacing, contrast, responsive behavior and accessible text alternative. Avoid decorative charts, generic stock-like illustrations, unnecessary motion and inconsistent visual language.
 
 ## Preconditions
 - The underlying analysis/result already exists or can be produced by the calling workflow.
@@ -30,23 +37,26 @@ Preserve the source analysis, evidence, uncertainty and canonical data contracts
 
 ## Procedure
 1. Identify the local decision/comprehension job supplied by the calling workflow or `report-composer`.
-2. Decide whether a visual materially improves the result and whether the caller marks it as required by the visual floor.
-3. Run `capability_preflight` against the capabilities actually exposed by the host runtime and return its status explicitly in the output:
+2. Read the requested `target_format` from the composition brief: `chat`, `web`, `docx`, `pdf`, `pptx` or another explicitly named format. The target owner controls layout and export; preserve one semantic ExhibitSpec while adapting its rendering and interaction to that format. Never promise web interactions in a PDF or editability in a flattened asset.
+3. Decide whether a visual materially improves the result and whether the caller marks it as required by the visual floor.
+4. Run `capability_preflight` against the capabilities actually exposed by the host runtime and return its status explicitly in the output:
    - inspect callable tools and host-native components actually documented and exposed in the current runtime;
    - bind the slot to a concrete renderer and classify it as static, hover-interactive, or control-interactive only when those behaviors are documented or observed;
    - do not invent a native `chart` call or response syntax because a platform is known to support charts elsewhere;
    - a quantitative renderer must deterministically encode supplied numeric series/categories;
+   - when Skills Factory Cloud Next exposes `render_bar_chart` or `render_line_chart`, treat it as a concrete interactive inline MCP App renderer for a report visual slot. This low-level tool is called internally through this skill; it is not a standalone user-facing report workflow. Keep the chart in the same Chat conversation flow and do not request fullscreen.
+   - route structural diagrams to a deterministic or editable diagram renderer, illustrative imagery/motion to an appropriate media generator, and slide-native exhibits to slide authoring. Do not use image generation for factual charts, and do not force one renderer to serve every modality.
    - `image_gen`, image viewing, generic media generation and Figma diagram/design capabilities do not qualify as quantitative data-chart renderers;
    - return `AVAILABLE`, `UNAVAILABLE`, or `UNKNOWN` for each requested interaction level, separately from ordinary static-renderer availability; include the concrete renderer/capability inspected and evidence or reason.
-4. If the visual is optional and no deterministic renderer exists, use the truthful text/table fallback.
-5. For a **required investment price/KPI visual**:
+5. If the visual is optional and no deterministic renderer exists, use the truthful text/table fallback.
+6. For a **required investment price/KPI visual**:
    - render verified data with the best concrete renderer available;
    - when a documented interactive component is callable, prefer it for the interaction the user asked for;
    - when only a static renderer is available, produce a static inline image and label it static;
    - if the user specifically requires selectors/filters and none are supported, mark that interaction feature `BLOCKED_NO_RENDERER` while keeping any useful static chart separate;
    - if a concrete renderer invocation fails, use `FAIL_RENDERER_INVOCATION`.
-6. For other required visuals with no qualifying renderer, return `BLOCKED_NO_RENDERER`; do not claim successful rendering and do not let a table/text fallback satisfy the visual slot.
-7. Build a semantic visual model from the supported analysis only:
+7. For other required visuals with no qualifying renderer, return `BLOCKED_NO_RENDERER`; do not claim successful rendering and do not let a table/text fallback satisfy the visual slot.
+8. Build a semantic visual model from the supported analysis only:
    - headline/message;
    - entities/categories;
    - measures/units;
@@ -54,12 +64,12 @@ Preserve the source analysis, evidence, uncertainty and canonical data contracts
    - time/as-of context;
    - uncertainty/status;
    - source/provenance references.
-8. Select the narrowest suitable renderer using `references/tool-routing.md`.
-9. Apply the design and integrity rules in `references/design-system.md`.
-10. Prefer a renderer that can appear directly inside the chat response. Use an external-artifact renderer (HTML file, Figma file, PDF, deck) only when the user explicitly requested that output form.
-11. Keep the visual synchronized with its surrounding report section: it must not imply a stronger conclusion than the written analysis.
-12. Provide a compact text/table fallback when useful. If the chart renderer itself is unavailable, label the visual slot diagnostic and keep it `BLOCKED_NO_RENDERER`. If only the requested interaction controls are unavailable, mark that feature separately and keep a successfully rendered static image at `PAYLOAD_RENDERED`.
-13. For interactive HTML, keep analysis data and presentation logic separated so the report can be regenerated from the same payload.
+9. Select the narrowest suitable renderer using `references/tool-routing.md`.
+10. Apply the design and integrity rules in `references/design-system.md`.
+11. Prefer a renderer that can appear directly inside the chat response. Use an external-artifact renderer (HTML file, Figma file, PDF, deck) only when the user explicitly requested that output form.
+12. Keep the visual synchronized with its surrounding report section: it must not imply a stronger conclusion than the written analysis.
+13. Provide a compact text/table fallback when useful. If the chart renderer itself is unavailable, label the visual slot diagnostic and keep it `BLOCKED_NO_RENDERER`. If only the requested interaction controls are unavailable, mark that feature separately and keep a successfully rendered static image at `PAYLOAD_RENDERED`.
+14. For interactive HTML, keep analysis data and presentation logic separated so the report can be regenerated from the same payload.
 
 ## Interaction honesty and investment chart layout
 
