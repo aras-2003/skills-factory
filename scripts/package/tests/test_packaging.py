@@ -37,6 +37,16 @@ class PackagingTests(unittest.TestCase):
         else:
             os.environ["SOURCE_REVISION"] = self.old_revision
 
+    def test_tracked_lab_plugin_manifests_match_release_version(self) -> None:
+        expected = package_version(ROOT, "lab")
+        for relative in (
+            "plugins/skills-factory-lab/plugin.json",
+            "plugins/skills-factory-lab/.codex-plugin/plugin.json",
+        ):
+            with self.subTest(manifest=relative):
+                manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+                self.assertEqual(expected, manifest["version"])
+
     def test_optional_dependency_has_explicit_missing_behavior(self) -> None:
         item = {
             "name": "workflow-x",
