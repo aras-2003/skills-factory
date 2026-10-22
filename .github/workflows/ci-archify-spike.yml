@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Verify exact PR head and immutable source lock
         env:
           EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -86,7 +87,7 @@ jobs:
         with:
           name: arc01-${{ github.sha }}
           path: |
-            ${{ runner.temp }}\/arc01\/finalize-receipt.json
-            ${{ runner.temp }}\/arc01\/synthetic-architecture.html
+            ${{ runner.temp }}/arc01/finalize-receipt.json
+            ${{ runner.temp }}/arc01/synthetic-architecture.html
           if-no-files-found: ignore
           retention-days: 14
