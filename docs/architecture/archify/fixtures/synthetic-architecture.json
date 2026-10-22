@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Synthetic Skills Factory Capability Boundary",
+    "output": "synthetic-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "router",
+      "type": "backend",
+      "label": "Synthetic Router",
+      "pos": [
+        40,
+        160
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "skill",
+      "type": "backend",
+      "label": "Synthetic Skill",
+      "pos": [
+        290,
+        160
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "evidence",
+      "type": "database",
+      "label": "Synthetic Evidence",
+      "pos": [
+        540,
+        160
+      ],
+      "size": [
+        170,
+        70
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "route",
+      "from": "router",
+      "to": "skill",
+      "label": "synthetic invocation"
+    },
+    {
+      "id": "receipt",
+      "from": "skill",
+      "to": "evidence",
+      "label": "synthetic receipt"
+    }
+  ]
+}
