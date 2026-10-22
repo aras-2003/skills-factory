@@ -1,0 +1,31 @@
+name: Architecture IR validation
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/architecture/**'
+      - 'tests/architecture/**'
+      - 'docs/architecture/archify/ARC-02-IR.md'
+      - '.github/workflows/ci-architecture-ir.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ir:
+    name: ARC-02 / Evidence and semantic contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify checked-out SHA
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+      - name: Python syntax and provenance/semantic tests
+        run: |
+          python3 -m compileall -q scripts/architecture/visualization_ir.py tests/architecture
+          python3 -m unittest discover -s tests/architecture -p 'test_visualization_ir.py' -v
