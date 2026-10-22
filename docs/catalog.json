@@ -7,7 +7,7 @@
       },
       "lab": {
         "name": "skills-factory-lab",
-        "version": "0.37.0"
+        "version": "0.37.1"
       }
     },
     "source_revision": "9b457bd68bcd",
@@ -1002,7 +1002,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "description": "Run the OAF Health Check workflow as a selective cross-domain organisational architecture diagnostic. Use when the user asks for a broad diagnosis spanning strategy execution, operating model, decision rights, enterprise architecture, portfolio/execution or evidence loops. Do not use for a narrow issue that should route directly to one specialist OAF skill.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
