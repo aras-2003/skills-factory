@@ -68,7 +68,10 @@ jobs:
             echo "Chrome unavailable, browser evidence cannot PASS" >&2
             exit 1
           fi
-          node "$RUNNER_TEMP/archify-upstream/archify/bin/archify.mjs" finalize architecture candidate.json synthetic-architecture.html --quality showcase --json > finalize-receipt.json
+          if ! node "$RUNNER_TEMP/archify-upstream/archify/bin/archify.mjs" finalize architecture candidate.json synthetic-architecture.html --quality showcase --json > finalize-receipt.json; then
+            cat finalize-receipt.json
+            exit 1
+          fi
           test -s synthetic-architecture.html
           python3 - <<'PY'
           import hashlib, json
