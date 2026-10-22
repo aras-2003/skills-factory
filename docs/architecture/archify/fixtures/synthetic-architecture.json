@@ -25,7 +25,7 @@
       "type": "backend",
       "label": "Synthetic Skill",
       "pos": [
-        290,
+        350,
         160
       ],
       "size": [
@@ -38,7 +38,7 @@
       "type": "database",
       "label": "Synthetic Evidence",
       "pos": [
-        540,
+        690,
         160
       ],
       "size": [
