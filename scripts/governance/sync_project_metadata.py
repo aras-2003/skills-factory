@@ -12,7 +12,7 @@ PROJECT = """query($owner:String!, $project:Int!, $repo:String!, $issue:Int!) {
     projectV2(number:$project) {
       id
       fields(first:100) {nodes {
-        ... on ProjectV2SingleSelectField {id name options{id name}}
+        ... on ProjectV2SingleSelectField {id name options{id name}}\n        ... on ProjectV2IterationField {id name configuration{iterations{id title startDate duration}}}
       }}
     }
     repository(name:$repo) {
@@ -24,7 +24,7 @@ PROJECT = """query($owner:String!, $project:Int!, $repo:String!, $issue:Int!) {
   }
 }"""
 # GitHub's user->repository works for own user repositories only.
-UPDATE = """mutation($project:ID!, $item:ID!, $field:ID!, $option:String!) {
+ITERATION_UPDATE = """mutation($project:ID!, $item:ID!, $field:ID!, $iteration:String!) {\n  updateProjectV2ItemFieldValue(input:{\n    projectId:$project,itemId:$item,fieldId:$field,\n    value:{iterationId:$iteration}\n  }) {projectV2Item{id}}\n}"""\nUPDATE = """mutation($project:ID!, $item:ID!, $field:ID!, $option:String!) {
   updateProjectV2ItemFieldValue(input:{
     projectId:$project,itemId:$item,fieldId:$field,
     value:{singleSelectOptionId:$option}
@@ -80,6 +80,12 @@ def values(title, body, labels):
         raise ValueError("Conflicting Project Status label and body")
     if selected_status or raw:
         result["Status"] = selected_status[0] if selected_status else raw[0]
+    # Explicit exact Project iteration title only. No inference from roadmap, dates or issue prefixes.
+    it = re.findall(r"(?im)^\\s*Project iteration\\s*:\\s*(.+?)\\s*$", body)
+    if len(it) > 1 and len(set(it)) != 1:
+        raise ValueError("Conflicting Project iteration markers")
+    if it:
+        result["Iteration"] = it[0].strip()
     if "Area" not in result:
         m = re.match(r"^\[([A-Z][A-Z0-9]*)-\d+\]", title)
         if m:
@@ -116,6 +122,14 @@ def main():
     updates = []
     for name, value in target.items():
         f = fields.get(name)
+        if name == "Iteration":
+            if not f or not (f.get("configuration") or {}).get("iterations"):
+                raise RuntimeError("Required native Iteration field unavailable")
+            choices = [v for v in f["configuration"]["iterations"] if v["title"].casefold() == value.casefold()]
+            if len(choices) != 1:
+                raise RuntimeError(f"Iteration title {value!r} missing/ambiguous; existing options: {[v['title'] for v in f['configuration']['iterations']]}")
+            updates.append((name, value, f["id"], choices[0]["id"]))
+            continue
         if not f or "options" not in f:
             raise RuntimeError(f"Required Project field {name} missing or not single-select")
         options = [o["id"] for o in f["options"] if o["name"].casefold()==value.casefold()]
