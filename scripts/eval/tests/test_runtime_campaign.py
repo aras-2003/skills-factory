@@ -184,7 +184,7 @@ class RuntimeCampaignTests(unittest.TestCase):
             definitions = {item["id"]: item for item in lock["case_definitions"]}
             self.assertEqual(45, len(definitions))
             components = {(item["channel"], item["name"]): item for item in lock["components"]}
-            self.assertEqual("1.5.0", components[("production", "oaf-health-check")]["version"])
+            self.assertEqual("1.6.0", components[("production", "oaf-health-check")]["version"])
             self.assertEqual("1.1.0", components[("production", "operating-model-review")]["version"])
             self.assertEqual("1.1.2", components[("production", "decision-bottleneck-analysis")]["version"])
             self.assertEqual("1.1.1", components[("production", "decision-rights-review")]["version"])
