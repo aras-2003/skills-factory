@@ -1,0 +1,1 @@
+Create a reusable Agent Skill for updating an existing presentation and all of its dependent outputs. The original deck and its revision cannot currently be identified. Define how the skill must proceed without claiming that an update or retest happened before the authoritative source is located.

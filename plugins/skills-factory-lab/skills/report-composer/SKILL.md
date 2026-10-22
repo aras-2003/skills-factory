@@ -9,10 +9,10 @@ description: 'Compose one integrated decision report from an already-supported w
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.11.1
+  version: 0.12.1
   maturity: candidate
   risk: low
-  last_reviewed: '2026-10-09'
+  last_reviewed: '2026-10-15'
 ---
 
 # Report Composer
@@ -38,9 +38,11 @@ Do not create a second "visual report" beside the chat answer. Do not create an 
    - inspect tools and host-native components actually documented and exposed by this runtime;
    - bind the slot to a concrete, callable renderer; never infer a widget API from a product name or create response syntax that is not documented;
    - distinguish deterministic static image/chart renderers from components with documented hover or user-operated controls;
+   - route each visual slot through the medium-specific renderer selected by `visual-output-design` (numeric chart, structural diagram, illustration/motion, or interactive UI). Use specialized generation/design tools where they improve the requested output quality, without letting them invent evidence or duplicate the report;
    - do not count `image_gen`, image viewers, generic media generation, or Figma diagram/design tools as quantitative chart renderers;
    - record renderer availability as `AVAILABLE`, `UNAVAILABLE`, or `UNKNOWN`;
    - when interactive capability is unknown or absent, use a real static renderer for the visual and explicitly state that interaction is unavailable; do not simulate an interactive-renderer attempt.
+   - in normal Chat, recognize the Skills Factory Cloud Next interactive chart MCP tools as concrete inline renderers when exposed. They are implementation primitives for this composition layer, not a separate user-facing skill or report. Keep chart content in the report flow; do not launch a parallel dashboard or fullscreen view.
 5. Select a report profile from `references/report-profiles.md` or derive a minimal equivalent.
 6. Build a semantic report model containing ordered sections:
    - section purpose;
@@ -48,6 +50,7 @@ Do not create a second "visual report" beside the chat answer. Do not create an 
    - evidence block;
    - decision/implication block;
    - optional inline visual slots;
+   - requested target format and any target-specific interaction/editability requirements;
    - section-level provenance and uncertainty.
 7. Decide visual placement by reading flow, not by asset type:
    - put the visual immediately after the claim/context it helps explain;
@@ -58,20 +61,21 @@ Do not create a second "visual report" beside the chat answer. Do not create an 
    - only the relevant supported data;
    - required renderer capabilities;
    - as-of context and provenance.
-9. For required investment price/KPI visuals, invoke at least one concrete chart renderer when verified chartable data exist. Prefer a documented interactive component only when the runtime exposes a callable interface; otherwise render a static image. If the user explicitly requested interaction and none is available, mark the interaction feature blocked while still including any useful static visual.
-10. Choose output target from actual renderer execution:
+9. For required chartable visuals in normal Chat, invoke the exposed Cloud Next `render_bar_chart` or `render_line_chart` through `visual-output-design` using verified chartable data. The renderer produces an inline interactive app (mark selection; line-series toggles). Place the report narrative and interpretation adjacent to the chart in the same conversation flow. Use another documented inline renderer when Cloud Next is unavailable; otherwise render a static image. If the user explicitly requested interaction and none is available, mark the interaction feature blocked while still including any useful static visual.
+10. For each explicitly requested external format, keep one source-backed `ExhibitSpec` but route production and QA through that format's owner. Record `NOT_RUN`, `PASS`, `FAIL`, `BLOCKED`, or `UNVERIFIED` separately for each artifact, with an actual artifact reference and format-specific review evidence. A successful chart-renderer call or generated download link is not artifact QA. Until an artifact has been opened/rendered and reviewed through its format-specific QA path, describe it as generated but `UNVERIFIED`, not ready or complete. Record interaction/editability loss per target.
+11. Choose output target from actual renderer execution:
    - **chat-native report** when required visual slots have a qualifying renderer and a valid payload was produced;
    - **chat-blocked** when no qualifying renderer exists or invocation fails;
    - **external artifact** only when the user explicitly asks for one.
-   Client-display success is never inferred by the model. A valid payload is `PAYLOAD_RENDERED`; client display remains `NOT_OBSERVABLE`.
-11. A blocked report may still include a compact table/matrix so the user can inspect the data, but that fallback is diagnostic only: it does **not** satisfy the required visual slot and must carry `BLOCKED_NO_RENDERER` (or `FAIL_RENDERER_INVOCATION` when a qualifying renderer was discovered but failed).
-12. Preserve progressive disclosure:
+   Client-display success is never inferred from a tool receipt alone. A valid payload is `PAYLOAD_RENDERED`; client display remains `NOT_OBSERVABLE` unless a separate browser/UI test or user observation confirms it. Record that external evidence in the runtime evaluation rather than rewriting the tool receipt.
+12. A blocked report may still include a compact table/matrix so the user can inspect the data, but that fallback is diagnostic only: it does **not** satisfy the required visual slot and must carry `BLOCKED_NO_RENDERER` (or `FAIL_RENDERER_INVOCATION` when a qualifying renderer was discovered but failed).
+13. Preserve progressive disclosure:
    - lead with the decision and minimum evidence;
    - keep detail near the section it supports;
    - move exhaustive evidence tables or appendices later.
-13. Keep receipts, source notes and material limitations in the same report, not in a disconnected parallel artifact.
-14. Run the contradiction check from the state/evidence contract before final output.
-15. Never silently convert a required visual-floor slot into successful renderer execution. If no qualifying renderer exists or invocation fails, surface that execution state explicitly. Do not silently move the report into an HTML/PDF/Figma/deck artifact. Create an external artifact only when the user explicitly requested one.
+14. Keep receipts, source notes and material limitations in the same report, not in a disconnected parallel artifact.
+15. Run the contradiction check from the state/evidence contract before final output.
+16. Never silently convert a required visual-floor slot into successful renderer execution. If no qualifying renderer exists or invocation fails, surface that execution state explicitly. Do not silently move the report into an HTML/PDF/Figma/deck artifact. Create an external artifact only when the user explicitly requested one.
 
 ## Visual coverage and dashboard contract
 
@@ -154,6 +158,13 @@ Return one semantic report with:
   - capability_status
   - renderer_execution_status
   - client_display_status: NOT_OBSERVABLE
+- **format_statuses[]** for explicitly requested external formats only:
+  - format
+  - artifact_reference
+  - creation_status
+  - qa_status: NOT_RUN / PASS / FAIL / BLOCKED / UNVERIFIED
+  - qa_evidence
+  - interaction_or_editability_losses
 - **receipts**
 - **limitations**
 - **appendix** only when needed
@@ -186,6 +197,7 @@ Do not emit `report_status: PASS` for ordinary report composition. Runtime visua
 - [ ] Interaction level (STATIC / HOVER / CONTROLLED / UNKNOWN) matches the emitted component and observed/documented behavior.
 - [ ] Interaction controls correspond to real supported alternate views.
 - [ ] No external artifact/file was created unless explicitly requested.
+- [ ] Each explicitly requested external artifact has its own creation status and format-specific QA evidence; unreviewed artifacts remain UNVERIFIED.
 - [ ] The report remains readable on narrow/mobile layouts.
 - [ ] Receipts and limitations remain visible.
 - [ ] `capability_preflight` was run for every required visual-floor slot.
