@@ -3,7 +3,7 @@ package:
   version: "1.37.0"
 lab:
   name: skills-factory-lab
-  version: "0.37.0"
+  version: "0.37.1"
   draft_test_targets:
     - skill-test-design
     - skill-evaluation

@@ -60,6 +60,10 @@ targets:
       mode: explicit
       input: evals/oaf-health-check/case-001-enterprise-it.input.md
       rubric: evals/oaf-health-check/case-001-enterprise-it.rubric.yaml
+    - id: fallback-strategy-disabled-lab-001
+      mode: explicit
+      input: evals/oaf-health-check/fallback-strategy-disabled-lab-001.input.md
+      rubric: evals/oaf-health-check/fallback-strategy-disabled-lab-001.rubric.yaml
   global-local-model-review:
     - id: case-global-local-001
       mode: explicit

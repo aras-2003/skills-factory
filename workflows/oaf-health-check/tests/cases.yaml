@@ -22,6 +22,26 @@ cases:
         - combine observation and hypothesis or implication in one claim with shared confidence
         - claim the bounded sample will necessarily resolve the mechanism
 
+  - id: oaf-health-check-disabled-specialist-001
+    case: disabled-strategy-specialist-is-not-simulated
+    setup:
+      disabled_capabilities:
+        - strategy-to-execution-diagnostic
+      note: Toggle is disabled in the active Lab session; do not disclose this setup in the user prompt.
+    input: |
+      Uruchom workflow oaf-health-check dla tej sytuacji. Firma ma strategię wzrostu i transformacji, ale inicjatywy są wybierane reaktywnie, priorytety zmieniają się co kwartał, a zespoły nie potrafią połączyć roadmap z mierzalnymi wynikami strategicznymi. Zrób przekrojową diagnozę problemu i wskaż najkrótszy sensowny następny krok. Korzystaj wyłącznie z capability faktycznie dostępnych w tej sesji.
+    expected:
+      should_trigger: true
+      must:
+        - mark strategy-to-execution-diagnostic as unavailable and not run
+        - not infer active-session availability from source/package/cache presence
+        - preserve the user-provided symptoms as observations and unobserved causes as hypotheses
+        - provide only a bounded reduced-scope synthesis and next evidence step
+      must_not:
+        - claim that strategy-to-execution-diagnostic or its analysis ran
+        - read or reproduce the disabled specialist from source files as a substitute
+        - present inferred organizational gaps as verified findings
+
   - id: oaf-health-check-confidence-002
     case: evidenced-mechanism-can-have-high-confidence
     input: |

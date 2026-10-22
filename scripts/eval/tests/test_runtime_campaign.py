@@ -184,7 +184,7 @@ class RuntimeCampaignTests(unittest.TestCase):
             definitions = {item["id"]: item for item in lock["case_definitions"]}
             self.assertEqual(45, len(definitions))
             components = {(item["channel"], item["name"]): item for item in lock["components"]}
-            self.assertEqual("1.5.0", components[("production", "oaf-health-check")]["version"])
+            self.assertEqual("1.6.0", components[("production", "oaf-health-check")]["version"])
             self.assertEqual("1.1.0", components[("production", "operating-model-review")]["version"])
             self.assertEqual("1.1.2", components[("production", "decision-bottleneck-analysis")]["version"])
             self.assertEqual("1.1.1", components[("production", "decision-rights-review")]["version"])
@@ -214,7 +214,7 @@ class RuntimeCampaignTests(unittest.TestCase):
     def test_historical_receipt_identity_uses_recorded_behavior_revision(self) -> None:
         old_revision = "ff012e494f5b2f71803f850d71d20f54a3315e2b"
         for case_id, component_name, expected_version, current_expected_version in (
-            ("fallback-strategy-production-001", "oaf-health-check", "1.0.0", "1.5.0"),
+            ("fallback-strategy-production-001", "oaf-health-check", "1.0.0", "1.6.0"),
             ("fallback-interface-production-001", "oaf-operating-model-redesign", "1.0.0", "1.1.0"),
         ):
             target, case = receipt.find_case(ROOT, case_id)

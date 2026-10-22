@@ -23,6 +23,20 @@ TARGET_WORKFLOWS = [
 
 
 class IntegratedReportingTests(unittest.TestCase):
+    def test_oaf_health_check_fails_closed_for_disabled_specialists(self) -> None:
+        workflow = (ROOT / "workflows/oaf-health-check/WORKFLOW.md").read_text(encoding="utf-8")
+        cases = yaml.safe_load((ROOT / "workflows/oaf-health-check/tests/cases.yaml").read_text(encoding="utf-8"))
+        fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
+        rubric = yaml.safe_load((ROOT / "evals/oaf-health-check/fallback-strategy-disabled-lab-001.rubric.yaml").read_text(encoding="utf-8"))
+
+        self.assertIn("readable from a repository/plugin cache does not mean", workflow)
+        self.assertIn("AVAILABILITY_UNVERIFIED", workflow)
+        case = next(item for item in cases["cases"] if item["id"] == "oaf-health-check-disabled-specialist-001")
+        self.assertEqual(["strategy-to-execution-diagnostic"], case["setup"]["disabled_capabilities"])
+        self.assertTrue(any("claim that strategy-to-execution-diagnostic" in assertion for assertion in case["expected"]["must_not"]))
+        self.assertIn("fallback-strategy-disabled-lab-001", [item["id"] for item in fixtures["targets"]["oaf-health-check"]])
+        self.assertIn("source/cache presence", " ".join(rubric["assertions"]["manual_not"]))
+
     def test_target_workflows_use_integrated_report_section(self) -> None:
         for name in TARGET_WORKFLOWS:
             with self.subTest(name=name):
