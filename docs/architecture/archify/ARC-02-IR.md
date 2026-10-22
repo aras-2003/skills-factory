@@ -1,20 +1,28 @@
-# ARC-02 — Canonical visualization intermediate representation v1
+# ARC-02 — Canonical, evidence-aware visualization IR v1
 
-Issue #375; parent #373. **Source-side implementation only.** No renderer or runtime enabled.
+Issue #375; parent #373; PR #386. Source-only shared Python model, not Archify native JSON, OAF replacement, a renderer or an MCP tool.
 
-`scripts/architecture/visualization_ir.py` accepts strict source-backed objects with schema_version=1, model_id, source_revision, nodes, edges. Each observed/proposed node and edge must provide explicit evidence with uri (`repo://` or `evidence://`), revision exactly matching model's source_revision and locator. Unknown elements are permitted but cannot claim evidence. Edges may never refer to missing nodes. An evidenced edge may not connect an unknown node.
+## Contracts
 
-`validate_model` rejects unknown attributes and unsupported enumerations. It sorts nodes/edges lexically; `canonical_json` and `model_digest` provide reproducible fingerprints independent of input ordering. This representation is distinct from Archify's rendering JSON and is not an OAF metamodel replacement.
+- Only schema_version integer 1, model_id, immutable lowercase **40-character Git commit SHA** as source_revision, and explicit nodes/edges arrays.
+- Allowed node types: skill, workflow, tool, capability, process, application, data, owner, unknown. Allowed edge types: requires, calls, produces, supports, owns, depends_on, flows_to, unknown.
+- Each observed/proposed fact must contain at least one repo:// path with matching full revision and Lstart[-Lend] locator. Unknown states cannot claim evidence; unknown relation must have unknown type.
+- Fail closed on duplicate IDs, dangling edges, extra attributes, unsupported enums, malformed line ranges, unsafe path segments and unsupported relationship direction/type pairs.
+- Semantic compatibility is implemented as an explicit edge type-pair allow-list; it restricts expressibility, not factual correctness. Extend only with OAF-reviewed contracts.
+- Sorting nodes, edges and evidence refs makes canonical_json and SHA-256 model_digest stable under input reordering.
 
-## Scope limits / safety
-- No inference of nodes/edges from labels, layouts, or LLM output.
-- No remote fetching, code execution, persistence or rendering.
-- No source authenticity guarantee: a URI + revision is an **asserted reference**, not a cryptographic attestation. A separate trusted loader must verify referenced locators against that revision before promoting evidence into authoritative model facts (planned integration).
-- Does not yet verify semantic edge type compatibility (e.g., capability → application); ARC-02 requires domain-specific relation policy before closure.
-- URI string validation is minimal allow-list and **not** a file-access authorization mechanism.
+## Authenticity boundary
 
-## Validation
-Run `python3 -m unittest discover -s tests/architecture -p 'test_visualization_ir.py'`. CI evidence and actual results should be reported per exact commit; neither tests nor runtime have been executed in GitHub connector-only authoring environment.
+validate_model checks structure and semantic *plausibility*, not truth or authority. **verify_sources(model, trusted_repo_root)** additionally reads Git objects at the declared commit SHA (not mutable working-tree files), requires a Git commit object and confirms every referenced UTF-8 line locator exists. It requires a locally trusted Git checkout and no network or tool permission escalation. It does NOT prove that the referenced lines entail the model claim. Human/domain evidence evaluation remains mandatory for claims affecting decisions.
 
-## Follow-up for ARC-02 acceptance
-Add schema/contract fixture files, source locator verifier bound to trusted repository revision, semantic edge type matrix for Skills Factory and OAF, tests for adversarial revisions/locators, and CI wiring. Do not claim Ready before tests and review.
+Only repo:// sources are currently accepted. evidence:// external records are deliberately rejected until a trusted external evidence attestor is specified and tested. Paths must be repo-relative; no traversal or arbitrary URLs. No writeback, persistence, renderer or network operation exists in this module.
+
+## Tests
+
+`python3 -m unittest discover -s tests/architecture -p 'test_visualization_ir.py' -v`
+
+Tests cover deterministic digests, allowed/forbidden semantic edges, no inferred links, stale revision, duplicate/dangling edges, malicious URI and locator input, exact commit lookup, missing Git blob and locator outside the referenced immutable source. A dedicated CI workflow `.github/workflows/ci-architecture-ir.yml` binds execution to the PR head SHA. CI completion and review are separate evidence.
+
+## Release limitations
+
+This does not by itself implement ARC-03 adapter, Archify rendering, runtime registration, or a general enterprise architecture metamodel. Iteration policy still applies: no merge while the iteration start and review gates remain unsatisfied.
