@@ -153,6 +153,14 @@ class InvestmentRuntimeTests(unittest.TestCase):
             with self.subTest(prompt=prompt):
                 self.assert_route(prompt, "attention", "investment-attention-review")
 
+    def test_user_reported_earnings_thesis_wording_routes_in_both_languages(self) -> None:
+        for prompt in (
+            "For my portfolio holding, explain how its latest earnings event changes my existing investment thesis.",
+            "Dla spółki z mojego portfela wyjaśnij, jak najnowszy raport wynikowy zmienia moją dotychczasową tezę inwestycyjną.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
     def test_sector_opportunity_discovery_routes_in_both_languages(self) -> None:
         for prompt in (
             "Find promising opportunities in the renewable energy sector; I want a new company to research.",
