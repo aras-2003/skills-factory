@@ -1979,7 +1979,7 @@
   ],
   "runtime_tools": [
     {
-      "content_sha256": "b0f3219e0af0aebc80949ce7d5e6117cc96c9a77d5349710864093da46225c88",
+      "content_sha256": "ad4074b220b58740489b4f6d47bd3fbfa2fe1e5249ec3dd474eaa5fdea0ecf71",
       "kind": "mcp-server",
       "name": "skills-factory-runtime",
       "runtime_class": "skills-factory-runtime",
@@ -1996,5 +1996,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425"
+  "source_revision": "30a94a4babdc245680d48ec2bd0baadab7453595"
 }
