@@ -45,8 +45,15 @@ def _plugin_root() -> Path:
 
 
 def skills_root() -> Path:
-    configured = os.environ.get("SKILLS_FACTORY_SKILLS_ROOT", "").strip()
-    root = Path(configured).resolve() if configured else _plugin_root() / "skills"
+    plugin_root = _plugin_root()
+    packaged_root = plugin_root / "skills"
+    # A release manifest binds runtime identity to the adjacent packaged catalog.
+    # Do not let a stale host-level override pair the new manifest with old skills.
+    if (plugin_root / "release-manifest.json").is_file() and packaged_root.is_dir():
+        root = packaged_root
+    else:
+        configured = os.environ.get("SKILLS_FACTORY_SKILLS_ROOT", "").strip()
+        root = Path(configured).resolve() if configured else packaged_root
     if not root.is_dir():
         raise RuntimeError(f"Skills catalog is unavailable: {root}")
     return root

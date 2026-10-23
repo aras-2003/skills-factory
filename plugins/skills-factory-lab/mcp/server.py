@@ -205,6 +205,7 @@ def runtime_info() -> dict[str, Any]:
     values["installation_behavior_verified"] = False
     installed = packaged_release_identity()
     values["lab_release"] = installed or None
+    values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
     values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "render_bar_chart", "render_line_chart"]
     if (installed and values["channel"] == "lab"
             and installed["source_revision"] == values["source_revision"]
