@@ -113,7 +113,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "etf", "fund", "holdings", "investment policy", "risk limit",
         "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
         "share", "thesis", "gross margin", "marża brutto", "marza brutto", "watchlist",
-        "research candidates", "kandydatów do researchu", "kandydatow do researchu",
+        "research candidates", "kandydatów do researchu", "kandydatow do researchu", "opportunit", "okazj",
     )
     if non_investment_finance and not explicit_investment_context:
         return {
@@ -140,6 +140,14 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "wymaga glebszej analizy", "give attention", "attention next", "next research",
         "research next", "attention review",
     ) or ("watchlist" in text and _contains(text, "earnings", "results", "news", "information", "wynik", "informacj"))
+    # Event triage must outrank the portfolio keyword when the request asks
+    # whether one named holding's earnings deserve thesis attention.
+    if (
+        _contains(text, "earnings", "wyniki", "results")
+        and _contains(text, "thesis", "tez", "holding", "portfolio", "portfel", "my company", "spółki", "spolki")
+        and _contains(text, "attention", "uwag", "warrant", "matter", "deserve", "wymag")
+    ):
+        attention = True
     theme = _contains(
         text,
         "investment theme", "investment themes", "theme research", "value chain",
@@ -155,6 +163,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
         "watchlist screen", "screen my watchlist", "screen watchlist",
         "preview the screen", "preview-only screen", "screen these candidates",
+        "promising opportunities", "promising opportunity", "obiecujące okazje", "obiecujace okazje",
+        "okazje w sektorze", "opportunities in the renewable", "opportunities in sector",
     )
     observation = _contains(
         text,
