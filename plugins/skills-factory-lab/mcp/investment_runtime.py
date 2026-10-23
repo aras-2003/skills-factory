@@ -143,9 +143,14 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     # Event triage must outrank the portfolio keyword when the request asks
     # whether one named holding's earnings deserve thesis attention.
     if (
-        _contains(text, "earnings", "wyniki", "results")
+        _contains(text, "earnings", "wynik", "results")
         and _contains(text, "thesis", "tez", "holding", "portfolio", "portfel", "my company", "spółki", "spolki")
-        and _contains(text, "attention", "uwag", "warrant", "matter", "deserve", "wymag")
+        and _contains(
+            text,
+            "attention", "uwag", "warrant", "matter", "deserve", "wymag",
+            "change", "changes", "changed", "impact", "affect", "influence",
+            "zmienia", "wpływ", "wplyw",
+        )
     ):
         attention = True
     theme = _contains(
