@@ -411,3 +411,8 @@ test("chart shape guards fail closed for stale connectors and silently truncated
   assert.equal(validLine.isError, false);
   assert.equal((validLine.structuredContent.data as { series_values: number[][] }).series_values[7][99], -456);
 });
+
+ test("software identity preserves Lab version independently of Site deployment", async () => {
+  const info = await runtimeInfo();
+  assert.deepEqual(info.software_release, {version: LAB_RELEASE.version, release_id: LAB_RELEASE.release_id, source_revision: LAB_RELEASE.source_revision});
+});

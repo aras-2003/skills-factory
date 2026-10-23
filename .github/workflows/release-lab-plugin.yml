@@ -6,7 +6,6 @@ on:
     paths-ignore:
       - "plugins/skills-factory-lab/**"
       - "docs/lab-release.json"
-      - "release/package.yaml"
 
 permissions:
   contents: write
@@ -20,7 +19,6 @@ concurrency:
 jobs:
   package:
     name: Release / Build, validate and prepare Lab Marketplace PR
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     env:
       SOURCE_REVISION: ${{ github.sha }}
@@ -35,43 +33,21 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: python -m pip install --require-hashes -r requirements-dev.lock
-      - name: Bump Lab package patch version
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path("release/package.yaml")
-          lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
-          in_lab = False
-          for index, line in enumerate(lines):
-              if line.strip() == "lab:":
-                  in_lab = True
-                  continue
-              if in_lab and line and not line[0].isspace():
-                  break
-              if in_lab and line.startswith("  version:"):
-                  raw_version = line.split(":", 1)[1].strip().strip("\\\"").strip("'")
-                  parts = raw_version.split(".")
-                  if len(parts) != 3 or not all(part.isdigit() for part in parts):
-                      raise SystemExit(f"Invalid lab.version: {raw_version}")
-                  major, minor, patch = map(int, parts)
-                  updated = f"{major}.{minor}.{patch + 1}"
-                  value_start = line.index(raw_version)
-                  lines[index] = line[:value_start] + updated + line[value_start + len(raw_version):]
-                  path.write_text("".join(lines), encoding="utf-8")
-                  print(f"Lab package version: {major}.{minor}.{patch} -> {updated}")
-                  break
-          else:
-              raise SystemExit("Could not locate lab.version in release/package.yaml")
-          PY
-      - name: Regenerate source-bound catalog for bumped package
-        run: python scripts/catalog/generate_site_catalog.py
       - name: Build and validate isolated Lab
         run: |
           python scripts/package/build_lab_plugin.py --output plugins/skills-factory-lab
           python scripts/package/artifact_validation.py plugins/skills-factory-lab --lab
           python scripts/eval/validate_isolation.py --artifact plugins/skills-factory-lab
           cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json
+      - name: Build Site from the identical Lab artifact
+        run: python scripts/package/build_cloud_next_site.py --lab-artifact plugins/skills-factory-lab --write-generated
+      - name: Upload source-bound Site candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skills-factory-site-${{ github.sha }}
+          path: sites/skills-factory-site
+          include-hidden-files: true
+          if-no-files-found: error
       - name: Upload immutable Lab candidate
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -107,7 +83,8 @@ jobs:
             git switch -c "$branch"
           fi
 
-          git add release/package.yaml plugins/skills-factory-lab docs/lab-release.json docs/catalog.json
+          git restore sites/skills-factory-site
+          git add plugins/skills-factory-lab docs/lab-release.json
           if ! git diff --cached --quiet; then
             git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore(lab): publish candidate $SOURCE_REVISION"
           fi

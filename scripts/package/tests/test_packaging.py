@@ -4,6 +4,7 @@ import json
 import importlib.util
 import os
 import shutil
+import subprocess
 import tempfile
 import unittest
 import zipfile
@@ -28,7 +29,7 @@ from workflow_entrypoints import dependency_availability, load_registry
 class PackagingTests(unittest.TestCase):
     def setUp(self) -> None:
         self.old_revision = os.environ.get("SOURCE_REVISION")
-        os.environ["SOURCE_REVISION"] = "0123456789abcdef0123456789abcdef01234567"
+        os.environ["SOURCE_REVISION"] = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         (ROOT / ".tmp").mkdir(exist_ok=True)
 
     def tearDown(self) -> None:
@@ -37,8 +38,8 @@ class PackagingTests(unittest.TestCase):
         else:
             os.environ["SOURCE_REVISION"] = self.old_revision
 
-    def test_tracked_lab_plugin_manifests_match_release_version(self) -> None:
-        expected = package_version(ROOT, "lab")
+    def test_tracked_lab_installer_manifests_agree_with_each_other(self) -> None:
+        expected = json.loads((ROOT / "plugins/skills-factory-lab/plugin.json").read_text())["version"]
         for relative in (
             "plugins/skills-factory-lab/plugin.json",
             "plugins/skills-factory-lab/.codex-plugin/plugin.json",
