@@ -145,7 +145,12 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     if (
         _contains(text, "earnings", "wyniki", "results")
         and _contains(text, "thesis", "tez", "holding", "portfolio", "portfel", "my company", "spółki", "spolki")
-        and _contains(text, "attention", "uwag", "warrant", "matter", "deserve", "wymag")
+        and _contains(
+            text,
+            "attention", "uwag", "warrant", "matter", "deserve", "wymag",
+            "change", "changes", "changed", "impact", "affect", "influence",
+            "zmienia", "wpływ", "wplyw",
+        )
     ):
         attention = True
     theme = _contains(
