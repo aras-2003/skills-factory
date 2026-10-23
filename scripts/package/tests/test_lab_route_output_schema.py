@@ -59,6 +59,8 @@ def load_lab_server():
     skill_catalog.list_skills = lambda: {}
     skill_catalog.load_skill = lambda _name: {}
     skill_catalog.packaged_release_identity = lambda: None
+    skill_catalog.packaged_payload_integrity = lambda *_args, **_kwargs: {"status": "unavailable"}
+    skill_catalog.packaged_runtime_value = lambda _name, default="unattested": default
     skill_catalog.catalog_digest = lambda: ""
 
     modules = {
