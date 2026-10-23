@@ -10,7 +10,7 @@ from typing import Any, get_args, get_origin, get_type_hints
 from unittest.mock import patch
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 SERVER_PATH = ROOT / "plugins" / "skills-factory-lab" / "mcp" / "server.py"
 
 
