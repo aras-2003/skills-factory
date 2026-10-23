@@ -236,6 +236,7 @@ lab:
         self.assertIn("Bump Lab package patch version", workflow)
         self.assertIn("Regenerate source-bound catalog for bumped package", workflow)
         self.assertIn("python scripts/catalog/generate_site_catalog.py", workflow)
+        self.assertIn("git add release/package.yaml plugins/skills-factory-lab docs/lab-release.json docs/catalog.json", workflow)
         self.assertLess(workflow.index("name: Bump Lab package patch version"), workflow.index("name: Regenerate source-bound catalog for bumped package"))
         self.assertLess(workflow.index("name: Regenerate source-bound catalog for bumped package"), workflow.index("name: Build and validate isolated Lab"))
         self.assertIn("contents: write", workflow)
