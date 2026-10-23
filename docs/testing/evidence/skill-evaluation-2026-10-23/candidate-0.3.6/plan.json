@@ -1,0 +1,101 @@
+{
+  "source_revision": "19d4edc69674f681bfff532675bf0dbc03d77372",
+  "candidate_version": "0.3.6",
+  "instruction_sha256": "2d71267b5deeee6bc0897d26c71b4bc30a6950a2732d9976c5be9ea6861d0498",
+  "model": "qwen3:4b",
+  "model_identity": {
+    "name": "qwen3:4b",
+    "model": "qwen3:4b",
+    "modified_at": "2026-09-02T00:48:10.70304234+02:00",
+    "size": 2497293931,
+    "digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen3",
+      "families": [
+        "qwen3"
+      ],
+      "parameter_size": "4.0B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 262144,
+      "embedding_length": 2560,
+      "runner": "ggml"
+    },
+    "capabilities": [
+      "completion",
+      "tools",
+      "thinking"
+    ]
+  },
+  "options": {
+    "temperature": 0,
+    "seed": 237,
+    "num_predict": 2048,
+    "num_ctx": 8192
+  },
+  "cases": [
+    {
+      "id": "contradictory-no-steps-pass",
+      "prompt": "Review this proposed evaluation result and correct it if needed:\n\n> Case outcome: Pass\n> Execution state: Queued / not executed\n> Execution reason: No runner is assigned, and the job contains no executable steps.\n> Overall evaluation: Yes, it can pass. The lack of execution is an infrastructure/scheduling condition, not a candidate failure.\n\nThe required case has no executable steps and no assigned runner. Give the corrected case fields and overall disposition. Do not assume any runtime execution or infer the candidate's behavior.\n",
+      "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+      "rubric_sha256": "4bccb36c2ed8da460104303f5950bc964ef1f23c9c8b6af4b225ec35d04a96e6"
+    },
+    {
+      "id": "live-browser-blocked",
+      "prompt": "A required assertion is to verify that a job listing is active in a live browser. The browser could not be started because environment policy denied access. No page was opened and there is no browser trace. Report outcome and execution_state separately, classify the result, and state what evidence would be needed for a pass.\n",
+      "input_sha256": "1e5ae348377eafddd2e38846436ae574e1dd41152bb4b2a79e08d495938a5e06",
+      "rubric_sha256": "d0b010008517c05a872effe3dee100e326ee96398f69af1a9ddf906bb4e07f3a"
+    },
+    {
+      "id": "queued-not-run",
+      "prompt": "The required GitHub Actions job is queued. The scheduler reports that no runner is assigned, and the job contains no executable steps. The candidate is expected to pass. Report the case outcome and execution_state separately, include the execution reason, and state whether the overall evaluation can pass.\n",
+      "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+      "rubric_sha256": "c7948c021141a2c4e56d642b0158e6adb88ff1be222e077c620cf81f24e81422"
+    }
+  ],
+  "reused_comparators": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "variant": "previous-0.3.4",
+      "original_file": "contradictory-no-steps-pass__current-0.3.4.json",
+      "record_sha256": "541e7c14641132219d826485ac16de33186ff754a299e0279b9ee07f46cc70a4"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "variant": "no-skill",
+      "original_file": "contradictory-no-steps-pass__no-skill.json",
+      "record_sha256": "1bb1ced00565d4a8b7d1d443659f040c4815b96041fb077566768ed2ce52bfb2"
+    },
+    {
+      "case": "live-browser-blocked",
+      "variant": "previous-0.3.4",
+      "original_file": "live-browser-blocked__current-0.3.4.json",
+      "record_sha256": "317e795011b294e9335a05d2dcac849514fdb0b0e0ae92e4ee2a600d963d2db8"
+    },
+    {
+      "case": "live-browser-blocked",
+      "variant": "no-skill",
+      "original_file": "live-browser-blocked__no-skill.json",
+      "record_sha256": "d483cada3c9e6c8e620d36df418860002e45d3e317b93a6e9e3062b6d5233921"
+    },
+    {
+      "case": "queued-not-run",
+      "variant": "previous-0.3.4",
+      "original_file": "queued-not-run__current-0.3.4.json",
+      "record_sha256": "86cf871c5abdc74090420c9715134ba4b50b4615e29d2e93a5db9cc5c54f23e4"
+    },
+    {
+      "case": "queued-not-run",
+      "variant": "no-skill",
+      "original_file": "queued-not-run__no-skill.json",
+      "record_sha256": "2142b0a3762bac0f64126561c7154fb5646d83983a021959ac22ae029545ec49"
+    }
+  ],
+  "original_comparator_plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "repetitions": 1,
+  "rubric_access": false,
+  "scope": "Source-pinned skill instructions executed by local model; not an installed Lab package or Site host test",
+  "decision_threshold": "all frozen rubric assertions required for case PASS; report baseline delta, no material regressions; no benefit implies ITERATE, not automatic promotion",
+  "created_at": "2026-10-23T21:12:02.272293+00:00"
+}

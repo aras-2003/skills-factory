@@ -1,0 +1,20 @@
+{
+  "status": "ITERATE; template withdrawn from proposed source",
+  "finding": "live-browser-blocked emits evaluation.status=BLOCKED, violating the explicit NOT_RUN contract for nonexecuted cases",
+  "positive_observation": "queued-not-run now emits NOT_RUN and both execution conditions",
+  "independent_evaluation": "Fresh anonymous 8B evaluator running; no score claimed until valid assessment and review",
+  "records": [
+    {
+      "file": "contradictory-no-steps-pass__current-0.3.6.json",
+      "sha256": "e48280be6d7d9e2b061ecf23af9180659f20e5f869fab60b74c032ef3bf1a929"
+    },
+    {
+      "file": "live-browser-blocked__current-0.3.6.json",
+      "sha256": "fdc542f91fef37b112f453c033b44c1b3dbfbb06ae64b594b6f80b42a77d093f"
+    },
+    {
+      "file": "queued-not-run__current-0.3.6.json",
+      "sha256": "02b2823a6313f4890ee8a1209e6b14871d6dc12e19dc438896691e495f49c98c"
+    }
+  ]
+}

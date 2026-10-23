@@ -17,3 +17,7 @@ Draft 0.3.5 at source `15740806f57d7058c0d2d3ac02f51c586e15e635` makes existing 
 `candidate-0.3.5/` contains the frozen plan, exact instructions/runner, three new final-answer records and assertion audit. The same model digest, parameters, inputs and unchanged rubrics apply. Six earlier no-skill/0.3.4 comparator records are explicitly reused, not counted as fresh executions.
 
 Parent audit: **2/3 PASS** for 0.3.5 versus 1/3 for 0.3.4 and 0/3 baseline. Contradictory PASS and blocked-browser cases pass. The queued case still omits explicit NOT_RUN status and the unassigned-runner condition. It is a real observed FAIL. No criterion was waived and no candidate promotion is claimed. These are source-pinned local-model runs, not a new installed Lab or deployed Site. Single samples do not establish general model quality or variance.
+
+## Withdrawn template experiment 0.3.6
+
+All three source-pinned responses completed. The queued case now emits complete statuses and both conditions, but the browser case emits evaluation.status=BLOCKED instead of required NOT_RUN. This observed contract regression is preserved in candidate-0.3.6; the 0.3.6 template is withdrawn from the proposed source, which returns to 0.3.5. No results are deleted. A separately frozen anonymous 8B evaluator attempt is in progress.
