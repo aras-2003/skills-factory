@@ -1,0 +1,12 @@
+{
+  "status": "NOT_RUN_EVALUATION",
+  "attempted_case": "contradictory-no-steps-pass",
+  "request_timeout_seconds": 600,
+  "client_exit_code": 1,
+  "error": "TimeoutError: timed out waiting for HTTP response",
+  "assessment_received": false,
+  "remaining_cases_attempted": false,
+  "candidate_behavior_verdict": null,
+  "recovery": "Ollama qwen3:8b stopped after client terminal failure; no implicit rerun",
+  "replacement": "Separately frozen anonymous review of proposed 0.3.5 with Luna as orchestrator; not a rerun of executor outputs"
+}

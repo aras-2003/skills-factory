@@ -2,7 +2,7 @@
   "status": "ITERATE; template withdrawn from proposed source",
   "finding": "live-browser-blocked emits evaluation.status=BLOCKED, violating the explicit NOT_RUN contract for nonexecuted cases",
   "positive_observation": "queued-not-run now emits NOT_RUN and both execution conditions",
-  "independent_evaluation": "Fresh anonymous 8B evaluator running; no score claimed until valid assessment and review",
+  "independent_evaluation": "8B attempt timed out after 600 seconds without assessment; NOT_RUN_EVALUATION. No candidate verdict inferred.",
   "records": [
     {
       "file": "contradictory-no-steps-pass__current-0.3.6.json",
