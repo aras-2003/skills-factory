@@ -8,7 +8,10 @@
         "run",
         "${PLUGIN_ROOT}/mcp/server.py"
       ],
-      "cwd": "${PLUGIN_ROOT}"
+      "cwd": "${PLUGIN_ROOT}",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      }
     }
   }
 }

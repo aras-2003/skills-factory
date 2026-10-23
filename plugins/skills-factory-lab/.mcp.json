@@ -7,6 +7,9 @@
       ],
       "command": "uv",
       "cwd": "${PLUGIN_ROOT}",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
       "type": "stdio"
     }
   }
