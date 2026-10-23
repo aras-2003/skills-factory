@@ -33,6 +33,55 @@ def packaged_release_identity() -> dict[str, Any]:
     return {k: value[k] for k in fields}
 
 
+def packaged_payload_integrity(identity: dict[str, Any] | None = None) -> dict[str, str]:
+    """Compare installed package bytes with its adjacent release manifest.
+
+    The build calculates the payload digest before adding the manifest. This
+    proves content equality with that unsigned manifest, not host attestation.
+    """
+    release = identity or packaged_release_identity()
+    expected = release.get("payload_content_sha256") if release else None
+    if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
+        return {"status": "unavailable"}
+
+    root = _plugin_root()
+    digest = hashlib.sha256()
+    try:
+        for item in sorted(path for path in root.rglob("*") if path.is_file()):
+            if (
+                item.relative_to(root).as_posix() == "release-manifest.json"
+                and not item.is_symlink()
+            ):
+                continue
+            if item.is_symlink():
+                return {"status": "mismatch"}
+            relative = item.relative_to(root).as_posix().encode("utf-8")
+            content = item.read_bytes()
+            digest.update(len(relative).to_bytes(4, "big"))
+            digest.update(relative)
+            digest.update(len(content).to_bytes(8, "big"))
+            digest.update(content)
+    except OSError:
+        return {"status": "unavailable"}
+
+    actual = digest.hexdigest()
+    return {
+        "status": "verified" if actual == expected else "mismatch",
+        "payload_content_sha256": actual,
+    }
+
+
+def packaged_runtime_value(name: str, default: str = "unattested") -> str:
+    """Use package identity only after its bytes match the packaged manifest."""
+    value = os.environ.get(f"SKILLS_FACTORY_{name.upper()}", "").strip()
+    if value:
+        return value
+    identity = packaged_release_identity()
+    if identity and packaged_payload_integrity(identity)["status"] == "verified":
+        return str(identity.get(name) or default)
+    return default
+
+
 def _plugin_root() -> Path:
     configured = os.environ.get("PLUGIN_ROOT", "").strip()
     if configured:
@@ -144,8 +193,8 @@ def list_skills() -> dict[str, Any]:
             "unverified_revision": "If a required source revision is unavailable, mark that comparison BLOCKED_SOURCE_REVISION and ask for it; never guess the authoritative version.",
         },
         "catalog_digest": catalog_digest(items),
-        "source_revision": os.environ.get("SKILLS_FACTORY_SOURCE_REVISION", "unattested"),
-        "channel": os.environ.get("SKILLS_FACTORY_CHANNEL", "unknown"),
+        "source_revision": packaged_runtime_value("source_revision"),
+        "channel": packaged_runtime_value("channel", "unknown"),
         "skills": [
             {key: value for key, value in item.items() if key != "directory"}
             for item in sorted(items, key=lambda x: x["name"])
@@ -186,5 +235,5 @@ def load_skill(skill_name: str) -> dict[str, Any]:
         "instructions": instructions,
         "reference_files": references,
         "content_sha256": item["content_sha256"],
-        "source_revision": os.environ.get("SKILLS_FACTORY_SOURCE_REVISION", "unattested"),
+        "source_revision": packaged_runtime_value("source_revision"),
     }
