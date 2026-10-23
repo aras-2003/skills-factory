@@ -15,7 +15,7 @@ For scope lock, one active iteration, branch flow, complete test coverage and cl
 | Tutorials / quick start | README and versioned docs; Wiki or Pages only as derived/navigation surface |
 
 ## Project configuration (manual/admin API step)
-Name: **Skills Factory — Product & Engineering**. Current status options: Backlog, Discovery, Ready, In progress, In review, Validation, Done. Blocked work uses a label and an explicit reason; there is no Blocked status column. Priority: P0–P3. Area: Engineering, Runtime, E2E, Security, Commerce, Investing, OAF, Learning, Strategy, Other. Type: Bug, Feature, Improvement, Research, Governance, Epic. Effort: XS/S/M/L/XL. Views: Executive Overview, Engineering Board, P0 Critical, Ideas & Research, E2E & Quality, Roadmap, Release Readiness. Keep GitHub native assignee, labels, dates and links rather than duplicating them in text fields.
+Name: **Skills Factory — Product & Engineering**. Current status options: Backlog, Discovery, Ready, In progress, In review, Verification, Done. Blocked work uses a label and an explicit reason; there is no Blocked status column. Priority: P0–P3. Area: Engineering, Runtime, E2E, Security, Commerce, Investing, OAF, Learning, Strategy, Other. Type: Bug, Feature, Improvement, Research, Governance, Epic. Effort: XS/S/M/L/XL. Views: Executive Overview, Engineering Board, P0 Critical, Ideas & Research, E2E & Quality, Roadmap, Release Readiness. Keep GitHub native assignee, labels, dates and links rather than duplicating them in text fields.
 
 ## Controlled backlog migration
 1. Freeze **a copy** of current legacy source and record source commit, item count, identifiers and digests; do not freeze active development.
@@ -29,8 +29,8 @@ Name: **Skills Factory — Product & Engineering**. Current status options: Back
 ## Gate definitions
 - **Ready:** outcome, scope, dependencies, owner and testable acceptance criteria are explicit; implementation belongs to the single active locked iteration.
 - **In review:** diff and relevant checks are available; reviewer identified.
-- **Validation:** evidence is tied to correct source revision, runtime/channel/surface and campaign.
-- **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime tests on an authorized, version-pinned surface. Production deployment is not required. A main merge moves runtime-bearing work to Validation, not Done. CI/static PASS alone does not imply runtime PASS.
+- **Verification:** required runtime, E2E or integration checks/evidence are underway or pending on a specified candidate. Keep the Issue open and record concrete blockers; this status is not a PASS or a waiver of acceptance criteria.
+- **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime tests on an authorized, version-pinned surface. Production deployment is not required. A main merge moves runtime-bearing work to Verification, not Done. CI/static PASS alone does not imply runtime PASS.
 - **Release:** release artifacts, provenance and any required production deployment evidence verified separately; production promotion is not implied by Done.
 
 ## Wiki policy
