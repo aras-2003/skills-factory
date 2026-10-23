@@ -64,6 +64,8 @@ jobs:
           else:
               raise SystemExit("Could not locate lab.version in release/package.yaml")
           PY
+      - name: Regenerate source-bound catalog for bumped package
+        run: python scripts/catalog/generate_site_catalog.py
       - name: Build and validate isolated Lab
         run: |
           python scripts/package/build_lab_plugin.py --output plugins/skills-factory-lab
