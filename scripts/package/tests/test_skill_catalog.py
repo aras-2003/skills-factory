@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
+import json
 import os
 import tempfile
 import unittest
@@ -18,6 +20,20 @@ def load_catalog():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def payload_digest(root: Path) -> str:
+    digest = hashlib.sha256()
+    for item in sorted(path for path in root.rglob("*") if path.is_file()):
+        if item.relative_to(root).as_posix() == "release-manifest.json":
+            continue
+        relative = item.relative_to(root).as_posix().encode("utf-8")
+        content = item.read_bytes()
+        digest.update(len(relative).to_bytes(4, "big"))
+        digest.update(relative)
+        digest.update(len(content).to_bytes(8, "big"))
+        digest.update(content)
+    return digest.hexdigest()
 
 
 class SkillCatalogTests(unittest.TestCase):
@@ -104,6 +120,59 @@ class SkillCatalogTests(unittest.TestCase):
                     os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = previous_skills_root
             self.assertIn("Packaged version", result["instructions"])
             self.assertNotIn("Stale version", result["instructions"])
+
+    def test_packaged_payload_integrity_matches_manifest_and_detects_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            package_root = Path(temp_dir) / "package"
+            (package_root / "mcp").mkdir(parents=True)
+            payload = package_root / "mcp" / "server.py"
+            payload.write_text("runtime", encoding="utf-8")
+            manifest = {
+                "channel": "lab",
+                "version": "1.38.313",
+                "release_id": "1.38.313+aaaaaaaaaaaa",
+                "source_revision": "a" * 40,
+                "payload_content_sha256": payload_digest(package_root),
+            }
+            (package_root / "release-manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8"
+            )
+            previous = os.environ.get("PLUGIN_ROOT")
+            previous_revision = os.environ.get("SKILLS_FACTORY_SOURCE_REVISION")
+            os.environ["PLUGIN_ROOT"] = str(package_root)
+            os.environ.pop("SKILLS_FACTORY_SOURCE_REVISION", None)
+            try:
+                self.assertEqual(
+                    {"status": "verified", "payload_content_sha256": manifest["payload_content_sha256"]},
+                    self.catalog.packaged_payload_integrity(),
+                )
+                self.assertEqual(
+                    "a" * 40, self.catalog.packaged_runtime_value("source_revision")
+                )
+                payload.write_text("mutated runtime", encoding="utf-8")
+                self.assertEqual(
+                    "mismatch", self.catalog.packaged_payload_integrity()["status"]
+                )
+                self.assertEqual(
+                    "unattested", self.catalog.packaged_runtime_value("source_revision")
+                )
+
+                external_dir = Path(temp_dir) / "external"
+                external_dir.mkdir()
+                (external_dir / "injected.py").write_text("unbound runtime", encoding="utf-8")
+                (package_root / "linked-runtime").symlink_to(
+                    external_dir, target_is_directory=True
+                )
+                self.assertEqual(
+                    "mismatch", self.catalog.packaged_payload_integrity()["status"]
+                )
+            finally:
+                if previous is None:
+                    os.environ.pop("PLUGIN_ROOT", None)
+                else:
+                    os.environ["PLUGIN_ROOT"] = previous
+                if previous_revision is not None:
+                    os.environ["SKILLS_FACTORY_SOURCE_REVISION"] = previous_revision
 
     def test_load_skill_includes_safe_references_but_excludes_eval_fixtures(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
