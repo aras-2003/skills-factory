@@ -1,0 +1,790 @@
+{
+  "packet_sha256": "785e51b6350871ba2fd16c58da9bccf7c046c991807eeb2e3927263ef9dfd462",
+  "expected_packet_sha256": "785e51b6350871ba2fd16c58da9bccf7c046c991807eeb2e3927263ef9dfd462",
+  "packet_hash_matches": true,
+  "review_sha256": "a06da4683b7482216e9e1ff1aa2d33963705d3ad9faedf37cc99046f646f8634",
+  "original_assessment_sha256": "710d830a06e5e8e673d13a589de188b684e377fe6dd35da6a002be54db3bc0a9",
+  "review_rows_expected": 57,
+  "review_rows_actual": 57,
+  "coverage_complete": true,
+  "case_pass_checks": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertions": 6,
+      "case_pass": true,
+      "and_check": true,
+      "and_matches": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertions": 6,
+      "case_pass": true,
+      "and_check": true,
+      "and_matches": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertions": 6,
+      "case_pass": false,
+      "and_check": false,
+      "and_matches": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertions": 6,
+      "case_pass": true,
+      "and_check": true,
+      "and_matches": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertions": 6,
+      "case_pass": false,
+      "and_check": false,
+      "and_matches": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertions": 6,
+      "case_pass": false,
+      "and_check": false,
+      "and_matches": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertions": 7,
+      "case_pass": false,
+      "and_check": false,
+      "and_matches": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertions": 7,
+      "case_pass": false,
+      "and_check": false,
+      "and_matches": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertions": 7,
+      "case_pass": false,
+      "and_check": false,
+      "and_matches": true
+    }
+  ],
+  "case_pass_count": 9,
+  "quote_offsets": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "incorrectly claims \"Pass\"",
+          "matched": true,
+          "source_start_char": 308,
+          "source_end_char_exclusive": 333,
+          "source_excerpt": "incorrectly claims \"Pass\""
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 2,
+      "citations": [
+        {
+          "quote": "execution_state: no_steps (primary state",
+          "matched": true,
+          "source_start_char": 114,
+          "source_end_char_exclusive": 157,
+          "source_excerpt": "execution_state`: `no_steps` (primary state"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 3,
+      "citations": [
+        {
+          "quote": "additional condition: awaiting_runner",
+          "matched": true,
+          "source_start_char": 159,
+          "source_end_char_exclusive": 197,
+          "source_excerpt": "additional condition: `awaiting_runner"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 4,
+      "citations": [
+        {
+          "quote": "outcome: null",
+          "matched": true,
+          "source_start_char": 55,
+          "source_end_char_exclusive": 70,
+          "source_excerpt": "outcome`: `null"
+        },
+        {
+          "quote": "evaluation.status: NOT_RUN",
+          "matched": true,
+          "source_start_char": 205,
+          "source_end_char_exclusive": 233,
+          "source_excerpt": "evaluation.status`: `NOT_RUN"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 5,
+      "citations": [
+        {
+          "quote": "Overall disposition: ITERATE",
+          "matched": true,
+          "source_start_char": 241,
+          "source_end_char_exclusive": 272,
+          "source_excerpt": "Overall disposition**: `ITERATE"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "not a candidate failure",
+          "matched": true,
+          "source_start_char": 870,
+          "source_end_char_exclusive": 893,
+          "source_excerpt": "not a candidate failure"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "proposed claim \"it can pass\" violates the skill's rule",
+          "matched": true,
+          "source_start_char": 731,
+          "source_end_char_exclusive": 785,
+          "source_excerpt": "proposed claim \"it can pass\" violates the skill's rule"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 2,
+      "citations": [
+        {
+          "quote": "execution_state must be no_steps (primary state)",
+          "matched": true,
+          "source_start_char": 361,
+          "source_end_char_exclusive": 412,
+          "source_excerpt": "execution_state` must be `no_steps` (primary state)"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 3,
+      "citations": [
+        {
+          "quote": "No runner assigned",
+          "matched": true,
+          "source_start_char": 137,
+          "source_end_char_exclusive": 155,
+          "source_excerpt": "No runner assigned"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 4,
+      "citations": [
+        {
+          "quote": "Case outcome: null",
+          "matched": true,
+          "source_start_char": 0,
+          "source_end_char_exclusive": 19,
+          "source_excerpt": "Case outcome: `null"
+        },
+        {
+          "quote": "Compatibility status: NOT_RUN",
+          "matched": true,
+          "source_start_char": 84,
+          "source_end_char_exclusive": 114,
+          "source_excerpt": "Compatibility status: `NOT_RUN"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 5,
+      "citations": [
+        {
+          "quote": "Overall disposition: ITERATE",
+          "matched": true,
+          "source_start_char": 199,
+          "source_end_char_exclusive": 230,
+          "source_excerpt": "Overall disposition**: `ITERATE"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "candidate's behavior is unobserved",
+          "matched": true,
+          "source_start_char": 981,
+          "source_end_char_exclusive": 1015,
+          "source_excerpt": "candidate's behavior is unobserved"
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "No, it cannot pass.",
+          "matched": true,
+          "source_start_char": 167,
+          "source_end_char_exclusive": 186,
+          "source_excerpt": "No, it cannot pass."
+        }
+      ]
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 3,
+      "citations": [
+        {
+          "quote": "No runner is assigned",
+          "matched": true,
+          "source_start_char": 80,
+          "source_end_char_exclusive": 101,
+          "source_excerpt": "No runner is assigned"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "outcome: null",
+          "matched": true,
+          "source_start_char": 0,
+          "source_end_char_exclusive": 13,
+          "source_excerpt": "outcome: null"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 2,
+      "citations": [
+        {
+          "quote": "execution_state: blocked",
+          "matched": true,
+          "source_start_char": 16,
+          "source_end_char_exclusive": 40,
+          "source_excerpt": "execution_state: blocked"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 3,
+      "citations": [
+        {
+          "quote": "the live listing status remains unknown",
+          "matched": true,
+          "source_start_char": 455,
+          "source_end_char_exclusive": 494,
+          "source_excerpt": "the live listing status remains unknown"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 4,
+      "citations": [
+        {
+          "quote": "Browser trace (to confirm listing status)",
+          "matched": true,
+          "source_start_char": 229,
+          "source_end_char_exclusive": 270,
+          "source_excerpt": "Browser trace (to confirm listing status)"
+        },
+        {
+          "quote": "Job listing URL",
+          "matched": true,
+          "source_start_char": 275,
+          "source_end_char_exclusive": 290,
+          "source_excerpt": "Job listing URL"
+        },
+        {
+          "quote": "Check timestamp",
+          "matched": true,
+          "source_start_char": 295,
+          "source_end_char_exclusive": 310,
+          "source_excerpt": "Check timestamp"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 5,
+      "citations": [
+        {
+          "quote": "runtime policy blocking browser access",
+          "matched": true,
+          "source_start_char": 346,
+          "source_end_char_exclusive": 384,
+          "source_excerpt": "runtime policy blocking browser access"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "the live listing status remains unknown",
+          "matched": true,
+          "source_start_char": 455,
+          "source_end_char_exclusive": 494,
+          "source_excerpt": "the live listing status remains unknown"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "no page opened, no browser trace",
+          "matched": true,
+          "source_start_char": 53,
+          "source_end_char_exclusive": 85,
+          "source_excerpt": "no page opened, no browser trace"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "outcome: null",
+          "matched": true,
+          "source_start_char": 649,
+          "source_end_char_exclusive": 666,
+          "source_excerpt": "outcome`**: `null"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 2,
+      "citations": [
+        {
+          "quote": "execution_state: blocked",
+          "matched": true,
+          "source_start_char": 707,
+          "source_end_char_exclusive": 735,
+          "source_excerpt": "execution_state`**: `blocked"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 3,
+      "citations": [
+        {
+          "quote": "listing status cannot be confirmed",
+          "matched": true,
+          "source_start_char": 1662,
+          "source_end_char_exclusive": 1696,
+          "source_excerpt": "listing status cannot be confirmed"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 5,
+      "citations": [
+        {
+          "quote": "runtime block, not a behavioral failure",
+          "matched": true,
+          "source_start_char": 1751,
+          "source_end_char_exclusive": 1791,
+          "source_excerpt": "runtime block*, not a behavioral failure"
+        }
+      ]
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "no browser trace means listing status cannot be confirmed",
+          "matched": true,
+          "source_start_char": 1639,
+          "source_end_char_exclusive": 1696,
+          "source_excerpt": "no browser trace means listing status cannot be confirmed"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "outcome: null",
+          "matched": true,
+          "source_start_char": 0,
+          "source_end_char_exclusive": 13,
+          "source_excerpt": "outcome: null"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 4,
+      "citations": [
+        {
+          "quote": "This case is ITERATE",
+          "matched": true,
+          "source_start_char": 127,
+          "source_end_char_exclusive": 148,
+          "source_excerpt": "This case is `ITERATE"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "overall evaluation cannot pass",
+          "matched": true,
+          "source_start_char": 91,
+          "source_end_char_exclusive": 123,
+          "source_excerpt": "overall evaluation **cannot pass"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 7,
+      "citations": [
+        {
+          "quote": "An expected PASS is not an observed PASS",
+          "matched": true,
+          "source_start_char": 215,
+          "source_end_char_exclusive": 255,
+          "source_excerpt": "An expected PASS is not an observed PASS"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 4,
+      "citations": [
+        {
+          "quote": "Overall evaluation can pass: No",
+          "matched": true,
+          "source_start_char": 163,
+          "source_end_char_exclusive": 194,
+          "source_excerpt": "Overall evaluation can pass: No"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "Overall evaluation can pass: No",
+          "matched": true,
+          "source_start_char": 163,
+          "source_end_char_exclusive": 194,
+          "source_excerpt": "Overall evaluation can pass: No"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 7,
+      "citations": [
+        {
+          "quote": "preventing execution regardless of runner availability",
+          "matched": true,
+          "source_start_char": 105,
+          "source_end_char_exclusive": 159,
+          "source_excerpt": "preventing execution regardless of runner availability"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 1,
+      "citations": [
+        {
+          "quote": "Case outcome: null",
+          "matched": true,
+          "source_start_char": 2,
+          "source_end_char_exclusive": 23,
+          "source_excerpt": "Case outcome**: `null"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 4,
+      "citations": [
+        {
+          "quote": "Cannot pass (disposition: ITERATE)",
+          "matched": true,
+          "source_start_char": 163,
+          "source_end_char_exclusive": 199,
+          "source_excerpt": "Cannot pass (disposition: `ITERATE`)"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 6,
+      "citations": [
+        {
+          "quote": "Cannot pass",
+          "matched": true,
+          "source_start_char": 163,
+          "source_end_char_exclusive": 174,
+          "source_excerpt": "Cannot pass"
+        }
+      ]
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 7,
+      "citations": [
+        {
+          "quote": "No evidence supports a PASS",
+          "matched": true,
+          "source_start_char": 689,
+          "source_end_char_exclusive": 717,
+          "source_excerpt": "No evidence supports a `PASS"
+        }
+      ]
+    }
+  ],
+  "false_rationale_checks": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 2,
+      "rationale": "The answer gives `Queued / not executed` as execution_state; it does not use `no_steps` as the primary state.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 4,
+      "rationale": "The answer sets outcome to `Fail`, not `null`, and does not provide compatibility status `NOT_RUN`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 5,
+      "rationale": "The answer gives no overall disposition of `ITERATE`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 6,
+      "rationale": "The answer calls the configuration “a candidate failure.”",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 1,
+      "rationale": "The answer does not state `outcome: null`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 2,
+      "rationale": "It sets `Execution_state: failed`, not `blocked`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 3,
+      "rationale": "It does not state that the listing status remains unknown.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 4,
+      "rationale": "It does not require a listing URL, check time, or observed status before PASS.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 5,
+      "rationale": "It labels the result `fail` despite stating browser start was denied and no page opened; it does not distinguish an unavailable run from an executed behavior failure.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 4,
+      "rationale": "It asks for a successful browser session and active-status confirmation but does not require a listing URL or check time.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 2,
+      "rationale": "It does not state compatibility evaluation status `NOT_RUN`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 3,
+      "rationale": "It does not record the unassigned runner as an additional condition.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 5,
+      "rationale": "It says the job “never executed” but does not state that a queued job is not a test result.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 1,
+      "rationale": "It sets outcome to `Failed` although the job did not execute.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 2,
+      "rationale": "It does not provide compatibility evaluation status `NOT_RUN`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 3,
+      "rationale": "It does not use `no_steps` as the execution_state or record the unassigned runner as an additional condition.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 5,
+      "rationale": "It does not state that a queued job is not a test result.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 2,
+      "rationale": "It does not state compatibility evaluation status `NOT_RUN`.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 3,
+      "rationale": "It mentions `awaiting_runner` as overridden, but does not record the unassigned runner as an additional condition.",
+      "contains_specific_gap": true
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 5,
+      "rationale": "It does not state that a queued job is not a test result.",
+      "contains_specific_gap": true
+    }
+  ],
+  "manual_review_notes": [
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 4,
+      "finding": "Independent review corrected this from FALSE to PASS; response contains browser trace requirement, listing URL, and check timestamp. The quoted source offsets are recorded above."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 3,
+      "finding": "Independent reviewer kept FALSE because the response says the awaiting_runner condition is overridden, but does not explicitly state that the runner is unassigned as an additional condition. This is a semantic edge: the response does name awaiting_runner as a condition while making no_steps primary. Keep the grader value unchanged; manual disposition can note the ambiguity."
+    }
+  ],
+  "validation_problems": []
+}

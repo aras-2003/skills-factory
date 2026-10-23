@@ -68,5 +68,8 @@
     "Initial blind review preserved, separate review corrects browser A assertion 4 and explanatory errors.",
     "Some queued-case semantic interpretations remain stricter than parent audit; aggregate failure is independently supported by missing explicit NOT_RUN statuses."
   ],
-  "release_authorization": false
+  "release_authorization": false,
+  "final_review_sha256": "a06da4683b7482216e9e1ff1aa2d33963705d3ad9faedf37cc99046f646f8634",
+  "citation_validation_sha256": "273bab5cc84bbc52fa2742c25e913af52acc5dc9ad27f0d186ade721b0eefcf4",
+  "orchestration_validation": "Luna verified 57 assertions, 9 AND aggregates and 41 exact quote spans; labels not unblinded to grader/orchestrator."
 }
