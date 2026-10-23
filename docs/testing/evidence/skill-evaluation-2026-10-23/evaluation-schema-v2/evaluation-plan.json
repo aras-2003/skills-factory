@@ -1,0 +1,14 @@
+{
+  "model": "qwen3:4b",
+  "options": {
+    "temperature": 0,
+    "seed": 237,
+    "num_predict": 4096,
+    "num_ctx": 8192
+  },
+  "system": "You are an independent blind evaluator. Grade the provided anonymous final answers against each numbered rubric assertion. Quote short evidence. An answer fails if any assertion is not met. Do not rewrite or echo the inputs. Return ONLY the assessment required by the JSON schema. Never guess the answer identities.",
+  "executor_plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "reason": "First evaluator returned input echo, invalid scoring output. Enforce scoring schema; criteria and executor outputs unchanged.",
+  "script_sha256": "08f93d0b2ff514ed55babdd8b1c1ac8c823b4aa509e4f5c2bcd0b6ba7dc36dba",
+  "created_at": "2026-10-23T20:46:15.672659+00:00"
+}
