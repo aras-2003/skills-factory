@@ -39,7 +39,6 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
 
           path = Path("release/package.yaml")
           lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
@@ -50,11 +49,15 @@ jobs:
                   continue
               if in_lab and line and not line[0].isspace():
                   break
-              if in_lab and re.match(r"^  version: [\\"']?\\d+\\.\\d+\\.\\d+[\\"']?\\s*$", line):
-                  match = re.search(r"\\d+\\.\\d+\\.\\d+", line)
-                  major, minor, patch = map(int, match.group().split("."))
+              if in_lab and line.startswith("  version:"):
+                  raw_version = line.split(":", 1)[1].strip().strip("\\\"").strip("'")
+                  parts = raw_version.split(".")
+                  if len(parts) != 3 or not all(part.isdigit() for part in parts):
+                      raise SystemExit(f"Invalid lab.version: {raw_version}")
+                  major, minor, patch = map(int, parts)
                   updated = f"{major}.{minor}.{patch + 1}"
-                  lines[index] = line[:match.start()] + updated + line[match.end():]
+                  value_start = line.index(raw_version)
+                  lines[index] = line[:value_start] + updated + line[value_start + len(raw_version):]
                   path.write_text("".join(lines), encoding="utf-8")
                   print(f"Lab package version: {major}.{minor}.{patch} -> {updated}")
                   break
