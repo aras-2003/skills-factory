@@ -36,8 +36,9 @@ def packaged_release_identity() -> dict[str, Any]:
 def packaged_payload_integrity(identity: dict[str, Any] | None = None) -> dict[str, str]:
     """Compare installed package bytes with its adjacent release manifest.
 
-    The build calculates the payload digest before adding the manifest. This
-    proves content equality with that unsigned manifest, not host attestation.
+    The build calculates the payload digest before adding the manifest. Python
+    bytecode caches created during runtime are derived artifacts and excluded.
+    This proves content equality with that unsigned manifest, not host attestation.
     """
     release = identity or packaged_release_identity()
     expected = release.get("payload_content_sha256") if release else None
@@ -56,7 +57,14 @@ def packaged_payload_integrity(identity: dict[str, Any] | None = None) -> dict[s
                 continue
             if item.relative_to(root).as_posix() == "release-manifest.json":
                 continue
-            relative = item.relative_to(root).as_posix().encode("utf-8")
+            relative_path = item.relative_to(root)
+            # Python may create these transient caches while importing the
+            # packaged MCP. They are derived artifacts, not package payload.
+            if "__pycache__" in relative_path.parts or item.suffix in {".pyc", ".pyo"}:
+                continue
+            if relative_path.as_posix() == "release-manifest.json":
+                continue
+            relative = relative_path.as_posix().encode("utf-8")
             content = item.read_bytes()
             digest.update(len(relative).to_bytes(4, "big"))
             digest.update(relative)
