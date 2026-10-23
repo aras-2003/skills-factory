@@ -1,0 +1,9 @@
+{
+  "execution_state": "blocked",
+  "outcome": null,
+  "evaluation_status": "NOT_RUN",
+  "reason": "First local HTTP inference timed out after 600 seconds without a response; remaining eight not attempted",
+  "case": "contradictory-no-steps-pass",
+  "variant": "no-skill",
+  "recorded_at": "2026-10-23T20:08:00.236251+00:00"
+}

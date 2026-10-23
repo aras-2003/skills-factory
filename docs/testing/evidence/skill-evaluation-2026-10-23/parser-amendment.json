@@ -1,0 +1,8 @@
+{
+  "recorded_at": "2026-10-23T20:36:05.684229+00:00",
+  "reason": "Local model emits reasoning segment in content despite think=false; evaluate and publish only final answer after last closing think delimiter; identical transform on every variant",
+  "success_criteria_changed": false,
+  "evaluation_started": false,
+  "original_evaluator_script_sha256": "d03f669ebbe3b8530c1986cbdce46fd6353ca2d9a56960ff32b7d48d6e6b73a6",
+  "amended_evaluator_script_sha256": "f3d1550a46bf4a9c00c73e7fc1926828a5ab039099a36e7ec7eaa582bcf00575"
+}
