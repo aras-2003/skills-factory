@@ -107,7 +107,7 @@ jobs:
             git switch -c "$branch"
           fi
 
-          git add release/package.yaml plugins/skills-factory-lab docs/lab-release.json
+          git add release/package.yaml plugins/skills-factory-lab docs/lab-release.json docs/catalog.json
           if ! git diff --cached --quiet; then
             git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore(lab): publish candidate $SOURCE_REVISION"
           fi
