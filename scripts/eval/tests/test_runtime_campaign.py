@@ -21,6 +21,7 @@ if str(EVAL_DIR) not in sys.path:
 import campaign
 import receipt
 from common import load_campaign_cases, load_supplemental_cases
+from scripts.package.build_utils import package_version
 
 
 class RuntimeCampaignTests(unittest.TestCase):
@@ -158,10 +159,10 @@ class RuntimeCampaignTests(unittest.TestCase):
             lock = json.loads((out / "lock.json").read_text(encoding="utf-8"))
             self.assertEqual(campaign.config()["behavior_source_revision"], lock["behavior_source_revision"])
             self.assertEqual("skills-factory", lock["packages"]["production"]["name"])
-            self.assertEqual("1.37.0", lock["packages"]["production"]["version"])
+            with patch.dict(os.environ, {"SOURCE_REVISION": lock["behavior_source_revision"]}):
+                self.assertEqual(package_version(ROOT, "package"), lock["packages"]["production"]["version"])
+                self.assertEqual(package_version(ROOT, "lab"), lock["packages"]["lab"]["version"])
             self.assertEqual("skills-factory-lab", lock["packages"]["lab"]["name"])
-            package_cfg = yaml.safe_load((ROOT / "release/package.yaml").read_text())
-            self.assertEqual(package_cfg["lab"]["version"], lock["packages"]["lab"]["version"])
             self.assertNotIn("strategy-to-execution-diagnostic", lock["expected_catalogs"]["production"])
             self.assertNotIn("organizational-interface-review", lock["expected_catalogs"]["production"])
             self.assertIn("organizational-interface-review", lock["expected_catalogs"]["lab"])
