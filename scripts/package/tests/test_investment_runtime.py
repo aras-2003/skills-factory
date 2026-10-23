@@ -137,6 +137,22 @@ class InvestmentRuntimeTests(unittest.TestCase):
             with self.subTest(prompt=prompt):
                 self.assert_route(prompt, "attention", "investment-attention-review")
 
+    def test_named_holding_earnings_attention_routes_to_attention_in_both_languages(self) -> None:
+        for prompt in (
+            "Review the latest earnings event for my holding, ticker NVDA, and tell me if it warrants thesis attention.",
+            "Przejrzyj ostatnie wyniki spółki z mojego portfela, ticker NVDA, i powiedz, czy wymagają uwagi dla tezy.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
+    def test_sector_opportunity_discovery_routes_in_both_languages(self) -> None:
+        for prompt in (
+            "Find promising opportunities in the renewable energy sector; I want a new company to research.",
+            "Znajdź obiecujące okazje w sektorze energii odnawialnej; chcę nową spółkę do analizy.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "opportunity", "investment-opportunity-hunter")
+
     def test_routes_policy_design(self) -> None:
         self.assert_route(
             "Pomóż mi ustalić zasady portfela: maksymalny udział jednej spółki i limity sektorowe.",
