@@ -232,7 +232,7 @@ def load_skill(skill_name: str) -> dict:
 
 
 @mcp.tool()
-def route_investment_request(user_request: str) -> dict[str, Any]:
+def route_investment_request(user_request: str) -> dict[str, str | bool]:
     """MANDATORY first step for every investment request, before analysis."""
     result = _route_investment_request(user_request)
     if result.get("is_investment_request"):
