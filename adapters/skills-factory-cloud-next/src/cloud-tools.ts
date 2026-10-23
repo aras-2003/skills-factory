@@ -80,6 +80,7 @@ export async function runtimeInfo(metadata?: SiteVersionMetadata) {
     release_id: metadata?.id || "unattested",
     source_revision: siteTag || "unattested",
     canonical_source_revision: CANONICAL_SOURCE_REVISION,
+    software_release: { version: LAB_RELEASE.version, release_id: LAB_RELEASE.release_id, source_revision: LAB_RELEASE.source_revision },
     routing_contract_blob_sha: ROUTING_CONTRACT_BLOB_SHA,
     channel: "site",
     capability_contract_version: "site-mcp-v2",

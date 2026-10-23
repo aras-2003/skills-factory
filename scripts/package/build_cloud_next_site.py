@@ -12,6 +12,8 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+from build_utils import package_version
+
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / "sites" / "skills-factory-site"
@@ -126,6 +128,11 @@ def main() -> int:
         if not (lab / "release-manifest.json").is_file():
             raise FileNotFoundError(f"Lab artifact is missing a release manifest: {lab}")
 
+        lab_manifest = json.loads((lab / "release-manifest.json").read_text())
+        if lab_manifest.get("source_revision") != source_revision():
+            raise ValueError("Site must use a Lab artifact from the exact canonical source revision")
+        if lab_manifest.get("version") != package_version(ROOT, "lab"):
+            raise ValueError("Site must preserve the canonical Lab software version")
         generated_catalog_path = generate_catalog(lab, work_dir)
         generated_site = generated_catalog_path.parents[1]
         adapter_generated = generated_site / "lib" / "skills-factory-adapter"

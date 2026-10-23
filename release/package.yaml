@@ -1,3 +1,7 @@
+# Effective build versions come from release.versioning; channel versions below describe legacy snapshots.
+release:
+  versioning: git-first-parent
+  version_prefix: "1.38"
 package:
   name: skills-factory
   version: "1.37.0"

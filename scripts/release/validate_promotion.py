@@ -51,6 +51,9 @@ def validate_promotion(root: Path, *, require_ancestor: bool = True) -> list[str
     for path, manifest in zip(production_paths, production):
         if manifest.get("source_revision") != source_revision:
             errors.append(f"{path.relative_to(root)} was not built from the exact Lab source revision")
+        for field in ("version", "release_id"):
+            if manifest.get(field) != lab.get(field):
+                errors.append(f"{path.relative_to(root)} must preserve the Lab {field}")
         if manifest.get("channel") not in {"plugin", "chatgpt-zip"}:
             errors.append(f"{path.relative_to(root)} has an unexpected release channel")
 

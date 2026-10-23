@@ -31,10 +31,10 @@ class ValidatePromotionTests(unittest.TestCase):
         self._write("plugins/skills-factory-lab/release-manifest.json", lab)
         self._write("docs/lab-release.json", lab)
         self._write("plugins/skills-factory/release-manifest.json", {
-            "source_revision": self.revision, "channel": "plugin"
+            "source_revision": self.revision, "channel": "plugin", "version": lab["version"], "release_id": lab["release_id"]
         })
         self._write("dist/chatgpt-skills/release-manifest.json", {
-            "source_revision": self.revision, "channel": "chatgpt-zip"
+            "source_revision": self.revision, "channel": "chatgpt-zip", "version": lab["version"], "release_id": lab["release_id"]
         })
         self._write("release/promotion-evidence.json", {
             "source_revision": self.revision,
@@ -61,6 +61,13 @@ class ValidatePromotionTests(unittest.TestCase):
         })
         errors = validate_promotion(self.root, require_ancestor=False)
         self.assertTrue(any("exact Lab source revision" in error for error in errors))
+
+    def test_rejects_renumbered_production_release(self) -> None:
+        path = self.root / "plugins/skills-factory/release-manifest.json"
+        manifest = json.loads(path.read_text())
+        manifest["version"] = "99.0.0"
+        path.write_text(json.dumps(manifest))
+        self.assertTrue(any("preserve the Lab version" in e for e in validate_promotion(self.root, require_ancestor=False)))
 
     def test_rejects_runtime_evidence_for_another_lab_digest(self) -> None:
         evidence = json.loads((self.root / "release/promotion-evidence.json").read_text())
