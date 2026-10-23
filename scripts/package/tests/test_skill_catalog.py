@@ -71,6 +71,40 @@ class SkillCatalogTests(unittest.TestCase):
                 else:
                     os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = previous
 
+    def test_packaged_catalog_overrides_stale_host_catalog(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            package_root = root / "package"
+            packaged_skill = package_root / "skills" / "example"
+            stale_root = root / "stale-skills"
+            stale_skill = stale_root / "example"
+            packaged_skill.mkdir(parents=True)
+            stale_skill.mkdir(parents=True)
+            (package_root / "release-manifest.json").write_text("{}", encoding="utf-8")
+            (packaged_skill / "SKILL.md").write_text(
+                "---\\nname: example\\n---\\n\\n# Packaged version\\n", encoding="utf-8"
+            )
+            (stale_skill / "SKILL.md").write_text(
+                "---\\nname: example\\n---\\n\\n# Stale version\\n", encoding="utf-8"
+            )
+            previous_plugin_root = os.environ.get("PLUGIN_ROOT")
+            previous_skills_root = os.environ.get("SKILLS_FACTORY_SKILLS_ROOT")
+            os.environ["PLUGIN_ROOT"] = str(package_root)
+            os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = str(stale_root)
+            try:
+                result = self.catalog.load_skill("example")
+            finally:
+                if previous_plugin_root is None:
+                    os.environ.pop("PLUGIN_ROOT", None)
+                else:
+                    os.environ["PLUGIN_ROOT"] = previous_plugin_root
+                if previous_skills_root is None:
+                    os.environ.pop("SKILLS_FACTORY_SKILLS_ROOT", None)
+                else:
+                    os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = previous_skills_root
+            self.assertIn("Packaged version", result["instructions"])
+            self.assertNotIn("Stale version", result["instructions"])
+
     def test_load_skill_includes_safe_references_but_excludes_eval_fixtures(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir) / "skills"
