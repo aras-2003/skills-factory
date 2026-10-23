@@ -7,10 +7,10 @@
       },
       "lab": {
         "name": "skills-factory-lab",
-        "version": "0.37.1"
+        "version": "0.37.2"
       }
     },
-    "source_revision": "9b457bd68bcd",
+    "source_revision": "bfe038b44cd8",
     "capability_contract": "repository-side-v1",
     "capability_assessment": "UNASSESSED",
     "runtime_installation": "NOT_OBSERVED",
