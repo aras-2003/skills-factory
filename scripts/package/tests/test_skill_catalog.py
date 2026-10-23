@@ -156,6 +156,16 @@ class SkillCatalogTests(unittest.TestCase):
                 self.assertEqual(
                     "unattested", self.catalog.packaged_runtime_value("source_revision")
                 )
+
+                external_dir = Path(temp_dir) / "external"
+                external_dir.mkdir()
+                (external_dir / "injected.py").write_text("unbound runtime", encoding="utf-8")
+                (package_root / "linked-runtime").symlink_to(
+                    external_dir, target_is_directory=True
+                )
+                self.assertEqual(
+                    "mismatch", self.catalog.packaged_payload_integrity()["status"]
+                )
             finally:
                 if previous is None:
                     os.environ.pop("PLUGIN_ROOT", None)

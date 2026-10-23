@@ -47,14 +47,15 @@ def packaged_payload_integrity(identity: dict[str, Any] | None = None) -> dict[s
     root = _plugin_root()
     digest = hashlib.sha256()
     try:
-        for item in sorted(path for path in root.rglob("*") if path.is_file()):
-            if (
-                item.relative_to(root).as_posix() == "release-manifest.json"
-                and not item.is_symlink()
-            ):
-                continue
+        for item in sorted(root.rglob("*")):
+            # Check symlinks before is_file(): directory symlinks report
+            # is_file() == False and would otherwise be silently omitted.
             if item.is_symlink():
                 return {"status": "mismatch"}
+            if not item.is_file():
+                continue
+            if item.relative_to(root).as_posix() == "release-manifest.json":
+                continue
             relative = item.relative_to(root).as_posix().encode("utf-8")
             content = item.read_bytes()
             digest.update(len(relative).to_bytes(4, "big"))
