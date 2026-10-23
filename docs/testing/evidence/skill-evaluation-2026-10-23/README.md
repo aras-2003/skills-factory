@@ -6,7 +6,7 @@ Nine tool-free local Qwen3:4b executor responses completed for the three frozen 
 
 `responses/` contains final answers only; original private record hashes and a uniform final-answer parser transformation are recorded. No hidden reasoning is published. Exact runner/evaluator scripts and pre-inference seed/parser amendments are preserved for audit.
 
-Both attempted anonymous model evaluators are **invalid**: v1 echoed inputs, v2 produced inconsistent assertion/aggregate results. Their outputs remain under `evaluation-invalid-v1/` and `evaluation-schema-v2/`; neither counts as PASS or FAIL. No blind score is claimed. The schema mechanism is documented at https://docs.ollama.com/capabilities/structured-outputs.
+Both attempted anonymous model evaluators are **invalid**: v1 echoed inputs, v2 produced inconsistent assertion/aggregate results. Their outputs remain under `evaluation-invalid-v1/` and `evaluation-schema-v2/`; neither counts as PASS or FAIL. Those two attempts provide no valid blind score; the later independent review is recorded below. The schema mechanism is documented at https://docs.ollama.com/capabilities/structured-outputs.
 
 `manual-audit.json` and `AUDIT.md` report the parent Codex review with visible variant labels. This is separate from the Qwen executor but not a blind review or independent release approval. No skill passed 0/3; historical 0.3.3 and 0.3.4 each passed 1/3. The omissions are missing explicit NOT_RUN fields and live-source URL/check-time requirements.
 
@@ -20,4 +20,12 @@ Parent audit: **2/3 PASS** for 0.3.5 versus 1/3 for 0.3.4 and 0/3 baseline. Cont
 
 ## Withdrawn template experiment 0.3.6
 
-All three source-pinned responses completed. The queued case now emits complete statuses and both conditions, but the browser case emits evaluation.status=BLOCKED instead of required NOT_RUN. This observed contract regression is preserved in candidate-0.3.6; the 0.3.6 template is withdrawn from the proposed source, which returns to 0.3.5. No results are deleted. A separately frozen anonymous 8B evaluator attempt is in progress.
+All three source-pinned responses completed. The queued case now emits complete statuses and both conditions, but the browser case emits evaluation.status=BLOCKED instead of required NOT_RUN. This observed contract regression is preserved in candidate-0.3.6; the 0.3.6 template is withdrawn from the proposed source, which returns to 0.3.5. No results are deleted. The separately frozen 8B evaluator timed out after 600 seconds without an assessment; it remains NOT_RUN_EVALUATION.
+
+## Independent blind review under Luna orchestration
+
+`blind-review/` preserves the anonymous frozen packet, initial assessment, separate corrected review, label mapping and deterministic aggregate validation. The evaluator received only final answers and unchanged assertions, without version labels or mapping. Luna orchestrated the review; the parent unblinded it only after scoring. The initial review incorrectly claimed the browser answer lacked check time. The same evaluator corrected it in a separate immutable review; both reports remain available.
+
+Independent aggregate: no-skill **0/3**, current 0.3.4 **1/3**, proposed 0.3.5 **2/3**. The queued 0.3.5 answer still lacks required NOT_RUN status fields and additional runner condition. Some other queued assertion interpretations differ from the parent audit; these do not alter the case failure. **Final evaluation disposition: ITERATE**, with no release, promotion, installed-runtime compatibility or general model-quality claim.
+
+This completes the bounded matched-comparison/evaluation work requested in #237: executor rubrics were isolated, runtime/model/input/budget matched, missing execution was not converted to a pass, and the independent review gives an evidence-backed ITERATE decision. Remaining candidate hardening is tracked in PR #410 and does not require concealing negative results or forcing every evaluation to PASS.
