@@ -1,0 +1,20 @@
+name: ARC-03 adapter checks
+on:
+  pull_request:
+    paths:
+      - 'scripts/architecture/**'
+      - 'tests/architecture/**'
+      - '.github/workflows/ci-archify-adapter.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: ARC-03 / renderer boundary tests
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - run: python3 -m unittest discover -s tests/architecture -p 'test_*.py' -v
