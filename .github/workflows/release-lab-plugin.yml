@@ -107,11 +107,15 @@ jobs:
 
           pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number // empty')"
           if [[ -z "$pr_number" ]]; then
-            if gh pr create --base main --head "$branch" --title "chore(lab): publish candidate $SOURCE_REVISION" --body "Generated from exact main source revision $SOURCE_REVISION after Lab package and isolation validation. This PR updates the Marketplace package snapshot and release receipt. It does not publish the Site."; then
+            if pr_output="$(gh pr create --base main --head "$branch" --title "chore(lab): publish candidate $SOURCE_REVISION" --body "Generated from exact main source revision $SOURCE_REVISION after Lab package and isolation validation. This PR updates the Marketplace package snapshot and release receipt. It does not publish the Site." 2>&1)"; then
+              echo "$pr_output"
               pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number')"
-            else
-              echo "::warning::GitHub Actions cannot create pull requests in this repository. Candidate branch is pushed; create its PR with the GitHub connector."
+            elif grep -Fq "GitHub Actions is not permitted to create or approve pull requests" <<<"$pr_output"; then
+              echo "::warning::Repository policy blocks pull-request creation by GITHUB_TOKEN. Candidate branch is pushed; create its PR with the GitHub connector."
               pr_number="pending manual PR"
+            else
+              echo "$pr_output" >&2
+              exit 1
             fi
           fi
 
