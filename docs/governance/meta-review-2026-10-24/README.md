@@ -1,12 +1,14 @@
 # Meta domain assessment and minimal update plan
 
-Issue #232; protocol #227 / PR #414. Review started 2026-10-24 after the quality closeout table in `../DOMAIN-REVIEW-PROTOCOL.md` was independently checked by Luna. One domain only. Reviewer: Codex; independent coverage review: pending. Frozen canonical source: `a752b553cc16d026408a379cfa3654c15f447171`. This is a source/procedure assessment with installed-content verification, not certification of all Meta behavior, promotion or release authorization.
+Issue #232; protocol #227 / PR #414. Review started 2026-10-24 after the quality closeout table in `../DOMAIN-REVIEW-PROTOCOL.md` was independently checked by Luna. One domain only. Reviewer: Codex; independent coverage review: completed, no blocker to assessment completion (see below). Frozen canonical source: `a752b553cc16d026408a379cfa3654c15f447171`. This is a source/procedure assessment with installed-content verification, not certification of all Meta behavior, promotion or release authorization.
 
 ## Inventory and identity
 
 Scope is **nine skills under `skills/meta/` and the registered `skill-development` workflow**, ten components. Source catalog domain membership and `scripts/package/skill_interface.py::workflow_domain` agree. `skills/meta/README.md` describes only the six engineering-chain skills; it is an incomplete index, not the scope authority.
 
 `inventory.json` binds every component to owner, version, maturity, source file SHA-256, test paths/case IDs/digests, reference inventory/digests, registered workflow consumers, declared capability requirements and current load receipt. All owners are `arkadiusz-kamrowski`. `runtime-loads.json` preserves actual returned public instructions/references, ten successful read-only load receipts and both current runtime identities. No private portfolio data were used.
+
+The Lab response field `domain: skills` is transport metadata, not the canonical source domain. Membership here is bound to actual source paths/catalog and workflow registry, not that transport label.
 
 Installed Lab: `1.38.320+111b10aa89d5`, source `111b10aa89d5d2b3c249da3126926732a325d05e`, payload `09da0f12b0194de60c68d3126fc7767a7a935f5b266569fa0a088a2b6e001231`, package integrity verified; host unattested. Site: v46, embedded `1.38.313+818639f98134`, canonical source `818639f9813420a747a3e2e4d3f46a8d97860425`, payload `1166e63b1164dcf4e5f4d37cb323effdfd97c624a4f0e264e59e962d4aea1ba2`, deployment attested. These are **different packages**. Current paired assessment remains MISMATCH in #253; do not claim compatibility from matching catalog counts or component text.
 
@@ -68,3 +70,7 @@ No adoption of an additional external skill is justified: the existing chain plu
 - Ten installed Lab `load_skill` calls: SUCCESS with unsigned receipts; identity checked first. No private writes, source edits to skills, model-case retakes, production merge or Site publication occurred as part of this review.
 
 Review completion means inventory, evidence gaps and actionable plan are assessed. Updates P1–P6 and broader behavioral certification remain follow-ups; their absence must not be mislabeled as current runtime PASS.
+
+## Independent coverage review
+
+On 2026-10-24, the existing Luna campaign-disposition reviewer independently compared this assessment with #232 acceptance and canonical source a752b553. It verified all 10 source hashes and listed test/reference hashes, 10 successful Lab load receipts, the total of 90 authored fixtures (not executed model results), explicit NOT_RUN behavior fields, distinct Site identity, unattested Lab host and absent production manifest. It confirmed the source-backed P1–P6 findings and found no blocker to closing the assessment/review deliverable. It requested the transport-domain clarification now included above. Its verdict does not close remediation P1–P6, certify all behavior, authorize a merge or claim Site/Lab compatibility. The earlier protocol audit likewise found #227's entry gate satisfied by final assessment dispositions, with open remediation tracked separately.
