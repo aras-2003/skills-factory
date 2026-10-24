@@ -51,6 +51,8 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["XYZ Technologies is a good investment; should I add 5% of my portfolio?", "investment-security-review"],
     ["Review Micron's thesis, valuation and portfolio fit after its position drifted to 9.5%", "investment-security-review"],
     ["Review my portfolio allocation, concentration and overlap across holdings", "investment-portfolio-review"],
+    ["Review my investment portfolio; routing only, do not read data or execute a child workflow.", "investment-portfolio-review"],
+    ["Find new stocks worth researching; do not review my investment portfolio.", "investment-opportunity-hunter"],
     ["Review stock ACN", "investment-security-review"],
     ["I hold Micron and want an end-to-end review of the stock. Reassess the thesis, valuation, downside, catalysts and whether the position still fits my portfolio. Do not scan for unrelated ideas.", "investment-security-review"],
     ["Znajdź nowe okazje inwestycyjne", "investment-opportunity-hunter"],

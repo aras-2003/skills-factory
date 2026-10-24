@@ -56,6 +56,23 @@ class InvestmentRuntimeTests(unittest.TestCase):
             "investment-security-review",
         )
 
+    def test_review_investment_portfolio_selects_portfolio_child(self) -> None:
+        for prompt in (
+            "Review my investment portfolio.",
+            "Review this investment portfolio.",
+            "Review the investment portfolio.",
+            "Review my investment portfolio; routing only, do not read data or execute a child workflow.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "portfolio", "investment-portfolio-review")
+
+    def test_negated_investment_portfolio_review_keeps_discovery_route(self) -> None:
+        self.assert_route(
+            "Find new stocks worth researching; do not review my investment portfolio.",
+            "opportunity",
+            "investment-opportunity-hunter",
+        )
+
     def test_ambiguous_share_ownership_requests_front_door_clarification(self) -> None:
         for prompt in (
             "Mam akcje. Co zrobić?",
