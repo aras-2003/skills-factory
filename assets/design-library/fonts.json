@@ -1,0 +1,82 @@
+{
+  "schema_version": "0.1",
+  "note": "Font availability and license must be verified in target renderer; no font files redistributed.",
+  "families": [
+    {
+      "id": "inter",
+      "name": "Inter",
+      "role": [
+        "body",
+        "heading",
+        "data"
+      ],
+      "source": "https://github.com/rsms/inter",
+      "license": "OFL-1.1",
+      "polish_check": "required"
+    },
+    {
+      "id": "source-sans-3",
+      "name": "Source Sans 3",
+      "role": [
+        "body",
+        "heading"
+      ],
+      "source": "https://github.com/adobe-fonts/source-sans",
+      "license": "OFL-1.1",
+      "polish_check": "required"
+    },
+    {
+      "id": "source-serif-4",
+      "name": "Source Serif 4",
+      "role": [
+        "editorial_heading"
+      ],
+      "source": "https://github.com/adobe-fonts/source-serif",
+      "license": "OFL-1.1",
+      "polish_check": "required"
+    },
+    {
+      "id": "manrope",
+      "name": "Manrope",
+      "role": [
+        "heading",
+        "body"
+      ],
+      "source": "https://fonts.google.com/specimen/Manrope",
+      "license": "review_current",
+      "polish_check": "required"
+    },
+    {
+      "id": "ibm-plex-sans",
+      "name": "IBM Plex Sans",
+      "role": [
+        "body",
+        "heading"
+      ],
+      "source": "https://github.com/IBM/plex",
+      "license": "OFL-1.1",
+      "polish_check": "required"
+    },
+    {
+      "id": "ibm-plex-mono",
+      "name": "IBM Plex Mono",
+      "role": [
+        "code",
+        "data"
+      ],
+      "source": "https://github.com/IBM/plex",
+      "license": "OFL-1.1",
+      "polish_check": "required"
+    },
+    {
+      "id": "literata",
+      "name": "Literata",
+      "role": [
+        "editorial_heading"
+      ],
+      "source": "https://fonts.google.com/specimen/Literata",
+      "license": "review_current",
+      "polish_check": "required"
+    }
+  ]
+}
