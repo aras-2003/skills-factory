@@ -78,12 +78,19 @@ jobs:
           branch="automation/lab-marketplace-$SOURCE_REVISION"
           if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
             git fetch origin "$branch"
+            candidate_identity="$(python -c 'import json; d=json.load(open("docs/lab-release.json")); print(d["release_id"], d["payload_content_sha256"])')"
+            remote_identity="$(git show "origin/$branch:docs/lab-release.json" | python -c 'import json,sys; d=json.load(sys.stdin); print(d["release_id"], d["payload_content_sha256"])')"
+            if [[ "$candidate_identity" != "$remote_identity" ]]; then
+              echo "::error::Existing package branch has a different release identity; refusing to overwrite it."
+              exit 1
+            fi
+            # Candidate artifacts have already been uploaded; clear them before checking out their matching branch.
+            git restore plugins/skills-factory-lab docs/lab-release.json sites/skills-factory-site
             git switch --track -C "$branch" "origin/$branch"
           else
             git switch -c "$branch"
+            git restore sites/skills-factory-site
           fi
-
-          git restore sites/skills-factory-site
           git add plugins/skills-factory-lab docs/lab-release.json
           if ! git diff --cached --quiet; then
             git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore(lab): publish candidate $SOURCE_REVISION"
@@ -100,10 +107,18 @@ jobs:
 
           pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number // empty')"
           if [[ -z "$pr_number" ]]; then
-            gh pr create --base main --head "$branch" --title "chore(lab): publish candidate $SOURCE_REVISION" --body "Generated from exact main source revision $SOURCE_REVISION after Lab package and isolation validation. This PR updates the Marketplace package snapshot and release receipt. It does not publish the Site."
-            pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number')"
+            if gh pr create --base main --head "$branch" --title "chore(lab): publish candidate $SOURCE_REVISION" --body "Generated from exact main source revision $SOURCE_REVISION after Lab package and isolation validation. This PR updates the Marketplace package snapshot and release receipt. It does not publish the Site."; then
+              pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number')"
+            else
+              echo "::warning::GitHub Actions cannot create pull requests in this repository. Candidate branch is pushed; create its PR with the GitHub connector."
+              pr_number="pending manual PR"
+            fi
           fi
 
           gh workflow run ci-validate.yml --ref "$branch"
           gh workflow run ci-domain-integrity.yml --ref "$branch"
-          echo "Opened/reused Lab Marketplace PR #$pr_number from $branch and dispatched candidate validation."
+          if [[ "$pr_number" == "pending manual PR" ]]; then
+            echo "Candidate artifacts and validation runs are ready; a GitHub connector must open the Marketplace PR from $branch." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Opened/reused Lab Marketplace PR #$pr_number from $branch and dispatched candidate validation." >> "$GITHUB_STEP_SUMMARY"
+          fi
