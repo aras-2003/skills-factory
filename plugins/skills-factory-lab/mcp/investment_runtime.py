@@ -182,7 +182,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "co mam obserwowac", "obserwuj moje pozycje", "obserwuj portfel",
         "zmiany w portfelu", "monitoruj portfel",
     )
-    portfolio = _contains(
+    portfolio = bool(re.search(r"\breview\s+(?:my|this|the)\s+investment\s+portfolio\b", text)) or _contains(
         text,
         "my portfolio", "this portfolio", "portfolio review", "review portfolio",
         "portfolio risk", "portfolio concentration", "portfolio diversification",
