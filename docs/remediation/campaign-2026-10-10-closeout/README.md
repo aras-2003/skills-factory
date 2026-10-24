@@ -1,0 +1,11 @@
+# Historical campaign closeout
+
+This record reconciles #311 against the completion rule on current main, without treating historical remediation as a new test run. The accepted historical totals remain **122 PASS / 44 FAIL / 72 BLOCKED**. The protected original archive is not republished.
+
+`dispositions.json` expands all 44 failed IDs, all 69 actionable blocked IDs and all three owner-excluded IDs from the canonical remediation document. Each failure remains a failure, with its original finding/action and missing exact-case retest evidence recorded. Each blocked case retains its concrete fixture, authorization, integration, tool or evaluator prerequisite. The 122 archived passes remain the accepted source summary; this ledger does not claim an independent review of their private transcripts.
+
+Some statements in the original historical follow-up describe source capabilities absent at that time; those statements are explicitly labeled historical here. Current source presence or a different passing case is not evidence that the original failure was fixed. In particular, #237's separate comparison does not relabel historical case 0558.
+
+The canonical gate permits final campaign accounting with exact blocked conditions documented. It does not require a Site deployment or equal Lab/Site versions. The 69 actionable BLOCKED rows and three owner-excluded rows have concrete dispositions. The 44 historical FAIL still have unresolved remediation actions: preserving their findings and recording missing receipts does not itself prove that the actions were completed or blocked. No campaign closure is claimed until those conditions are resolved or the owner explicitly authorizes superseding/archiving the old run in favor of the agreed regression. Site/Lab parity remains separately tracked in #253.
+
+Mechanical audit: 44 unique FAIL rows + 69 unique actionable BLOCKED rows + three owner-excluded BLOCKED rows = 116 nonpassing cases; with 122 accepted archived passes = 238. All cases are enumerated; 44 FAIL remain explicitly unresolved, while 69 actionable BLOCKED and three excluded cases retain their exact prerequisites. No outcome was changed and no private data or hidden reasoning was added.
