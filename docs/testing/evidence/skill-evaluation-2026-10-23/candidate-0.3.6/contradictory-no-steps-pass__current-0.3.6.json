@@ -1,0 +1,17 @@
+{
+  "case_id": "contradictory-no-steps-pass",
+  "variant": "current-0.3.6",
+  "source_revision": "19d4edc69674f681bfff532675bf0dbc03d77372",
+  "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+  "plan_sha256": "1f28697dc151dbb89863d6e56592658d86b2ea8534382af87d3add5a0b28ff36",
+  "request_sha256": "fe08d315c79e5c1fa2f1d2ece5ad68af261dbdab5ffdcfa8a28b64cf69abdf4a",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 534,
+  "prompt_eval_count": 2595,
+  "created_at": "2026-10-23T21:14:38.723988Z",
+  "response_final": "```yaml\noutcome: null\nexecution_state: no_steps\nevaluation:\n  status: NOT_RUN\ncompatibility_status: NOT_RUN\nexecution_reason: \"No executable steps\"\nadditional_conditions: [\"No runner assigned\"]\ndisposition: ITERATE\n```",
+  "original_private_record_sha256": "c2fc96656df344b6015e5ba0a5b7f8d4d3c4ed4fbd53c070199d5a505f10760f",
+  "transformation": "Final-answer suffix only; hidden reasoning excluded uniformly."
+}

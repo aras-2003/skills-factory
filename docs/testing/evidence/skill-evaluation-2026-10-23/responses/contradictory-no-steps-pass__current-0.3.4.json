@@ -1,0 +1,16 @@
+{
+  "case_id": "contradictory-no-steps-pass",
+  "variant": "current-0.3.4",
+  "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+  "plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "request_sha256": "3ee5c841eb83f27a6b5fac8a30b4c2816246a4a26ad9a0ecf20ea187c5691b6a",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 916,
+  "prompt_eval_count": 2296,
+  "created_at": "2026-10-23T20:20:57.150668Z",
+  "response_final": "**Corrected Case Fields and Overall Disposition**  \n- `outcome`: `null` (execution did not produce evidence)  \n- `execution_state`: `no_steps` (primary state; additional condition: `awaiting_runner`)  \n- `evaluation.status`: `NOT_RUN`  \n- **Overall disposition**: `ITERATE`  \n\n**Why**:  \nThe proposed result incorrectly claims \"Pass\" for a case with no executable steps (`no_steps`) and no assigned runner (`awaiting_runner`). Per the skill evaluation rules:  \n1. Non-executed cases **must** have `outcome: null` (no evidence generated).  \n2. `execution_state: no_steps` (with `awaiting_runner` as a secondary condition) **cannot** be scored as `passed`.  \n3. The overall disposition **cannot** be `PASS` when required evidence is unobserved (per hard gate: \"An expected PASS is not an observed PASS\").  \n4. This case requires `ITERATE` because the evidence is missing, not a candidate failure.  \n\n**Smallest next action**: Fix job configuration to add executable steps (to resolve `no_steps`).  \n\n*No inference about candidate behavior is made—only observed state is corrected per evidence.*",
+  "raw_record_sha256": "541e7c14641132219d826485ac16de33186ff754a299e0279b9ee07f46cc70a4",
+  "final_answer_transform": "suffix after last </think> delimiter, stripped; otherwise entire response, stripped"
+}

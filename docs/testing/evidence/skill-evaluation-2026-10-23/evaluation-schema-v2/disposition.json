@@ -1,0 +1,6 @@
+{
+  "status": "INVALID_EVALUATOR_AGGREGATE",
+  "behavior_verdict": null,
+  "reason": "For A and C all six assertion checks are true but case_pass=false. Baseline per-assertion judgments also require evidence review. Checker stopped evaluation before a second case.",
+  "client_exit_code": 1
+}

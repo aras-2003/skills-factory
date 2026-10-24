@@ -4,10 +4,10 @@ description: >
   Evaluate an Agent Skill's routing and behavior using predeclared representative cases, a no-skill baseline or accepted prior version, and evidence-based regression analysis. Use when asked to evaluate a skill, classify or report test results, determine whether a queued or blocked case actually ran, distinguish test outcome from execution state, compare evidence, or assess release readiness. Use after validation and test design, before production promotion, and after material behavior changes.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.3.4"
+  version: "0.3.5"
   maturity: draft
   risk: medium
-  last_reviewed: "2026-10-09"
+  last_reviewed: "2026-10-23"
 ---
 
 # Skill Evaluation
@@ -101,6 +101,10 @@ Select only criteria relevant to the skill, but cover its contract:
 Do not score hidden chain-of-thought, exact phrasing, or stylistic preference as a proxy for task quality. Do not treat evaluator agreement, model confidence, or one attractive example as proof.
 
 ## Output contract
+
+For every case, explicitly print `outcome`, `execution_state`, `evaluation.status`, `compatibility_status`, and `execution_reason`, including in a short response. Record additional conditions separately so the primary state does not hide another blocker. Do not rely on prose or the overall disposition to imply a missing field. For every non-executed case both status fields must be `NOT_RUN` and `outcome` must be `null`.
+
+For a required live-source check, explicitly identify the evidence needed before PASS: the source URL/resource, check time, observed status, and actual browser/tool trace. If execution was blocked, state that the source status is unknown; missing evidence requirements must remain listed even when no URL or time was supplied. Never invent their values.
 
 Return a compact report:
 - evaluation question, candidate/comparator and runtime;

@@ -1,0 +1,16 @@
+{
+  "case_id": "live-browser-blocked",
+  "variant": "current-0.3.4",
+  "input_sha256": "1e5ae348377eafddd2e38846436ae574e1dd41152bb4b2a79e08d495938a5e06",
+  "plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "request_sha256": "5832a21cdcb264237ebcc66380828f27e7ec34a1d325850694aa16ad8b90cf26",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 780,
+  "prompt_eval_count": 2254,
+  "created_at": "2026-10-23T20:31:09.959717Z",
+  "response_final": "**Evaluation Report**  \n\n**Evaluation Question**: Verify job listing active in live browser.  \n**Candidate**: Browser-based listing check (unavailable)  \n**Comparator**: N/A (no-skill baseline not applicable)  \n**Runtime**: Environment policy denied browser access  \n\n| Case | Expected Route | Observed Route | `outcome` | `execution_state` | Evidence Receipt |\n|------|----------------|----------------|------------|-------------------|-------------------|\n| 1    | Open browser → Check listing | Browser denied access | `null` | `blocked` | Environment policy blocked browser access; no page opened; no browser trace |\n\n**Classification**:  \n- **`outcome`**: `null` (no evidence of listing status)  \n- **`execution_state`**: `blocked` (execution prevented by policy denial)  \n- **`evaluation.status`**: `NOT_RUN` (non-executed state with blocking error)  \n\n**Disposition**: `ITERATE`  \n**Why**: Required evidence (browser session showing active listing) is unobserved. The job failed to execute due to environment policy, so **no pass is possible** without fixing the blocking condition.  \n\n**Evidence Needed for PASS**:  \n1. Successful browser session (e.g., browser trace showing listing page loaded).  \n2. Confirmation that the listing is active (e.g., live page status matches expected state).  \n\n**Next Action**:  \nFix environment policy to allow browser access. *Do not rerun without resolving the blocking condition*.  \n\n**Why not PASS?**  \n- Hard gate: Expected `PASS` requires observed evidence. Here, `execution_state: blocked` → `outcome: null` → **no evidence exists**.  \n- Material gap: Policy denial prevents verification; no browser trace means listing status cannot be confirmed.  \n\n> 💡 **Key Insight**: Browser unavailability is a *runtime block*, not a behavioral failure. The skill cannot pass without resolving the environment policy. Always prioritize fixing blocking conditions before evaluating outcomes.",
+  "raw_record_sha256": "317e795011b294e9335a05d2dcac849514fdb0b0e0ae92e4ee2a600d963d2db8",
+  "final_answer_transform": "suffix after last </think> delimiter, stripped; otherwise entire response, stripped"
+}

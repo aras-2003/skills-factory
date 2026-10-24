@@ -1,0 +1,17 @@
+{
+  "case_id": "queued-not-run",
+  "variant": "current-0.3.6",
+  "source_revision": "19d4edc69674f681bfff532675bf0dbc03d77372",
+  "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+  "plan_sha256": "1f28697dc151dbb89863d6e56592658d86b2ea8534382af87d3add5a0b28ff36",
+  "request_sha256": "60ba8832f7aa3abb474510037b8bcd74fbef0dbb7c8ed3021591f4d99aa73e7d",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 732,
+  "prompt_eval_count": 2546,
+  "created_at": "2026-10-23T21:19:06.455954Z",
+  "response_final": "outcome: null  \nexecution_state: no_steps  \nevaluation:  \n  status: NOT_RUN  \ncompatibility_status: NOT_RUN  \nexecution_reason: \"no executable steps and no runner assigned\"  \ndisposition: ITERATE  \n\n**Explanation**: The job contains no executable steps (`no_steps`), so it cannot run regardless of runner availability. Per the precedence table, this state overrides `awaiting_runner`. Since the job did not execute (no evidence of completion), the expected PASS is unobserved. **Overall evaluation cannot pass**—the case must be re-rerun with executable steps or runner assignment to meet evidence requirements.",
+  "original_private_record_sha256": "5a0e3105e5fdfdf7d4feb928ec7df8e3472efd3f881f4aa50652cfaf47a49bf1",
+  "transformation": "Final-answer suffix only; hidden reasoning excluded uniformly."
+}
