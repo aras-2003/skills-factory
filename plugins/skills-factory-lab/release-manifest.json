@@ -1418,9 +1418,9 @@
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "918a0c6bc660208c04ed7aeaaeffc34dfcf9c011554e6624a45369829ef554a4",
-  "release_id": "1.38.324+a1f1efbc5f0f",
+  "payload_content_sha256": "d5c8c9561173e1687e0f7f7db8b7e06c7fccd12e4ff2b89b25ef5411a36c5139",
+  "release_id": "1.38.326+22ac11c2888f",
   "schema_version": "1.0",
-  "source_revision": "a1f1efbc5f0f8f0bd07cce11ab8941b7ff0a9d42",
-  "version": "1.38.324"
+  "source_revision": "22ac11c2888facb440f9ee89c67508bff2d7a76b",
+  "version": "1.38.326"
 }
