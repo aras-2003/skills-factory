@@ -107,7 +107,7 @@ class SourceToExportMatrixTests(unittest.TestCase):
         self.assertEqual(set(bundle["node_ids"]), {n["id"] for n in verified["nodes"]})
         self.assertEqual(set(bundle["edge_ids"]), {e["id"] for e in verified["edges"]})
         self.assertIn("<svg", svg)
-        self.assertIn("source_revision", bundle["formats"]["svg"]["diagram_semantics"])
+        self.assertIn("all model nodes", bundle["formats"]["svg"]["diagram_semantics"])
         self.assertEqual(bundle["formats"]["html"]["mode"], "interactive")
         self.assertEqual(bundle["formats"]["pptx"]["mode"], "flattened-embed")
         return bundle
