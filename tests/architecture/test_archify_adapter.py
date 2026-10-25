@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.architecture.archify_adapter import SANDBOX_IMAGE,UPSTREAM_SHA,RenderError,_sandbox_command,archify_candidate,offline_svg_fallback,render
+from scripts.architecture.archify_adapter import SANDBOX_IMAGE,SANDBOX_SCRIPT,UPSTREAM_SHA,RenderError,_sandbox_command,archify_candidate,offline_svg_fallback,render
 
 REV="a"*40
 REF={"uri":"repo://docs/example.md","revision":REV,"locator":"L1"}
@@ -52,7 +52,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(cmd[cmd.index("--network")+1],"none")
         self.assertIn("--read-only",cmd)
         self.assertEqual(cmd[cmd.index("--cap-drop")+1],"ALL")
-        self.assertIn("no-new-privileges:true",cmd)
+        self.assertIn("no-new-privileges:true",cmd)\n        self.assertIn('--no-sandbox "$@"',SANDBOX_SCRIPT)
         mounts=[cmd[i+1] for i,x in enumerate(cmd[:-1]) if x=="--mount"]
         self.assertEqual(len(mounts),3)
         self.assertTrue(mounts[0].endswith(",readonly"))
