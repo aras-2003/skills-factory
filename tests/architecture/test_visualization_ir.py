@@ -29,6 +29,7 @@ class VisualizationIRTests(unittest.TestCase):
     def test_capability_can_contain_documented_map_entities(self):
         obj=fixture()
         obj["nodes"][1]["type"]="capability"
+        obj["edges"] = []  # isolate the containment contract from the calls fixture
         obj["nodes"].append({
             "id":"process","type":"process","label":"Source-mapped process",
             "state":"observed","evidence":[copy.deepcopy(SOURCE)],
