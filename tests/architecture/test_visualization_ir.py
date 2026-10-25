@@ -39,6 +39,12 @@ class VisualizationIRTests(unittest.TestCase):
         })
         validate_model(obj)
 
+    def test_workflow_can_call_another_workflow(self):
+        obj=fixture()
+        obj["nodes"][0]["type"]="workflow"
+        obj["nodes"][1]["type"]="workflow"
+        validate_model(obj)
+
     def test_skill_and_workflow_can_depend_on_documented_data(self):
         for source_type in ("skill", "workflow"):
             obj=fixture()
