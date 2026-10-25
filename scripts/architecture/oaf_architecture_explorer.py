@@ -102,6 +102,8 @@ def extract_model(repo_root: Path, revision: str) -> dict[str, Any]:
     )
     if owner_gap_line is None:
         raise OAFExplorerError("source no longer documents incomplete ownership")
+    add_node("process:ownership-incomplete", "process",
+             "Ownership information is incomplete", "observed", evidence(owner_gap_line))
     gap_id = "unknown:application-owners"
     add_node(gap_id, "unknown", "Some application owners not supplied", "unknown", [])
     for label, node_id in sorted(ids.items()):
