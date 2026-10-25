@@ -27,6 +27,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(a["diagram_type"],"architecture")
         self.assertEqual((a["connections"][0]["from"],a["connections"][0]["to"]),("n0","n1"))
         self.assertEqual(a["connections"][0]["label"],"call")
+        self.assertEqual(a["connections"][0]["labelDy"],8)
         self.assertTrue(all(component["size"] == [300,76] for component in a["components"]))
 
     def test_architecture_labels_are_compact_but_provenance_stays_in_ir(self):
