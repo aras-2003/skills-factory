@@ -1,6 +1,7 @@
 """ARC-03 adapter and sandbox-boundary contract tests."""
 import copy
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -63,6 +64,24 @@ class AdapterTests(unittest.TestCase):
         self.assertNotIn("/var/run/docker.sock"," ".join(cmd))
         self.assertNotIn("--env-file",cmd)
         self.assertNotIn("-e",cmd)
+
+    def test_timeout_fails_closed_and_removes_container(self):
+        from types import SimpleNamespace
+        with tempfile.TemporaryDirectory() as root:
+            p=Path(root)
+            upstream=p/"upstream"
+            cli=upstream/"archify"/"bin"
+            cli.mkdir(parents=True)
+            (cli/"archify.mjs").write_text("",encoding="utf-8")
+            timed_out=subprocess.TimeoutExpired(cmd=["docker","run"],timeout=5)
+            completed=SimpleNamespace(returncode=0,stdout="",stderr="")
+            with patch("scripts.architecture.archify_adapter.verify_sources",return_value=sample()), \
+                 patch("scripts.architecture.archify_adapter._git_sha",return_value=UPSTREAM_SHA), \
+                 patch("scripts.architecture.archify_adapter.subprocess.run",side_effect=[completed,timed_out,completed]) as run:
+                with self.assertRaisesRegex(RenderError,"timed out"):
+                    render(sample(),p,upstream,p/"out",timeout=5)
+            self.assertEqual(run.call_count,3)
+            self.assertEqual(run.call_args_list[2].args[0][:3],["docker","rm","--force"])
 
     def test_output_symlink_is_rejected_before_source_access(self):
         with tempfile.TemporaryDirectory() as root:
