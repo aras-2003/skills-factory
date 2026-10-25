@@ -43,9 +43,20 @@ test -n "$CHROME"
 export HOME=/tmp
 export TMPDIR=/tmp
 export ARCHIFY_UPDATE_CHECK_DISABLED=1
-export ARCHIFY_CHROME="$CHROME"
+export ARCHIFY_REAL_CHROME="$CHROME"
+cat > /home/pwuser/out/chrome-wrapper <<'SH'
+#!/bin/sh
+exec "$ARCHIFY_REAL_CHROME" --no-sandbox "$@"
+SH
+chmod 700 /home/pwuser/out/chrome-wrapper
+export ARCHIFY_CHROME=/home/pwuser/out/chrome-wrapper
 cd /home/pwuser/out
-exec node /home/pwuser/archify/archify/bin/archify.mjs finalize architecture /home/pwuser/candidate.json diagram.html --quality standard --json
+set +e
+node /home/pwuser/archify/archify/bin/archify.mjs finalize architecture /home/pwuser/candidate.json diagram.html --quality standard --json
+status=$?
+set -e
+rm -f /home/pwuser/out/chrome-wrapper
+exit "$status"
 """
 TYPE_MAP={"skill":"backend","workflow":"backend","tool":"cloud",
           "capability":"backend","process":"backend","application":"cloud",
