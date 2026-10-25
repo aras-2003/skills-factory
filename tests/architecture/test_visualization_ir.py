@@ -26,6 +26,25 @@ class VisualizationIRTests(unittest.TestCase):
         self.assertEqual(model_digest(one),model_digest(two))
         self.assertEqual([x["id"] for x in validate_model(one)["nodes"]],["a","b"])
 
+    def test_capability_can_contain_documented_map_entities(self):
+        obj=fixture()
+        obj["nodes"][1]["type"]="capability"
+        obj["nodes"].append({
+            "id":"process","type":"process","label":"Source-mapped process",
+            "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+        })
+        obj["edges"].append({
+            "id":"contains-process","type":"contains","from":"a","to":"process",
+            "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+        })
+        validate_model(obj)
+
+    def test_contains_rejects_unsupported_direction(self):
+        obj=fixture()
+        obj["edges"][0].update(type="contains")
+        with self.assertRaises(ModelValidationError):
+            validate_model(obj)
+
     def test_workflow_can_depend_on_an_explicit_process_gate(self):
         obj=fixture()
         obj["nodes"][1]["type"]="workflow"
