@@ -42,13 +42,13 @@ class VisualizationIRTests(unittest.TestCase):
     def test_skill_and_workflow_can_depend_on_documented_data(self):
         for source_type in ("skill", "workflow"):
             obj=fixture()
-            obj["nodes"][1]["type"]=source_type
+            obj["nodes"][0]["type"]=source_type
             obj["nodes"].append({
                 "id":"data","type":"data","label":"Documented data source",
                 "state":"observed","evidence":[copy.deepcopy(SOURCE)],
             })
             obj["edges"].append({
-                "id":"data-dependency","type":"depends_on","from":"b","to":"data",
+                "id":"data-dependency","type":"depends_on","from":"a","to":"data",
                 "state":"observed","evidence":[copy.deepcopy(SOURCE)],
             })
             with self.subTest(source_type=source_type):
