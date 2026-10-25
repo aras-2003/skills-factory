@@ -95,7 +95,7 @@ def archify_candidate(model: dict) -> dict:
                  "label":display_label(n),"pos":[50+(i%3)*400,70+(i//3)*210],
                  "size":[300,76]} for i,n in enumerate(nodes)]
     ids={n["id"]:f"n{i}" for i,n in enumerate(nodes)}
-    edge_labels={"depends_on":"dep","calls":"call","unknown":"?"}
+    edge_labels={"depends_on":"dep","calls":"call","contains":"in","unknown":"?"}
     edges=[{"id":f"e{i}","from":ids[e["from"]],"to":ids[e["to"]],
             "label":edge_labels.get(e["type"],e["type"].replace("_"," ")[:20]),
             "labelDy":8,
