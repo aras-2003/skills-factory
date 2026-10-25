@@ -13,5 +13,5 @@
   "mcpServers": "./.mcp.json",
   "name": "skills-factory-lab",
   "skills": "./skills/",
-  "version": "1.38.333"
+  "version": "1.38.335"
 }
