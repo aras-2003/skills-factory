@@ -27,7 +27,7 @@ const source=flagsAt('/home/pwuser/archify');
 const candidate=flagsAt('/home/pwuser/candidate.json');
 const output=flagsAt('/home/pwuser/out');
 if(!root||!root.includes('ro'))process.exit(81);
-if(!source||!source.includes('ro'))process.exit(82);
+if(!source||!source.includes('ro')){console.error('ARC03_DEBUG source='+JSON.stringify(source)+' rows='+JSON.stringify(lines.filter(line=>line.includes('/archify'))));process.exit(82);}
 if(!candidate||!candidate.includes('ro'))process.exit(83);
 if(!output||!output.includes('rw'))process.exit(84);
 console.error('ARC03_BOUNDARY=rootfs-read-only');
