@@ -17,7 +17,7 @@ SHA = re.compile(r"[0-9a-f]{40}\Z")
 LINES = re.compile(r"L([1-9]\d*)(?:-L?([1-9]\d*))?\Z")
 POLICY = {
  "requires": {("workflow","skill"),("workflow","workflow"),("skill","skill"),("skill","tool")},
- "calls": {("workflow","skill"),("workflow","tool"),("skill","tool"),("application","application")},
+ "calls": {("workflow","skill"),("workflow","workflow"),("workflow","tool"),("skill","tool"),("application","application")},
  "produces": {("skill","data"),("workflow","data"),("process","data"),("application","data")},
  "supports": {("application","capability"),("application","process"),("process","capability")},
  "owns": {("owner",target) for target in ("capability","process","application","data")},
