@@ -33,3 +33,17 @@ cases:
         - job-discovery finds opportunities before listing-specific verification
       must_not:
         - turn a broad vacancy search into a verdict on a single listing
+  - id: job-validity-primary-source-unavailable
+    case: stale-aggregator-with-employer-source-unavailable
+    input: |
+      The employer ATS is unavailable. An aggregator shows this CTO vacancy but its copy is eight months old and has no
+      verified posting date. Is the role still open?
+    expected:
+      should_trigger: true
+      must:
+        - classify the role as UNCLEAR until current authoritative evidence is available
+        - state that the employer source was unavailable and date the observed secondary evidence
+        - identify the employer or ATS check needed to resume
+      must_not:
+        - infer ACTIVE from the old aggregator copy
+        - infer CLOSED from the unavailable employer page

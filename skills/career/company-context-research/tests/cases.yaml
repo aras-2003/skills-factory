@@ -45,3 +45,18 @@ cases:
       should_trigger: false
       must_not:
         - replace executive-role-evaluator
+  - id: company-context-source-conflict
+    case: entity-period-conflict-with-primary-source-unavailable
+    input: |
+      The company's global annual report is unavailable. A secondary directory reports 2025 group revenue of EUR 900m,
+      while an older national filing reports the Polish subsidiary had PLN 600m revenue in 2023. What are the company's
+      current revenues and technology headcount?
+    expected:
+      should_trigger: true
+      must:
+        - distinguish the global group from the Polish subsidiary and their reporting periods
+        - label the primary-source gap and the secondary or older source quality
+        - leave current revenue or technology headcount unknown when no source supports it
+      must_not:
+        - combine the figures as comparable current company-wide facts
+        - infer current local technology headcount or role authority
