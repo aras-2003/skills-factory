@@ -83,17 +83,48 @@ def _fresh_directory(path: str | Path) -> Path:
     return target
 
 
+def _wrapped_lines(value: str, limit: int = 132) -> list[str]:
+    """Wrap by characters so long, validated labels stay inside the SVG viewBox."""
+    words = value.split(" ")
+    lines: list[str] = []
+    current = ""
+    for word in words:
+        while len(word) > limit:
+            if current:
+                lines.append(current)
+                current = ""
+            lines.append(word[:limit])
+            word = word[limit:]
+        candidate = f"{current} {word}".strip()
+        if current and len(candidate) > limit:
+            lines.append(current)
+            current = word
+        else:
+            current = candidate
+    if current or not lines:
+        lines.append(current)
+    return lines
+
+
 def _svg(model: dict[str, Any], digest: str) -> str:
     """Produce a script-free SVG. Nodes and relations are explicit, never inferred."""
     nodes = model["nodes"]
     edges = model["edges"]
     width = 1100
-    row_height = 48
-    node_top = 100
-    node_rows = max(1, len(nodes))
-    edge_top = node_top + node_rows * row_height + 72
-    edge_rows = max(1, len(edges))
-    height = edge_top + edge_rows * row_height + 100
+    node_rows = [(node, _wrapped_lines(node["label"])) for node in nodes]
+    node_heights = [max(66, 48 + 16 * len(lines)) for _, lines in node_rows]
+    node_top = 122
+    edge_top = node_top + sum(node_heights) + 76
+    edge_rows = []
+    node_by_id = {item["id"]: item for item in nodes}
+    for edge in edges:
+        relation_lines = _wrapped_lines(f'{edge["from"]} → {edge["type"]} → {edge["to"]}')
+        detail_lines = _wrapped_lines(
+            f'from {node_by_id[edge["from"]]["label"]} to {node_by_id[edge["to"]]["label"]}'
+        )
+        edge_rows.append((edge, relation_lines, detail_lines))
+    edge_heights = [max(58, 28 + 16 * (len(relation) + len(detail))) for _, relation, detail in edge_rows]
+    height = edge_top + sum(edge_heights) + 100
     title = "Evidence-backed architecture export"
     description = (
         f"{len(nodes)} nodes and {len(edges)} directed relations. "
@@ -120,37 +151,51 @@ def _svg(model: dict[str, Any], digest: str) -> str:
         f'<text x="32" y="76" font-size="13" fill="#475569">{len(nodes)} nodes · {len(edges)} relations · revision {model["source_revision"]}</text>',
         '<text x="32" y="104" font-size="16" font-weight="700" fill="#0f172a">Nodes</text>',
     ]
-    for index, node in enumerate(nodes):
-        y = node_top + index * row_height
+    y = node_top
+    for index, (node, label_lines) in enumerate(node_rows):
+        box_height = node_heights[index] - 8
         parts.extend([
             f'<g id="node-{index}" data-model-id="{html.escape(node["id"], quote=True)}">',
-            f'<rect x="32" y="{y}" width="1036" height="38" rx="5" fill="#f1f5f9" stroke="#64748b"/>',
-            f'<text x="44" y="{y + 16}" font-size="12" font-weight="700" fill="#0f172a">{html.escape(node["id"])} · {html.escape(node["type"])} · {html.escape(node["state"])}</text>',
-            f'<text x="44" y="{y + 31}" font-size="12" fill="#334155">{html.escape(node["label"])}</text>',
-            "</g>",
+            f'<rect x="32" y="{y}" width="1036" height="{box_height}" rx="5" fill="#f1f5f9" stroke="#64748b"/>',
+            f'<text x="44" y="{y + 18}" font-size="12" font-weight="700" fill="#0f172a">{html.escape(node["id"])} · {html.escape(node["type"])} · {html.escape(node["state"])}</text>',
         ])
-    parts.append(f'<text x="32" y="{edge_top - 20}" font-size="16" font-weight="700" fill="#0f172a">Directed relations</text>')
-    node_by_id = {item["id"]: item for item in nodes}
-    for index, edge in enumerate(edges):
-        y = edge_top + index * row_height
-        start = node_by_id[edge["from"]]
-        end = node_by_id[edge["to"]]
+        parts.append(f'<text x="44" y="{y + 38}" font-size="12" fill="#334155">')
+        parts.extend(
+            f'<tspan x="44" dy="{0 if line_index == 0 else 16}">{html.escape(line)}</tspan>'
+            for line_index, line in enumerate(label_lines)
+        )
+        parts.extend(["</text>", "</g>"])
+        y += node_heights[index]
+    parts.append(f'<text x="32" y="{edge_top - 24}" font-size="16" font-weight="700" fill="#0f172a">Directed relations</text>')
+    y = edge_top
+    for index, (edge, relation_lines, detail_lines) in enumerate(edge_rows):
+        box_height = edge_heights[index] - 8
         state_label = "UNKNOWN" if edge["state"] == "unknown" else edge["state"].upper()
-        relation = f'{edge["from"]} → {edge["type"]} → {edge["to"]}'
         parts.extend([
             f'<g id="edge-{index}" data-model-id="{html.escape(edge["id"], quote=True)}">',
-            f'<rect x="32" y="{y}" width="1036" height="38" rx="5" fill="#fff" stroke="#94a3b8"/>',
-            f'<text x="44" y="{y + 16}" font-size="12" font-weight="700" fill="#0f172a">{html.escape(edge["id"])} · {html.escape(state_label)} · {html.escape(relation)}</text>',
-            f'<text x="44" y="{y + 31}" font-size="11" fill="#475569">from {html.escape(start["label"])} to {html.escape(end["label"])}</text>',
-            "</g>",
+            f'<rect x="32" y="{y}" width="1036" height="{box_height}" rx="5" fill="#fff" stroke="#94a3b8"/>',
+            f'<text x="44" y="{y + 17}" font-size="12" font-weight="700" fill="#0f172a">{html.escape(edge["id"])} · {html.escape(state_label)}</text>',
+            f'<text x="44" y="{y + 34}" font-size="12" fill="#334155">',
         ])
+        parts.extend(
+            f'<tspan x="44" dy="{0 if line_index == 0 else 16}">{html.escape(line)}</tspan>'
+            for line_index, line in enumerate(relation_lines)
+        )
+        parts.append("</text>")
+        detail_y = y + 34 + 16 * len(relation_lines)
+        parts.append(f'<text x="44" y="{detail_y}" font-size="11" fill="#475569">')
+        parts.extend(
+            f'<tspan x="44" dy="{0 if line_index == 0 else 16}">{html.escape(line)}</tspan>'
+            for line_index, line in enumerate(detail_lines)
+        )
+        parts.extend(["</text>", "</g>"])
+        y += edge_heights[index]
     parts.extend([
         f'<text x="32" y="{height - 44}" font-size="11" fill="#475569">Source revision: {model["source_revision"]}</text>',
         f'<text x="32" y="{height - 24}" font-size="11" fill="#475569">Model digest: {digest}</text>',
         "</svg>",
     ])
     return "\n".join(parts) + "\n"
-
 
 def _text_equivalent(model: dict[str, Any], digest: str) -> str:
     lines = [
