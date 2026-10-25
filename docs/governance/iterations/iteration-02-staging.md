@@ -16,6 +16,7 @@ The 18 Iteration 2 Issues are all closed with GitHub state reason `completed` an
 #149, #240, #242, #243, #247, #250, #251, #252, #253, #254, #256, #257, #259, #286, #287, #289, #290 and #311.
 
 The issue bodies remain the evidence ledger for each ticket. Material scope dispositions retained:
+
 - #287 is Done for its bounded qualitative review and six targeted evidence-gap cases; PR #421 is merged at main `28ab716fd355386f7d49884059ae00475990ef8a`, whose 18 applicable checks passed. The wider candidate-versus-baseline campaign is tracked separately by #289.
 - #311's owner-approved archival preserves its historical FAIL/BLOCKED receipts unchanged; it is not a claim that those historical runs passed.
 - #256 retains the nine historical R17 failures; the owner explicitly retired that version rather than requiring a return to it.
