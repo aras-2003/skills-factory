@@ -66,6 +66,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(cmd[cmd.index("--network")+1],"none")
         self.assertIn("--read-only",cmd)
         self.assertEqual(cmd[cmd.index("--cap-drop")+1],"ALL")
+        self.assertEqual(cmd[cmd.index("--pids-limit")+1],"256")
         self.assertIn("no-new-privileges:true",cmd)
         self.assertIn('--no-sandbox "$@"',SANDBOX_SCRIPT)
         mounts=[cmd[i+1] for i,x in enumerate(cmd[:-1]) if x=="--mount"]

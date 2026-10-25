@@ -11,7 +11,7 @@ class ModelValidationError(ValueError):
     """Invalid, unsupported, or unverified diagram input."""
 
 NODES = frozenset({"skill","workflow","tool","capability","process","application","data","owner","unknown"})
-EDGES = frozenset({"requires","calls","produces","supports","owns","depends_on","flows_to","unknown"})
+EDGES = frozenset({"requires","calls","produces","supports","owns","contains","depends_on","flows_to","unknown"})
 STATES = frozenset({"observed","proposed","unknown"})
 SHA = re.compile(r"[0-9a-f]{40}\Z")
 LINES = re.compile(r"L([1-9]\d*)(?:-L?([1-9]\d*))?\Z")
@@ -21,6 +21,7 @@ POLICY = {
  "produces": {("skill","data"),("workflow","data"),("process","data"),("application","data")},
  "supports": {("application","capability"),("application","process"),("process","capability")},
  "owns": {("owner",target) for target in ("capability","process","application","data")},
+ "contains": {("capability",target) for target in ("capability","process","application","owner")},
  "depends_on": {(type_,type_) for type_ in ("skill","workflow","tool","capability","process","application","data")} | {("workflow","process"),("workflow","data"),("skill","data")},
  "flows_to": {(type_,type_) for type_ in ("process","application","data","tool")},
  "unknown": set(),

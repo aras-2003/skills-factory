@@ -95,7 +95,7 @@ def archify_candidate(model: dict) -> dict:
                  "label":display_label(n),"pos":[50+(i%3)*400,70+(i//3)*210],
                  "size":[300,76]} for i,n in enumerate(nodes)]
     ids={n["id"]:f"n{i}" for i,n in enumerate(nodes)}
-    edge_labels={"depends_on":"dep","calls":"call","unknown":"?"}
+    edge_labels={"depends_on":"dep","calls":"call","contains":"in","unknown":"?"}
     edges=[{"id":f"e{i}","from":ids[e["from"]],"to":ids[e["to"]],
             "label":edge_labels.get(e["type"],e["type"].replace("_"," ")[:20]),
             "labelDy":8,
@@ -138,7 +138,7 @@ def _sandbox_command(docker_binary:str,name:str,upstream:Path,candidate:Path,out
         docker_binary,"run","--rm","--init","--name",name,
         "--platform","linux/amd64","--network","none","--read-only",
         "--cap-drop","ALL","--security-opt","no-new-privileges:true",
-        "--pids-limit","128","--memory","2g","--cpus","2","--shm-size","1g",
+        "--pids-limit","256","--memory","2g","--cpus","2","--shm-size","1g",
         "--user",f"{uid}:{gid}",
         "--tmpfs",f"/tmp:rw,noexec,nosuid,nodev,size=256m,uid={uid},gid={gid}",
         "--mount",f"type=bind,source={upstream},target=/home/pwuser/archify,readonly",
