@@ -15,7 +15,7 @@ REF = {"uri": "repo://docs/example.md", "revision": REV, "locator": "L1"}
 def fixture():
     def node(node_id, kind, label, state="observed", evidence=None):
         return {"id": node_id, "type": kind, "label": label, "state": state,
-                "evidence": copy.deepcopy(REF if evidence is None else evidence)}
+                "evidence": copy.deepcopy([REF] if evidence is None else evidence)}
     return {
         "schema_version": 1,
         "model_id": "arc06-export-fixture",
