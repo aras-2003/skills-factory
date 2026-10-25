@@ -61,7 +61,8 @@ class OAFArchitectureExplorerTests(unittest.TestCase):
             self.assertEqual(by_label["Customer Data Platform"]["type"], "application")
             self.assertEqual(by_label["Power BI"]["type"], "application")
             self.assertEqual(by_label["Payments"]["type"], "capability")
-            self.assertEqual(by_label["Ownership information is incomplete"]["type"], "process")
+            self.assertEqual(by_label["Ownership information is incomplete"]["type"], "unknown")
+            self.assertEqual(by_label["Ownership information is incomplete"]["state"], "observed")
             self.assertTrue(all(ref["revision"] == revision
                                 for node in model["nodes"] for ref in node["evidence"]))
             self.assertEqual(verify_sources(model, root)["source_revision"], revision)
@@ -89,6 +90,7 @@ class OAFArchitectureExplorerTests(unittest.TestCase):
             self.assertEqual(summary["entity_counts"]["data"], 0)
             self.assertIn("unknown:data-lineage", summary["unresolved"])
             self.assertIn("unknown:to-be", summary["unresolved"])
+            self.assertIn("unknown:ownership-incomplete", summary["known_gaps"])
 
     def test_bad_revision_and_unsupported_nesting_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:
