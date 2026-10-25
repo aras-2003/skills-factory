@@ -102,7 +102,7 @@ def extract_model(repo_root: Path, revision: str) -> dict[str, Any]:
     )
     if owner_gap_line is None:
         raise OAFExplorerError("source no longer documents incomplete ownership")
-    add_node("process:ownership-incomplete", "process",
+    add_node("unknown:ownership-incomplete", "unknown",
              "Ownership information is incomplete", "observed", evidence(owner_gap_line))
     gap_id = "unknown:application-owners"
     add_node(gap_id, "unknown", "Some application owners not supplied", "unknown", [])
@@ -160,4 +160,6 @@ def coverage(model: dict[str, Any]) -> dict[str, Any]:
         "to_be": "NOT_SUPPLIED",
         "entity_counts": counts,
         "unresolved": unknowns,
+        "known_gaps": sorted(node["id"] for node in model["nodes"]
+                             if node["type"] == "unknown" and node["state"] == "observed"),
     }
