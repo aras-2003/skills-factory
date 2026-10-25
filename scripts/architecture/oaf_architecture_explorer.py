@@ -11,7 +11,7 @@ from scripts.architecture.visualization_ir import ModelValidationError, validate
 
 SOURCE = "evals/oaf/wave4/case-capability-map-001.md"
 SECTION_START = "Extract:"
-SECTION_END = "Leadership wants:"
+SECTION_END = "Leadership wants"
 KNOWN_TYPES = {
     "CRM Team": "owner",
     "Customer Service Process": "process",
@@ -47,7 +47,7 @@ def extract_model(repo_root: Path, revision: str) -> dict[str, Any]:
     try:
         start = next(i for i, line in enumerate(lines) if line.strip() == SECTION_START)
         end = next(i for i in range(start + 1, len(lines))
-                   if lines[i].strip() == SECTION_END)
+                   if lines[i].strip().startswith(SECTION_END))
     except StopIteration as error:
         raise OAFExplorerError("capability-map extraction section is malformed") from error
 
