@@ -146,8 +146,7 @@ def render(model:dict,repo_root:Path,archify_root:Path,output_dir:Path,*,docker_
             raise RenderError("isolated Archify execution timed out") from e
         except OSError as e:
             raise RenderError("Docker sandbox execution failed") from e
-    if proc.returncode:
-        raise RenderError(f"isolated Archify execution failed with exit {proc.returncode}")
+    if proc.returncode:\n        detail=(proc.stderr or proc.stdout or "").strip()[-3000:]\n        raise RenderError(f"isolated Archify execution failed with exit {proc.returncode}: {detail}")
     missing=[marker for marker in BOUNDARY_MARKERS if marker not in proc.stderr]
     if missing:
         raise RenderError("sandbox boundary receipt incomplete: "+", ".join(missing))
