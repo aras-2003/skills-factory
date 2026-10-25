@@ -17,11 +17,11 @@ SHA = re.compile(r"[0-9a-f]{40}\Z")
 LINES = re.compile(r"L([1-9]\d*)(?:-L?([1-9]\d*))?\Z")
 POLICY = {
  "requires": {("workflow","skill"),("workflow","workflow"),("skill","skill"),("skill","tool")},
- "calls": {("workflow","skill"),("workflow","tool"),("skill","tool"),("application","application")},
+ "calls": {("workflow","skill"),("workflow","workflow"),("workflow","tool"),("skill","tool"),("application","application")},
  "produces": {("skill","data"),("workflow","data"),("process","data"),("application","data")},
  "supports": {("application","capability"),("application","process"),("process","capability")},
  "owns": {("owner",target) for target in ("capability","process","application","data")},
- "depends_on": {(type_,type_) for type_ in ("skill","workflow","tool","capability","process","application","data")},
+ "depends_on": {(type_,type_) for type_ in ("skill","workflow","tool","capability","process","application","data")} | {("workflow","process"),("workflow","data"),("skill","data")},
  "flows_to": {(type_,type_) for type_ in ("process","application","data","tool")},
  "unknown": set(),
 }

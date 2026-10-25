@@ -71,12 +71,34 @@ def archify_candidate(model: dict) -> dict:
     obj=validate_model(model)
     nodes=obj["nodes"]
     by_id={n["id"]:n for n in nodes}
+    def display_label(node):
+        if node["type"] == "process":
+            if node["label"].startswith("Runtime gate execution: NOT_RUN"):
+                return "Runtime: NOT_RUN"
+            if node["state"] == "unknown":
+                return "Gate docs missing"
+            locator = node["evidence"][0]["locator"]
+            return f"Gate at {locator}"
+        if node["type"] == "workflow":
+            short = {
+                "investment-security-review":"Security Review",
+                "investment-theme-discovery":"Theme Discovery",
+                "investment-os-review":"Investment OS",
+                "investment-attention-review":"Attention Review",
+                "investment-opportunity-hunter":"Opportunity Hunter",
+                "investment-portfolio-review":"Portfolio Review",
+                "investment-portfolio-observation":"Portfolio Watch",
+            }
+            return short.get(node["id"].removeprefix("workflow:"), node["label"][:30])
+        return node["label"][:30]
     components=[{"id":f"n{i}","type":TYPE_MAP[n["type"]],
-                 "label":n["label"][:80],"pos":[50+(i%3)*350,70+(i//3)*210],
-                 "size":[180,76]} for i,n in enumerate(nodes)]
+                 "label":display_label(n),"pos":[50+(i%3)*400,70+(i//3)*210],
+                 "size":[300,76]} for i,n in enumerate(nodes)]
     ids={n["id"]:f"n{i}" for i,n in enumerate(nodes)}
+    edge_labels={"depends_on":"dep","calls":"call","unknown":"?"}
     edges=[{"id":f"e{i}","from":ids[e["from"]],"to":ids[e["to"]],
-            "label":e["type"].replace("_"," ")[:50],
+            "label":edge_labels.get(e["type"],e["type"].replace("_"," ")[:20]),
+            "labelDy":8,
             **({"variant":"dashed"} if e["state"]=="unknown" else {})}
            for i,e in enumerate(obj["edges"])]
     return {"schema_version":1,"diagram_type":"architecture",

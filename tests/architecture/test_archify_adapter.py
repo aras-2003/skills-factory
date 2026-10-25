@@ -26,6 +26,19 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(a,archify_candidate(copy.deepcopy(obj)))
         self.assertEqual(a["diagram_type"],"architecture")
         self.assertEqual((a["connections"][0]["from"],a["connections"][0]["to"]),("n0","n1"))
+        self.assertEqual(a["connections"][0]["label"],"call")
+        self.assertEqual(a["connections"][0]["labelDy"],8)
+        self.assertTrue(all(component["size"] == [300,76] for component in a["components"]))
+
+    def test_architecture_labels_are_compact_but_provenance_stays_in_ir(self):
+        obj=sample()
+        obj["nodes"][0].update(type="workflow")
+        obj["nodes"][1].update(type="process",label="Failure gate, source line 1: a very long explanatory failure condition")
+        obj["edges"][0].update(type="depends_on")
+        candidate=archify_candidate(obj)
+        self.assertEqual(candidate["components"][1]["label"],"Gate at L1")
+        self.assertEqual(obj["nodes"][1]["label"],"Failure gate, source line 1: a very long explanatory failure condition")
+        self.assertEqual(candidate["connections"][0]["label"],"dep")
 
     def test_safe_static_fallback_escapes_content(self):
         out=offline_svg_fallback(sample())

@@ -26,6 +26,40 @@ class VisualizationIRTests(unittest.TestCase):
         self.assertEqual(model_digest(one),model_digest(two))
         self.assertEqual([x["id"] for x in validate_model(one)["nodes"]],["a","b"])
 
+    def test_workflow_can_depend_on_an_explicit_process_gate(self):
+        obj=fixture()
+        obj["nodes"][1]["type"]="workflow"
+        obj["nodes"].append({
+            "id":"gate","type":"process","label":"Documented failure gate",
+            "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+        })
+        obj["edges"].append({
+            "id":"workflow-gate","type":"depends_on","from":"a","to":"gate",
+            "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+        })
+        validate_model(obj)
+
+    def test_workflow_can_call_another_workflow(self):
+        obj=fixture()
+        obj["nodes"][0]["type"]="workflow"
+        obj["nodes"][1]["type"]="workflow"
+        validate_model(obj)
+
+    def test_skill_and_workflow_can_depend_on_documented_data(self):
+        for source_type in ("skill", "workflow"):
+            obj=fixture()
+            next(node for node in obj["nodes"] if node["id"]=="a")["type"]=source_type
+            obj["nodes"].append({
+                "id":"data","type":"data","label":"Documented data source",
+                "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+            })
+            obj["edges"].append({
+                "id":"data-dependency","type":"depends_on","from":"a","to":"data",
+                "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+            })
+            with self.subTest(source_type=source_type):
+                validate_model(obj)
+
     def test_invalid_types_duplicate_dangling_implicit_edge(self):
         changes=[
             lambda x:x["nodes"].append(copy.deepcopy(x["nodes"][0])),

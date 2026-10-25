@@ -53,6 +53,11 @@ jobs:
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/arc03-output"
           PYTHONPATH=. python3 scripts/architecture/run_archify_adapter_smoke.py --upstream "$RUNNER_TEMP/archify-upstream" --output-dir "$RUNNER_TEMP/arc03-output"
+      - name: Execute exact-source Skills Factory Explorer render
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/arc04-output"
+          PYTHONPATH=. python3 scripts/architecture/run_skills_factory_explorer_smoke.py --upstream "$RUNNER_TEMP/archify-upstream" --output-dir "$RUNNER_TEMP/arc04-output"
       - name: Archive exact renderer and sandbox receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -60,5 +65,6 @@ jobs:
           name: arc03-isolated-render-${{ github.sha }}
           path: |
             ${{ runner.temp }}/arc03-output/*
+            ${{ runner.temp }}/arc04-output/*
           if-no-files-found: ignore
           retention-days: 30
