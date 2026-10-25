@@ -52,8 +52,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/arc03-output"
-          python3 scripts/architecture/run_archify_adapter_smoke.py \
-            --upstream "$RUNNER_TEMP/archify-upstream" \
+          PYTHONPATH=. python3 scripts/architecture/run_archify_adapter_smoke.py \\
+            --upstream "$RUNNER_TEMP/archify-upstream" \\
             --output-dir "$RUNNER_TEMP/arc03-output"
       - name: Archive exact renderer and sandbox receipts
         if: always()
