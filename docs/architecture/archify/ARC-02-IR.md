@@ -8,7 +8,7 @@ Issue #375; parent #373; PR #386. Source-only shared Python model, not Archify n
 - Allowed node types: skill, workflow, tool, capability, process, application, data, owner, unknown. Allowed edge types: requires, calls, produces, supports, owns, depends_on, flows_to, unknown.
 - Each observed/proposed fact must contain at least one repo:// path with matching full revision and Lstart[-Lend] locator. Unknown states cannot claim evidence; unknown relation must have unknown type.
 - Fail closed on duplicate IDs, dangling edges, extra attributes, unsupported enums, malformed line ranges, unsafe path segments and unsupported relationship direction/type pairs.
-- Semantic compatibility is implemented as an explicit edge type-pair allow-list; it restricts expressibility, not factual correctness. The `depends_on` relation includes the targeted workflow → process pair so a workflow can link to a documented process/failure gate. This does not attest runtime gate execution.
+- Semantic compatibility is implemented as an explicit edge type-pair allow-list; it restricts expressibility, not factual correctness. The `depends_on` relation allows skill/workflow → data dependencies and workflow → process links so source-backed models can expose documented data lineage and process/failure gates. These relations do not attest successful data access or runtime gate execution.
 - Sorting nodes, edges and evidence refs makes canonical_json and SHA-256 model_digest stable under input reordering.
 
 ## Authenticity boundary
