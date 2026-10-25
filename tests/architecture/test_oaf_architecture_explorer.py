@@ -61,6 +61,7 @@ class OAFArchitectureExplorerTests(unittest.TestCase):
             self.assertEqual(by_label["Customer Data Platform"]["type"], "application")
             self.assertEqual(by_label["Power BI"]["type"], "application")
             self.assertEqual(by_label["Payments"]["type"], "capability")
+            self.assertEqual(by_label["Ownership information is incomplete"]["type"], "process")
             self.assertTrue(all(ref["revision"] == revision
                                 for node in model["nodes"] for ref in node["evidence"]))
             self.assertEqual(verify_sources(model, root)["source_revision"], revision)
@@ -96,8 +97,13 @@ class OAFArchitectureExplorerTests(unittest.TestCase):
                 extract_model(root, "main")
             path = root / SOURCE
             path.write_text(FIXTURE.replace("  - CRM Team", "    - CRM Team"), encoding="utf-8")
+            subprocess.check_call(["git", "-C", directory, "add", SOURCE])
+            subprocess.check_call(["git", "-C", directory, "commit", "-qm", "malformed fixture"])
+            malformed_revision = subprocess.check_output(
+                ["git", "-C", directory, "rev-parse", "HEAD"], text=True
+            ).strip()
             with self.assertRaises(ValueError):
-                extract_model(root, revision)
+                extract_model(root, malformed_revision)
 
 
 if __name__ == "__main__":
