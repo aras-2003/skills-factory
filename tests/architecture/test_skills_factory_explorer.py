@@ -65,9 +65,7 @@ class SkillsFactoryExplorerTests(unittest.TestCase):
         model = extract_model(self.root, self.revision)
         report = gate_report(model)
         self.assertEqual(report["missing_gate_documentation"], [
-            "gate:investment-portfolio-review:undocumented",
-            "gate:investment-security-review:undocumented",
-            "gate:investment-theme-discovery:undocumented",
+            f"gate:{name}:undocumented" for name in WORKFLOWS[1:]
         ])
         self.assertEqual(len(report["runtime_not_run"]), len(WORKFLOWS))
         unknown_edges = [edge for edge in model["edges"] if edge["state"] == "unknown"]
