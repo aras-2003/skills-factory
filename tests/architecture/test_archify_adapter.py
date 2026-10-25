@@ -31,6 +31,7 @@ class AdapterTests(unittest.TestCase):
 
     def test_architecture_labels_are_compact_but_provenance_stays_in_ir(self):
         obj=sample()
+        obj["nodes"][0].update(type="workflow")
         obj["nodes"][1].update(type="process",label="Failure gate, source line 1: a very long explanatory failure condition")
         obj["edges"][0].update(type="depends_on")
         candidate=archify_candidate(obj)
