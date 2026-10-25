@@ -138,7 +138,7 @@ def _sandbox_command(docker_binary:str,name:str,upstream:Path,candidate:Path,out
         docker_binary,"run","--rm","--init","--name",name,
         "--platform","linux/amd64","--network","none","--read-only",
         "--cap-drop","ALL","--security-opt","no-new-privileges:true",
-        "--pids-limit","128","--memory","2g","--cpus","2","--shm-size","1g",
+        "--pids-limit","256","--memory","2g","--cpus","2","--shm-size","1g",
         "--user",f"{uid}:{gid}",
         "--tmpfs",f"/tmp:rw,noexec,nosuid,nodev,size=256m,uid={uid},gid={gid}",
         "--mount",f"type=bind,source={upstream},target=/home/pwuser/archify,readonly",
