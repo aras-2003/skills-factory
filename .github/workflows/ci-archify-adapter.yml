@@ -64,6 +64,6 @@ jobs:
         with:
           name: arc03-isolated-render-${{ github.sha }}
           path: |
-            ${{ runner.temp }}/arc03-output/*
+            ${{ runner.temp }}/arc03-output/*\n            ${{ runner.temp }}/arc04-output/*
           if-no-files-found: ignore
           retention-days: 30
