@@ -42,11 +42,17 @@ REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM PUBLIC, anon, authenticated, s
 REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM PUBLIC, anon, authenticated, service_role;
 GRANT EXECUTE ON FUNCTION public.try_numeric(text) TO service_role;
 
--- The deprecated duplicate schema is for diagnostics only; no runtime role may use it.
-REVOKE ALL ON SCHEMA investment FROM PUBLIC, anon, authenticated, service_role;
-REVOKE ALL ON ALL TABLES IN SCHEMA investment FROM PUBLIC, anon, authenticated, service_role;
-REVOKE ALL ON ALL SEQUENCES IN SCHEMA investment FROM PUBLIC, anon, authenticated, service_role;
-REVOKE ALL ON ALL FUNCTIONS IN SCHEMA investment FROM PUBLIC, anon, authenticated, service_role;
+-- Some current installations have already removed the deprecated duplicate schema.
+-- When present, keep it inaccessible to every runtime role.
+DO $
+BEGIN
+  IF to_regnamespace('investment') IS NOT NULL THEN
+    EXECUTE 'REVOKE ALL ON SCHEMA investment FROM PUBLIC, anon, authenticated, service_role';
+    EXECUTE 'REVOKE ALL ON ALL TABLES IN SCHEMA investment FROM PUBLIC, anon, authenticated, service_role';
+    EXECUTE 'REVOKE ALL ON ALL SEQUENCES IN SCHEMA investment FROM PUBLIC, anon, authenticated, service_role';
+    EXECUTE 'REVOKE ALL ON ALL FUNCTIONS IN SCHEMA investment FROM PUBLIC, anon, authenticated, service_role';
+  END IF;
+END $;
 
 -- Migrations execute as postgres. Future objects remain private unless their migration grants access.
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
