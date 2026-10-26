@@ -77,6 +77,12 @@ Do not write "the stock fell because X" merely because X happened nearby in time
 - A cheap multiple can reflect peak earnings.
 - Never pass UNVERIFIED/CONFLICTED critical metrics into valuation or sizing.
 
+## Visual lifecycle contract
+- For every individual equity security review include an **inline graphical Business Lifecycle panel** with all five phases visible, the selected phase highlighted, phase-affinity bars and an explicit **NOT calibrated probability** legend. Produce it from the same classifier output via `scripts/business_lifecycle_visual.py`, not from manually assigned scores.
+- When verified comparable financial data are missing, display the five-phase graphic with **NOT CLASSIFIED**, no highlighted phase and N/A bars; never fabricate a phase.
+- If a supported renderer is unavailable, display a faithful five-phase text/table equivalent and label `BLOCKED_NO_RENDERER`; never pretend an SVG was rendered.
+- Keep the lifecycle panel adjacent to revenue, operating-profit and FCF trends, and visually separate it from valuation and BUY/SELL decision.
+
 ## Output contract
 WHY THIS / WHY NOW; historical price context; historical KPI trends; historical valuation context; event timeline; observed moves vs likely causes with confidence; business; financial quality; evidence-sanity status; verified/blocked metrics; drivers; business-thesis strength; valuation context if permitted; priced-in expectations; security attractiveness; catalysts; risks; variant perception; thesis; assumptions; kill criteria; exact verification requirements; confidence; provenance.
 
@@ -91,3 +97,4 @@ WHY THIS / WHY NOW; historical price context; historical KPI trends; historical 
 - [ ] No valuation or sizing was computed from blocked metrics.
 - [ ] Business thesis and security attractiveness are separate.
 - [ ] Kill criteria are falsifiable.
+- [ ] Lifecycle graphic or explicitly blocked fallback rendered from verified classifier output, with five phases and uncalibrated-affinity warning.
