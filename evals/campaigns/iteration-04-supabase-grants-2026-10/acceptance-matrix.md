@@ -1,19 +1,19 @@
 # Iteration 04 — Supabase grants acceptance matrix
 
-Candidate baseline: `87a10f72c62db87910cc4e9d173489320aa67635` (lock commit pending).
+Candidate: merged PR #466, PR head `238197ec81b4abc1c9b2590d3df8bc3071680a54`; merge commit `6e548b8801cae07cd234d208ee445594eaa10ec3`.
 
 | Row ID | Issue / criterion | Layer + case | Required surface | Candidate | State | Verdict | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| SF387-MIGRATION-REPLAY | #387 AC-01 | Empty database replay of all checked-in migrations | CI/local disposable PostgreSQL | TBD | NOT_RUN | none | pending |
-| SF387-OBJECT-GRANTS | #387 AC-02 | Every created object gets explicit role grants in its creation migration | CI/static | TBD | NOT_RUN | none | pending |
-| SF387-ROLE-DENY | #387 AC-02 | anon/authenticated cannot SELECT, INSERT, UPDATE, DELETE private data | CI + test DB/Data API | TBD | NOT_RUN | none | pending |
-| SF387-RLS | #387 AC-03 | RLS enabled on private public-schema tables; no unintended policy grant | CI + test DB | TBD | NOT_RUN | none | pending |
-| SF387-VIEWS | #387 AC-03 | Views use security_invoker or remain inaccessible to client roles | CI + test DB | TBD | NOT_RUN | none | pending |
-| SF387-DEFAULT-ACL | #387 AC-04 | Future tables, sequences, and functions are denied to PUBLIC/anon/authenticated by default | CI + test DB | TBD | NOT_RUN | none | pending |
-| SF387-SERVICE-ROLE | #387 AC-04 | Server-only role retains the explicit access required by actual consumers | CI + test DB/API | TBD | NOT_RUN | none | pending |
-| SF387-CI | #387 AC-05 | Required repository checks pass at exact PR SHA | GitHub Actions | TBD | NOT_RUN | none | pending |
-| SF387-TEST-PROJECT | #387 AC-06 | Isolated project migration replay and authorization checks pass | `investment-os-test` | TBD | NOT_RUN | none | pending |
-| SF387-ADVISOR | #387 AC-06 | Supabase security advisor findings reviewed and resolved or dispositioned | `investment-os-test` | TBD | NOT_RUN | none | pending |
-| SF387-ROLLBACK | #387 AC-06 | Restore/rollback instructions validated without affecting production | Documentation + test project | TBD | NOT_RUN | none | pending |
+| SF387-MIGRATION-REPLAY | #387 AC-01 | Empty database replay of all checked-in migrations | CI/local disposable PostgreSQL 17 | `238197ec` | PASS | PASS | All 20 migrations replayed in clean Supabase CI PostgreSQL 17; local PGlite replay also passed. |
+| SF387-OBJECT-GRANTS | #387 AC-02 | Every created object gets explicit role grants in its creation migration | CI/static | `238197ec` | PASS | PASS | Static validator and migration security workflow passed on final PR head. |
+| SF387-ROLE-DENY | #387 AC-02 | anon/authenticated cannot SELECT, INSERT, UPDATE, DELETE private data | CI + test DB/Data API | `238197ec` | PASS | PASS | CI role-boundary checks passed. Test-project probe GET and POST both returned 401 / SQLSTATE 42501; zero rows; probe removed. |
+| SF387-RLS | #387 AC-03 | RLS enabled on private public-schema tables; no unintended policy grant | CI + test DB | `238197ec` | PASS | PASS | CI assertions passed; test-project RLS/grants inspected. Security advisor INFO findings were dispositioned as deny-by-default. |
+| SF387-VIEWS | #387 AC-03 | Views use security_invoker or remain inaccessible to client roles | CI + test DB | `238197ec` | PASS | PASS | CI and test-project effective privilege checks show client roles cannot read private views. |
+| SF387-DEFAULT-ACL | #387 AC-04 | Future tables, sequences, and functions are denied to PUBLIC/anon/authenticated by default | CI + test DB | `238197ec` | PASS | PASS | CI future-object tests and test-project default ACL checks passed. |
+| SF387-SERVICE-ROLE | #387 AC-04 | Server-only role retains the explicit access required by actual consumers | CI + test DB/API | `238197ec` | PARTIAL | PARTIAL | CI positive server-role API checks and test-project effective SELECT/INSERT ACLs passed. Positive HTTP call against test project was not run: secret service-role key is unavailable through connected tools. |
+| SF387-CI | #387 AC-05 | Required repository checks pass at exact PR SHA | GitHub Actions | `238197ec` | PASS | PASS | Four required workflows passed: Supabase migration security, Domain integrity, Skills Factory Evaluation CI, Validate skills. |
+| SF387-TEST-PROJECT | #387 AC-06 | Isolated project migration replay and authorization checks pass | `investment-os-test` | `6e548b88` | PARTIAL | PARTIAL | Grant migration applied and effective/default ACLs plus anon denial verified. Project already contains data; no clean replay or reset was run, and no Supabase branch was created. |
+| SF387-ADVISOR | #387 AC-06 | Supabase security advisor findings reviewed and resolved or dispositioned | `investment-os-test` | `6e548b88` | PASS | PASS | 26 INFO RLS-enabled/no-policy findings and 38 INFO unused-index findings reviewed; consistent with the private deny-by-default model and outside this ACL-only change. |
+| SF387-ROLLBACK | #387 AC-06 | Restore/rollback instructions validated without affecting production | Documentation + test project | `6e548b88` | NOT_RUN | none | Forward-only recovery guidance is documented. No restore rehearsal was performed; production was untouched. |
 
-Tested schema contains no private user rows in this matrix. No credentials or production data may be written into fixtures, artifacts, logs, or receipts.
+No existing business rows were used as fixtures or written to. The probe table was synthetic and removed. No credentials or production data are included in this matrix.
