@@ -1,0 +1,131 @@
+name: Archify ARC-01 isolated proof
+
+on:
+  pull_request:
+    paths:
+      - 'docs/architecture/archify/**'
+      - '.github/workflows/ci-archify-spike.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  spike:
+    name: ARC-01 / Pinned upstream PoC
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      ARCHIFY_SHA: 208acba8d412335185b2056fedf54b3405df43fb
+      ARCHIFY_UPDATE_CHECK_DISABLED: "1"
+      CI: "true"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact PR head and immutable source lock
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path('docs/architecture/archify/ARCHIFY-UPSTREAM-LOCK.json')
+          lock=json.loads(p.read_text())
+          assert lock['revision']==os.environ['ARCHIFY_SHA']
+          assert lock['package_lock_git_blob']=='e6187b907edc8459f47fe31455539700f2d8e796'
+          assert lock['root_license']=='MIT'
+          PY
+      - name: Validate fixture and adversarial input tests
+        run: |
+          python3 docs/architecture/archify/scripts/check_fixture.py
+          python3 -m unittest discover -s docs/architecture/archify/scripts -p 'test_*.py' -v
+      - name: Fetch pinned upstream in disposable runner
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none https://github.com/tt-a1i/archify.git "$RUNNER_TEMP/archify-upstream"
+          git -C "$RUNNER_TEMP/archify-upstream" checkout --detach "$ARCHIFY_SHA"
+          test "$(git -C "$RUNNER_TEMP/archify-upstream" rev-parse HEAD)" = "$ARCHIFY_SHA"
+          test "$(git -C "$RUNNER_TEMP/archify-upstream" hash-object archify/package-lock.json)" = "e6187b907edc8459f47fe31455539700f2d8e796"
+          grep -q 'MIT License' "$RUNNER_TEMP/archify-upstream/LICENSE"
+      - name: Install locked dev dependencies without lifecycle scripts
+        run: |
+          npm ci --prefix "$RUNNER_TEMP/archify-upstream" --ignore-scripts --no-fund
+          npm ci --prefix "$RUNNER_TEMP/archify-upstream/archify" --ignore-scripts --no-fund
+          npm audit --prefix "$RUNNER_TEMP/archify-upstream" --audit-level=high
+          npm audit --prefix "$RUNNER_TEMP/archify-upstream/archify" --audit-level=high
+      - name: Real finalize, HTML and browser-check using pinned CLI
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/arc01"
+          cp docs/architecture/archify/fixtures/synthetic-architecture.json "$RUNNER_TEMP/arc01/candidate.json"
+          cd "$RUNNER_TEMP/arc01"
+          export ARCHIFY_CHROME="$(command -v google-chrome || command -v chromium || true)"
+          if [ -z "$ARCHIFY_CHROME" ]; then
+            echo "Chrome unavailable, browser evidence cannot PASS" >&2
+            exit 1
+          fi
+          if ! node "$RUNNER_TEMP/archify-upstream/archify/bin/archify.mjs" finalize architecture candidate.json synthetic-architecture.html --quality showcase --json > finalize-receipt.json; then
+            cat finalize-receipt.json
+            exit 1
+          fi
+          test -s synthetic-architecture.html
+          python3 - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          receipt=Path("finalize-receipt.json").read_text()
+          data=json.loads(receipt)
+          assert data.get("ok") is True and data.get("status") == "pass", data
+          assert all(data.get("gates", {}).get(k) == "pass" for k in ("validate","deliver","check","browser-check")), data.get("gates")
+          assert data.get("browserCheck", {}).get("ran") is True, data.get("browserCheck")
+          html=Path("synthetic-architecture.html").read_bytes()
+          assert len(html)>1000, "Archify output unusually short"
+          assert "<html" in html.decode("utf-8").lower(), "missing HTML document"
+          print("html_sha256="+hashlib.sha256(html).hexdigest())
+          print("receipt_sha256="+hashlib.sha256(receipt.encode()).hexdigest())
+          print("html_bytes="+str(len(html)))
+          PY
+      - name: Real browser screenshots for visual inspection (not perceptual PASS)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/arc01"
+          node "$RUNNER_TEMP/archify-upstream/archify/bin/archify.mjs" visual-check synthetic-architecture.html --summary --require-provenance > visual-check-receipt.json
+          test -s visual-check-receipt.json
+      - name: Archify negative input must fail closed
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/arc01"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          model=json.loads(Path("candidate.json").read_text())
+          model["connections"][0]["to"]="missing-component"
+          Path("invalid.json").write_text(json.dumps(model))
+          PY
+          if node "$RUNNER_TEMP/archify-upstream/archify/bin/archify.mjs" validate architecture invalid.json --json > invalid-receipt.json; then
+            echo "ERROR: Archify incorrectly accepted a dangling relation" >&2
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path("invalid-receipt.json").read_text())
+          assert receipt.get("ok") is False, receipt
+          print("negative_archify_validation=PASS (expected rejection)")
+          PY
+      - name: Archive actual evidence (no fabricated PASS)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: arc01-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/arc01/finalize-receipt.json
+            ${{ runner.temp }}/arc01/synthetic-architecture.html
+            ${{ runner.temp }}/arc01/visual-check-receipt.json
+            ${{ runner.temp }}/arc01/invalid-receipt.json
+            ${{ runner.temp }}/arc01/*.png
+          if-no-files-found: ignore
+          retention-days: 14

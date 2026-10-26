@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -64,6 +65,19 @@ def ensure_source_valid(root: Path) -> None:
 
 def package_version(root: Path, key: str) -> str:
     data = load_versions(root)
+    release = data.get("release") or {}
+    if release.get("versioning") == "git-first-parent":
+        revision = source_revision(root)
+        if not re.fullmatch(r"[0-9a-fA-F]{40}", revision):
+            raise ValueError("Release versioning requires an exact full source SHA")
+        if not re.fullmatch(r"[0-9]+\.[0-9]+", str(release.get("version_prefix", ""))):
+            raise ValueError("Release version_prefix must be major.minor")
+        if subprocess.check_output(["git", "rev-parse", "--is-shallow-repository"], cwd=root, text=True).strip() == "true":
+            raise ValueError("Release versioning requires full Git history (fetch-depth: 0)")
+        sequence = subprocess.check_output(
+            ["git", "rev-list", "--first-parent", "--count", revision], cwd=root, text=True
+        ).strip()
+        return f"{release['version_prefix']}.{int(sequence)}"
     section = data.get(key) or {}
     version = section.get("version")
     if not isinstance(version, str) or not version:

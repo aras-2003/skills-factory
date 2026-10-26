@@ -56,6 +56,23 @@ class InvestmentRuntimeTests(unittest.TestCase):
             "investment-security-review",
         )
 
+    def test_review_investment_portfolio_selects_portfolio_child(self) -> None:
+        for prompt in (
+            "Review my investment portfolio.",
+            "Review this investment portfolio.",
+            "Review the investment portfolio.",
+            "Review my investment portfolio; routing only, do not read data or execute a child workflow.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "portfolio", "investment-portfolio-review")
+
+    def test_negated_investment_portfolio_review_keeps_discovery_route(self) -> None:
+        self.assert_route(
+            "Find new stocks worth researching; do not review my investment portfolio.",
+            "opportunity",
+            "investment-opportunity-hunter",
+        )
+
     def test_ambiguous_share_ownership_requests_front_door_clarification(self) -> None:
         for prompt in (
             "Mam akcje. Co zrobić?",
@@ -136,6 +153,38 @@ class InvestmentRuntimeTests(unittest.TestCase):
         ):
             with self.subTest(prompt=prompt):
                 self.assert_route(prompt, "attention", "investment-attention-review")
+
+    def test_named_holding_earnings_attention_routes_to_attention_in_both_languages(self) -> None:
+        for prompt in (
+            "Review the latest earnings event for my holding, ticker NVDA, and tell me if it warrants thesis attention.",
+            "Przejrzyj ostatnie wyniki spółki z mojego portfela, ticker NVDA, i powiedz, czy wymagają uwagi dla tezy.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
+    def test_earnings_thesis_change_routes_to_attention_without_explicit_attention_word(self) -> None:
+        for prompt in (
+            "AAPL reported quarterly earnings today. Review whether the result changes my existing investment thesis. Do not analyze beyond routing.",
+            "AAPL opublikował dziś wyniki kwartalne. Sprawdź, czy wynik zmienia moją istniejącą tezę inwestycyjną. Nie analizuj poza routingiem.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
+    def test_user_reported_earnings_thesis_wording_routes_in_both_languages(self) -> None:
+        for prompt in (
+            "For my portfolio holding, explain how its latest earnings event changes my existing investment thesis.",
+            "Dla spółki z mojego portfela wyjaśnij, jak najnowszy raport wynikowy zmienia moją dotychczasową tezę inwestycyjną.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
+    def test_sector_opportunity_discovery_routes_in_both_languages(self) -> None:
+        for prompt in (
+            "Find promising opportunities in the renewable energy sector; I want a new company to research.",
+            "Znajdź obiecujące okazje w sektorze energii odnawialnej; chcę nową spółkę do analizy.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "opportunity", "investment-opportunity-hunter")
 
     def test_routes_policy_design(self) -> None:
         self.assert_route(

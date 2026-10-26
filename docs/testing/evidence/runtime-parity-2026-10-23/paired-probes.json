@@ -1,0 +1,330 @@
+{
+  "checked_at": "2026-10-23T21:41:00Z",
+  "scope": "Three paired MCP probes, not full host-model workflow execution or visible UI assertion",
+  "fixtures": {
+    "chart": {
+      "expected_points_per_series": 4,
+      "expected_series": 1,
+      "expected_x_labels": 4,
+      "series_names": [
+        "Przychód"
+      ],
+      "series_values": [
+        [
+          12,
+          18,
+          15,
+          24
+        ]
+      ],
+      "title": "Przychód",
+      "unit": "mln PLN",
+      "x_labels": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    "architecture": {
+      "skill_name": "architecture-review"
+    },
+    "route": {
+      "user_request": "Review my investment portfolio; routing only, do not read data or execute a child workflow."
+    }
+  },
+  "identity": {
+    "lab": {
+      "runtime_name": "Skills Factory runtime",
+      "release_id": "unattested",
+      "source_revision": "unattested",
+      "channel": "unknown",
+      "capability_contract_version": "repository-side-v1",
+      "tool_schema_digest": "unattested",
+      "deployed_at": "unattested",
+      "attestation_status": "unattested",
+      "attestation_basis": "unsigned_runtime_environment_fields_only",
+      "installation_behavior_verified": false,
+      "package_integrity_status": "verified",
+      "package_integrity_basis": "installed_payload_digest_matches_adjacent_unsigned_manifest",
+      "package_integrity_sha256": "09da0f12b0194de60c68d3126fc7767a7a935f5b266569fa0a088a2b6e001231",
+      "lab_release": {
+        "channel": "lab",
+        "version": "1.38.320",
+        "release_id": "1.38.320+111b10aa89d5",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "payload_content_sha256": "09da0f12b0194de60c68d3126fc7767a7a935f5b266569fa0a088a2b6e001231"
+      },
+      "software_release": {
+        "version": "1.38.320",
+        "release_id": "1.38.320+111b10aa89d5",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e"
+      },
+      "capabilities": [
+        "runtime_info",
+        "list_skills",
+        "load_skill",
+        "route_investment_request",
+        "render_bar_chart",
+        "render_line_chart"
+      ],
+      "payload_content_sha256": "09da0f12b0194de60c68d3126fc7767a7a935f5b266569fa0a088a2b6e001231",
+      "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+      "manifest_binding": "installed_manifest_matches_runtime_payload",
+      "tool_receipt": {
+        "schema_version": "1.0",
+        "kind": "unsigned_mcp_tool_call_receipt",
+        "tool_name": "runtime_info",
+        "status": "SUCCESS",
+        "execution_state": "executed",
+        "completed_at": "2026-10-23T21:41:40.166Z",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "output_sha256": "19f394058d9284c49c1d422a64a3b6a4e5fe17da3d3443c42c0e46a99fd86b8c"
+      }
+    },
+    "site": {
+      "repository": "https://github.com/aras-2003/skills-factory",
+      "github_main_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+      "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+      "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+      "channel": "site",
+      "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+      "lab_release": {
+        "channel": "lab",
+        "version": "1.38.313",
+        "source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+        "release_id": "1.38.313+818639f98134",
+        "payload_content_sha256": "1166e63b1164dcf4e5f4d37cb323effdfd97c624a4f0e264e59e962d4aea1ba2",
+        "skill_count": 83,
+        "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+        "artifact_sha256": "a982583099d2392cd1aa4ed3fcd9bcab47693c3de846b93c8e1ba6e5f503da37"
+      },
+      "draft_extension": null,
+      "runtime_release": {
+        "channel": "lab",
+        "version": "1.38.313",
+        "source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+        "release_id": "1.38.313+818639f98134",
+        "payload_content_sha256": "1166e63b1164dcf4e5f4d37cb323effdfd97c624a4f0e264e59e962d4aea1ba2",
+        "skill_count": 83,
+        "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+        "artifact_sha256": "a982583099d2392cd1aa4ed3fcd9bcab47693c3de846b93c8e1ba6e5f503da37",
+        "artifact_scope": "complete_lab"
+      },
+      "release_id": "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+      "source_revision": "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+      "canonical_source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+      "software_release": {
+        "version": "1.38.313",
+        "release_id": "1.38.313+818639f98134",
+        "source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425"
+      },
+      "capability_contract_version": "site-mcp-v2",
+      "tool_schema_digest": "sha256:020e72cd05ccc9ff93bdac00c54433911b0946da16c7f43032e76ee1851e24ef",
+      "deployed_at": "2026-10-23T10:45:49.000Z",
+      "attestation_status": "verified",
+      "identity_source": "site_environment",
+      "capabilities": [
+        "runtime_info",
+        "list_skills",
+        "load_skill",
+        "route_investment_request",
+        "render_bar_chart",
+        "render_line_chart"
+      ],
+      "execution_mode": "host_model_executes_loaded_instructions",
+      "tool_receipt": {
+        "schema_version": "1.0",
+        "kind": "unsigned_mcp_tool_call_receipt",
+        "tool_name": "runtime_info",
+        "status": "SUCCESS",
+        "execution_state": "executed",
+        "completed_at": "2026-10-23T21:41:36.811Z",
+        "source_revision": "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+        "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "output_sha256": "acaf57431de9cd5e9951bcdc72871e0b19d14dfe45c78922bc7db61066d8c93c"
+      }
+    }
+  },
+  "results": {
+    "lab": {
+      "architecture": {
+        "name": "architecture-review",
+        "version": "1.0.0",
+        "content_sha256": "7b51635affc6fc4006410cb77c9345b377e16bee7efb566d0642535dd5536993",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-23T21:41:53.551Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "0c82bd4d605b43785f97339c2e4ab3a16162cfead618742af595ce9315e82292",
+          "output_sha256": "e8867a985c2ed9ffcdc3648b352d7343b1f5548135e8646569780204144ff8f5"
+        }
+      },
+      "route": {
+        "is_investment_request": true,
+        "route": "unknown",
+        "child_workflow": "investment-os-review",
+        "reason": "investment intent detected but the decision object is ambiguous; use the Investment OS front door",
+        "must_invoke_child_workflow": true,
+        "next_action": "load_front_door_then_clarify",
+        "routing_receipt": "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_front_door_then_clarify",
+        "workflow_executed": false,
+        "execution_state": "routed_only",
+        "workflow_execution_state": "not_executed",
+        "execution_state_reason": "router selected a workflow but did not execute it",
+        "outcome": null,
+        "response_policy": "load_front_door_then_clarify_before_analysis",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "route_investment_request",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-23T21:41:58.139Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "42491bbee0df982fab8fc278a65a78b11ed654483072941bfb1c21deab2effeb",
+          "output_sha256": "33312432fc68df9e42f097dbd2438a5e78050206c7a26646c732941c28077b2d"
+        }
+      },
+      "chart": [
+        "CHART_PAYLOAD_OK mime=image/png bytes=45469 sha256=4ab1bd2a74f6c6d0e9d0e88b7eaa35c5a6704de042adba20b25ee7f3c5cd1eb4 canvas_px=850x480",
+        "MCP_TOOL_RECEIPT {\"artifact_state\": \"rendered\", \"client_display_state\": \"not_observable\", \"completed_at\": \"2026-10-23T21:41:50.354Z\", \"execution_state\": \"executed\", \"input_sha256\": \"694ede1db6a1eab7b05a2463cadf8ce01e7db497206070186449cf3321d98a9e\", \"kind\": \"unsigned_mcp_tool_call_receipt\", \"output_sha256\": \"47d9719255107269be810214f992cd87513284e72213ce854bbf51f7f974c278\", \"schema_version\": \"1.0\", \"source_revision\": \"111b10aa89d5d2b3c249da3126926732a325d05e\", \"status\": \"SUCCESS\", \"tool_name\": \"render_line_chart\"}"
+      ]
+    },
+    "site": {
+      "architecture": {
+        "name": "architecture-review",
+        "version": "1.0.0",
+        "content_sha256": "7b51635affc6fc4006410cb77c9345b377e16bee7efb566d0642535dd5536993",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-23T21:41:47.034Z",
+          "source_revision": "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+          "input_sha256": "0c82bd4d605b43785f97339c2e4ab3a16162cfead618742af595ce9315e82292",
+          "output_sha256": "92d67725bc449944a2ff5d40947310d5e536c2b84fbba80666e318d96b305119"
+        }
+      },
+      "route": {
+        "route": "portfolio-review",
+        "child_workflow": "investment-portfolio-review",
+        "routing_receipt": "ROUTE=portfolio-review; CHILD=investment-portfolio-review; NEXT_ACTION=load_skill(investment-portfolio-review)",
+        "status": "routed",
+        "candidates": [
+          "investment-portfolio-review"
+        ],
+        "reason": "A portfolio-level review is the decision object.",
+        "method": "deterministic bilingual rules; no semantic model",
+        "clarification": null,
+        "recommendation": null,
+        "workflow_executed": false,
+        "execution_state": "routed_only",
+        "workflow_execution_state": "not_executed",
+        "execution_state_reason": "router selected a workflow but did not execute it",
+        "outcome": null,
+        "is_investment_request": true,
+        "must_invoke_child_workflow": true,
+        "response_policy": "load_child_workflow_then_follow",
+        "source": {
+          "repository": "https://github.com/aras-2003/skills-factory",
+          "github_main_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+          "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+          "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+          "channel": "private Cloud Next Site sourced from Skills Factory",
+          "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+          "lab_release": {
+            "channel": "lab",
+            "version": "1.38.313",
+            "source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+            "release_id": "1.38.313+818639f98134",
+            "payload_content_sha256": "1166e63b1164dcf4e5f4d37cb323effdfd97c624a4f0e264e59e962d4aea1ba2",
+            "skill_count": 83,
+            "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+            "artifact_sha256": "a982583099d2392cd1aa4ed3fcd9bcab47693c3de846b93c8e1ba6e5f503da37"
+          },
+          "draft_extension": null,
+          "runtime_release": {
+            "channel": "lab",
+            "version": "1.38.313",
+            "source_revision": "818639f9813420a747a3e2e4d3f46a8d97860425",
+            "release_id": "1.38.313+818639f98134",
+            "payload_content_sha256": "1166e63b1164dcf4e5f4d37cb323effdfd97c624a4f0e264e59e962d4aea1ba2",
+            "skill_count": 83,
+            "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+            "artifact_sha256": "a982583099d2392cd1aa4ed3fcd9bcab47693c3de846b93c8e1ba6e5f503da37",
+            "artifact_scope": "complete_lab"
+          }
+        },
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "route_investment_request",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-23T21:41:59.231Z",
+          "source_revision": "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+          "input_sha256": "42491bbee0df982fab8fc278a65a78b11ed654483072941bfb1c21deab2effeb",
+          "output_sha256": "213b1eb4c67559c9e0fcda225944baca881249d5dcecd6f32300a6d328cf0301"
+        }
+      },
+      "chart": {
+        "kind": "line",
+        "title": "Przychód",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 960 578\" width=\"960\" height=\"578\" role=\"img\" aria-labelledby=\"chart-title chart-desc\"><title id=\"chart-title\">Przychód</title><desc id=\"chart-desc\">Line chart with 1 series across 4 equally spaced categories; categories are not interpreted as dates. Exact values are available in each point&apos;s SVG tooltip. Unit: mln PLN.</desc><rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/><g font-family=\"Arial, sans-serif\" font-size=\"16\" fill=\"#14273e\"><text x=\"28\" y=\"34\" font-size=\"20\" font-weight=\"700\">Przychód</text><text x=\"28\" y=\"60\" fill=\"#506579\">mln PLN</text><path d=\"M95 430H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"435\" text-anchor=\"end\" font-size=\"14\">0</text><path d=\"M95 350H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"355\" text-anchor=\"end\" font-size=\"14\">6</text><path d=\"M95 270H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"275\" text-anchor=\"end\" font-size=\"14\">12</text><path d=\"M95 190H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"195\" text-anchor=\"end\" font-size=\"14\">18</text><path d=\"M95 110H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"115\" text-anchor=\"end\" font-size=\"14\">24</text><text x=\"95\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q1</title>Q1</text><text x=\"366.66666666666663\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q2</title>Q2</text><text x=\"638.3333333333333\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q3</title>Q3</text><text x=\"910\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q4</title>Q4</text><polyline fill=\"none\" stroke=\"#2374e8\" stroke-width=\"3\" points=\"95,270 366.66666666666663,190 638.3333333333333,230 910,110\"/><circle cx=\"95\" cy=\"270\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q1: 12 mln PLN</title></circle><circle cx=\"366.66666666666663\" cy=\"190\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q2: 18 mln PLN</title></circle><circle cx=\"638.3333333333333\" cy=\"230\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q3: 15 mln PLN</title></circle><circle cx=\"910\" cy=\"110\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q4: 24 mln PLN</title></circle><path d=\"M95 500h24\" stroke=\"#2374e8\" stroke-width=\"3\"/><text x=\"129\" y=\"505\">Przychód</text></g></svg>",
+        "data": {
+          "x_labels": [
+            "Q1",
+            "Q2",
+            "Q3",
+            "Q4"
+          ],
+          "series_names": [
+            "Przychód"
+          ],
+          "series_values": [
+            [
+              12,
+              18,
+              15,
+              24
+            ]
+          ],
+          "title": "Przychód",
+          "unit": "mln PLN"
+        },
+        "mime_type": "image/svg+xml",
+        "render_status": "PAYLOAD_RENDERED",
+        "client_display": "NOT_OBSERVABLE",
+        "provenance": "explicit caller data; no retrieval or inference",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "render_line_chart",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-23T21:41:54.198Z",
+          "source_revision": "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+          "input_sha256": "53a79ba846389a6c8293cc8565736934b9ee00671d7ec4847b31a38252d5c456",
+          "output_sha256": "bd9d09f6f495fa1f32a4cc5c645c9fed0d5ea578316a461d714c57b15429910d",
+          "artifact_state": "rendered",
+          "client_display_state": "not_observable"
+        }
+      }
+    }
+  },
+  "disposition": {
+    "identity": "MISMATCH",
+    "architecture_content": "MATCH",
+    "chart": "Both renderers executed on identical input; Lab PNG / Site SVG. Client display not observable.",
+    "routing": "MISMATCH: Lab unknown/front door vs Site portfolio-review. No child executed.",
+    "compatibility": "NOT_VERIFIED"
+  }
+}

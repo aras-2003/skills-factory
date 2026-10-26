@@ -227,17 +227,29 @@ lab:
             self.assertEqual(6, data[25], "new icons must preserve RGBA transparency")
             self.assertLess(len(data), 2_000_000)
 
-    def test_lab_packager_uploads_an_immutable_candidate_without_branch_writes(self) -> None:
+    def test_lab_packager_uploads_candidate_and_opens_validated_marketplace_pr(self) -> None:
         workflow = (ROOT / ".github/workflows/release-lab-plugin.yml").read_text(encoding="utf-8")
         self.assertIn("cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json", workflow)
         self.assertIn("actions/upload-artifact@", workflow)
         self.assertIn("include-hidden-files: true", workflow)
         self.assertIn("name: skills-factory-lab-${{ github.sha }}", workflow)
-        self.assertIn("contents: read", workflow)
+        self.assertNotIn("Bump Lab package patch version", workflow)
+        self.assertIn("--lab-artifact plugins/skills-factory-lab --write-generated", workflow)
+        self.assertIn("name: skills-factory-site-${{ github.sha }}", workflow)
+        self.assertIn("git add plugins/skills-factory-lab docs/lab-release.json", workflow)
+        self.assertIn("contents: write", workflow)
+        self.assertIn("pull-requests: write", workflow)
+        self.assertIn("actions: write", workflow)
+        self.assertIn('branch="automation/lab-marketplace-$SOURCE_REVISION"', workflow)
+        self.assertIn('git push origin "HEAD:refs/heads/$branch"', workflow)
+        self.assertIn('gh pr create --base main --head "$branch"', workflow)
+        self.assertIn('gh workflow run ci-validate.yml --ref "$branch"', workflow)
+        self.assertIn('gh workflow run ci-domain-integrity.yml --ref "$branch"', workflow)
+        self.assertIn('current_main="$(git ls-remote origin refs/heads/main | cut -f1)"', workflow)
+        self.assertNotIn("HEAD:refs/heads/main", workflow)
+        self.assertNotIn('      - "release/package.yaml"', workflow)
         self.assertIn('"plugins/skills-factory-lab/**"', workflow)
         self.assertIn('"docs/lab-release.json"', workflow)
-        self.assertNotIn("git push", workflow)
-        self.assertNotIn("contents: write", workflow)
 
     def test_page_distinguishes_catalog_revision_from_lab_build_revision(self) -> None:
         page = (ROOT / "docs/index.html").read_text(encoding="utf-8")

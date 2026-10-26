@@ -108,10 +108,10 @@ The campaign CLI currently selects R20 in code; it does not select an arbitrary 
 | Ready | Frozen active scope, dependencies satisfied, owner and test plan explicit. |
 | In progress | Actual implementation underway; WIP ≤2. |
 | In review | PR is ready for review with offline results. |
-| Validation | Integrated on main; final candidate runtime/integration acceptance pending. |
+| Verification | Required runtime/integration acceptance is being performed on the final candidate; an evidence gap remains open. |
 | Done | Acceptance criteria pass with final evidence, including required runtime tests on an authorized, version-pinned surface. Production deployment is not required. Issue closure and Project status agree. |
 
-A merged runtime-bearing Issue stays open in Validation until its required rows pass. Individual Issues may reach Done while the iteration is still validating; shared regressions and unresolved rows still block the iteration. A discovered regression reopens the relevant Issue, removes current acceptance and keeps historical verdicts intact. Production promotion/publication is a separate release decision and does not gate Done; source CI or a merge alone still cannot satisfy required runtime acceptance. Use one current `Project status:` marker and canonical metadata labels; verify the asynchronous workflow and actual Project field after changes. Native Iteration is separately maintained. A tracking Issue records iteration state; do not create a new Project column per iteration state.
+A merged runtime-bearing Issue stays open in Verification until its required rows pass. Individual Issues may reach Done while the iteration is still validating; shared regressions and unresolved rows still block the iteration. A discovered regression reopens the relevant Issue, removes current acceptance and keeps historical verdicts intact. Production promotion/publication is a separate release decision and does not gate Done; source CI or a merge alone still cannot satisfy required runtime acceptance. Use one current `Project status:` marker and canonical metadata labels; verify the asynchronous workflow and actual Project field after changes. Native Iteration is separately maintained. A tracking Issue records iteration state; do not create a new Project column per iteration state.
 
 ## Failure severity and close decisions
 
