@@ -32,7 +32,7 @@ The default is **analysis only**. A user request to research, analyze, review, s
 5. Run the hard evidence-sanity gate: period, units, GAAP/non-GAAP, quarterly/annual, per-share/absolute, arithmetic and scale.
 6. If any critical metric remains UNVERIFIED/CONFLICTED, classify VERIFY/RESEARCH; block numeric valuation and sizing; persist the gap if possible and return.
 7. Only after the gate passes, build bear/base/bull valuation scenarios and current-price implications.
-8. Separate business-thesis strength, security attractiveness and priced-in expectations.
+8. Separate business-thesis strength, security attractiveness and priced-in expectations. Include five-stage business lifecycle using the deterministic security-underwriting classifier only after verification; label affinity scores uncalibrated and surface missing metrics. Never interpret lifecycle as valuation or trade recommendation.
 9. Run thesis-challenge independently.
 10. Classify research state: REJECT / WATCH / RESEARCHED / THESIS SURVIVES / THESIS WEAKENED / INVALIDATED.
 11. If portfolio action is considered, parse policy semantics literally and run portfolio-state-review/position-sizing-review as needed.
@@ -65,7 +65,7 @@ After analytical synthesis, call `report-composer`. Use `visual-output-design` t
 Default profile:
 - investment view / thesis state;
 - WHY THIS / WHY NOW;
-- business performance with KPI strip;
+- business performance with KPI strip and lifecycle phase/uncalibrated affinity when source history is sufficient;
 - a required inline 5Y price-history visual plus 1Y current-setup view when verified time-series data exist; use the best concrete renderer.
 - a required KPI-history visual for key decision-driving metrics when historical data exist;
 - dated material-event timeline tied to major price/KPI changes;
