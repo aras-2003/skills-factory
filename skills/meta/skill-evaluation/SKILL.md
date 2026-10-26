@@ -4,10 +4,10 @@ description: >
   Evaluate an Agent Skill's routing and behavior using predeclared representative cases, a no-skill baseline or accepted prior version, and evidence-based regression analysis. Use when asked to evaluate a skill, classify or report test results, determine whether a queued or blocked case actually ran, distinguish test outcome from execution state, compare evidence, or assess release readiness. Use after validation and test design, before production promotion, and after material behavior changes.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.3.5"
+  version: "0.3.7"
   maturity: draft
   risk: medium
-  last_reviewed: "2026-10-23"
+  last_reviewed: "2026-10-26"
 ---
 
 # Skill Evaluation
@@ -103,6 +103,22 @@ Do not score hidden chain-of-thought, exact phrasing, or stylistic preference as
 ## Output contract
 
 For every case, explicitly print `outcome`, `execution_state`, `evaluation.status`, `compatibility_status`, and `execution_reason`, including in a short response. Record additional conditions separately so the primary state does not hide another blocker. Do not rely on prose or the overall disposition to imply a missing field. For every non-executed case both status fields must be `NOT_RUN` and `outcome` must be `null`.
+
+Emit the case record before explanatory prose. Use the same fields for blocked, queued and executed cases; derive their values from the precedence table. A missing runner is an additional condition when no executable steps exist.
+
+```yaml
+outcome: null
+execution_state: no_steps
+evaluation:
+  status: NOT_RUN
+compatibility_status: NOT_RUN
+execution_reason: No executable steps exist; the queued job did not execute.
+additional_conditions:
+  - No runner assigned.
+disposition: ITERATE
+```
+
+The example is specifically a queued job with no steps and no runner. For unavailable browser execution, change only the primary state/reason to `blocked`/browser unavailable, keep both statuses `NOT_RUN` and outcome null, and list URL/resource, check time, observed source status and actual browser/tool trace as missing prerequisites. The source status is unknown until observed. `blocked` describes execution, never `evaluation.status`. For an executed case use the observed passed/failed outcome and PASS/FAIL status instead. Check that no known condition disappears from the record. Expected behavior or queue state is not a test result.
 
 For a required live-source check, explicitly identify the evidence needed before PASS: the source URL/resource, check time, observed status, and actual browser/tool trace. If execution was blocked, state that the source status is unknown; missing evidence requirements must remain listed even when no URL or time was supplied. Never invent their values.
 
