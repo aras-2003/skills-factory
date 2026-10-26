@@ -343,7 +343,7 @@
       "name": "skill-evaluation",
       "domain": "meta",
       "maturity": "draft",
-      "version": "0.3.7",
+      "version": "0.3.5",
       "description": "Evaluate an Agent Skill's routing and behavior using predeclared representative cases, a no-skill baseline or accepted prior version, and evidence-based regression analysis. Use when asked to evaluate a skill, classify or report test results, determine whether a queued or blocked case actually ran, distinguish test outcome from execution state, compare evidence, or assess release readiness. Use after validation and test design, before production promotion, and after material behavior changes.",
       "source": "skills/meta/skill-evaluation/SKILL.md",
       "source_status": "present",

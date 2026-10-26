@@ -29,3 +29,9 @@ All three source-pinned responses completed. The queued case now emits complete 
 Independent aggregate: no-skill **0/3**, current 0.3.4 **1/3**, proposed 0.3.5 **2/3**. The queued 0.3.5 answer still lacks required NOT_RUN status fields and additional runner condition. Some other queued assertion interpretations differ from the parent audit; these do not alter the case failure. **Final evaluation disposition: ITERATE**, with no release, promotion, installed-runtime compatibility or general model-quality claim.
 
 This completes the bounded matched-comparison/evaluation work requested in #237: executor rubrics were isolated, runtime/model/input/budget matched, missing execution was not converted to a pass, and the independent review gives an evidence-backed ITERATE decision. Remaining candidate hardening is tracked in PR #410 and does not require concealing negative results or forcing every evaluation to PASS.
+
+## Closeout retest — 2026-10-26
+
+A further frozen 0.3.7 template experiment used the identical local Qwen3:4b digest, inputs, rubrics, seed and budgets. All three responses completed; the unchanged final-answer parser excluded hidden reasoning and retained raw-response hashes. Parent labeled self-review found 1/3 PASS: queued output still omitted required fields and the browser output failed the explicit unknown-status requirement while suggesting policy bypass. The experiment is withdrawn; proposed source remains 0.3.5, draft, with its previously documented 2/3 result and unresolved queued omission. No criterion was relaxed and no historical outcome changed.
+
+This PR delivers the completed bounded evaluation record and the incremental 0.3.5 contract clarification. Merging it does not certify this draft across models or promote it. A future candidate requires a fresh frozen comparison; the Meta review P1 remediation plan remains the next scope.
