@@ -84,3 +84,9 @@ cases:
   - id: software-adr-no-skill-en
     input: evals/routing/software-adr-no-skill-en.input.md
     rubric: evals/routing/software-adr-no-skill-en.rubric.yaml
+  - id: web-design-interface-design-natural-en
+    input: evals/routing/web-design-interface-design-natural-en.input.md
+    rubric: evals/routing/web-design-interface-design-natural-en.rubric.yaml
+  - id: web-design-interface-design-report-nearmiss
+    input: evals/routing/web-design-interface-design-report-nearmiss.input.md
+    rubric: evals/routing/web-design-interface-design-report-nearmiss.rubric.yaml

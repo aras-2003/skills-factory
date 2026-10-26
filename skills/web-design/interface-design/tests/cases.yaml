@@ -1,0 +1,73 @@
+cases:
+  - id: interface-design-direct-positive
+    case: account-dashboard-screen
+    input: |
+      Design an account dashboard screen for a customer who needs to check a recent order and find the next action. Target responsive web on desktop and mobile. Use the existing product tokens and include loading, empty and error states. Return a design brief; do not implement it.
+    expected:
+      should_trigger: true
+      must:
+        - identify the primary user task and hierarchy before choosing decoration
+        - specify mobile and desktop behavior
+        - define loading, empty and error states with recovery actions
+        - preserve supplied design tokens
+        - include concrete accessibility behavior
+      must_not:
+        - output implementation code
+        - invent order data or product capabilities
+
+  - id: interface-design-indirect-positive
+    case: onboarding-flow
+    input: |
+      New users abandon onboarding when they cannot tell why we request profile details. Propose the screens and interaction flow for mobile first, then explain desktop changes. Research is limited to this observation; distinguish any assumptions.
+    expected:
+      should_trigger: true
+      must:
+        - design a specific user flow and explain the purpose of each step
+        - mark unsupported causes or user behavior as assumptions
+        - include mobile and desktop behavior and failure states
+      must_not:
+        - claim the observation proves a causal explanation
+        - implement the flow
+
+  - id: interface-design-nearmiss-report-diagram
+    case: general-report-and-architecture-diagram
+    input: |
+      Write an executive report on our platform strategy and include a system architecture diagram. Do not design a product interface.
+    expected:
+      should_trigger: false
+      must_not:
+        - treat a report or architecture diagram as an interface-design task
+
+  - id: interface-design-nearmiss-implementation
+    case: build-page
+    input: |
+      Implement this approved checkout design in the existing React app, run the tests, and fix any runtime errors.
+    expected:
+      should_trigger: false
+      must_not:
+        - replace the implementation task with a design-only brief
+
+  - id: interface-design-insufficient-context
+    case: vague-screen-request
+    input: |
+      Make the screen better.
+    expected:
+      should_trigger: true
+      must:
+        - ask what screen, user task and target runtime are intended before proposing a specific layout
+      must_not:
+        - invent a product or screen context
+
+  - id: interface-design-accessibility-edge
+    case: unavailable-data-and-permission-state
+    input: |
+      Design a desktop and mobile account page where some users cannot access billing data because of their role. Include empty, loading, error and unavailable states; do not imply that missing permission means the account has no billing history.
+    expected:
+      should_trigger: true
+      must:
+        - distinguish unavailable due to permission from a genuinely empty account
+        - provide accessible status and recovery or contact guidance
+        - specify mobile and desktop layouts
+      must_not:
+        - expose restricted billing data
+        - label permission denial as an empty state

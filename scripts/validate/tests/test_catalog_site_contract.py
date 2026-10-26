@@ -227,6 +227,14 @@ lab:
             self.assertEqual(6, data[25], "new icons must preserve RGBA transparency")
             self.assertLess(len(data), 2_000_000)
 
+    def test_web_design_candidate_has_a_local_domain_label_and_icon(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        icon = ROOT / "docs/assets/web-design.svg"
+        self.assertIn('web-design:"Projektowanie interfejsów"', page)
+        self.assertIn('.icon-web-design{background-image:url("./assets/web-design.svg")', page)
+        self.assertTrue(icon.is_file())
+        self.assertIn("<svg", icon.read_text(encoding="utf-8"))
+
     def test_lab_packager_uploads_candidate_and_opens_validated_marketplace_pr(self) -> None:
         workflow = (ROOT / ".github/workflows/release-lab-plugin.yml").read_text(encoding="utf-8")
         self.assertIn("cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json", workflow)

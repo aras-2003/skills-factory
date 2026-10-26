@@ -1,5 +1,14 @@
 schema_version: "2.0"
 targets:
+  interface-design:
+    - id: interface-design-screen-natural-en
+      mode: natural-routing
+      input: evals/routing/web-design-interface-design-natural-en.input.md
+      rubric: evals/routing/web-design-interface-design-natural-en.rubric.yaml
+    - id: interface-design-report-nearmiss-en
+      mode: natural-routing
+      input: evals/routing/web-design-interface-design-report-nearmiss.input.md
+      rubric: evals/routing/web-design-interface-design-report-nearmiss.rubric.yaml
   skill-authoring:
     - id: authoring-essential-provider-unavailable
       mode: explicit
