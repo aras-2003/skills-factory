@@ -52,7 +52,7 @@ Read the 19 applied production migration statements only to reconstruct migratio
 - PR #466 is merged at `6e548b8801cae07cd234d208ee445594eaa10ec3`; its final PR head `238197ec81b4abc1c9b2590d3df8bc3071680a54` passed all four required workflows.
 - The existing `investment-os-test` project is pre-existing and contains data. The migration and ACL checks were run there without reading or changing business rows. No Supabase branch was created.
 - A temporary RLS-enabled probe table was used only for the direct anon Data API denial check, then removed; the temporary HTTP extension was also removed. GET and POST both returned 401 / SQLSTATE 42501, and the probe had zero rows before cleanup.
-- The test project's `service_role` effective SELECT/INSERT privileges are verified. A positive HTTP request with its secret key was not run because the connected tools do not expose that key. Do not retrieve or paste it into chat.
+- In a rolled-back transaction on `investment-os-test`, `SET LOCAL ROLE service_role` successfully inserted and selected one synthetic probe row; after `ROLLBACK`, `to_regclass` confirmed the probe table was absent. The test project's effective SELECT/INSERT privileges are verified. A positive HTTP request with its secret key was not run because connected tools do not expose that key. Do not retrieve or paste it into chat.
 - A clean all-migrations replay passed in disposable CI PostgreSQL 17; it was not run against the existing data-bearing test project. No database restore rehearsal was performed. The documented recovery is forward-only and avoids deleting an applied migration or restoring broad grants.
 
 ## Closure gate
