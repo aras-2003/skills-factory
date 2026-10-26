@@ -2000,5 +2000,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "de9b88a4aa4625be0cfee4fdd9aa0700a79546cc"
+  "source_revision": "32756db52d1dc68cbfd59bcffc173fd44706a8f4"
 }
