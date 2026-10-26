@@ -326,16 +326,15 @@ components:
     exception_expires: "2026-11-14"
   - name: oaf-health-check
     kind: workflow
-    version: "1.5.0"
+    version: "1.6.0"
     source: workflows/oaf-health-check/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
-    maturity_disposition: retain-existing-pending-evidence-review
-    evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
-    limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
-    exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    maturity_disposition: lab-candidate-pending-runtime-validation
+    candidate_channel: lab
+    evidence_gap: "Disabled-specialist fallback regression fix has not been rerun on Lab 0.37.1."
+    limitation: "Lab candidate only; historical results do not establish runtime PASS for workflow 1.6.0."
   - name: oaf-operating-model-redesign
     kind: workflow
     version: "1.1.0"

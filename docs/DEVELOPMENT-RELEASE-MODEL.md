@@ -32,13 +32,13 @@ For normal incremental work:
 
 1. create a short-lived branch from `main` and open a PR;
 2. merge only after `Validate skills` and `Domain integrity` pass;
-3. `.github/workflows/release-lab-plugin.yml` builds the Lab artifact from the exact merged `main` commit and uploads the immutable Lab artifact; it does not write to a branch or publish the Site;
-4. install/run that exact Lab candidate and retain its runtime receipt;
+3. `.github/workflows/release-lab-plugin.yml` builds and validates the Lab artifact from the exact merged `main` commit, bumps the Lab patch version, uploads the immutable candidate and opens a Marketplace package PR from that same source revision; the PR contains the generated Lab package and release receipt, and is subject to the normal branch protections;
+4. review and merge the generated Marketplace package PR, then install/run that exact Lab candidate and retain its runtime receipt;
 5. fix blockers rather than weakening validators;
 6. production is released only after an explicit user request. Prepare a promotion PR containing production packages built from the exact Lab `source_revision`; include `release/promotion-evidence.json` bound to the Lab release id and digest;
 7. `.github/workflows/release-production-plugin.yml` validates the PR, all generated package manifests, the exact Lab-to-production source chain, and the runtime receipt. It never pushes or merges.
 
-The promotion validator rejects mismatched revisions, missing runtime evidence, missing package digests, or missing run identity. Production PR merge is a human-triggered release action, not an automatic consequence of a `main` merge.
+The Lab packaging workflow never writes directly to `main`, merges the Marketplace PR, or publishes the Site. The promotion validator rejects mismatched revisions, missing runtime evidence, missing package digests, or missing run identity. Production PR merge is a human-triggered release action, not an automatic consequence of a `main` merge.
 
 The active model-output campaign pins changes under `skills/`, `workflows/` and `release/package.yaml`. Changes under `runtime/mcp/` or `runtime/contracts/` require deterministic MCP contract tests; Cloud Next adapter changes additionally require Site typecheck, lint and build gates. If such a runtime change alters model-visible instructions or outcomes, add it to a scoped behavior campaign before claiming runtime compatibility. Site-only UI changes do not by themselves invalidate a host-model campaign for skill behavior. The CI workflow builds Lab and production artifacts once and reuses them for runtime handoffs; the separately required Site workflow builds Lab independently.
 

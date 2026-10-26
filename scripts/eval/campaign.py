@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -340,6 +341,44 @@ def separately_validated_iteration02_workflow_paths(root: Path = ROOT) -> set[st
         return set()
 
 
+def separately_validated_oaf_fallback_paths(root: Path = ROOT) -> set[str]:
+    """Keep R20 immutable while a hash-bound Lab fallback candidate awaits runtime."""
+    path = root / "evals/campaigns/oaf-health-check-fallback-2026-10/campaign.yaml"
+    expected = {"workflows/oaf-health-check/WORKFLOW.md"}
+    files = expected | {
+        "workflows/oaf-health-check/tests/cases.yaml",
+        "evals/oaf-health-check/fallback-strategy-disabled-lab-001.input.md",
+        "evals/oaf-health-check/fallback-strategy-disabled-lab-001.rubric.yaml",
+    }
+    try:
+        cfg = yaml.safe_load(path.read_text()) or {}
+        if (cfg.get("campaign") != "oaf-health-check-fallback-2026-10"
+                or cfg.get("runtime_status") != "NOT_RUN"
+                or cfg.get("release_approved") is not False
+                or cfg.get("historical_r20_immutable") is not True
+                or cfg.get("out_of_scope_behavior_paths") != sorted(expected)
+                or set(cfg.get("source_sha256") or {}) != files):
+            return set()
+        for rel in files:
+            if hashlib.sha256((root / rel).read_bytes()).hexdigest() != cfg["source_sha256"][rel]:
+                return set()
+        registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text())
+        entry = next(item for item in registry["workflows"] if item["name"] == "oaf-health-check")
+        if str(entry["metadata"]["version"]) != cfg.get("workflow_version"):
+            return set()
+        cases = yaml.safe_load((root / "workflows/oaf-health-check/tests/cases.yaml").read_text())["cases"]
+        if sorted(case["id"] for case in cases) != sorted(cfg.get("required_case_ids") or []):
+            return set()
+        fixtures = yaml.safe_load((root / "evals/runtime-fixtures.yaml").read_text())
+        fixture = next(item for item in fixtures["targets"]["oaf-health-check"]
+                       if item["id"] == cfg.get("runtime_fixture_id"))
+        if {fixture.get("input"), fixture.get("rubric")} != {rel for rel in files if rel.startswith("evals/")}:
+            return set()
+        return expected
+    except (OSError, ValueError, TypeError, KeyError, StopIteration, yaml.YAMLError):
+        return set()
+
+
 def filter_behavior_paths(paths: list[str], separately_validated: set[str]) -> list[str]:
     return [path for path in paths if path not in separately_validated]
 
@@ -486,6 +525,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
+    separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
         if not path:

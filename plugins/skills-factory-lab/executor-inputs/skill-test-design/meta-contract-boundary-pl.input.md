@@ -1,0 +1,1 @@
+Przygotowuję draft skillu, który porządkuje reklamacje klientów i może przygotować lub wysłać odpowiedź. Właściciel nie zdecydował jeszcze, czy wysyłanie jest dozwolone. Zaprojektuj najmniejszy zestaw testów dla tej zmiany.

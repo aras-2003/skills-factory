@@ -4,6 +4,10 @@ These examples come from the real unassisted R4 FAIL for `fallback-strategy-prod
 
 They are validation examples only. Their presence in source or static tests is **not** runtime evidence that the new behavior is fixed.
 
+## Disabled specialist claimed as available
+
+In the Lab fallback retest on 2026-10-22, the user had disabled `strategy-to-execution-diagnostic`, but the `oaf-health-check` answer claimed to have used strategy-to-execution diagnostics. This is a runtime FAIL: source/package presence is not proof that a specialist is available in the current session, and an unavailable branch must not be simulated or claimed as run. The regression fixture is `fallback-strategy-disabled-lab-001`.
+
 ## Unsupported mechanism in executive diagnosis
 
 > Firma ma strategię, ale nie ma stabilnego mechanizmu przekładania jej na porównywalne decyzje portfelowe i roadmapy.

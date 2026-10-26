@@ -8,7 +8,9 @@ on:
       - "docs/lab-release.json"
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
+  actions: write
 
 concurrency:
   group: main-lab-packaging
@@ -16,8 +18,7 @@ concurrency:
 
 jobs:
   package:
-    name: Release / Build, validate and upload Lab candidate
-    if: github.actor != 'github-actions[bot]'
+    name: Release / Build, validate and prepare Lab Marketplace PR
     runs-on: ubuntu-latest
     env:
       SOURCE_REVISION: ${{ github.sha }}
@@ -38,6 +39,15 @@ jobs:
           python scripts/package/artifact_validation.py plugins/skills-factory-lab --lab
           python scripts/eval/validate_isolation.py --artifact plugins/skills-factory-lab
           cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json
+      - name: Build Site from the identical Lab artifact
+        run: python scripts/package/build_cloud_next_site.py --lab-artifact plugins/skills-factory-lab --write-generated
+      - name: Upload source-bound Site candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: skills-factory-site-${{ github.sha }}
+          path: sites/skills-factory-site
+          include-hidden-files: true
+          if-no-files-found: error
       - name: Upload immutable Lab candidate
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -51,6 +61,68 @@ jobs:
       - name: Record candidate identity
         run: |
           echo "## Lab candidate" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Source revision: \`$SOURCE_REVISION\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Release ID: \`$(python -c 'import json; print(json.load(open("docs/lab-release.json"))["release_id"])')\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Package digest: \`$(python -c 'import json; print(json.load(open("docs/lab-release.json"))["payload_content_sha256"])')\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Source revision: $SOURCE_REVISION" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Release ID: $(python -c 'import json; print(json.load(open("docs/lab-release.json"))["release_id"])')" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Package digest: $(python -c 'import json; print(json.load(open("docs/lab-release.json"))["payload_content_sha256"])')" >> "$GITHUB_STEP_SUMMARY"
+      - name: Open Marketplace package PR and dispatch validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          current_main="$(git ls-remote origin refs/heads/main | cut -f1)"
+          if [[ "$current_main" != "$SOURCE_REVISION" ]]; then
+            echo "::notice::main advanced from $SOURCE_REVISION to $current_main; skipping stale package PR."
+            exit 0
+          fi
+
+          branch="automation/lab-marketplace-$SOURCE_REVISION"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "$branch"
+            candidate_identity="$(python -c 'import json; d=json.load(open("docs/lab-release.json")); print(d["release_id"], d["payload_content_sha256"])')"
+            remote_identity="$(git show "origin/$branch:docs/lab-release.json" | python -c 'import json,sys; d=json.load(sys.stdin); print(d["release_id"], d["payload_content_sha256"])')"
+            if [[ "$candidate_identity" != "$remote_identity" ]]; then
+              echo "::error::Existing package branch has a different release identity; refusing to overwrite it."
+              exit 1
+            fi
+            # Candidate artifacts have already been uploaded; clear them before checking out their matching branch.
+            git restore plugins/skills-factory-lab docs/lab-release.json sites/skills-factory-site
+            git switch --track -C "$branch" "origin/$branch"
+          else
+            git switch -c "$branch"
+            git restore sites/skills-factory-site
+          fi
+          git add plugins/skills-factory-lab docs/lab-release.json
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore(lab): publish candidate $SOURCE_REVISION"
+          fi
+
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "::error::Unexpected working tree changes while preparing Lab package PR."
+            exit 1
+          fi
+          remote_head="$(git rev-parse "origin/$branch" 2>/dev/null || true)"
+          if [[ "$(git rev-parse HEAD)" != "$remote_head" ]]; then
+            git push origin "HEAD:refs/heads/$branch"
+          fi
+
+          pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number // empty')"
+          if [[ -z "$pr_number" ]]; then
+            if pr_output="$(gh pr create --base main --head "$branch" --title "chore(lab): publish candidate $SOURCE_REVISION" --body "Generated from exact main source revision $SOURCE_REVISION after Lab package and isolation validation. This PR updates the Marketplace package snapshot and release receipt. It does not publish the Site." 2>&1)"; then
+              echo "$pr_output"
+              pr_number="$(gh pr list --base main --head "$branch" --state open --json number --jq '.[0].number')"
+            elif grep -Fq "GitHub Actions is not permitted to create or approve pull requests" <<<"$pr_output"; then
+              echo "::warning::Repository policy blocks pull-request creation by GITHUB_TOKEN. Candidate branch is pushed; create its PR with the GitHub connector."
+              pr_number="pending manual PR"
+            else
+              echo "$pr_output" >&2
+              exit 1
+            fi
+          fi
+
+          gh workflow run ci-validate.yml --ref "$branch"
+          gh workflow run ci-domain-integrity.yml --ref "$branch"
+          if [[ "$pr_number" == "pending manual PR" ]]; then
+            echo "Candidate artifacts and validation runs are ready; a GitHub connector must open the Marketplace PR from $branch." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Opened/reused Lab Marketplace PR #$pr_number from $branch and dispatched candidate validation." >> "$GITHUB_STEP_SUMMARY"
+          fi

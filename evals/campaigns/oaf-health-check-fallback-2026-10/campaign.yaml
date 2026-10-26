@@ -1,0 +1,21 @@
+campaign: oaf-health-check-fallback-2026-10
+runtime_status: NOT_RUN
+release_approved: false
+historical_r20_immutable: true
+out_of_scope_behavior_paths:
+- workflows/oaf-health-check/WORKFLOW.md
+workflow_version: 1.6.0
+required_case_ids:
+- oaf-health-check-confidence-001
+- oaf-health-check-confidence-002
+- oaf-health-check-disabled-specialist-001
+source_sha256:
+  workflows/oaf-health-check/WORKFLOW.md: a9d4cdaf9303968961064baac3f790ab631dbc331073b5b3b7787150730b412c
+  workflows/oaf-health-check/tests/cases.yaml: 3c0d2895ad8dd59dcffaf3601f0917f3214b10bfd191723a895c5fb11421623a
+  evals/oaf-health-check/fallback-strategy-disabled-lab-001.input.md: 488092aeb8d0216bb4686d50bcfad87d76710dbf872fe640aeb9ec57c26099cb
+  evals/oaf-health-check/fallback-strategy-disabled-lab-001.rubric.yaml: aa4b8fdf53b4590a6e751d27571b66c2237f8ec274c5fcd0842b05cc1eb55095
+runtime_fixture_id: fallback-strategy-disabled-lab-001
+execution_surface: Lab only, Site MCP disabled; Strategy To Execution Diagnostic disabled
+  through plugin settings.
+candidate_identity: Bind actual source_revision, release_id and payload_content_sha256
+  from the merged-main Lab artifact before execution.

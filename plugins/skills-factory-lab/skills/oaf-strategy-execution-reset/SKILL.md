@@ -4,10 +4,10 @@ description: Run an OAF strategy-execution reset linking strategic outcomes, cap
   portfolio, decision rights, funding and evidence loops.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: 0.1.1
   maturity: candidate
   risk: medium
-  last_reviewed: '2026-09-30'
+  last_reviewed: '2026-10-13'
 ---
 
 # Oaf Strategy Execution Reset Runtime Entrypoint

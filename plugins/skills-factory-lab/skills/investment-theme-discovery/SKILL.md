@@ -6,10 +6,10 @@ description: Child workflow for Investment OS theme research. Use when selected 
   broad natural investment requests.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.2.0
+  version: 0.2.1
   maturity: production
   risk: medium
-  last_reviewed: '2026-10-02'
+  last_reviewed: '2026-10-13'
 ---
 
 # Investment Theme Discovery Runtime Entrypoint

@@ -7,10 +7,10 @@ description: Run the OAF Health Check workflow as a selective cross-domain organ
   specialist OAF skill.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 1.5.0
+  version: 1.6.0
   maturity: production
   risk: medium
-  last_reviewed: '2026-10-01'
+  last_reviewed: '2026-10-22'
 ---
 
 # Oaf Health Check Runtime Entrypoint

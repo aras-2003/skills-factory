@@ -51,6 +51,8 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["XYZ Technologies is a good investment; should I add 5% of my portfolio?", "investment-security-review"],
     ["Review Micron's thesis, valuation and portfolio fit after its position drifted to 9.5%", "investment-security-review"],
     ["Review my portfolio allocation, concentration and overlap across holdings", "investment-portfolio-review"],
+    ["Review my investment portfolio; routing only, do not read data or execute a child workflow.", "investment-portfolio-review"],
+    ["Find new stocks worth researching; do not review my investment portfolio.", "investment-opportunity-hunter"],
     ["Review stock ACN", "investment-security-review"],
     ["I hold Micron and want an end-to-end review of the stock. Reassess the thesis, valuation, downside, catalysts and whether the position still fits my portfolio. Do not scan for unrelated ideas.", "investment-security-review"],
     ["Znajdź nowe okazje inwestycyjne", "investment-opportunity-hunter"],
@@ -410,4 +412,9 @@ test("chart shape guards fail closed for stale connectors and silently truncated
   const validLine = await call("render_line_chart", { x_labels: validXLabels, series_names: validSeriesNames, series_values: validSeries, expected_x_labels: 100, expected_series: 8, expected_points_per_series: 100, title: "L", unit: "u" });
   assert.equal(validLine.isError, false);
   assert.equal((validLine.structuredContent.data as { series_values: number[][] }).series_values[7][99], -456);
+});
+
+ test("software identity preserves Lab version independently of Site deployment", async () => {
+  const info = await runtimeInfo();
+  assert.deepEqual(info.software_release, {version: LAB_RELEASE.version, release_id: LAB_RELEASE.release_id, source_revision: LAB_RELEASE.source_revision});
 });

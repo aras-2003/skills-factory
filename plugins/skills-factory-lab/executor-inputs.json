@@ -157,6 +157,13 @@
       "input_sha256": "7789a62a1763ccce189f83a5a4230941c5ac4c5c731333d19741f9acb4dc9e19"
     },
     {
+      "target": "oaf-health-check",
+      "case_id": "fallback-strategy-disabled-lab-001",
+      "mode": "explicit",
+      "input": "executor-inputs/oaf-health-check/fallback-strategy-disabled-lab-001.input.md",
+      "input_sha256": "488092aeb8d0216bb4686d50bcfad87d76710dbf872fe640aeb9ec57c26099cb"
+    },
+    {
       "target": "oaf-operating-model-redesign",
       "case_id": "case-operating-model-redesign-001",
       "mode": "explicit",
@@ -185,6 +192,27 @@
       "input_sha256": "ee939bf8b1e1e08af09354606912e349cc0f405e2cb0de3216790d4be5783aac"
     },
     {
+      "target": "skill-authoring",
+      "case_id": "authoring-conflicting-brief",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-authoring/conflicting-brief.input.md",
+      "input_sha256": "5fbcb0f161873a349c7c2848bcbb076ca7b58d312c7ef9982cc3c762de9645c9"
+    },
+    {
+      "target": "skill-authoring",
+      "case_id": "authoring-essential-provider-unavailable",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-authoring/essential-provider-unavailable.input.md",
+      "input_sha256": "d53d62dfcd471014397079c4c56a7c865016f4d9ab7b69771c872185977c432d"
+    },
+    {
+      "target": "skill-authoring",
+      "case_id": "authoring-source-artifact-missing",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-authoring/source-artifact-missing.input.md",
+      "input_sha256": "a1558795e791659a4053e84c12384eaa97cdb667cc82f31ce73851fa04c45dad"
+    },
+    {
       "target": "skill-evaluation",
       "case_id": "evaluation-contradictory-no-steps-pass",
       "mode": "explicit",
@@ -207,6 +235,34 @@
     },
     {
       "target": "skill-test-design",
+      "case_id": "testdesign-article-edit-nearmiss-en",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-test-design/article-edit-nearmiss-en.input.md",
+      "input_sha256": "c64b83a28be0fa7006d26ea5afda9d183f82d792fceddb5cef71c6da8a7f2273"
+    },
+    {
+      "target": "skill-test-design",
+      "case_id": "testdesign-article-factcheck-pl",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-test-design/article-factcheck-pl.input.md",
+      "input_sha256": "0bd62e50d4273c3b7358893c5864a3dd0ce66e3165a01af0030abe6def628eba"
+    },
+    {
+      "target": "skill-test-design",
+      "case_id": "testdesign-commerce-opportunity-en",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-test-design/commerce-opportunity-en.input.md",
+      "input_sha256": "1359c7b5f34dd506d42d556656ca6011ef5c1a713a26e7a92531ffaebc4486a3"
+    },
+    {
+      "target": "skill-test-design",
+      "case_id": "testdesign-consumer-purchase-nearmiss-pl",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-test-design/consumer-purchase-nearmiss-pl.input.md",
+      "input_sha256": "7e75e1df317da981ebee9a534b68d6ac08a2971b888bbc9129c5ce6da066b8f8"
+    },
+    {
+      "target": "skill-test-design",
       "case_id": "testdesign-description-only-routing",
       "mode": "explicit",
       "input": "executor-inputs/skill-test-design/description-only-routing.input.md",
@@ -218,6 +274,13 @@
       "mode": "explicit",
       "input": "executor-inputs/skill-test-design/live-source-evidence.input.md",
       "input_sha256": "51aec1f8ffb42eec7f50f691c38ca15723c0756a8e0a6229585cc7ed530ca2a7"
+    },
+    {
+      "target": "skill-test-design",
+      "case_id": "testdesign-meta-contract-boundary-pl",
+      "mode": "explicit",
+      "input": "executor-inputs/skill-test-design/meta-contract-boundary-pl.input.md",
+      "input_sha256": "2e9d1ca05ee3a9ebf00519ab239e5a8e7178738113964d412bf414c032abae93"
     },
     {
       "target": "transformation-blueprint",
