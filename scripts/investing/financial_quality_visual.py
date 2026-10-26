@@ -83,6 +83,6 @@ def render_quality_trends_svg(observations: list[dict], *, company: str = "Compa
             out.append(f'<polyline points="{" ".join(points)}" fill="none" stroke="{color}" stroke-width="3"/>')
     for i, (key, label, color) in enumerate(SERIES):
         out.append(f'<rect x="{45 + (i%2)*445}" y="{372 + (i//2)*19}" width="12" height="9" fill="{color}"/>')
-        out.append(f'<text x="{65+(i%2)*445}" y="{381+(i//2)*19}" fill="#CCD5E2" font-size="12">{escape(label)}{" (no data)" if key not in {x[0] for x in []} and not any((item.get("metrics") or {}).get(key) is not None for item in observations) else ""}</text>')
+        out.append(f'<text x="{65+(i%2)*445}" y="{381+(i//2)*19}" fill="#CCD5E2" font-size="12">{escape(label)}{" (no data)" if not any((item.get("metrics") or {}).get(key) is not None for item in observations) else ""}</text>')
     out.append("</svg>")
     return "".join(out)
