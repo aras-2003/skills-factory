@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "kind": "local_validation_receipt",
+  "issue": 422,
+  "captured_at": "2026-10-26",
+  "reviewed_source_revision": "5d132430842b1c983d6d2e611735689f6fbbd6b8",
+  "upstream": {
+    "repository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+    "reviewed_commit": "28b3b8dee8c976df4fa3e94aed4e092ad43fcb03",
+    "declared_skill_version": "2.15.0",
+    "license": "MIT",
+    "latest_release_tag": "v2.15.0",
+    "release_commit": "a38d04c3d5c298c851dbe5e6ee1965ee3de42cb5",
+    "release_skill_version": "2.13.0",
+    "cli_package_version": "2.5.0",
+    "version_mismatch": true
+  },
+  "checks": {
+    "adapter_contract_unit_tests": {
+      "state": "PASS",
+      "cases": 6,
+      "network_used_during_execution": false
+    },
+    "repository_validate_all": {
+      "state": "PASS",
+      "exit_code": 0,
+      "preexisting_warnings": 20
+    },
+    "skill_security_scan": {
+      "state": "PASS",
+      "findings": 0
+    },
+    "production_plugin_package": {
+      "state": "PASS",
+      "version": "1.38.351",
+      "source_revision": "5d132430842b1c983d6d2e611735689f6fbbd6b8",
+      "skills": 40,
+      "workflow_entrypoints": 15,
+      "capabilities": 55,
+      "contains_ui_ux_pro_max_or_21st_provider": false,
+      "capabilities_sha256": "ce598b540dabff5d23787f77e871ffe0388f38a1ccb713f144f7a035f6689c5e",
+      "release_manifest_sha256": "db7c3f662b2ffa8997912c909bdaa47b6dfffde10c7e562f5205f5306d8cac2f"
+    }
+  },
+  "runtime_behavior": {
+    "state": "NOT_RUN",
+    "reason": "This change adds only a non-executable adapter reference and does not add or promote a runtime skill."
+  },
+  "scope": "Reference-only upstream adapter; no copied upstream code or data, no new dependencies, no production allow-list change."
+}

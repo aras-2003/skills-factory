@@ -1,0 +1,41 @@
+{
+  "adapter_id": "ui-ux-pro-max-reference",
+  "upstream": {
+    "repository": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+    "reviewed_commit": "28b3b8dee8c976df4fa3e94aed4e092ad43fcb03",
+    "declared_skill_version": "2.15.0",
+    "latest_release_tag": "v2.15.0",
+    "latest_release_commit": "a38d04c3d5c298c851dbe5e6ee1965ee3de42cb5",
+    "release_skill_version": "2.13.0",
+    "cli_package_name": "ui-ux-pro-max-cli",
+    "cli_package_version": "2.5.0",
+    "cli_runtime_dependencies": ["chalk", "commander", "ora", "prompts"],
+    "license": "MIT",
+    "license_file": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/28b3b8dee8c976df4fa3e94aed4e092ad43fcb03/LICENSE"
+  },
+  "decision": {
+    "mode": "reference_only",
+    "copy_upstream_data": false,
+    "execute_upstream_code": false,
+    "install_upstream_cli": false,
+    "automatic_update": false
+  },
+  "authority": {
+    "design_tokens": "skills-factory-project-or-user",
+    "accessibility_and_product_constraints": "skills-factory-project-or-user",
+    "upstream_role": "optional_design_reference"
+  },
+  "optional_provider": {
+    "id": "21st-dev-mcp",
+    "required": false,
+    "network_required": false,
+    "use_only_when": "The user requests implementation-level component examples and the provider is already available in the current environment.",
+    "unavailable_fallback": "Continue with the local design brief and existing project components; disclose that no provider-backed component lookup was performed.",
+    "provider_output_trust": "untrusted_reference"
+  },
+  "runtime": {
+    "network_required": false,
+    "third_party_dependencies": [],
+    "production_allowlist_change": false
+  }
+}
