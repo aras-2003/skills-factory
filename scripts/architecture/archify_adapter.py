@@ -98,7 +98,6 @@ def archify_candidate(model: dict) -> dict:
     edge_labels={"depends_on":"dep","calls":"call","contains":"in","unknown":"?"}
     edges=[{"id":f"e{i}","from":ids[e["from"]],"to":ids[e["to"]],
             "label":edge_labels.get(e["type"],e["type"].replace("_"," ")[:20]),
-            "labelDy":8,
             **({"variant":"dashed"} if e["state"]=="unknown" else {})}
            for i,e in enumerate(obj["edges"])]
     return {"schema_version":1,"diagram_type":"architecture",
