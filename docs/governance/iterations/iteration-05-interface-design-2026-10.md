@@ -1,14 +1,15 @@
 # Iteration 05 — interface-design candidate acceptance
 
-- State: PLANNED
+- State: ACTIVE
 - Owner: Arkadiusz Kamrowski
 - Reviewer: Arkadiusz Kamrowski (self-review; not independent)
 - Tracking Issue: [#471](https://github.com/aras-2003/skills-factory/issues/471)
 - Native Project Iteration: not set; repository record is authoritative.
 - Previous terminal iteration: Iteration 04, closed at main `508f35cdba43e2f93a231ae6f828d46b70534ba9`.
 - Baseline main SHA: `508f35cdba43e2f93a231ae6f828d46b70534ba9`.
-- Lock commit SHA: to be recorded in #471 after this record merges.
-- Scope lock reviewed by / at: owner self-review, 2026-10-27 UTC.
+- Started at: 2026-10-26 23:23 UTC (2026-10-27 01:23 Europe/Warsaw).
+- Lock commit SHA: `709522475f6e1671b7b3600f1c8b3a72bbf3df08` (scope-lock merge commit; fixed commitment is unchanged).
+- Scope lock reviewed by / at: owner self-review, 2026-10-26 UTC (2026-10-27 Europe/Warsaw).
 
 ## Frozen commitment
 
