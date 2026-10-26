@@ -1,6 +1,6 @@
 # Iteration 04 — Supabase migration grants and isolated replay
 
-Status: ACTIVE (scope locked before implementation)
+Status: CLOSED (owner/reviewer accepted evidence substitution on 2026-10-26)
 
 ## Lock
 
@@ -43,18 +43,23 @@ Read the 19 applied production migration statements only to reconstruct migratio
 | Surface | Requirement | State |
 | --- | --- | --- |
 | PR/CI | Static migration lint and clean replay, exact SHA | PASS — PR #466 final head `238197ec81b4abc1c9b2590d3df8bc3071680a54` |
-| `investment-os-test` | Apply the grant migration and verify effective/current and default ACLs without disturbing existing data | PASS — migration applied; grants/defaults checked |
-| Test-project Data API | Deny client reads/writes and verify authorized server path without disclosing keys | PARTIAL — anon GET/POST denied; positive `service_role` HTTP call unavailable |
+| `investment-os-test` | Verify grants, default ACLs, and runtime authorization without disturbing existing data | PASS — migration applied; grants/defaults and role paths checked |
+| Test-project Data API | Deny client reads/writes and verify authorized server path without disclosing keys | PASS — anon GET/POST denied; owner-run `service_role` GET returned HTTP 200 with an empty body |
 | Production | No migration execution in this increment | N/A — excluded by scope |
 
 ## Actual verification — 2026-10-26
 
 - PR #466 is merged at `6e548b8801cae07cd234d208ee445594eaa10ec3`; its final PR head `238197ec81b4abc1c9b2590d3df8bc3071680a54` passed all four required workflows.
 - The existing `investment-os-test` project is pre-existing and contains data. The migration and ACL checks were run there without reading or changing business rows. No Supabase branch was created.
-- A temporary RLS-enabled probe table was used only for the direct anon Data API denial check, then removed; the temporary HTTP extension was also removed. GET and POST both returned 401 / SQLSTATE 42501, and the probe had zero rows before cleanup.
-- In a rolled-back transaction on `investment-os-test`, `SET LOCAL ROLE service_role` successfully inserted and selected one synthetic probe row; after `ROLLBACK`, `to_regclass` confirmed the probe table was absent. The test project's effective SELECT/INSERT privileges are verified. A positive HTTP request with its secret key was not run because connected tools do not expose that key. Do not retrieve or paste it into chat.
-- A clean all-migrations replay passed in disposable CI PostgreSQL 17; it was not run against the existing data-bearing test project. Its current migration ledger has nine entries and does not represent the repository's full 20-migration replay. No database restore rehearsal was performed. The documented recovery is forward-only and avoids deleting an applied migration or restoring broad grants.
+- A temporary RLS-enabled probe table was used for the direct anon Data API denial check, then removed; the temporary HTTP extension was also removed. GET and POST both returned 401 / SQLSTATE 42501, and a cleanup query confirmed no remaining probe objects or HTTP extension.
+- In a rolled-back transaction on `investment-os-test`, `SET LOCAL ROLE service_role` inserted and selected one synthetic row; after `ROLLBACK`, `to_regclass` confirmed the table was absent.
+- Owner-run service-role Data API GET `system_config?select=*&limit=0` returned HTTP 200 and an empty `[]` response; no business data or key was shared.
+- All 20 migrations replayed cleanly in disposable CI PostgreSQL 17. The existing `investment-os-test` has pre-existing data and a different nine-entry migration ledger, so it was not reset or replayed from zero. No restore rehearsal was performed. The documented recovery is forward-only and avoids deleting applied migrations or restoring broad grants.
+
+## Closure decision — 2026-10-26
+
+The owner explicitly accepted the clean CI replay plus live `investment-os-test` runtime authorization evidence as sufficient to close #387 without resetting the data-bearing project or creating a Supabase branch. This is an approved evidence substitution: it does not claim a clean replay or restore rehearsal happened on the remote project. The ACL-only migration and test-project current/default grants passed; client denial and server-role API access passed. Production remained untouched.
 
 ## Closure gate
 
-Keep #387 open in Verification until the test-project replay/recovery acceptance is validated. The direct test-project Data API server path is now evidenced; the existing data-bearing project was not reset. Do not claim the existing test project was empty or replayed from zero. Production deployment is not required for closure.
+Closed on 2026-10-26 after owner/reviewer acceptance. Keep the remote replay/restore limitation explicit in future references; do not represent it as an executed test. Production deployment is not required for closure.
