@@ -32,3 +32,16 @@ Monitoring: compare results across dated observations and flag phase transition
 for analyst review; do not auto-generate trading orders or infer certainty from
 a score. Persistence belongs exclusively to `investment-record-store`, subject
 to verified canonical `public` schema and explicit write authorization.
+
+## Mandatory report graphic
+Call `render_lifecycle_svg(result, company=...)` in
+`scripts/business_lifecycle_visual.py` for the research report lifecycle panel.
+Display all five phases in order, highlight the chosen phase, provide affinity
+bars with **NOT calibrated probability** labeling, and show input KPI evidence.
+For insufficient or conflicted observations, still show the five phases with
+NOT CLASSIFIED / N/A and no winner. SVG includes accessible title/description,
+but report prose must also contain the phase, evidence and limitations.
+If graphic embedding is unsupported, report BLOCKED_NO_RENDERER and an accurate
+five-phase table; never claim visual success without a returned rendered object.
+
+Run `python -m pytest tests/investing/test_business_lifecycle_visual.py -q`.
