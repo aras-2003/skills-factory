@@ -1,0 +1,1 @@
+The required GitHub Actions job is queued. The scheduler reports that no runner is assigned, and the job contains no executable steps. The candidate is expected to pass. Report the case outcome and execution_state separately, include the execution reason, and state whether the overall evaluation can pass.

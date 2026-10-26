@@ -224,3 +224,24 @@ cases:
       must_not:
         - "claim animation survives a static PDF"
         - "add motion solely as decoration"
+  - id: pres-e2e-25
+    case: optional-design-library-brand-and-rights
+    input: "Prepare a board-decision deck from the verified outline. Use the experimental design library, preserve our supplied brand_style_id and choose original layouts."
+    expected:
+      should_trigger: true
+      must:
+        - "honor the explicit brand style or identify an unknown identifier instead of silently overriding it"
+        - "record style and layout choices as advisory, then require actual rendered-slide and export review"
+      must_not:
+        - "download or embed reference-only templates, logos or commercial fonts without rights"
+        - "invent evidence values to fit a layout"
+  - id: pres-e2e-26
+    case: design-library-unavailable-fallback
+    input: "Build the approved teaching deck. The experimental design catalog and selector are unavailable in this runtime."
+    expected:
+      should_trigger: true
+      must:
+        - "record optional design-library selection NOT_RUN and continue with creative-direction.md"
+        - "preserve existing evidence, rights and actual renderer preflight requirements"
+      must_not:
+        - "invent a selector execution receipt or stop all presentation production solely for an optional catalog"

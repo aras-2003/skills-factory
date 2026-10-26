@@ -1,0 +1,810 @@
+{
+  "scope": "9 source Meta skills + registered Meta workflow skill-development; 10 components",
+  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+  "snapshot_manifest_identity": {
+    "version": "1.38.320",
+    "release_id": "1.38.320+111b10aa89d5",
+    "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+    "payload_content_sha256": "09da0f12b0194de60c68d3126fc7767a7a935f5b266569fa0a088a2b6e001231"
+  },
+  "production_snapshot_identity": {
+    "version": null,
+    "release_id": null,
+    "source_revision": null,
+    "payload_content_sha256": null
+  },
+  "records": [
+    {
+      "name": "report-composer",
+      "kind": "skill",
+      "source": "skills/meta/report-composer/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "18b8a2aecf1db821f6cd6da06403fad47f08e16d685c49aae5f3464c5995ab1d",
+      "owner": "arkadiusz-kamrowski",
+      "version": "0.12.1",
+      "maturity": "candidate",
+      "routing_description": "Compose one integrated decision report from an already-supported workflow result by interleaving narrative, evidence, decisions and contextually placed visual slots. Use when the user needs a coherent report where charts, diagrams, interactive components or Figma outputs appear inside the relevant sections instead of as a separate parallel artifact.\n",
+      "tests": [
+        {
+          "path": "skills/meta/report-composer/tests/cases.yaml",
+          "sha256": "b4af9ff88d37348024fc4c807b5a574dd1c2714508c1c0d89b2497131f611eb8",
+          "case_ids": [
+            "integrated-investment-report",
+            "cloud-next-inline-interactive-report",
+            "integrated-oaf-report",
+            "explicit-html-report",
+            "no-unsolicited-artifact",
+            "exhibit-adapts-to-requested-output-format",
+            "simple-answer-no-report",
+            "integrated-investment-shortlist-static-fallback",
+            "audit-near-miss-report-composer"
+          ]
+        },
+        {
+          "path": "skills/meta/report-composer/tests/quality-cases.yaml",
+          "sha256": "5f2c64d1690d49752d6dcb4f65c1e7df8bbef3ef2e05d6b333020eb4c9d47c19",
+          "case_ids": [
+            "quality-investment-portfolio",
+            "quality-security-review",
+            "quality-no-renderer",
+            "quality-payload-client-not-observable",
+            "quality-user-provided-unreproducible-metric"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "path": "skills/meta/report-composer/references/composition-rules.md",
+          "sha256": "0639186d0e9e8ac9b616cfe532ac609d09ca3560121445e28c0bdf4b3a293932"
+        },
+        {
+          "path": "skills/meta/report-composer/references/report-profiles.md",
+          "sha256": "4e6ec754485993c676d52b001e302ee26a79949490e82940e39139f4644506b4"
+        },
+        {
+          "path": "skills/meta/report-composer/references/report-quality-standard.md",
+          "sha256": "0fcec169295529420c14d90edf1163e1abe30f1ec2f2d7dee092944510aa3d8f"
+        },
+        {
+          "path": "skills/meta/report-composer/references/report-state-and-evidence-contract.md",
+          "sha256": "81be59d7bcb21c80478b163121680519be48c8ca8ab274bcc5538c3233eeb83e"
+        }
+      ],
+      "registered_consumers": [
+        "oaf-health-check",
+        "oaf-operating-model-redesign",
+        "oaf-governance-redesign",
+        "oaf-transformation-design",
+        "oaf-enterprise-architecture-review",
+        "commerce-product-deep-dive",
+        "commerce-opportunity-review",
+        "investment-portfolio-observation",
+        "investment-attention-review",
+        "investment-opportunity-hunter",
+        "investment-security-review",
+        "investment-portfolio-review",
+        "investment-theme-discovery"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/report-composer/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "report-composer",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Compose one integrated decision report from an already-supported workflow result by interleaving narrative, evidence, decisions and contextually placed visual slots. Use when the user needs a coherent report where charts, diagrams, interactive components or Figma outputs appear inside the relevant sections instead of as a separate parallel artifact.\n",
+        "version": "0.12.1",
+        "maturity": "candidate",
+        "content_sha256": "0cdbab649bd1bc5cbb452420af8b493f11bf0b3c47b53a759972de8698048033",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:52:09.427Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "ca94cf4751e86606e98cfbbc8072a8207dd02f98de2e602135f110019627bc9d",
+          "output_sha256": "f43b654620be92de30c9209c4c04187ce6d0866b9413dede18a035b526c24adf"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-authoring",
+      "kind": "skill",
+      "source": "skills/meta/skill-authoring/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "0ea0f76785702eceb84e47d4a2dcf8e98b97d5b86840fa3fbcf0d457c407a137",
+      "owner": "arkadiusz-kamrowski",
+      "version": "1.0.2",
+      "maturity": "production",
+      "routing_description": "Create or refactor an Agent Skill package from an approved skill specification. Use when writing SKILL.md, splitting instructions into references/scripts/assets, improving progressive disclosure, or aligning a skill with repository and current Agent Skills authoring conventions.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skill-authoring/tests/cases.yaml",
+          "sha256": "eda7e7c556187c6419121ae08944e4ad5597b7a9a78ff07d19f825dbec473663",
+          "case_ids": [
+            "author-001",
+            "author-002",
+            "author-003",
+            "author-negative-validation-only",
+            "author-negative-eval-only",
+            "author-004",
+            "author-005",
+            "author-006"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [
+        "skill-development"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skill-authoring/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-authoring",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Create or refactor an Agent Skill package from an approved skill specification. Use when writing SKILL.md, splitting instructions into references/scripts/assets, improving progressive disclosure, or aligning a skill with repository and current Agent Skills authoring conventions.\n",
+        "version": "1.0.2",
+        "maturity": "production",
+        "content_sha256": "9643a9a0db97809e712309e1c302bcc672ceac10156fbd4cfd75ded178f5d9fd",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:51:35.311Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "9d779b287c0a4822967e689c65e88344eec785ce88f39b4c30a753134ad9bfe8",
+          "output_sha256": "b89af017626db7f1950069f7022d14dbc60332f7332318831e61cd693414ed4b"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-evaluation",
+      "kind": "skill",
+      "source": "skills/meta/skill-evaluation/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "8f385debc0bb4f4c60be1457af17d938a22f8207c5214940b0daf2269a5a2334",
+      "owner": "arkadiusz-kamrowski",
+      "version": "0.3.4",
+      "maturity": "draft",
+      "routing_description": "Evaluate an Agent Skill's routing and behavior using predeclared representative cases, a no-skill baseline or accepted prior version, and evidence-based regression analysis. Use when asked to evaluate a skill, classify or report test results, determine whether a queued or blocked case actually ran, distinguish test outcome from execution state, compare evidence, or assess release readiness. Use after validation and test design, before production promotion, and after material behavior changes.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skill-evaluation/tests/cases.yaml",
+          "sha256": "a5cdeb4542451eb988a61bcb4e8dec59c9da27313bd5cf3c8896571efff855ff",
+          "case_ids": [
+            "eval-routing-contract",
+            "eval-one-example",
+            "eval-paired-comparison",
+            "eval-subjective-blind-review",
+            "eval-stochastic-variance",
+            "eval-missing-runtime-evidence",
+            "eval-queued-not-run",
+            "eval-reject-contradictory-nonexecution-pass",
+            "eval-live-browser-evidence",
+            "eval-diagnostic-hypothesis",
+            "eval-no-trigger-near-miss",
+            "eval-negative-unapproved-scope"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [
+        "skill-development"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skill-evaluation/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-evaluation",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Evaluate an Agent Skill's routing and behavior using predeclared representative cases, a no-skill baseline or accepted prior version, and evidence-based regression analysis. Use when asked to evaluate a skill, classify or report test results, determine whether a queued or blocked case actually ran, distinguish test outcome from execution state, compare evidence, or assess release readiness. Use after validation and test design, before production promotion, and after material behavior changes.\n",
+        "version": "0.3.4",
+        "maturity": "draft",
+        "content_sha256": "584d9d29cf0bb39fddc7b9e6cdecbf8233d6fe3f4e4c0a501d5c8944b72f0658",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:51:45.425Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "b4b992882ce47eec6188043861330fde438682fcde021ee3c06702d9506c560f",
+          "output_sha256": "411f368742cb1a2adc538773f4dfa2afe2d8844da8af063c676da1f21013af19"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-release-review",
+      "kind": "skill",
+      "source": "skills/meta/skill-release-review/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "528589be39c2916f3c774256f708a16c1a5317a636f4cc811da8c9758b48735b",
+      "owner": "arkadiusz-kamrowski",
+      "version": "0.3.0",
+      "maturity": "draft",
+      "routing_description": "Make an evidence-gated production-readiness decision for an Agent Skill after validation and evaluation are complete. Use before promotion or publication, including when reviewing a changed production skill.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skill-release-review/tests/cases.yaml",
+          "sha256": "37e798fb6a3bf4e6e0ed39ef6768eaf9d1e141d94f330c0e0df50e1a17cfc956",
+          "case_ids": [
+            "release-candidate-evidence-match",
+            "release-missing-target-channel",
+            "release-stale-evidence",
+            "release-severe-routing-collision",
+            "release-no-added-value",
+            "release-package-mismatch",
+            "release-authority-boundary",
+            "release-replacement-digest-needs-new-authorization",
+            "release-queued-runtime-evidence",
+            "release-follow-up-owner",
+            "release-personal-beta-bounded",
+            "release-personal-beta-not-new-promotion",
+            "release-negative-source-authoring",
+            "release-negative-test-design"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [
+        "skill-development"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skill-release-review/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-release-review",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Make an evidence-gated production-readiness decision for an Agent Skill after validation and evaluation are complete. Use before promotion or publication, including when reviewing a changed production skill.\n",
+        "version": "0.3.0",
+        "maturity": "draft",
+        "content_sha256": "d326eb2ace8b478c8cb3303b4682ce5f3170c354995955df5410e246e841f189",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:52:06.397Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "7647257320623c583d2065ffc4ab0214e0e5e7e8b265c773100e7a074ecca10d",
+          "output_sha256": "a43f1fca73eff17a64926409eccf02147c42607ebe3072696e1ddc34fdae0963"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-specification",
+      "kind": "skill",
+      "source": "skills/meta/skill-specification/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "06db71b7495580ced459f861694ca83a4f3b1f756ec772c916fef4d233feee02",
+      "owner": "arkadiusz-kamrowski",
+      "version": "1.0.1",
+      "maturity": "production",
+      "routing_description": "Decide whether a repeatable task should become an Agent Skill and define its behavioral contract before implementation. Use when proposing a new skill, splitting/merging skills, or when an existing skill has unclear scope, trigger conditions, inputs, outputs or boundaries.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skill-specification/tests/cases.yaml",
+          "sha256": "57301c1677581e8439ff3927e3e3edcc0a162ac686ff30fa03d3bdc337958aad",
+          "case_ids": [
+            "spec-001",
+            "spec-002",
+            "spec-003",
+            "spec-negative-authoring",
+            "spec-negative-test-design"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [
+        "skill-development"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skill-specification/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-specification",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Decide whether a repeatable task should become an Agent Skill and define its behavioral contract before implementation. Use when proposing a new skill, splitting/merging skills, or when an existing skill has unclear scope, trigger conditions, inputs, outputs or boundaries.\n",
+        "version": "1.0.1",
+        "maturity": "production",
+        "content_sha256": "17630060bec77d3f1b94a162ce4848fdced858bc6d1273a7decca42e37bc7346",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:52:01.386Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "228915fa8b65dd2824e74f11ccbe11d6e299f47230a7e8e28cb312eb2e677b5c",
+          "output_sha256": "416bf6c019a58dd749fc3ca384610a77d9730c93bc04835a22eeae1a2cedb1cd"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-test-design",
+      "kind": "skill",
+      "source": "skills/meta/skill-test-design/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "b92380a159969fdb84f93510d8c03ca98043687fbea7f018661fa98a432640c1",
+      "owner": "arkadiusz-kamrowski",
+      "version": "0.3.1",
+      "maturity": "draft",
+      "routing_description": "Design and maintain routing, behavioral, edge-case, adversarial, and regression tests for an Agent Skill. Use after a skill draft exists, when changing its trigger or procedure, or when converting a real failure into a permanent evaluation case.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skill-test-design/tests/cases.yaml",
+          "sha256": "0f9878baf4209844ce250dd284d41a73d5bab8e33818f6b1a9277ccaf8242e0e",
+          "case_ids": [
+            "testdesign-positive-routing",
+            "testdesign-realistic-near-miss",
+            "testdesign-description-change",
+            "testdesign-contract-gap",
+            "testdesign-real-failure",
+            "testdesign-tool-failure",
+            "testdesign-case-leakage",
+            "testdesign-queued-not-run",
+            "testdesign-live-source-receipt",
+            "testdesign-exact-string",
+            "testdesign-negative-eval-existing",
+            "testdesign-negative-release"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [
+        "skill-development"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skill-test-design/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-test-design",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Design and maintain routing, behavioral, edge-case, adversarial, and regression tests for an Agent Skill. Use after a skill draft exists, when changing its trigger or procedure, or when converting a real failure into a permanent evaluation case.\n",
+        "version": "0.3.1",
+        "maturity": "draft",
+        "content_sha256": "f97c11194ca9cf304dcce267a05446030bfbd1cb6c214f34a071781985c4b8ba",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:51:57.580Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "28830d76e44888d81195976baf984bc00b7f37634291aba74e49f16bdb508bf8",
+          "output_sha256": "ef803b63204d0bb41cca0053832ec732ec941afa2b9d70ef69f79b3b9f11a299"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-validation",
+      "kind": "skill",
+      "source": "skills/meta/skill-validation/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "3b559e100d668667a86ee4c81869c7f0894e6d4a0d09494537e56e8124785812",
+      "owner": "arkadiusz-kamrowski",
+      "version": "1.0.0",
+      "maturity": "production",
+      "routing_description": "Validate an Agent Skill package for structural correctness, routing clarity, standards alignment, security, portability, duplication and maintainability. Use after authoring or modifying a skill and before behavioral evaluation or release.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skill-validation/tests/cases.yaml",
+          "sha256": "3bc2ef2f60e44036c421f9e5cd47361749d1ec014947d4dee0b2909495a87fc2",
+          "case_ids": [
+            "validate-001",
+            "validate-002",
+            "validate-003",
+            "validate-negative-test-design",
+            "validate-negative-model-eval"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [
+        "skill-development"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skill-validation/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-validation",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Validate an Agent Skill package for structural correctness, routing clarity, standards alignment, security, portability, duplication and maintainability. Use after authoring or modifying a skill and before behavioral evaluation or release.\n",
+        "version": "1.0.0",
+        "maturity": "production",
+        "content_sha256": "b79780e3d891ca64d45afbb25acc991735ea8da88d1da55d63c2d078823a020a",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:51:38.349Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "47fb5e8cf9be9d001630cc31fe8abd11edbeb4afbaf33203f736f4a1369fc919",
+          "output_sha256": "c1e4297e134939402192acf7cc61db3fddd7402d849895c861149201d229bee1"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skills-factory-diagnostic",
+      "kind": "skill",
+      "source": "skills/meta/skills-factory-diagnostic/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "e31329cd410cb4258bdf0edf3c89c240fa4a3e7be6c672f9401155663816a360",
+      "owner": "arkadiusz-kamrowski",
+      "version": "1.0.1",
+      "maturity": "production",
+      "routing_description": "Confirm that the Skills Factory plugin is exposing bundled skills to ChatGPT or Codex. Use when the user explicitly asks to test, verify, diagnose, or confirm whether Skills Factory is active.\n",
+      "tests": [
+        {
+          "path": "skills/meta/skills-factory-diagnostic/tests/cases.yaml",
+          "sha256": "37646f241225cca8651e0953424c9255093a01c3bd7ce340490248a658b8aeb5",
+          "case_ids": [
+            "diagnostic-001",
+            "diagnostic-002",
+            "audit-near-miss-skills-factory-diagnostic",
+            "audit-indirect-positive-skills-factory-diagnostic"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/skills-factory-diagnostic/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skills-factory-diagnostic",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Confirm that the Skills Factory plugin is exposing bundled skills to ChatGPT or Codex. Use when the user explicitly asks to test, verify, diagnose, or confirm whether Skills Factory is active.\n",
+        "version": "1.0.1",
+        "maturity": "production",
+        "content_sha256": "9e64d3297afe6ec58fd27e585200cbfd939a2d1c9dfe9d5fdb7f09caf336cfac",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:51:42.001Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "680288bbedbb00047f72968ceb24363d91374f2b22dcbe9bcc23fe80148fbb40",
+          "output_sha256": "de8c398cd0dd3271f659adef7c49cbfcdf2a739369047f732d19c45c821969a1"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "visual-output-design",
+      "kind": "skill",
+      "source": "skills/meta/visual-output-design/SKILL.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "0e14a4073eadabfc3cc4ecceb54fbc688ddbc3e7b22ef8b1fe5852e7ff1d5521",
+      "owner": "arkadiusz-kamrowski",
+      "version": "0.13.0",
+      "maturity": "candidate",
+      "routing_description": "Select and render one source-backed exhibit for a report, presentation or local interactive component. Route quantitative charts, diagrams, illustrative imagery, motion and interactive HTML to suitable specialized renderers while preserving evidence. Use beneath report-composer, report-document-architecture or presentation-exhibit-design; do not replace those workflows or invent data for visual balance.\n",
+      "tests": [
+        {
+          "path": "skills/meta/visual-output-design/tests/cases.yaml",
+          "sha256": "c33c390697c88c09e6d2dd582f6804b8e19e151fc007e52e6080e2ea880af22b",
+          "case_ids": [
+            "visual-output-chart",
+            "visual-output-org-model",
+            "visual-output-html",
+            "visual-output-no-decoration",
+            "visual-output-no-fabrication",
+            "visual-output-capability-preflight",
+            "visual-output-payload-client-not-observable",
+            "visual-output-static-is-not-interactive",
+            "visual-output-controlled-needs-real-control",
+            "cloud-next-inline-chart-renderer",
+            "visual-output-normalized-shortlist",
+            "visual-output-target-format-matrix",
+            "audit-near-miss-visual-output-design"
+          ]
+        }
+      ],
+      "references": [
+        {
+          "path": "skills/meta/visual-output-design/references/design-system.md",
+          "sha256": "a8e9872d18c19f32b883980a2ac343c5586e88a759fbd03e939f0ab6e22e84aa"
+        },
+        {
+          "path": "skills/meta/visual-output-design/references/tool-routing.md",
+          "sha256": "9a38be61ad8a035d0de78a7d1e3848747f9c02a772e849d212f23026810d55ab"
+        }
+      ],
+      "registered_consumers": [
+        "oaf-health-check",
+        "oaf-operating-model-redesign",
+        "oaf-governance-redesign",
+        "oaf-transformation-design",
+        "oaf-enterprise-architecture-review",
+        "commerce-product-deep-dive",
+        "commerce-opportunity-review",
+        "investment-portfolio-observation",
+        "investment-attention-review",
+        "investment-opportunity-hunter",
+        "investment-security-review",
+        "investment-portfolio-review",
+        "investment-theme-discovery"
+      ],
+      "declared_dependencies": {},
+      "capability_declaration": {
+        "source": "skills/meta/visual-output-design/SKILL.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "visual-output-design",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Select and render one source-backed exhibit for a report, presentation or local interactive component. Route quantitative charts, diagrams, illustrative imagery, motion and interactive HTML to suitable specialized renderers while preserving evidence. Use beneath report-composer, report-document-architecture or presentation-exhibit-design; do not replace those workflows or invent data for visual balance.\n",
+        "version": "0.13.0",
+        "maturity": "candidate",
+        "content_sha256": "9e7fa76be1ca30a8e2369e2cbb6d1c090760fa45c51e6fca898bccfacf0d5724",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:52:13.325Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "09ad703fd0b37605e38b5a5b7130bf858c025e7c17446ba144f3b7e9e2996136",
+          "output_sha256": "88f9a15322c9417b96edc94bee20a2131b483412690a992c84e20fdd7b229c31"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    },
+    {
+      "name": "skill-development",
+      "kind": "workflow",
+      "source": "workflows/skill-development/WORKFLOW.md",
+      "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "source_file_sha256": "f6608650ec33f73479716319e872e39cddec7b59c60d1bf65f500d856c735deb",
+      "owner": "arkadiusz-kamrowski",
+      "version": "0.1.0",
+      "maturity": "draft",
+      "routing_description": "Run the complete skill-development lifecycle for defining, authoring, validating, evaluating and releasing a reusable skill. Use when a skill is created, materially changed or considered for promotion; do not use for routine execution of an existing skill.\n",
+      "tests": [
+        {
+          "path": "workflows/skill-development/tests/cases.yaml",
+          "sha256": "0530d8b491869b3af5035f3809a83c8a1c96f8e9f2ab9b6b2586b0576257ba61",
+          "case_ids": [
+            "routing-only-test-depth",
+            "queued-runtime-is-not-pass",
+            "unrelated-document-edit"
+          ]
+        }
+      ],
+      "references": [],
+      "registered_consumers": [],
+      "declared_dependencies": {
+        "required": [
+          "skill-authoring",
+          "skill-specification",
+          "skill-test-design",
+          "skill-evaluation",
+          "skill-validation",
+          "skill-release-review"
+        ],
+        "optional": []
+      },
+      "capability_declaration": {
+        "source": "workflows/skill-development/WORKFLOW.md",
+        "review_state": "STATIC_PARTIAL",
+        "requirements": {
+          "network": "unassessed",
+          "filesystem": "unassessed",
+          "shell_exec": "unassessed",
+          "credentials": "unassessed",
+          "external_actions": "unassessed"
+        }
+      },
+      "lab_snapshot_included": true,
+      "production_snapshot_included": "UNVERIFIED_NO_PRODUCTION_MANIFEST",
+      "current_runtime_load": {
+        "name": "skill-development",
+        "domain": "skills",
+        "kind": "skill",
+        "description": "Run the complete skill-development lifecycle for defining, authoring, validating, evaluating and releasing a reusable skill. Use when a skill is created, materially changed or considered for promotion; do not use for routine execution of an existing skill.",
+        "version": "0.1.0",
+        "maturity": "draft",
+        "content_sha256": "ac1a287b26c1d22ddc60124a1bada9e8b4dc3f59f246e4fcaf37ab9a15257f4e",
+        "execution_mode": "host_model_executes_loaded_instructions",
+        "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+        "tool_receipt": {
+          "schema_version": "1.0",
+          "kind": "unsigned_mcp_tool_call_receipt",
+          "tool_name": "load_skill",
+          "status": "SUCCESS",
+          "execution_state": "executed",
+          "completed_at": "2026-10-24T09:52:16.296Z",
+          "source_revision": "111b10aa89d5d2b3c249da3126926732a325d05e",
+          "input_sha256": "5061cfee546e17080e19b27f0f52f682e8b96880d2ca7a4ff7d6852435db74a9",
+          "output_sha256": "495cc337247ab2fc221d2edba30e1c6fb5ea9e6d575fc596572363e9b4fbe060"
+        }
+      },
+      "runtime_behavior_in_this_review": "NOT_RUN",
+      "source_text_matches_installed_instructions": false,
+      "semantic_review": "See README component table and linked findings; source/load is not behavioral PASS.",
+      "source_body_matches_installed_body": true,
+      "packaging_note": "Portable frontmatter normalization / workflow entrypoint generation means raw source-file bytes need not equal packaged SKILL.md; compare body and manifest component digest separately."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "case_id": "contradictory-no-steps-pass",
+  "variant": "current-0.3.5",
+  "source_revision": "15740806f57d7058c0d2d3ac02f51c586e15e635",
+  "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+  "plan_sha256": "4b4a4364d9f74299c6c828eb5e182f9052ee3e2a33c01600b97e95cb8411a8f5",
+  "request_sha256": "428c7c633f63dfadcaa9a8c64f63af5dd3ef32808429f5ae0f7e117f1ae8eea6",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 1042,
+  "prompt_eval_count": 2435,
+  "created_at": "2026-10-23T20:59:01.173363Z",
+  "response_final": "Case outcome: `null`  \nExecution state: `no_steps`  \nEvaluation.status: `NOT_RUN`  \nCompatibility status: `NOT_RUN`  \nExecution reason: \"No runner assigned and job contains no executable steps\"  \n\n**Overall disposition**: `ITERATE`  \n\n**Correction rationale**:  \n- The case has no executable steps (`no_steps`), so `outcome` must be `null` (not `passed`).  \n- `execution_state` must be `no_steps` (primary state), not \"queued/not executed\" (invalid combination).  \n- `evaluation.status` must be `NOT_RUN` (not `PASS`), as non-execution states cannot satisfy PASS criteria.  \n- **Hard gate**: \"Case outcome: Pass / Execution state: queued or no_steps\" is invalid per precedence table → **must be `ITERATE`** (never `PASS`).  \n- The proposed claim \"it can pass\" violates the skill's rule: *\"Do not say the overall evaluation 'can pass' while required evidence is unobserved.\"*  \n\n**Why not `PASS`?**  \nThe case has no evidence of execution (no steps → invalid configuration), so the candidate's behavior is unobserved. `PASS` requires *observed* evidence meeting criteria—here, evidence is absent.  \n\n**Next action**: Fix job configuration to add executable steps before retesting.",
+  "original_private_record_sha256": "33fb4d30ef3562e98cffe3244ed5dcb3410b8748e2fe078be09ef48bcb402d8d",
+  "transformation": "Final-answer suffix only; hidden reasoning excluded uniformly."
+}

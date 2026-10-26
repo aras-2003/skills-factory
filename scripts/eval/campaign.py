@@ -110,6 +110,7 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
         "workflows/presentation-production/WORKFLOW.md",
         "workflows/presentation-production/references/artifact-contract.md",
         "workflows/presentation-production/references/creative-direction.md",
+        "workflows/presentation-production/references/design-library-selection.md",
         "workflows/presentation-production/references/quality-standard.md",
         "skills/reports/report-document-architecture/SKILL.md",
         "skills/reports/report-document-authoring/SKILL.md",
@@ -465,6 +466,70 @@ def separately_validated_iteration01_paths(root: Path = ROOT) -> set[str]:
         return set()
 
 
+def separately_validated_investment_lifecycle_paths(root: Path = ROOT) -> set[str]:
+    """Exact, case-backed candidate scope; does not grant runtime PASS."""
+    rel = "evals/campaigns/investment-business-lifecycle-2026-10/campaign.json"
+    try:
+        cfg = json.loads((root / rel).read_text(encoding="utf-8"))
+        expected = {
+            "skills/investing/security-underwriting/SKILL.md",
+            "skills/investing/security-underwriting/references/business-lifecycle.md",
+            "skills/investing/security-underwriting/scripts/business_lifecycle.py",
+            "skills/investing/security-underwriting/scripts/business_lifecycle_visual.py",
+        }
+        cases = cfg.get("cases") or []
+        if (cfg.get("campaign") != "investment-business-lifecycle-2026-10"
+                or cfg.get("execution_channel") != "lab"
+                or cfg.get("runtime_status") != "NOT_RUN"
+                or cfg.get("historical_r20_immutable") is not True
+                or cfg.get("release_approved") is not False
+                or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
+                or len(cases) != 4):
+            return set()
+        required = {"operating-leverage", "mature-cash-returns",
+                    "missing-data", "blocked-renderer"}
+        if ({c.get("dimension") for c in cases} != required
+                or any(not c.get("input") or not c.get("must") for c in cases)):
+            return set()
+        expected_tests = {
+            "tests/investing/test_business_lifecycle.py",
+            "tests/investing/test_business_lifecycle_visual.py",
+        }
+        if set(cfg.get("test_modules") or []) != expected_tests:
+            return set()
+        if not all((root / p).is_file() for p in expected | expected_tests):
+            return set()
+        source = (root / "skills/investing/security-underwriting/SKILL.md").read_text(encoding="utf-8")
+        if not all(token in source for token in ("NOT CLASSIFIED", "NOT calibrated probability", "BLOCKED_NO_RENDERER")):
+            return set()
+        return expected
+    except (OSError, ValueError, TypeError, AttributeError):
+        return set()
+def separately_validated_fundamental_intelligence_paths(root: Path = ROOT) -> set[str]:
+    """Only exempt the three exact source files when a dedicated test campaign is present."""
+    expected = {
+        "skills/investing/fundamental-intelligence/engine.py",
+        "skills/investing/fundamental-intelligence/damodaran.py",
+        "skills/investing/fundamental-intelligence/test_engine.py",
+    }
+    manifest = root / "evals/campaigns/fundamental-intelligence-2026-10/source-coverage.yaml"
+    if not manifest.is_file():
+        return set()
+    cfg = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
+    if (
+        cfg.get("campaign") != "fundamental-intelligence-2026-10"
+        or cfg.get("runtime_status") != "NOT_RUN"
+        or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
+        or cfg.get("unit_test") != "skills/investing/fundamental-intelligence/test_engine.py"
+    ):
+        return set()
+    if not all((root / path).is_file() for path in expected):
+        return set()
+    if not (root / "scripts/eval/tests/test_fundamental_intelligence_coverage.py").is_file():
+        return set()
+    return expected
+
+
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     exists = subprocess.run(
         ["git", "cat-file", "-e", pinned + "^{commit}"],
@@ -493,10 +558,12 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
             and f'version: "{meta.get("candidate_version")}"' in meta_skill.read_text(encoding="utf-8")
         ):
             separate_meta_targets = set(expected_paths)
+    separate_meta_targets.update(separately_validated_fundamental_intelligence_paths(ROOT))
     separate_meta_targets.update(separately_validated_engineering_paths())
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
+    separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))

@@ -1,0 +1,7 @@
+campaign: fundamental-intelligence-2026-10
+runtime_status: NOT_RUN
+unit_test: skills/investing/fundamental-intelligence/test_engine.py
+out_of_scope_behavior_paths:
+  - skills/investing/fundamental-intelligence/damodaran.py
+  - skills/investing/fundamental-intelligence/engine.py
+  - skills/investing/fundamental-intelligence/test_engine.py

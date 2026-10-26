@@ -1,0 +1,151 @@
+{
+  "schema_version": "0.1",
+  "retrieved_as_of": "2026-10-19",
+  "policy": "discovery_reference_only_no_auto_asset_import",
+  "sources": [
+    {
+      "id": "dribbble",
+      "url": "https://dribbble.com/search/presentation-templates",
+      "category": "visual inspiration",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "behance",
+      "url": "https://www.behance.net/search/projects/presentation%20design",
+      "category": "case studies",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "figma-community",
+      "url": "https://www.figma.com/community",
+      "category": "editable design resources",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "canva",
+      "url": "https://www.canva.com/presentations/templates/",
+      "category": "presentation templates",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "slidesgo",
+      "url": "https://slidesgo.com/",
+      "category": "slide templates",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "slidescarnival",
+      "url": "https://www.slidescarnival.com/",
+      "category": "presentation templates",
+      "rights_status": "attribution_review_required"
+    },
+    {
+      "id": "slidesmania",
+      "url": "https://slidesmania.com/",
+      "category": "presentation templates",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "presentationgo",
+      "url": "https://www.presentationgo.com/",
+      "category": "business slide layouts",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "slidemodel",
+      "url": "https://slidemodel.com/",
+      "category": "business PowerPoint graphics",
+      "rights_status": "commercial_license_review"
+    },
+    {
+      "id": "slideso",
+      "url": "https://slideso.com/templates",
+      "category": "executive decks",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "gamma",
+      "url": "https://gamma.app/templates",
+      "category": "adaptive web slides",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "slides",
+      "url": "https://slides.com/templates",
+      "category": "web presentation patterns",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "pitch",
+      "url": "https://pitch.com/templates",
+      "category": "collaborative decks",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "beautiful-ai",
+      "url": "https://www.beautiful.ai/",
+      "category": "adaptive slide layout",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "envato",
+      "url": "https://elements.envato.com/presentation-templates",
+      "category": "paid deck assets",
+      "rights_status": "commercial_license_review"
+    },
+    {
+      "id": "graphicriver",
+      "url": "https://graphicriver.net/presentation-templates",
+      "category": "paid slide templates",
+      "rights_status": "commercial_license_review"
+    },
+    {
+      "id": "freepik",
+      "url": "https://www.freepik.com/",
+      "category": "illustrations and resources",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "unsplash",
+      "url": "https://unsplash.com/",
+      "category": "photography",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "pexels",
+      "url": "https://www.pexels.com/",
+      "category": "photography",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "ourworldindata",
+      "url": "https://ourworldindata.org/",
+      "category": "evidence/data viz references",
+      "rights_status": "verify_data_and_rights"
+    },
+    {
+      "id": "data-to-viz",
+      "url": "https://www.data-to-viz.com/",
+      "category": "chart selection grammar",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "informationisbeautiful",
+      "url": "https://informationisbeautiful.net/",
+      "category": "information design references",
+      "rights_status": "reference_only"
+    },
+    {
+      "id": "observable",
+      "url": "https://observablehq.com/",
+      "category": "interactive visual references",
+      "rights_status": "license_review_required"
+    },
+    {
+      "id": "google-fonts",
+      "url": "https://fonts.google.com/",
+      "category": "font discovery",
+      "rights_status": "per_family_license_review"
+    }
+  ]
+}

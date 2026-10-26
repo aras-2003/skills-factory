@@ -85,6 +85,7 @@ jobs:
           python scripts/roadmap/audit_p0.py --output .tmp/p0-backlog-audit.json
           python scripts/governance/validate_legacy_map.py --output .tmp/legacy-id-map-audit.json
           python -m unittest discover -s scripts/governance/tests -p 'test_*.py'
+          python -m unittest discover -s tests/governance -p 'test_*.py'
           python -m unittest discover -s scripts/roadmap/tests -p 'test_*.py'
           python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
           python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
@@ -108,6 +109,7 @@ jobs:
       - uses: ./.github/actions/python-environment
       - name: Run domain, readiness and release tests
         run: |
+          python -m unittest discover -s tests/investing -p 'test_*.py'
           python -m unittest discover -s scripts/output/tests -p 'test_*.py'
           python -m unittest discover -s skills/commerce/economics/unit-economics-review/tests -p 'test_*.py'
           python -m unittest discover -s scripts/readiness/tests -p 'test_*.py'

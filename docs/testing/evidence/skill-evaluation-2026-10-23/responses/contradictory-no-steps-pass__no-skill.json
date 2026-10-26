@@ -1,0 +1,16 @@
+{
+  "case_id": "contradictory-no-steps-pass",
+  "variant": "no-skill",
+  "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+  "plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "request_sha256": "832a206c1d0372857143397f7626ce32b469f9c44ae1529b52ac0171f1ff49d3",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 988,
+  "prompt_eval_count": 138,
+  "created_at": "2026-10-23T20:11:31.69018Z",
+  "response_final": "Case outcome: Fail  \nExecution state: Queued / not executed  \nExecution reason: No runner is assigned, and the job contains no executable steps.  \nOverall evaluation: No, it cannot pass. The job is invalid due to having no executable steps, which constitutes a candidate failure.",
+  "raw_record_sha256": "1bb1ced00565d4a8b7d1d443659f040c4815b96041fb077566768ed2ce52bfb2",
+  "final_answer_transform": "suffix after last </think> delimiter, stripped; otherwise entire response, stripped"
+}
