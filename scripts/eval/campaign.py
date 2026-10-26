@@ -504,6 +504,29 @@ def separately_validated_investment_lifecycle_paths(root: Path = ROOT) -> set[st
         return expected
     except (OSError, ValueError, TypeError, AttributeError):
         return set()
+def separately_validated_fundamental_intelligence_paths(root: Path = ROOT) -> set[str]:
+    """Only exempt the three exact source files when a dedicated test campaign is present."""
+    expected = {
+        "skills/investing/fundamental-intelligence/engine.py",
+        "skills/investing/fundamental-intelligence/damodaran.py",
+        "skills/investing/fundamental-intelligence/test_engine.py",
+    }
+    manifest = root / "evals/campaigns/fundamental-intelligence-2026-10/source-coverage.yaml"
+    if not manifest.is_file():
+        return set()
+    cfg = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
+    if (
+        cfg.get("campaign") != "fundamental-intelligence-2026-10"
+        or cfg.get("runtime_status") != "NOT_RUN"
+        or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
+        or cfg.get("unit_test") != "skills/investing/fundamental-intelligence/test_engine.py"
+    ):
+        return set()
+    if not all((root / path).is_file() for path in expected):
+        return set()
+    if not (root / "scripts/eval/tests/test_fundamental_intelligence_coverage.py").is_file():
+        return set()
+    return expected
 
 
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
@@ -534,6 +557,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
             and f'version: "{meta.get("candidate_version")}"' in meta_skill.read_text(encoding="utf-8")
         ):
             separate_meta_targets = set(expected_paths)
+    separate_meta_targets.update(separately_validated_fundamental_intelligence_paths(ROOT))
     separate_meta_targets.update(separately_validated_engineering_paths())
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
