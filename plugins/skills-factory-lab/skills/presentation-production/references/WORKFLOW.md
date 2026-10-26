@@ -9,6 +9,10 @@ Produce an audience-specific, evidence-backed, deliberately art-directed **prese
 
 **Source status:** draft; registered only in the isolated Lab runtime and unavailable in the production channel until validation. Read `references/artifact-contract.md`, `references/quality-standard.md` and `references/creative-direction.md` when needed. For Canva provider actions, permissions and export restrictions read `references/canva-connector-contract.md`.
 
+## Experimental Design Library v0.1 (optional advisory step)
+
+After storyline/ghost-deck approval and before slide authoring, optionally consult `references/design-library-selection.md` and the repo's `assets/design-library/` catalog to select original layout recipes, palette and font recommendations by audience, communication purpose, density and target medium. Existing `references/creative-direction.md`, rights, privacy, exhibit data and actual destination capability preflight remain authoritative. Do not substitute reference-site imagery, brand themes or unlicensed downloadable templates for original slide components. If this experimental step is not executable, record NOT_RUN and continue with the existing workflow. No claim of rendered visual quality is made by selection alone.
+
 ## Stage 0 — Capability and privacy preflight
 Check what is actually callable in the current runtime: content/Drive/doc retrieval, research, deterministic chart rendering, Figma Slides generation and create/edit, Canva generation/template/edit, Google Slides create/edit/inspect/export, deck screenshots, reopen/render and file output. Log `AVAILABLE / UNAVAILABLE / UNKNOWN` separately per capability and destination. Apply the selection matrix in `references/creative-direction.md`: pick the strongest single primary authoring path for this audience, art direction, brand, collaboration and export need; add specialist tools only to fill a real gap. Do not infer integration from brand name or marketing page, and do not call multiple generators without a reason. If the requested medium is unsupported, surface the blocker and offer a verified alternative; no phantom deliverables.
 

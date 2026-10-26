@@ -640,7 +640,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4bebac32baf11debcde9cd8493f6cd8a76736005f97584348564cd5aa00cebac",
+      "content_sha256": "0823d4240f4c8259d37cbf5dbeaf2d60f4b0f081a43ba9ed0edb84d4262d7a1c",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1221,7 +1221,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "ce67de3675cdc10cb8d9f13806eb79b7af2d7fbd4a3b9ca4e3a8c0e720a293ba",
+      "content_sha256": "5decba87cd202c02cf29eb5a0df1ef5a03593a83f8587592949ca8488f72ead3",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1230,6 +1230,7 @@
         "references/artifact-contract.md",
         "references/canva-connector-contract.md",
         "references/creative-direction.md",
+        "references/design-library-selection.md",
         "references/quality-standard.md"
       ],
       "kind": "workflow",
@@ -1475,11 +1476,14 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "72962dd265bea72ff0777c3e1510b6ef10dc937ba3b56b8578d95000fd76d4ba",
+      "content_sha256": "679f6526708a0db0a4a9c822ee739bb93491d8be4ac0886852746ebe450df30b",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
-        "assets/skills-factory-domain-icon.svg"
+        "assets/skills-factory-domain-icon.svg",
+        "references/business-lifecycle.md",
+        "scripts/business_lifecycle.py",
+        "scripts/business_lifecycle_visual.py"
       ],
       "kind": "skill",
       "maturity": "production",
@@ -1542,7 +1546,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "f159b76c9818b4ed0b05d89c416aa47d839dc6ee071a83c2ddfa01f85b9ee5e1",
+      "content_sha256": "de2e6d8fcb58052f79520c57e060e7a26cbb05a72a31c542845718bfa6ae57c7",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1551,7 +1555,7 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "skill-evaluation",
-      "version": "0.3.4"
+      "version": "0.3.5"
     },
     {
       "capability_assessment": {
@@ -1608,7 +1612,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "79087f28bb67d66cdaa6af9d8140fee28f9d697640baf419d991e7c3b1f62a28",
+      "content_sha256": "c5fb5a3eba116d00e93b6ebdd4b76730d7f4bf155c78002d44e489f3f17d65ac",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1996,5 +2000,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "886fd3ef2d46e18ac4408325781a249b5451b0cb"
+  "source_revision": "59d1141f03d7d7031f9157de65f4e2ffb84b11a0"
 }
