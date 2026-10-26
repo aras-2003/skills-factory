@@ -7,6 +7,7 @@ on:
       - 'tests/architecture/**'
       - 'docs/architecture/archify/ARC-02-IR.md'
       - '.github/workflows/ci-architecture-ir.yml'
+      - 'requirements-architecture-exports.txt'
   workflow_dispatch:
 
 permissions:
@@ -30,3 +31,49 @@ jobs:
         run: |
           python3 -m compileall -q scripts/architecture/visualization_ir.py tests/architecture
           python3 -m unittest discover -s tests/architecture -p 'test_visualization_ir.py' -v
+  exports:
+    name: ARC-06 / Actual document export parity
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ARCHIFY_DOCUMENT_EXPORTS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Verify exact source and install isolated export dependencies
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          python3 -m venv "$RUNNER_TEMP/arc06-python"
+          "$RUNNER_TEMP/arc06-python/bin/pip" install -r requirements-architecture-exports.txt
+          npm ci --prefix scripts/architecture --ignore-scripts --no-fund
+          npm audit --prefix scripts/architecture --audit-level=high
+      - name: Verify container pixels, accessible equivalents and failure paths
+        run: |
+          "$RUNNER_TEMP/arc06-python/bin/python" -m unittest discover -s tests/architecture -p 'test_document_exports.py' -v
+          PYTHONPATH=. "$RUNNER_TEMP/arc06-python/bin/python" scripts/architecture/run_document_export_smoke.py --output-dir "$RUNNER_TEMP/arc06-export"
+      - name: Render actual Office containers with independent consumers
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libreoffice-writer libreoffice-impress poppler-utils fonts-dejavu-core
+          mkdir -p "$RUNNER_TEMP/arc06-export/docx-render" "$RUNNER_TEMP/arc06-export/pptx-render"
+          libreoffice -env:UserInstallation=file://$RUNNER_TEMP/arc06-lo-docx --headless --convert-to pdf --outdir "$RUNNER_TEMP/arc06-export/docx-render" "$RUNNER_TEMP/arc06-export/architecture.docx"
+          libreoffice -env:UserInstallation=file://$RUNNER_TEMP/arc06-lo-pptx --headless --convert-to pdf --outdir "$RUNNER_TEMP/arc06-export/pptx-render" "$RUNNER_TEMP/arc06-export/architecture.pptx"
+          for folder in docx-render pptx-render; do
+            test -s "$RUNNER_TEMP/arc06-export/$folder/architecture.pdf"
+            pdftoppm -scale-to 1600 -png "$RUNNER_TEMP/arc06-export/$folder/architecture.pdf" "$RUNNER_TEMP/arc06-export/$folder/page"
+          done
+          pdftoppm -scale-to 1600 -png "$RUNNER_TEMP/arc06-export/architecture.pdf" "$RUNNER_TEMP/arc06-export/pdf-page"
+      - name: Retain actual files and independent renderings
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: arc06-document-exports-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/arc06-export/**
+          if-no-files-found: error
+          retention-days: 30

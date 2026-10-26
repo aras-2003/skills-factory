@@ -1,0 +1,7 @@
+# Optional document consumers; intentionally excluded from the Lab MCP runtime.
+python-docx==1.2.0
+python-pptx==1.0.2
+reportlab==4.4.9
+pypdf==6.10.0
+Pillow==12.3.0
+matplotlib>=3.9,<4

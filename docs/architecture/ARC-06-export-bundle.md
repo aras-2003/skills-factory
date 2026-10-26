@@ -19,8 +19,27 @@ Call `build_export_bundle(model, output_dir)` from `scripts.architecture.export_
 | PDF | Flattened media | Embed SVG or its rasterized derivative; no interactive HTML | Tagged figure plus `architecture.txt` as description | No |
 | PPTX | Flattened media | Embed SVG or its rasterized derivative; native editable shapes are not provided | Image alt text and `architecture.txt` in notes or appendix | No |
 
-The matrix describes integration requirements; it is not a claim that this repository generates PNG, DOCX, PDF, or PPTX files. In particular, no interactive behavior survives flattening, and native editable PowerPoint shapes are outside this adapter. A consumer must carry the exact manifest and text equivalent alongside its embedded media. Do not silently drop model nodes or relations when converting.
+This table describes the dependency-free SVG adapter. The optional document consumer below generates PNG, DOCX, PDF and PPTX. No interactive behavior survives flattening, and native editable PowerPoint shapes are outside this adapter. A consumer must carry the exact manifest and text equivalent alongside its embedded media. Do not silently drop model nodes or relations when converting.
+
+## Actual document consumers
+
+`scripts.architecture.document_exports.build_document_exports(model, output_dir)` generates the base bundle and `architecture.png`, `architecture.docx`, `architecture.pdf`, and `architecture.pptx`. This is an offline Work/local operation; the six-tool Site MCP does not expose a document-export tool. Loading a skill in Chat alone is not evidence of running this exporter.
+
+Install `requirements-architecture-exports.txt` in an isolated Python environment and run `npm ci --prefix scripts/architecture --ignore-scripts`. These optional document dependencies are excluded from the Lab MCP runtime. `node_executable` selects an installed Node executable; the default is `node`. `ARCHIFY_SHARP_MODULE` may select an explicitly managed Sharp installation, for example the bundled desktop dependency. No network request occurs during generation.
+
+The PNG is rasterized directly from the generated, script-free SVG. All document consumers embed contiguous crops of that exact PNG; tall images are divided into balanced pages of at most 650 source pixels to avoid microscopic text and nearly empty tail pages. DOCX includes the full text equivalent as document paragraphs and an image description. PPTX includes it in every slide's notes and a paginated appendix. PDF includes selectable equivalent text, tagged Figure content with full alt text, source revision, and model digest. Full PDF/UA conformance is not certified. PDF uses the existing Matplotlib DejaVu font and refuses unsupported source characters rather than silently substituting glyphs.
+
+Every generated file has a SHA-256 entry in the updated manifest. `generated_here` is true for PNG/DOCX/PDF/PPTX only after all four consumers succeed. A failed operation leaves an incomplete directory with the original SVG-only manifest; it must not be treated as a completed export or overwritten on retry. Rasterization fails explicitly above 24 million pixels. Interactive HTML remains the separately produced ARC-03 artifact; no untrusted HTML is opened or embedded by this consumer.
+
+Run a retained synthetic fixture with:
+
+```sh
+PYTHONPATH=. python scripts/architecture/run_document_export_smoke.py --output-dir /absolute/fresh/arc06-bundle
+ARCHIFY_DOCUMENT_EXPORTS=1 python -m unittest discover -s tests/architecture -p 'test_document_exports.py' -v
+```
+
+The receipt distinguishes the checked-out implementation revision from the synthetic model's source field; it does not attest fixture evidence as repository facts. The ARC-06 CI job retains actual containers, hashes and independently rendered LibreOffice/Poppler pages for visual review.
 
 ## Verification
 
-`tests/architecture/test_export_bundle.py` uses one fixture for the SVG, text equivalent, and manifest. It verifies exact node/relation ID coverage, counts, unknown-state retention, provenance, safe escaping, accessible SVG elements, format boundaries, and fail-closed output-path behavior. This is an adapter contract test, not an end-to-end test of Office/PDF renderers or a Site runtime test.
+`tests/architecture/test_export_bundle.py` verifies the dependency-free SVG contract. The optional `test_document_exports.py` executes the document consumers on that same fixture, verifies exact embedded pixels, node/relation IDs, unknown states, Polish text, source/digest metadata, PDF Figure descriptions, Office equivalents, pagination, invalid-input rejection and rasterizer failure. CI renders the resulting DOCX/PPTX through independent LibreOffice consumers and all PDFs through Poppler. These local/CI receipts do not certify Site publication or ordinary Chat UI acceptance.

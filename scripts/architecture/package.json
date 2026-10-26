@@ -1,0 +1,6 @@
+{
+  "name": "skills-factory-architecture-exports",
+  "private": true,
+  "description": "Optional offline rasterization for ARC-06 document exports",
+  "dependencies": { "sharp": "0.35.5" }
+}
