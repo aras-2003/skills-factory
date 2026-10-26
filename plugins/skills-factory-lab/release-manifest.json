@@ -356,11 +356,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "298f839a1975d1752db8741b1bcc63b0a930ee122dc55cc426c1512034798df6",
+      "content_sha256": "a50b09c6b080edb1f383497d5d1d64bfe9a53d87450b352b74685ff8631db3d8",
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-attention-review",
-      "version": "0.2.1"
+      "version": "0.2.2"
     },
     {
       "capability_assessment": {
@@ -475,11 +475,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "c24c0e2149cd43d8d26e13c53a43615f97e5b3add45dcb9bfc51cfd58e56fbc9",
+      "content_sha256": "aec74af4d49fd40864b43b20fa61e34585f70ff2090fbdb20ebe7eeceb5bb30e",
       "kind": "skill",
       "maturity": "production",
       "name": "investment-record-store",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     {
       "capability_assessment": {
@@ -492,11 +492,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4545db92e4b5bffdee7f3520a55ad55cf5c19cc64c85a8f6c5312109989da65f",
+      "content_sha256": "4bebac32baf11debcde9cd8493f6cd8a76736005f97584348564cd5aa00cebac",
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-security-review",
-      "version": "0.4.0"
+      "version": "0.4.1"
     },
     {
       "capability_assessment": {
@@ -509,11 +509,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4cc512ac23d1a8dd409637779829619b81763d1b706c4a34905fd01be2568950",
+      "content_sha256": "7e2e11fe78195f311f708b74ed6c5771c089b8302d2ea324e28d7ee33555abb9",
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-theme-discovery",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     {
       "capability_assessment": {
@@ -679,11 +679,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "d08f5804c8c82e1d1b418121fc2e629b2f2b1a5ee3bcdd6de9b07ce7aa0911cd",
+      "content_sha256": "ce865ae89b4bed8aaa7296c32a3bd8f86aaff495c9296d91292deee7e984c4c9",
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-health-check",
-      "version": "1.5.0"
+      "version": "1.6.0"
     },
     {
       "capability_assessment": {
@@ -713,11 +713,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "bdc64f498e8faea112073ef8e62f30eeb15225123a0a6450ca5be8c66602c21f",
+      "content_sha256": "9b29cea1bf843f96c1130b12e6662874ac8f72cddfc002376357e1f83160e7c5",
       "kind": "workflow",
       "maturity": "candidate",
       "name": "oaf-strategy-execution-reset",
-      "version": "0.1.0"
+      "version": "0.1.1"
     },
     {
       "capability_assessment": {
@@ -900,7 +900,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "bdad28494b2b9ed1d690480459cfa3239d8218e8270d72afef6ba4b7e20c5ee8",
+      "content_sha256": "8b1e8bf4718dee98db91433f875be06360426efc03b728bf53a5569ba28e108e",
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-exhibit-design",
@@ -1036,11 +1036,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "82b4facd546db1d0ddcecfc2a1e1b1dd62cffc1335c6c47767fb2182820377df",
+      "content_sha256": "0d30866638c6700c747aa85e1bf168358ccddc2cc23edf35545d7986f4fd0322",
       "kind": "skill",
       "maturity": "candidate",
       "name": "report-composer",
-      "version": "0.11.1"
+      "version": "0.12.1"
     },
     {
       "capability_assessment": {
@@ -1138,11 +1138,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "a812c9723722f5df97eaec5a0f2e7ebb9da5f33ed87ed133b78f012b642a0914",
+      "content_sha256": "7d167d0ca5627a020d7f0d824b9a462cbfb7bf42f5ccd4a9089d3e5ee5aed051",
       "kind": "skill",
       "maturity": "production",
       "name": "skill-authoring",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     {
       "capability_assessment": {
@@ -1410,17 +1410,17 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "5a8d2e74e2b48586411b47d8c1e7adb98764c7f63329a80dda055298db0bc145",
+      "content_sha256": "27cb6660f4e415b3227038f7e86a9d53da83c05d0a09d71c5ad11e63890c4d30",
       "kind": "skill",
       "maturity": "candidate",
       "name": "visual-output-design",
-      "version": "0.12.1"
+      "version": "0.13.0"
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "2cf9a08d3d6d5adb941b6def66df959e421ad3e5d434daf822dbd012d36e1fde",
-  "release_id": "0.35.0+e1c4b8462c51",
+  "payload_content_sha256": "4818d797e8e970e8e293b39e5cd4c3bbcd481fe08c227c6502a40d476f1edf8e",
+  "release_id": "1.38.338+886fd3ef2d46",
   "schema_version": "1.0",
-  "source_revision": "e1c4b8462c519f1fa25a9af5980b6786ed590029",
-  "version": "0.35.0"
+  "source_revision": "886fd3ef2d46e18ac4408325781a249b5451b0cb",
+  "version": "1.38.338"
 }

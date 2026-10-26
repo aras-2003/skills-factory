@@ -23,6 +23,8 @@ policy/risk limits, or new information about an existing investment:
 2. Load the returned child_workflow by its exact packaged name before analysis;
    the route result alone is not execution. If it cannot be loaded, stop and state
    that the workflow did not run. Do not silently substitute another specialist.
+   If next_action is load_front_door_then_clarify, load the front door and ask the
+   user to clarify before any substantive analysis or recommendation.
 3. Follow the loaded workflow's sequence and evidence gates. Do not claim that a
    child workflow ran unless its own load/execution is present in the tool trace.
 4. Do not replace the selected workflow with generic investment commentary.
@@ -110,8 +112,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "investment", "investing", "portfolio", "stock", "stocks", "security", "securities",
         "etf", "fund", "holdings", "investment policy", "risk limit",
         "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
-        "share", "thesis", "gross margin", "marża brutto", "marza brutto",
-        "research candidates", "kandydatów do researchu", "kandydatow do researchu",
+        "share", "thesis", "gross margin", "marża brutto", "marza brutto", "watchlist",
+        "research candidates", "kandydatów do researchu", "kandydatow do researchu", "opportunit", "okazj",
     )
     if non_investment_finance and not explicit_investment_context:
         return {
@@ -137,7 +139,20 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "zmieniają tezę", "zmienia teze", "czy to zmienia", "wymaga głębszej analizy",
         "wymaga glebszej analizy", "give attention", "attention next", "next research",
         "research next", "attention review",
-    )
+    ) or ("watchlist" in text and _contains(text, "earnings", "results", "news", "information", "wynik", "informacj"))
+    # Event triage must outrank the portfolio keyword when the request asks
+    # whether one named holding's earnings deserve thesis attention.
+    if (
+        _contains(text, "earnings", "wynik", "results")
+        and _contains(text, "thesis", "tez", "holding", "portfolio", "portfel", "my company", "spółki", "spolki")
+        and _contains(
+            text,
+            "attention", "uwag", "warrant", "matter", "deserve", "wymag",
+            "change", "changes", "changed", "impact", "affect", "influence",
+            "zmienia", "wpływ", "wplyw",
+        )
+    ):
+        attention = True
     theme = _contains(
         text,
         "investment theme", "investment themes", "theme research", "value chain",
@@ -153,6 +168,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
         "watchlist screen", "screen my watchlist", "screen watchlist",
         "preview the screen", "preview-only screen", "screen these candidates",
+        "promising opportunities", "promising opportunity", "obiecujące okazje", "obiecujace okazje",
+        "okazje w sektorze", "opportunities in the renewable", "opportunities in sector",
     )
     observation = _contains(
         text,
@@ -165,7 +182,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "co mam obserwowac", "obserwuj moje pozycje", "obserwuj portfel",
         "zmiany w portfelu", "monitoruj portfel",
     )
-    portfolio = _contains(
+    portfolio = bool(re.search(r"\breview\s+(?:my|this|the)\s+investment\s+portfolio\b", text)) or _contains(
         text,
         "my portfolio", "this portfolio", "portfolio review", "review portfolio",
         "portfolio risk", "portfolio concentration", "portfolio diversification",
@@ -259,7 +276,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
             "child_workflow": "investment-os-review",
             "reason": "investment intent detected but the decision object is ambiguous; use the Investment OS front door",
             "must_invoke_child_workflow": True,
-            "routing_receipt": "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_skill(investment-os-review)",
+            "next_action": "load_front_door_then_clarify",
+            "routing_receipt": "ROUTE=unknown; CHILD=investment-os-review; NEXT_ACTION=load_front_door_then_clarify",
         }
 
     return {

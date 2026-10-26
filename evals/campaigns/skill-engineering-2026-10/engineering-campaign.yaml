@@ -19,6 +19,11 @@ runtime_targets:
     required_cases:
       - testdesign-description-only-routing
       - testdesign-live-source-evidence
+      - testdesign-meta-contract-boundary-pl
+      - testdesign-commerce-opportunity-en
+      - testdesign-consumer-purchase-nearmiss-pl
+      - testdesign-article-factcheck-pl
+      - testdesign-article-edit-nearmiss-en
   skill-evaluation:
     version: "0.3.4"
     required_cases:

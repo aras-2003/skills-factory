@@ -22,6 +22,26 @@ targets:
       mode: explicit
       input: evals/meta/skill-test-design/live-source-evidence.input.md
       rubric: evals/meta/skill-test-design/live-source-evidence.rubric.yaml
+    - id: testdesign-meta-contract-boundary-pl
+      mode: explicit
+      input: evals/meta/skill-test-design/meta-contract-boundary-pl.input.md
+      rubric: evals/meta/skill-test-design/meta-contract-boundary-pl.rubric.yaml
+    - id: testdesign-commerce-opportunity-en
+      mode: explicit
+      input: evals/meta/skill-test-design/commerce-opportunity-en.input.md
+      rubric: evals/meta/skill-test-design/commerce-opportunity-en.rubric.yaml
+    - id: testdesign-consumer-purchase-nearmiss-pl
+      mode: explicit
+      input: evals/meta/skill-test-design/consumer-purchase-nearmiss-pl.input.md
+      rubric: evals/meta/skill-test-design/consumer-purchase-nearmiss-pl.rubric.yaml
+    - id: testdesign-article-factcheck-pl
+      mode: explicit
+      input: evals/meta/skill-test-design/article-factcheck-pl.input.md
+      rubric: evals/meta/skill-test-design/article-factcheck-pl.rubric.yaml
+    - id: testdesign-article-edit-nearmiss-en
+      mode: explicit
+      input: evals/meta/skill-test-design/article-edit-nearmiss-en.input.md
+      rubric: evals/meta/skill-test-design/article-edit-nearmiss-en.rubric.yaml
   skill-evaluation:
     - id: evaluation-queued-not-run
       mode: explicit
@@ -40,6 +60,10 @@ targets:
       mode: explicit
       input: evals/oaf-health-check/case-001-enterprise-it.input.md
       rubric: evals/oaf-health-check/case-001-enterprise-it.rubric.yaml
+    - id: fallback-strategy-disabled-lab-001
+      mode: explicit
+      input: evals/oaf-health-check/fallback-strategy-disabled-lab-001.input.md
+      rubric: evals/oaf-health-check/fallback-strategy-disabled-lab-001.rubric.yaml
   global-local-model-review:
     - id: case-global-local-001
       mode: explicit

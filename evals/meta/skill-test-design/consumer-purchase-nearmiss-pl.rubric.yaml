@@ -1,0 +1,17 @@
+schema_version: "1.0"
+id: testdesign-consumer-purchase-nearmiss-pl
+target: skill-test-design
+mode: explicit
+source_legacy: evals/meta/skill-test-design/consumer-purchase-nearmiss-pl.input.md
+execution_payload_must_not_include:
+  - evaluator-only expected assertions
+  - pass/fail criteria
+  - rubric contents
+criteria_text: |
+  This is a personal purchase request, not a request to design or maintain an Agent Skill test suite.
+assertions:
+  manual:
+    - do not invoke skill-test-design or create evaluation cases
+    - answer or route the consumer product comparison request using available consumer-shopping research; general web search is acceptable when no dedicated packaged product-research skill is exposed
+    - if no research tool is available, state that limitation and ask whether the user wants a general comparison without live offers
+    - do not reframe a one-time purchase as a commercial opportunity

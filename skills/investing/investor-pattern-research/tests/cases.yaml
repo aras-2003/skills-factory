@@ -27,3 +27,17 @@ cases:
         - security-underwriting applies analysis to a named issuer
       must_not:
         - substitute a biography of investors for the requested stock research
+  - id: investor-primary-source-unavailable
+    case: attribution-with-only-unverified-secondary-quote
+    input: |
+      The investor's letters and interviews are unavailable. A quote aggregator attributes "risk is what you don't see"
+      to them. Extract the investor's risk principle for my policy.
+    expected:
+      should_trigger: true
+      must:
+        - distinguish the unverified aggregator attribution from the investor's own stated philosophy
+        - keep the principle and any policy implication unverified until primary evidence is available
+        - request or identify the primary source needed to resume
+      must_not:
+        - present the quote as a verified investor principle
+        - turn an unattributed quote into a policy rule

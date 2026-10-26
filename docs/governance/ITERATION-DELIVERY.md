@@ -78,7 +78,7 @@ Use [the acceptance matrix](templates/ACCEPTANCE-MATRIX.md) as one ledger for th
 | Cross-framework regression | Fixed sentinel set for routing, authorization/side effects, evidence integrity, output/delivery and unrelated critical existing capability. Expand by changed dependency/call graph; do not run only modified skills. |
 | Recovery | Failure becomes fixture; fix, rebuild candidate, rerun failed cases, impacted cases and shared smoke. Flaky required cases remain blocked until investigated. |
 
-A documentation-only acceptance criterion can be closed offline after review and link/static checks. Runtime may be N/A only when its applicability and rationale were declared at scope lock and confirmed against the actual diff. An iteration changing any skill behavior cannot use this exception for those rows.
+A documentation-only acceptance criterion can be closed offline after review and link/static checks. Runtime may be N/A only when its applicability and rationale were declared at scope lock and confirmed against the actual diff. An iteration changing any skill behavior cannot use this exception for those rows. Required runtime tests must run on an authorized, version-pinned surface; that surface may be Lab, Site, or a disposable/synthetic test environment. Production deployment is not a prerequisite for Issue or iteration Done. A test that specifically requires production data or production-only behavior must be redesigned as a safe equivalent runtime test where possible; otherwise that criterion remains blocked and cannot be declared Done by skipping runtime.
 
 For each runtime row retain case/input/rubric hashes, execution time, candidate identity, model/reasoning, channel/surface, tool availability, actual output/trace and reviewer verdict. Keep executor inputs isolated from evaluator rubrics, following [the eval protocol](../../scripts/eval/README.md). An assisted run does not qualify as PASS. Rendering/tool output and visible client display are separate assertions; test the latter when required.
 
@@ -108,10 +108,10 @@ The campaign CLI currently selects R20 in code; it does not select an arbitrary 
 | Ready | Frozen active scope, dependencies satisfied, owner and test plan explicit. |
 | In progress | Actual implementation underway; WIP ≤2. |
 | In review | PR is ready for review with offline results. |
-| Validation | Integrated on main; final candidate runtime/integration acceptance pending. |
-| Done | Criterion accepted with final evidence, including required runtime; Issue closure and Project status agree. |
+| Verification | Required runtime/integration acceptance is being performed on the final candidate; an evidence gap remains open. |
+| Done | Acceptance criteria pass with final evidence, including required runtime tests on an authorized, version-pinned surface. Production deployment is not required. Issue closure and Project status agree. |
 
-A merged runtime-bearing Issue stays open in Validation until its required rows pass. Individual Issues may reach Done while the iteration is still validating; shared regressions and unresolved rows still block the iteration. A discovered regression reopens the relevant Issue, removes current acceptance and keeps historical verdicts intact. Use one current `Project status:` marker and canonical metadata labels; verify the asynchronous workflow and actual Project field after changes. Native Iteration is separately maintained. A tracking Issue records iteration state; do not create a new Project column per iteration state.
+A merged runtime-bearing Issue stays open in Verification until its required rows pass. Individual Issues may reach Done while the iteration is still validating; shared regressions and unresolved rows still block the iteration. A discovered regression reopens the relevant Issue, removes current acceptance and keeps historical verdicts intact. Production promotion/publication is a separate release decision and does not gate Done; source CI or a merge alone still cannot satisfy required runtime acceptance. Use one current `Project status:` marker and canonical metadata labels; verify the asynchronous workflow and actual Project field after changes. Native Iteration is separately maintained. A tracking Issue records iteration state; do not create a new Project column per iteration state.
 
 ## Failure severity and close decisions
 

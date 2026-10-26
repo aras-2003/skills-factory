@@ -22,6 +22,15 @@ If the request is already narrow, route directly to the relevant OAF skill and s
 
 ## Stage 2 — Select diagnostic domains
 
+### Check capability availability before routing
+
+Before dispatching a specialist, verify that it is exposed as available in the current runtime session. A skill being named in this workflow, present in the Lab package, or readable from a repository/plugin cache does not mean that it is enabled for this session.
+
+- Treat a specialist explicitly disabled by the user or absent from the current session's exposed capability list as unavailable.
+- Do not read its source from a repository or cache, reproduce its procedure, or present a generic substitute as that specialist's result.
+- Claim that a specialist ran only when it was available and its execution/result is evidenced in this session.
+- If the runtime exposes no authoritative availability signal, mark the specialist's availability `UNVERIFIED`, do not claim it ran, and keep its branch out of the synthesis. State the resulting scope limit.
+
 Route only where evidence suggests a material issue:
 
 - Strategy disconnected from execution -> `strategy-to-execution-diagnostic`
@@ -97,6 +106,8 @@ When diagnosis is sufficient:
 ## Output contract
 
 Keep the answer compact. Reuse the same epistemic structure in every section.
+
+For every material specialist branch, distinguish `AVAILABLE_AND_RUN`, `UNAVAILABLE_NOT_RUN`, and `AVAILABILITY_UNVERIFIED`. Include specialist findings only for `AVAILABLE_AND_RUN`; never infer that state from package/source files.
 
 ### Executive diagnosis
 

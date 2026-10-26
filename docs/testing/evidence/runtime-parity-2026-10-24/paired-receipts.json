@@ -1,0 +1,1147 @@
+{
+  "observed_at": "2026-10-24",
+  "scope": "Exact-package parity of selected shared MCP flows: routing, architecture content load and chart rendering. Not broad workflow certification or independent model comparison.",
+  "identity": {
+    "lab": {
+      "runtime_name": "Skills Factory runtime",
+      "release_id": "unattested",
+      "source_revision": "unattested",
+      "channel": "unknown",
+      "capability_contract_version": "repository-side-v1",
+      "tool_schema_digest": "unattested",
+      "deployed_at": "unattested",
+      "attestation_status": "unattested",
+      "attestation_basis": "unsigned_runtime_environment_fields_only",
+      "installation_behavior_verified": false,
+      "package_integrity_status": "verified",
+      "package_integrity_basis": "installed_payload_digest_matches_adjacent_unsigned_manifest",
+      "package_integrity_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+      "lab_release": {
+        "channel": "lab",
+        "version": "1.38.322",
+        "release_id": "1.38.322+a752b553cc16",
+        "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+        "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4"
+      },
+      "software_release": {
+        "version": "1.38.322",
+        "release_id": "1.38.322+a752b553cc16",
+        "source_revision": "a752b553cc16d026408a379cfa3654c15f447171"
+      },
+      "capabilities": [
+        "runtime_info",
+        "list_skills",
+        "load_skill",
+        "route_investment_request",
+        "render_bar_chart",
+        "render_line_chart"
+      ],
+      "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+      "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+      "manifest_binding": "installed_manifest_matches_runtime_payload",
+      "tool_receipt": {
+        "schema_version": "1.0",
+        "kind": "unsigned_mcp_tool_call_receipt",
+        "tool_name": "runtime_info",
+        "status": "SUCCESS",
+        "execution_state": "executed",
+        "completed_at": "2026-10-24T10:10:20.038Z",
+        "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+        "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "output_sha256": "6855f6ff1032a756275aeea25f306f3d13a33949adc11df735d7be1b5f4891a1"
+      }
+    },
+    "site": {
+      "repository": "https://github.com/aras-2003/skills-factory",
+      "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+      "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+      "channel": "site",
+      "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+      "lab_release": {
+        "channel": "lab",
+        "version": "1.38.322",
+        "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+        "release_id": "1.38.322+a752b553cc16",
+        "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+        "skill_count": 83,
+        "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+        "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+      },
+      "draft_extension": null,
+      "runtime_release": {
+        "channel": "lab",
+        "version": "1.38.322",
+        "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+        "release_id": "1.38.322+a752b553cc16",
+        "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+        "skill_count": 83,
+        "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+        "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+        "artifact_scope": "complete_lab"
+      },
+      "release_id": "43a52351464692fe0132a380903402509cc3b95d",
+      "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+      "canonical_source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+      "software_release": {
+        "version": "1.38.322",
+        "release_id": "1.38.322+a752b553cc16",
+        "source_revision": "a752b553cc16d026408a379cfa3654c15f447171"
+      },
+      "capability_contract_version": "site-mcp-v2",
+      "tool_schema_digest": "sha256:020e72cd05ccc9ff93bdac00c54433911b0946da16c7f43032e76ee1851e24ef",
+      "deployed_at": "2026-10-24T10:09:36.000Z",
+      "attestation_status": "verified",
+      "identity_source": "site_environment",
+      "capabilities": [
+        "runtime_info",
+        "list_skills",
+        "load_skill",
+        "route_investment_request",
+        "render_bar_chart",
+        "render_line_chart"
+      ],
+      "execution_mode": "host_model_executes_loaded_instructions",
+      "tool_receipt": {
+        "schema_version": "1.0",
+        "kind": "unsigned_mcp_tool_call_receipt",
+        "tool_name": "runtime_info",
+        "status": "SUCCESS",
+        "execution_state": "executed",
+        "completed_at": "2026-10-24T10:10:16.255Z",
+        "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+        "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "output_sha256": "58073c701e8a77fd2d089782c8da25b68b6893d62bd3a13bf9a0ae2e35bcc11f"
+      }
+    }
+  },
+  "native_saved_version": {
+    "id": "appgprj_6ac56f2116588191a4a1ebc682c97865~appgver_f296e3f9233481918004246aef47f8b6",
+    "project_id": "appgprj_6ac56f2116588191a4a1ebc682c97865",
+    "version_number": 47,
+    "source": {
+      "commit_sha": "43a52351464692fe0132a380903402509cc3b95d"
+    },
+    "archive_storage": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_00000000e32c8246900e97e43058a6db",
+      "content_hash": "sha256:1ff59a93bb88418b8d445e6f064a9109dc1cf2a41b1cb160ad054910d7545bed",
+      "size_bytes": 3696640,
+      "file_count": 81
+    },
+    "screenshot_url": null,
+    "deployment_id": "appgdep_6adc83eb8f3481919bdf28ddc4e9f982"
+  },
+  "routes": [
+    {
+      "input": "Review my investment portfolio; routing only, do not read data or execute a child workflow.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"portfolio\",\n  \"child_workflow\": \"investment-portfolio-review\",\n  \"reason\": \"request concerns multiple holdings, weights, concentration, diversification or portfolio-level decisions\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=portfolio; CHILD=investment-portfolio-review; NEXT_ACTION=load_skill(investment-portfolio-review)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:11:25.313Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"42491bbee0df982fab8fc278a65a78b11ed654483072941bfb1c21deab2effeb\",\n    \"output_sha256\": \"17cf219ff36ccc797954b8bb353662117c6f932f6584b1faad96760aee701ae1\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "portfolio",
+              "child_workflow": "investment-portfolio-review",
+              "reason": "request concerns multiple holdings, weights, concentration, diversification or portfolio-level decisions",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=portfolio; CHILD=investment-portfolio-review; NEXT_ACTION=load_skill(investment-portfolio-review)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:25.313Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "42491bbee0df982fab8fc278a65a78b11ed654483072941bfb1c21deab2effeb",
+                "output_sha256": "17cf219ff36ccc797954b8bb353662117c6f932f6584b1faad96760aee701ae1"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"portfolio-review\",\"child_workflow\":\"investment-portfolio-review\",\"routing_receipt\":\"ROUTE=portfolio-review; CHILD=investment-portfolio-review; NEXT_ACTION=load_skill(investment-portfolio-review)\",\"status\":\"routed\",\"candidates\":[\"investment-portfolio-review\"],\"reason\":\"A portfolio-level review is the decision object.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:11:21.365Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"42491bbee0df982fab8fc278a65a78b11ed654483072941bfb1c21deab2effeb\",\"output_sha256\":\"ec0683403028d1df183c4a48336d27c5c6407dfb105df7802794fc9fb4fa4664\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "portfolio-review",
+              "child_workflow": "investment-portfolio-review",
+              "routing_receipt": "ROUTE=portfolio-review; CHILD=investment-portfolio-review; NEXT_ACTION=load_skill(investment-portfolio-review)",
+              "status": "routed",
+              "candidates": [
+                "investment-portfolio-review"
+              ],
+              "reason": "A portfolio-level review is the decision object.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:21.365Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "42491bbee0df982fab8fc278a65a78b11ed654483072941bfb1c21deab2effeb",
+                "output_sha256": "ec0683403028d1df183c4a48336d27c5c6407dfb105df7802794fc9fb4fa4664"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "input": "AAPL reported quarterly earnings today. Review whether the result changes my existing investment thesis. Do not analyze beyond routing.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"attention\",\n  \"child_workflow\": \"investment-attention-review\",\n  \"reason\": \"request asks whether new information changes an existing investment thesis or deserves escalation\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:11:28.881Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"1c589b15ff9be67203c1cca2ba90af2f042dd661935b8ea071f4ef3358e985f8\",\n    \"output_sha256\": \"aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "attention",
+              "child_workflow": "investment-attention-review",
+              "reason": "request asks whether new information changes an existing investment thesis or deserves escalation",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:28.881Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "1c589b15ff9be67203c1cca2ba90af2f042dd661935b8ea071f4ef3358e985f8",
+                "output_sha256": "aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"attention-review\",\"child_workflow\":\"investment-attention-review\",\"routing_receipt\":\"ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\"status\":\"routed\",\"candidates\":[\"investment-attention-review\"],\"reason\":\"New information is being assessed against holdings or theses.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:11:29.575Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"1c589b15ff9be67203c1cca2ba90af2f042dd661935b8ea071f4ef3358e985f8\",\"output_sha256\":\"4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "attention-review",
+              "child_workflow": "investment-attention-review",
+              "routing_receipt": "ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "status": "routed",
+              "candidates": [
+                "investment-attention-review"
+              ],
+              "reason": "New information is being assessed against holdings or theses.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:29.575Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "1c589b15ff9be67203c1cca2ba90af2f042dd661935b8ea071f4ef3358e985f8",
+                "output_sha256": "4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "input": "AAPL opublikował dziś wyniki kwartalne. Sprawdź, czy wynik zmienia moją istniejącą tezę inwestycyjną. Nie analizuj poza routingiem.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"attention\",\n  \"child_workflow\": \"investment-attention-review\",\n  \"reason\": \"request asks whether new information changes an existing investment thesis or deserves escalation\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:11:33.831Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"bcc48161882627327f7af25bd4edc863ba8eb2ab97c2d54894bc169084524f7c\",\n    \"output_sha256\": \"aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "attention",
+              "child_workflow": "investment-attention-review",
+              "reason": "request asks whether new information changes an existing investment thesis or deserves escalation",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:33.831Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "bcc48161882627327f7af25bd4edc863ba8eb2ab97c2d54894bc169084524f7c",
+                "output_sha256": "aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"attention-review\",\"child_workflow\":\"investment-attention-review\",\"routing_receipt\":\"ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\"status\":\"routed\",\"candidates\":[\"investment-attention-review\"],\"reason\":\"New information is being assessed against holdings or theses.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:11:30.149Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"bcc48161882627327f7af25bd4edc863ba8eb2ab97c2d54894bc169084524f7c\",\"output_sha256\":\"4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "attention-review",
+              "child_workflow": "investment-attention-review",
+              "routing_receipt": "ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "status": "routed",
+              "candidates": [
+                "investment-attention-review"
+              ],
+              "reason": "New information is being assessed against holdings or theses.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:30.149Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "bcc48161882627327f7af25bd4edc863ba8eb2ab97c2d54894bc169084524f7c",
+                "output_sha256": "4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "input": "For my portfolio holding, explain how its latest earnings event changes my existing investment thesis.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"attention\",\n  \"child_workflow\": \"investment-attention-review\",\n  \"reason\": \"request asks whether new information changes an existing investment thesis or deserves escalation\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:11:37.251Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"efd9578a7654286b6475b7051729562391ac098b947eaebc088380179cbebe34\",\n    \"output_sha256\": \"aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "attention",
+              "child_workflow": "investment-attention-review",
+              "reason": "request asks whether new information changes an existing investment thesis or deserves escalation",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:37.251Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "efd9578a7654286b6475b7051729562391ac098b947eaebc088380179cbebe34",
+                "output_sha256": "aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"attention-review\",\"child_workflow\":\"investment-attention-review\",\"routing_receipt\":\"ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\"status\":\"routed\",\"candidates\":[\"investment-attention-review\"],\"reason\":\"New information is being assessed against holdings or theses.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:11:38.803Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"efd9578a7654286b6475b7051729562391ac098b947eaebc088380179cbebe34\",\"output_sha256\":\"4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "attention-review",
+              "child_workflow": "investment-attention-review",
+              "routing_receipt": "ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "status": "routed",
+              "candidates": [
+                "investment-attention-review"
+              ],
+              "reason": "New information is being assessed against holdings or theses.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:38.803Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "efd9578a7654286b6475b7051729562391ac098b947eaebc088380179cbebe34",
+                "output_sha256": "4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "input": "Dla spółki z mojego portfela wyjaśnij, jak najnowszy raport wynikowy zmienia moją dotychczasową tezę inwestycyjną.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"attention\",\n  \"child_workflow\": \"investment-attention-review\",\n  \"reason\": \"request asks whether new information changes an existing investment thesis or deserves escalation\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:11:42.506Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"072277d2fbdfd700251a559f836a76ee15804b5cdda02f73326f85a0a124da68\",\n    \"output_sha256\": \"aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "attention",
+              "child_workflow": "investment-attention-review",
+              "reason": "request asks whether new information changes an existing investment thesis or deserves escalation",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=attention; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:42.506Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "072277d2fbdfd700251a559f836a76ee15804b5cdda02f73326f85a0a124da68",
+                "output_sha256": "aacb94489868b4de29937cd6e5d93292ee8611e6e2cd99776ac1415b70823c1a"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"attention-review\",\"child_workflow\":\"investment-attention-review\",\"routing_receipt\":\"ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)\",\"status\":\"routed\",\"candidates\":[\"investment-attention-review\"],\"reason\":\"New information is being assessed against holdings or theses.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:11:43.163Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"072277d2fbdfd700251a559f836a76ee15804b5cdda02f73326f85a0a124da68\",\"output_sha256\":\"4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "attention-review",
+              "child_workflow": "investment-attention-review",
+              "routing_receipt": "ROUTE=attention-review; CHILD=investment-attention-review; NEXT_ACTION=load_skill(investment-attention-review)",
+              "status": "routed",
+              "candidates": [
+                "investment-attention-review"
+              ],
+              "reason": "New information is being assessed against holdings or theses.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:43.163Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "072277d2fbdfd700251a559f836a76ee15804b5cdda02f73326f85a0a124da68",
+                "output_sha256": "4413105464611fbdfb117da273feb8fe76c1c3901d769af2dbc89e049abfbe28"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "input": "Find promising opportunities in the renewable energy sector; I want a new company to research.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"opportunity\",\n  \"child_workflow\": \"investment-opportunity-hunter\",\n  \"reason\": \"request asks to discover new securities or research candidates\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=opportunity; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:11:47.959Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"7c9768fc94e8f25463764209b8ee4f53e47ca6a4eaf23b25e70e0783afb5db88\",\n    \"output_sha256\": \"f402e7e9085ed30f8e4e2d796f1348f51d0f0968f65ae4c02035728b1ee4c11c\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "opportunity",
+              "child_workflow": "investment-opportunity-hunter",
+              "reason": "request asks to discover new securities or research candidates",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=opportunity; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:47.959Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "7c9768fc94e8f25463764209b8ee4f53e47ca6a4eaf23b25e70e0783afb5db88",
+                "output_sha256": "f402e7e9085ed30f8e4e2d796f1348f51d0f0968f65ae4c02035728b1ee4c11c"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"opportunity-hunter\",\"child_workflow\":\"investment-opportunity-hunter\",\"routing_receipt\":\"ROUTE=opportunity-hunter; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)\",\"status\":\"routed\",\"candidates\":[\"investment-opportunity-hunter\"],\"reason\":\"Discovery of new research candidates; incidental or excluded portfolio mentions do not change the decision object.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:11:49.874Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"7c9768fc94e8f25463764209b8ee4f53e47ca6a4eaf23b25e70e0783afb5db88\",\"output_sha256\":\"70e21b349bb26eead46861701847f3a9f074e95c31618575151e92b4da672c07\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "opportunity-hunter",
+              "child_workflow": "investment-opportunity-hunter",
+              "routing_receipt": "ROUTE=opportunity-hunter; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)",
+              "status": "routed",
+              "candidates": [
+                "investment-opportunity-hunter"
+              ],
+              "reason": "Discovery of new research candidates; incidental or excluded portfolio mentions do not change the decision object.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:11:49.874Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "7c9768fc94e8f25463764209b8ee4f53e47ca6a4eaf23b25e70e0783afb5db88",
+                "output_sha256": "70e21b349bb26eead46861701847f3a9f074e95c31618575151e92b4da672c07"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "input": "Find new stocks worth researching; do not review my investment portfolio.",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"is_investment_request\": true,\n  \"route\": \"opportunity\",\n  \"child_workflow\": \"investment-opportunity-hunter\",\n  \"reason\": \"request asks to discover new securities or research candidates\",\n  \"must_invoke_child_workflow\": true,\n  \"routing_receipt\": \"ROUTE=opportunity; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)\",\n  \"workflow_executed\": false,\n  \"execution_state\": \"routed_only\",\n  \"workflow_execution_state\": \"not_executed\",\n  \"execution_state_reason\": \"router selected a workflow but did not execute it\",\n  \"outcome\": null,\n  \"response_policy\": \"load_child_workflow_then_follow\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"route_investment_request\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:13:46.646Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"09ea34a6739b7b89280885ed431f51a7bba3a53a324b68fc5fefea0730d34373\",\n    \"output_sha256\": \"f402e7e9085ed30f8e4e2d796f1348f51d0f0968f65ae4c02035728b1ee4c11c\"\n  }\n}"
+              }
+            ],
+            "structuredContent": {
+              "is_investment_request": true,
+              "route": "opportunity",
+              "child_workflow": "investment-opportunity-hunter",
+              "reason": "request asks to discover new securities or research candidates",
+              "must_invoke_child_workflow": true,
+              "routing_receipt": "ROUTE=opportunity; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)",
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "response_policy": "load_child_workflow_then_follow",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:13:46.646Z",
+                "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "input_sha256": "09ea34a6739b7b89280885ed431f51a7bba3a53a324b68fc5fefea0730d34373",
+                "output_sha256": "f402e7e9085ed30f8e4e2d796f1348f51d0f0968f65ae4c02035728b1ee4c11c"
+              }
+            },
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"route\":\"opportunity-hunter\",\"child_workflow\":\"investment-opportunity-hunter\",\"routing_receipt\":\"ROUTE=opportunity-hunter; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)\",\"status\":\"routed\",\"candidates\":[\"investment-opportunity-hunter\"],\"reason\":\"Discovery of new research candidates; incidental or excluded portfolio mentions do not change the decision object.\",\"method\":\"deterministic bilingual rules; no semantic model\",\"clarification\":null,\"recommendation\":null,\"workflow_executed\":false,\"execution_state\":\"routed_only\",\"workflow_execution_state\":\"not_executed\",\"execution_state_reason\":\"router selected a workflow but did not execute it\",\"outcome\":null,\"is_investment_request\":true,\"must_invoke_child_workflow\":true,\"response_policy\":\"load_child_workflow_then_follow\",\"source\":{\"repository\":\"https://github.com/aras-2003/skills-factory\",\"github_main_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"routing_contract\":\"workflows/investment-os-review/WORKFLOW.md\",\"routing_contract_blob_sha\":\"cc77c6ee38a3e00040759cd301f1cfd312e5736c\",\"channel\":\"private Cloud Next Site sourced from Skills Factory\",\"synchronization\":\"generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded\",\"lab_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\"},\"draft_extension\":null,\"runtime_release\":{\"channel\":\"lab\",\"version\":\"1.38.322\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"release_id\":\"1.38.322+a752b553cc16\",\"payload_content_sha256\":\"05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4\",\"skill_count\":83,\"catalog_digest\":\"98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb\",\"artifact_sha256\":\"cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff\",\"artifact_scope\":\"complete_lab\"}},\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"route_investment_request\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:13:42.648Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"09ea34a6739b7b89280885ed431f51a7bba3a53a324b68fc5fefea0730d34373\",\"output_sha256\":\"70e21b349bb26eead46861701847f3a9f074e95c31618575151e92b4da672c07\"}}"
+              }
+            ],
+            "structuredContent": {
+              "route": "opportunity-hunter",
+              "child_workflow": "investment-opportunity-hunter",
+              "routing_receipt": "ROUTE=opportunity-hunter; CHILD=investment-opportunity-hunter; NEXT_ACTION=load_skill(investment-opportunity-hunter)",
+              "status": "routed",
+              "candidates": [
+                "investment-opportunity-hunter"
+              ],
+              "reason": "Discovery of new research candidates; incidental or excluded portfolio mentions do not change the decision object.",
+              "method": "deterministic bilingual rules; no semantic model",
+              "clarification": null,
+              "recommendation": null,
+              "workflow_executed": false,
+              "execution_state": "routed_only",
+              "workflow_execution_state": "not_executed",
+              "execution_state_reason": "router selected a workflow but did not execute it",
+              "outcome": null,
+              "is_investment_request": true,
+              "must_invoke_child_workflow": true,
+              "response_policy": "load_child_workflow_then_follow",
+              "source": {
+                "repository": "https://github.com/aras-2003/skills-factory",
+                "github_main_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                "routing_contract": "workflows/investment-os-review/WORKFLOW.md",
+                "routing_contract_blob_sha": "cc77c6ee38a3e00040759cd301f1cfd312e5736c",
+                "channel": "private Cloud Next Site sourced from Skills Factory",
+                "synchronization": "generated from the complete Skills Factory Lab artifact built from this canonical repository revision; evaluator fixtures excluded",
+                "lab_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff"
+                },
+                "draft_extension": null,
+                "runtime_release": {
+                  "channel": "lab",
+                  "version": "1.38.322",
+                  "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+                  "release_id": "1.38.322+a752b553cc16",
+                  "payload_content_sha256": "05eaa916d3d5e997e79732a266de075b5a3d9f85706aaf4ade7a53add0b917f4",
+                  "skill_count": 83,
+                  "catalog_digest": "98cced925d4e77a0b2acd1489a259a2c1cfa4be98993a0c729b588cff6660fdb",
+                  "artifact_sha256": "cae754f70af153bcc98308db6c5585a98d4d0b73aa0c2b5130b68329b0d9a2ff",
+                  "artifact_scope": "complete_lab"
+                }
+              },
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "route_investment_request",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:13:42.648Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "09ea34a6739b7b89280885ed431f51a7bba3a53a324b68fc5fefea0730d34373",
+                "output_sha256": "70e21b349bb26eead46861701847f3a9f074e95c31618575151e92b4da672c07"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    }
+  ],
+  "loads": [
+    {
+      "name": "architecture-review",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"name\": \"architecture-review\",\n  \"domain\": \"skills\",\n  \"kind\": \"skill\",\n  \"description\": \"Review alignment across business direction, capabilities, organisational design, information and technology architecture. Use for enterprise or organisational architecture decisions; do not use as a low-level software design review.\\n\",\n  \"version\": \"1.0.0\",\n  \"maturity\": \"production\",\n  \"content_sha256\": \"7b51635affc6fc4006410cb77c9345b377e16bee7efb566d0642535dd5536993\",\n  \"execution_mode\": \"host_model_executes_loaded_instructions\",\n  \"instructions\": \"---\\nname: architecture-review\\ndescription: 'Review alignment across business direction, capabilities, organisational\\n  design, information and technology architecture. Use for enterprise or organisational\\n  architecture decisions; do not use as a low-level software design review.\\n\\n  '\\nmetadata:\\n  owner: arkadiusz-kamrowski\\n  version: 1.0.0\\n  maturity: production\\n  risk: medium\\n  last_reviewed: '2026-09-30'\\n---\\n\\n# Architecture Review\\n\\n## Purpose\\nTest whether organisational and technology architecture coherently supports strategic direction without assuming that organisational symptoms imply technology defects.\\n\\n## Procedure\\n1. State the business outcomes, constraints and architectural decision problem.\\n2. Identify impacted capabilities, ownership and key dependencies.\\n3. Review business-to-architecture traceability.\\n4. Review organisational ownership and architecture governance.\\n5. Review how architecture enters portfolio, funding and delivery decisions.\\n6. Distinguish:\\n   - organisational/decision-system problems;\\n   - investment-system problems;\\n   - evidenced technology-estate problems.\\n7. Do not diagnose technology defects unless specific estate evidence supports them.\\n8. Identify current-state structural misfits and diagnostic options.\\n9. Recommend target-state architecture only when evidence is sufficient; otherwise state the minimum evidence needed.\\n\\n## Decision rules\\n- Architecture decisions must trace to business/capability needs.\\n- Avoid technology-only recommendations when the problem is organisational.\\n- Architecture responsibility without investment/delivery authority is a governance issue before it is a technology issue.\\n- Local optimisation can create enterprise technology consequences without proving a technology defect.\\n- Explicitly surface trade-offs and reversibility.\\n- Unknown architecture debt must remain unknown.\\n\\n## Output contract\\n- context and architectural decision problem;\\n- affected capabilities/ownership hypotheses;\\n- current-state diagnosis;\\n- organisational vs technology problem table;\\n- structural misfits;\\n- diagnostic options;\\n- minimum evidence before target-state design;\\n- recommendation on the next evidence-gathering step.\\n\\n## Model guidance\\nDefault: **standard**.\\nValidated on Luna for current-state diagnosis and architecture-governance review.\\nEscalate to strong for novel cross-domain target architecture, contested target-state trade-offs, or major transition design.\\n\\n## Quality checks\\n- [ ] Business-to-architecture traceability explicit.\\n- [ ] Organisational and technology causes separated.\\n- [ ] No invented technology-estate defects.\\n- [ ] Architecture influence linked to investment/delivery timing and authority.\\n- [ ] Target-state design deferred when evidence is insufficient.\",\n  \"reference_files\": [],\n  \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"load_skill\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:12:10.021Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"0c82bd4d605b43785f97339c2e4ab3a16162cfead618742af595ce9315e82292\",\n    \"output_sha256\": \"2a9dc502dc71969cca033ffd9eeb443651bcf88a83fd45ab3463251228bf8a3b\"\n  }\n}"
+              }
+            ],
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"name\":\"architecture-review\",\"domain\":\"skills\",\"kind\":\"skill\",\"description\":\"Review alignment across business direction, capabilities, organisational design, information and technology architecture. Use for enterprise or organisational architecture decisions; do not use as a low-level software design review.\\n\",\"version\":\"1.0.0\",\"maturity\":\"production\",\"content_sha256\":\"7b51635affc6fc4006410cb77c9345b377e16bee7efb566d0642535dd5536993\",\"instructions\":\"---\\nname: architecture-review\\ndescription: 'Review alignment across business direction, capabilities, organisational\\n  design, information and technology architecture. Use for enterprise or organisational\\n  architecture decisions; do not use as a low-level software design review.\\n\\n  '\\nmetadata:\\n  owner: arkadiusz-kamrowski\\n  version: 1.0.0\\n  maturity: production\\n  risk: medium\\n  last_reviewed: '2026-09-30'\\n---\\n\\n# Architecture Review\\n\\n## Purpose\\nTest whether organisational and technology architecture coherently supports strategic direction without assuming that organisational symptoms imply technology defects.\\n\\n## Procedure\\n1. State the business outcomes, constraints and architectural decision problem.\\n2. Identify impacted capabilities, ownership and key dependencies.\\n3. Review business-to-architecture traceability.\\n4. Review organisational ownership and architecture governance.\\n5. Review how architecture enters portfolio, funding and delivery decisions.\\n6. Distinguish:\\n   - organisational/decision-system problems;\\n   - investment-system problems;\\n   - evidenced technology-estate problems.\\n7. Do not diagnose technology defects unless specific estate evidence supports them.\\n8. Identify current-state structural misfits and diagnostic options.\\n9. Recommend target-state architecture only when evidence is sufficient; otherwise state the minimum evidence needed.\\n\\n## Decision rules\\n- Architecture decisions must trace to business/capability needs.\\n- Avoid technology-only recommendations when the problem is organisational.\\n- Architecture responsibility without investment/delivery authority is a governance issue before it is a technology issue.\\n- Local optimisation can create enterprise technology consequences without proving a technology defect.\\n- Explicitly surface trade-offs and reversibility.\\n- Unknown architecture debt must remain unknown.\\n\\n## Output contract\\n- context and architectural decision problem;\\n- affected capabilities/ownership hypotheses;\\n- current-state diagnosis;\\n- organisational vs technology problem table;\\n- structural misfits;\\n- diagnostic options;\\n- minimum evidence before target-state design;\\n- recommendation on the next evidence-gathering step.\\n\\n## Model guidance\\nDefault: **standard**.\\nValidated on Luna for current-state diagnosis and architecture-governance review.\\nEscalate to strong for novel cross-domain target architecture, contested target-state trade-offs, or major transition design.\\n\\n## Quality checks\\n- [ ] Business-to-architecture traceability explicit.\\n- [ ] Organisational and technology causes separated.\\n- [ ] No invented technology-estate defects.\\n- [ ] Architecture influence linked to investment/delivery timing and authority.\\n- [ ] Target-state design deferred when evidence is insufficient.\",\"reference_files\":{},\"instruction_sha256\":\"e2b7b239e4bbd6f0ed18d6e5b29cd33381c4ea4532d6b7ec5a3b932755619a10\",\"host_surface_sha256\":\"1f7549a21cf6d39471ad5eb88815e4ecd35fd48a803831795623b4c46e903444\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"execution_mode\":\"host_model_executes_loaded_instructions\",\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"load_skill\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:12:10.805Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"0c82bd4d605b43785f97339c2e4ab3a16162cfead618742af595ce9315e82292\",\"output_sha256\":\"67cced0a57c68d640d6b8c803f9539457064d2d3a6a8a9ffe2ac3faf8035ae1b\"}}"
+              }
+            ],
+            "structuredContent": {
+              "name": "architecture-review",
+              "domain": "skills",
+              "kind": "skill",
+              "description": "Review alignment across business direction, capabilities, organisational design, information and technology architecture. Use for enterprise or organisational architecture decisions; do not use as a low-level software design review.\n",
+              "version": "1.0.0",
+              "maturity": "production",
+              "content_sha256": "7b51635affc6fc4006410cb77c9345b377e16bee7efb566d0642535dd5536993",
+              "instructions": "---\nname: architecture-review\ndescription: 'Review alignment across business direction, capabilities, organisational\n  design, information and technology architecture. Use for enterprise or organisational\n  architecture decisions; do not use as a low-level software design review.\n\n  '\nmetadata:\n  owner: arkadiusz-kamrowski\n  version: 1.0.0\n  maturity: production\n  risk: medium\n  last_reviewed: '2026-09-30'\n---\n\n# Architecture Review\n\n## Purpose\nTest whether organisational and technology architecture coherently supports strategic direction without assuming that organisational symptoms imply technology defects.\n\n## Procedure\n1. State the business outcomes, constraints and architectural decision problem.\n2. Identify impacted capabilities, ownership and key dependencies.\n3. Review business-to-architecture traceability.\n4. Review organisational ownership and architecture governance.\n5. Review how architecture enters portfolio, funding and delivery decisions.\n6. Distinguish:\n   - organisational/decision-system problems;\n   - investment-system problems;\n   - evidenced technology-estate problems.\n7. Do not diagnose technology defects unless specific estate evidence supports them.\n8. Identify current-state structural misfits and diagnostic options.\n9. Recommend target-state architecture only when evidence is sufficient; otherwise state the minimum evidence needed.\n\n## Decision rules\n- Architecture decisions must trace to business/capability needs.\n- Avoid technology-only recommendations when the problem is organisational.\n- Architecture responsibility without investment/delivery authority is a governance issue before it is a technology issue.\n- Local optimisation can create enterprise technology consequences without proving a technology defect.\n- Explicitly surface trade-offs and reversibility.\n- Unknown architecture debt must remain unknown.\n\n## Output contract\n- context and architectural decision problem;\n- affected capabilities/ownership hypotheses;\n- current-state diagnosis;\n- organisational vs technology problem table;\n- structural misfits;\n- diagnostic options;\n- minimum evidence before target-state design;\n- recommendation on the next evidence-gathering step.\n\n## Model guidance\nDefault: **standard**.\nValidated on Luna for current-state diagnosis and architecture-governance review.\nEscalate to strong for novel cross-domain target architecture, contested target-state trade-offs, or major transition design.\n\n## Quality checks\n- [ ] Business-to-architecture traceability explicit.\n- [ ] Organisational and technology causes separated.\n- [ ] No invented technology-estate defects.\n- [ ] Architecture influence linked to investment/delivery timing and authority.\n- [ ] Target-state design deferred when evidence is insufficient.",
+              "reference_files": {},
+              "instruction_sha256": "e2b7b239e4bbd6f0ed18d6e5b29cd33381c4ea4532d6b7ec5a3b932755619a10",
+              "host_surface_sha256": "1f7549a21cf6d39471ad5eb88815e4ecd35fd48a803831795623b4c46e903444",
+              "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+              "execution_mode": "host_model_executes_loaded_instructions",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "load_skill",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:12:10.805Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "0c82bd4d605b43785f97339c2e4ab3a16162cfead618742af595ce9315e82292",
+                "output_sha256": "67cced0a57c68d640d6b8c803f9539457064d2d3a6a8a9ffe2ac3faf8035ae1b"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "investment-portfolio-review",
+      "pair": [
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\n  \"name\": \"investment-portfolio-review\",\n  \"domain\": \"skills\",\n  \"kind\": \"skill\",\n  \"description\": \"Child workflow for full portfolio review. Use when selected by investment-os-review, explicitly requested, or when another Investment OS workflow delegates a portfolio-level decision. It performs canonical reads, reconciliation, concentration/diversification analysis, policy/thesis checks, integrated reporting and the visual-floor path. Do not use as the default natural Investment OS entry point; natural portfolio requests should enter through investment-os-review.\",\n  \"version\": \"0.5.1\",\n  \"maturity\": \"production\",\n  \"content_sha256\": \"b995ee862c4148dbda239cc5b91e8352c106073d06dcb97063ffa6a39e0f24b4\",\n  \"execution_mode\": \"host_model_executes_loaded_instructions\",\n  \"instructions\": \"---\\nname: investment-portfolio-review\\ndescription: Child workflow for full portfolio review. Use when selected by investment-os-review,\\n  explicitly requested, or when another Investment OS workflow delegates a portfolio-level\\n  decision. It performs canonical reads, reconciliation, concentration/diversification\\n  analysis, policy/thesis checks, integrated reporting and the visual-floor path.\\n  Do not use as the default natural Investment OS entry point; natural portfolio requests\\n  should enter through investment-os-review.\\nmetadata:\\n  owner: arkadiusz-kamrowski\\n  version: 0.5.1\\n  maturity: production\\n  risk: high\\n  last_reviewed: '2026-10-09'\\n---\\n\\n# Investment Portfolio Review Runtime Entrypoint\\n\\n## Purpose\\n\\nExpose a repository workflow to the skill runtime without duplicating its orchestration logic.\\n\\n## Procedure\\n\\n1. Load `references/WORKFLOW.md`.\\n2. Follow it as the authoritative orchestration procedure.\\n3. Route only to specialist skills that the workflow actually requires.\\n4. Preserve workflow gates, stop conditions and evidence discipline.\\n5. If an optional dependency is unavailable, apply the declared reduced-scope behavior below and explicitly disclose that the specialist did not run.\\n6. Do not replace the workflow with a generic best-practice answer.\\n\\n## Output contract\\n\\nUse the output contract defined in `references/WORKFLOW.md`.\\n\\n## Quality checks\\n\\n- [ ] The workflow source was loaded.\\n- [ ] Specialist skills were selected selectively.\\n- [ ] Required dependencies were available.\\n- [ ] Missing optional dependencies were disclosed and not simulated.\\n- [ ] Workflow stage order and gates were preserved.\\n- [ ] Evidence and uncertainty remain explicit.\\n- [ ] No extra domain was added merely for completeness.\",\n  \"reference_files\": [\n    {\n      \"path\": \"references/WORKFLOW.md\",\n      \"content\": \"# Investment Portfolio Review Workflow\\n\\n## Purpose\\nReview the user's investment portfolio as a system, detect material concentration, diversification/overlap risk, drift or thesis deterioration, and surface only positions that require attention.\\n\\n## Natural activation\\nUse this workflow for ordinary portfolio-review requests even when the user does not name the workflow, Investment OS, XTB, canonical storage or any specialist skill. Typical natural requests include:\\n- \\\"review my portfolio\\\";\\n- \\\"review this portfolio\\\";\\n- \\\"what requires attention in my portfolio?\\\";\\n- a list/table of holdings or weights followed by a request for risk, concentration, diversification or next decisions.\\n\\nWhen activated naturally, do not replace the workflow with a generic investment commentary answer. Run the canonical/evidence path first, then integrated reporting and the required visual-floor path. Do not mark the workflow complete until the composition visual slot has a renderer receipt or an explicit `BLOCKED_NO_RENDERER` result.\\n\\n## Required skills\\n- portfolio-state-review\\n- thesis-monitor\\n- investment-record-store\\n\\n## Optional skills\\n- investment-attention-triage\\n- position-sizing-review\\n- valuation-scenario-review\\n- thesis-challenge\\n- decision-journal-update\\n\\n## Sequence\\n1. Attempt canonical reads first through investment-record-store: current_positions, latest portfolio snapshot, current policy, active thesis versions and relevant transaction history. Emit canonical READ receipt.\\n   - Resolve backend/project/schema from the record-store bootstrap contract first; do not choose a schema by scanning for populated duplicate tables.\\n   - Treat the schema named in the canonical READ receipt as authoritative for the entire workflow run.\\n   - If the user also supplied holdings/weights, preserve them as USER_PROVIDED evidence and reconcile them against canonical state when available.\\n   - Do not skip canonical reads merely because the prompt already contains enough numbers for a generic analysis.\\n2. If current state or prior snapshot is unavailable, state exactly which comparison is blocked. Do not substitute local/chat/analytics cache.\\n3. Reconcile current state and preserve append-only snapshot history.\\n4. Use Data/analytics tooling for concentration, ETF look-through, overlap, currency, theme/cycle and historical trend calculations when useful. Treat results as derived analytics.\\n5. Attribute change only when evidence supports causality:\\n   - current state alone cannot establish drift cause;\\n   - current + prior canonical snapshots establish change, but not necessarily whether it came from trades or market movement;\\n   - classify trade-driven vs market-driven only when transaction evidence plus comparable prior/current state, or an explicit canonical attribution record, distinguishes the causes;\\n   - an empty, incomplete or unavailable transaction table is not causal evidence and does not prove that no transaction occurred;\\n   - otherwise return attribution `UNKNOWN` and do not guess.\\n6. Triage new company/industry/market evidence with investment-attention-triage.\\n7. For REVIEW/ESCALATE positions, run thesis-monitor.\\n8. Revalue only positions where valuation drift can change the action.\\n9. Use position-sizing-review when concentration, uncertainty or thesis state changes the policy band.\\n10. Surface only positions requiring action review.\\n11. Persist new snapshot, signals, thesis-monitor records and user-confirmed decisions through investment-record-store only.\\n12. Emit canonical WRITE receipt.\\n13. After analytical synthesis, call `report-composer` and satisfy the required composition/concentration visual slot with a callable renderer. Record `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`; client display is `NOT_OBSERVABLE` unless directly observed. Do not close the workflow with an unreported visual slot.\\n\\n## Decision rules\\n- analytics layer reads/derives; it does not become the system of record;\\n- canonical schema is resolved once through investment-record-store and must not change mid-run;\\n- duplicate Supabase schemas are not fallback sources;\\n- position risk can deteriorate while company thesis remains intact;\\n- no-trade price drift is still portfolio drift;\\n- policy breach triggers review, not automatic sale;\\n- without prior canonical snapshot, do not claim a complete change comparison;\\n- without sufficient transaction/history evidence, do not classify drift as trade-driven or market-driven;\\n- an empty, incomplete, unavailable or zero-row transaction result is not evidence that no transaction occurred;\\n- user-provided aggregate metrics that cannot be recomputed from the visible holdings remain USER_PROVIDED, not DERIVED.\\n\\n## Output contract\\nRequires attention; no material change; portfolio-level observations; derived analytics/provenance; canonical READ/WRITE receipts.\\n\\nWhen change exists but causal evidence does not distinguish transactions from market movement, state that attribution is `UNKNOWN` because distinguishing evidence is insufficient. Do not explain UNKNOWN merely as \\\"the transaction table is empty\\\".\\n\\n## Stop conditions\\nStop when every material alert is tied to evidence or policy.\\n\\n## Integrated report presentation\\nRender the report directly in the chat response by default. External HTML/PDF/Figma/deck/file output is allowed only when the user explicitly requests that artifact or format.\\n\\nAfter analytical synthesis, call `report-composer` to produce one portfolio decision report. Use `visual-output-design` for inline components only. This step is mandatory for substantial portfolio reviews; do not stop after a prose-only analytical answer when the visual floor applies. Before marking the workflow complete, record the required composition/concentration visual as `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`. Renderer output does not establish that the client displayed it; report display as `NOT_OBSERVABLE` unless directly observed.\\n\\nDefault profile:\\n- portfolio decision headline + KPI strip;\\n- concentration/diversification with inline allocation/concentration charts;\\n- overlap/look-through matrix when supported;\\n- material drift/change since prior snapshot;\\n- positions requiring attention;\\n- opportunity implications;\\n- decision queue / next actions;\\n- canonical READ/WRITE receipts and limitations.\\n\\nPrefer embedded chat-native visual payloads when multiple coordinated portfolio views materially help. Renderer payload success does not prove client display; client display remains NOT_OBSERVABLE to the model. If rendering is unavailable, use truthful tables/structured prose as diagnostic fallback; do not generate an external artifact unless explicitly requested.\\n\"\n    }\n  ],\n  \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n  \"tool_receipt\": {\n    \"schema_version\": \"1.0\",\n    \"kind\": \"unsigned_mcp_tool_call_receipt\",\n    \"tool_name\": \"load_skill\",\n    \"status\": \"SUCCESS\",\n    \"execution_state\": \"executed\",\n    \"completed_at\": \"2026-10-24T10:12:15.037Z\",\n    \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\",\n    \"input_sha256\": \"425dca740ae65674b9c02ea381e9f55ae26f0b43058ed99f4005ee63f6f6caf9\",\n    \"output_sha256\": \"2e5dde60ceb81cb89343511e1ddad611319c5c7666c494a775bf3a1fa1414a39\"\n  }\n}"
+              }
+            ],
+            "isError": false
+          }
+        },
+        {
+          "status": "fulfilled",
+          "value": {
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"name\":\"investment-portfolio-review\",\"domain\":\"skills\",\"kind\":\"workflow\",\"description\":\"Child workflow for full portfolio review. Use when selected by investment-os-review, explicitly requested, or when another Investment OS workflow delegates a portfolio-level decision. It performs canonical reads, reconciliation, concentration/diversification analysis, policy/thesis checks, integrated reporting and the visual-floor path. Do not use as the default natural Investment OS entry point; natural portfolio requests should enter through investment-os-review.\",\"version\":\"0.5.1\",\"maturity\":\"production\",\"content_sha256\":\"b995ee862c4148dbda239cc5b91e8352c106073d06dcb97063ffa6a39e0f24b4\",\"instructions\":\"---\\nname: investment-portfolio-review\\ndescription: Child workflow for full portfolio review. Use when selected by investment-os-review,\\n  explicitly requested, or when another Investment OS workflow delegates a portfolio-level\\n  decision. It performs canonical reads, reconciliation, concentration/diversification\\n  analysis, policy/thesis checks, integrated reporting and the visual-floor path.\\n  Do not use as the default natural Investment OS entry point; natural portfolio requests\\n  should enter through investment-os-review.\\nmetadata:\\n  owner: arkadiusz-kamrowski\\n  version: 0.5.1\\n  maturity: production\\n  risk: high\\n  last_reviewed: '2026-10-09'\\n---\\n\\n# Investment Portfolio Review Runtime Entrypoint\\n\\n## Purpose\\n\\nExpose a repository workflow to the skill runtime without duplicating its orchestration logic.\\n\\n## Procedure\\n\\n1. Load `references/WORKFLOW.md`.\\n2. Follow it as the authoritative orchestration procedure.\\n3. Route only to specialist skills that the workflow actually requires.\\n4. Preserve workflow gates, stop conditions and evidence discipline.\\n5. If an optional dependency is unavailable, apply the declared reduced-scope behavior below and explicitly disclose that the specialist did not run.\\n6. Do not replace the workflow with a generic best-practice answer.\\n\\n## Output contract\\n\\nUse the output contract defined in `references/WORKFLOW.md`.\\n\\n## Quality checks\\n\\n- [ ] The workflow source was loaded.\\n- [ ] Specialist skills were selected selectively.\\n- [ ] Required dependencies were available.\\n- [ ] Missing optional dependencies were disclosed and not simulated.\\n- [ ] Workflow stage order and gates were preserved.\\n- [ ] Evidence and uncertainty remain explicit.\\n- [ ] No extra domain was added merely for completeness.\",\"reference_files\":{\"references/WORKFLOW.md\":\"# Investment Portfolio Review Workflow\\n\\n## Purpose\\nReview the user's investment portfolio as a system, detect material concentration, diversification/overlap risk, drift or thesis deterioration, and surface only positions that require attention.\\n\\n## Natural activation\\nUse this workflow for ordinary portfolio-review requests even when the user does not name the workflow, Investment OS, XTB, canonical storage or any specialist skill. Typical natural requests include:\\n- \\\"review my portfolio\\\";\\n- \\\"review this portfolio\\\";\\n- \\\"what requires attention in my portfolio?\\\";\\n- a list/table of holdings or weights followed by a request for risk, concentration, diversification or next decisions.\\n\\nWhen activated naturally, do not replace the workflow with a generic investment commentary answer. Run the canonical/evidence path first, then integrated reporting and the required visual-floor path. Do not mark the workflow complete until the composition visual slot has a renderer receipt or an explicit `BLOCKED_NO_RENDERER` result.\\n\\n## Required skills\\n- portfolio-state-review\\n- thesis-monitor\\n- investment-record-store\\n\\n## Optional skills\\n- investment-attention-triage\\n- position-sizing-review\\n- valuation-scenario-review\\n- thesis-challenge\\n- decision-journal-update\\n\\n## Sequence\\n1. Attempt canonical reads first through investment-record-store: current_positions, latest portfolio snapshot, current policy, active thesis versions and relevant transaction history. Emit canonical READ receipt.\\n   - Resolve backend/project/schema from the record-store bootstrap contract first; do not choose a schema by scanning for populated duplicate tables.\\n   - Treat the schema named in the canonical READ receipt as authoritative for the entire workflow run.\\n   - If the user also supplied holdings/weights, preserve them as USER_PROVIDED evidence and reconcile them against canonical state when available.\\n   - Do not skip canonical reads merely because the prompt already contains enough numbers for a generic analysis.\\n2. If current state or prior snapshot is unavailable, state exactly which comparison is blocked. Do not substitute local/chat/analytics cache.\\n3. Reconcile current state and preserve append-only snapshot history.\\n4. Use Data/analytics tooling for concentration, ETF look-through, overlap, currency, theme/cycle and historical trend calculations when useful. Treat results as derived analytics.\\n5. Attribute change only when evidence supports causality:\\n   - current state alone cannot establish drift cause;\\n   - current + prior canonical snapshots establish change, but not necessarily whether it came from trades or market movement;\\n   - classify trade-driven vs market-driven only when transaction evidence plus comparable prior/current state, or an explicit canonical attribution record, distinguishes the causes;\\n   - an empty, incomplete or unavailable transaction table is not causal evidence and does not prove that no transaction occurred;\\n   - otherwise return attribution `UNKNOWN` and do not guess.\\n6. Triage new company/industry/market evidence with investment-attention-triage.\\n7. For REVIEW/ESCALATE positions, run thesis-monitor.\\n8. Revalue only positions where valuation drift can change the action.\\n9. Use position-sizing-review when concentration, uncertainty or thesis state changes the policy band.\\n10. Surface only positions requiring action review.\\n11. Persist new snapshot, signals, thesis-monitor records and user-confirmed decisions through investment-record-store only.\\n12. Emit canonical WRITE receipt.\\n13. After analytical synthesis, call `report-composer` and satisfy the required composition/concentration visual slot with a callable renderer. Record `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`; client display is `NOT_OBSERVABLE` unless directly observed. Do not close the workflow with an unreported visual slot.\\n\\n## Decision rules\\n- analytics layer reads/derives; it does not become the system of record;\\n- canonical schema is resolved once through investment-record-store and must not change mid-run;\\n- duplicate Supabase schemas are not fallback sources;\\n- position risk can deteriorate while company thesis remains intact;\\n- no-trade price drift is still portfolio drift;\\n- policy breach triggers review, not automatic sale;\\n- without prior canonical snapshot, do not claim a complete change comparison;\\n- without sufficient transaction/history evidence, do not classify drift as trade-driven or market-driven;\\n- an empty, incomplete, unavailable or zero-row transaction result is not evidence that no transaction occurred;\\n- user-provided aggregate metrics that cannot be recomputed from the visible holdings remain USER_PROVIDED, not DERIVED.\\n\\n## Output contract\\nRequires attention; no material change; portfolio-level observations; derived analytics/provenance; canonical READ/WRITE receipts.\\n\\nWhen change exists but causal evidence does not distinguish transactions from market movement, state that attribution is `UNKNOWN` because distinguishing evidence is insufficient. Do not explain UNKNOWN merely as \\\"the transaction table is empty\\\".\\n\\n## Stop conditions\\nStop when every material alert is tied to evidence or policy.\\n\\n## Integrated report presentation\\nRender the report directly in the chat response by default. External HTML/PDF/Figma/deck/file output is allowed only when the user explicitly requests that artifact or format.\\n\\nAfter analytical synthesis, call `report-composer` to produce one portfolio decision report. Use `visual-output-design` for inline components only. This step is mandatory for substantial portfolio reviews; do not stop after a prose-only analytical answer when the visual floor applies. Before marking the workflow complete, record the required composition/concentration visual as `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`. Renderer output does not establish that the client displayed it; report display as `NOT_OBSERVABLE` unless directly observed.\\n\\nDefault profile:\\n- portfolio decision headline + KPI strip;\\n- concentration/diversification with inline allocation/concentration charts;\\n- overlap/look-through matrix when supported;\\n- material drift/change since prior snapshot;\\n- positions requiring attention;\\n- opportunity implications;\\n- decision queue / next actions;\\n- canonical READ/WRITE receipts and limitations.\\n\\nPrefer embedded chat-native visual payloads when multiple coordinated portfolio views materially help. Renderer payload success does not prove client display; client display remains NOT_OBSERVABLE to the model. If rendering is unavailable, use truthful tables/structured prose as diagnostic fallback; do not generate an external artifact unless explicitly requested.\\n\"},\"instruction_sha256\":\"90642d0a4b1dbdbe90aac3643c798fc73423b7cdbb8977b221d42372153f6cc1\",\"host_surface_sha256\":\"452acec50db3b530e22adf2c2d4c67c8ea90160e5c2e97455d11d3d27ff1a5a8\",\"source_revision\":\"a752b553cc16d026408a379cfa3654c15f447171\",\"execution_mode\":\"host_model_executes_loaded_instructions\",\"tool_receipt\":{\"schema_version\":\"1.0\",\"kind\":\"unsigned_mcp_tool_call_receipt\",\"tool_name\":\"load_skill\",\"status\":\"SUCCESS\",\"execution_state\":\"executed\",\"completed_at\":\"2026-10-24T10:12:11.596Z\",\"source_revision\":\"43a52351464692fe0132a380903402509cc3b95d\",\"input_sha256\":\"425dca740ae65674b9c02ea381e9f55ae26f0b43058ed99f4005ee63f6f6caf9\",\"output_sha256\":\"dd1f9b4ffb81481e3bc10c3b0ca069e51a40ff4b23b5af198988f46c537bac9f\"}}"
+              }
+            ],
+            "structuredContent": {
+              "name": "investment-portfolio-review",
+              "domain": "skills",
+              "kind": "workflow",
+              "description": "Child workflow for full portfolio review. Use when selected by investment-os-review, explicitly requested, or when another Investment OS workflow delegates a portfolio-level decision. It performs canonical reads, reconciliation, concentration/diversification analysis, policy/thesis checks, integrated reporting and the visual-floor path. Do not use as the default natural Investment OS entry point; natural portfolio requests should enter through investment-os-review.",
+              "version": "0.5.1",
+              "maturity": "production",
+              "content_sha256": "b995ee862c4148dbda239cc5b91e8352c106073d06dcb97063ffa6a39e0f24b4",
+              "instructions": "---\nname: investment-portfolio-review\ndescription: Child workflow for full portfolio review. Use when selected by investment-os-review,\n  explicitly requested, or when another Investment OS workflow delegates a portfolio-level\n  decision. It performs canonical reads, reconciliation, concentration/diversification\n  analysis, policy/thesis checks, integrated reporting and the visual-floor path.\n  Do not use as the default natural Investment OS entry point; natural portfolio requests\n  should enter through investment-os-review.\nmetadata:\n  owner: arkadiusz-kamrowski\n  version: 0.5.1\n  maturity: production\n  risk: high\n  last_reviewed: '2026-10-09'\n---\n\n# Investment Portfolio Review Runtime Entrypoint\n\n## Purpose\n\nExpose a repository workflow to the skill runtime without duplicating its orchestration logic.\n\n## Procedure\n\n1. Load `references/WORKFLOW.md`.\n2. Follow it as the authoritative orchestration procedure.\n3. Route only to specialist skills that the workflow actually requires.\n4. Preserve workflow gates, stop conditions and evidence discipline.\n5. If an optional dependency is unavailable, apply the declared reduced-scope behavior below and explicitly disclose that the specialist did not run.\n6. Do not replace the workflow with a generic best-practice answer.\n\n## Output contract\n\nUse the output contract defined in `references/WORKFLOW.md`.\n\n## Quality checks\n\n- [ ] The workflow source was loaded.\n- [ ] Specialist skills were selected selectively.\n- [ ] Required dependencies were available.\n- [ ] Missing optional dependencies were disclosed and not simulated.\n- [ ] Workflow stage order and gates were preserved.\n- [ ] Evidence and uncertainty remain explicit.\n- [ ] No extra domain was added merely for completeness.",
+              "reference_files": {
+                "references/WORKFLOW.md": "# Investment Portfolio Review Workflow\n\n## Purpose\nReview the user's investment portfolio as a system, detect material concentration, diversification/overlap risk, drift or thesis deterioration, and surface only positions that require attention.\n\n## Natural activation\nUse this workflow for ordinary portfolio-review requests even when the user does not name the workflow, Investment OS, XTB, canonical storage or any specialist skill. Typical natural requests include:\n- \"review my portfolio\";\n- \"review this portfolio\";\n- \"what requires attention in my portfolio?\";\n- a list/table of holdings or weights followed by a request for risk, concentration, diversification or next decisions.\n\nWhen activated naturally, do not replace the workflow with a generic investment commentary answer. Run the canonical/evidence path first, then integrated reporting and the required visual-floor path. Do not mark the workflow complete until the composition visual slot has a renderer receipt or an explicit `BLOCKED_NO_RENDERER` result.\n\n## Required skills\n- portfolio-state-review\n- thesis-monitor\n- investment-record-store\n\n## Optional skills\n- investment-attention-triage\n- position-sizing-review\n- valuation-scenario-review\n- thesis-challenge\n- decision-journal-update\n\n## Sequence\n1. Attempt canonical reads first through investment-record-store: current_positions, latest portfolio snapshot, current policy, active thesis versions and relevant transaction history. Emit canonical READ receipt.\n   - Resolve backend/project/schema from the record-store bootstrap contract first; do not choose a schema by scanning for populated duplicate tables.\n   - Treat the schema named in the canonical READ receipt as authoritative for the entire workflow run.\n   - If the user also supplied holdings/weights, preserve them as USER_PROVIDED evidence and reconcile them against canonical state when available.\n   - Do not skip canonical reads merely because the prompt already contains enough numbers for a generic analysis.\n2. If current state or prior snapshot is unavailable, state exactly which comparison is blocked. Do not substitute local/chat/analytics cache.\n3. Reconcile current state and preserve append-only snapshot history.\n4. Use Data/analytics tooling for concentration, ETF look-through, overlap, currency, theme/cycle and historical trend calculations when useful. Treat results as derived analytics.\n5. Attribute change only when evidence supports causality:\n   - current state alone cannot establish drift cause;\n   - current + prior canonical snapshots establish change, but not necessarily whether it came from trades or market movement;\n   - classify trade-driven vs market-driven only when transaction evidence plus comparable prior/current state, or an explicit canonical attribution record, distinguishes the causes;\n   - an empty, incomplete or unavailable transaction table is not causal evidence and does not prove that no transaction occurred;\n   - otherwise return attribution `UNKNOWN` and do not guess.\n6. Triage new company/industry/market evidence with investment-attention-triage.\n7. For REVIEW/ESCALATE positions, run thesis-monitor.\n8. Revalue only positions where valuation drift can change the action.\n9. Use position-sizing-review when concentration, uncertainty or thesis state changes the policy band.\n10. Surface only positions requiring action review.\n11. Persist new snapshot, signals, thesis-monitor records and user-confirmed decisions through investment-record-store only.\n12. Emit canonical WRITE receipt.\n13. After analytical synthesis, call `report-composer` and satisfy the required composition/concentration visual slot with a callable renderer. Record `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`; client display is `NOT_OBSERVABLE` unless directly observed. Do not close the workflow with an unreported visual slot.\n\n## Decision rules\n- analytics layer reads/derives; it does not become the system of record;\n- canonical schema is resolved once through investment-record-store and must not change mid-run;\n- duplicate Supabase schemas are not fallback sources;\n- position risk can deteriorate while company thesis remains intact;\n- no-trade price drift is still portfolio drift;\n- policy breach triggers review, not automatic sale;\n- without prior canonical snapshot, do not claim a complete change comparison;\n- without sufficient transaction/history evidence, do not classify drift as trade-driven or market-driven;\n- an empty, incomplete, unavailable or zero-row transaction result is not evidence that no transaction occurred;\n- user-provided aggregate metrics that cannot be recomputed from the visible holdings remain USER_PROVIDED, not DERIVED.\n\n## Output contract\nRequires attention; no material change; portfolio-level observations; derived analytics/provenance; canonical READ/WRITE receipts.\n\nWhen change exists but causal evidence does not distinguish transactions from market movement, state that attribution is `UNKNOWN` because distinguishing evidence is insufficient. Do not explain UNKNOWN merely as \"the transaction table is empty\".\n\n## Stop conditions\nStop when every material alert is tied to evidence or policy.\n\n## Integrated report presentation\nRender the report directly in the chat response by default. External HTML/PDF/Figma/deck/file output is allowed only when the user explicitly requests that artifact or format.\n\nAfter analytical synthesis, call `report-composer` to produce one portfolio decision report. Use `visual-output-design` for inline components only. This step is mandatory for substantial portfolio reviews; do not stop after a prose-only analytical answer when the visual floor applies. Before marking the workflow complete, record the required composition/concentration visual as `PAYLOAD_RENDERED` or `BLOCKED_NO_RENDERER`. Renderer output does not establish that the client displayed it; report display as `NOT_OBSERVABLE` unless directly observed.\n\nDefault profile:\n- portfolio decision headline + KPI strip;\n- concentration/diversification with inline allocation/concentration charts;\n- overlap/look-through matrix when supported;\n- material drift/change since prior snapshot;\n- positions requiring attention;\n- opportunity implications;\n- decision queue / next actions;\n- canonical READ/WRITE receipts and limitations.\n\nPrefer embedded chat-native visual payloads when multiple coordinated portfolio views materially help. Renderer payload success does not prove client display; client display remains NOT_OBSERVABLE to the model. If rendering is unavailable, use truthful tables/structured prose as diagnostic fallback; do not generate an external artifact unless explicitly requested.\n"
+              },
+              "instruction_sha256": "90642d0a4b1dbdbe90aac3643c798fc73423b7cdbb8977b221d42372153f6cc1",
+              "host_surface_sha256": "452acec50db3b530e22adf2c2d4c67c8ea90160e5c2e97455d11d3d27ff1a5a8",
+              "source_revision": "a752b553cc16d026408a379cfa3654c15f447171",
+              "execution_mode": "host_model_executes_loaded_instructions",
+              "tool_receipt": {
+                "schema_version": "1.0",
+                "kind": "unsigned_mcp_tool_call_receipt",
+                "tool_name": "load_skill",
+                "status": "SUCCESS",
+                "execution_state": "executed",
+                "completed_at": "2026-10-24T10:12:11.596Z",
+                "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+                "input_sha256": "425dca740ae65674b9c02ea381e9f55ae26f0b43058ed99f4005ee63f6f6caf9",
+                "output_sha256": "dd1f9b4ffb81481e3bc10c3b0ca069e51a40ff4b23b5af198988f46c537bac9f"
+              }
+            },
+            "isError": false
+          }
+        }
+      ]
+    }
+  ],
+  "chart": {
+    "input": {
+      "expected_points_per_series": 4,
+      "expected_series": 1,
+      "expected_x_labels": 4,
+      "series_names": [
+        "Przychód"
+      ],
+      "series_values": [
+        [
+          12,
+          18,
+          15,
+          24
+        ]
+      ],
+      "title": "Przychód",
+      "unit": "mln PLN",
+      "x_labels": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ]
+    },
+    "lab": {
+      "isError": false,
+      "content": [
+        {
+          "type": "text",
+          "text": "CHART_PAYLOAD_OK mime=image/png bytes=45469 sha256=4ab1bd2a74f6c6d0e9d0e88b7eaa35c5a6704de042adba20b25ee7f3c5cd1eb4 canvas_px=850x480"
+        },
+        {
+          "type": "text",
+          "text": "MCP_TOOL_RECEIPT {\"artifact_state\": \"rendered\", \"client_display_state\": \"not_observable\", \"completed_at\": \"2026-10-24T10:12:32.090Z\", \"execution_state\": \"executed\", \"input_sha256\": \"694ede1db6a1eab7b05a2463cadf8ce01e7db497206070186449cf3321d98a9e\", \"kind\": \"unsigned_mcp_tool_call_receipt\", \"output_sha256\": \"fa91723470e53c90f16e2b1608e9d075066033eae21913db8bda74405f088086\", \"schema_version\": \"1.0\", \"source_revision\": \"a752b553cc16d026408a379cfa3654c15f447171\", \"status\": \"SUCCESS\", \"tool_name\": \"render_line_chart\"}"
+        }
+      ],
+      "image_content_returned": true
+    },
+    "site": {
+      "kind": "line",
+      "title": "Przychód",
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 960 578\" width=\"960\" height=\"578\" role=\"img\" aria-labelledby=\"chart-title chart-desc\"><title id=\"chart-title\">Przychód</title><desc id=\"chart-desc\">Line chart with 1 series across 4 equally spaced categories; categories are not interpreted as dates. Exact values are available in each point&apos;s SVG tooltip. Unit: mln PLN.</desc><rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/><g font-family=\"Arial, sans-serif\" font-size=\"16\" fill=\"#14273e\"><text x=\"28\" y=\"34\" font-size=\"20\" font-weight=\"700\">Przychód</text><text x=\"28\" y=\"60\" fill=\"#506579\">mln PLN</text><path d=\"M95 430H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"435\" text-anchor=\"end\" font-size=\"14\">0</text><path d=\"M95 350H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"355\" text-anchor=\"end\" font-size=\"14\">6</text><path d=\"M95 270H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"275\" text-anchor=\"end\" font-size=\"14\">12</text><path d=\"M95 190H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"195\" text-anchor=\"end\" font-size=\"14\">18</text><path d=\"M95 110H920\" stroke=\"#e1e8f0\"/><text x=\"84\" y=\"115\" text-anchor=\"end\" font-size=\"14\">24</text><text x=\"95\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q1</title>Q1</text><text x=\"366.66666666666663\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q2</title>Q2</text><text x=\"638.3333333333333\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q3</title>Q3</text><text x=\"910\" y=\"458\" text-anchor=\"middle\" font-size=\"14\"><title>Q4</title>Q4</text><polyline fill=\"none\" stroke=\"#2374e8\" stroke-width=\"3\" points=\"95,270 366.66666666666663,190 638.3333333333333,230 910,110\"/><circle cx=\"95\" cy=\"270\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q1: 12 mln PLN</title></circle><circle cx=\"366.66666666666663\" cy=\"190\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q2: 18 mln PLN</title></circle><circle cx=\"638.3333333333333\" cy=\"230\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q3: 15 mln PLN</title></circle><circle cx=\"910\" cy=\"110\" r=\"3.5\" fill=\"#2374e8\"><title>Przychód / Q4: 24 mln PLN</title></circle><path d=\"M95 500h24\" stroke=\"#2374e8\" stroke-width=\"3\"/><text x=\"129\" y=\"505\">Przychód</text></g></svg>",
+      "data": {
+        "x_labels": [
+          "Q1",
+          "Q2",
+          "Q3",
+          "Q4"
+        ],
+        "series_names": [
+          "Przychód"
+        ],
+        "series_values": [
+          [
+            12,
+            18,
+            15,
+            24
+          ]
+        ],
+        "title": "Przychód",
+        "unit": "mln PLN"
+      },
+      "mime_type": "image/svg+xml",
+      "render_status": "PAYLOAD_RENDERED",
+      "client_display": "NOT_OBSERVABLE",
+      "provenance": "explicit caller data; no retrieval or inference",
+      "tool_receipt": {
+        "schema_version": "1.0",
+        "kind": "unsigned_mcp_tool_call_receipt",
+        "tool_name": "render_line_chart",
+        "status": "SUCCESS",
+        "execution_state": "executed",
+        "completed_at": "2026-10-24T10:12:34.461Z",
+        "source_revision": "43a52351464692fe0132a380903402509cc3b95d",
+        "input_sha256": "53a79ba846389a6c8293cc8565736934b9ee00671d7ec4847b31a38252d5c456",
+        "output_sha256": "bd9d09f6f495fa1f32a4cc5c645c9fed0d5ea578316a461d714c57b15429910d",
+        "artifact_state": "rendered",
+        "client_display_state": "not_observable"
+      }
+    },
+    "client_display_asserted": false
+  }
+}
