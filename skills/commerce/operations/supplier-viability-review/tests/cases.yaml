@@ -40,3 +40,16 @@ cases:
         - unit-economics-review handles the financial contribution model
       must_not:
         - replace cost calculations with supplier reliability speculation
+  - id: supplier-quality-documents-unavailable
+    case: production-quality-evidence-unavailable
+    input: |
+      The supplier says its certificate is current and production quality is consistent, but the certificate, audit and
+      production-batch records are unavailable. Can we call the supplier ready to scale?
+    expected:
+      should_trigger: true
+      must:
+        - mark certification and production consistency as unverified supplier claims
+        - keep scale viability unresolved and identify the dated quality documents needed
+        - separate sample or quote evidence from production-reliability evidence
+      must_not:
+        - certify compliance or scale readiness from the supplier statement alone
