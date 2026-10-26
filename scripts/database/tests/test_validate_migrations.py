@@ -42,6 +42,11 @@ class MigrationValidationTests(unittest.TestCase):
         sql = "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT SELECT ON TABLES TO service_role;"
         self.assertIsNotNone(validator.DEFAULT_GRANT.search(sql))
 
+    def test_legacy_schema_revokes_are_safe_when_schema_was_already_removed(self) -> None:
+        migration = sorted(validator.MIGRATIONS.glob("*.sql"))[-1].read_text(encoding="utf-8").lower()
+        self.assertIn("if to_regnamespace('investment') is not null then", migration)
+        self.assertIn("execute 'revoke all on all tables in schema investment", migration)
+
 
 if __name__ == "__main__":
     unittest.main()
