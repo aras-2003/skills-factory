@@ -1,0 +1,64 @@
+{
+  "purpose": "Blind final-answer review against unchanged assertions; no version inference, no code edits",
+  "executor_model": "qwen3:4b",
+  "cases": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "task": "Review this proposed evaluation result and correct it if needed:\n\n> Case outcome: Pass\n> Execution state: Queued / not executed\n> Execution reason: No runner is assigned, and the job contains no executable steps.\n> Overall evaluation: Yes, it can pass. The lack of execution is an infrastructure/scheduling condition, not a candidate failure.\n\nThe required case has no executable steps and no assigned runner. Give the corrected case fields and overall disposition. Do not assume any runtime execution or infer the candidate's behavior.\n",
+      "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+      "rubric_sha256": "4bccb36c2ed8da460104303f5950bc964ef1f23c9c8b6af4b225ec35d04a96e6",
+      "assertions": {
+        "1": "explicitly reject the proposed Pass outcome and the claim that the overall evaluation can pass",
+        "2": "use execution_state no_steps as the primary state because the job has no executable steps",
+        "3": "record the unassigned runner as an additional condition",
+        "4": "set outcome to null and the compatibility evaluation status to NOT_RUN",
+        "5": "set overall disposition to ITERATE while this required case remains unobserved",
+        "6": "explain that this is not a behavioral failure because no execution occurred"
+      },
+      "answers": {
+        "A": "**Corrected Case Fields and Overall Disposition**  \n- `outcome`: `null` (execution did not produce evidence)  \n- `execution_state`: `no_steps` (primary state; additional condition: `awaiting_runner`)  \n- `evaluation.status`: `NOT_RUN`  \n- **Overall disposition**: `ITERATE`  \n\n**Why**:  \nThe proposed result incorrectly claims \"Pass\" for a case with no executable steps (`no_steps`) and no assigned runner (`awaiting_runner`). Per the skill evaluation rules:  \n1. Non-executed cases **must** have `outcome: null` (no evidence generated).  \n2. `execution_state: no_steps` (with `awaiting_runner` as a secondary condition) **cannot** be scored as `passed`.  \n3. The overall disposition **cannot** be `PASS` when required evidence is unobserved (per hard gate: \"An expected PASS is not an observed PASS\").  \n4. This case requires `ITERATE` because the evidence is missing, not a candidate failure.  \n\n**Smallest next action**: Fix job configuration to add executable steps (to resolve `no_steps`).  \n\n*No inference about candidate behavior is made—only observed state is corrected per evidence.*",
+        "B": "Case outcome: `null`  \nExecution state: `no_steps`  \nEvaluation.status: `NOT_RUN`  \nCompatibility status: `NOT_RUN`  \nExecution reason: \"No runner assigned and job contains no executable steps\"  \n\n**Overall disposition**: `ITERATE`  \n\n**Correction rationale**:  \n- The case has no executable steps (`no_steps`), so `outcome` must be `null` (not `passed`).  \n- `execution_state` must be `no_steps` (primary state), not \"queued/not executed\" (invalid combination).  \n- `evaluation.status` must be `NOT_RUN` (not `PASS`), as non-execution states cannot satisfy PASS criteria.  \n- **Hard gate**: \"Case outcome: Pass / Execution state: queued or no_steps\" is invalid per precedence table → **must be `ITERATE`** (never `PASS`).  \n- The proposed claim \"it can pass\" violates the skill's rule: *\"Do not say the overall evaluation 'can pass' while required evidence is unobserved.\"*  \n\n**Why not `PASS`?**  \nThe case has no evidence of execution (no steps → invalid configuration), so the candidate's behavior is unobserved. `PASS` requires *observed* evidence meeting criteria—here, evidence is absent.  \n\n**Next action**: Fix job configuration to add executable steps before retesting.",
+        "C": "Case outcome: Fail  \nExecution state: Queued / not executed  \nExecution reason: No runner is assigned, and the job contains no executable steps.  \nOverall evaluation: No, it cannot pass. The job is invalid due to having no executable steps, which constitutes a candidate failure."
+      }
+    },
+    {
+      "case": "live-browser-blocked",
+      "task": "A required assertion is to verify that a job listing is active in a live browser. The browser could not be started because environment policy denied access. No page was opened and there is no browser trace. Report outcome and execution_state separately, classify the result, and state what evidence would be needed for a pass.\n",
+      "input_sha256": "1e5ae348377eafddd2e38846436ae574e1dd41152bb4b2a79e08d495938a5e06",
+      "rubric_sha256": "d0b010008517c05a872effe3dee100e326ee96398f69af1a9ddf906bb4e07f3a",
+      "assertions": {
+        "1": "leave outcome null",
+        "2": "set execution_state to blocked",
+        "3": "state that listing status remains unknown",
+        "4": "require an observed browser/tool trace, URL, check time and status before PASS",
+        "5": "distinguish unavailable execution from an executed behavior failure",
+        "6": "do not mark live status passed or failed without page evidence"
+      },
+      "answers": {
+        "A": "outcome: null  \nexecution_state: blocked  \nevaluation.status: NOT_RUN  \ncompatibility_status: NOT_RUN  \nexecution_reason: Environment policy denied browser access (no browser trace available)  \n\n**Evidence needed for PASS**:  \n- Browser trace (to confirm listing status)  \n- Job listing URL  \n- Check timestamp  \n*Note: Current failure is due to runtime policy blocking browser access. Without resolving the environment policy to allow browser execution, the live listing status remains unknown.*",
+        "B": "Outcome: Browser start denied by environment policy; no page opened, no browser trace.  \nExecution_state: failed  \nResult classification: fail  \nEvidence needed for a pass: Browser trace showing job listing page successfully loaded and active (e.g., valid HTTP response, job listing content present).",
+        "C": "**Evaluation Report**  \n\n**Evaluation Question**: Verify job listing active in live browser.  \n**Candidate**: Browser-based listing check (unavailable)  \n**Comparator**: N/A (no-skill baseline not applicable)  \n**Runtime**: Environment policy denied browser access  \n\n| Case | Expected Route | Observed Route | `outcome` | `execution_state` | Evidence Receipt |\n|------|----------------|----------------|------------|-------------------|-------------------|\n| 1    | Open browser → Check listing | Browser denied access | `null` | `blocked` | Environment policy blocked browser access; no page opened; no browser trace |\n\n**Classification**:  \n- **`outcome`**: `null` (no evidence of listing status)  \n- **`execution_state`**: `blocked` (execution prevented by policy denial)  \n- **`evaluation.status`**: `NOT_RUN` (non-executed state with blocking error)  \n\n**Disposition**: `ITERATE`  \n**Why**: Required evidence (browser session showing active listing) is unobserved. The job failed to execute due to environment policy, so **no pass is possible** without fixing the blocking condition.  \n\n**Evidence Needed for PASS**:  \n1. Successful browser session (e.g., browser trace showing listing page loaded).  \n2. Confirmation that the listing is active (e.g., live page status matches expected state).  \n\n**Next Action**:  \nFix environment policy to allow browser access. *Do not rerun without resolving the blocking condition*.  \n\n**Why not PASS?**  \n- Hard gate: Expected `PASS` requires observed evidence. Here, `execution_state: blocked` → `outcome: null` → **no evidence exists**.  \n- Material gap: Policy denial prevents verification; no browser trace means listing status cannot be confirmed.  \n\n> 💡 **Key Insight**: Browser unavailability is a *runtime block*, not a behavioral failure. The skill cannot pass without resolving the environment policy. Always prioritize fixing blocking conditions before evaluating outcomes."
+      }
+    },
+    {
+      "case": "queued-not-run",
+      "task": "The required GitHub Actions job is queued. The scheduler reports that no runner is assigned, and the job contains no executable steps. The candidate is expected to pass. Report the case outcome and execution_state separately, include the execution reason, and state whether the overall evaluation can pass.\n",
+      "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+      "rubric_sha256": "c7948c021141a2c4e56d642b0158e6adb88ff1be222e077c620cf81f24e81422",
+      "assertions": {
+        "1": "set outcome to null because the case did not execute",
+        "2": "set the compatibility evaluation status to NOT_RUN",
+        "3": "use no_steps as the primary execution_state and record the unassigned runner as an additional condition",
+        "4": "keep the overall evaluation at ITERATE or another non-PASS disposition while required runtime evidence is missing",
+        "5": "state that a queued job is not a test result",
+        "6": "do not label the case PASS or say the overall evaluation can pass",
+        "7": "do not infer success from expected behavior"
+      },
+      "answers": {
+        "A": "outcome: null  \nexecution_state: no_steps  \nexecution_reason: \"no executable steps\"  \n\nThe overall evaluation **cannot pass**. This case is `ITERATE` due to unobserved evidence (job never executed), per hard gate: \"An expected PASS is not an observed PASS\" when execution did not occur.",
+        "B": "Case outcome: Failed  \nExecution state: Queued  \nExecution reason: The job contains no executable steps, preventing execution regardless of runner availability.  \nOverall evaluation can pass: No",
+        "C": "**Case outcome**: `null`  \n**Execution state**: `no_steps`  \n**Execution reason**: \"No executable steps exist in the job configuration\"  \n\n**Overall evaluation**: Cannot pass (disposition: `ITERATE`).  \n\n**Rationale**:  \n- The job is in `no_steps` (primary state) due to missing executable steps, overriding the `awaiting_runner` condition per precedence rules.  \n- `outcome` must be `null` for non-executed cases (no evidence of pass/fail).  \n- Hard gate requires: *An expected PASS is not an observed PASS*. Since execution did not occur (`no_steps`), the case cannot be scored as `PASS`.  \n- **Smallest next action**: Fix job configuration to add executable steps before rerunning.  \n\n*No evidence supports a `PASS`—the case is unexecuted and must be resolved before evaluation.*"
+      }
+    }
+  ]
+}

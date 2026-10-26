@@ -1,0 +1,17 @@
+{
+  "case_id": "queued-not-run",
+  "variant": "current-0.3.7",
+  "source_revision": "34b30bb999c82f37f1be00315646c1df5d256605",
+  "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+  "plan_sha256": "61efffec5a175a08a3c98ff77897573949f3b5447a6219441b2cd31414c4c096",
+  "request_sha256": "76561dba1ce68fbeb8a08c032f7a19c3249ab5e98fbe8628d91cec1c638ee38a",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "response": "outcome: null  \nexecution_state: no_steps  \nexecution_reason: No executable steps exist; the queued job did not execute.  \ndisposition: ITERATE  \n\n**Explanation**: The job contains no executable steps (`no_steps`), so it cannot run regardless of runner assignment. Per the precedence table, this state requires `outcome: null`, `execution_state: no_steps`, and `evaluation.status: NOT_RUN`. The candidate *cannot* pass because the hard gate requires an observed PASS for the intended task—this case did not execute at all. No evidence exists to meet the frozen criteria, so the overall disposition is **ITERATE** (not PASS).",
+  "eval_count": 587,
+  "prompt_eval_count": 2611,
+  "created_at": "2026-10-26T13:01:08.931697Z",
+  "raw_response_sha256": "98ebe9ea61ad041294be69f9561f2997ae5025a4fc618ab854c3888b75f1a0bb",
+  "final_answer_parser": "Uniform final-answer extraction after final </think>, as established in earlier comparison; hidden reasoning excluded"
+}

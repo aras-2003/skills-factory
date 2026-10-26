@@ -2,6 +2,7 @@
 import importlib.util
 import pathlib
 import unittest
+from unittest.mock import patch
 
 PATH = pathlib.Path(__file__).resolve().parents[2] / "scripts/governance/sync_project_metadata.py"
 spec = importlib.util.spec_from_file_location("sync_project_metadata", PATH)
@@ -57,6 +58,46 @@ class MappingTest(unittest.TestCase):
         for stage in ("Discovery", "Validation", "In review"):
             with self.subTest(stage=stage):
                 self.assertEqual(mod.values("[ENG-03] review", "Project status: " + stage, [])["Status"], stage)
+
+
+class IterationSyncTest(unittest.TestCase):
+    def test_explicit_title_and_no_numeric_guess(self):
+        self.assertEqual(mod.values("Issue", "Project iteration: 03 | Lifecycle", []),
+                         {"Iteration": "03 | Lifecycle"})
+        self.assertNotIn("Iteration", mod.values("[03] Issue", "Iteration 03 roadmap", []))
+        with self.assertRaises(ValueError):
+            mod.values("Issue", "Project iteration: A\nProject iteration: B", [])
+
+    def run_sync(self, title, configured, *, completed=False):
+        field = {"id": "iteration-field", "name": "Iteration", "configuration": {
+            "iterations": [] if completed else configured,
+            "completedIterations": configured if completed else []}}
+        data = {"user": {"projectV2": {"id": "project", "fields": {"nodes": [field]}},
+                 "repository": {"issue": {"title": "Example", "body": "Project iteration: " + title,
+                    "labels": {"nodes": []}, "projectItems": {"nodes": [
+                        {"id": "item", "project": {"id": "project"}}]}}}}}
+        with patch.dict(mod.os.environ, {"GH_REPOSITORY": "owner/skills-factory",
+                "PROJECT_OWNER": "owner", "PROJECT_NUMBER": "1", "ISSUE_NUMBER": "2"}), \
+             patch.object(mod, "gql", side_effect=[data, {}]) as gql:
+            mod.main()
+        return gql.call_args_list
+
+    def test_iteration_uses_native_mutation(self):
+        calls = self.run_sync("03 | Lifecycle", [{"id": "it3", "title": "03 | Lifecycle"}])
+        self.assertEqual(calls[1].args, (mod.ITERATION_UPDATE,
+            {"project": "project", "item": "item", "field": "iteration-field", "iteration": "it3"}))
+
+    def test_completed_iteration_can_be_selected(self):
+        self.assertEqual(len(self.run_sync("02 | Runtime", [{"id": "it2", "title": "02 | Runtime"}], completed=True)), 2)
+
+    def test_numeric_or_case_mismatch_refuses_write(self):
+        for title in ["03", "03 | lifecycle"]:
+            with self.subTest(title=title), self.assertRaises(RuntimeError):
+                self.run_sync(title, [{"id": "it3", "title": "03 | Lifecycle"}])
+
+    def test_ambiguous_title_refuses_write(self):
+        with self.assertRaises(RuntimeError):
+            self.run_sync("Same", [{"id": "a", "title": "Same"}, {"id": "b", "title": "Same"}])
 
 
 if __name__ == "__main__":

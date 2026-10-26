@@ -1,0 +1,308 @@
+{
+  "reviewer": "Codex parent agent, separate from local Qwen executor; variant labels visible, not a blind review",
+  "scope": "Three frozen evidence-state cases only",
+  "disposition": "ITERATE for 0.3.4; 0.3.5 not yet scored",
+  "independent_blind_model_results": "Invalid, not counted as PASS/FAIL",
+  "rows": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "variant": "no-skill",
+      "published_record_sha256": "4d5364d12f2e4a85c60572ef6f6f364cd30f51db4738be5f934fe22b80fc32b5",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": false
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": false
+        },
+        {
+          "index": 5,
+          "passed": false
+        },
+        {
+          "index": 6,
+          "passed": false
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "variant": "previous-0.3.3",
+      "published_record_sha256": "32c680a917c5039060e7aee6ebfd7fb58feef1bf2aab13cf6a634901e6eee7e3",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        }
+      ],
+      "case_pass": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "variant": "current-0.3.4",
+      "published_record_sha256": "a8a9af5899ea05b12ca9bc33f386666ee46b9b29f4e9074c925a1c33e565514b",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        }
+      ],
+      "case_pass": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "variant": "no-skill",
+      "published_record_sha256": "5a3538fa0b80584d96dbf8828b64f76568f15a03fd51f862e2ec40b8bb30b90c",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": false
+        },
+        {
+          "index": 2,
+          "passed": false
+        },
+        {
+          "index": 3,
+          "passed": false
+        },
+        {
+          "index": 4,
+          "passed": false
+        },
+        {
+          "index": 5,
+          "passed": false
+        },
+        {
+          "index": 6,
+          "passed": false
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "case": "live-browser-blocked",
+      "variant": "previous-0.3.3",
+      "published_record_sha256": "8e8e53b5b4ee6a8df0c4aadabc3c2f08d7c08653a83e7f1361cd001d85978561",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": false
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "case": "live-browser-blocked",
+      "variant": "current-0.3.4",
+      "published_record_sha256": "51fb12a1f84fca3086ad3fca07a3d7fd92280168780d14498d95af6a46945008",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": false
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "case": "queued-not-run",
+      "variant": "no-skill",
+      "published_record_sha256": "953fa09e0d22152d043e872346397cece1c5f416f99903552a295ccb44e4aef3",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": false
+        },
+        {
+          "index": 2,
+          "passed": false
+        },
+        {
+          "index": 3,
+          "passed": false
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": false
+        },
+        {
+          "index": 6,
+          "passed": true
+        },
+        {
+          "index": 7,
+          "passed": true
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "case": "queued-not-run",
+      "variant": "previous-0.3.3",
+      "published_record_sha256": "5260a8cc9fd3f165ab251f0ac749a09f8033f26c83ea878433a54fd8239d87e6",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": false
+        },
+        {
+          "index": 3,
+          "passed": false
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        },
+        {
+          "index": 7,
+          "passed": true
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "case": "queued-not-run",
+      "variant": "current-0.3.4",
+      "published_record_sha256": "c960295dbb1e6e6b402d00ca79be7a78a75fcd3630e0f9d29270dfe6866fb1e1",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": false
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        },
+        {
+          "index": 7,
+          "passed": true
+        }
+      ],
+      "case_pass": false
+    }
+  ]
+}

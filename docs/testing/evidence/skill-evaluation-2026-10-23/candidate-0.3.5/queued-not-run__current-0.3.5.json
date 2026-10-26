@@ -1,0 +1,17 @@
+{
+  "case_id": "queued-not-run",
+  "variant": "current-0.3.5",
+  "source_revision": "15740806f57d7058c0d2d3ac02f51c586e15e635",
+  "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+  "plan_sha256": "4b4a4364d9f74299c6c828eb5e182f9052ee3e2a33c01600b97e95cb8411a8f5",
+  "request_sha256": "9f8085ec0bfa3fb5e8a6ca29866e202b328760df88de696acc5e8ec85c2716e2",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 630,
+  "prompt_eval_count": 2386,
+  "created_at": "2026-10-23T21:03:44.482182Z",
+  "response_final": "outcome: null  \nexecution_state: no_steps  \nexecution_reason: \"no executable steps\"  \n\nThe overall evaluation **cannot pass**. This case is `ITERATE` due to unobserved evidence (job never executed), per hard gate: \"An expected PASS is not an observed PASS\" when execution did not occur.",
+  "original_private_record_sha256": "75f31cbb33ed69c9e9af45fc4cceb969971f981a237f3b32ccb2106357876258",
+  "transformation": "Final-answer suffix only; hidden reasoning excluded uniformly."
+}

@@ -1,0 +1,7 @@
+{
+  "recorded_at": "2026-10-23T20:39:43.568126+00:00",
+  "reason": "Fix integer-plus-string TypeError in blind label randomization; no evaluator call or score existed before fix",
+  "previous_script_sha256": "f3d1550a46bf4a9c00c73e7fc1926828a5ab039099a36e7ec7eaa582bcf00575",
+  "corrected_script_sha256": "7dd2aee16102eb67d2ad35a41dc0a5680bdc2cb3a535bd424f25a07ac2985bad",
+  "success_criteria_changed": false
+}

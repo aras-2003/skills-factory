@@ -1,0 +1,113 @@
+{
+  "reviewer": "Codex parent agent; separate model from Qwen executor, author and version labels visible; NOT blind or independent release approval",
+  "disposition": "ITERATE; 2/3 bounded cases PASS, queued NOT_RUN fields and missing-runner condition omitted",
+  "candidate_source_revision": "15740806f57d7058c0d2d3ac02f51c586e15e635",
+  "plan_sha256": "4b4a4364d9f74299c6c828eb5e182f9052ee3e2a33c01600b97e95cb8411a8f5",
+  "reused_comparators": 6,
+  "new_candidate_runs": 3,
+  "rows": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "published_record_sha256": "279c51521d07006deb093182f5263c39c926e257098b6f0171dcab95241bcb9d",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        }
+      ],
+      "case_pass": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "published_record_sha256": "0749c59da4cd9d6489f69b86692f9b37e7b3de7cd393b1dfe0167ceab839b1f5",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": true
+        },
+        {
+          "index": 3,
+          "passed": true
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        }
+      ],
+      "case_pass": true
+    },
+    {
+      "case": "queued-not-run",
+      "published_record_sha256": "d99840856f74188e12662715cb15082888e33c201ddfd70803ed32891af9325f",
+      "assertions": [
+        {
+          "index": 1,
+          "passed": true
+        },
+        {
+          "index": 2,
+          "passed": false
+        },
+        {
+          "index": 3,
+          "passed": false
+        },
+        {
+          "index": 4,
+          "passed": true
+        },
+        {
+          "index": 5,
+          "passed": true
+        },
+        {
+          "index": 6,
+          "passed": true
+        },
+        {
+          "index": 7,
+          "passed": true
+        }
+      ],
+      "case_pass": false
+    }
+  ],
+  "limits": [
+    "Local qwen3:4b only; no installed Lab/Site claim",
+    "Single sample per case/variant; no statistical confidence",
+    "Both blind scorer attempts invalid; no valid blind score",
+    "Skill remains draft; no candidate promotion"
+  ]
+}

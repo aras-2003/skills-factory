@@ -1,0 +1,1208 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Owner-authorized archival closeout of the historical run, superseded by the agreed bounded regression; no historical outcome changed.",
+  "source_revision": "9d5788749fa1422c5cf1d1067c61744708ba1e9c",
+  "source_file": "docs/remediation/campaign-2026-10-10.md",
+  "source_sha256": "def81cf259e9493aedf188b8c0b29eb6ba037b98c0340b2ff86e13eedf7b90f5",
+  "historical_totals": {
+    "PASS": 122,
+    "FAIL": 44,
+    "BLOCKED": 72
+  },
+  "pass_handling": "122 archived PASS retained as the accepted main summary; individual private receipts are not republished or re-evaluated here.",
+  "completion_rule": "Each prerequisite is satisfied/rerun or its exact blocked condition is documented, per the canonical main campaign completion gate. No Site/Lab equal-version dependency is added.",
+  "cases": [
+    {
+      "case_id": "0031",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Wrong skill selected for interview brief",
+      "original_follow_up": "Runtime integration needs a TEST route trace; confirm interview-brief wins for interview-preparation intent.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0031: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0085",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0085: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0086",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0086: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0087",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0087: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0088",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0088: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0089",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0089: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0090",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0090: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0091",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0091: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0092",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0092: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0557",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Attention triage route/labels and read/write proof inconsistent",
+      "original_follow_up": "Triage contract tightened. Rerun against an isolated TEST store with raw router, read, and write receipts; no production data.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0557: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0111",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "New earnings item routed to broad Investment OS front door",
+      "original_follow_up": "Add a routing regression for new company information/earnings as attention triage.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0111: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0157",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Initial thesis vs monitoring route and missing trace/evaluator evidence",
+      "original_follow_up": "Rerun with synthetic active/draft thesis fixtures and independent rubric plus canonical trace; retain NOT_RUN when execution is absent.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0157: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0159",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Initial thesis vs monitoring route and missing trace/evaluator evidence",
+      "original_follow_up": "Rerun with synthetic active/draft thesis fixtures and independent rubric plus canonical trace; retain NOT_RUN when execution is absent.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0159: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0600",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Initial thesis vs monitoring route and missing trace/evaluator evidence",
+      "original_follow_up": "Rerun with synthetic active/draft thesis fixtures and independent rubric plus canonical trace; retain NOT_RUN when execution is absent.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0600: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0309",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Complete deck generated before brief inputs were established",
+      "original_follow_up": "Presentation Brief source is not implemented in this repository; add intake gate for audience, decision/outcome, context/evidence before final authoring.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0309: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0313",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Complete deck generated before brief inputs were established",
+      "original_follow_up": "Presentation Brief source is not implemented in this repository; add intake gate for audience, decision/outcome, context/evidence before final authoring.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0313: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0330",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Evidence review offered strategy exercise instead of Strategy OS delegation",
+      "original_follow_up": "Presentation Evidence Review source is not implemented here; add explicit Strategy OS delegation/stop rule.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0330: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0359",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Storyline mirrored 35 headings instead of compressing argument",
+      "original_follow_up": "Presentation Storyline source is not implemented here; require narrative/decision flow, main argument vs appendix, and approval before authoring.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0359: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0362",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Report structure used generic IDs, assumed scope/audience, or invented strategy",
+      "original_follow_up": "Report Architecture source is not implemented here; require approved finding/option IDs, scope/audience/evidence, and leave unsupported recommendation blank.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0362: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0366",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Report structure used generic IDs, assumed scope/audience, or invented strategy",
+      "original_follow_up": "Report Architecture source is not implemented here; require approved finding/option IDs, scope/audience/evidence, and leave unsupported recommendation blank.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0366: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0368",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Report structure used generic IDs, assumed scope/audience, or invented strategy",
+      "original_follow_up": "Report Architecture source is not implemented here; require approved finding/option IDs, scope/audience/evidence, and leave unsupported recommendation blank.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0368: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0382",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Review omitted source links and owner/action handoff",
+      "original_follow_up": "Report Review source is not implemented here; add source location and owner/action disposition to contradiction correction.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0382: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0385",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Integration identity/evaluation cannot be independently verified",
+      "original_follow_up": "Do not alter the historical binary. Repeat with exact canonical target, content digest, execution trace, and independent rubric result.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0385: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0386",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Integration identity/evaluation cannot be independently verified",
+      "original_follow_up": "Do not alter the historical binary. Repeat with exact canonical target, content digest, execution trace, and independent rubric result.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0386: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0556",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Integration identity/evaluation cannot be independently verified",
+      "original_follow_up": "Do not alter the historical binary. Repeat with exact canonical target, content digest, execution trace, and independent rubric result.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0556: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0397",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Portfolio observation made unsupported portfolio-level recommendations / missed soft-vs-hard threshold distinction",
+      "original_follow_up": "Require visible portfolio-review child receipt before portfolio decisions; explicitly label soft review bands vs hard policy. Reevaluate 0907 with the same rubric.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0397: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0561",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Portfolio observation made unsupported portfolio-level recommendations / missed soft-vs-hard threshold distinction",
+      "original_follow_up": "Require visible portfolio-review child receipt before portfolio decisions; explicitly label soft review bands vs hard policy. Reevaluate 0907 with the same rubric.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0561: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0907",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Portfolio observation made unsupported portfolio-level recommendations / missed soft-vs-hard threshold distinction",
+      "original_follow_up": "Require visible portfolio-review child receipt before portfolio decisions; explicitly label soft review bands vs hard policy. Reevaluate 0907 with the same rubric.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0907: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0401",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Prioritization began before initiatives were comparable",
+      "original_follow_up": "Add an evidence comparability gate before ranking: scope, value, cost/capacity, confidence, dependency, horizon, mandatory status.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0401: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0408",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Presentation production inferred audience/strategy or mislabeled an unrun gate",
+      "original_follow_up": "Presentation Production source is not implemented here; require brief and Strategy OS evidence, and represent unexecuted challenge as NOT_RUN.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0408: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0418",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Presentation production inferred audience/strategy or mislabeled an unrun gate",
+      "original_follow_up": "Presentation Production source is not implemented here; require brief and Strategy OS evidence, and represent unexecuted challenge as NOT_RUN.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0418: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0422",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Presentation production inferred audience/strategy or mislabeled an unrun gate",
+      "original_follow_up": "Presentation Production source is not implemented here; require brief and Strategy OS evidence, and represent unexecuted challenge as NOT_RUN.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0422: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0427",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Artifact receipt/format mismatch, missing upstream escalation, unintended attachment",
+      "original_follow_up": "Report Production source is not implemented here; validate each claimed artifact/format, preserve UPSTREAM_REVIEW_REQUIRED, and isolate unrelated attachment context.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0427: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0437",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Artifact receipt/format mismatch, missing upstream escalation, unintended attachment",
+      "original_follow_up": "Report Production source is not implemented here; validate each claimed artifact/format, preserve UPSTREAM_REVIEW_REQUIRED, and isolate unrelated attachment context.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0437: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0440",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Artifact receipt/format mismatch, missing upstream escalation, unintended attachment",
+      "original_follow_up": "Report Production source is not implemented here; validate each claimed artifact/format, preserve UPSTREAM_REVIEW_REQUIRED, and isolate unrelated attachment context.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0440: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0441",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Skill development omitted required route cases; queued job treated as failure",
+      "original_follow_up": "Test-design source already has these controls; rerun in the candidate evaluator and align behavior: positive/near-miss/competing route cases; zero-step queue is NOT_RUN.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0441: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0442",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Skill development omitted required route cases; queued job treated as failure",
+      "original_follow_up": "Test-design source already has these controls; rerun in the candidate evaluator and align behavior: positive/near-miss/competing route cases; zero-step queue is NOT_RUN.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0442: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0478",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Canonical persistence/read receipts absent",
+      "original_follow_up": "Add explicit READ/WRITE status receipts (SUCCESS / UNAVAILABLE / FAILED); never assert persistence without receipt.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0478: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0480",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Canonical persistence/read receipts absent",
+      "original_follow_up": "Add explicit READ/WRITE status receipts (SUCCESS / UNAVAILABLE / FAILED); never assert persistence without receipt.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0480: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0518",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Personal policy assumptions, incomplete portfolio review, visible single-security misroute despite router regression, ambiguous action prompt",
+      "original_follow_up": "Strengthen front-door clarification before recommendation. Existing deterministic router tests already cover `0522`/`0532`; rerun against the exact installed package with route/child trace to distinguish stale runtime from model noncompliance. Also require user-confirmed policy assumptions and full canonical+visual portfolio path.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0518: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0519",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Personal policy assumptions, incomplete portfolio review, visible single-security misroute despite router regression, ambiguous action prompt",
+      "original_follow_up": "Strengthen front-door clarification before recommendation. Existing deterministic router tests already cover `0522`/`0532`; rerun against the exact installed package with route/child trace to distinguish stale runtime from model noncompliance. Also require user-confirmed policy assumptions and full canonical+visual portfolio path.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0519: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0522",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Personal policy assumptions, incomplete portfolio review, visible single-security misroute despite router regression, ambiguous action prompt",
+      "original_follow_up": "Strengthen front-door clarification before recommendation. Existing deterministic router tests already cover `0522`/`0532`; rerun against the exact installed package with route/child trace to distinguish stale runtime from model noncompliance. Also require user-confirmed policy assumptions and full canonical+visual portfolio path.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0522: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0532",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Personal policy assumptions, incomplete portfolio review, visible single-security misroute despite router regression, ambiguous action prompt",
+      "original_follow_up": "Strengthen front-door clarification before recommendation. Existing deterministic router tests already cover `0522`/`0532`; rerun against the exact installed package with route/child trace to distinguish stale runtime from model noncompliance. Also require user-confirmed policy assumptions and full canonical+visual portfolio path.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0532: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "0558",
+      "historical_result": "FAIL",
+      "final_accounting_disposition": "owner_authorized_archive_unresolved_failure",
+      "finding_at_original_remediation": "Evaluator pending despite runtime identity evidence",
+      "original_follow_up": "Re-run independent rubric; until then classify as blocked evidence, not a code fix.",
+      "current_retest_result": "NOT_RUN",
+      "remaining_condition": "No matched exact-case current execution and independent rubric receipt is supplied by this reconciliation. Source fixes or another similar passing case do not overwrite this failure.",
+      "required_case_evidence": "Protected original campaign case 0558: frozen input, rubric and exact-run evidence corresponding to original_follow_up; not included in the canonical remediation summary or this worktree.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision",
+      "remediation_status": "unresolved_or_unverified; historical failure is not a current fix claim"
+    },
+    {
+      "case_id": "authored-cv-gap-analysis-audit-near-miss-cv-gap-analysis",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "owner_excluded",
+      "remaining_condition": "Explicit owner exclusion remains in force; no rerun unless owner reactivates this exact case.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-cv-tailoring-audit-near-miss-cv-tailoring",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "owner_excluded",
+      "remaining_condition": "Explicit owner exclusion remains in force; no rerun unless owner reactivates this exact case.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-job-discovery-audit-near-miss-job-discovery",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "owner_excluded",
+      "remaining_condition": "Explicit owner exclusion remains in force; no rerun unless owner reactivates this exact case.",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-job-validity-check-audit-near-miss-job-validity-check",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Career",
+      "remaining_condition": "Isolated TEST profile with memory and production project retrieval disabled; synthetic job description, company, reporting line/team fixture; tracker writes off. These otherwise resolve against private career history.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-process-update-audit-near-miss-process-update",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Career",
+      "remaining_condition": "Isolated TEST profile with memory and production project retrieval disabled; synthetic job description, company, reporting line/team fixture; tracker writes off. These otherwise resolve against private career history.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-problem-demand-validation-audit-near-miss-problem-demand-validation",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-unit-economics-review-audit-near-miss-unit-economics-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-acquisition-fit-review-audit-near-miss-acquisition-fit-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-competition-landscape-review-audit-near-miss-competition-landscape-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-supplier-viability-review-audit-near-miss-supplier-viability-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-market-transferability-review-audit-near-miss-market-transferability-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-product-opportunity-discovery-audit-near-miss-product-opportunity-discovery",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-differentiation-review-audit-near-miss-differentiation-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-commerce-regulatory-risk-review-audit-near-miss-commerce-regulatory-risk-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Commerce",
+      "remaining_condition": "Isolated TEST profile; complete synthetic product/category/claims/supplier/offer fixtures with the numeric inputs each rubric requires; production memory and tracker writes disabled. Prompts reference missing prior context or omit calculation/claims inputs.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-policy-design-audit-near-miss-investment-policy-design",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing baseline",
+      "remaining_condition": "Synthetic policy, holdings, exposures, and risk limits in isolated TEST profile/store; production financial store disconnected. User-specific state must not be read from production.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-portfolio-state-review-audit-near-miss-portfolio-state-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing baseline",
+      "remaining_condition": "Synthetic policy, holdings, exposures, and risk limits in isolated TEST profile/store; production financial store disconnected. User-specific state must not be read from production.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-position-sizing-review-audit-near-miss-position-sizing-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing baseline",
+      "remaining_condition": "Synthetic policy, holdings, exposures, and risk limits in isolated TEST profile/store; production financial store disconnected. User-specific state must not be read from production.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-thesis-monitor-monitor-earnings",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Thesis monitoring",
+      "remaining_condition": "Isolated TEST investment store with synthetic ACTIVE/DRAFT thesis, dated assumptions, earnings/noise evidence, and kill criteria. For append case, disposable TEST write target, explicit per-run authorization, duplicate check, and actual canonical receipt.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-thesis-monitor-monitor-noise",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Thesis monitoring",
+      "remaining_condition": "Isolated TEST investment store with synthetic ACTIVE/DRAFT thesis, dated assumptions, earnings/noise evidence, and kill criteria. For append case, disposable TEST write target, explicit per-run authorization, duplicate check, and actual canonical receipt.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-thesis-monitor-monitor-draft-only",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Thesis monitoring",
+      "remaining_condition": "Isolated TEST investment store with synthetic ACTIVE/DRAFT thesis, dated assumptions, earnings/noise evidence, and kill criteria. For append case, disposable TEST write target, explicit per-run authorization, duplicate check, and actual canonical receipt.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-thesis-monitor-monitor-read-store-unavailable",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Thesis monitoring",
+      "remaining_condition": "Isolated TEST investment store with synthetic ACTIVE/DRAFT thesis, dated assumptions, earnings/noise evidence, and kill criteria. For append case, disposable TEST write target, explicit per-run authorization, duplicate check, and actual canonical receipt.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-thesis-monitor-monitor-authorized-append-only",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Thesis monitoring",
+      "remaining_condition": "Isolated TEST investment store with synthetic ACTIVE/DRAFT thesis, dated assumptions, earnings/noise evidence, and kill criteria. For append case, disposable TEST write target, explicit per-run authorization, duplicate check, and actual canonical receipt.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-skill-authoring-author-negative-validation-only",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Skill authoring/evaluation",
+      "remaining_condition": "Exact synthetic SKILL.md/specification, approved suite, candidate and prior-version results, paired execution receipts, and a disposable authoring workspace. Private project files must not be substituted.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-skill-authoring-author-negative-eval-only",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Skill authoring/evaluation",
+      "remaining_condition": "Exact synthetic SKILL.md/specification, approved suite, candidate and prior-version results, paired execution receipts, and a disposable authoring workspace. Private project files must not be substituted.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-skill-release-review-release-negative-source-authoring",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Skill authoring/evaluation",
+      "remaining_condition": "Exact synthetic SKILL.md/specification, approved suite, candidate and prior-version results, paired execution receipts, and a disposable authoring workspace. Private project files must not be substituted.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-organizational-interface-review-audit-near-miss-organizational-interface-review",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Customer contract / organization",
+      "remaining_condition": "Synthetic customer contract, decision rights, exception and approval history; private project retrieval disabled.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-brief-brief-direct",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation brief",
+      "remaining_condition": "Synthetic brief with audience, decision/outcome, options, notes and exact attachments; fresh isolated TEST chat with project retrieval disabled.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-brief-brief-specified",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation brief",
+      "remaining_condition": "Synthetic brief with audience, decision/outcome, options, notes and exact attachments; fresh isolated TEST chat with project retrieval disabled.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-brief-brief-competing",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation brief",
+      "remaining_condition": "Synthetic brief with audience, decision/outcome, options, notes and exact attachments; fresh isolated TEST chat with project retrieval disabled.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-deck-review-review-board",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-deck-review-review-render",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-deck-review-review-near-miss",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-deck-review-review-competing",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-deck-review-review-strategy-validation-separate",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-evidence-review-evidence-verification",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-exhibit-design-exhibit-ranked",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-exhibit-design-exhibit-architecture",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-exhibit-design-exhibit-near-miss",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-storyline-story-competing",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-storyline-story-competing-strategy",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation review / evidence / exhibits",
+      "remaining_condition": "Exact synthetic deck/storyboard/renders, source ledger, workbook, verified values, architecture/strategy pack as needed; exact deck ID where a slide is referenced; isolated TEST context. Artifacts are absent or ambiguous.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-export-verification-export-pptx",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation authoring / export",
+      "remaining_condition": "Exact storyboard/deck IDs and values; disposable Canva/Figma workspace, authenticated destination/team, callable export or actual exported artifact, stable design ID/preview; explicit authorization before external AI credit use.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-export-verification-export-pdf",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation authoring / export",
+      "remaining_condition": "Exact storyboard/deck IDs and values; disposable Canva/Figma workspace, authenticated destination/team, callable export or actual exported artifact, stable design ID/preview; explicit authorization before external AI credit use.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-slide-authoring-authoring-direct",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation authoring / export",
+      "remaining_condition": "Exact storyboard/deck IDs and values; disposable Canva/Figma workspace, authenticated destination/team, callable export or actual exported artifact, stable design ID/preview; explicit authorization before external AI credit use.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-slide-authoring-authoring-canva",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation authoring / export",
+      "remaining_condition": "Exact storyboard/deck IDs and values; disposable Canva/Figma workspace, authenticated destination/team, callable export or actual exported artifact, stable design ID/preview; explicit authorization before external AI credit use.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-slide-authoring-pres-canva-provider-03",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation authoring / export",
+      "remaining_condition": "Exact storyboard/deck IDs and values; disposable Canva/Figma workspace, authenticated destination/team, callable export or actual exported artifact, stable design ID/preview; explicit authorization before external AI credit use.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-production-pres-e2e-01",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation production",
+      "remaining_condition": "Synthetic authoritative notes/maps; selected TEST team/workspace and explicit credit-use approval; controlled safety harness for refusal case; for revision, explicit approval of cycle 1 then separate review/approval before cycle 2 commit.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-production-pres-e2e-03",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation production",
+      "remaining_condition": "Synthetic authoritative notes/maps; selected TEST team/workspace and explicit credit-use approval; controlled safety harness for refusal case; for revision, explicit approval of cycle 1 then separate review/approval before cycle 2 commit.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-production-pres-e2e-11",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation production",
+      "remaining_condition": "Synthetic authoritative notes/maps; selected TEST team/workspace and explicit credit-use approval; controlled safety harness for refusal case; for revision, explicit approval of cycle 1 then separate review/approval before cycle 2 commit.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-presentation-production-pres-e2e-21",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Presentation production",
+      "remaining_condition": "Synthetic authoritative notes/maps; selected TEST team/workspace and explicit credit-use approval; controlled safety harness for refusal case; for revision, explicit approval of cycle 1 then separate review/approval before cycle 2 commit.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-architecture-rep-arch-03",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-architecture-rep-arch-04",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-authoring-rep-auth-03",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-authoring-rep-auth-04",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-authoring-rep-auth-05",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-authoring-rep-auth-06",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-review-rep-review-01",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-review-rep-review-02",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-document-review-rep-review-04",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report architecture / authoring / review",
+      "remaining_condition": "Exact source/report version and page count, source ledger, regenerated PDF where required, workflow/router trace; negative export case needs a session that truly lacks native authoring; safety case needs controlled harness with synthetic content.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-production-rep-e2e-10",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report production",
+      "remaining_condition": "For e2e-10, use a session that genuinely lacks native file generation/export. For e2e-13, use a controlled safety path and synthetic non-sensitive content with an explicit destination.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-report-production-rep-e2e-13",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Report production",
+      "remaining_condition": "For e2e-10, use a session that genuinely lacks native file generation/export. For e2e-13, use a controlled safety path and synthetic non-sensitive content with an explicit destination.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-attention-review-attention-workflow-unknown-permissions",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing workflow integration",
+      "remaining_condition": "Free an active-task slot or use a one-time harness; export route + child completion trace; exact synthetic canonical target and current/prior READ receipts; isolated TEST write target and authorization for save case.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-opportunity-hunter-opportunity-explicit-test-save",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing workflow integration",
+      "remaining_condition": "Free an active-task slot or use a one-time harness; export route + child completion trace; exact synthetic canonical target and current/prior READ receipts; isolated TEST write target and authorization for save case.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-os-review-router-positive-portfolio",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing workflow integration",
+      "remaining_condition": "Free an active-task slot or use a one-time harness; export route + child completion trace; exact synthetic canonical target and current/prior READ receipts; isolated TEST write target and authorization for save case.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-os-review-router-positive-theme",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing workflow integration",
+      "remaining_condition": "Free an active-task slot or use a one-time harness; export route + child completion trace; exact synthetic canonical target and current/prior READ receipts; isolated TEST write target and authorization for save case.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-portfolio-observation-observation-positive-data-gap",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing workflow integration",
+      "remaining_condition": "Free an active-task slot or use a one-time harness; export route + child completion trace; exact synthetic canonical target and current/prior READ receipts; isolated TEST write target and authorization for save case.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-investment-portfolio-observation-observation-negative-security",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Investing workflow integration",
+      "remaining_condition": "Free an active-task slot or use a one-time harness; export route + child completion trace; exact synthetic canonical target and current/prior READ receipts; isolated TEST write target and authorization for save case.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-oaf-strategy-execution-reset-reset-negative-prioritization",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "OAF workflow integration",
+      "remaining_condition": "Route/child trace plus synthetic normalized initiative value, resource/capacity, dependency, deadline, confidence, and mandatory-status inputs for ranking.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "authored-oaf-strategy-execution-reset-reset-negative-decision-rights",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "OAF workflow integration",
+      "remaining_condition": "Route/child trace plus synthetic normalized initiative value, resource/capacity, dependency, deadline, confidence, and mandatory-status inputs for ranking.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "external-evals--routing--investment-opportunity-natural-pl.input.md",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Natural routing integration",
+      "remaining_condition": "Correlated route, selected capability, child completion trace and independent rubric; observation additionally requires both valid current/prior canonical READ receipts with IDs/timestamps.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "external-evals--routing--investment-portfolio-observation-natural-pl.input.md",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Natural routing integration",
+      "remaining_condition": "Correlated route, selected capability, child completion trace and independent rubric; observation additionally requires both valid current/prior canonical READ receipts with IDs/timestamps.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "external-evals--routing--investment-security-natural-en.input.md",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Natural routing integration",
+      "remaining_condition": "Correlated route, selected capability, child completion trace and independent rubric; observation additionally requires both valid current/prior canonical READ receipts with IDs/timestamps.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    },
+    {
+      "case_id": "external-evals--routing--investment-theme-natural-en.input.md",
+      "historical_result": "BLOCKED",
+      "final_accounting_disposition": "exact_blocker_documented",
+      "group": "Natural routing integration",
+      "remaining_condition": "Correlated route, selected capability, child completion trace and independent rubric; observation additionally requires both valid current/prior canonical READ receipts with IDs/timestamps.",
+      "current_retest_result": "NOT_RUN",
+      "archive_disposition": "superseded_historical_run_by_owner_decision"
+    }
+  ],
+  "separate_current_work": {
+    "253": "Exact Site/Lab package comparison and runtime mismatch repair; remains open.",
+    "289": "Owner-approved six-case current Lab routing regression completed, no 54-skill certification.",
+    "237": "Independent three-case matched evaluation completed with candidate ITERATE; historical 0558 is not relabeled from this similar case.",
+    "410": "Proposed skill-evaluation contract hardening; not promoted.",
+    "411": "Merged as a752b553cc16d026408a379cfa3654c15f447171 by explicit owner approval; new package/install/Site retest still required under #253."
+  },
+  "release_authorization": false,
+  "reconciliation_gate_satisfied": true,
+  "completion_basis": "Explicit owner scope decision on 2026-10-24 supersedes full rerun/remediation as the closure requirement for this historical campaign; remaining defects are not declared fixed.",
+  "owner_decision": {
+    "date": "2026-10-24",
+    "verbatim": "Archiwizuj stary przebieg bez zmiany wyników",
+    "question_scope": "Archive the historical #311 run as superseded by agreed basic regression; preserve 44 FAIL / 72 BLOCKED and outstanding runtime/source fixes.",
+    "authorization": "archive_and_close_historical_accounting_only",
+    "not_authorized": [
+      "rewrite historical results",
+      "declare unresolved defects fixed",
+      "merge unrelated PRs",
+      "release or promotion"
+    ]
+  }
+}
