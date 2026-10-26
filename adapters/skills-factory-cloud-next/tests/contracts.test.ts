@@ -283,6 +283,10 @@ test("main runtime delta: unrelated tasks and host child execution", () => {
     ["Screen my watchlist, preview only", "investment-opportunity-hunter"],
     ["A company in my watchlist just reported earnings. Triage whether it changes my thesis and what deserves deeper research.", "investment-attention-review"],
     ["Spółka z mojej watchlisty opublikowała nowe wyniki. Oceń ich wpływ na tezę i powiedz, co wymaga dalszej analizy.", "investment-attention-review"],
+    ["Check my thesis after earnings.", "investment-attention-review"],
+    ["Sprawdź moją tezę po wynikach spółki.", "investment-attention-review"],
+    ["Review my thesis about the company.", "investment-security-review"],
+    ["Sprawdź moją tezę o spółce.", "investment-security-review"],
   ]) {
     const r=routeInvestment(request); assert.equal(r.child_workflow, expected); assert.equal(r.response_policy, "load_child_workflow_then_follow"); assert.equal(r.workflow_executed, false);
   }
