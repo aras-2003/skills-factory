@@ -1,0 +1,52 @@
+name: Database security
+
+on:
+  pull_request:
+    paths:
+      - "supabase/**"
+      - "scripts/database/**"
+      - ".github/workflows/ci-database-security.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/**"
+      - "scripts/database/**"
+      - ".github/workflows/ci-database-security.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  migration-security:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.9
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: skills_factory_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d skills_factory_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: skills_factory_test
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y postgresql-client
+      - name: Lint migration access rules
+        run: python scripts/database/lint_migrations.py
+      - name: Replay every migration on a clean database and test role boundaries
+        run: bash scripts/database/replay_migrations.sh
