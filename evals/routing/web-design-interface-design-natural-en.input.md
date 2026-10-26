@@ -1,0 +1,1 @@
+Design a responsive product screen for a warehouse operator who needs to find delayed orders and choose a safe next action. The user works on mobile scanners and desktop. Specify hierarchy, navigation, loading, empty, error and permission states, plus keyboard and screen-reader behavior. Do not implement code.

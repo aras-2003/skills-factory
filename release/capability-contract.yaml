@@ -312,6 +312,15 @@ component_declarations:
       shell_exec: unassessed
       credentials: unassessed
       external_actions: unassessed
+  interface-design:
+    source: skills/web-design/interface-design/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: none
+      filesystem: none
+      shell_exec: none
+      credentials: none
+      external_actions: none
   investor-pattern-research:
     source: skills/investing/investor-pattern-research/SKILL.md
     review_state: STATIC_PARTIAL

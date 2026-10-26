@@ -34,18 +34,21 @@ def write_json(path: Path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
-def component_sources(root=ROOT):
-    # The closure-v12 campaign remains bound to its 70-entry historical baseline;
-    # the all-status Lab package has its own current-source packaging validation.
+def component_sources(root=ROOT, expected_names=None):
+    # Closure packs preserve the selected catalog snapshot. New candidate skills
+    # have their own source/runtime handoff and must not silently enter an older baseline.
     package = read_yaml(root / 'release/package.yaml')
     draft_targets = set(package['lab']['draft_test_targets'])
     result = {}
     for path in sorted((root / 'skills').rglob('SKILL.md')):
         fm = yaml.safe_load(path.read_text(encoding='utf-8').split('---', 2)[1])
         if fm.get('metadata', {}).get('maturity') in ('candidate', 'production') or fm['name'] in draft_targets:
-            result[fm['name']] = path
+            if expected_names is None or fm['name'] in expected_names:
+                result[fm['name']] = path
     for row in read_yaml(root / 'workflows/runtime-registry.yaml')['workflows']:
         if row.get('channels', {}).get('lab') == 'supported' and (row.get('metadata') or {}).get('maturity') != 'draft':
+            if expected_names is not None and row['name'] not in expected_names:
+                continue
             result[row['name']] = root / row['workflow']
     return result
 
@@ -62,8 +65,8 @@ def assemble(root=ROOT, baseline_path=None):
             raise ValueError('selected runtime release/source mismatch')
         if baseline['catalog'].get('source_revision') != runtime['lab_release']['source_revision']:
             raise ValueError('selected catalog/Lab source mismatch')
-    sources = component_sources(root)
     observed = {x['name'] for x in baseline['catalog']['skills']}
+    sources = component_sources(root, expected_names=observed)
     if observed != set(sources):
         raise ValueError(f'catalog/source drift: {observed ^ set(sources)}')
     cases, seen = [], set()

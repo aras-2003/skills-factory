@@ -89,6 +89,13 @@ class RuntimeCampaignTests(unittest.TestCase):
             campaign.config().get("retest_focus_case_ids"),
         )
 
+    def test_interface_design_candidate_isolated_from_frozen_r20(self) -> None:
+        path = "skills/web-design/interface-design/SKILL.md"
+        self.assertEqual({path}, campaign.separately_validated_interface_design_paths(ROOT))
+        self.assertEqual([], campaign.validate_campaign())
+        fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
+        self.assertNotIn("interface-design", fixtures["targets"])
+
     def test_skill_engineering_campaign_derives_lab_version_from_package_source(self) -> None:
         cfg = yaml.safe_load(
             (ROOT / "evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml").read_text()

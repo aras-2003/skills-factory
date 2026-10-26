@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: interface-design-screen-natural-en
+mode: natural-routing
+target: interface-design
+expected_target: interface-design
+required_selected_capabilities:
+  - interface-design
+language: en
+competing_intents:
+  - website implementation
+  - data visualization
+assertions:
+  manual:
+    - selects interface design because the requested outcome is a responsive screen and interaction brief
+    - includes screen hierarchy, navigation, responsive behavior, states and accessibility
+    - does not claim implementation or runtime testing

@@ -1,0 +1,17 @@
+schema_version: "1.0"
+id: interface-design-report-nearmiss-en
+mode: natural-routing
+target: interface-design
+expected_target: no-skill
+forbidden_selected_capabilities:
+  - interface-design
+  - report-composer
+  - visual-output-design
+language: en
+competing_intents:
+  - report production
+  - visual output design
+assertions:
+  manual:
+    - does not select interface-design for a report and architecture diagram request
+    - routes to the report and diagram capabilities if available
