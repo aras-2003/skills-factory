@@ -44,6 +44,13 @@ class InterfaceDesignContractTests(unittest.TestCase):
             with self.subTest(state=state):
                 self.assertIn(state, self.body.lower())
 
+    def test_missing_data_uses_placeholders_instead_of_fabricated_records(self):
+        self.assertIn("[order ID]", self.body)
+        self.assertIn("[delay duration]", self.body)
+        self.assertIn("do not fabricate populated records", self.body.lower())
+        direct = next(c for c in self.cases if c["id"] == "interface-design-direct-positive")
+        self.assertTrue(any("invent order data" in text.lower() for text in direct["expected"]["must_not"]))
+
     def test_fixtures_cover_positive_nearmiss_and_edge_cases(self):
         ids = {case["id"] for case in self.cases}
         self.assertGreaterEqual(len(self.cases), 6)
