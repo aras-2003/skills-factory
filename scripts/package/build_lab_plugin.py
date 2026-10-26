@@ -207,6 +207,8 @@ def main() -> int:
             },
         )
         revision = source_revision(root)
+        # This canonical registry is the only source of executor inputs in the Lab artifact.
+        # Isolated candidate campaigns stay outside it until they have their own runtime handoff.
         fixture_registry = yaml.safe_load((root / "evals" / "runtime-fixtures.yaml").read_text(encoding="utf-8")) or {}
         fixture_targets = set((fixture_registry.get("targets") or {}).keys())
         packaged_names = {item["name"] for item in capabilities}
