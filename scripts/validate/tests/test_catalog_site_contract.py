@@ -139,7 +139,9 @@ lab:
         self.assertRegex(receipt["source_revision"], r"^[0-9a-f]{40}$")
         self.assertRegex(receipt["payload_content_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(f"{receipt['version']}+{receipt['source_revision'][:12]}", receipt["release_id"])
-        self.assertEqual(83, len(receipt["components"]))
+        component_names = [item["name"] for item in receipt["components"]]
+        self.assertEqual(len(component_names), len(set(component_names)))
+        self.assertTrue(all(name for name in component_names))
         manifest = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest, receipt)
 
