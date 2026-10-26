@@ -434,7 +434,7 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "37072e20773b5c9f689305e583eb00bc2840177d047276da780c9186645bbbb4",
+      "content_sha256": "c5ee8fe85a4781848cbdf60a8483bdf818c6a25735bf49e62a63a2b64cae5826",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -2022,5 +2022,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "6dcbd09aa8f2afbb00ee42b95afca37a182f575d"
+  "source_revision": "70d7e8fe3a9c2d6c24fc604b2214c861d2ba5853"
 }
