@@ -1,0 +1,5 @@
+interface:
+  display_name: Interface Design
+  short_description: Design the information hierarchy, navigation, responsive…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'

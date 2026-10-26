@@ -426,6 +426,28 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "37072e20773b5c9f689305e583eb00bc2840177d047276da780c9186645bbbb4",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "interface-design",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -2000,5 +2022,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "de9b88a4aa4625be0cfee4fdd9aa0700a79546cc"
+  "source_revision": "a2c2752025fd767326b72051a2f309d34e08915a"
 }
