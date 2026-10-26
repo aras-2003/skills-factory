@@ -8,9 +8,11 @@ BEGIN
     RAISE EXCEPTION 'public schema usage does not match the server-only contract';
   END IF;
 
-  IF has_schema_privilege('anon', 'investment', 'USAGE')
-     OR has_schema_privilege('authenticated', 'investment', 'USAGE')
-     OR has_schema_privilege('service_role', 'investment', 'USAGE') THEN
+  IF to_regnamespace('investment') IS NOT NULL AND (
+       has_schema_privilege('anon', 'investment', 'USAGE')
+       OR has_schema_privilege('authenticated', 'investment', 'USAGE')
+       OR has_schema_privilege('service_role', 'investment', 'USAGE')
+     ) THEN
     RAISE EXCEPTION 'deprecated investment schema is accessible to a runtime role';
   END IF;
 
