@@ -1,0 +1,1 @@
+A required assertion is to verify that a job listing is active in a live browser. The browser could not be started because environment policy denied access. No page was opened and there is no browser trace. Report outcome and execution_state separately, classify the result, and state what evidence would be needed for a pass.

@@ -1,0 +1,459 @@
+{
+  "packet_sha256": "785e51b6350871ba2fd16c58da9bccf7c046c991807eeb2e3927263ef9dfd462",
+  "assessments": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“incorrectly claims \\\"Pass\\\"”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 2,
+      "passed": true,
+      "evidence": "“execution_state`: `no_steps` (primary state”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 3,
+      "passed": true,
+      "evidence": "“additional condition: `awaiting_runner`”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 4,
+      "passed": true,
+      "evidence": "“outcome`: `null`”; “evaluation.status`: `NOT_RUN`”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 5,
+      "passed": true,
+      "evidence": "“Overall disposition**: `ITERATE`”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“not a candidate failure”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“proposed claim \\\"it can pass\\\" violates the skill's rule”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 2,
+      "passed": true,
+      "evidence": "“execution_state` must be `no_steps` (primary state)”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 3,
+      "passed": true,
+      "evidence": "“No runner assigned”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 4,
+      "passed": true,
+      "evidence": "“Case outcome: `null`” and “Compatibility status: `NOT_RUN`”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 5,
+      "passed": true,
+      "evidence": "“Overall disposition**: `ITERATE`”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“candidate's behavior is unobserved”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“No, it cannot pass.”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 2,
+      "passed": false,
+      "evidence": "The answer gives `Queued / not executed` as execution_state; it does not use `no_steps` as the primary state."
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 3,
+      "passed": true,
+      "evidence": "“No runner is assigned”"
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 4,
+      "passed": false,
+      "evidence": "The answer sets outcome to `Fail`, not `null`, and does not provide compatibility status `NOT_RUN`."
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 5,
+      "passed": false,
+      "evidence": "The answer gives no overall disposition of `ITERATE`."
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "assertion_index": 6,
+      "passed": false,
+      "evidence": "The answer calls the configuration “a candidate failure.”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“outcome: null”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 2,
+      "passed": true,
+      "evidence": "“execution_state: blocked”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 3,
+      "passed": true,
+      "evidence": "“the live listing status remains unknown”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 4,
+      "passed": true,
+      "evidence": "“Browser trace (to confirm listing status)”; “Job listing URL”; “Check timestamp”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 5,
+      "passed": true,
+      "evidence": "“runtime policy blocking browser access”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“the live listing status remains unknown”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 1,
+      "passed": false,
+      "evidence": "The answer does not state `outcome: null`."
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 2,
+      "passed": false,
+      "evidence": "It sets `Execution_state: failed`, not `blocked`."
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 3,
+      "passed": false,
+      "evidence": "It does not state that the listing status remains unknown."
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 4,
+      "passed": false,
+      "evidence": "It does not require a listing URL, check time, or observed status before PASS."
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 5,
+      "passed": false,
+      "evidence": "It labels the result `fail` despite stating browser start was denied and no page opened; it does not distinguish an unavailable run from an executed behavior failure."
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“no page opened, no browser trace”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“`outcome`: `null`”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 2,
+      "passed": true,
+      "evidence": "“`execution_state`: `blocked`”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 3,
+      "passed": true,
+      "evidence": "“listing status cannot be confirmed”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 4,
+      "passed": false,
+      "evidence": "It asks for a successful browser session and active-status confirmation but does not require a listing URL or check time."
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 5,
+      "passed": true,
+      "evidence": "“runtime block, not a behavioral failure”"
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“no browser trace means listing status cannot be confirmed”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“outcome: null”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 2,
+      "passed": false,
+      "evidence": "It does not state compatibility evaluation status `NOT_RUN`."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 3,
+      "passed": false,
+      "evidence": "It does not record the unassigned runner as an additional condition."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 4,
+      "passed": true,
+      "evidence": "“This case is `ITERATE`”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 5,
+      "passed": false,
+      "evidence": "It says the job “never executed” but does not state that a queued job is not a test result."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“overall evaluation **cannot pass**”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "assertion_index": 7,
+      "passed": true,
+      "evidence": "“An expected PASS is not an observed PASS”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 1,
+      "passed": false,
+      "evidence": "It sets outcome to `Failed` although the job did not execute."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 2,
+      "passed": false,
+      "evidence": "It does not provide compatibility evaluation status `NOT_RUN`."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 3,
+      "passed": false,
+      "evidence": "It does not use `no_steps` as the execution_state or record the unassigned runner as an additional condition."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 4,
+      "passed": true,
+      "evidence": "“Overall evaluation can pass: No”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 5,
+      "passed": false,
+      "evidence": "It does not state that a queued job is not a test result."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“Overall evaluation can pass: No”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "assertion_index": 7,
+      "passed": true,
+      "evidence": "“preventing execution regardless of runner availability”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 1,
+      "passed": true,
+      "evidence": "“Case outcome**: `null`”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 2,
+      "passed": false,
+      "evidence": "It does not state compatibility evaluation status `NOT_RUN`."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 3,
+      "passed": false,
+      "evidence": "It mentions `awaiting_runner` as overridden, but does not record the unassigned runner as an additional condition."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 4,
+      "passed": true,
+      "evidence": "“Cannot pass (disposition: `ITERATE`)”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 5,
+      "passed": false,
+      "evidence": "It does not state that a queued job is not a test result."
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 6,
+      "passed": true,
+      "evidence": "“Cannot pass”"
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "assertion_index": 7,
+      "passed": true,
+      "evidence": "“No evidence supports a `PASS`”"
+    }
+  ],
+  "case_pass": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "passed": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "passed": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "passed": false
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "passed": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "passed": false
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "passed": false
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "passed": false
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "passed": false
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "passed": false
+    }
+  ],
+  "ambiguities": [
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "assertion_index": 6,
+      "note": "The exact phrase “Result classification: fail” could be read as the result category or as a statement that the live listing failed. I treated it as a result category: the response does not state that the listing itself is inactive. Assertion 5 fails independently because the response classifies an unavailable, unexecuted check as fail."
+    }
+  ]
+}

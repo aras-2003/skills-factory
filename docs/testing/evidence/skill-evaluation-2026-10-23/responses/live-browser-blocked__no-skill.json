@@ -1,0 +1,16 @@
+{
+  "case_id": "live-browser-blocked",
+  "variant": "no-skill",
+  "input_sha256": "1e5ae348377eafddd2e38846436ae574e1dd41152bb4b2a79e08d495938a5e06",
+  "plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "request_sha256": "68ad4842c49c20d425b56249d9557d859f929b95f69351f8591a5958e6b0ab88",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 1392,
+  "prompt_eval_count": 96,
+  "created_at": "2026-10-23T20:25:34.234133Z",
+  "response_final": "Outcome: Browser start denied by environment policy; no page opened, no browser trace.  \nExecution_state: failed  \nResult classification: fail  \nEvidence needed for a pass: Browser trace showing job listing page successfully loaded and active (e.g., valid HTTP response, job listing content present).",
+  "raw_record_sha256": "d483cada3c9e6c8e620d36df418860002e45d3e317b93a6e9e3062b6d5233921",
+  "final_answer_transform": "suffix after last </think> delimiter, stripped; otherwise entire response, stripped"
+}

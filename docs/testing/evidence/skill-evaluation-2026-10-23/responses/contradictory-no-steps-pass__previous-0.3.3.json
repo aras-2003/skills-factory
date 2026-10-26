@@ -1,0 +1,16 @@
+{
+  "case_id": "contradictory-no-steps-pass",
+  "variant": "previous-0.3.3",
+  "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+  "plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "request_sha256": "b2ce7ad1a27f0f830490337bdea255f99c4790554ca848ab0a6d0799239f061b",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 927,
+  "prompt_eval_count": 2179,
+  "created_at": "2026-10-23T20:15:52.602149Z",
+  "response_final": "**Corrected Case Fields and Overall Disposition**  \n- `outcome`: `null` (execution did not produce evidence)  \n- `execution_state`: `no_steps` (primary state; *additional condition*: `awaiting_runner` due to no assigned runner)  \n- `evaluation.status`: `NOT_RUN`  \n- **Overall disposition**: `ITERATE`  \n\n**Why?**  \nPer the skill evaluation rules:  \n1. A case with **no executable steps** (`no_steps`) *always* has `outcome: null` and `evaluation.status: NOT_RUN`, regardless of runner status.  \n2. The original claim \"it can pass\" violates the **hard gate**: *\"An expected PASS is not an observed PASS. Resolve execution state before scoring any case.\"*  \n3. **Non-executed cases cannot be scored as `passed`**—the disposition must be `ITERATE` when required evidence is unobserved (as explicitly stated in the precedence table).  \n4. Infrastructure conditions (e.g., no runner) are *not* candidate failures but require iteration to resolve.  \n\n**Key correction**: The proposed result incorrectly treated unexecuted cases as `passed`. Per evidence, the case **did not run** → `ITERATE` (not `PASS`).  \n\n> ✅ **Final disposition**: `ITERATE` (required evidence unobserved; case must be rerun after fixing infrastructure).",
+  "raw_record_sha256": "7618106793f9af365e8e970a1d9bde2701a5d9d8b3b77158150b41071e995f34",
+  "final_answer_transform": "suffix after last </think> delimiter, stripped; otherwise entire response, stripped"
+}

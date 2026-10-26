@@ -1,0 +1,16 @@
+{
+  "case_id": "queued-not-run",
+  "variant": "no-skill",
+  "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+  "plan_sha256": "1e79b3e8471acc8685c00cd7e4e9a4a99df1c5b33989165dcb5f9597573328ec",
+  "request_sha256": "7ecc0ecfdccc536df0c8671e7d5fa6079223ca615d2d41160bc0d1ba0c9644a5",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 1021,
+  "prompt_eval_count": 89,
+  "created_at": "2026-10-23T20:34:23.582087Z",
+  "response_final": "Case outcome: Failed  \nExecution state: Queued  \nExecution reason: The job contains no executable steps, preventing execution regardless of runner availability.  \nOverall evaluation can pass: No",
+  "raw_record_sha256": "2142b0a3762bac0f64126561c7154fb5646d83983a021959ac22ae029545ec49",
+  "final_answer_transform": "suffix after last </think> delimiter, stripped; otherwise entire response, stripped"
+}

@@ -1,0 +1,7 @@
+{
+  "status": "INVALID_EVALUATOR_OUTPUT",
+  "behavior_verdict": null,
+  "reason": "Echoed task/rubric/answers without scoring fields; client stopped after first invalid completed result",
+  "client_exit_code": 143,
+  "executor_outputs_unchanged": true
+}

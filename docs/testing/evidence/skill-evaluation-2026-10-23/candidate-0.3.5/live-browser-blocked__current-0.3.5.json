@@ -1,0 +1,17 @@
+{
+  "case_id": "live-browser-blocked",
+  "variant": "current-0.3.5",
+  "source_revision": "15740806f57d7058c0d2d3ac02f51c586e15e635",
+  "input_sha256": "1e5ae348377eafddd2e38846436ae574e1dd41152bb4b2a79e08d495938a5e06",
+  "plan_sha256": "4b4a4364d9f74299c6c828eb5e182f9052ee3e2a33c01600b97e95cb8411a8f5",
+  "request_sha256": "7a6a398f3442ea8baf559ccfe4c5ec70002087b91beaa435e697320f50aa4e79",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "eval_count": 721,
+  "prompt_eval_count": 2393,
+  "created_at": "2026-10-23T21:01:33.287312Z",
+  "response_final": "outcome: null  \nexecution_state: blocked  \nevaluation.status: NOT_RUN  \ncompatibility_status: NOT_RUN  \nexecution_reason: Environment policy denied browser access (no browser trace available)  \n\n**Evidence needed for PASS**:  \n- Browser trace (to confirm listing status)  \n- Job listing URL  \n- Check timestamp  \n*Note: Current failure is due to runtime policy blocking browser access. Without resolving the environment policy to allow browser execution, the live listing status remains unknown.*",
+  "original_private_record_sha256": "61ad1dc10e8c7553e1794e77c8bcb83f3fc34b69ccccdf9f923d004b2e238d87",
+  "transformation": "Final-answer suffix only; hidden reasoning excluded uniformly."
+}

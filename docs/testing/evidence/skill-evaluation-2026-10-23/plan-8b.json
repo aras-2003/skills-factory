@@ -1,0 +1,45 @@
+{
+  "ticket": 237,
+  "model": "qwen3:8b",
+  "expected_model_id": "500a1f067a9f",
+  "surface": "local Ollama tool-free synthetic text evaluation",
+  "candidate_release": "1.38.320+111b10aa89d5",
+  "previous_revision": "e575a1316ea8fd48d29ca475851814ac9041e9f2",
+  "previous_status": "historical draft, not accepted production comparator",
+  "variants": {
+    "no-skill": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "previous-0.3.3": "d5bc228e6067077437b57fad81953a0f0f0e5722c8f5d7a5b27050c034ab86d0",
+    "current-0.3.4": "fc4b44350c4193f5ec1c81db37f06c45b6a98adb58744603817be08f77d84188"
+  },
+  "cases": [
+    {
+      "id": "contradictory-no-steps-pass",
+      "prompt": "Review this proposed evaluation result and correct it if needed:\n\n> Case outcome: Pass\n> Execution state: Queued / not executed\n> Execution reason: No runner is assigned, and the job contains no executable steps.\n> Overall evaluation: Yes, it can pass. The lack of execution is an infrastructure/scheduling condition, not a candidate failure.\n\nThe required case has no executable steps and no assigned runner. Give the corrected case fields and overall disposition. Do not assume any runtime execution or infer the candidate's behavior.\n",
+      "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+      "rubric_sha256": "4bccb36c2ed8da460104303f5950bc964ef1f23c9c8b6af4b225ec35d04a96e6"
+    },
+    {
+      "id": "live-browser-blocked",
+      "prompt": "A required assertion is to verify that a job listing is active in a live browser. The browser could not be started because environment policy denied access. No page was opened and there is no browser trace. Report outcome and execution_state separately, classify the result, and state what evidence would be needed for a pass.\n",
+      "input_sha256": "1e5ae348377eafddd2e38846436ae574e1dd41152bb4b2a79e08d495938a5e06",
+      "rubric_sha256": "d0b010008517c05a872effe3dee100e326ee96398f69af1a9ddf906bb4e07f3a"
+    },
+    {
+      "id": "queued-not-run",
+      "prompt": "The required GitHub Actions job is queued. The scheduler reports that no runner is assigned, and the job contains no executable steps. The candidate is expected to pass. Report the case outcome and execution_state separately, include the execution reason, and state whether the overall evaluation can pass.\n",
+      "input_sha256": "58cf5eca1ed2351b38d3407a23bfbc79b3f8000aec728af18197dee818b3e6de",
+      "rubric_sha256": "c7948c021141a2c4e56d642b0158e6adb88ff1be222e077c620cf81f24e81422"
+    }
+  ],
+  "options": {
+    "temperature": 0,
+    "seed": 237,
+    "num_predict": 2048,
+    "num_ctx": 16384
+  },
+  "repetitions": 1,
+  "executor_rubric_access": false,
+  "evaluator": "separate fresh tool-free model sessions after outputs frozen; blind variant labels",
+  "decision_threshold": "all frozen rubric assertions required for case PASS; report baseline delta, no material regressions; no benefit implies ITERATE, not automatic promotion",
+  "created_at": "2026-10-23T19:54:16.125633+00:00"
+}

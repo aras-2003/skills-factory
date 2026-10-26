@@ -1,0 +1,17 @@
+{
+  "case_id": "contradictory-no-steps-pass",
+  "variant": "current-0.3.7",
+  "source_revision": "34b30bb999c82f37f1be00315646c1df5d256605",
+  "input_sha256": "ff5eba523f3b127db6ae075a33283edd68cb394f13e1fad7a198d17c72cdd8ed",
+  "plan_sha256": "61efffec5a175a08a3c98ff77897573949f3b5447a6219441b2cd31414c4c096",
+  "request_sha256": "1a186be9854e21def6775d96fe6c10652b8afdfe8fe240b0fe221e15b9ded818",
+  "model": "qwen3:4b",
+  "done": true,
+  "done_reason": "stop",
+  "response": "Case outcome: null  \nexecution_state: no_steps  \nevaluation.status: NOT_RUN  \ncompatibility_status: NOT_RUN  \nexecution_reason: No executable steps exist; the queued job did not execute.  \nadditional_conditions:  \n  - No runner assigned  \ndisposition: ITERATE  \n\n**Correction rationale**:  \n- The case has no executable steps (`no_steps`), so `outcome` must be `null` (not `passed`).  \n- `execution_state` is `no_steps` (primary state), not `queued`/`not_executed`.  \n- `evaluation.status` and `compatibility_status` must be `NOT_RUN` for non-executed cases.  \n- **Hard gate violation**: An expected PASS is not observed when the case never executed. Disposition cannot be `PASS` when required evidence is missing.  \n- The original claim \"it can pass\" incorrectly treats infrastructure conditions as non-failures; the evaluation system requires evidence to be observed before scoring.  \n\n*No runtime execution occurred, so the candidate's behavior is unobservable. Disposition must be `ITERATE` per the hard gate rule.*",
+  "eval_count": 817,
+  "prompt_eval_count": 2660,
+  "created_at": "2026-10-26T12:56:39.900728Z",
+  "raw_response_sha256": "b202a6e40f7e7fb6d524c175fdba6a3ad2587308c094b8a29afb5ed88f9c7ac1",
+  "final_answer_parser": "Uniform final-answer extraction after final </think>, as established in earlier comparison; hidden reasoning excluded"
+}

@@ -1,0 +1,75 @@
+{
+  "disposition": "ITERATE",
+  "review_packet_sha256": "785e51b6350871ba2fd16c58da9bccf7c046c991807eeb2e3927263ef9dfd462",
+  "raw_review_sha256": "710d830a06e5e8e673d13a589de188b684e377fe6dd35da6a002be54db3bc0a9",
+  "errata_review_sha256": "eb4cfd608d2a056bdf9fa308e9b1a3dfee76d169055b37333aa3cb2fd66a8d0a",
+  "case_results": [
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "A",
+      "record": "responses/contradictory-no-steps-pass__current-0.3.4.json",
+      "passed": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "B",
+      "record": "candidate-0.3.5/contradictory-no-steps-pass__current-0.3.5.json",
+      "passed": true
+    },
+    {
+      "case": "contradictory-no-steps-pass",
+      "answer": "C",
+      "record": "responses/contradictory-no-steps-pass__no-skill.json",
+      "passed": false
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "A",
+      "record": "candidate-0.3.5/live-browser-blocked__current-0.3.5.json",
+      "passed": true
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "B",
+      "record": "responses/live-browser-blocked__no-skill.json",
+      "passed": false
+    },
+    {
+      "case": "live-browser-blocked",
+      "answer": "C",
+      "record": "responses/live-browser-blocked__current-0.3.4.json",
+      "passed": false
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "A",
+      "record": "candidate-0.3.5/queued-not-run__current-0.3.5.json",
+      "passed": false
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "B",
+      "record": "responses/queued-not-run__no-skill.json",
+      "passed": false
+    },
+    {
+      "case": "queued-not-run",
+      "answer": "C",
+      "record": "responses/queued-not-run__current-0.3.4.json",
+      "passed": false
+    }
+  ],
+  "limits": [
+    "Three frozen evidence-state cases, one sample per variant; not variance estimation or broad release certification.",
+    "No-skill is primary baseline. Historical draft 0.3.3 is not an accepted production comparator.",
+    "Six existing no-skill/0.3.4 records reused in 0.3.5 retest; not counted as fresh executions.",
+    "Source-pinned local qwen3:4b executor; not installed Lab/Site host model.",
+    "Two 4B evaluator attempts invalid; independent 8B timed out without assessment. Separate blind Codex evaluator produced this review under Luna orchestration.",
+    "Initial blind review preserved, separate review corrects browser A assertion 4 and explanatory errors.",
+    "Some queued-case semantic interpretations remain stricter than parent audit; aggregate failure is independently supported by missing explicit NOT_RUN statuses."
+  ],
+  "release_authorization": false,
+  "final_review_sha256": "a06da4683b7482216e9e1ff1aa2d33963705d3ad9faedf37cc99046f646f8634",
+  "citation_validation_sha256": "273bab5cc84bbc52fa2742c25e913af52acc5dc9ad27f0d186ade721b0eefcf4",
+  "orchestration_validation": "Luna verified 57 assertions, 9 AND aggregates and 41 exact quote spans; labels not unblinded to grader/orchestrator."
+}

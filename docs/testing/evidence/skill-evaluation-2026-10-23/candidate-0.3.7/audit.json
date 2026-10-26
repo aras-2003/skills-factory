@@ -1,0 +1,25 @@
+{
+  "scope": "Three frozen source-only local-model cases; parent labeled self-review, not independent review or installed-runtime proof",
+  "reviewer": "Codex parent",
+  "candidate": "0.3.7",
+  "cases": [
+    {
+      "id": "contradictory-no-steps-pass",
+      "verdict": "PASS",
+      "evidence": "Final record has outcome null, no_steps, both NOT_RUN statuses, missing runner and ITERATE."
+    },
+    {
+      "id": "live-browser-blocked",
+      "verdict": "FAIL",
+      "evidence": "Final answer does not explicitly state listing status unknown and suggests policy bypass or resolution. No policy bypass is authorized by the skill."
+    },
+    {
+      "id": "queued-not-run",
+      "verdict": "FAIL",
+      "evidence": "Final record omits compatibility_status and no-runner additional condition. evaluation.status appears only in prose."
+    }
+  ],
+  "parent_aggregate": "1/3 PASS",
+  "disposition": "WITHDRAWN_ITERATE",
+  "action": "Restore the previously proposed 0.3.5 source; archive this unsuccessful 0.3.7 experiment without altering any historical result. No promotion or generalized model-quality claim."
+}
