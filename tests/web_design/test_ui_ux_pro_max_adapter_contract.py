@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CONTRACT_PATH = ROOT / "skills/web-design/references/ui-ux-pro-max-adapter.json"
+CONTRACT_PATH = ROOT / "docs/web-design/ui-ux-pro-max-adapter.json"
 RECEIPT_PATH = ROOT / "docs/testing/evidence/ui-ux-pro-max-adapter-2026-10-26/receipt.json"
 
 
