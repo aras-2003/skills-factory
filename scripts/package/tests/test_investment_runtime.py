@@ -178,6 +178,22 @@ class InvestmentRuntimeTests(unittest.TestCase):
             with self.subTest(prompt=prompt):
                 self.assert_route(prompt, "attention", "investment-attention-review")
 
+    def test_thesis_review_explicitly_after_earnings_routes_to_attention(self) -> None:
+        for prompt in (
+            "Check my thesis after earnings.",
+            "Sprawdź moją tezę po wynikach spółki.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "attention", "investment-attention-review")
+
+    def test_thesis_review_without_earnings_context_remains_security_review(self) -> None:
+        for prompt in (
+            "Review my thesis about the company.",
+            "Sprawdź moją tezę o spółce.",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assert_route(prompt, "security", "investment-security-review")
+
     def test_sector_opportunity_discovery_routes_in_both_languages(self) -> None:
         for prompt in (
             "Find promising opportunities in the renewable energy sector; I want a new company to research.",
