@@ -7,9 +7,9 @@
 - Native Project Iteration: not set; repository record is authoritative.
 - Previous terminal iteration: Iteration 04, closed at main `508f35cdba43e2f93a231ae6f828d46b70534ba9`.
 - Baseline main SHA: `508f35cdba43e2f93a231ae6f828d46b70534ba9`.
-- Started at: 2026-10-26 23:23 UTC (2026-10-27 01:23 Europe/Warsaw).
-- Lock commit SHA: `709522475f6e1671b7b3600f1c8b3a72bbf3df08` (scope-lock merge commit; fixed commitment is unchanged).
+- Lock commit SHA: `709522475f6e1671b7b3600f1c8b3a72bbf3df08` (scope-lock merge commit; frozen scope unchanged).
 - Scope lock reviewed by / at: owner self-review, 2026-10-26 UTC (2026-10-27 Europe/Warsaw).
+- Started at: 2026-10-26 23:23 UTC (2026-10-27 01:23 Europe/Warsaw).
 
 ## Frozen commitment
 
@@ -48,7 +48,8 @@
 
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Runtime identity / smoke | Supersedes |
 | --- | --- | --- | --- | --- | --- |
-| C1 | `508f35cdba43e2f93a231ae6f828d46b70534ba9` | Site embeds `1.38.360+508f35cdba43`; payload `4c3f8ff795b415c7c8793f6cda27bcac912f83d3145ec25579f6e8db96823bdb`; Lab currently remains on `1.38.354+6dcbd09aa8f2` | Merge checks for #461 and main packaging are historical; final-main checks pending verification in this iteration. Campaign validation pending rerun. | Current Lab/Site identity observations documented above; paired behavior pending. | None |
+| C1 | `508f35cdba43e2f93a231ae6f828d46b70534ba9` | Site embeds `1.38.360+508f35cdba43`; payload `4c3f8ff795b415c7c8793f6cda27bcac912f83d3145ec25579f6e8db96823bdb`; Lab currently remains on `1.38.354+6dcbd09aa8f2` | #472 scope-lock PR CI: all checks PASS; local targeted suite 25 tests, 1 skipped; skill contract 6/6; campaign and isolation validation PASS. | Site natural positive invocation and candidate load observed; direct-positive behavior FAIL due invented records/data. Same-candidate Lab pairing BLOCKED. | None |
+| C2 | Corrective PR pending | Pending Lab artifact / Site deployment from post-fix main | Required after corrective merge; run all applicable final-main gates. | Reinstall Lab and publish Site from same candidate; full locked matrix must be rerun. | C1 behavior evidence superseded where impact applies; preserve C1 FAIL. |
 
 ## Regression selection and counts
 
@@ -62,13 +63,13 @@
 
 | Bug Issue / discovery iteration | Existing contract / frozen criterion | Severity / blocks closure | Fix / deferral | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
-| None identified yet | — | — | — | — | — |
+| [#474](https://github.com/aras-2003/skills-factory/issues/474) | #423 AC-04 / `interface-design-direct-positive`: do not invent order data | Major / blocks closure | Corrective change in #475; no scope expansion | All six behavior cases, all routing cases, sentinels, probes, identity and smoke on C2 | Owner self-review; not independent |
 
 ## Closure decision
 
 - Outcome: PENDING.
-- Final candidate / matrix: pending execution.
-- Required rows: NOT_RUN/BLOCKED until actual runtime execution and same-candidate Lab availability.
+- Final candidate / matrix: C1 direct-positive Site FAIL, linked in #423 and #474; C2 pending.
+- Required rows: C1 remaining rows NOT_RUN/BLOCKED; C2 full runtime matrix required.
 - Scope compared with lock commit: pending.
 - Issue / Project / PR reconciliation: pending.
 - Owner proposal / reviewer acceptance: pending; reviewer is the owner and is not independent.
