@@ -42,11 +42,19 @@ Read the 19 applied production migration statements only to reconstruct migratio
 
 | Surface | Requirement | State |
 | --- | --- | --- |
-| PR/CI | Static migration lint and clean replay, exact SHA | NOT_RUN |
-| `investment-os-test` | Isolated migration replay and SQL role checks | NOT_RUN |
-| Test-project Data API | Deny client reads/writes; verify authorized server path without disclosing keys | NOT_RUN |
+| PR/CI | Static migration lint and clean replay, exact SHA | PASS — PR #466 final head `238197ec81b4abc1c9b2590d3df8bc3071680a54` |
+| `investment-os-test` | Apply the grant migration and verify effective/current and default ACLs without disturbing existing data | PASS — migration applied; grants/defaults checked |
+| Test-project Data API | Deny client reads/writes and verify authorized server path without disclosing keys | PARTIAL — anon GET/POST denied; positive `service_role` HTTP call unavailable |
 | Production | No migration execution in this increment | N/A — excluded by scope |
+
+## Actual verification — 2026-10-26
+
+- PR #466 is merged at `6e548b8801cae07cd234d208ee445594eaa10ec3`; its final PR head `238197ec81b4abc1c9b2590d3df8bc3071680a54` passed all four required workflows.
+- The existing `investment-os-test` project is pre-existing and contains data. The migration and ACL checks were run there without reading or changing business rows. No Supabase branch was created.
+- A temporary RLS-enabled probe table was used only for the direct anon Data API denial check, then removed; the temporary HTTP extension was also removed. GET and POST both returned 401 / SQLSTATE 42501, and the probe had zero rows before cleanup.
+- The test project's `service_role` effective SELECT/INSERT privileges are verified. A positive HTTP request with its secret key was not run because the connected tools do not expose that key. Do not retrieve or paste it into chat.
+- A clean all-migrations replay passed in disposable CI PostgreSQL 17; it was not run against the existing data-bearing test project. No database restore rehearsal was performed. The documented recovery is forward-only and avoids deleting an applied migration or restoring broad grants.
 
 ## Closure gate
 
-Keep #387 open in Verification until each required row passes on the final candidate and the test-project receipt is retained. If the authorized server-side API path cannot be exercised without accessing an unavailable credential, record that exact limitation and leave that acceptance row open. Production deployment is not required for closure.
+Keep #387 open in Verification until the authorized server-side API path has evidence and the recovery acceptance is validated. Do not claim the existing test project was empty or replayed from zero. Production deployment is not required for closure.
