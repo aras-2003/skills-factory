@@ -51,7 +51,7 @@ Produce an evidence-backed investment case that can later be challenged, valued,
    - do not compute P/E, FCF yield, numeric valuation scenarios or numeric sizing from those figures;
    - state exactly what must be verified next.
    - If an event, company-specific fact, or key input remains unresolved, identify it as a blocking uncertainty and limit downstream conclusions; do not bury it in a generic risk list or continue to a definitive thesis/valuation conclusion.
-9. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations.
+9. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations. Classify business lifecycle with the deterministic `scripts/business_lifecycle.py` classifier and `references/business-lifecycle.md` contract when three comparable annual/TTM observations are available. Report phase and uncalibrated affinity separately from valuation. For insufficient or conflicted inputs, show NOT_CLASSIFIED, not invented phase odds.
 10. Evaluate valuation relative to history, peers and scenario economics.
 11. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.
 12. State catalysts, risks, dependencies and variant perception.
