@@ -1,0 +1,60 @@
+name: Supabase migration security
+
+on:
+  pull_request:
+    paths:
+      - "supabase/**"
+      - "scripts/database/**"
+      - "docs/investing/SUPABASE-MIGRATION-SOURCE.md"
+      - ".github/workflows/ci-supabase-migrations.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/**"
+      - "scripts/database/**"
+      - "docs/investing/SUPABASE-MIGRATION-SOURCE.md"
+      - ".github/workflows/ci-supabase-migrations.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-migrations-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  replay-and-security:
+    name: CI / Supabase clean replay and role boundaries
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned Supabase CLI
+        run: npm install --global supabase@2.81.3
+      - name: Validate migration source and privilege map
+        run: |
+          python scripts/database/validate_migrations.py
+          python -m unittest discover -s scripts/database/tests -p 'test_*.py'
+      - name: Start isolated local Supabase services
+        run: supabase start --exclude realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+      - name: Replay all migrations against an empty PostgreSQL 17 database
+        run: |
+          supabase db reset --local --no-seed
+          supabase migration list --local
+          supabase db lint --local --fail-on warning
+      - name: Verify current and future role grants
+        run: |
+          supabase db query --local --output table --file scripts/database/tests/security.sql
+          supabase db query --local --output table --file scripts/database/tests/future-defaults.sql
+      - name: Verify PostgREST role behavior
+        run: python scripts/database/test_postgrest_roles.py
+      - name: Remove disposable local database
+        if: always()
+        continue-on-error: true
+        run: supabase stop --no-backup
