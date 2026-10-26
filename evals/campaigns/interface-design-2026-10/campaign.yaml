@@ -1,0 +1,30 @@
+schema_version: "1.0"
+campaign: interface-design-2026-10
+purpose: isolated-source-and-runtime-handoff-for-the-interface-design-candidate
+runtime_status: NOT_RUN
+release_approved: false
+out_of_scope_behavior_paths:
+  - skills/web-design/interface-design/SKILL.md
+candidate_skill:
+  name: interface-design
+  version: "0.1.0"
+  source: skills/web-design/interface-design/SKILL.md
+  test_cases: skills/web-design/interface-design/tests/cases.yaml
+  required_case_ids:
+    - interface-design-direct-positive
+    - interface-design-indirect-positive
+    - interface-design-nearmiss-report-diagram
+    - interface-design-nearmiss-implementation
+    - interface-design-insufficient-context
+    - interface-design-accessibility-edge
+routing_cases:
+  - id: interface-design-screen-natural-en
+    input: evals/routing/web-design-interface-design-natural-en.input.md
+    rubric: evals/routing/web-design-interface-design-natural-en.rubric.yaml
+  - id: interface-design-report-nearmiss-en
+    input: evals/routing/web-design-interface-design-report-nearmiss.input.md
+    rubric: evals/routing/web-design-interface-design-report-nearmiss.rubric.yaml
+evaluator_policy:
+  executor_must_not_receive_rubrics: true
+  runtime_model_and_surface_must_be_recorded: true
+  runtime_receipts_required_before_release: true
