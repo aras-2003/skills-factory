@@ -93,6 +93,8 @@ class RuntimeCampaignTests(unittest.TestCase):
         path = "skills/web-design/interface-design/SKILL.md"
         self.assertEqual({path}, campaign.separately_validated_interface_design_paths(ROOT))
         self.assertEqual([], campaign.validate_campaign())
+        fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
+        self.assertNotIn("interface-design", fixtures["targets"])
 
     def test_skill_engineering_campaign_derives_lab_version_from_package_source(self) -> None:
         cfg = yaml.safe_load(
