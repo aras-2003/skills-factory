@@ -29,6 +29,7 @@ SEPARATE_META_CAMPAIGN_REL = Path("evals/campaigns/skill-release-review-2026-10/
 SKILL_ENGINEERING_CAMPAIGN_REL = Path("evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml")
 PRESENTATION_OS_CAMPAIGN_REL = Path("evals/campaigns/presentation-os-creative-direction-2026-10/source-coverage.yaml")
 INTERACTIVE_REPORT_EXHIBIT_CAMPAIGN_REL = Path("evals/campaigns/interactive-report-exhibits-2026-10/campaign.yaml")
+INTERFACE_DESIGN_CAMPAIGN_REL = Path("evals/campaigns/interface-design-2026-10/campaign.yaml")
 EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS = {
     "skills/meta/report-composer/SKILL.md",
     "skills/meta/visual-output-design/SKILL.md",
@@ -249,6 +250,66 @@ def separately_validated_interactive_report_exhibit_paths(root: Path = ROOT) -> 
     )):
         return set()
     return EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS
+
+
+def separately_validated_interface_design_paths(root: Path = ROOT) -> set[str]:
+    """Keep the interface-design candidate isolated from frozen R20 until its own runtime handoff."""
+    path = root / INTERFACE_DESIGN_CAMPAIGN_REL
+    if not path.is_file():
+        return set()
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    expected_path = "skills/web-design/interface-design/SKILL.md"
+    candidate = cfg.get("candidate_skill") or {}
+    if (
+        cfg.get("campaign") != "interface-design-2026-10"
+        or cfg.get("runtime_status") != "NOT_RUN"
+        or cfg.get("release_approved") is not False
+        or cfg.get("out_of_scope_behavior_paths") != [expected_path]
+        or candidate.get("name") != "interface-design"
+        or candidate.get("version") != "0.1.0"
+        or candidate.get("source") != expected_path
+        or candidate.get("test_cases") != "skills/web-design/interface-design/tests/cases.yaml"
+    ):
+        return set()
+    source = root / expected_path
+    cases_path = root / str(candidate.get("test_cases"))
+    if not source.is_file() or not cases_path.is_file() or 'version: "0.1.0"' not in source.read_text(encoding="utf-8"):
+        return set()
+    suite = yaml.safe_load(cases_path.read_text(encoding="utf-8")) or {}
+    by_id = {str(row.get("id")): row for row in suite.get("cases", []) if isinstance(row, dict) and row.get("id")}
+    required = list(map(str, candidate.get("required_case_ids") or []))
+    if len(required) < 6 or len(set(required)) != len(required) or not set(required).issubset(by_id):
+        return set()
+    if any(
+        not isinstance(by_id[cid].get("expected", {}).get("should_trigger"), bool)
+        or not by_id[cid].get("expected", {}).get("must_not")
+        for cid in required
+    ):
+        return set()
+    if any(
+        by_id[cid]["expected"]["should_trigger"] and not by_id[cid]["expected"].get("must")
+        for cid in required
+    ):
+        return set()
+    routing_cases = cfg.get("routing_cases") or []
+    if len(routing_cases) != 2:
+        return set()
+    for row in routing_cases:
+        for key, suffix in (("input", ".input.md"), ("rubric", ".rubric.yaml")):
+            fixture = root / str(row.get(key) or "")
+            if not fixture.is_file() or not fixture.name.endswith(suffix):
+                return set()
+        rubric = yaml.safe_load((root / str(row["rubric"])).read_text(encoding="utf-8")) or {}
+        if rubric.get("id") != row.get("id") or rubric.get("mode") != "natural-routing":
+            return set()
+    policy = cfg.get("evaluator_policy") or {}
+    if any(policy.get(key) is not True for key in (
+        "executor_must_not_receive_rubrics",
+        "runtime_model_and_surface_must_be_recorded",
+        "runtime_receipts_required_before_release",
+    )):
+        return set()
+    return {expected_path}
 
 
 def config(root: Path = ROOT):
@@ -562,6 +623,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_engineering_paths())
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
+    separate_meta_targets.update(separately_validated_interface_design_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
