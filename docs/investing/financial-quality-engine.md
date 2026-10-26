@@ -20,3 +20,6 @@ Test: `python -m unittest discover -s tests/investing -p 'test_financial_quality
 Financial statement data provider, automated taxonomy mappings, TTM chronology,
 sector peer cohorts, persistence and graphical trend dashboard. These are follow-up
 gates, not implied by this PR. Do not claim production Investment OS integration.
+
+## Historical margin visualization (stage 1)
+`scripts/investing/financial_quality_visual.py` renders a source-only accessible SVG for three or more chronological, comparable observations. The chart shows gross, operating, net and FCF margin trends, keeps gaps unconnected, flags missing series and avoids invented scores. No direct UI embedding or live data loading is implied. Test with `python -m unittest discover -s tests/investing -p 'test_financial_quality_visual.py'`.
