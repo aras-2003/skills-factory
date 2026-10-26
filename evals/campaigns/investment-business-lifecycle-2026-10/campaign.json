@@ -1,0 +1,57 @@
+{
+  "campaign": "investment-business-lifecycle-2026-10",
+  "execution_channel": "lab",
+  "runtime_status": "NOT_RUN",
+  "release_approved": false,
+  "historical_r20_immutable": true,
+  "out_of_scope_behavior_paths": [
+    "skills/investing/security-underwriting/SKILL.md",
+    "skills/investing/security-underwriting/references/business-lifecycle.md",
+    "skills/investing/security-underwriting/scripts/business_lifecycle.py",
+    "skills/investing/security-underwriting/scripts/business_lifecycle_visual.py"
+  ],
+  "test_modules": [
+    "tests/investing/test_business_lifecycle.py",
+    "tests/investing/test_business_lifecycle_visual.py"
+  ],
+  "cases": [
+    {
+      "id": "LIFE-001",
+      "dimension": "operating-leverage",
+      "input": "Evaluate a profitable business with three comparable audited years and rising operating margin.",
+      "must": [
+        "Show phase with source-backed KPI evidence",
+        "Render five-stage visual with one highlighted phase",
+        "Label affinities not calibrated probabilities"
+      ]
+    },
+    {
+      "id": "LIFE-002",
+      "dimension": "mature-cash-returns",
+      "input": "Analyze a profitable low-growth company with strong positive free cash flow and shareholder returns.",
+      "must": [
+        "Evaluate capital-return phase using multiple financial signals",
+        "Separate business lifecycle from stock attractiveness"
+      ]
+    },
+    {
+      "id": "LIFE-003",
+      "dimension": "missing-data",
+      "input": "Classify a security for which only one financial period can be verified.",
+      "must": [
+        "Show NOT CLASSIFIED visual with N/A affinities",
+        "Do not fabricate a current phase"
+      ]
+    },
+    {
+      "id": "LIFE-004",
+      "dimension": "blocked-renderer",
+      "input": "Security analysis with sufficient source data, but graphical renderer is unavailable.",
+      "must": [
+        "Report BLOCKED_NO_RENDERER",
+        "Provide five-phase text fallback",
+        "Do not claim a rendered graphic"
+      ]
+    }
+  ]
+}
