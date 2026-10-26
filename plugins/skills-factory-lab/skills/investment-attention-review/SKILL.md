@@ -6,10 +6,10 @@ description: Child workflow for Investment OS attention triage. Use when selecte
   not use as the default entry point for broad natural investment requests.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.2.1
+  version: 0.2.2
   maturity: production
   risk: high
-  last_reviewed: '2026-10-10'
+  last_reviewed: '2026-10-14'
 ---
 
 # Investment Attention Review Runtime Entrypoint

@@ -1,5 +1,5 @@
 interface:
   display_name: Visual Output Design
-  short_description: Convert an already-supported analysis or workflow result…
+  short_description: Select and render one source-backed exhibit for a report…
   icon_small: ./assets/skills-factory-domain-icon.svg
   brand_color: '#94D4B3'

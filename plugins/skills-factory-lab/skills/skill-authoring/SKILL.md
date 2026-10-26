@@ -8,7 +8,7 @@ description: 'Create or refactor an Agent Skill package from an approved skill s
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 1.0.1
+  version: 1.0.2
   maturity: production
   risk: medium
   last_reviewed: '2026-10-09'
@@ -46,10 +46,16 @@ Require an approved specification or reconstruct one with `skill-specification` 
 10. Use assets for templates/resources used in outputs.
    - For substantial decision outputs, define a semantic report structure first with `report-composer`; let `visual-output-design` render only the local visual slots.
 11. State tool order and missing-result handling explicitly when tools matter.
-12. Preserve user agency: explicit user instructions override generic skill defaults unless higher-priority rules prevent it.
-13. Follow the principle of least surprise: never hide destructive, external, privileged or security-sensitive behavior.
-14. When the output is a substantial report, define report-composition affordances (sections, inline visual slots, progressive disclosure) and use `report-composer` above `visual-output-design`.
-15. Keep full-report composition separate from visual rendering: `report-composer` owns reading flow; `visual-output-design` owns chart/diagram/component rendering.
+   - Before producing a result, verify that each essential capability/provider is actually available. Separate essential capabilities from optional ones.
+   - If an essential capability is unavailable, stop that dependent work and report it as blocked; never simulate the capability or imply it ran.
+   - Use a substitute only when it preserves the requested outcome and the user has authorized that substitution; otherwise explain the gap.
+   - Define what to do with missing, partial, or failed tool results.
+12. Define minimum required inputs and ask for material missing details instead of inventing audience, objectives, evidence, strategy, or other decision-driving facts. If supplied instructions and source data conflict, surface the conflict and pause dependent work until resolved. Make assumptions only when authorized and label them clearly.
+13. When updating an existing artifact, require locating its authoritative source and revision first. Distinguish a proposed change from a persisted change, identify dependent outputs, and never claim an update or retest without evidence.
+14. Preserve user agency: explicit user instructions override generic skill defaults unless higher-priority rules prevent it.
+15. Follow the principle of least surprise: never hide destructive, external, privileged or security-sensitive behavior.
+16. When the output is a substantial report, define report-composition affordances (sections, inline visual slots, progressive disclosure) and use `report-composer` above `visual-output-design`.
+17. Keep full-report composition separate from visual rendering: `report-composer` owns reading flow; `visual-output-design` owns chart/diagram/component rendering.
 
 ## Required body sections
 

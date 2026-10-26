@@ -117,16 +117,37 @@ class CloudRuntimeTests(unittest.TestCase):
         self.assertEqual("unattested", result["source_revision"])
         self.assertEqual("runtime_info", result["tool_receipt"]["tool_name"])
 
-    def test_installed_lab_manifest_is_bound_only_to_matching_runtime_environment(self):
+    def test_installed_lab_manifest_binds_to_payload_and_matching_runtime_environment(self):
         installed={"source_revision":"a"*40,"release_id":"fixture","payload_content_sha256":"b"*64,"channel":"lab","version":"0.36.0"}
-        with patch.object(self.server,"packaged_release_identity",return_value=installed), patch.object(self.server,"catalog_digest",return_value="c"*64), patch.dict("os.environ",{"SKILLS_FACTORY_CHANNEL":"lab","SKILLS_FACTORY_SOURCE_REVISION":"a"*40,"SKILLS_FACTORY_RELEASE_ID":"fixture"},clear=True):
+        integrity={"status":"verified","payload_content_sha256":"b"*64}
+        with patch.object(self.server,"packaged_release_identity",return_value=installed), patch.object(self.server,"packaged_payload_integrity",return_value=integrity), patch.object(self.server,"catalog_digest",return_value="c"*64), patch.dict("os.environ",{"SKILLS_FACTORY_CHANNEL":"lab","SKILLS_FACTORY_SOURCE_REVISION":"a"*40,"SKILLS_FACTORY_RELEASE_ID":"fixture"},clear=True):
             r=self.server.runtime_info()
+            self.assertEqual({k: installed[k] for k in ("version", "release_id", "source_revision")}, r["software_release"])
             self.assertEqual("b"*64,r["payload_content_sha256"])
             self.assertEqual("installed_manifest_matches_runtime_environment",r["manifest_binding"])
-        with patch.object(self.server,"packaged_release_identity",return_value=installed),patch.dict("os.environ",{"SKILLS_FACTORY_CHANNEL":"lab","SKILLS_FACTORY_SOURCE_REVISION":"d"*40,"SKILLS_FACTORY_RELEASE_ID":"fixture"},clear=True):
+        with patch.object(self.server,"packaged_release_identity",return_value=installed), patch.object(self.server,"packaged_payload_integrity",return_value={"status":"mismatch"}), patch.dict("os.environ",{"SKILLS_FACTORY_CHANNEL":"lab","SKILLS_FACTORY_SOURCE_REVISION":"d"*40,"SKILLS_FACTORY_RELEASE_ID":"fixture"},clear=True):
             r=self.server.runtime_info()
             self.assertNotIn("payload_content_sha256",r)
             self.assertEqual("unavailable_or_mismatched",r["manifest_binding"])
+
+    def test_packaged_payload_integrity_binds_manifest_without_host_attestation(self) -> None:
+        installed={"source_revision":"a"*40,"release_id":"0.36.0+aaaaaaaaaaaa","payload_content_sha256":"b"*64,"channel":"lab","version":"0.36.0"}
+        with patch.object(self.server,"packaged_release_identity",return_value=installed), patch.object(self.server,"packaged_payload_integrity",return_value={"status":"verified","payload_content_sha256":"b"*64}), patch.object(self.server,"catalog_digest",return_value="c"*64), patch.dict("os.environ",{},clear=True):
+            result=self.server.runtime_info()
+
+        self.assertEqual("unattested",result["attestation_status"])
+        self.assertEqual("verified",result["package_integrity_status"])
+        self.assertEqual("installed_manifest_matches_runtime_payload",result["manifest_binding"])
+        self.assertEqual("b"*64,result["payload_content_sha256"])
+
+    def test_payload_integrity_mismatch_never_binds_installed_manifest(self) -> None:
+        installed={"source_revision":"a"*40,"release_id":"fixture","payload_content_sha256":"b"*64,"channel":"lab","version":"0.36.0"}
+        with patch.object(self.server,"packaged_release_identity",return_value=installed), patch.object(self.server,"packaged_payload_integrity",return_value={"status":"mismatch","payload_content_sha256":"d"*64}), patch.dict("os.environ",{},clear=True):
+            result=self.server.runtime_info()
+
+        self.assertEqual("mismatch",result["package_integrity_status"])
+        self.assertEqual("unavailable_or_mismatched",result["manifest_binding"])
+        self.assertNotIn("payload_content_sha256",result)
 
     def test_runtime_info_verifies_only_when_all_identity_fields_are_present(self) -> None:
         with patch.dict(

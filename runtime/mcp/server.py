@@ -20,7 +20,12 @@ from chart_renderer import render_line_chart as _render_line_chart
 from investment_runtime import route_investment_request as _route_investment_request
 from skill_catalog import list_skills as _list_skills
 from skill_catalog import load_skill as _load_skill
-from skill_catalog import packaged_release_identity, catalog_digest
+from skill_catalog import (
+    packaged_payload_integrity,
+    packaged_release_identity,
+    packaged_runtime_value,
+    catalog_digest,
+)
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
@@ -29,7 +34,12 @@ Skills Factory runtime contract.
 
 Call runtime_info first when a test, receipt or compatibility decision depends
 on the exact runtime identity. A result with attestation_status "unattested"
-must not be treated as evidence of exact-version compatibility.
+does not attest the host's deployment identity. For a Lab package, exact
+package compatibility may be established only when package_integrity_status is
+"verified" and the Lab release_id, source_revision and payload digest all match
+the expected artifact. This checks installed bytes against the adjacent
+unsigned manifest; it is not host/deployment attestation or evidence that an
+installer behaved correctly. Do not infer identity from version labels alone.
 
 Do not call route_investment_request for an unrelated task, including editing,
 proofreading, security review, governance, or accounting. A negated mention of
@@ -142,7 +152,7 @@ def _tool_receipt(tool_name: str, arguments: Any, result: Any) -> dict[str, Any]
         "completed_at": datetime.now(timezone.utc)
         .isoformat(timespec="milliseconds")
         .replace("+00:00", "Z"),
-        "source_revision": _runtime_value("SKILLS_FACTORY_SOURCE_REVISION"),
+        "source_revision": packaged_runtime_value("source_revision"),
         "input_sha256": _json_sha256(arguments),
         "output_sha256": _json_sha256(result),
     }
@@ -204,14 +214,25 @@ def runtime_info() -> dict[str, Any]:
     values["attestation_basis"] = "unsigned_runtime_environment_fields_only"
     values["installation_behavior_verified"] = False
     installed = packaged_release_identity()
+    package_integrity = packaged_payload_integrity(installed)
+    values["package_integrity_status"] = package_integrity["status"]
+    values["package_integrity_basis"] = "installed_payload_digest_matches_adjacent_unsigned_manifest"
+    if package_integrity.get("payload_content_sha256"):
+        values["package_integrity_sha256"] = package_integrity["payload_content_sha256"]
     values["lab_release"] = installed or None
+    values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
     values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "render_bar_chart", "render_line_chart"]
-    if (installed and values["channel"] == "lab"
+    if (installed and package_integrity["status"] == "verified"
+            and values["channel"] == "lab"
             and installed["source_revision"] == values["source_revision"]
             and installed["release_id"] == values["release_id"]):
         values["payload_content_sha256"] = installed["payload_content_sha256"]
         values["catalog_digest"] = catalog_digest()
         values["manifest_binding"] = "installed_manifest_matches_runtime_environment"
+    elif installed and package_integrity["status"] == "verified":
+        values["payload_content_sha256"] = installed["payload_content_sha256"]
+        values["catalog_digest"] = catalog_digest()
+        values["manifest_binding"] = "installed_manifest_matches_runtime_payload"
     else:
         values["manifest_binding"] = "unavailable_or_mismatched"
     return _with_tool_receipt("runtime_info", {}, values)
@@ -232,7 +253,7 @@ def load_skill(skill_name: str) -> dict:
 
 
 @mcp.tool()
-def route_investment_request(user_request: str) -> dict[str, str | bool]:
+def route_investment_request(user_request: str) -> dict[str, Any]:
     """MANDATORY first step for every investment request, before analysis."""
     result = _route_investment_request(user_request)
     if result.get("is_investment_request"):

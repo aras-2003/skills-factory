@@ -1,0 +1,12 @@
+{
+  "name": "tt-a1i/archify",
+  "upstream_release": "v3.2.0",
+  "revision": "208acba8d412335185b2056fedf54b3405df43fb",
+  "root_license": "MIT",
+  "node_engine": ">=18",
+  "package_lock_path": "archify/package-lock.json",
+  "package_lock_git_blob": "e6187b907edc8459f47fe31455539700f2d8e796",
+  "entrypoint": "archify/bin/archify.mjs",
+  "network_policy": "no network during untrusted diagram rendering; CI currently checks on host and must not be considered a production sandbox",
+  "exposure": "spike-only, no vendor bundle or production use"
+}

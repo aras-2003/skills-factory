@@ -33,6 +33,64 @@ def packaged_release_identity() -> dict[str, Any]:
     return {k: value[k] for k in fields}
 
 
+def packaged_payload_integrity(identity: dict[str, Any] | None = None) -> dict[str, str]:
+    """Compare installed package bytes with its adjacent release manifest.
+
+    The build calculates the payload digest before adding the manifest. Python
+    bytecode caches created during runtime are derived artifacts and excluded.
+    This proves content equality with that unsigned manifest, not host attestation.
+    """
+    release = identity or packaged_release_identity()
+    expected = release.get("payload_content_sha256") if release else None
+    if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
+        return {"status": "unavailable"}
+
+    root = _plugin_root()
+    digest = hashlib.sha256()
+    try:
+        for item in sorted(root.rglob("*")):
+            # Check symlinks before is_file(): directory symlinks report
+            # is_file() == False and would otherwise be silently omitted.
+            if item.is_symlink():
+                return {"status": "mismatch"}
+            if not item.is_file():
+                continue
+            if item.relative_to(root).as_posix() == "release-manifest.json":
+                continue
+            relative_path = item.relative_to(root)
+            # Python may create these transient caches while importing the
+            # packaged MCP. They are derived artifacts, not package payload.
+            if "__pycache__" in relative_path.parts or item.suffix in {".pyc", ".pyo"}:
+                continue
+            if relative_path.as_posix() == "release-manifest.json":
+                continue
+            relative = relative_path.as_posix().encode("utf-8")
+            content = item.read_bytes()
+            digest.update(len(relative).to_bytes(4, "big"))
+            digest.update(relative)
+            digest.update(len(content).to_bytes(8, "big"))
+            digest.update(content)
+    except OSError:
+        return {"status": "unavailable"}
+
+    actual = digest.hexdigest()
+    return {
+        "status": "verified" if actual == expected else "mismatch",
+        "payload_content_sha256": actual,
+    }
+
+
+def packaged_runtime_value(name: str, default: str = "unattested") -> str:
+    """Use package identity only after its bytes match the packaged manifest."""
+    value = os.environ.get(f"SKILLS_FACTORY_{name.upper()}", "").strip()
+    if value:
+        return value
+    identity = packaged_release_identity()
+    if identity and packaged_payload_integrity(identity)["status"] == "verified":
+        return str(identity.get(name) or default)
+    return default
+
+
 def _plugin_root() -> Path:
     configured = os.environ.get("PLUGIN_ROOT", "").strip()
     if configured:
@@ -45,8 +103,15 @@ def _plugin_root() -> Path:
 
 
 def skills_root() -> Path:
-    configured = os.environ.get("SKILLS_FACTORY_SKILLS_ROOT", "").strip()
-    root = Path(configured).resolve() if configured else _plugin_root() / "skills"
+    plugin_root = _plugin_root()
+    packaged_root = plugin_root / "skills"
+    # A release manifest binds runtime identity to the adjacent packaged catalog.
+    # Do not let a stale host-level override pair the new manifest with old skills.
+    if (plugin_root / "release-manifest.json").is_file() and packaged_root.is_dir():
+        root = packaged_root
+    else:
+        configured = os.environ.get("SKILLS_FACTORY_SKILLS_ROOT", "").strip()
+        root = Path(configured).resolve() if configured else packaged_root
     if not root.is_dir():
         raise RuntimeError(f"Skills catalog is unavailable: {root}")
     return root
@@ -137,8 +202,8 @@ def list_skills() -> dict[str, Any]:
             "unverified_revision": "If a required source revision is unavailable, mark that comparison BLOCKED_SOURCE_REVISION and ask for it; never guess the authoritative version.",
         },
         "catalog_digest": catalog_digest(items),
-        "source_revision": os.environ.get("SKILLS_FACTORY_SOURCE_REVISION", "unattested"),
-        "channel": os.environ.get("SKILLS_FACTORY_CHANNEL", "unknown"),
+        "source_revision": packaged_runtime_value("source_revision"),
+        "channel": packaged_runtime_value("channel", "unknown"),
         "skills": [
             {key: value for key, value in item.items() if key != "directory"}
             for item in sorted(items, key=lambda x: x["name"])
@@ -179,5 +244,5 @@ def load_skill(skill_name: str) -> dict[str, Any]:
         "instructions": instructions,
         "reference_files": references,
         "content_sha256": item["content_sha256"],
-        "source_revision": os.environ.get("SKILLS_FACTORY_SOURCE_REVISION", "unattested"),
+        "source_revision": packaged_runtime_value("source_revision"),
     }

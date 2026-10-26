@@ -33,3 +33,17 @@ cases:
         - executive-role-evaluator addresses one existing role mandate
       must_not:
         - search for unrelated open job advertisements
+  - id: job-discovery-sources-unavailable
+    case: approved-listing-sources-unavailable
+    input: |
+      Find current Warsaw or hybrid CIO and CTO roles matching my executive profile. The approved employer and ATS
+      sources are temporarily unavailable in this session.
+    expected:
+      should_trigger: true
+      must:
+        - disclose that current listing discovery is not testable from the unavailable sources
+        - identify the minimum source access needed to resume
+        - keep any returned leads explicitly unverified for currentness
+      must_not:
+        - invent current vacancies or source URLs
+        - treat the unavailable search as evidence that no roles exist

@@ -15,10 +15,20 @@ if str(PACKAGE_DIR) not in sys.path:
     sys.path.insert(0, str(PACKAGE_DIR))
 
 from build_chatgpt_skills import _write_deterministic_zip
-from build_utils import atomic_output, sha256_file, validate_output_path
+from build_utils import atomic_output, package_runtime_mcp, sha256_file, validate_output_path
 
 
 class BuildIntegrityTests(unittest.TestCase):
+    def test_local_mcp_configs_disable_python_bytecode_writes(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            stage = Path(td) / "stage"
+            stage.mkdir()
+            package_runtime_mcp(ROOT, stage, mode="local")
+            for name in ("mcp.json", ".mcp.json"):
+                config = json.loads((stage / name).read_text(encoding="utf-8"))
+                server = config["mcpServers"]["skills-factory-runtime"]
+                self.assertEqual("1", server["env"]["PYTHONDONTWRITEBYTECODE"])
+
     def test_site_catalog_generation_does_not_mutate_lab_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

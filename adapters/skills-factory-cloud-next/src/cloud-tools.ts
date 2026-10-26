@@ -80,6 +80,7 @@ export async function runtimeInfo(metadata?: SiteVersionMetadata) {
     release_id: metadata?.id || "unattested",
     source_revision: siteTag || "unattested",
     canonical_source_revision: CANONICAL_SOURCE_REVISION,
+    software_release: { version: LAB_RELEASE.version, release_id: LAB_RELEASE.release_id, source_revision: LAB_RELEASE.source_revision },
     routing_contract_blob_sha: ROUTING_CONTRACT_BLOB_SHA,
     channel: "site",
     capability_contract_version: "site-mcp-v2",
@@ -110,7 +111,7 @@ export function routeInvestment(userRequest: string) {
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
   const observation = /zmien|zmian|changed|happening|dzieje|obserw|watch|monitor|drift|dryf/.test(s);
-  const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /thes|tez|holding|portfel|portfolio/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /wplyw|impact|matter|znaczen|tez|thes|holdings|portfel|zmienia/.test(s);
+  const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /thes|tez|holding|portfel|portfolio|watchlist/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /wplyw|impact|matter|znaczen|tez|thes|holdings|portfel|zmienia|watchlist/.test(s);
   const opportunity = /watchlist screen|screen my watchlist|screen watchlist|preview the screen|preview-only screen|screen these candidates|okazj|opportunit|kandydat|candidates|research next|badac dalej|szukaj spolek|znajdz spolk|find.*(stocks|securities)/.test(s);
   const explicitCandidateDiscovery = /(?:find|scan|discover|screen|szukaj|znajd|znalez|selekcj).{0,100}(?:stocks|securities|spolk|kandydat|candidates)/.test(s);
   const theme = /temat.*inwest|investment theme|trend|value chain|lancuch wartosc|beneficjen|second.order/.test(s);
@@ -132,7 +133,7 @@ export function routeInvestment(userRequest: string) {
   else if (portfolio) { candidates = [routes[1]]; reason = "A portfolio-level review is the decision object."; }
   else if (theme) { candidates = [routes[4]]; reason = "Thematic or value-chain research."; }
   else if (policy) { candidates = [routes[6]]; reason = "Investment policy or limits are the decision object."; }
-  const investmentContext = explicit.length > 0 || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
+  const investmentContext = explicit.length > 0 || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
   const unrelatedGovernance = /security\.md|codeowners|report os.*production.ready/.test(s);
   const applicable = !editingOnly && !unrelatedGovernance && investmentContext;
   if (!applicable) { candidates = []; reason = editingOnly ? "request is limited to a non-investment editing task" : "no investment decision object was identified"; }
