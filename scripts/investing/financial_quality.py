@@ -84,7 +84,7 @@ def financial_quality(current: Financials, previous: Financials | None = None) -
     if gp is not None and gp <= 0:
         warnings.append("Gross profit is nonpositive; expense-to-gross-profit ratios undefined.")
     if ebit is not None and ebit <= 0:
-        warnings.append("EBIT is nonpositive; debt service ratios undefined.")
+        warnings.append("EBIT is nonpositive; ratios with EBIT as denominator are undefined; interest coverage may be negative.")
     if current.pretax_income is not None and current.pretax_income <= 0:
         warnings.append("Pretax income is nonpositive; effective tax rate undefined.")
     if previous and (previous.diluted_eps is None or previous.diluted_eps <= 0):
