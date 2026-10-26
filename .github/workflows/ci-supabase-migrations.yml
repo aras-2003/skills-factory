@@ -36,7 +36,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install pinned Supabase CLI
-        run: npm install --global supabase@2.81.3
+        run: |
+          npm install --prefix "$RUNNER_TEMP/supabase-cli" --no-save supabase@2.81.3
+          echo "$RUNNER_TEMP/supabase-cli/node_modules/.bin" >> "$GITHUB_PATH"
       - name: Validate migration source and privilege map
         run: |
           python scripts/database/validate_migrations.py
