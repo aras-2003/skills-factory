@@ -8,6 +8,7 @@ on:
       - 'tests/architecture/**'
       - 'docs/architecture/archify/**'
       - '.github/workflows/ci-archify-adapter.yml'
+      - 'requirements-architecture-exports.txt'
   workflow_dispatch:
 
 permissions:
@@ -64,6 +65,13 @@ jobs:
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/arc05-output"
           PYTHONPATH=. python3 scripts/architecture/run_oaf_explorer_smoke.py --upstream "$RUNNER_TEMP/archify-upstream" --output-dir "$RUNNER_TEMP/arc05-output"
+      - name: Execute the identical fixture through interactive HTML and document exports
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/arc06-parity-python"
+          "$RUNNER_TEMP/arc06-parity-python/bin/pip" install -r requirements-architecture-exports.txt
+          npm ci --prefix scripts/architecture --ignore-scripts --no-fund
+          PYTHONPATH=. "$RUNNER_TEMP/arc06-parity-python/bin/python" scripts/architecture/run_document_export_smoke.py --upstream "$RUNNER_TEMP/archify-upstream" --output-dir "$RUNNER_TEMP/arc06-parity-output"
       - name: Archive exact renderer and sandbox receipts
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -73,5 +81,6 @@ jobs:
             ${{ runner.temp }}/arc03-output/*
             ${{ runner.temp }}/arc04-output/*
             ${{ runner.temp }}/arc05-output/*
+            ${{ runner.temp }}/arc06-parity-output/**
           if-no-files-found: ignore
           retention-days: 30

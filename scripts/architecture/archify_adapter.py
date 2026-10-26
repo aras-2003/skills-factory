@@ -98,7 +98,10 @@ def archify_candidate(model: dict) -> dict:
     edge_labels={"depends_on":"dep","calls":"call","contains":"in","unknown":"?"}
     edges=[{"id":f"e{i}","from":ids[e["from"]],"to":ids[e["to"]],
             "label":edge_labels.get(e["type"],e["type"].replace("_"," ")[:20]),
-            "labelDy":8,
+            # Pinned Archify 3.2 leaves '?' on a node border for dashed
+            # uncertainty links. Preserve their measured 8px clearance; let
+            # asserted relation labels use upstream collision avoidance.
+            **({"labelDy":8} if e["state"]=="unknown" else {}),
             **({"variant":"dashed"} if e["state"]=="unknown" else {})}
            for i,e in enumerate(obj["edges"])]
     return {"schema_version":1,"diagram_type":"architecture",
