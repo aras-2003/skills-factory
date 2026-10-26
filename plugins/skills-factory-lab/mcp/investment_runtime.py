@@ -145,11 +145,17 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     if (
         _contains(text, "earnings", "wynik", "results")
         and _contains(text, "thesis", "tez", "holding", "portfolio", "portfel", "my company", "spółki", "spolki")
-        and _contains(
-            text,
-            "attention", "uwag", "warrant", "matter", "deserve", "wymag",
-            "change", "changes", "changed", "impact", "affect", "influence",
-            "zmienia", "wpływ", "wplyw",
+        and (
+            _contains(
+                text,
+                "attention", "uwag", "warrant", "matter", "deserve", "wymag",
+                "change", "changes", "changed", "impact", "affect", "influence",
+                "zmienia", "wpływ", "wplyw",
+            )
+            or (
+                _contains(text, "after earnings", "after results", "po wynik")
+                and _contains(text, "check", "review", "assess", "sprawd", "przejrz", "ocen")
+            )
         )
     ):
         attention = True
@@ -192,10 +198,10 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "dywersyfikacja", "pozycje w portfelu",
     )
     single_security_intent = (
-        _contains(text, "stock", "security", "spółk", "spolk", "akcj", "good investment")
+        _contains(text, "stock", "security", "company", "issuer", "spółk", "spółce", "spolce", "spolk", "akcj", "good investment")
         and (
-            re.search(r"(?:review|assess|analy[sz]e|analiz|oceń|ocen|wyceń|wycen).{0,60}(?:stock|security|spółk|spolk|akcj)", text)
-            or _contains(text, "thesis", "valuation", "underwriting", "good investment")
+            re.search(r"(?:review|assess|analy[sz]e|analiz|oceń|ocen|wyceń|wycen).{0,60}(?:stock|security|company|issuer|spółk|spółce|spolce|spolk|akcj)", text)
+            or _contains(text, "thesis", "tez", "valuation", "underwriting", "good investment")
         )
     )
 
