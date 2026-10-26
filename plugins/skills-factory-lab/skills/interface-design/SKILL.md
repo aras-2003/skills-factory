@@ -63,7 +63,8 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 - User goals and product constraints outrank decorative convention or optional references.
 - Preserve supplied design tokens and accessibility requirements. Flag conflicts instead of silently overriding them.
-- Do not invent content, metrics, permissions, user research, or system behavior. Mark each assumption and its impact.
+- Do not invent content, metrics, permissions, user research, records, identifiers, counts, timestamps, or system behavior. Mark each assumption and its impact.
+- When the user supplies no data for a design example, show neutral field placeholders such as `[order ID]`, `[delay duration]`, and `[status]`; do not fabricate populated records or operational-looking values. Generate synthetic sample data only when the user explicitly requests a demo or fixture, and label it as synthetic.
 - Do not design a happy path only. Every screen needs explicit loading, empty, and error behavior; describe unavailable-data handling when data is part of the interface.
 - Do not prescribe a chart or diagram merely because the screen contains data. If the requested outcome is the visual itself, route to the relevant visualization capability.
 - Do not turn the brief into implementation code. A separate approved implementation task owns code changes and runtime validation.
