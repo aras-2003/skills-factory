@@ -65,7 +65,7 @@ After analytical synthesis, call `report-composer`. Use `visual-output-design` t
 Default profile:
 - investment view / thesis state;
 - WHY THIS / WHY NOW;
-- business performance with KPI strip and lifecycle phase/uncalibrated affinity when source history is sufficient;
+- business performance with KPI strip and **required inline five-stage Business Lifecycle visualization**, generated from the classifier's actual output; show a highlighted phase, five affinity bars, uncalibrated-score warning and revenue/margin evidence. If data are insufficient, render the same five-stage panel as NOT CLASSIFIED with N/A scores. Use a documented renderer or show explicit BLOCKED_NO_RENDERER plus five-stage text fallback;
 - a required inline 5Y price-history visual plus 1Y current-setup view when verified time-series data exist; use the best concrete renderer.
 - a required KPI-history visual for key decision-driving metrics when historical data exist;
 - dated material-event timeline tied to major price/KPI changes;
