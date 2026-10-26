@@ -47,8 +47,8 @@ class SiteCatalogContractTests(unittest.TestCase):
         self.assertEqual("registered", report_production["runtime_registration"])
         self.assertEqual("draft", report_production["maturity"])
         self.assertEqual({"lab": "supported", "plugin": "unavailable", "chatgpt-zip": "unavailable"}, report_production["declared_channels"])
-        self.assertEqual("UNASSESSED", catalog["metadata"]["capability_assessment"])
-        self.assertTrue(all(item["capability_assessment"] == "UNASSESSED" for item in catalog["skills"]))
+        self.assertEqual("PARTIALLY_DECLARED", catalog["metadata"]["capability_assessment"])
+        self.assertTrue(any(item["capability_assessment"] != "UNASSESSED" for item in catalog["skills"]))
         self.assertTrue(all(item["declared_channels"] for item in catalog["workflows"] if item["runtime_registration"] == "registered"))
         self.assertEqual("NOT_OBSERVED", catalog["metadata"]["runtime_installation"])
 
