@@ -45,6 +45,8 @@ jobs:
           python -m unittest discover -s scripts/database/tests -p 'test_*.py'
       - name: Start isolated local Supabase services
         run: supabase start --exclude realtime,storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+        env:
+          SUPABASE_INTERNAL_IMAGE_REGISTRY: ghcr.io
       - name: Replay all migrations against an empty PostgreSQL 17 database
         run: |
           supabase db reset --local --no-seed
