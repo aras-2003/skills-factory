@@ -1,0 +1,95 @@
+---
+name: interface-design
+description: 'Design the information hierarchy, navigation, responsive layout, interaction
+  states and accessible behavior for a specific product screen or user flow. Use when
+  the requested outcome is a design brief for an interface, not an implemented page,
+  general report, data visualization or architecture diagram.
+
+  '
+metadata:
+  owner: arkadiusz-kamrowski
+  version: 0.1.0
+  maturity: candidate
+  risk: medium
+  last_reviewed: '2026-10-26'
+---
+
+# Interface Design
+
+## Purpose
+
+Turn a concrete product or service need into a buildable, evidence-aware interface brief. Define what people need to understand and do before choosing visual treatment or writing implementation code.
+
+## Use when
+
+- The user asks to design a named screen, page, or short interaction flow.
+- The deliverable should specify hierarchy, navigation, responsive behavior, states, or accessible interactions.
+- A product or runtime target is known, or can be clarified before design decisions are made.
+
+## Do not use when
+
+- The user asks to implement or edit a working page; use the implementation brief and its implementation workflow.
+- The main deliverable is a report, slide, chart, diagram, or data visualization.
+- The task is to critique an existing design without proposing a replacement interface.
+- The request is only for branding, a logo, or a general moodboard.
+
+## Inputs
+
+### Required
+
+- Screen or user-flow goal.
+- Intended user and their primary task.
+- Target runtime or device context. If missing, ask one focused question or state a clearly bounded assumption when the design can still be useful.
+
+### Optional
+
+- Existing design system, tokens, components, or screenshots.
+- Content, data schema, permissions, and known operational constraints.
+- Accessibility requirements, supported devices, localization, and brand constraints.
+- Existing user research or analytics. Treat supplied findings as evidence only to the extent their source and scope are known.
+
+## Procedure
+
+1. Restate the user goal and primary task. Separate supplied facts from assumptions; ask for missing information that would change the hierarchy or interaction model.
+2. Identify the key information users need, the actions they can take, and the decision or outcome each action supports.
+3. Define the information hierarchy and screen anatomy. Use existing design-system components and tokens when supplied. Do not invent an established system or silently replace it.
+4. Describe navigation, interaction behavior, feedback, validation, permissions, and any destructive or irreversible action.
+5. Specify mobile and desktop behavior, including what reflows, collapses, becomes scrollable, or remains persistently available. Do not assume a desktop layout simply scales down.
+6. Define loading, empty, error, and unavailable-data states. Include recovery or next actions and state what information remains visible.
+7. Specify semantic structure and accessibility behavior: headings, labels, keyboard order, focus, contrast risks, status announcements, reduced motion, and touch-target concerns where relevant.
+8. List unresolved decisions, evidence gaps, and handoff questions. Keep this brief at the design level; do not claim that code was built or tested.
+
+## Decision rules
+
+- User goals and product constraints outrank decorative convention or optional references.
+- Preserve supplied design tokens and accessibility requirements. Flag conflicts instead of silently overriding them.
+- Do not invent content, metrics, permissions, user research, or system behavior. Mark each assumption and its impact.
+- Do not design a happy path only. Every screen needs explicit loading, empty, and error behavior; describe unavailable-data handling when data is part of the interface.
+- Do not prescribe a chart or diagram merely because the screen contains data. If the requested outcome is the visual itself, route to the relevant visualization capability.
+- Do not turn the brief into implementation code. A separate approved implementation task owns code changes and runtime validation.
+
+## Output contract
+
+Return a concise **Interface brief** with these sections:
+
+1. **Goal and context** — primary user, task, target runtime, verified inputs, and assumptions.
+2. **Information hierarchy** — primary, supporting, and secondary content; what can be deferred.
+3. **Screen structure** — sections/components and their purpose, in reading order.
+4. **Navigation and interactions** — entry/exit, actions, feedback, validation, and permissions.
+5. **Responsive behavior** — mobile and desktop layouts and meaningful behavior changes.
+6. **States** — loading, empty, error, and unavailable-data behavior, each with recovery guidance.
+7. **Accessibility** — semantics, keyboard/focus, contrast, announcements, motion, and touch risks.
+8. **Open decisions and handoff** — unresolved questions, dependencies, and what implementation must verify.
+
+When a required input is missing, mark it as an assumption or ask before making decisions that depend on it. Do not omit a section; use “not applicable” with a reason.
+
+## Quality checks
+
+- [ ] The brief solves the stated user task and distinguishes evidence from assumptions.
+- [ ] Information hierarchy and component order are explicit.
+- [ ] Mobile and desktop behavior are both described.
+- [ ] Loading, empty, error, and relevant unavailable-data states include recovery behavior.
+- [ ] Navigation and key interactions have visible feedback and permission boundaries.
+- [ ] Accessibility behaviors are concrete enough to validate during implementation.
+- [ ] Existing tokens and constraints are preserved or conflicts are surfaced.
+- [ ] No implementation, research result, or test is claimed without evidence.
