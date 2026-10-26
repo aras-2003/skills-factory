@@ -139,7 +139,10 @@ lab:
         self.assertRegex(receipt["source_revision"], r"^[0-9a-f]{40}$")
         self.assertRegex(receipt["payload_content_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(f"{receipt['version']}+{receipt['source_revision'][:12]}", receipt["release_id"])
-        self.assertEqual(83, len(receipt["components"]))
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        expected_components = {item["name"] for item in catalog["skills"] + catalog["workflows"]}
+        actual_components = {item["name"] for item in receipt["components"]}
+        self.assertEqual(expected_components, actual_components)
         manifest = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest, receipt)
 
