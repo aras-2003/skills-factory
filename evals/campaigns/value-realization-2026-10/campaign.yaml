@@ -23,4 +23,4 @@ test_modules:
 source_sha256:
   skills/strategy-ea/value-realization/SKILL.md: c1cfb17df4e6910b5a84a79a85f14e824b03093dac3a230fee0f7420d1242a5a
   skills/strategy-ea/value-realization/engine.py: 031fedc9707b1ca5267bbbbd30f096063b7c40446181ce1cb4a3a3372863f601
-  skills/strategy-ea/value-realization/tests/cases.yaml: 4a80ec6f41fa6daea948bf9fc302099feb0763f0da52d7b338d8538d05302f56
+  skills/strategy-ea/value-realization/tests/cases.yaml: d8875172452fc8068ad3dd238fe56a8734386ff041f792eb55067e3aefaa1c67
