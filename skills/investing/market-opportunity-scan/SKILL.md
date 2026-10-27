@@ -7,10 +7,10 @@ description: >
   canonical portfolio context from investment-record-store. Do not issue buy/sell instructions.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.3.1"
+  version: "0.4.0"
   maturity: production
   risk: medium
-  last_reviewed: "2026-10-09"
+  last_reviewed: "2026-10-27"
   execution:
     default_model_class: fast
 ---

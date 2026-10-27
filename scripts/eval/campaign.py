@@ -614,11 +614,13 @@ def separately_validated_investment_lifecycle_paths(root: Path = ROOT) -> set[st
     except (OSError, ValueError, TypeError, AttributeError):
         return set()
 def separately_validated_fundamental_intelligence_paths(root: Path = ROOT) -> set[str]:
-    """Only exempt the three exact source files when a dedicated test campaign is present."""
+    """Only exempt the exact source and behavior-contract files in this NOT_RUN campaign."""
     expected = {
         "skills/investing/fundamental-intelligence/engine.py",
         "skills/investing/fundamental-intelligence/damodaran.py",
         "skills/investing/fundamental-intelligence/test_engine.py",
+        "skills/investing/market-opportunity-scan/SKILL.md",
+        "skills/investing/market-opportunity-scan/tests/cases.yaml",
     }
     manifest = root / "evals/campaigns/fundamental-intelligence-2026-10/source-coverage.yaml"
     if not manifest.is_file():
@@ -627,13 +629,23 @@ def separately_validated_fundamental_intelligence_paths(root: Path = ROOT) -> se
     if (
         cfg.get("campaign") != "fundamental-intelligence-2026-10"
         or cfg.get("runtime_status") != "NOT_RUN"
+        or cfg.get("release_approved") is not False
         or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
         or cfg.get("unit_test") != "skills/investing/fundamental-intelligence/test_engine.py"
+        or cfg.get("behavior_case_suite") != "skills/investing/market-opportunity-scan/tests/cases.yaml"
+        or cfg.get("behavior_case_ids") != ["scan-opportunity-score-evidence-gate"]
     ):
         return set()
     if not all((root / path).is_file() for path in expected):
         return set()
     if not (root / "scripts/eval/tests/test_fundamental_intelligence_coverage.py").is_file():
+        return set()
+    cases = yaml.safe_load((root / cfg["behavior_case_suite"]).read_text(encoding="utf-8")) or {}
+    by_id = {item.get("id"): item for item in cases.get("cases", []) if isinstance(item, dict)}
+    case = by_id.get("scan-opportunity-score-evidence-gate")
+    if (not case or not case.get("input")
+            or not case.get("expected", {}).get("must")
+            or not case.get("expected", {}).get("must_not")):
         return set()
     return expected
 
