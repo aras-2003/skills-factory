@@ -86,4 +86,19 @@ All runs below used a fresh ordinary Chat with the `Skills Factory Cloud Next` a
 | I01-SENT-001 punctuation-only sentinel, retry | PASS | Returned only the corrected punctuation; no unrelated routing. https://chatgpt.com/c/6ae07887-3c90-83ed-b177-826352c60a57 |
 | I01-SENT-002 VAT arithmetic sentinel, retry | PASS | 123 PLN gross at 23% VAT -> 100 PLN net, using only given figures. https://chatgpt.com/c/6ae078b6-eea4-83ed-af59-54ce64e47f3e |
 
-These runs do not close the campaign. The onboarding defect remains awaiting v0.1.2 deployment and behavioral retest; v0.1.2 has not yet been accepted by the live Site.
+The v0.1.1 supplemental runs above do not close the campaign. The subsequent v0.1.2 exact-case results are recorded below and also leave the campaign active.
+
+## Site v56 exact-case checks — `interface-design` v0.1.2
+
+Candidate identity was read from the live Site immediately before this run: canonical SHA `a1be6fd9a79962af736b1501ea88e3cbf28842ac`, Lab release `1.38.373+a1be6fd9a799`, payload SHA-256 `9212ee0ca64e31267decf9f3640271f59f5736aa25b7e41ba0e949ad436ca689`, Site v56, attestation `verified`. `load_skill(interface-design)` returned v0.1.2, content SHA-256 `1de0d2304f2847026734d2af90145eec69ce8283d13c48e1fb761ae852b912c5`. Each behavioral attempt used a fresh ordinary Chat with the Cloud Next app chip selected and Work mode off. The Chat UI did not expose per-case MCP receipt IDs; these entries record observed behavior and selected app, not a cryptographic execution receipt.
+
+| ID | Case | Runs | Result | Evidence / notes |
+| --- | --- | ---: | --- | --- |
+| ID-INDIRECT-SITE-v56 | Locked mobile-first onboarding request | 1 | FAIL | The answer asked for product/platform details instead of producing the requested flow and required failure/recovery states. https://chatgpt.com/c/6ae07e95-dca4-83ed-b8a5-6bc5f33737a6 |
+| ID-DIRECT-SITE-v56 | Locked responsive account dashboard brief | 1 | FAIL | Added unprovided operational status/content and navigation destinations despite the rubric prohibiting invented product data and capabilities. https://chatgpt.com/c/6ae07f1e-b334-83ed-b1dc-ca636a1f9606 |
+| ID-NEAR-REPORT-SITE-v56 | Report plus architecture diagram near-miss | 1 | PASS (routing) | Returned a strategy/report and architecture direction, without substituting an interface brief. https://chatgpt.com/c/6ae07f51-c69c-83eb-af10-ffde00175267 |
+| ID-NEAR-IMPLEMENT-SITE-v56 | Checkout implementation near-miss | 1 | PASS | Preserved the implementation request, reported missing approved design/repository as the blocker, and made no claims of edits or tests. https://chatgpt.com/c/6ae07fa3-377c-83eb-a97f-9fc91087bef0 |
+| ID-CLARIFY-SITE-v56 | “Make the screen better.” | 1 | FAIL | Asked for a screenshot but also supplied a generic improvement checklist before screen, task, and target runtime were identified. https://chatgpt.com/c/6ae07fed-a8f0-83eb-9a04-13f6cc675e69 |
+| ID-ACCESSIBILITY-SITE-v56 | Billing permission and unavailable-data edge | 1 | PASS | Distinguished permission denial from confirmed empty, request error and unavailable states; gave accessible recovery guidance and desktop/mobile behavior without exposing billing data. https://chatgpt.com/c/6ae0801c-36a4-83eb-afd4-b6f34096ab53 |
+
+The v0.1.2 checks add three behavioral failures and one pass. Iteration 06 remains active. The scoped v0.1.3 candidate addresses clarification-only gating, product-evidence boundaries and explicit failure paths; it requires a new Site identity lock and fresh behavioral retests before acceptance.
