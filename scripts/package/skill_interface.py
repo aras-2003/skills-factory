@@ -13,6 +13,7 @@ DOMAIN_COLORS = {
     "oaf": "#83A9FF",
     "presentations": "#F0C982",
     "reports": "#8AB5D7",
+    "strategy": "#D4A866",
     "web-design": "#A998FF",
 }
 ACRONYMS = {"ai", "cac", "cogs", "cv", "kpi", "oaf", "os", "vat", "xtb"}

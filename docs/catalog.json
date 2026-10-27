@@ -680,6 +680,46 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "strategy-benefits-realization",
+      "domain": "strategy",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Track forecast and realized benefits from approved initiatives with ownership, baselines, timing, evidence and reconciliation. Use for benefit realization governance; hand off KPI design, strategy diagnosis, decision rights and capital reallocation to existing OAF skills.",
+      "source": "skills/strategy/strategy-benefits-realization/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "strategy-financial-model",
+      "domain": "strategy",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Build or audit a generic business cash-flow decision model with explicit assumptions and deterministic NPV, IRR, payback and sensitivity calculations. Use for projects or business cases, not public-security valuation.",
+      "source": "skills/strategy/strategy-financial-model/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "strategy-market-sizing",
+      "domain": "strategy",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Estimate a defined market for a strategic decision using explicit scope, independent top-down and bottom-up approaches, and evidence-backed ranges. Use for TAM/SAM/SOM and segmentation; hand off cross-market transferability to market-transferability-review.",
+      "source": "skills/strategy/strategy-market-sizing/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "strategy-profit-pool-analysis",
+      "domain": "strategy",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Decompose industry or value-chain profit pools and explain structural differences in returns and value drivers. Use for strategy-level economics; hand off offer-level unit economics and portfolio ranking to their existing skills.",
+      "source": "skills/strategy/strategy-profit-pool-analysis/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
       "name": "accessibility-gate",
       "domain": "web-design",
       "maturity": "candidate",
