@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3]; SOURCE=ROOT/"skills/strategy-ea/strategy-economics"
 class StrategyEconomicsCoverageTests(unittest.TestCase):
     def test_candidate_is_hash_pinned_and_not_run(self):
-        campaign=(ROOT/"evals/campaigns/strategy-economics-2026-10/campaign.yaml").read_text();self.assertIn("runtime_status: NOT_RUN",campaign);self.assertIn("provenance_status: BLOCKED_SOURCE_CORPUS",campaign)
+        campaign=(ROOT/"evals/campaigns/strategy-economics-2026-10/campaign.yaml").read_text();self.assertIn("runtime_status: NOT_RUN",campaign);self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS",campaign)
         pins=dict(re.findall(r"^  (skills/strategy-ea/strategy-economics/[^:]+): ([a-f0-9]{64})$",campaign,re.M));self.assertEqual({"skills/strategy-ea/strategy-economics/SKILL.md","skills/strategy-ea/strategy-economics/engine.py","skills/strategy-ea/strategy-economics/tests/cases.yaml"},set(pins))
         for path,digest in pins.items():self.assertEqual(digest,hashlib.sha256((ROOT/path).read_bytes()).hexdigest())
     def test_fixtures_cover_golden_negative_adversarial_regression(self):
