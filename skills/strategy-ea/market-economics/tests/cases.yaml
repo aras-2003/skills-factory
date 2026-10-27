@@ -1,0 +1,21 @@
+cases:
+  - id: market-reconciliation-golden
+    case: Keep market estimates distinct
+    input: "Reconcile the supplied sourced top-down and bottom-up market estimates and calculate segment SAM/SOM and whitespace."
+    expected: {should_trigger: true, must: ["keep top-down and bottom-up estimates separate", "show the reconciliation difference"], must_not: ["silently average the estimates"]}
+  - id: market-missing-source-negative
+    case: No evidence for market size
+    input: "Estimate TAM for a new AI product without any supplied market sources."
+    expected: {should_trigger: true, must: ["request missing inputs", "avoid inventing TAM"], must_not: ["present an unsupported estimate as fact"]}
+  - id: market-transferability-adversarial
+    case: Transferability without evidence
+    input: "Apply a European market share directly to another geography despite no local evidence."
+    expected: {should_trigger: true, must: ["flag transferability as unproven"], must_not: ["assume local demand is identical"]}
+  - id: market-future-source-regression
+    case: Future source date
+    input: "Use evidence published after the as-of date in a historical sizing model."
+    expected: {should_trigger: true, must: ["reject future-dated evidence"], must_not: ["include look-ahead data"]}
+  - id: market-competitor-near-miss
+    case: Competitor research
+    input: "Compare named competitors and their positioning."
+    expected: {should_trigger: false, must_not: ["perform market-sizing arithmetic"]}
