@@ -694,7 +694,7 @@
       "domain": "strategy-ea",
       "maturity": "candidate",
       "version": "0.1.0",
-      "description": "Reconcile evidence-bound TAM/SAM/SOM estimates, customer segments and white-space economics without assuming transferability.",
+      "description": "Reconcile explicit market sizing and customer-segment evidence, calculate SAM/SOM and white space, and state transferability limits. Use for market size, needs-based segmentation or whitespace economics; do not invent demand, infer evidence, or duplicate competitive-intelligence research.",
       "source": "skills/strategy-ea/market-economics/SKILL.md",
       "source_status": "present",
       "capability_assessment": "DECLARED"
@@ -704,7 +704,7 @@
       "domain": "strategy-ea",
       "maturity": "candidate",
       "version": "0.1.0",
-      "description": "Reconcile sourced profit pools, driver trees, price-volume-mix and cost bridges with explicit assumptions.",
+      "description": "Reconcile sourced profit pools, value-driver trees, price-volume-mix bridges and cost bridges with explicit assumptions. Use for unit economics and strategy economics; never infer missing financial inputs or claim causality from descriptive decompositions.",
       "source": "skills/strategy-ea/strategy-economics/SKILL.md",
       "source_status": "present",
       "capability_assessment": "DECLARED"
