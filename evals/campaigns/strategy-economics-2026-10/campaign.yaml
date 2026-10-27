@@ -3,10 +3,32 @@ candidate: strategy-economics
 candidate_version: 0.1.0
 runtime_status: NOT_RUN
 release_approved: false
-provenance_status: BLOCKED_SOURCE_CORPUS
-source_note: "Original archives and per-file manifest are unavailable; this is an original candidate with no upstream-source equivalence claim."
+provenance_status: VERIFIED_SOURCE_CORPUS
+source_note: "Seven public archives were recovered and SHA-256 verified; source mapping is in docs/strategy-os/strategy-source-review.md. Method-reference only, no copied content; runtime remains NOT_RUN."
 as_of: "2026-10-27"
 sources:
-  skills/strategy-ea/strategy-economics/SKILL.md: 91ef00de47ed4b3ebdb6dcb141aa8823249c6e83d08ad230b522437830bfe796
+  skills/strategy-ea/strategy-economics/SKILL.md: 764285751268a0bbc779c1cdf0cce5e23e223fccc06463c816d4d6adb778dcfc
   skills/strategy-ea/strategy-economics/engine.py: 02ec781743c4dcb660dd14b3ce129f2b8a43a7f7642b51bcd2433b181c5b6b6c
-  skills/strategy-ea/strategy-economics/tests/cases.yaml: 6012f3838f5081eb870352908b5b870e8c2537058202de45268f3ea5ff9aace9
+  skills/strategy-ea/strategy-economics/tests/cases.yaml: ac9998a608883745345ae526ac6b0849aaf6ebcf8b3780314c8382a372c8b8fd
+
+upstream_references:
+  - archive: oria-tier-one-strategy
+    path: skills/profit-pool-analysis/SKILL.md
+    sha256: 7359f0e8441f98a3d1da3c20c89a01c8c43f6d216f6d7af4075020a48ba1bd9e
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/value-driver-tree/SKILL.md
+    sha256: 2df399cbe777a2c3dd6c6becfda03a820a4a3e122a96156d193a69b3cd1aff2b
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/capital-allocation/SKILL.md
+    sha256: 2e88731b91b8907372082970e4570ae7dc49c63a3f54152c6915901ab2de7bbf
+    use: method_reference_only_no_content_reuse
+  - archive: oria-21-strategy
+    path: skills/profit-pool-analysis/SKILL.md
+    sha256: 067984277fff678af12bce1312959c081f1f2d97e207a306775300e3532746c4
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/bridge-waterfall-constructor/SKILL.md
+    sha256: 643da9dcf32628237d23fef0341b0eaa1a68a8e0126791019647516b8759bee8
+    use: method_reference_only_no_content_reuse
