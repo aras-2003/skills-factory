@@ -7,7 +7,7 @@ description: >
   behavior or claim automated accessibility/runtime checks.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.0"
+  version: "0.1.1"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-10-27"
@@ -57,9 +57,13 @@ Review an existing interface artifact and help the owner decide which visual or 
 - Do not infer user research, business impact, conversion effects, or established design tokens from appearance alone.
 - If the artifact, intended user/task, or relevant viewport is missing, ask a concise question naming only the missing inputs. Do not substitute a generic checklist.
 
+### Hard gate: no artifact
+
+If there is no inspectable visual artifact, stop before critique. Return only a brief request for the artifact and the intended user/task (and viewport only if responsive behavior is requested). Do not produce candidate findings, a checklist, hypothetical repairs, sample interface copy, example prices, or any other artifact-specific content. A concern stated by the user is not visual evidence. Resume the critique only after an artifact is supplied.
+
 ## Procedure
 
-1. Confirm which supplied artifact and state are being reviewed, the intended user/task, viewport, and decision sought. Identify unavailable context.
+1. Apply the hard gate above. If an inspectable artifact is present, confirm which supplied artifact and state are being reviewed, the intended user/task, viewport, and decision sought. Identify unavailable context.
 2. Describe the primary visual hierarchy and the path a user appears expected to follow. Mark this as an interpretation when the task is not supplied.
 3. Look for material issues across hierarchy, clarity, affordance, readability, consistency, responsiveness, distinctiveness, cognitive load, and visible accessibility risks. Report only issues supported by the artifact.
 4. For each finding, record severity, confidence, evidence, likely user consequence, and a specific repair. Keep inferred consequence distinct from observed evidence.

@@ -45,6 +45,8 @@ cases:
       must_not:
         - diagnose visual hierarchy or button appearance without seeing it
         - return a generic design checklist
+        - offer hypothetical findings or repairs before receiving an artifact
+        - invent interface copy, prices, product details, or screen content
 
   - id: design-critique-hidden-behavior
     case: screenshot-does-not-prove-interaction

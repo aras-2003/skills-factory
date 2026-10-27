@@ -662,7 +662,7 @@ class RuntimeCampaignTests(unittest.TestCase):
             shutil.copytree(
                 ROOT,
                 moved,
-                ignore=shutil.ignore_patterns(".git", ".tmp", "__pycache__", "*.pyc"),
+                ignore=shutil.ignore_patterns(".git", ".tmp", "node_modules", "__pycache__", "*.pyc"),
             )
             source_evidence = ROOT / evidence_rel
             moved_evidence = moved / evidence_rel
