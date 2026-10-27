@@ -40,3 +40,21 @@ cases:
     expected:
       should_trigger: false
       must_not: ["request or invent cash flows", "run a calculation"]
+
+source_references:
+  - archive: oria-excel-strategy
+    path: skills/dcf-structure-builder/SKILL.md
+    sha256: a96d6d2f22613b65c587d7c50aed15d3a88896f0a24bf792f52b7e7d220fd683
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/three-scenario-model/SKILL.md
+    sha256: 3274068853c41a58451d99f5f9a1f95a2027c832abcb42f01a0bf1d95b41e2ec
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/sensitivity-tornado/SKILL.md
+    sha256: d4ae7325f56c8d85b4acfae5bc17640cbc3a048cfb89b01c0c2ee21782da719d
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/formula-audit-checker/SKILL.md
+    sha256: 2e77c3d63e3404148174a1d2f5734ec7bf6a78252e90214f90b63f56e954fd70
+    use: method_reference_only_no_content_reuse
