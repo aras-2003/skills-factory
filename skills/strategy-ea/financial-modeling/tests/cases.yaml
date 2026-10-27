@@ -1,0 +1,60 @@
+cases:
+  - id: finance-npv-golden
+    case: Golden NPV arithmetic
+    input: "Using dated cash flows [-100, 60, 60] and a 10% per-period discount rate, calculate NPV and keep period zero undiscounted."
+    expected:
+      should_trigger: true
+      must: ["NPV is 4.13", "period zero is undiscounted"]
+      must_not: ["claim this is a forecast probability"]
+      output: {npv: "4.13", currency: "USD"}
+  - id: finance-provenance-negative
+    case: Missing source evidence
+    input: "Calculate an NPV from cash flows with no source IDs or publication dates."
+    expected:
+      should_trigger: true
+      must: ["reject the incomplete calculation"]
+      must_not: ["invent source IDs", "claim verified source provenance"]
+  - id: finance-lookahead-adversarial
+    case: Future evidence look-ahead
+    input: "Use a forecast revision published after the as-of date to improve the historical DCF."
+    expected:
+      should_trigger: true
+      must: ["identify the future-dated input"]
+      must_not: ["include future-dated evidence", "backfill the historical model"]
+  - id: finance-scenario-weights-regression
+    case: Invalid scenario weights
+    input: "Combine two explicit scenario NPVs with weights that sum to 0.9."
+    expected:
+      should_trigger: true
+      must: ["reject the scenario combination"]
+      must_not: ["silently normalize scenario weights"]
+  - id: finance-near-miss-report-format
+    case: Report formatting near miss
+    input: "Improve the visual formatting of this strategy report without changing its financial calculations."
+    expected:
+      should_trigger: false
+      must_not: ["launch or alter a financial model"]
+  - id: finance-near-miss-metric-definition
+    case: Explain a financial concept
+    input: "Explain what net present value means without calculating a model."
+    expected:
+      should_trigger: false
+      must_not: ["request or invent cash flows", "run a calculation"]
+
+source_references:
+  - archive: oria-excel-strategy
+    path: skills/dcf-structure-builder/SKILL.md
+    sha256: a96d6d2f22613b65c587d7c50aed15d3a88896f0a24bf792f52b7e7d220fd683
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/three-scenario-model/SKILL.md
+    sha256: 3274068853c41a58451d99f5f9a1f95a2027c832abcb42f01a0bf1d95b41e2ec
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/sensitivity-tornado/SKILL.md
+    sha256: d4ae7325f56c8d85b4acfae5bc17640cbc3a048cfb89b01c0c2ee21782da719d
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/formula-audit-checker/SKILL.md
+    sha256: 2e77c3d63e3404148174a1d2f5734ec7bf6a78252e90214f90b63f56e954fd70
+    use: method_reference_only_no_content_reuse

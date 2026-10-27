@@ -1,0 +1,51 @@
+cases:
+  - id: strategy-econ-profit-pool-golden
+    case: Sum sourced profit pools
+    input: "Aggregate sourced entity revenue and operating profit, then show margin."
+    expected: {should_trigger: true, must: ["show entity and aggregate amounts", "show the denominator used for margin"], must_not: ["infer unsupported entity values"]}
+  - id: strategy-econ-driver-reconcile-negative
+    case: Driver tree does not reconcile
+    input: "Present driver children whose sum differs from the reported parent."
+    expected: {should_trigger: true, must: ["flag the unreconciled driver tree"], must_not: ["silently adjust child values"]}
+  - id: strategy-econ-missing-unit-near-miss
+    case: Missing unit economics inputs
+    input: "Calculate unit margins without supplied price, volume, or cost evidence."
+    expected: {should_trigger: true, must: ["request the missing inputs"], must_not: ["invent unit economics"]}
+  - id: strategy-econ-pvm-adversarial
+    case: Explain bridge interaction allocation
+    input: "Produce a price-volume-mix bridge and explain the order convention."
+    expected: {should_trigger: true, must: ["reconcile exactly", "state the sequential convention"], must_not: ["claim unique causal attribution"]}
+  - id: strategy-econ-future-evidence-regression
+    case: Future dated source
+    input: "Use next quarter's data in an as-of historical cost bridge."
+    expected: {should_trigger: true, must: ["reject future-dated evidence"], must_not: ["include look-ahead data"]}
+  - id: strategy-econ-competitor-near-miss
+    case: Competitor benchmarking
+    input: "Research competitors' product positioning and public strategy."
+    expected: {should_trigger: false, must_not: ["invent a profit-pool benchmark"]}
+  - id: strategy-econ-option-design-near-miss
+    case: Strategy option narrative
+    input: "Develop strategic options without any supplied unit economics or financial bridge request."
+    expected: {should_trigger: false, must_not: ["invent profit pools or cost bridges"]}
+
+source_references:
+  - archive: oria-tier-one-strategy
+    path: skills/profit-pool-analysis/SKILL.md
+    sha256: 7359f0e8441f98a3d1da3c20c89a01c8c43f6d216f6d7af4075020a48ba1bd9e
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/value-driver-tree/SKILL.md
+    sha256: 2df399cbe777a2c3dd6c6becfda03a820a4a3e122a96156d193a69b3cd1aff2b
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/capital-allocation/SKILL.md
+    sha256: 2e88731b91b8907372082970e4570ae7dc49c63a3f54152c6915901ab2de7bbf
+    use: method_reference_only_no_content_reuse
+  - archive: oria-21-strategy
+    path: skills/profit-pool-analysis/SKILL.md
+    sha256: 067984277fff678af12bce1312959c081f1f2d97e207a306775300e3532746c4
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/bridge-waterfall-constructor/SKILL.md
+    sha256: 643da9dcf32628237d23fef0341b0eaa1a68a8e0126791019647516b8759bee8
+    use: method_reference_only_no_content_reuse

@@ -1,0 +1,47 @@
+campaign: financial-modeling-2026-10
+schema_version: "1.0"
+scope: strategy_financial_model_candidate
+execution_channel: lab
+runtime_status: NOT_RUN
+release_approved: false
+historical_r20_immutable: true
+provenance_status: VERIFIED_SOURCE_CORPUS
+provenance_note: >-
+  The source corpus was recovered and verified from the archives listed in
+  docs/strategy-os/strategy-source-manifest.json. References are method-level
+  only; no third-party text or code was copied into this candidate.
+out_of_scope_behavior_paths:
+  - skills/strategy-ea/financial-modeling/SKILL.md
+  - skills/strategy-ea/financial-modeling/engine.py
+  - skills/strategy-ea/financial-modeling/tests/cases.yaml
+required_case_ids:
+  - finance-npv-golden
+  - finance-provenance-negative
+  - finance-lookahead-adversarial
+  - finance-scenario-weights-regression
+  - finance-near-miss-report-format
+test_modules:
+  - skills/strategy-ea/financial-modeling/tests/test_engine.py
+  - scripts/eval/tests/test_financial_modeling_coverage.py
+source_sha256:
+  skills/strategy-ea/financial-modeling/SKILL.md: f1d33f05f94fc80d8ade8f22a92c80a9eb172854fdb314139c06830bc49f41c9
+  skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
+  skills/strategy-ea/financial-modeling/tests/cases.yaml: df38c8cc847418ca3e9453809b9d3eb6f0f3193134591f1e116d9357c530a435
+
+upstream_references:
+  - archive: oria-excel-strategy
+    path: skills/dcf-structure-builder/SKILL.md
+    sha256: a96d6d2f22613b65c587d7c50aed15d3a88896f0a24bf792f52b7e7d220fd683
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/three-scenario-model/SKILL.md
+    sha256: 3274068853c41a58451d99f5f9a1f95a2027c832abcb42f01a0bf1d95b41e2ec
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/sensitivity-tornado/SKILL.md
+    sha256: d4ae7325f56c8d85b4acfae5bc17640cbc3a048cfb89b01c0c2ee21782da719d
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/formula-audit-checker/SKILL.md
+    sha256: 2e77c3d63e3404148174a1d2f5734ec7bf6a78252e90214f90b63f56e954fd70
+    use: method_reference_only_no_content_reuse

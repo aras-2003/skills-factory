@@ -680,6 +680,46 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "financial-modeling",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Run deterministic, evidence-bound NPV, DCF, IRR, payback, scenario and sensitivity calculations from explicit supplied inputs.",
+      "source": "skills/strategy-ea/financial-modeling/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "market-economics",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Reconcile explicit market sizing and customer-segment evidence, calculate SAM/SOM and white space, and state transferability limits. Use for market size, needs-based segmentation or whitespace economics; do not invent demand, infer evidence, or duplicate competitive-intelligence research.",
+      "source": "skills/strategy-ea/market-economics/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "strategy-economics",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Reconcile sourced profit pools, value-driver trees, price-volume-mix bridges and cost bridges with explicit assumptions. Use for unit economics and strategy economics; never infer missing financial inputs or claim causality from descriptive decompositions.",
+      "source": "skills/strategy-ea/strategy-economics/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "value-realization",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review a funded strategy initiative against dated benefit baselines, forecasts, realized KPIs, owners and explicit decision rules.",
+      "source": "skills/strategy-ea/value-realization/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "accessibility-gate",
       "domain": "web-design",
       "maturity": "candidate",

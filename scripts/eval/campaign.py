@@ -864,6 +864,14 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
         "skills/investing/technical-structure/SKILL.md",
         "skills/investing/technical-structure/scripts/engine.py",
         "skills/web-design/experience-design-routing/SKILL.md",
+        "skills/strategy-ea/financial-modeling/SKILL.md",
+        "skills/strategy-ea/financial-modeling/engine.py",
+        "skills/strategy-ea/market-economics/SKILL.md",
+        "skills/strategy-ea/market-economics/engine.py",
+        "skills/strategy-ea/strategy-economics/SKILL.md",
+        "skills/strategy-ea/strategy-economics/engine.py",
+        "skills/strategy-ea/value-realization/SKILL.md",
+        "skills/strategy-ea/value-realization/engine.py",
     }
     try:
         cfg = yaml.safe_load((root / "evals/campaigns/unassigned-candidates-2026-10/campaign.yaml").read_text(encoding="utf-8")) or {}
@@ -877,8 +885,8 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             or cfg.get("historical_r20_immutable") is not True
             or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
             or set(hashes) != expected
-            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing"}
-            or len(modules) != 3
+            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing", "financial-modeling", "market-economics", "strategy-economics", "value-realization"}
+            or len(modules) != len(suites)
             or not all((root / path).is_file() for path in modules)
         ):
             return set()

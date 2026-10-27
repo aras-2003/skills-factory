@@ -1,0 +1,44 @@
+campaign: value-realization-2026-10
+schema_version: "1.0"
+scope: strategy_value_realization_candidate
+execution_channel: lab
+runtime_status: NOT_RUN
+release_approved: false
+historical_r20_immutable: true
+provenance_status: VERIFIED_SOURCE_CORPUS
+provenance_note: >-
+  Original Oria source archive and per-file manifest are unavailable in this
+  checkout and current conversation. This campaign tests original Skills Factory
+  behavior only; no upstream equivalence or license clearance is claimed.
+behavior_case_suite: skills/strategy-ea/value-realization/tests/cases.yaml
+required_case_ids:
+  - value-realization-golden
+  - value-realization-negative
+  - value-realization-adversarial
+  - value-realization-regression
+  - value-realization-near-miss-finance-model
+test_modules:
+  - skills/strategy-ea/value-realization/tests/test_engine.py
+  - scripts/eval/tests/test_value_realization_coverage.py
+source_sha256:
+  skills/strategy-ea/value-realization/SKILL.md: 056c3e0205faf1eaa376c39133f57a051aab1bf42e00d8276a8f5b3f2d45b79e
+  skills/strategy-ea/value-realization/engine.py: 031fedc9707b1ca5267bbbbd30f096063b7c40446181ce1cb4a3a3372863f601
+  skills/strategy-ea/value-realization/tests/cases.yaml: 31504579e04b4e798ec5ac2dc365f9fcd9edd50f6bff15a3ae8f6d3b2dff57f7
+
+upstream_references:
+  - archive: oria-tier-one-strategy
+    path: skills/value-realization/SKILL.md
+    sha256: b51dcceecea1ef23d19cd619c1db35ca0fece318225f05a4ccd69e864e0d76c1
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/capital-allocation/SKILL.md
+    sha256: 2e88731b91b8907372082970e4570ae7dc49c63a3f54152c6915901ab2de7bbf
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/kpi-dashboard-structurer/SKILL.md
+    sha256: 4b6542d30c256cac4f1948dfc02563c96fccffb8b1a73ac75f32bdf729214419
+    use: method_reference_only_no_content_reuse
+  - archive: mckinsey-skills-community
+    path: mckinsey_skills-main/skills/05-risk-performance-and-value-governance/value-realization.md
+    sha256: 3885a7b15da1c8d7716768e832c13b9c9df227e82efff69937bfa3630c367b52
+    use: method_reference_only_no_content_reuse

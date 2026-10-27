@@ -85,6 +85,10 @@ class CapabilityContractTests(unittest.TestCase):
                 "implementation-brief",
                 "visual-regression-review",
                 "accessibility-gate",
+                "market-economics",
+                "strategy-economics",
+                "financial-modeling",
+                "value-realization",
             },
             declared,
         )
