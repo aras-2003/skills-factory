@@ -1,6 +1,6 @@
 # Strategy / Enterprise Architecture / Executive Work
 
-> **Status:** mixed. The `financial-modeling` directory contains a candidate with a deterministic calculator; other entries below remain proposed capability names, not current source or runtime availability.
+> **Status:** mixed. The `financial-modeling` and `value-realization` directories contain candidate source implementations; other entries below remain proposed capability names, not current source or runtime availability.
 
 Skills for structured executive decision support and architecture work.
 
