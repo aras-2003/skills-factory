@@ -1,0 +1,12 @@
+schema_version: "1.0"
+id: accessibility-gate-implementation-nearmiss-en
+mode: natural-routing
+target: implementation-workflow
+expected_target: implementation-workflow
+required_selected_capabilities: []
+language: en
+competing_intents:
+  - accessibility audit
+assertions:
+  manual:
+    - does not substitute an audit report for requested code changes and tests
