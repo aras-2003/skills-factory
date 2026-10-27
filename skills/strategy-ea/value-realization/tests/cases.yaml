@@ -46,3 +46,21 @@ cases:
       should_trigger: false
       tags: [near-miss]
       must_not: ["invent realized value", "report benefit realization"]
+
+source_references:
+  - archive: oria-tier-one-strategy
+    path: skills/value-realization/SKILL.md
+    sha256: b51dcceecea1ef23d19cd619c1db35ca0fece318225f05a4ccd69e864e0d76c1
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/capital-allocation/SKILL.md
+    sha256: 2e88731b91b8907372082970e4570ae7dc49c63a3f54152c6915901ab2de7bbf
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/kpi-dashboard-structurer/SKILL.md
+    sha256: 4b6542d30c256cac4f1948dfc02563c96fccffb8b1a73ac75f32bdf729214419
+    use: method_reference_only_no_content_reuse
+  - archive: mckinsey-skills-community
+    path: mckinsey_skills-main/skills/05-risk-performance-and-value-governance/value-realization.md
+    sha256: 3885a7b15da1c8d7716768e832c13b9c9df227e82efff69937bfa3630c367b52
+    use: method_reference_only_no_content_reuse
