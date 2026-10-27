@@ -3,10 +3,32 @@ candidate: market-economics
 candidate_version: 0.1.0
 runtime_status: NOT_RUN
 release_approved: false
-provenance_status: BLOCKED_SOURCE_CORPUS
-source_note: "Original archives and per-file manifest are unavailable; this is an original candidate with no upstream-source equivalence claim."
+provenance_status: VERIFIED_SOURCE_CORPUS
+source_note: "Seven public archives were recovered and SHA-256 verified; source mapping is in docs/strategy-os/strategy-source-review.md. Method-reference only, no copied content; runtime remains NOT_RUN."
 as_of: "2026-10-27"
 sources:
-  skills/strategy-ea/market-economics/SKILL.md: 37d9b8cede8b429827a5db3c8918cfe465cb89f9d351c988051d38ac5c7815e0
+  skills/strategy-ea/market-economics/SKILL.md: 1c911c68cb857e7239c88cd9c9c85e45d0b210e3fa281a6390e82b190bad04f2
   skills/strategy-ea/market-economics/engine.py: 5eb18d226f3099a4d3329ca4f2052a4ca42a91f623c75328da71b8f2550edb3f
-  skills/strategy-ea/market-economics/tests/cases.yaml: bc5d65bef0b024888007e9452c587d32b0cb5c148dae4000f4f9de9c917b1f52
+  skills/strategy-ea/market-economics/tests/cases.yaml: 7a6dd8c362a63ac5d19b5e1ece560b57ac5aef43253fe95625eac97d9d443533
+
+upstream_references:
+  - archive: oria-tier-one-strategy
+    path: skills/market-sizing/SKILL.md
+    sha256: 884d0050b34d53dd07a3fb0b86f0068888f541aade9367c8e23af8bfaefb21f0
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/customer-segmentation/SKILL.md
+    sha256: 1c607d76ae273c37231ab0043758a71f8ce93fcb3c10a4456433297172c668cd
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/white-space-mapping/SKILL.md
+    sha256: f949b7aaefe7a7c180b620fab08f5627f79e9195b8d2becfa2d9f923bed2a7db
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/tam-sam-som-model/SKILL.md
+    sha256: 793037bdc1cb6e2f6ff2b3db9b677b6175d40e4238d308ac2d2bc1f5198cd8c0
+    use: method_reference_only_no_content_reuse
+  - archive: oria-21-strategy
+    path: skills/customer-segmentation/SKILL.md
+    sha256: d42b9b1bca2bdd91cc9321070469c1801e5131d324ac89b3c941353e6d58d2b4
+    use: method_reference_only_no_content_reuse
