@@ -25,7 +25,7 @@ If an as-of snapshot is absent, return `BLOCKED_MISSING_SNAPSHOT`; never reconst
 1. Validate and freeze the sample, decision rules and evaluation assumptions before calculating outcomes.
 2. Separate information available at decision time from future outcome data. Reject future-dated decision inputs.
 3. Compare the same decision dates and horizons against a named buy-and-hold or index baseline. Apply identical explicit costs; if costs are missing, mark net results blocked.
-4. Report counts and denominators, gross and net returns, turnover, drawdown where a complete dated path exists, and event-conditional hit rate only when its event labels were available ex ante.
+4. Report counts and denominators, net returns, turnover, drawdown, event-type positive-return rates, and alert precision/recall only when both alerts and outcome labels are supplied. Keep future outcome labels out of decision-time inputs.
 5. Keep research quality, valuation, sizing and optional timing attribution separate. A favorable return does not validate a low-quality process.
 6. Use chronological walk-forward splits; never tune rules on the reported out-of-sample segment. Preserve contiguous time order in stress tests.
 
@@ -33,4 +33,4 @@ If an as-of snapshot is absent, return `BLOCKED_MISSING_SNAPSHOT`; never reconst
 State the rule/version, sample and dates, as-of policy, exclusions, costs, baseline, metrics with denominators, uncertainty, and all missing or blocked inputs. Do not invent odds, statistical certainty, taxes, or economic edge. Label short or selected samples as descriptive only. Read only by default; any persistence requires separate authorization and an actual idempotent-write receipt.
 
 ## Evaluation boundary
-The bundled engine validates timestamp boundaries and deterministic arithmetic for supplied rows. It does not fetch canonical history, adjust prices, model corporate actions, select securities, infer taxes, or certify a walk-forward backtest. Those remain explicit input and review responsibilities.
+The bundled engine validates timestamp boundaries and deterministic arithmetic for supplied non-overlapping rows; it reports costed strategy, buy-and-hold, benchmark and long/flat trend baselines, turnover, drawdown, event metrics, regret, opportunity cost and an optional chronological out-of-sample segment. It does not fetch canonical history, adjust prices, model corporate actions or taxes, select securities, validate source authenticity, tune or freeze rules, or certify an out-of-sample backtest. Results remain descriptive until those inputs and review are independently established.
