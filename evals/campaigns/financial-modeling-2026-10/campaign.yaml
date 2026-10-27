@@ -20,10 +20,11 @@ required_case_ids:
   - finance-provenance-negative
   - finance-lookahead-adversarial
   - finance-scenario-weights-regression
+  - finance-near-miss-report-format
 test_modules:
   - skills/strategy-ea/financial-modeling/tests/test_engine.py
   - scripts/eval/tests/test_financial_modeling_coverage.py
 source_sha256:
   skills/strategy-ea/financial-modeling/SKILL.md: cdd5fa83428ab98f314560f4294931d3cc4d303088d18f4d0a6f2b9cf765a04f
   skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
-  skills/strategy-ea/financial-modeling/tests/cases.yaml: 9650b62acda78287b5701748f0f8f2bcc99922f5ac0d50932644058490f5dc9e
+  skills/strategy-ea/financial-modeling/tests/cases.yaml: 3fa1dda8a88f7c08426e177d635894c64b8842489fd32e605db88ef732d59056
