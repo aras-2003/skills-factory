@@ -9,8 +9,8 @@ out_of_scope_behavior_paths:
   - skills/investing/technical-structure/scripts/engine.py
   - skills/web-design/experience-design-routing/SKILL.md
 source_sha256:
-  skills/investing/historical-decision-replay/SKILL.md: 6d9d5aeb95c8b4abb810592c8278d5626c3275e1181bffe1c69486075d7bb7a7
-  skills/investing/historical-decision-replay/scripts/engine.py: 1a741174ae2d98538088281591c13598de15c7a633eb0c4f656a0d3ab39f0517
+  skills/investing/historical-decision-replay/SKILL.md: 06382d99ea7168fd5576c6b376b720002135213faf2a1f6a1cbc31f015e7955e
+  skills/investing/historical-decision-replay/scripts/engine.py: 9e2d54c7e39178b9805a4cb368249c1e9cc8a3d3d3889bbafecdb7a96e7114f1
   skills/investing/technical-structure/SKILL.md: 8aaf21f8d6406789f83f6c9dcc80dc15aae5b9318e1ad90ea8c92a9f1900860e
   skills/investing/technical-structure/scripts/engine.py: 018992a2404fe1e038da7174f5a812b38af4743bf1ee42d060bc407b585ec8fa
   skills/web-design/experience-design-routing/SKILL.md: 02089646b4c0fcccdb375e8718ced7c41c79509baec740b70822e5dbb9ca18d5
