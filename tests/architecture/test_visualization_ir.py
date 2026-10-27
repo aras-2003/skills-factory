@@ -80,6 +80,15 @@ class VisualizationIRTests(unittest.TestCase):
             with self.subTest(source_type=source_type):
                 validate_model(obj)
 
+    def test_skill_can_depend_on_a_documented_workflow(self):
+        obj=fixture()
+        obj["nodes"][0]["type"]="workflow"
+        obj["edges"]=[{
+            "id":"workflow-dependency","type":"depends_on","from":"a","to":"b",
+            "state":"observed","evidence":[copy.deepcopy(SOURCE)],
+        }]
+        validate_model(obj)
+
     def test_invalid_types_duplicate_dangling_implicit_edge(self):
         changes=[
             lambda x:x["nodes"].append(copy.deepcopy(x["nodes"][0])),
