@@ -382,7 +382,7 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
             or candidate.get("version") != "0.1.0"
             or candidate.get("sha256") != hashlib.sha256(source.read_bytes()).hexdigest()
             or 'version: "0.1.0"' not in source_text
-            or len(required) != 6
+            or len(required) != 7
             or len(set(required)) != len(required)
             or set(required) != set(cases)
         ):
