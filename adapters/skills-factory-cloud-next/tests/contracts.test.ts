@@ -65,6 +65,12 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Research investment themes and value chains", "investment-theme-discovery"],
     ["Research investment themes that could benefit from AI infrastructure spending over the next few years. I want value-chain and second-order opportunities, not an immediate buy list.", "investment-theme-discovery"],
     ["Does this news matter for my holdings?", "investment-attention-review"],
+    ["Rebuild my 2021 thesis and portfolio exposure using only the as-of snapshot available on the decision date; mark missing history blocked.", "historical-decision-replay"],
+    ["Compare our frozen decision rule with buy-and-hold using chronological walk-forward out-of-sample periods and realistic costs.", "historical-decision-replay"],
+    ["Use earnings revision published after the decision date only as an outcome label; never include it in the decision-time inputs.", "historical-decision-replay"],
+    ["Evaluate adjusted OHLCV and confirmed Dow swing pivots, OPS/OPD and trend invalidation for this ticker.", "technical-structure"],
+    ["Use the adjusted price series to identify confirmed swing highs and lows; do not backdate pivots before right-side confirmation.", "technical-structure"],
+    ["If price adjustments are unavailable, mark the technical structure unknown instead of inferring raw-price pivots.", "technical-structure"],
     ["Pomóż ustalić limity ryzyka i politykę inwestycyjną", "investment-policy-design"],
     ["What does GPT mean?", "investment-os-review"], ["hello", "investment-os-review"],
   ];
