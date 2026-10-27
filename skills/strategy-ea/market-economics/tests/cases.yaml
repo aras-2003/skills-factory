@@ -23,3 +23,7 @@ cases:
     case: Competitor research
     input: "Compare named competitors and their positioning."
     expected: {should_trigger: false, must_not: ["perform market-sizing arithmetic"]}
+  - id: market-research-near-miss
+    case: Qualitative market trend research
+    input: "Summarize the supplied market trend sources without estimating market size."
+    expected: {should_trigger: false, must_not: ["invent TAM or segment shares"]}
