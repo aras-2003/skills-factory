@@ -1,0 +1,32 @@
+schema_version: "1.0"
+campaign: design-critique-2026-10
+purpose: isolated-source-and-runtime-handoff-for-design-critique-candidate
+runtime_status: NOT_RUN
+release_approved: false
+out_of_scope_behavior_paths:
+  - skills/web-design/design-critique/SKILL.md
+candidate_skill:
+  name: design-critique
+  version: "0.1.0"
+  source: skills/web-design/design-critique/SKILL.md
+  sha256: 3860ab34b2aff6c557f1190c38dfbfd07646451b403c824e38904072c04cd54c
+  test_cases: skills/web-design/design-critique/tests/cases.yaml
+  required_case_ids:
+    - design-critique-comparative-fixture
+    - design-critique-single-screen
+    - design-critique-no-artifact
+    - design-critique-hidden-behavior
+    - design-critique-implementation-nearmiss
+    - design-critique-copy-edit-nearmiss
+    - design-critique-single-viewport
+routing_cases:
+  - id: design-critique-natural-en
+    input: evals/routing/design-critique-natural-en.input.md
+    rubric: evals/routing/design-critique-natural-en.rubric.yaml
+  - id: design-critique-implementation-nearmiss-en
+    input: evals/routing/design-critique-implementation-nearmiss-en.input.md
+    rubric: evals/routing/design-critique-implementation-nearmiss-en.rubric.yaml
+evaluator_policy:
+  executor_must_not_receive_rubrics: true
+  runtime_model_and_surface_must_be_recorded: true
+  runtime_receipts_required_before_release: true

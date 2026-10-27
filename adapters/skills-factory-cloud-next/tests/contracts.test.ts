@@ -140,7 +140,7 @@ test("MCP initialize, discover parity tools, authenticate and call", async () =>
   assert.equal(lineGood.result.isError, false);
   assert.deepEqual(lineGood.result.structuredContent.data.x_labels, ["Q1", "Q2"]); assert.match(lineGood.result.structuredContent.svg, /<title>Series \/ Q1: 0 PLN<\/title>/); assert.match(lineGood.result.structuredContent.svg, /<title>Series \/ Q2: -10 PLN<\/title>/); assert.ok(lineGood.result.content.every((item) => item.type === "text"));
   const bad = await (await handleMcp(rpc("tools/call", { name: "render_line_chart", arguments: { ...line, series_values: [[1]], expected_x_labels: 2, expected_series: 1, expected_points_per_series: 2 } }, { "oai-authenticated-user-id": "test-only" }))).json() as { result: { isError: boolean } }; assert.equal(bad.result.isError, true);
-  const catalog = callTool("list_skills", {}); assert.equal(catalog.skills.length, 84); assert.ok(catalog.skills.every((item) => !("reference_files" in item)));
+  const catalog = callTool("list_skills", {}); assert.equal(catalog.skills.length, catalog.skill_count); assert.ok(catalog.skills.every((item) => !("reference_files" in item)));
   const loaded = callTool("load_skill", { skill_name: "oaf-health-check" });
   const loadedReferences = loaded.reference_files as Record<string, string>;
   assert.match(loaded.instructions, /Load `references\/WORKFLOW\.md`/);
@@ -216,8 +216,7 @@ test("embedded Lab release identity and executor isolation", () => {
 });
 test("complete Lab includes Presentation/Report/skill-development drafts without an extension", async () => {
   const catalog = callTool("list_skills", {});
-  assert.equal(catalog.skill_count, 84);
-  assert.equal(catalog.lab_release.skill_count, 84);
+  assert.equal(catalog.lab_release.skill_count, catalog.skill_count);
   assert.equal(catalog.draft_extension, null);
   assert.equal(catalog.artifact_scope, "complete_lab");
   const expected = ["presentation-brief", "presentation-storyline", "presentation-evidence-review", "presentation-exhibit-design", "presentation-slide-authoring", "presentation-deck-review", "presentation-export-verification", "presentation-production", "report-document-architecture", "report-document-authoring", "report-document-review", "report-production", "skill-development"];
@@ -234,8 +233,8 @@ test("complete Lab includes Presentation/Report/skill-development drafts without
     if (loaded.kind === "workflow") assert.ok(refs["references/WORKFLOW.md"]);
   }
   const runtime = await callTool("runtime_info", {});
-  assert.equal(runtime.runtime_release.skill_count, 84);
-  assert.equal(runtime.lab_release.skill_count, 84);
+  assert.equal(runtime.runtime_release.skill_count, catalog.skill_count);
+  assert.equal(runtime.lab_release.skill_count, catalog.skill_count);
 });
 test("MCP receipts bind content and distinguish routing, rendering and validation", async () => {
   const metadata = { id: "test-version", tag: "0123456789abcdef0123456789abcdef01234567", timestamp: "2026-10-09T10:00:00Z" };

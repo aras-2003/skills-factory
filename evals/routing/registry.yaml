@@ -87,3 +87,9 @@ cases:
   - id: software-adr-no-skill-en
     input: evals/routing/software-adr-no-skill-en.input.md
     rubric: evals/routing/software-adr-no-skill-en.rubric.yaml
+  - id: design-critique-natural-en
+    input: evals/routing/design-critique-natural-en.input.md
+    rubric: evals/routing/design-critique-natural-en.rubric.yaml
+  - id: design-critique-implementation-nearmiss-en
+    input: evals/routing/design-critique-implementation-nearmiss-en.input.md
+    rubric: evals/routing/design-critique-implementation-nearmiss-en.rubric.yaml

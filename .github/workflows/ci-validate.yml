@@ -152,10 +152,14 @@ jobs:
           python - <<'PY_ASSERT'
           import json
           from pathlib import Path
+          import yaml
           root = Path('.tmp/iteration02-all-component-campaign')
           data = json.loads((root / 'source-audit.json').read_text())
+          catalog = json.loads(Path('docs/catalog.json').read_text())
+          registry = yaml.safe_load(Path('workflows/runtime-registry.yaml').read_text())
           assert data['status'] == 'INPUTS_READY_RUNTIME_NOT_RUN', data.get('errors')
-          assert data['skill_count'] == 65 and data['registered_workflow_count'] == 19
+          assert data['skill_count'] == len(catalog['skills'])
+          assert data['registered_workflow_count'] == len(registry['workflows'])
           assert data['case_count'] > 0 and not data['release_approved']
           assert not json.loads((root / 'executor-inputs.json').read_text())['writes_authorized']
           PY_ASSERT

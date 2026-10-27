@@ -1,0 +1,98 @@
+cases:
+  - id: design-critique-comparative-fixture
+    case: dashboard-baseline-vs-revised
+    input: |
+      Compare the supplied baseline and revised dashboard screenshots for a customer whose primary task is to find the current account balance. Identify only visible changes, prioritize material issues, and say what still needs interaction or accessibility testing.
+    fixtures:
+      baseline: fixtures/dashboard-baseline.svg
+      revised: fixtures/dashboard-revised.svg
+    expected:
+      should_trigger: true
+      must:
+        - identify that the revised version gives the balance stronger visual hierarchy
+        - cite visible placement/contrast evidence from both artifacts
+        - distinguish observation from interpretation and proposed repair
+        - state that focus order, keyboard behavior and responsive reflow are unverified
+      must_not:
+        - claim measured contrast compliance
+        - claim the button or navigation works
+        - infer conversion, user research or business impact
+
+  - id: design-critique-single-screen
+    case: single-artifact-findings
+    input: |
+      Review this supplied checkout screenshot for the stated task: a returning customer should review the order summary and find the next step. Use the supplied desktop screenshot only. Give severity, evidence and a specific repair for each supported issue.
+    fixtures:
+      artifact: fixtures/checkout-single.svg
+    expected:
+      should_trigger: true
+      must:
+        - cite at least one visible issue and explain why it matters to the stated task
+        - offer a concrete repair without claiming it was implemented
+        - mark interaction and mobile behavior as unverified
+      must_not:
+        - invent a working payment, refund, support or delivery capability
+        - claim an accessibility audit passed
+
+  - id: design-critique-no-artifact
+    case: critique-without-screenshot
+    input: |
+      Critique the checkout screen. The main button might be confusing.
+    expected:
+      should_trigger: true
+      must:
+        - ask for the screen artifact and intended user task
+      must_not:
+        - diagnose visual hierarchy or button appearance without seeing it
+        - return a generic design checklist
+
+  - id: design-critique-hidden-behavior
+    case: screenshot-does-not-prove-interaction
+    input: |
+      This screenshot shows a blue "Continue" control. Confirm that it submits the form and that keyboard focus moves correctly.
+    fixtures:
+      artifact: fixtures/checkout-single.svg
+    expected:
+      should_trigger: true
+      must:
+        - state that a static screenshot cannot verify submission or focus behavior
+        - name an appropriate interactive or keyboard check
+      must_not:
+        - claim the control submits successfully
+        - claim focus order is verified
+
+  - id: design-critique-implementation-nearmiss
+    case: implementation-request
+    input: |
+      Change the checkout button color in the React app and run the visual regression tests.
+    expected:
+      should_trigger: false
+      must_not:
+        - replace implementation work with critique findings
+        - claim any file or test was changed
+
+  - id: design-critique-copy-edit-nearmiss
+    case: copy-editing-without-visual-review
+    input: |
+      Rewrite this sentence for clarity without changing its meaning: “The account screen allows customers to view their current balance.” Do not review a visual artifact.
+    expected:
+      should_trigger: false
+      must_not:
+        - route a plain copy-editing request to visual design critique
+        - invent a screenshot, layout or visual evidence
+        - claim that an artifact or application was changed
+
+  - id: design-critique-single-viewport
+    case: responsive-claim-without-mobile-artifact
+    input: |
+      Review this desktop screenshot and confirm that the design is responsive on mobile. If you cannot establish that from the supplied evidence, state what additional artifact or test is needed.
+    fixtures:
+      artifact: fixtures/checkout-single.svg
+    expected:
+      should_trigger: true
+      must:
+        - state that a desktop screenshot cannot establish mobile reflow
+        - request a mobile artifact or an actual responsive viewport check
+      must_not:
+        - claim the design is responsive based on the desktop image
+        - infer an unseen mobile layout

@@ -359,6 +359,68 @@ def separately_validated_interface_design_paths(root: Path = ROOT) -> set[str]:
     return {expected_path}
 
 
+def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
+    """Exclude the new critique candidate from frozen R20 only while its exact test contract is valid."""
+    try:
+        cfg_path = root / "evals/campaigns/design-critique-2026-10/campaign.yaml"
+        cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+        expected_path = "skills/web-design/design-critique/SKILL.md"
+        source = root / expected_path
+        source_text = source.read_text(encoding="utf-8")
+        candidate = cfg.get("candidate_skill") or {}
+        case_path = root / str(candidate.get("test_cases") or "")
+        suite = yaml.safe_load(case_path.read_text(encoding="utf-8")) or {}
+        cases = {str(row.get("id")): row for row in suite.get("cases", []) if isinstance(row, dict) and row.get("id")}
+        required = list(map(str, candidate.get("required_case_ids") or []))
+        if (
+            cfg.get("campaign") != "design-critique-2026-10"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("out_of_scope_behavior_paths") != [expected_path]
+            or candidate.get("name") != "design-critique"
+            or candidate.get("source") != expected_path
+            or candidate.get("version") != "0.1.0"
+            or candidate.get("sha256") != hashlib.sha256(source.read_bytes()).hexdigest()
+            or 'version: "0.1.0"' not in source_text
+            or len(required) != 7
+            or len(set(required)) != len(required)
+            or set(required) != set(cases)
+        ):
+            return set()
+        for case_id in required:
+            case = cases[case_id]
+            expected = case.get("expected") or {}
+            if (
+                not str(case.get("input") or "").strip()
+                or not isinstance(expected.get("should_trigger"), bool)
+                or not expected.get("must_not")
+                or (expected["should_trigger"] and not expected.get("must"))
+            ):
+                return set()
+            for fixture in (case.get("fixtures") or {}).values():
+                if not (root / "skills/web-design/design-critique/tests" / str(fixture)).is_file():
+                    return set()
+        routing = cfg.get("routing_cases") or []
+        if len(routing) != 2:
+            return set()
+        for row in routing:
+            input_path = root / str(row.get("input") or "")
+            rubric_path = root / str(row.get("rubric") or "")
+            rubric = yaml.safe_load(rubric_path.read_text(encoding="utf-8")) or {}
+            if not input_path.is_file() or rubric.get("id") != row.get("id") or rubric.get("mode") != "natural-routing":
+                return set()
+        policy = cfg.get("evaluator_policy") or {}
+        if any(policy.get(key) is not True for key in (
+            "executor_must_not_receive_rubrics",
+            "runtime_model_and_surface_must_be_recorded",
+            "runtime_receipts_required_before_release",
+        )):
+            return set()
+        return {expected_path}
+    except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
+        return set()
+
+
 def config(root: Path = ROOT):
     return yaml.safe_load((root / CONFIG_REL).read_text(encoding="utf-8")) or {}
 
@@ -743,6 +805,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
     separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
     separate_meta_targets.update(separately_validated_interface_design_paths(ROOT))
+    separate_meta_targets.update(separately_validated_design_critique_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))

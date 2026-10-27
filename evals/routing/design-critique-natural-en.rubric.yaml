@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: design-critique-natural-en
+mode: natural-routing
+target: design-critique
+expected_target: design-critique
+required_selected_capabilities:
+  - design-critique
+language: en
+competing_intents:
+  - new interface design
+  - implementation
+assertions:
+  manual:
+    - routes an existing supplied visual artifact to design-critique
+    - requests the artifact if absent instead of inventing visual findings
+    - does not claim implementation, interaction testing, or measured accessibility results
