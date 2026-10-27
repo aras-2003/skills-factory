@@ -1,9 +1,13 @@
 schema_version: "1.0"
 id: implementation-brief-implementation-nearmiss-en
 mode: natural-routing
-target: implementation-workflow
-expected_target: implementation-workflow
+expected_target: no-skill
 required_selected_capabilities: []
+forbidden_selected_capabilities:
+  - implementation-brief
+  - visual-regression-review
+  - accessibility-gate
+  - interface-design
 language: en
 competing_intents:
   - implementation-brief
