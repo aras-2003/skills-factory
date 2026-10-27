@@ -71,6 +71,17 @@ cases:
         - replace implementation work with critique findings
         - claim any file or test was changed
 
+  - id: design-critique-copy-edit-nearmiss
+    case: copy-editing-without-visual-review
+    input: |
+      Rewrite this sentence for clarity without changing its meaning: “The account screen allows customers to view their current balance.” Do not review a visual artifact.
+    expected:
+      should_trigger: false
+      must_not:
+        - route a plain copy-editing request to visual design critique
+        - invent a screenshot, layout or visual evidence
+        - claim that an artifact or application was changed
+
   - id: design-critique-single-viewport
     case: responsive-claim-without-mobile-artifact
     input: |
