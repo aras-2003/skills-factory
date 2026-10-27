@@ -9,4 +9,4 @@ as_of: "2026-10-27"
 sources:
   skills/strategy-ea/strategy-economics/SKILL.md: 91ef00de47ed4b3ebdb6dcb141aa8823249c6e83d08ad230b522437830bfe796
   skills/strategy-ea/strategy-economics/engine.py: 02ec781743c4dcb660dd14b3ce129f2b8a43a7f7642b51bcd2433b181c5b6b6c
-  skills/strategy-ea/strategy-economics/tests/cases.yaml: a0c2eacb67ec77d6bef2215a7775a5da47ce0ea9e896230813b469e0c9e18c0d
+  skills/strategy-ea/strategy-economics/tests/cases.yaml: 6012f3838f5081eb870352908b5b870e8c2537058202de45268f3ea5ff9aace9
