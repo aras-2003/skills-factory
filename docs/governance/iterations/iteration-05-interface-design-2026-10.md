@@ -1,6 +1,6 @@
 # Iteration 05 — interface-design candidate acceptance
 
-- State: ACTIVE
+- State: ABORTED
 - Owner: Arkadiusz Kamrowski
 - Reviewer: Arkadiusz Kamrowski (self-review; not independent)
 - Tracking Issue: [#471](https://github.com/aras-2003/skills-factory/issues/471)
@@ -63,15 +63,42 @@
 
 | Bug Issue / discovery iteration | Existing contract / frozen criterion | Severity / blocks closure | Fix / deferral | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
-| [#474](https://github.com/aras-2003/skills-factory/issues/474) | #423 AC-04 / `interface-design-direct-positive`: do not invent order data | Major / blocks closure | Corrective change in #475; no scope expansion | All six behavior cases, all routing cases, sentinels, probes, identity and smoke on C2 | Owner self-review; not independent |
-| [#480](https://github.com/aras-2003/skills-factory/issues/480) | #423 AC-03/AC-04 / `interface-design-insufficient-context`: do not import unrelated prior-chat context | Major / blocks closure | Corrective change in this branch/PR; context-boundary rule and stronger existing case only | Retest vague prompt and affected routing/behavior rows on exact updated Site; Lab pair remains blocked | Owner self-review; not independent |
+| [#474](https://github.com/aras-2003/skills-factory/issues/474) | #423 AC-04 / `interface-design-direct-positive`: do not invent order data | Major / blocks closure | Corrective changes in #475 and #478; no scope expansion | All six behavior cases, all routing cases, sentinels, probes, identity and smoke on the follow-up candidate | Owner self-review; not independent |
+| [#480](https://github.com/aras-2003/skills-factory/issues/480) | #423 AC-03/AC-04 / `interface-design-insufficient-context`: do not import unrelated prior-chat context | Major / blocks closure | Corrective change in #481; context-boundary rule and stronger existing case only | Retest vague prompt and affected routing/behavior rows on Site after deployment; Lab is supplemental under future policy | Owner self-review; not independent |
 
-## Closure decision
+## Abort decision — 2026-10-27 09:03 Europe/Warsaw
 
-- Outcome: PENDING.
-- Final candidate / matrix: C1 direct-positive Site FAIL, linked in #423 and #474; C2 pending.
-- Required rows: C1 remaining rows NOT_RUN/BLOCKED; C2 full runtime matrix required.
-- Scope compared with lock commit: pending.
-- Issue / Project / PR reconciliation: pending.
-- Owner proposal / reviewer acceptance: pending; reviewer is the owner and is not independent.
-- Next iteration eligibility: only after CLOSED or ABORTED.
+- **Outcome: ABORTED. This is not PASS, Done, release approval, or a waiver of any frozen criterion.**
+- Owner decision: the user directed that Iteration 05 be stopped and specified that future substantive Cloud Next behavior checks use Site MCP, with Lab as an additional consistency check. Lab availability or version lag must not block a complete Site MCP behavioral result in future scopes.
+- Reason: this frozen lock requires ordinary-Chat runtime acceptance on both Lab and Site and same-candidate identity. The required Lab surface was not available in ordinary Chat. The owner chose to terminate this lock rather than rewrite its frozen acceptance in place.
+- Frozen commitment, exclusions, C1/C2 failures and all missing verdicts remain intact. The new runtime-surface policy in `docs/governance/ITERATION-DELIVERY.md` applies prospectively; it does not retrospectively mark Iteration 05 cases as passing.
+
+### Final observed candidate and evidence boundary
+
+- Current GitHub main at the abort decision: `aa060dc1c620a15e52329376ff1fd4a5af206acf`, including #481's context-boundary correction.
+- A fresh Site `runtime_info` observation completed `2026-10-27T08:06:57.702Z`: embedded Lab release `1.38.366+63b9c002c7e6`, canonical source `63b9c002c7e672bb2999cca79cb7fae88b1e7260`, payload SHA-256 `d79b146627f7356e2b4ccd5eac7495fa29ca808202c3d4aff47c7cfe66cdb9f6`; Site attestation was `verified`, and provider mirror revision was `90623d4608444ce051ff3d8b959211b2ff59ff39`. Receipt output SHA-256: `c16477f240bf96ffad3cd7690a0246ca5d31bdbc5942259974802cbc024b2878`. This deployed source predates current main and does not contain #481.
+- The four 4/4 routing-only Site calls documented on #456 are unrelated to the `interface-design` behavioral acceptance and are not credited to this matrix. They did not execute a child workflow.
+- No post-#481 `interface-design` runtime retest was observed on Site. No Lab acceptance result was observed in ordinary Chat. Site identity evidence and package build evidence do not substitute for behavioral execution.
+
+### Preserved verdicts and complete unresolved-criterion mapping
+
+| Frozen criterion / finding | Abort-time disposition | Replacement work |
+| --- | --- | --- |
+| AC-01 — offline structure, isolation and final-main gates | Earlier candidate checks remain historical sub-evidence; no complete final-main iteration acceptance is claimed. | #423: rerun required offline gates on the follow-up candidate and record exact main SHA. |
+| AC-02 — natural positive and near-miss routing | NOT_RUN as a complete final-candidate Site matrix. The separate #456 route-only matrix does not count. | #423: execute the frozen positive, report/diagram and implementation prompts on Site MCP. |
+| AC-03 — six behavioral cases | Incomplete. Preserve the direct-positive FAIL in #474 and insufficient-context FAIL in #480; remaining final-candidate cases are NOT_RUN. | #423: execute all six frozen cases; #474: retest direct-positive; #480: retest insufficient context after deploying #481. |
+| AC-04 — output quality, responsive/accessibility states, no invented facts or implementation claims | C1 and C2 direct-positive failures remain FAIL; post-fix behavior is NOT_RUN. | #423 and #474: rerun all applicable output assertions on the Site MCP candidate. |
+| AC-05 — exact runtime identity and same-candidate pairing | Site identity is verified for source `63b9c002…`; it is older than current main `aa060dc…`. The required Lab observation in ordinary Chat and same-candidate pair are BLOCKED/NOT_RUN. | #423: verify the deployed Site candidate for semantic tests. Record any supplemental Lab identity separately; do not claim parity without matching identities. |
+| AC-06 — fixed sentinels and two rotating probes | NOT_RUN on the final post-#481 candidate. | #423: execute both fixed sentinels and both preselected probes on Site MCP, with no data writes. |
+| AC-07 — issue closure and release decision | NOT_RUN; #423 remains open and unaccepted. | #423: make a new evidence-based closure decision only after AC-01–AC-06 are resolved. |
+| #474 — invented operational data | Historical FAILs remain immutable; the source correction is merged but not behaviorally accepted on the final current-main Site. | Keep #474 open; link its retest to #423's next locked scope. |
+| #480 — unrelated prior-chat context | Historical FAIL remains immutable; #481 is merged, but the observed Site package predates #481. | Keep #480 open; publish/test the source containing #481 under a future scope and link the actual Chat evidence. |
+
+Issues #423, #474 and #480 remain open; aborting this iteration does not close them or change their acceptance results. #424–#426 were explicitly excluded from this lock and remain backlog items dependent on #423. No replacement iteration is started by this abort decision.
+
+### Reconciliation
+
+- Scope compared with lock commit: unchanged; termination is administrative, not a scope rewrite.
+- Preserved failed and unrun evidence: retained in #423, #474, #480 and their original chat/runtime records.
+- Project status: the tracking issue must show an aborted disposition without `Done`; child behavior issues stay in Verification until their replacement criteria are actually tested.
+- Next iteration eligibility: released after this ABORTED record is merged. A new scope requires its own PLANNED record, test matrix and tracking link.
