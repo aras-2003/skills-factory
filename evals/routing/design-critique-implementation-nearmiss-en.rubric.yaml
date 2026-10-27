@@ -1,0 +1,15 @@
+schema_version: "1.0"
+id: design-critique-implementation-nearmiss-en
+mode: natural-routing
+target: design-critique
+expected_target: no-skill
+forbidden_selected_capabilities:
+  - design-critique
+language: en
+competing_intents:
+  - software implementation
+  - visual regression testing
+assertions:
+  manual:
+    - preserves the request as an implementation task
+    - does not replace the requested code change with critique findings

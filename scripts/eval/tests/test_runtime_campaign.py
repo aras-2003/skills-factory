@@ -96,6 +96,18 @@ class RuntimeCampaignTests(unittest.TestCase):
         fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
         self.assertNotIn("interface-design", fixtures["targets"])
 
+    def test_design_critique_candidate_isolated_from_frozen_r20(self) -> None:
+        path = "skills/web-design/design-critique/SKILL.md"
+        self.assertEqual({path}, campaign.separately_validated_design_critique_paths(ROOT))
+        self.assertEqual([], campaign.validate_campaign())
+        fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
+        self.assertNotIn("design-critique", fixtures["targets"])
+        cases = yaml.safe_load((ROOT / "skills/web-design/design-critique/tests/cases.yaml").read_text())
+        self.assertEqual(6, len(cases["cases"]))
+        for case in cases["cases"]:
+            for fixture in (case.get("fixtures") or {}).values():
+                self.assertTrue((ROOT / "skills/web-design/design-critique/tests" / fixture).is_file())
+
     def test_skill_engineering_campaign_derives_lab_version_from_package_source(self) -> None:
         cfg = yaml.safe_load(
             (ROOT / "evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml").read_text()
