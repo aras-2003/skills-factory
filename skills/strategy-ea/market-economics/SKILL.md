@@ -19,4 +19,4 @@ Define segments by the supplied customer need/JTBD evidence and explain inclusio
 
 ## Output
 
-Run `python engine.py input.json` (or provide JSON on stdin) for deterministic arithmetic. Treat the output as a sizing aid, not a market fact or investment decision. The original upstream source corpus and license baseline were unavailable for this candidate; no upstream content is copied or claimed equivalent.
+Run `python engine.py input.json` (or provide JSON on stdin) for deterministic arithmetic. Treat the output as a sizing aid, not a market fact or investment decision. The public reference sources are now hash-verified. This candidate uses them as method references only; no third-party content is copied and no source-equivalence claim is made.
