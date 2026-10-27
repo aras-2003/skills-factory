@@ -23,3 +23,7 @@ cases:
     case: Competitor benchmarking
     input: "Research competitors' product positioning and public strategy."
     expected: {should_trigger: false, must_not: ["invent a profit-pool benchmark"]}
+  - id: strategy-econ-option-design-near-miss
+    case: Strategy option narrative
+    input: "Develop strategic options without any supplied unit economics or financial bridge request."
+    expected: {should_trigger: false, must_not: ["invent profit pools or cost bridges"]}
