@@ -24,7 +24,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_candidate_metadata_and_identity(self):
         self.assertEqual(self.metadata["name"], "interface-design")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.0")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.3")
 
     def test_contract_sections_are_present(self):
         for section in (
@@ -75,6 +75,17 @@ class InterfaceDesignContractTests(unittest.TestCase):
         joined = " ".join(case["expected"]["must"] + case["expected"]["must_not"]).lower()
         self.assertIn("permission", joined)
         self.assertIn("empty state", joined)
+
+    def test_missing_context_gate_is_clarification_only(self):
+        self.assertIn("entire response must be that clarification question", self.body)
+        self.assertIn("do not add an introduction, examples, suggestions, a checklist", self.body)
+
+    def test_product_unknowns_are_not_presented_as_existing_ui(self):
+        self.assertIn("Do not present plausible labels or example content as existing product behavior", self.body)
+        self.assertIn("Do not create an interactive preview, prototype, wireframe artifact", self.body)
+
+    def test_indirect_flow_keeps_failure_recovery(self):
+        self.assertIn("include at least one realistic failure path and its recovery", self.body)
 
 
 if __name__ == "__main__":

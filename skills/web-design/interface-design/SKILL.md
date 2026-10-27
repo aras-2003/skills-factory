@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.2"
+  version: "0.1.3"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-10-27"
@@ -48,7 +48,11 @@ Before proposing any screen-specific design, verify that the current request or 
 
 If any required input is missing, stop and ask one concise question that names every missing input. Do not provide a layout, a partial design, a generic UX checklist, or a bounded assumption in place of the missing context. Do not infer these inputs from unrelated chats, profile data, saved memory, or ambient application context. Continue only after the user supplies the missing information.
 
+For this gate, the entire response must be that clarification question. Name only the missing fields (screen or flow, intended user and task, target runtime/device); do not add an introduction, examples, suggestions, a checklist, or a promise of a future deliverable. A request such as “make the screen better” has no identifiable screen, user task, or target runtime and must receive one question asking for those three items.
+
 A product name, industry, or native/web label is not an extra required input when the stated user-flow goal, intended user and primary task, and target device context are already clear. For a product-agnostic flow, proceed with explicit, limited assumptions and list product-specific decisions for handoff. Do not ask for details that would not change the requested flow.
+
+When a user supplies a concrete problem observation and the intended user, goal, and device context are clear, design a flow that responds to that observation. Treat unverified causes as assumptions; do not block the flow by asking for product or platform details that can be left as handoff decisions.
 
 ### Optional
 
@@ -75,6 +79,8 @@ A product name, industry, or native/web label is not an extra required input whe
 7. Specify semantic structure and accessibility behavior: headings, labels, keyboard order, focus, contrast risks, status announcements, reduced motion, and touch-target concerns where relevant.
 8. List unresolved decisions, evidence gaps, and handoff questions. Keep this brief at the design level; do not claim that code was built or tested.
 
+For an onboarding or other multi-step flow, include at least one realistic failure path and its recovery, in addition to the successful path. Name the triggering condition only when it is supplied or established; otherwise use a neutral placeholder and identify it as an open product rule.
+
 ## Decision rules
 
 - User goals and product constraints outrank decorative convention or optional references.
@@ -84,6 +90,8 @@ A product name, industry, or native/web label is not an extra required input whe
 - Treat the requested task as the boundary of the product surface. Do not add unprovided navigation destinations, screens, services, states, or actions as if they exist. For an order dashboard, do not assume shipment tracking, delivery estimates, payment changes, cancellations, refunds, returns, address management, support channels, or account settings unless the user or supplied product evidence names them.
 - When the requested next action depends on missing product rules, show a neutral placeholder such as `[next action from approved order rules]` and list the required state/action mapping as an open decision. Do not invent sample order statuses or a condition-to-action matrix to fill that gap.
 - If design tokens, navigation patterns, or product capabilities are referenced but not supplied, say they are unavailable and make their use a handoff dependency. Do not invent token names or values, component names, or destinations.
+- A requested screen or page is not evidence that specific tabs, navigation destinations, actions, account fields, status labels, records, or operational copy exist. When product evidence does not define them, describe the information role generically or use a neutral placeholder; identify any required product mapping as unresolved. Do not present plausible labels or example content as existing product behavior.
+- Produce the requested written interface brief only. Do not create an interactive preview, prototype, wireframe artifact, or implementation unless the user explicitly requests that deliverable.
 - Do not design a happy path only. Every screen needs explicit loading, empty, and error behavior; describe unavailable-data handling when data is part of the interface.
 - Do not prescribe a chart or diagram merely because the screen contains data. If the requested outcome is the visual itself, route to the relevant visualization capability.
 - Do not turn the brief into implementation code. A separate approved implementation task owns code changes and runtime validation.
@@ -102,6 +110,8 @@ Return a concise **Interface brief** with these sections:
 8. **Open decisions and handoff** — unresolved questions, dependencies, and what implementation must verify.
 
 When a required input is missing, follow the required-context gate before drafting the brief. Do not substitute assumptions or a generic checklist for a clarification. After the required inputs are supplied, do not omit a section; use “not applicable” with a reason.
+
+The clarification-only response is the sole exception to the eight-section brief: do not emit any brief section until the required context is present. For a valid brief, keep the output textual and do not append a rendered or interactive artifact.
 
 ## Quality checks
 
