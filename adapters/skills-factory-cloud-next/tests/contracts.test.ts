@@ -71,6 +71,9 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Evaluate adjusted OHLCV and confirmed Dow swing pivots, OPS/OPD and trend invalidation for this ticker.", "technical-structure"],
     ["Use the adjusted price series to identify confirmed swing highs and lows; do not backdate pivots before right-side confirmation.", "technical-structure"],
     ["If price adjustments are unavailable, mark the technical structure unknown instead of inferring raw-price pivots.", "technical-structure"],
+    ["Odtwórz decyzję inwestycyjną z 2021 r. z użyciem migawki as-of; nie uzupełniaj braków dzisiejszym portfelem.", "historical-decision-replay"],
+    ["Oceń potwierdzone swingi, OPS/OPD i zanegowanie trendu na skorygowanych danych OHLCV.", "technical-structure"],
+    ["Review ACN's valuation and earnings quality; do not analyze price swings.", "investment-security-review"],
     ["Pomóż ustalić limity ryzyka i politykę inwestycyjną", "investment-policy-design"],
     ["What does GPT mean?", "investment-os-review"], ["hello", "investment-os-review"],
   ];
