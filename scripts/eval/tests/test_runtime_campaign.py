@@ -133,6 +133,14 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/investing/technical-structure/SKILL.md",
             "skills/investing/technical-structure/scripts/engine.py",
             "skills/web-design/experience-design-routing/SKILL.md",
+            "skills/strategy-ea/financial-modeling/SKILL.md",
+            "skills/strategy-ea/financial-modeling/engine.py",
+            "skills/strategy-ea/market-economics/SKILL.md",
+            "skills/strategy-ea/market-economics/engine.py",
+            "skills/strategy-ea/strategy-economics/SKILL.md",
+            "skills/strategy-ea/strategy-economics/engine.py",
+            "skills/strategy-ea/value-realization/SKILL.md",
+            "skills/strategy-ea/value-realization/engine.py",
         }
         self.assertEqual(expected, campaign.separately_validated_unassigned_candidate_paths(ROOT))
         self.assertEqual([], campaign.validate_campaign())
