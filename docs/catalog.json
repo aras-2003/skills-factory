@@ -690,6 +690,16 @@
       "capability_assessment": "DECLARED"
     },
     {
+      "name": "value-realization",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review a funded strategy initiative against dated benefit baselines, forecasts, realized KPIs, owners and explicit decision rules.",
+      "source": "skills/strategy-ea/value-realization/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "accessibility-gate",
       "domain": "web-design",
       "maturity": "candidate",
