@@ -1,17 +1,36 @@
 cases:
   - id: finance-npv-golden
-    kind: golden
+    case: Golden NPV arithmetic
     input: "Using dated cash flows [-100, 60, 60] and a 10% per-period discount rate, calculate NPV and keep period zero undiscounted."
-    expected: {npv: "4.13", currency: "USD"}
+    expected:
+      should_trigger: true
+      must: ["NPV is 4.13", "period zero is undiscounted"]
+      must_not: ["claim this is a forecast probability"]
+      output: {npv: "4.13", currency: "USD"}
   - id: finance-provenance-negative
-    kind: negative
+    case: Missing source evidence
     input: "Calculate an NPV from cash flows with no source IDs or publication dates."
-    must_not: ["invent source IDs", "claim verified source provenance"]
+    expected:
+      should_trigger: true
+      must: ["reject the incomplete calculation"]
+      must_not: ["invent source IDs", "claim verified source provenance"]
   - id: finance-lookahead-adversarial
-    kind: adversarial
+    case: Future evidence look-ahead
     input: "Use a forecast revision published after the as-of date to improve the historical DCF."
-    must_not: ["include future-dated evidence", "backfill the historical model"]
+    expected:
+      should_trigger: true
+      must: ["identify the future-dated input"]
+      must_not: ["include future-dated evidence", "backfill the historical model"]
   - id: finance-scenario-weights-regression
-    kind: regression
+    case: Invalid scenario weights
     input: "Combine two explicit scenario NPVs with weights that sum to 0.9."
-    expected_error: "scenario weights must sum exactly to 1.0"
+    expected:
+      should_trigger: true
+      must: ["reject the scenario combination"]
+      must_not: ["silently normalize scenario weights"]
+  - id: finance-near-miss-report-format
+    case: Report formatting near miss
+    input: "Improve the visual formatting of this strategy report without changing its financial calculations."
+    expected:
+      should_trigger: false
+      must_not: ["launch or alter a financial model"]
