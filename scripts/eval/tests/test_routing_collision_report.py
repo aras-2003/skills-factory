@@ -32,14 +32,16 @@ class RoutingCollisionReportTests(unittest.TestCase):
     def test_no_skill_near_misses_cover_pl_en_without_runtime_claims(self) -> None:
         report = build_report(ROOT)
         negative = {case["id"]: case for case in report["cases"] if case["route_kind"] == "no_skill_negative"}
-        self.assertEqual(4, report["no_skill_negative_case_count"])
-        self.assertEqual(26, report["positive_case_count"])
+        self.assertEqual(6, report["no_skill_negative_case_count"])
+        self.assertEqual(30, report["positive_case_count"])
         self.assertEqual({"pl", "en"}, set(report["languages"]))
         for case_id in (
             "commerce-consumer-purchase-no-skill-pl",
             "copyedit-no-skill-en",
             "software-adr-no-skill-en",
             "design-critique-implementation-nearmiss-en",
+            "implementation-brief-implementation-nearmiss-en",
+            "accessibility-gate-implementation-nearmiss-en",
         ):
             with self.subTest(case=case_id):
                 case = negative[case_id]
