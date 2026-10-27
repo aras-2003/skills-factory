@@ -1,7 +1,77 @@
 cases:
   - id: value-realization-golden
     case: Dated forecast versus realized benefit
-    input: "Compare a dated $1,000 forecast with a dated $800 realized amount for the same KPI period and apply explicitly sourced correction thresholds."
+    input: |
+      Compare a dated $1,000 forecast with a dated $800 realized amount for the same KPI period and apply explicitly sourced correction thresholds.
+      All values below are synthetic test inputs, not business forecasts. Periods are equally spaced annual periods where applicable. Use only this supplied evidence.
+      Input JSON:
+      {
+        "as_of": "2026-01-31",
+        "initiatives": [
+          {
+            "initiative_id": "initiative-1",
+            "owner": "owner-1",
+            "currency": "USD",
+            "funded_amount": {
+              "value": "100000",
+              "source_id": "approved-funding",
+              "published_at": "2026-01-01"
+            },
+            "review_cadence_days": {
+              "value": "30",
+              "source_id": "approved-cadence",
+              "published_at": "2026-01-01"
+            },
+            "last_review_at": "2025-12-01",
+            "benefits": [
+              {
+                "kpi_id": "savings-run-rate",
+                "kind": "lagging",
+                "unit": "USD/month",
+                "baseline": {
+                  "value": "0",
+                  "source_id": "baseline",
+                  "published_at": "2026-01-01"
+                },
+                "target": {
+                  "value": "1000",
+                  "source_id": "target",
+                  "published_at": "2026-01-01"
+                },
+                "forecast": [
+                  {
+                    "period": "2026-01",
+                    "value": "1000",
+                    "source_id": "forecast-jan",
+                    "published_at": "2026-01-01"
+                  }
+                ],
+                "actual": [
+                  {
+                    "period": "2026-01",
+                    "value": "800",
+                    "source_id": "actual-jan",
+                    "published_at": "2026-01-31"
+                  }
+                ],
+                "decision_critical": true
+              }
+            ],
+            "decision_rules": {
+              "stop_if_variance_pct_at_or_below": {
+                "value": "-0.50",
+                "source_id": "stop-policy",
+                "published_at": "2026-01-01"
+              },
+              "correct_if_variance_pct_at_or_below": {
+                "value": "-0.10",
+                "source_id": "correct-policy",
+                "published_at": "2026-01-01"
+              }
+            }
+          }
+        ]
+      }
     expected:
       should_trigger: true
       tags: [golden]

@@ -1,7 +1,67 @@
 cases:
   - id: market-reconciliation-golden
     case: Keep market estimates distinct
-    input: "Reconcile the supplied sourced top-down and bottom-up market estimates and calculate segment SAM/SOM and whitespace."
+    input: |
+      Reconcile the supplied sourced top-down and bottom-up market estimates and calculate segment SAM/SOM and whitespace.
+      All values below are synthetic test inputs, not business forecasts. Periods are equally spaced annual periods where applicable. Use only this supplied evidence.
+      Input JSON:
+      {
+        "as_of": "2026-01-31",
+        "currency": "USD",
+        "top_down": {
+          "value": "1000",
+          "source_id": "top",
+          "published_at": "2026-01-01"
+        },
+        "bottom_up": {
+          "value": "1200",
+          "source_id": "bottom",
+          "published_at": "2026-01-01"
+        },
+        "currently_served": {
+          "value": "20",
+          "source_id": "served",
+          "published_at": "2026-01-01"
+        },
+        "segments": [
+          {
+            "id": "smb",
+            "annual_spend": {
+              "value": "100",
+              "source_id": "spend",
+              "published_at": "2026-01-01"
+            },
+            "serviceable_share": {
+              "value": "0.5",
+              "source_id": "fit",
+              "published_at": "2026-01-01"
+            },
+            "attainable_share": {
+              "value": "0.2",
+              "source_id": "capture",
+              "published_at": "2026-01-01"
+            }
+          },
+          {
+            "id": "enterprise",
+            "annual_spend": {
+              "value": "200",
+              "source_id": "spend2",
+              "published_at": "2026-01-01"
+            },
+            "serviceable_share": {
+              "value": "0.25",
+              "source_id": "fit2",
+              "published_at": "2026-01-01"
+            },
+            "attainable_share": {
+              "value": "0.1",
+              "source_id": "capture2",
+              "published_at": "2026-01-01"
+            }
+          }
+        ]
+      }
     expected: {should_trigger: true, must: ["keep top-down and bottom-up estimates separate", "show the reconciliation difference"], must_not: ["silently average the estimates"]}
   - id: market-missing-source-negative
     case: No evidence for market size

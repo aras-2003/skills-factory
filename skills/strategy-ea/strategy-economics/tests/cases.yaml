@@ -1,7 +1,129 @@
 cases:
   - id: strategy-econ-profit-pool-golden
     case: Sum sourced profit pools
-    input: "Aggregate sourced entity revenue and operating profit, then show margin."
+    input: |
+      Aggregate sourced entity revenue and operating profit, then show margin.
+      All values below are synthetic test inputs, not business forecasts. Periods are equally spaced annual periods where applicable. Use only this supplied evidence.
+      Input JSON:
+      {
+        "as_of": "2026-01-31",
+        "currency": "USD",
+        "profit_pools": [
+          {
+            "entity": "A",
+            "revenue": {
+              "value": "100",
+              "source_id": "ra",
+              "published_at": "2026-01-01"
+            },
+            "operating_profit": {
+              "value": "20",
+              "source_id": "pa",
+              "published_at": "2026-01-01"
+            }
+          },
+          {
+            "entity": "B",
+            "revenue": {
+              "value": "200",
+              "source_id": "rb",
+              "published_at": "2026-01-01"
+            },
+            "operating_profit": {
+              "value": "30",
+              "source_id": "pb",
+              "published_at": "2026-01-01"
+            }
+          }
+        ],
+        "pvm": [
+          {
+            "id": "a",
+            "prior_price": {
+              "value": "10",
+              "source_id": "p0a",
+              "published_at": "2026-01-01"
+            },
+            "current_price": {
+              "value": "11",
+              "source_id": "p1a",
+              "published_at": "2026-01-01"
+            },
+            "prior_volume": {
+              "value": "10",
+              "source_id": "v0a",
+              "published_at": "2026-01-01"
+            },
+            "current_volume": {
+              "value": "12",
+              "source_id": "v1a",
+              "published_at": "2026-01-01"
+            }
+          },
+          {
+            "id": "b",
+            "prior_price": {
+              "value": "20",
+              "source_id": "p0b",
+              "published_at": "2026-01-01"
+            },
+            "current_price": {
+              "value": "22",
+              "source_id": "p1b",
+              "published_at": "2026-01-01"
+            },
+            "prior_volume": {
+              "value": "10",
+              "source_id": "v0b",
+              "published_at": "2026-01-01"
+            },
+            "current_volume": {
+              "value": "8",
+              "source_id": "v1b",
+              "published_at": "2026-01-01"
+            }
+          }
+        ],
+        "driver_tree": {
+          "reported_value": {
+            "value": "30",
+            "source_id": "parent",
+            "published_at": "2026-01-01"
+          },
+          "operation": "sum",
+          "children": [
+            {
+              "reported_value": {
+                "value": "10",
+                "source_id": "child1",
+                "published_at": "2026-01-01"
+              }
+            },
+            {
+              "reported_value": {
+                "value": "20",
+                "source_id": "child2",
+                "published_at": "2026-01-01"
+              }
+            }
+          ]
+        },
+        "cost_bridge": [
+          {
+            "id": "labor",
+            "baseline": {
+              "value": "40",
+              "source_id": "cb",
+              "published_at": "2026-01-01"
+            },
+            "actual": {
+              "value": "45",
+              "source_id": "ca",
+              "published_at": "2026-01-01"
+            }
+          }
+        ]
+      }
     expected: {should_trigger: true, must: ["show entity and aggregate amounts", "show the denominator used for margin"], must_not: ["infer unsupported entity values"]}
   - id: strategy-econ-driver-reconcile-negative
     case: Driver tree does not reconcile

@@ -1,7 +1,39 @@
 cases:
   - id: finance-npv-golden
     case: Golden NPV arithmetic
-    input: "Using dated cash flows [-100, 60, 60] and a 10% per-period discount rate, calculate NPV and keep period zero undiscounted."
+    input: |
+      Using dated cash flows [-100, 60, 60] and a 10% per-period discount rate, calculate NPV and keep period zero undiscounted.
+      All values below are synthetic test inputs, not business forecasts. Periods are equally spaced annual periods where applicable. Use only this supplied evidence.
+      Input JSON:
+      {
+        "currency": "USD",
+        "as_of": "2026-01-31",
+        "discount_rate": {
+          "value": "0.10",
+          "source_id": "approved-wacc",
+          "published_at": "2026-01-01"
+        },
+        "cash_flows": [
+          {
+            "period": 0,
+            "value": "-100",
+            "source_id": "initial-investment",
+            "published_at": "2026-01-01"
+          },
+          {
+            "period": 1,
+            "value": "60",
+            "source_id": "year-1-cash-flow",
+            "published_at": "2026-01-01"
+          },
+          {
+            "period": 2,
+            "value": "60",
+            "source_id": "year-2-cash-flow",
+            "published_at": "2026-01-01"
+          }
+        ]
+      }
     expected:
       should_trigger: true
       must: ["NPV is 4.13", "period zero is undiscounted"]
