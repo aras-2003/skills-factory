@@ -4,7 +4,7 @@
 
 The pinned UI/UX Pro Max review is a non-executable reference for future design skills. It does not add a package dependency, copy upstream datasets, enable a production capability, or call a remote MCP. See [the adapter contract](../../docs/web-design/ui-ux-pro-max-adapter.md).
 
-The [interface-design](interface-design/SKILL.md) skill defines screen and flow briefs. Its current evidence is limited to source and fixture validation; natural routing and model behavior remain unverified until the exact Lab candidate is installed and evaluated.
+The `interface-design` skill defines screen and flow briefs. `implementation-brief` turns an approved concept into a build-ready handoff, while `visual-regression-review` and `accessibility-gate` keep evidence and test limits explicit. These are candidate skills: source/fixture checks do not establish model routing or runtime behavior; exact-version runtime evaluation is still required before promotion.
 
 Skills for turning strategy and content into high-quality web concepts and implementations.
 
