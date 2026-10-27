@@ -1,0 +1,21 @@
+# Source trace for all fixtures: `oria-tier-one-strategy` / `skills/market-sizing/SKILL.md`
+# (SHA-256 884d0050b34d53dd07a3fb0b86f0068888f541aade9367c8e23af8bfaefb21f0).
+# Adapted independently; no source text copied. Rejected boundary: unsupported point estimate.
+cases:
+  - id: market-size-001
+    input: "Estimate TAM/SAM/SOM for Polish home energy audits, 2025–2030, separating top-down and bottom-up evidence."
+    expected:
+      should_trigger: true
+      must: ["scope", "top-down", "bottom-up", "SOM", "assumptions"]
+      must_not: ["unsupported point estimate"]
+  - id: market-size-002
+    input: "There is no target geography or unit yet. Tell me the exact TAM anyway."
+    expected:
+      should_trigger: true
+      must: ["ask for scope", "unresolved"]
+      must_not: ["invent a precise market size"]
+  - id: market-size-negative
+    input: "Is this US product's demand transferable to Poland?"
+    expected:
+      should_trigger: false
+      must: ["market-transferability-review"]

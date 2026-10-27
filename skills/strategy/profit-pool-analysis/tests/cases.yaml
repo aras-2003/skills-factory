@@ -1,0 +1,20 @@
+# Source trace for all fixtures: `oria-tier-one-strategy` / `skills/profit-pool-analysis/SKILL.md`
+# (SHA-256 7359f0e8441f98a3d1da3c20c89a01c8c43f6d216f6d7af4075020a48ba1bd9e),
+# corroborated by `oria-21-strategy` same member (SHA-256 067984277fff678af12bce1312959c081f1f2d97e207a306775300e3532746c4).
+# Adapted independently; no source text copied.
+cases:
+  - id: profit-pool-001
+    input: "Map where profit accrues across the European heat-pump value chain and explain drivers."
+    expected:
+      should_trigger: true
+      must: ["boundary", "comparable definitions", "value-driver", "reconciliation"]
+  - id: profit-pool-002
+    input: "Bridge baseline profit to target using price, volume, mix and cost drivers."
+    expected:
+      should_trigger: true
+      must: ["bridge", "residual", "double counting"]
+  - id: profit-pool-negative
+    input: "Rank our approved transformation initiatives for funding."
+    expected:
+      should_trigger: false
+      must: ["portfolio-prioritization"]
