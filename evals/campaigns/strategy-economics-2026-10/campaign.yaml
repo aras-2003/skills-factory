@@ -7,6 +7,6 @@ provenance_status: BLOCKED_SOURCE_CORPUS
 source_note: "Original archives and per-file manifest are unavailable; this is an original candidate with no upstream-source equivalence claim."
 as_of: "2026-10-27"
 sources:
-  skills/strategy-ea/strategy-economics/SKILL.md: 23635b313a275513cdefb71e851820ed867b025d0f64027a9b213bdb4745e825
+  skills/strategy-ea/strategy-economics/SKILL.md: 91ef00de47ed4b3ebdb6dcb141aa8823249c6e83d08ad230b522437830bfe796
   skills/strategy-ea/strategy-economics/engine.py: 02ec781743c4dcb660dd14b3ce129f2b8a43a7f7642b51bcd2433b181c5b6b6c
-  skills/strategy-ea/strategy-economics/tests/cases.yaml: c1da6f0114e6ffb98f280e4dbf6eef85530541e470981893079bef8d1c5aae34
+  skills/strategy-ea/strategy-economics/tests/cases.yaml: a0c2eacb67ec77d6bef2215a7775a5da47ce0ea9e896230813b469e0c9e18c0d
