@@ -20,82 +20,12 @@
   },
   "skills": [
     {
-      "name": "accessibility-gate",
-      "domain": "web-design",
-      "maturity": "candidate",
-      "version": "0.1.0",
-      "description": "Review interface implementation evidence for accessibility risks and required follow-up checks. Use when a team needs an evidence-bound accessibility gate beyond deterministic CI; never claim WCAG conformance without an appropriate audit.",
-      "source": "skills/web-design/accessibility-gate/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "DECLARED"
-    },
-    {
-      "name": "acquisition-fit-review",
-      "domain": "commerce",
-      "maturity": "production",
-      "version": "1.1.0",
-      "description": "Assess whether a product is suitable for paid social and other direct-response acquisition based on demo strength, hooks, creative depth and CAC headroom. Use when channel fit matters after the offer and economics are at least provisionally defined.",
-      "source": "skills/commerce/growth/acquisition-fit-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "architecture-review",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Review alignment across business direction, capabilities, organisational design, information and technology architecture. Use for enterprise or organisational architecture decisions; do not use as a low-level software design review.",
-      "source": "skills/oaf/enterprise-architecture/architecture-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "capability-gap-analysis",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Identify material gaps between required business capabilities and current organisational, process, information, technology, governance or capacity enablement. Use after strategic outcomes are sufficiently clear; do not translate every capability gap directly into a technology project.",
-      "source": "skills/oaf/enterprise-architecture/capability-gap-analysis/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "capability-map-review",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Assess whether a business capability map is coherent and decision-useful, including level consistency, overlap, gaps, ownership and linkage to strategy, investments, applications, risks or performance. Use to improve a map for a defined decision; do not infer detailed processes or technology defects from capability names alone.",
-      "source": "skills/oaf/enterprise-architecture/capability-map-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "commerce-regulatory-risk-review",
-      "domain": "commerce",
-      "maturity": "production",
-      "version": "1.1.1",
-      "description": "Triage regulatory, claims, safety and compliance risk for consumer e-commerce products. Use to decide whether complexity is proportionate before deeper legal review; do not use this skill as legal clearance.",
-      "source": "skills/commerce/risk/commerce-regulatory-risk-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
       "name": "company-context-research",
       "domain": "career",
       "maturity": "production",
       "version": "1.0.2",
       "description": "Research factual company context relevant to executive technology opportunities, including scale, revenue, headcount, ownership, leadership, transactions, strategy and technology organization. Use when the user asks for company facts or organizational context. Do not evaluate role attractiveness, candidate fit, career value, mandate quality or recommended recruitment actions unless the user explicitly asks what the company context means for a specific role; in that case hand off to executive-role-evaluator.",
       "source": "skills/career/company-context-research/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "competition-landscape-review",
-      "domain": "commerce",
-      "maturity": "production",
-      "version": "1.1.1",
-      "description": "Review competition around an e-commerce opportunity across product, price, brand, distribution and acquisition. Use before calling a market empty or saturated.",
-      "source": "skills/commerce/market/competition-landscape-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -120,44 +50,124 @@
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "decision-bottleneck-analysis",
-      "domain": "oaf",
+      "name": "executive-role-evaluator",
+      "domain": "career",
       "maturity": "production",
-      "version": "1.1.2",
-      "description": "Diagnose why a specific material decision class is slow, repeatedly escalated or duplicated by tracing decision steps, waits, vetoes, evidence gaps and authority boundaries. Use after the problematic decision class and its decision owner/path are sufficiently identified; when the core unknown is who has final authority, lead with decision-rights-review. Do not lead a mixed cross-unit handoff/accountability/capacity diagnosis whose failure type is still unknown.",
-      "source": "skills/oaf/decision-governance/decision-bottleneck-analysis/SKILL.md",
+      "version": "1.1.0",
+      "description": "Evaluate senior and executive technology job opportunities based on real mandate, organizational scope, candidate fit, career value, risk and evidence quality. Use when assessing whether an executive technology role is worth pursuing, comparing opportunities, updating an assessment after recruiter/interview evidence, or identifying decision-critical unknowns. Do not use for company research alone, CV tailoring alone, interview preparation alone, generic job matching, or factual company research that does not explicitly ask for role implications.",
+      "source": "skills/career/executive-role-evaluator/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "decision-journal-update",
-      "domain": "investing",
-      "maturity": "production",
-      "version": "0.1.1",
-      "description": "Append a structured investment decision record capturing what was known, decided and expected at the time, then later support ex-post review of thesis, timing and sizing quality. Use after meaningful buy/add/reduce/exit/watchlist decisions or when reviewing past decision quality. Do not rewrite old decisions using hindsight.",
-      "source": "skills/investing/decision-journal-update/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "decision-rights-review",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.1.1",
-      "description": "Map and review critical organisational decision rights, including who proposes, decides, executes, advises and escalates. Use when the primary question concerns ownership or authority for identified material decisions. Repeated escalation, decision circulation and uncertainty about who has final authority are decision-rights signals, even when latency is also present. Do not lead a mixed cross-unit handoff/accountability/capacity diagnosis before the decision problem is isolated, and do not use merely to create a generic RACI.",
-      "source": "skills/oaf/decision-governance/decision-rights-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "design-critique",
-      "domain": "web-design",
+      "name": "interview-brief",
+      "domain": "career",
       "maturity": "candidate",
       "version": "0.1.0",
-      "description": "Use when reviewing a supplied interface screenshot or visual artifact for hierarchy, clarity, affordance, responsiveness, consistency, distinctiveness and cognitive risk. Give evidence-bound findings and practical repairs; do not infer hidden behavior or claim automated accessibility/runtime checks.",
-      "source": "skills/web-design/design-critique/SKILL.md",
+      "description": "Prepare a concise executive interview brief from an evaluated role, company context and candidate profile, including likely themes, evidence-backed talking points, risks and high-value questions. Use before recruiter, hiring-manager or executive interviews.",
+      "source": "skills/career/interview-brief/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "job-discovery",
+      "domain": "career",
+      "maturity": "candidate",
+      "version": "0.1.1",
+      "description": "Find current senior and executive technology roles from approved sources using explicit career filters, remove obvious mismatches and duplicates, and return a shortlist for validity checking. Use for role discovery, not deep role evaluation or company research.",
+      "source": "skills/career/job-discovery/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "job-validity-check",
+      "domain": "career",
+      "maturity": "candidate",
+      "version": "0.1.1",
+      "description": "Verify whether a known job opportunity is still active, current, unique and materially unchanged across employer, ATS and aggregator sources. Use before spending time on role evaluation, company research or CV tailoring.",
+      "source": "skills/career/job-validity-check/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "process-update",
+      "domain": "career",
+      "maturity": "candidate",
+      "version": "0.1.1",
+      "description": "Convert new recruitment-process information into a concise structured status update with current stage, evidence, next action, owner/date and changes to prior assumptions. Use after recruiter calls, interviews, emails or offer updates.",
+      "source": "skills/career/process-update/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "problem-demand-validation",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Validate whether a target customer problem is frequent, painful and purchase-relevant enough to justify product testing. Use before assuming category interest equals demand.",
+      "source": "skills/commerce/demand/problem-demand-validation/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "unit-economics-review",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Evaluate e-commerce unit economics including VAT, COGS, freight, fulfilment, fees, returns and CAC headroom. Use before recommending a product test or scale decision.",
+      "source": "skills/commerce/economics/unit-economics-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "acquisition-fit-review",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Assess whether a product is suitable for paid social and other direct-response acquisition based on demo strength, hooks, creative depth and CAC headroom. Use when channel fit matters after the offer and economics are at least provisionally defined.",
+      "source": "skills/commerce/growth/acquisition-fit-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "competition-landscape-review",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.1",
+      "description": "Review competition around an e-commerce opportunity across product, price, brand, distribution and acquisition. Use before calling a market empty or saturated.",
+      "source": "skills/commerce/market/competition-landscape-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "supplier-viability-review",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Assess whether sourcing, MOQ, lead time, quality, packaging and supplier concentration make a product viable to test and scale. Use when supplier or inventory risk can change the launch decision.",
+      "source": "skills/commerce/operations/supplier-viability-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "market-transferability-review",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Review whether a product or business model proven in one market is plausibly transferable to another market, especially US-to-Poland, without assuming foreign traction will repeat locally. Use when the thesis depends materially on source-market success.",
+      "source": "skills/commerce/opportunity/market-transferability-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "product-opportunity-discovery",
+      "domain": "commerce",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Discover product opportunity hypotheses from customer problems, category signals and market gaps. Use for broad e-commerce idea generation before deep validation; do not use when a concrete product already needs an end-to-end business decision.",
+      "source": "skills/commerce/opportunity/product-opportunity-discovery/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
     },
     {
       "name": "differentiation-review",
@@ -170,72 +180,22 @@
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "evidence-loop-review",
-      "domain": "oaf",
+      "name": "commerce-regulatory-risk-review",
+      "domain": "commerce",
       "maturity": "production",
-      "version": "1.0.0",
-      "description": "Review whether organisational KPIs, outcomes, reviews and feedback loops actually inform decisions and adaptation. Use when governance produces reporting but weak learning; do not use as a generic KPI-design task.",
-      "source": "skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md",
+      "version": "1.1.1",
+      "description": "Triage regulatory, claims, safety and compliance risk for consumer e-commerce products. Use to decide whether complexity is proportionate before deeper legal review; do not use this skill as legal clearance.",
+      "source": "skills/commerce/risk/commerce-regulatory-risk-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "executive-role-evaluator",
-      "domain": "career",
+      "name": "decision-journal-update",
+      "domain": "investing",
       "maturity": "production",
-      "version": "1.1.0",
-      "description": "Evaluate senior and executive technology job opportunities based on real mandate, organizational scope, candidate fit, career value, risk and evidence quality. Use when assessing whether an executive technology role is worth pursuing, comparing opportunities, updating an assessment after recruiter/interview evidence, or identifying decision-critical unknowns. Do not use for company research alone, CV tailoring alone, interview preparation alone, generic job matching, or factual company research that does not explicitly ask for role implications.",
-      "source": "skills/career/executive-role-evaluator/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "global-local-model-review",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Review how responsibilities, standards, capabilities and decisions are split between global/central and local units. Use when the organisation needs to balance scale and consistency against local context and speed; do not default to centralisation.",
-      "source": "skills/oaf/operating-model/global-local-model-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "governance-design",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Design the minimum governance mechanisms needed for a defined set of material decisions, including ownership, evidence, cadence and escalation. Use only after decision-rights or operating-model problems are sufficiently diagnosed; do not create committees as a default response.",
-      "source": "skills/oaf/decision-governance/governance-design/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "implementation-brief",
-      "domain": "web-design",
-      "maturity": "candidate",
-      "version": "0.1.0",
-      "description": "Turn an approved interface concept into a build-ready specification for an existing product implementation, including components, states, props, tokens, responsive rules and verifiable acceptance checks. Use when the user asks to hand a design to engineering; do not use to design a new concept or implement it.",
-      "source": "skills/web-design/implementation-brief/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "DECLARED"
-    },
-    {
-      "name": "interface-design",
-      "domain": "web-design",
-      "maturity": "candidate",
-      "version": "0.1.3",
-      "description": "Design the information hierarchy, navigation, responsive layout, interaction states and accessible behavior for a specific product screen or user flow. Use when the requested outcome is a design brief for an interface, not an implemented page, general report, data visualization or architecture diagram.",
-      "source": "skills/web-design/interface-design/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "DECLARED"
-    },
-    {
-      "name": "interview-brief",
-      "domain": "career",
-      "maturity": "candidate",
-      "version": "0.1.0",
-      "description": "Prepare a concise executive interview brief from an evaluated role, company context and candidate profile, including likely themes, evidence-backed talking points, risks and high-value questions. Use before recruiter, hiring-manager or executive interviews.",
-      "source": "skills/career/interview-brief/SKILL.md",
+      "version": "0.1.1",
+      "description": "Append a structured investment decision record capturing what was known, decided and expected at the time, then later support ex-post review of thesis, timing and sizing quality. Use after meaningful buy/add/reduce/exit/watchlist decisions or when reviewing past decision quality. Do not rewrite old decisions using hindsight.",
+      "source": "skills/investing/decision-journal-update/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -280,92 +240,12 @@
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "job-discovery",
-      "domain": "career",
-      "maturity": "candidate",
-      "version": "0.1.1",
-      "description": "Find current senior and executive technology roles from approved sources using explicit career filters, remove obvious mismatches and duplicates, and return a shortlist for validity checking. Use for role discovery, not deep role evaluation or company research.",
-      "source": "skills/career/job-discovery/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "job-validity-check",
-      "domain": "career",
-      "maturity": "candidate",
-      "version": "0.1.1",
-      "description": "Verify whether a known job opportunity is still active, current, unique and materially unchanged across employer, ATS and aggregator sources. Use before spending time on role evaluation, company research or CV tailoring.",
-      "source": "skills/career/job-validity-check/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "kpi-quality-review",
-      "domain": "oaf",
-      "maturity": "candidate",
-      "version": "0.1.0",
-      "description": "Review whether a defined KPI set is decision-useful, interpretable and linked to outcomes, owners, thresholds and actions. Use after the relevant decisions/outcomes are known; do not generate a generic KPI catalogue.",
-      "source": "skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
       "name": "market-opportunity-scan",
       "domain": "investing",
       "maturity": "production",
       "version": "0.4.0",
       "description": "Screen the XTB-investable equity and ETF universe for research candidates using changes in fundamentals, valuation, expectations, price behavior and portfolio relevance. Use for broad opportunity hunting or change detection. Prefer installed structured equity-research plugins for breadth, Firecrawl/primary sources for verification, and canonical portfolio context from investment-record-store. Do not issue buy/sell instructions.",
       "source": "skills/investing/market-opportunity-scan/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "market-transferability-review",
-      "domain": "commerce",
-      "maturity": "production",
-      "version": "1.1.0",
-      "description": "Review whether a product or business model proven in one market is plausibly transferable to another market, especially US-to-Poland, without assuming foreign traction will repeat locally. Use when the thesis depends materially on source-market success.",
-      "source": "skills/commerce/opportunity/market-transferability-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "operating-model-review",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.1.0",
-      "description": "Review an operating model for role clarity, interfaces, accountability, autonomy, coordination and authority/resource alignment. Use as the lead diagnosis when symptoms span cross-unit handoffs plus unclear accountability or capacity/funding authority and the failure has not yet been isolated to one decision class. Do not reduce the review to an org chart.",
-      "source": "skills/oaf/operating-model/operating-model-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "organizational-interface-review",
-      "domain": "oaf",
-      "maturity": "candidate",
-      "version": "0.1.0",
-      "description": "Review critical organisational interfaces where ownership, work, information, funding or decisions cross unit boundaries. Use when handoffs, dependencies or coordination create delay or accountability loss; do not redesign the whole operating model.",
-      "source": "skills/oaf/operating-model/organizational-interface-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "portfolio-health-review",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Review whether an initiative portfolio is coherent, affordable, capacity-feasible, dependency-aware and aligned to strategic outcomes. Use for portfolio health diagnosis; do not force ranking when comparable evidence is missing.",
-      "source": "skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "portfolio-prioritization",
-      "domain": "oaf",
-      "maturity": "production",
-      "version": "1.0.0",
-      "description": "Structure transparent prioritisation of initiatives using agreed strategic, value, risk, capacity and dependency criteria. Use when a portfolio needs comparable decisions; use deterministic calculation for scoring where possible.",
-      "source": "skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -390,102 +270,52 @@
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "presentation-brief",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Establish the audience, communication objective, intended decision or behavior and constraints before producing a slide deck. Use when someone asks to prepare a presentation from a topic, idea, notes, brief or source documents; do not use for a narrow request to edit a known slide.",
-      "source": "skills/presentations/presentation-brief/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "presentation-deck-review",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Critique a real or draft presentation for strategy, audience fit, evidence integrity, narrative and visual craft; rank specific defects and guide targeted revision. Use before final delivery or after deck changes; do not confuse an opinion score with verified rendered output.",
-      "source": "skills/presentations/presentation-deck-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "presentation-evidence-review",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Check source-to-slide fidelity, citations, claim sufficiency, conflicting evidence and chart inputs in presentations. Use when slide assertions/exhibits need source mapping; delegate substantive new strategy research and analysis to their domain/shared owners.",
-      "source": "skills/presentations/presentation-evidence-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "presentation-exhibit-design",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Choose data-faithful charts, diagrams and presentation exhibits for an approved slide claim and audience, delegating actual rendering to existing visual-output-design and deterministic tools. Use after storyline/evidence planning; do not use for decorative image prompts alone.",
-      "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "presentation-export-verification",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Verify a presentation's actual rendered slides, delivery format, PowerPoint/PDF round-trip behavior, editability, fonts and animation limitations. Use when a deck exists and the user needs final deliverable QA; do not treat a planned export or tool invocation as successful delivery.",
-      "source": "skills/presentations/presentation-export-verification/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "presentation-slide-authoring",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Create or revise an editable presentation in a supported Figma Slides, Canva or Google Slides runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
-      "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "presentation-storyline",
-      "domain": "presentations",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Design and stress-test a slide deck's audience-specific argument, narrative order and action-title ghost deck before visual authoring. Use when a presentation brief or draft deck needs story structure, executive flow, persuasive narrative that communicates supplied or domain-supported conclusions; do not design business strategy or just a chart.",
-      "source": "skills/presentations/presentation-storyline/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "problem-demand-validation",
-      "domain": "commerce",
+      "name": "security-underwriting",
+      "domain": "investing",
       "maturity": "production",
-      "version": "1.1.0",
-      "description": "Validate whether a target customer problem is frequent, painful and purchase-relevant enough to justify product testing. Use before assuming category interest equals demand.",
-      "source": "skills/commerce/demand/problem-demand-validation/SKILL.md",
+      "version": "0.5.1",
+      "description": "Underwrite one equity or ETF as an investment using structured equity research for breadth and primary filings/IR for decision-critical verification, then analyze economics, financial quality, growth drivers, valuation, catalysts, risks, variant perception and thesis invalidation. Do not use for broad market scanning.",
+      "source": "skills/investing/security-underwriting/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "process-update",
-      "domain": "career",
-      "maturity": "candidate",
+      "name": "thesis-challenge",
+      "domain": "investing",
+      "maturity": "production",
       "version": "0.1.1",
-      "description": "Convert new recruitment-process information into a concise structured status update with current stage, evidence, next action, owner/date and changes to prior assumptions. Use after recruiter calls, interviews, emails or offer updates.",
-      "source": "skills/career/process-update/SKILL.md",
+      "description": "Stress-test an existing investment thesis by seeking contradictory evidence, priced-in expectations, alternative explanations and failure modes. Use after an initial thesis exists or when confirmation bias is a material risk. Do not use to create the initial thesis from scratch.",
+      "source": "skills/investing/thesis-challenge/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "product-opportunity-discovery",
-      "domain": "commerce",
+      "name": "thesis-monitor",
+      "domain": "investing",
       "maturity": "production",
-      "version": "1.1.0",
-      "description": "Discover product opportunity hypotheses from customer problems, category signals and market gaps. Use for broad e-commerce idea generation before deep validation; do not use when a concrete product already needs an end-to-end business decision.",
-      "source": "skills/commerce/opportunity/product-opportunity-discovery/SKILL.md",
+      "version": "0.3.2",
+      "description": "Monitor an existing investment thesis against new earnings, guidance, industry data, price/valuation changes and predefined kill criteria. Use canonical thesis history plus structured research/primary evidence; do not restart full underwriting unless the thesis materially changes or evidence becomes stale.",
+      "source": "skills/investing/thesis-monitor/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "trend-theme-research",
+      "domain": "investing",
+      "maturity": "production",
+      "version": "0.1.0",
+      "description": "Research an investment trend or market theme by mapping its economic value chain, demand drivers, bottlenecks, second-order beneficiaries and failure modes. Use when exploring themes such as AI infrastructure, power, memory, automation or other structural/cyclical trends. Do not use for one-company underwriting alone.",
+      "source": "skills/investing/trend-theme-research/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "valuation-scenario-review",
+      "domain": "investing",
+      "maturity": "production",
+      "version": "0.1.0",
+      "description": "Build bear, base and bull valuation scenarios for one security using explicit operating assumptions, valuation methods and market-implied expectations. Use when valuation could change an investment decision or position size. Do not use as a standalone price-target generator.",
+      "source": "skills/investing/valuation-scenario-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -496,46 +326,6 @@
       "version": "0.12.1",
       "description": "Compose one integrated decision report from an already-supported workflow result by interleaving narrative, evidence, decisions and contextually placed visual slots. Use when the user needs a coherent report where charts, diagrams, interactive components or Figma outputs appear inside the relevant sections instead of as a separate parallel artifact.",
       "source": "skills/meta/report-composer/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "report-document-architecture",
-      "domain": "reports",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Plan the section hierarchy and evidence-backed reading flow for a substantial written report or technical document before DOCX/PDF production. Use when a long-form analytical document needs a coherent chapter outline, section arguments, exhibits, appendix and citation plan; do not design slide storylines or redo domain research.",
-      "source": "skills/reports/report-document-architecture/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "report-document-authoring",
-      "domain": "reports",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Turn an approved long-form report model into a real editable and professionally typeset DOCX, Google Doc or paginated PDF using available document tools. Use when an external report document with headings, citations, figures and page layout is explicitly requested; do not claim exported files from chat prose or create presentation slides.",
-      "source": "skills/reports/report-document-authoring/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "report-document-review",
-      "domain": "reports",
-      "maturity": "draft",
-      "version": "0.1.0",
-      "description": "Critique and verify actual long-form DOCX/PDF report artifacts page by page for content fidelity, citations, style, pagination, tables, links, editability and export parity. Use for quality review or regression checks of generated written documents; do not replace Strategy/OAF analysis reviews or certify a report without rendered pages.",
-      "source": "skills/reports/report-document-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "security-underwriting",
-      "domain": "investing",
-      "maturity": "production",
-      "version": "0.5.1",
-      "description": "Underwrite one equity or ETF as an investment using structured equity research for breadth and primary filings/IR for decision-critical verification, then analyze economics, financial quality, growth drivers, valuation, catalysts, risks, variant perception and thesis invalidation. Do not use for broad market scanning.",
-      "source": "skills/investing/security-underwriting/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -610,6 +400,46 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "visual-output-design",
+      "domain": "meta",
+      "maturity": "candidate",
+      "version": "0.13.0",
+      "description": "Select and render one source-backed exhibit for a report, presentation or local interactive component. Route quantitative charts, diagrams, illustrative imagery, motion and interactive HTML to suitable specialized renderers while preserving evidence. Use beneath report-composer, report-document-architecture or presentation-exhibit-design; do not replace those workflows or invent data for visual balance.",
+      "source": "skills/meta/visual-output-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "decision-bottleneck-analysis",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.1.2",
+      "description": "Diagnose why a specific material decision class is slow, repeatedly escalated or duplicated by tracing decision steps, waits, vetoes, evidence gaps and authority boundaries. Use after the problematic decision class and its decision owner/path are sufficiently identified; when the core unknown is who has final authority, lead with decision-rights-review. Do not lead a mixed cross-unit handoff/accountability/capacity diagnosis whose failure type is still unknown.",
+      "source": "skills/oaf/decision-governance/decision-bottleneck-analysis/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "decision-rights-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.1.1",
+      "description": "Map and review critical organisational decision rights, including who proposes, decides, executes, advises and escalates. Use when the primary question concerns ownership or authority for identified material decisions. Repeated escalation, decision circulation and uncertainty about who has final authority are decision-rights signals, even when latency is also present. Do not lead a mixed cross-unit handoff/accountability/capacity diagnosis before the decision problem is isolated, and do not use merely to create a generic RACI.",
+      "source": "skills/oaf/decision-governance/decision-rights-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "governance-design",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Design the minimum governance mechanisms needed for a defined set of material decisions, including ownership, evidence, cadence and escalation. Use only after decision-rights or operating-model problems are sufficiently diagnosed; do not create committees as a default response.",
+      "source": "skills/oaf/decision-governance/governance-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
       "name": "strategy-to-execution-diagnostic",
       "domain": "oaf",
       "maturity": "candidate",
@@ -620,32 +450,102 @@
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "supplier-viability-review",
-      "domain": "commerce",
+      "name": "architecture-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Review alignment across business direction, capabilities, organisational design, information and technology architecture. Use for enterprise or organisational architecture decisions; do not use as a low-level software design review.",
+      "source": "skills/oaf/enterprise-architecture/architecture-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "capability-gap-analysis",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Identify material gaps between required business capabilities and current organisational, process, information, technology, governance or capacity enablement. Use after strategic outcomes are sufficiently clear; do not translate every capability gap directly into a technology project.",
+      "source": "skills/oaf/enterprise-architecture/capability-gap-analysis/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "capability-map-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Assess whether a business capability map is coherent and decision-useful, including level consistency, overlap, gaps, ownership and linkage to strategy, investments, applications, risks or performance. Use to improve a map for a defined decision; do not infer detailed processes or technology defects from capability names alone.",
+      "source": "skills/oaf/enterprise-architecture/capability-map-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "evidence-loop-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Review whether organisational KPIs, outcomes, reviews and feedback loops actually inform decisions and adaptation. Use when governance produces reporting but weak learning; do not use as a generic KPI-design task.",
+      "source": "skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "kpi-quality-review",
+      "domain": "oaf",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review whether a defined KPI set is decision-useful, interpretable and linked to outcomes, owners, thresholds and actions. Use after the relevant decisions/outcomes are known; do not generate a generic KPI catalogue.",
+      "source": "skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "global-local-model-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Review how responsibilities, standards, capabilities and decisions are split between global/central and local units. Use when the organisation needs to balance scale and consistency against local context and speed; do not default to centralisation.",
+      "source": "skills/oaf/operating-model/global-local-model-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "operating-model-review",
+      "domain": "oaf",
       "maturity": "production",
       "version": "1.1.0",
-      "description": "Assess whether sourcing, MOQ, lead time, quality, packaging and supplier concentration make a product viable to test and scale. Use when supplier or inventory risk can change the launch decision.",
-      "source": "skills/commerce/operations/supplier-viability-review/SKILL.md",
+      "description": "Review an operating model for role clarity, interfaces, accountability, autonomy, coordination and authority/resource alignment. Use as the lead diagnosis when symptoms span cross-unit handoffs plus unclear accountability or capacity/funding authority and the failure has not yet been isolated to one decision class. Do not reduce the review to an org chart.",
+      "source": "skills/oaf/operating-model/operating-model-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "thesis-challenge",
-      "domain": "investing",
-      "maturity": "production",
-      "version": "0.1.1",
-      "description": "Stress-test an existing investment thesis by seeking contradictory evidence, priced-in expectations, alternative explanations and failure modes. Use after an initial thesis exists or when confirmation bias is a material risk. Do not use to create the initial thesis from scratch.",
-      "source": "skills/investing/thesis-challenge/SKILL.md",
+      "name": "organizational-interface-review",
+      "domain": "oaf",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review critical organisational interfaces where ownership, work, information, funding or decisions cross unit boundaries. Use when handoffs, dependencies or coordination create delay or accountability loss; do not redesign the whole operating model.",
+      "source": "skills/oaf/operating-model/organizational-interface-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "thesis-monitor",
-      "domain": "investing",
+      "name": "portfolio-health-review",
+      "domain": "oaf",
       "maturity": "production",
-      "version": "0.3.2",
-      "description": "Monitor an existing investment thesis against new earnings, guidance, industry data, price/valuation changes and predefined kill criteria. Use canonical thesis history plus structured research/primary evidence; do not restart full underwriting unless the thesis materially changes or evidence becomes stale.",
-      "source": "skills/investing/thesis-monitor/SKILL.md",
+      "version": "1.0.0",
+      "description": "Review whether an initiative portfolio is coherent, affordable, capacity-feasible, dependency-aware and aligned to strategic outcomes. Use for portfolio health diagnosis; do not force ranking when comparable evidence is missing.",
+      "source": "skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "portfolio-prioritization",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Structure transparent prioritisation of initiatives using agreed strategic, value, risk, capacity and dependency criteria. Use when a portfolio needs comparable decisions; use deterministic calculation for scoring where possible.",
+      "source": "skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -660,44 +560,144 @@
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "trend-theme-research",
-      "domain": "investing",
-      "maturity": "production",
+      "name": "presentation-brief",
+      "domain": "presentations",
+      "maturity": "draft",
       "version": "0.1.0",
-      "description": "Research an investment trend or market theme by mapping its economic value chain, demand drivers, bottlenecks, second-order beneficiaries and failure modes. Use when exploring themes such as AI infrastructure, power, memory, automation or other structural/cyclical trends. Do not use for one-company underwriting alone.",
-      "source": "skills/investing/trend-theme-research/SKILL.md",
+      "description": "Establish the audience, communication objective, intended decision or behavior and constraints before producing a slide deck. Use when someone asks to prepare a presentation from a topic, idea, notes, brief or source documents; do not use for a narrow request to edit a known slide.",
+      "source": "skills/presentations/presentation-brief/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "unit-economics-review",
-      "domain": "commerce",
-      "maturity": "production",
-      "version": "1.1.0",
-      "description": "Evaluate e-commerce unit economics including VAT, COGS, freight, fulfilment, fees, returns and CAC headroom. Use before recommending a product test or scale decision.",
-      "source": "skills/commerce/economics/unit-economics-review/SKILL.md",
-      "source_status": "present",
-      "capability_assessment": "UNASSESSED"
-    },
-    {
-      "name": "valuation-scenario-review",
-      "domain": "investing",
-      "maturity": "production",
+      "name": "presentation-deck-review",
+      "domain": "presentations",
+      "maturity": "draft",
       "version": "0.1.0",
-      "description": "Build bear, base and bull valuation scenarios for one security using explicit operating assumptions, valuation methods and market-implied expectations. Use when valuation could change an investment decision or position size. Do not use as a standalone price-target generator.",
-      "source": "skills/investing/valuation-scenario-review/SKILL.md",
+      "description": "Critique a real or draft presentation for strategy, audience fit, evidence integrity, narrative and visual craft; rank specific defects and guide targeted revision. Use before final delivery or after deck changes; do not confuse an opinion score with verified rendered output.",
+      "source": "skills/presentations/presentation-deck-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
     {
-      "name": "visual-output-design",
-      "domain": "meta",
+      "name": "presentation-evidence-review",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Check source-to-slide fidelity, citations, claim sufficiency, conflicting evidence and chart inputs in presentations. Use when slide assertions/exhibits need source mapping; delegate substantive new strategy research and analysis to their domain/shared owners.",
+      "source": "skills/presentations/presentation-evidence-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-exhibit-design",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Choose data-faithful charts, diagrams and presentation exhibits for an approved slide claim and audience, delegating actual rendering to existing visual-output-design and deterministic tools. Use after storyline/evidence planning; do not use for decorative image prompts alone.",
+      "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-export-verification",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Verify a presentation's actual rendered slides, delivery format, PowerPoint/PDF round-trip behavior, editability, fonts and animation limitations. Use when a deck exists and the user needs final deliverable QA; do not treat a planned export or tool invocation as successful delivery.",
+      "source": "skills/presentations/presentation-export-verification/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-slide-authoring",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Create or revise an editable presentation in a supported Figma Slides, Canva or Google Slides runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
+      "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-storyline",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Design and stress-test a slide deck's audience-specific argument, narrative order and action-title ghost deck before visual authoring. Use when a presentation brief or draft deck needs story structure, executive flow, persuasive narrative that communicates supplied or domain-supported conclusions; do not design business strategy or just a chart.",
+      "source": "skills/presentations/presentation-storyline/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-document-architecture",
+      "domain": "reports",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Plan the section hierarchy and evidence-backed reading flow for a substantial written report or technical document before DOCX/PDF production. Use when a long-form analytical document needs a coherent chapter outline, section arguments, exhibits, appendix and citation plan; do not design slide storylines or redo domain research.",
+      "source": "skills/reports/report-document-architecture/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-document-authoring",
+      "domain": "reports",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Turn an approved long-form report model into a real editable and professionally typeset DOCX, Google Doc or paginated PDF using available document tools. Use when an external report document with headings, citations, figures and page layout is explicitly requested; do not claim exported files from chat prose or create presentation slides.",
+      "source": "skills/reports/report-document-authoring/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "report-document-review",
+      "domain": "reports",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Critique and verify actual long-form DOCX/PDF report artifacts page by page for content fidelity, citations, style, pagination, tables, links, editability and export parity. Use for quality review or regression checks of generated written documents; do not replace Strategy/OAF analysis reviews or certify a report without rendered pages.",
+      "source": "skills/reports/report-document-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "accessibility-gate",
+      "domain": "web-design",
       "maturity": "candidate",
-      "version": "0.13.0",
-      "description": "Select and render one source-backed exhibit for a report, presentation or local interactive component. Route quantitative charts, diagrams, illustrative imagery, motion and interactive HTML to suitable specialized renderers while preserving evidence. Use beneath report-composer, report-document-architecture or presentation-exhibit-design; do not replace those workflows or invent data for visual balance.",
-      "source": "skills/meta/visual-output-design/SKILL.md",
+      "version": "0.1.0",
+      "description": "Review interface implementation evidence for accessibility risks and required follow-up checks. Use when a team needs an evidence-bound accessibility gate beyond deterministic CI; never claim WCAG conformance without an appropriate audit.",
+      "source": "skills/web-design/accessibility-gate/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "design-critique",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Use when reviewing a supplied interface screenshot or visual artifact for hierarchy, clarity, affordance, responsiveness, consistency, distinctiveness and cognitive risk. Give evidence-bound findings and practical repairs; do not infer hidden behavior or claim automated accessibility/runtime checks.",
+      "source": "skills/web-design/design-critique/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "implementation-brief",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Turn an approved interface concept into a build-ready specification for an existing product implementation, including components, states, props, tokens, responsive rules and verifiable acceptance checks. Use when the user asks to hand a design to engineering; do not use to design a new concept or implement it.",
+      "source": "skills/web-design/implementation-brief/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "interface-design",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.3",
+      "description": "Design the information hierarchy, navigation, responsive layout, interaction states and accessible behavior for a specific product screen or user flow. Use when the requested outcome is a design brief for an interface, not an implemented page, general report, data visualization or architecture diagram.",
+      "source": "skills/web-design/interface-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
     },
     {
       "name": "visual-regression-review",
@@ -724,9 +724,7 @@
         "lab": "supported",
         "plugin": "supported"
       },
-      "required_dependencies": [
-
-      ],
+      "required_dependencies": [],
       "optional_dependencies": [
         "acquisition-fit-review",
         "commerce-product-deep-dive",
@@ -854,9 +852,7 @@
         "investment-security-review",
         "investment-theme-discovery"
       ],
-      "optional_dependencies": [
-
-      ],
+      "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
     {
@@ -1006,9 +1002,7 @@
         "lab": "supported",
         "plugin": "supported"
       },
-      "required_dependencies": [
-
-      ],
+      "required_dependencies": [],
       "optional_dependencies": [
         "architecture-review",
         "capability-gap-analysis",
@@ -1065,9 +1059,7 @@
         "lab": "supported",
         "plugin": "supported"
       },
-      "required_dependencies": [
-
-      ],
+      "required_dependencies": [],
       "optional_dependencies": [
         "architecture-review",
         "capability-map-review",
@@ -1181,9 +1173,7 @@
         "presentation-slide-authoring",
         "presentation-storyline"
       ],
-      "optional_dependencies": [
-
-      ],
+      "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
     {
@@ -1204,9 +1194,7 @@
         "report-document-authoring",
         "report-document-review"
       ],
-      "optional_dependencies": [
-
-      ],
+      "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
     {
@@ -1230,9 +1218,7 @@
         "skill-test-design",
         "skill-validation"
       ],
-      "optional_dependencies": [
-
-      ],
+      "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     }
   ]
