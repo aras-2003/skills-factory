@@ -14,6 +14,7 @@ cases:
       must_not:
         - output implementation code
         - invent order data or product capabilities
+        - add unprovided tracking, delivery estimates, payment or cancellation flows, returns, refunds, addresses, support destinations, settings, order statuses, or navigation
 
   - id: interface-design-indirect-positive
     case: onboarding-flow
