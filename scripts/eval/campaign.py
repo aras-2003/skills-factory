@@ -421,6 +421,90 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
         return set()
 
 
+def separately_validated_web_design_quality_paths(root: Path = ROOT) -> set[str]:
+    """Isolate the three UX-04 candidates only while source, fixtures and routing contracts are valid."""
+    try:
+        cfg = yaml.safe_load(
+            (root / "evals/campaigns/web-design-quality-2026-10/campaign.yaml").read_text(encoding="utf-8")
+        ) or {}
+        expected = {
+            "implementation-brief": "skills/web-design/implementation-brief/SKILL.md",
+            "visual-regression-review": "skills/web-design/visual-regression-review/SKILL.md",
+            "accessibility-gate": "skills/web-design/accessibility-gate/SKILL.md",
+        }
+        candidates = cfg.get("candidate_skills") or []
+        candidate_names = [str(item.get("name") or "") for item in candidates if isinstance(item, dict)]
+        if (
+            cfg.get("campaign") != "web-design-quality-2026-10"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("out_of_scope_behavior_paths") != sorted(expected.values())
+            or len(candidates) != len(expected)
+            or set(candidate_names) != set(expected)
+            or len(candidate_names) != len(set(candidate_names))
+        ):
+            return set()
+        for candidate in candidates:
+            name = str(candidate.get("name") or "")
+            path = expected.get(name)
+            source = root / path if path else None
+            source_text = source.read_text(encoding="utf-8") if source and source.is_file() else ""
+            test_rel = str(candidate.get("test_cases") or "")
+            test_path = root / test_rel
+            suite = yaml.safe_load(test_path.read_text(encoding="utf-8")) or {}
+            cases = [row for row in suite.get("cases", []) if isinstance(row, dict) and row.get("id")]
+            required = list(map(str, candidate.get("required_case_ids") or []))
+            by_id = {str(row["id"]): row for row in cases}
+            if (
+                not path
+                or candidate.get("source") != path
+                or candidate.get("version") != "0.1.0"
+                or f'version: "0.1.0"' not in source_text
+                or candidate.get("sha256") != hashlib.sha256(source.read_bytes()).hexdigest()
+                or test_rel != f"skills/web-design/{name}/tests/cases.yaml"
+                or len(required) != 6
+                or len(set(required)) != len(required)
+                or set(required) != set(by_id)
+            ):
+                return set()
+            triggers = []
+            for cid in required:
+                expected_case = by_id[cid].get("expected") or {}
+                if (
+                    not str(by_id[cid].get("input") or "").strip()
+                    or not isinstance(expected_case.get("should_trigger"), bool)
+                    or not expected_case.get("must_not")
+                    or (expected_case["should_trigger"] and not expected_case.get("must"))
+                ):
+                    return set()
+                triggers.append(expected_case["should_trigger"])
+            if sum(triggers) < 2 or len(triggers) - sum(triggers) < 2:
+                return set()
+        routing = cfg.get("routing_cases") or []
+        if len(routing) != 6:
+            return set()
+        for row in routing:
+            input_path = root / str(row.get("input") or "")
+            rubric_path = root / str(row.get("rubric") or "")
+            rubric = yaml.safe_load(rubric_path.read_text(encoding="utf-8")) or {}
+            if (
+                not input_path.is_file()
+                or rubric.get("id") != row.get("id")
+                or rubric.get("mode") != "natural-routing"
+            ):
+                return set()
+        policy = cfg.get("evaluator_policy") or {}
+        if any(policy.get(key) is not True for key in (
+            "executor_must_not_receive_rubrics",
+            "runtime_model_and_surface_must_be_recorded",
+            "runtime_receipts_required_before_release",
+        )):
+            return set()
+        return set(expected.values())
+    except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
+        return set()
+
+
 def config(root: Path = ROOT):
     return yaml.safe_load((root / CONFIG_REL).read_text(encoding="utf-8")) or {}
 
@@ -806,6 +890,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
     separate_meta_targets.update(separately_validated_interface_design_paths(ROOT))
     separate_meta_targets.update(separately_validated_design_critique_paths(ROOT))
+    separate_meta_targets.update(separately_validated_web_design_quality_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
