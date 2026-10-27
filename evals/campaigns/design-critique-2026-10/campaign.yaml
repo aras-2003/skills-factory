@@ -7,9 +7,9 @@ out_of_scope_behavior_paths:
   - skills/web-design/design-critique/SKILL.md
 candidate_skill:
   name: design-critique
-  version: "0.1.0"
+  version: "0.1.1"
   source: skills/web-design/design-critique/SKILL.md
-  sha256: 3860ab34b2aff6c557f1190c38dfbfd07646451b403c824e38904072c04cd54c
+  sha256: fd1f4fdf6ae2e614090e8838f4b13e6a8649d317ee1a2f3f74846d04ae2b1f26
   test_cases: skills/web-design/design-critique/tests/cases.yaml
   required_case_ids:
     - design-critique-comparative-fixture

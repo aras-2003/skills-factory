@@ -379,9 +379,9 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
             or cfg.get("out_of_scope_behavior_paths") != [expected_path]
             or candidate.get("name") != "design-critique"
             or candidate.get("source") != expected_path
-            or candidate.get("version") != "0.1.0"
+            or candidate.get("version") != "0.1.1"
             or candidate.get("sha256") != hashlib.sha256(source.read_bytes()).hexdigest()
-            or 'version: "0.1.0"' not in source_text
+            or 'version: "0.1.1"' not in source_text
             or len(required) != 7
             or len(set(required)) != len(required)
             or set(required) != set(cases)
