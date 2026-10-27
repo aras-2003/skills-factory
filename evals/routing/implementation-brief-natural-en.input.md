@@ -1,0 +1,1 @@
+Turn this approved settings-page concept into an engineering handoff for our existing web app. Specify the component/props map, responsive behavior, empty and error states, and observable acceptance checks. Do not implement it.
