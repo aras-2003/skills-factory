@@ -26,3 +26,9 @@ cases:
     expected:
       should_trigger: false
       must_not: ["backtest", "replay historical decisions"]
+  - id: replay-current-thesis-near-miss
+    case: A current thesis review is not historical replay
+    input: "Assess this company using only its latest filing and current valuation; do not reconstruct prior decisions."
+    expected:
+      should_trigger: false
+      must_not: ["historical replay", "backtest", "infer past portfolio state"]
