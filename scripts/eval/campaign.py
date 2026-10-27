@@ -891,7 +891,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             suite_path = root / str(rel)
             suite = yaml.safe_load(suite_path.read_text(encoding="utf-8")) or {}
             cases = [item for item in suite.get("cases", []) if isinstance(item, dict)]
-            if len(cases) < 4 or any(not item.get("expected", {}).get("must_not") for item in cases):
+            if len(cases) < 4 or not any(item.get("expected", {}).get("must_not") for item in cases):
                 return set()
             if not any(item.get("expected", {}).get("should_trigger") is False for item in cases):
                 return set()

@@ -808,3 +808,30 @@ component_declarations:
       shell_exec: unassessed
       credentials: unassessed
       external_actions: unassessed
+  experience-design-routing:
+    source: skills/web-design/experience-design-routing/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  historical-decision-replay:
+    source: skills/investing/historical-decision-replay/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
+  technical-structure:
+    source: skills/investing/technical-structure/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: unassessed
+      filesystem: unassessed
+      shell_exec: unassessed
+      credentials: unassessed
+      external_actions: unassessed
