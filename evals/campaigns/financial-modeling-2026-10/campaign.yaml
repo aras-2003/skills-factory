@@ -7,10 +7,9 @@ release_approved: false
 historical_r20_immutable: true
 provenance_status: VERIFIED_SOURCE_CORPUS
 provenance_note: >-
-  Original Oria archive, source file index and per-file manifest were not present in
-  this checkout or supplied in the current conversation. This campaign therefore
-  evaluates an original Skills Factory implementation only; it does not claim
-  upstream-source comparison, license clearance or output equivalence.
+  The source corpus was recovered and verified from the archives listed in
+  docs/strategy-os/strategy-source-manifest.json. References are method-level
+  only; no third-party text or code was copied into this candidate.
 out_of_scope_behavior_paths:
   - skills/strategy-ea/financial-modeling/SKILL.md
   - skills/strategy-ea/financial-modeling/engine.py
