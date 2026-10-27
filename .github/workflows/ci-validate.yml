@@ -126,8 +126,15 @@ jobs:
           fetch-depth: 0
           ref: ${{ env.SOURCE_REVISION }}
       - uses: ./.github/actions/python-environment
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: scripts/eval/promptfoo/package-lock.json
       - name: Validate evaluation campaigns and packaging safety
         run: |
+          npm ci --prefix scripts/eval/promptfoo --ignore-scripts --no-audit --no-fund
+          npm run --prefix scripts/eval/promptfoo smoke
           python scripts/eval/validate_isolation.py
           python scripts/eval/campaign.py validate
           python scripts/eval/skill_release_campaign.py validate

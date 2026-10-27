@@ -1,0 +1,39 @@
+name: Manual evaluation failure simulations
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  failure-simulations:
+    name: Deterministic offline failure simulations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: ./.github/actions/python-environment
+      - name: Simulate bounded failure states
+        run: |
+          mkdir -p .tmp/failure-simulations
+          for case in timeout permission_denied tool_unavailable incompatible_schema renderer_unavailable; do
+            python scripts/eval/failure_injection.py --case "$case" > ".tmp/failure-simulations/$case.json"
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          for path in Path('.tmp/failure-simulations').glob('*.json'):
+              record = json.loads(path.read_text())
+              assert record['test_mode'] == 'OFFLINE_SIMULATION_ONLY'
+              assert record['provider_calls_executed'] is False
+              assert record['external_side_effects'] == 'NONE_BY_HARNESS'
+              assert record['real_execution_state'] == 'NOT_RUN'
+              assert record['real_outcome'] is None
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: offline-failure-simulations-${{ github.sha }}
+          path: .tmp/failure-simulations/
+          if-no-files-found: error
+          retention-days: 14

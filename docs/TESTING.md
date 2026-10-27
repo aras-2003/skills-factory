@@ -7,6 +7,10 @@ Test skills as behavioral components, not as static prompt text.
 The question is not "does the markdown look good?" but:
 **does the agent reliably do the intended thing under representative inputs?**
 
+The free-first CI, Promptfoo adapter, OpenTelemetry/OpenInference fields, local
+Phoenix setup, cost boundaries and overlap map are documented in
+[Testing and runtime observability](architecture/TESTING-OBSERVABILITY.md).
+
 ## 2. Test layers
 
 ### Layer 1 — Static validation

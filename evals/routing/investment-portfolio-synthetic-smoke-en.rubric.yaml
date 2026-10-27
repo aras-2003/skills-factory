@@ -1,0 +1,15 @@
+schema_version: "1.0"
+id: investment-portfolio-synthetic-smoke-en
+mode: natural-routing
+expected_target: investment-os-review
+language: en
+competing_intents:
+  - investment-security-review
+required_selected_capabilities:
+  - investment-portfolio-review
+required_tool_fragments:
+  - route_investment_request
+assertions:
+  manual:
+    - The synthetic portfolio request selects the portfolio front door.
+    - The runtime reports routing only and does not claim to execute analysis.

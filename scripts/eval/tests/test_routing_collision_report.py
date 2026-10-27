@@ -33,7 +33,7 @@ class RoutingCollisionReportTests(unittest.TestCase):
         report = build_report(ROOT)
         negative = {case["id"]: case for case in report["cases"] if case["route_kind"] == "no_skill_negative"}
         self.assertEqual(3, report["no_skill_negative_case_count"])
-        self.assertEqual(24, report["positive_case_count"])
+        self.assertEqual(25, report["positive_case_count"])
         self.assertEqual({"pl", "en"}, set(report["languages"]))
         for case_id in (
             "commerce-consumer-purchase-no-skill-pl",
