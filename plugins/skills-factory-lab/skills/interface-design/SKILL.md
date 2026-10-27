@@ -8,10 +8,10 @@ description: 'Design the information hierarchy, navigation, responsive layout, i
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: 0.1.2
   maturity: candidate
   risk: medium
-  last_reviewed: '2026-10-26'
+  last_reviewed: '2026-10-27'
 ---
 
 # Interface Design
@@ -39,7 +39,15 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 - Screen or user-flow goal.
 - Intended user and their primary task.
-- Target runtime or device context. If missing, ask one focused question or state a clearly bounded assumption when the design can still be useful.
+- Target runtime or device context.
+
+## Required-context gate
+
+Before proposing any screen-specific design, verify that the current request or an explicitly referenced source provides all three required inputs: (1) the screen or user-flow goal, (2) the intended user and primary task, and (3) the target runtime or device context.
+
+If any required input is missing, stop and ask one concise question that names every missing input. Do not provide a layout, a partial design, a generic UX checklist, or a bounded assumption in place of the missing context. Do not infer these inputs from unrelated chats, profile data, saved memory, or ambient application context. Continue only after the user supplies the missing information.
+
+A product name, industry, or native/web label is not an extra required input when the stated user-flow goal, intended user and primary task, and target device context are already clear. For a product-agnostic flow, proceed with explicit, limited assumptions and list product-specific decisions for handoff. Do not ask for details that would not change the requested flow.
 
 ### Optional
 
@@ -47,6 +55,13 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 - Content, data schema, permissions, and known operational constraints.
 - Accessibility requirements, supported devices, localization, and brand constraints.
 - Existing user research or analytics. Treat supplied findings as evidence only to the extent their source and scope are known.
+
+## Context boundary
+
+- Use design context stated in the current request/conversation or in sources the user explicitly references for this request.
+- Do not carry a product, screen, user task, workflow, or design constraint from an unrelated past chat, saved memory, or ambient history into an underspecified request.
+- Generic phrases such as “the screen” do not identify a previously discussed screen unless the user explicitly asks to continue or revise that named conversation or artifact.
+- The required-context gate applies even when prior or ambient context appears to make a plausible design possible. Ask before offering a layout or general screen-improvement checklist.
 
 ## Procedure
 
@@ -85,7 +100,7 @@ Return a concise **Interface brief** with these sections:
 7. **Accessibility** — semantics, keyboard/focus, contrast, announcements, motion, and touch risks.
 8. **Open decisions and handoff** — unresolved questions, dependencies, and what implementation must verify.
 
-When a required input is missing, mark it as an assumption or ask before making decisions that depend on it. Do not omit a section; use “not applicable” with a reason.
+When a required input is missing, follow the required-context gate before drafting the brief. Do not substitute assumptions or a generic checklist for a clarification. After the required inputs are supplied, do not omit a section; use “not applicable” with a reason.
 
 ## Quality checks
 

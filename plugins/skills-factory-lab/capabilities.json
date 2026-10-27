@@ -434,7 +434,7 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "ef2faebe579b272a547abb24d87b9769bfd39eba452b4b192efe8e8f61418d36",
+      "content_sha256": "458cfd034fada09377c90e210b2e12de5d4a68b6de34287faa19992df22f3d6e",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -443,7 +443,7 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.0"
+      "version": "0.1.2"
     },
     {
       "capability_assessment": {
@@ -2022,5 +2022,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "63b9c002c7e672bb2999cca79cb7fae88b1e7260"
+  "source_revision": "a1be6fd9a79962af736b1501ea88e3cbf28842ac"
 }
