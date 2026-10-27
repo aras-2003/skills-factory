@@ -12,7 +12,9 @@ class MarketEconomicsCoverageTests(unittest.TestCase):
     def test_sources_are_hash_pinned_and_runtime_is_not_run(self):
         campaign=(ROOT/"evals/campaigns/market-economics-2026-10/campaign.yaml").read_text()
         self.assertIn("runtime_status: NOT_RUN",campaign)
-        self.assertIn("provenance_status: BLOCKED_SOURCE_CORPUS",campaign)
+        self.assertIn("source_references:",(SOURCE/"tests/cases.yaml").read_text())
+        self.assertIn("884d0050b34d53dd07a3fb0b86f0068888f541aade9367c8e23af8bfaefb21f0",(SOURCE/"tests/cases.yaml").read_text())
+        self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS",campaign)
         pins=dict(re.findall(r"^  (skills/strategy-ea/market-economics/[^:]+): ([a-f0-9]{64})$",campaign,re.M))
         self.assertEqual({"skills/strategy-ea/market-economics/SKILL.md","skills/strategy-ea/market-economics/engine.py","skills/strategy-ea/market-economics/tests/cases.yaml"},set(pins))
         for path,digest in pins.items(): self.assertEqual(digest,hashlib.sha256((ROOT/path).read_bytes()).hexdigest())
