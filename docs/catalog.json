@@ -1248,3 +1248,8 @@
         "skill-test-design",
         "skill-validation"
       ],
+      "optional_dependencies": [],
+      "capability_assessment": "UNASSESSED"
+    }
+  ]
+}
