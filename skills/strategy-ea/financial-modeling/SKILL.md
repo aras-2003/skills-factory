@@ -33,4 +33,4 @@ Require one currency, an `as_of` date, explicit equally spaced periods, cash flo
 - No data retrieval, writes, or external actions are performed by this component.
 
 ## Verification boundary
-The bundled calculator verifies arithmetic and input contracts on synthetic fixtures. It does not validate source authenticity, forecast quality, legal/accounting treatment, economic assumptions, or runtime behavior. Exact upstream-library comparison and licensing/provenance review remain pending until the referenced source corpus is available.
+The bundled calculator verifies arithmetic and input contracts on synthetic fixtures. It does not validate source authenticity, forecast quality, legal/accounting treatment, economic assumptions, or runtime behavior. The public source corpus is now hash-verified and used as method reference only. No third-party content is copied or claimed equivalent; runtime acceptance remains pending.
