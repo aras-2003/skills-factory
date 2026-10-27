@@ -1,7 +1,7 @@
 import unittest
 from decimal import Decimal
 
-from scripts.strategy.financial_model import irr, npv, payback
+from scripts.strategy.financial_model import irr, npv, payback, profit_bridge
 
 
 class FinancialModelTests(unittest.TestCase):
@@ -27,6 +27,25 @@ class FinancialModelTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             npv(-1, [0, 1])
         self.assertIsNone(payback([-10, 1, 1]))
+
+    def test_profit_bridge_reconciles_volume_mix_price_and_cost(self):
+        result = profit_bridge(
+            {"A": [60, 10, 4], "B": [40, 15, 8]},
+            {"A": [80, 11, 5], "B": [50, 16, 9]},
+        )
+        self.assertEqual(result["baseline_profit"], Decimal(640))
+        self.assertEqual(result["target_profit"], Decimal(830))
+        self.assertEqual(result["residual"], Decimal(0))
+        self.assertEqual(
+            sum(result[k] for k in ("volume_effect", "mix_effect", "price_effect", "unit_cost_effect")),
+            Decimal(190),
+        )
+
+    def test_profit_bridge_rejects_missing_segments_and_negative_volume(self):
+        with self.assertRaises(ValueError):
+            profit_bridge({"A": [1, 2, 1]}, {"B": [1, 2, 1]})
+        with self.assertRaises(ValueError):
+            profit_bridge({"A": [-1, 2, 1]}, {"A": [1, 2, 1]})
 
 
 if __name__ == "__main__":
