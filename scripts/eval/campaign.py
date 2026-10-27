@@ -253,7 +253,54 @@ def separately_validated_interactive_report_exhibit_paths(root: Path = ROOT) -> 
 
 
 def separately_validated_interface_design_paths(root: Path = ROOT) -> set[str]:
-    """Keep the interface-design candidate isolated from frozen R20 until its own runtime handoff."""
+    """Keep interface-design isolated from frozen R20 while its Site retest is active."""
+    replacement = root / "evals/campaigns/iteration-06-interface-design-site-2026-10/campaign.yaml"
+    if replacement.is_file():
+        try:
+            cfg = yaml.safe_load(replacement.read_text(encoding="utf-8")) or {}
+            expected_path = "skills/web-design/interface-design/SKILL.md"
+            source = root / expected_path
+            cases_path = root / str(cfg.get("test_cases") or "")
+            source_digest = hashlib.sha256(source.read_bytes()).hexdigest()
+            cases = yaml.safe_load(cases_path.read_text(encoding="utf-8")) or {}
+            cases_by_id = {
+                str(row.get("id")): row
+                for row in cases.get("cases", [])
+                if isinstance(row, dict) and row.get("id")
+            }
+            candidate = cfg.get("candidate_skill") or {}
+            required = list(map(str, candidate.get("required_case_ids") or []))
+            if (
+                cfg.get("campaign") != "iteration-06-interface-design-site-2026-10"
+                or cfg.get("state") != "ACTIVE"
+                or cfg.get("execution_surface") != "site-ordinary-chat"
+                or cfg.get("out_of_scope_behavior_paths") != [expected_path]
+                or candidate.get("name") != "interface-design"
+                or candidate.get("source") != expected_path
+                or candidate.get("test_cases") != cfg.get("test_cases")
+                or candidate.get("sha256") != source_digest
+                or not candidate.get("version")
+                or f'version: "{candidate.get("version")}"' not in source.read_text(encoding="utf-8")
+                or not cases_by_id
+                or len(required) != 6
+                or len(set(required)) != len(required)
+                or set(required) != set(cases_by_id)
+            ):
+                return set()
+            if any(
+                not isinstance(cases_by_id[cid].get("expected", {}).get("should_trigger"), bool)
+                or not cases_by_id[cid].get("expected", {}).get("must_not")
+                or (
+                    cases_by_id[cid]["expected"]["should_trigger"]
+                    and not cases_by_id[cid]["expected"].get("must")
+                )
+                for cid in required
+            ):
+                return set()
+            return {expected_path}
+        except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
+            return set()
+
     path = root / INTERFACE_DESIGN_CAMPAIGN_REL
     if not path.is_file():
         return set()

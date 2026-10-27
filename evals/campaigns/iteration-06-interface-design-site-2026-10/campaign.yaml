@@ -1,0 +1,20 @@
+schema_version: "1.0"
+campaign: iteration-06-interface-design-site-2026-10
+state: ACTIVE
+execution_surface: site-ordinary-chat
+test_cases: skills/web-design/interface-design/tests/cases.yaml
+out_of_scope_behavior_paths:
+  - skills/web-design/interface-design/SKILL.md
+candidate_skill:
+  name: interface-design
+  version: "0.1.1"
+  source: skills/web-design/interface-design/SKILL.md
+  sha256: 0d228114373b376ad86de2fe29f58f9bb74293f17a2292c1ad8c684950b91b40
+  test_cases: skills/web-design/interface-design/tests/cases.yaml
+  required_case_ids:
+    - interface-design-direct-positive
+    - interface-design-indirect-positive
+    - interface-design-nearmiss-report-diagram
+    - interface-design-nearmiss-implementation
+    - interface-design-insufficient-context
+    - interface-design-accessibility-edge
