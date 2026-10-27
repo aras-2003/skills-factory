@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.1"
+  version: "0.1.2"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-10-27"
