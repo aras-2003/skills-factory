@@ -21,7 +21,7 @@ test_modules:
   - skills/strategy-ea/value-realization/tests/test_engine.py
   - scripts/eval/tests/test_value_realization_coverage.py
 source_sha256:
-  skills/strategy-ea/value-realization/SKILL.md: eed96c6d5e45bccd016d4c263ea14644e829b8598d2a8916cadbe8d0d350013d
+  skills/strategy-ea/value-realization/SKILL.md: 056c3e0205faf1eaa376c39133f57a051aab1bf42e00d8276a8f5b3f2d45b79e
   skills/strategy-ea/value-realization/engine.py: 031fedc9707b1ca5267bbbbd30f096063b7c40446181ce1cb4a3a3372863f601
   skills/strategy-ea/value-realization/tests/cases.yaml: 89f6325afb6409b907f98513b55bb98c3b1135cf2efa68ecf541c15b807406be
 
