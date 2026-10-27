@@ -30,7 +30,7 @@ Name: **Skills Factory — Product & Engineering**. Current status options: Back
 - **Ready:** outcome, scope, dependencies, owner and testable acceptance criteria are explicit; implementation belongs to the single active locked iteration.
 - **In review:** diff and relevant checks are available; reviewer identified.
 - **Verification:** required runtime, E2E or integration checks/evidence are underway or pending on a specified candidate. Keep the Issue open and record concrete blockers; this status is not a PASS or a waiver of acceptance criteria.
-- **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime tests on an authorized, version-pinned surface. Production deployment is not required. A main merge moves runtime-bearing work to Verification, not Done. CI/static PASS alone does not imply runtime PASS.
+- **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime tests on the primary surface selected by the scope. For Cloud Next behavior, ordinary Chat with Site MCP explicitly selected is primary; the actual MCP invocation and resulting host behavior must both be observed. Lab is supplemental unless Lab-specific behavior or Lab/Site parity is explicitly in scope. Record version lag and do not claim parity from mismatched identities. Production deployment is not required. A main merge moves runtime-bearing work to Verification, not Done. CI/static PASS alone does not imply runtime PASS. See [Runtime surface policy](ITERATION-DELIVERY.md#runtime-surface-policy).
 - **Release:** release artifacts, provenance and any required production deployment evidence verified separately; production promotion is not implied by Done.
 
 ## Wiki policy
