@@ -10,6 +10,8 @@ There is no single universal runtime registry. R18 composes Commerce cases from 
 
 `skill-release-review-2026-10` is an isolated meta-skill runtime campaign. It exercises five release-gate decisions against the candidate Lab package and records the exact source revision, Lab package identity, skill digest, executor-input hashes and evaluator-rubric hashes. The executor pack contains only prompts and the Lab artifact; rubrics remain in the repository. The R16 campaign definition and pin remain unchanged. Its behavior pin excludes only `skills/meta/skill-release-review/SKILL.md` when the dedicated campaign validates the matching candidate version.
 
+`systemic-risk-signals-2026-10` is a source-scoped candidate campaign for the systemic signal registry and its portfolio evidence boundaries. It has four synthetic runtime cases and a hash-bound exact behavior scope; `runtime_status: NOT_RUN` and `release_approved: false` remain until independent Site execution and review. It does not amend R20 or its receipts.
+
 Validate and prepare it with:
 
 - `python scripts/eval/skill_release_campaign.py validate`

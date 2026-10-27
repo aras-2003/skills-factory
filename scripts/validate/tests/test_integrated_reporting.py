@@ -23,6 +23,29 @@ TARGET_WORKFLOWS = [
 
 
 class IntegratedReportingTests(unittest.TestCase):
+    def test_systemic_risk_registry_is_point_in_time_and_fails_closed(self) -> None:
+        registry_path = ROOT / "skills/investing/investment-attention-triage/references/systemic-risk-indicator-registry.yaml"
+        registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+        self.assertEqual("0.1.0", registry["version"])
+        self.assertIsNone(registry["rules"]["thresholds"]["default"])
+        self.assertEqual("NOT_CONFIGURED", registry["rules"]["thresholds"]["unconfigured_result"])
+        self.assertIn("vintage", registry["rules"]["point_in_time"]["revisions"].lower())
+        required = {"id", "permitted_series", "definition", "interval", "max_age_days", "derivation", "correlation_group", "allowed_sources", "gap_rule"}
+        signals = registry["signals"]
+        self.assertGreaterEqual(len(signals), 8)
+        self.assertEqual(len({item["id"] for item in signals}), len(signals))
+        for signal in signals:
+            with self.subTest(signal=signal["id"]):
+                self.assertTrue(required.issubset(signal))
+                self.assertGreater(signal["max_age_days"], 0)
+                self.assertTrue(signal["permitted_series"])
+                self.assertTrue(signal["allowed_sources"])
+        triage = (ROOT / "skills/investing/investment-attention-triage/SKILL.md").read_text(encoding="utf-8")
+        observation = (ROOT / "workflows/investment-portfolio-observation/WORKFLOW.md").read_text(encoding="utf-8")
+        self.assertIn("systemic-risk-indicator-registry.yaml", triage)
+        self.assertIn("correlation_group", registry["signals"][0])
+        self.assertIn("broad market stress alone does not prove portfolio-specific impact", observation)
+
     def test_oaf_health_check_fails_closed_for_disabled_specialists(self) -> None:
         workflow = (ROOT / "workflows/oaf-health-check/WORKFLOW.md").read_text(encoding="utf-8")
         cases = yaml.safe_load((ROOT / "workflows/oaf-health-check/tests/cases.yaml").read_text(encoding="utf-8"))

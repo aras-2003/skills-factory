@@ -40,6 +40,20 @@ cases:
       must: ["source coverage", "decomposition completeness", "partial"]
       must_not: ["sum holding_weight and sector_weight", "complete look-through coverage"]
 
+  - id: portfolio-systemic-risk-no-double-count
+    case: Cross-ETF issuer exposure uses compatible dated constituents and no overlapping aggregates
+    input: "Estimate my combined issuer and semiconductor exposure across direct holdings and two ETFs. One ETF has only partial top holdings and sector rows are also available. Do not double count anything."
+    expected:
+      should_trigger: true
+      must:
+        - "direct issuer weight separate from look-through issuer weight"
+        - "partial minimum exposure"
+        - "source coverage separate from decomposition completeness"
+      must_not:
+        - "sum holding_weight and sector_weight"
+        - "complete total from partial constituents"
+        - "double count issuer and sector aggregates"
+
   - id: portfolio-attribution-empty-transactions
     case: Empty canonical transaction query is not evidence of no trades
     input: "Current and prior portfolio snapshots are available and weights are unchanged. The canonical transaction query returned zero rows. Tell me whether there were no trades and whether any drift was market-driven."
