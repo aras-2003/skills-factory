@@ -93,3 +93,21 @@ cases:
   - id: design-critique-implementation-nearmiss-en
     input: evals/routing/design-critique-implementation-nearmiss-en.input.md
     rubric: evals/routing/design-critique-implementation-nearmiss-en.rubric.yaml
+  - id: implementation-brief-natural-en
+    input: evals/routing/implementation-brief-natural-en.input.md
+    rubric: evals/routing/implementation-brief-natural-en.rubric.yaml
+  - id: implementation-brief-implementation-nearmiss-en
+    input: evals/routing/implementation-brief-implementation-nearmiss-en.input.md
+    rubric: evals/routing/implementation-brief-implementation-nearmiss-en.rubric.yaml
+  - id: visual-regression-natural-en
+    input: evals/routing/visual-regression-natural-en.input.md
+    rubric: evals/routing/visual-regression-natural-en.rubric.yaml
+  - id: visual-regression-a11y-nearmiss-en
+    input: evals/routing/visual-regression-a11y-nearmiss-en.input.md
+    rubric: evals/routing/visual-regression-a11y-nearmiss-en.rubric.yaml
+  - id: accessibility-gate-natural-en
+    input: evals/routing/accessibility-gate-natural-en.input.md
+    rubric: evals/routing/accessibility-gate-natural-en.rubric.yaml
+  - id: accessibility-gate-implementation-nearmiss-en
+    input: evals/routing/accessibility-gate-implementation-nearmiss-en.input.md
+    rubric: evals/routing/accessibility-gate-implementation-nearmiss-en.rubric.yaml
