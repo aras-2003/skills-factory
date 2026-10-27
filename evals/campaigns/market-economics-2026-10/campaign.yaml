@@ -9,7 +9,7 @@ as_of: "2026-10-27"
 sources:
   skills/strategy-ea/market-economics/SKILL.md: 2d66e9dbadb639e8c0f6e702a9e07fd4c141612b9abd94e56ae97b4d5e6cfc67
   skills/strategy-ea/market-economics/engine.py: 5eb18d226f3099a4d3329ca4f2052a4ca42a91f623c75328da71b8f2550edb3f
-  skills/strategy-ea/market-economics/tests/cases.yaml: edd04fb4b57bcd5b45445b18597f5a059b3d708536251b6002442755237ac9ab
+  skills/strategy-ea/market-economics/tests/cases.yaml: 27d9d51de1e25c559513f4d6a652d5fba353b9332036b53f8aa9f89d36f302ee
 
 upstream_references:
   - archive: oria-tier-one-strategy
