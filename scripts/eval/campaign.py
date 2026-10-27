@@ -856,7 +856,6 @@ def separately_validated_systemic_risk_paths(root: Path = ROOT) -> set[str]:
         return set()
 
 
-
 def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[str]:
     """Exclude only exact, hash-bound candidate sources with isolated NOT_RUN contracts."""
     expected = {
@@ -887,7 +886,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             path = root / rel
             if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
                 return set()
-        for rel in suites.values():
+        for name, rel in suites.items():
             suite_path = root / str(rel)
             suite = yaml.safe_load(suite_path.read_text(encoding="utf-8")) or {}
             cases = [item for item in suite.get("cases", []) if isinstance(item, dict)]
@@ -898,6 +897,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
         return expected
     except (OSError, ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError):
         return set()
+
 
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     exists = subprocess.run(
