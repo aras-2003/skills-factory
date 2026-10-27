@@ -19,4 +19,4 @@ Keep units and periods comparable before calculation. Report missing inputs inst
 
 ## Output
 
-Return sourced totals, margin denominator, the driver-tree reconciliation, the PVM convention and effects, and cost-bridge deltas. Flag incompatible scopes or missing evidence instead of aggregating them. This is an original candidate. The upstream archives and license manifest are unavailable, so this implementation makes no source-equivalence or reuse claim. Runtime acceptance remains pending.
+Return sourced totals, margin denominator, the driver-tree reconciliation, the PVM convention and effects, and cost-bridge deltas. Flag incompatible scopes or missing evidence instead of aggregating them. The public source corpus is now hash-verified. It is used as method reference only; no third-party text or code is copied and no source-equivalence claim is made. Runtime acceptance remains pending.
