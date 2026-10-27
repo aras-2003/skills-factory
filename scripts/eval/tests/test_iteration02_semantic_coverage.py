@@ -26,12 +26,12 @@ class SemanticCoverageTests(unittest.TestCase):
             ROOT,
         )
 
-    def test_current_65_skills_19_workflows_have_source_only_ledger(self):
+    def test_ledger_covers_current_skill_and_workflow_source_inventory(self):
         report = self.check()
         self.assertEqual("SOURCE_INVENTORY_REVIEW_REQUIRED", report["status"], report["errors"])
-        self.assertEqual(65, report["skill_count"])
-        self.assertEqual(19, report["registered_workflow_count"])
-        self.assertEqual(84, len(report["components"]))
+        self.assertEqual(self.skills["total_skills"], report["skill_count"])
+        self.assertEqual(len(self.workflows["workflows"]), report["registered_workflow_count"])
+        self.assertEqual(report["skill_count"] + report["registered_workflow_count"], len(report["components"]))
         self.assertEqual("NOT_RUN", report["runtime_execution"])
         self.assertFalse(report["model_behavior_verified"])
         self.assertFalse(report["release_approved"])

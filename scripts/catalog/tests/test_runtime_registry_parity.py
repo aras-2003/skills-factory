@@ -32,7 +32,7 @@ class RegistryParityTests(unittest.TestCase):
         report = self.check()
         self.assertEqual("SOURCE_PARITY_ONLY_REVIEW_REQUIRED", report["status"], report["errors"])
         self.assertEqual(19, report["workflow_count"])
-        self.assertEqual(64, report["skill_count"])
+        self.assertEqual(len(self.catalog["skills"]), report["skill_count"])
         self.assertEqual("NOT_OBSERVED", report["runtime_installation"])
         self.assertFalse(report["release_approved"])
 

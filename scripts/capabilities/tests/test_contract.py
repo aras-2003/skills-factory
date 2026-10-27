@@ -74,9 +74,12 @@ class CapabilityContractTests(unittest.TestCase):
         report, errors = validate(ROOT)
         self.assertFalse(errors)
         self.assertGreater(report["component_count"], 60)
-        self.assertEqual(report["component_count"] - 1, report["unassessed_count"])
-        candidate = next(row for row in report["components"] if row["name"] == "interface-design")
-        self.assertEqual("DECLARED", candidate["status"])
+        declared = {
+            row["name"] for row in report["components"]
+            if row["status"] != "UNASSESSED"
+        }
+        self.assertEqual({"interface-design", "design-critique"}, declared)
+        self.assertEqual(report["component_count"] - len(declared), report["unassessed_count"])
         self.assertEqual("NOT_VERIFIED", report["runtime_compatibility"])
         self.assertIn("not evidence of no permissions", report["assessment_semantics"])
 
