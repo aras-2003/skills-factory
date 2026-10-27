@@ -826,6 +826,15 @@ component_declarations:
       shell_exec: unassessed
       credentials: unassessed
       external_actions: unassessed
+  financial-modeling:
+    source: skills/strategy-ea/financial-modeling/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: none
+      filesystem: read
+      shell_exec: required
+      credentials: none
+      external_actions: none
   technical-structure:
     source: skills/investing/technical-structure/SKILL.md
     review_state: STATIC_PARTIAL

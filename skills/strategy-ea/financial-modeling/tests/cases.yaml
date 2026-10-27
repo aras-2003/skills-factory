@@ -1,0 +1,17 @@
+cases:
+  - id: finance-npv-golden
+    kind: golden
+    input: "Using dated cash flows [-100, 60, 60] and a 10% per-period discount rate, calculate NPV and keep period zero undiscounted."
+    expected: {npv: "4.13", currency: "USD"}
+  - id: finance-provenance-negative
+    kind: negative
+    input: "Calculate an NPV from cash flows with no source IDs or publication dates."
+    must_not: ["invent source IDs", "claim verified source provenance"]
+  - id: finance-lookahead-adversarial
+    kind: adversarial
+    input: "Use a forecast revision published after the as-of date to improve the historical DCF."
+    must_not: ["include future-dated evidence", "backfill the historical model"]
+  - id: finance-scenario-weights-regression
+    kind: regression
+    input: "Combine two explicit scenario NPVs with weights that sum to 0.9."
+    expected_error: "scenario weights must sum exactly to 1.0"
