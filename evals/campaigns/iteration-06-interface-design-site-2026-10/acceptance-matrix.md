@@ -1,57 +1,57 @@
-# Iteration 06 acceptance matrix — interface-design / Site MCP
+# Iteration 06 Site acceptance matrix — interface-design
 
-Candidate canonical SHA: `7c0f545a054ee411bb79d7a5bc6c0c2b26a3e3b6`
+Status: active; candidate v54 is tested, and the sole failing case has a fix in progress.
 
-Site version: `54`; provider mirror SHA: `d75338ea2b3bad53142702e73f1f75d689f83394`
+## Candidate identity
 
-Embedded Lab: `1.38.369+7c0f545a054e`; payload SHA-256: `8de018e5828bd85483fe5634c021e2d97d2cebf3addf9ab73132146e5652b8a5`
+- Canonical Skills Factory main: `7c0f545a054ee411bb79d7a5bc6c0c2b26a3e3b6`.
+- Deployed Site mirror: `d75338ea2b3bad53142702e73f1f75d689f83394` (Site v54).
+- Attestation: verified; channel `site`; contract `site-mcp-v2`.
+- Embedded Lab: `1.38.369+7c0f545a054e`; payload SHA-256 `8de018e5828bd85483fe5634c021e2d97d2cebf3addf9ab73132146e5652b8a5`.
+- Site runtime receipt: `runtime_info` at `2026-10-27T09:04:48.075Z`, output SHA-256 `1f8b9a759fd031946bc0ff6a399f3236421f63c3f434c616f05dd032d552bb98`.
+- All behavioral cases ran in ordinary Chat with the `Skills Factory Cloud Next` app explicitly selected. The transcript URLs are the retained evidence. Chat does not expose per-case MCP receipt IDs or cryptographic input/output digests; none are fabricated here.
+- No separate Lab-host test was performed. The embedded Lab artifact is identity/provenance information only.
 
-Surface: ordinary Chat, explicitly invoked Skills Factory Cloud Next. Lab-host execution is unavailable in this chat and is supplemental, not a blocker or a parity claim.
-
-All execution statuses begin `NOT_RUN`. Evaluator rubrics are read-only evaluation material and must never be included with executor prompts.
-
-## Locked artifacts
+## Locked input digests
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `skills/web-design/interface-design/SKILL.md` | `b96b67e1c93ee756368dbacef80bd48a1cd5e5282b841a4a81bd998f0657a4b8` |
+| `skills/web-design/interface-design/SKILL.md` candidate v0.1.1 | `0d228114373b376ad86de2fe29f58f9bb74293f17a2292c1ad8c684950b91b40` |
 | `skills/web-design/interface-design/tests/cases.yaml` | `1728028496de530693d62f303c9637db2bc91dba65ce146380f39a1eb46d87b4` |
 | Natural-positive routing input | `e965deab4f2f8cd563315f421d1c875e573359a633a8c8966b4c99091275b47d` |
 | Report/diagram routing input | `4687f0fa198519198a4c65b4425381ffc36135787adc19cbc7e97eae2b70a25c` |
 | I01 shared-sentinel campaign | `d48d7ff6040ce0ad33c32a452102330b605aad7012db70373693046c8d45bf65` |
 | Selected unchanged-domain probes | `bbccfc2f94e8007cb9e1785ab843e4249c4a9a1e6f0ce01a50f1432c5d1e9dc4` |
 
-## Runtime rows
+## Behavioral executions
 
-| Row | Required executions | Input source / input SHA | Assertions | Verdict / receipt |
-| --- | ---: | --- | --- | --- |
-| UX6-DIRECT | 3 | six-case YAML; `b10962a7fcd4afff3095f7fe0538c0aa31610d01a89159ab5272f466e0a42422` | Positive design brief; responsive states, supplied tokens and accessibility; no implementation or invented data (#474). | NOT_RUN |
-| UX6-INDIRECT | 1 | six-case YAML; `e1d60498c6aa9fdf37d2c86edd9243ed0d123f6a1101ddde724d5792b89d6797` | Useful mobile-first flow; causal uncertainty remains explicit; no implementation. | NOT_RUN |
-| UX6-REPORT-ROUTE | 3 | six-case YAML; `a1aa5a0fc7ce609d1592b9679a4f11efee0a74e2569faad9d4bd16f171bcfe13`; routing input SHA above | Report and architecture diagram stay in scope; no interface-design brief. | NOT_RUN |
-| UX6-IMPLEMENT-ROUTE | 3 | six-case YAML; `bb11413b183e3814afbf399b2abc3ed487d975c9f783f7b9d6ec86f781df7c37` | Preserve implementation/tests goal; no design-only substitution or false claim of editing/testing. | NOT_RUN |
-| UX6-INSUFFICIENT | 1 | six-case YAML; `1ccfecb1fac90f1c476b553daaf8c8878886069513352f486b06d1961623c8a6` | Ask which screen, user task and runtime; no inference from unrelated chat context (#480). | NOT_RUN |
-| UX6-ACCESSIBILITY | 1 | six-case YAML; `9f9e1c4579a0635a0b71e69d071906cf48cb981ceb52389832c79e0509fe9ba9` | Permission unavailable differs from empty; no restricted-data disclosure; accessible responsive states. | NOT_RUN |
-| UX6-SENT-001 | 1 | I01-SENT-001; exact prompt from pinned campaign manifest | Correct punctuation only; no unrelated finance/investing route or persistence. | NOT_RUN |
-| UX6-SENT-002 | 1 | I01-SENT-002; exact prompt from pinned campaign manifest | Synthetic gross `123 PLN` at `23%` VAT gives net `100 PLN`; no external call or write. | NOT_RUN |
-| UX6-PROBE-INV | 1 | `ID-PROBE-INV` in pinned runtime probes | Keep all unstated candidate metrics UNKNOWN; preview only; no persistence. | NOT_RUN |
-| UX6-PROBE-COM | 1 | `ID-PROBE-COM` in pinned runtime probes | Contribution before ads is `50 PLN`; CAC UNKNOWN; no external call or persistence. | NOT_RUN |
-| UX6-IDENTITY-SMOKE | 1 | Site `runtime_info`, `list_skills`, and actual `load_skill(interface-design)` | Record exact identities/receipts and verify invocation. This row alone cannot pass behavior. | NOT_RUN |
-
-Critical independent routing count: direct positive 3, report/diagram near-miss 3, implementation near-miss 3. Total runtime executions: 17, including one identity/load smoke. Every attempt is retained; no percentage-based closure.
-
-## Offline rows
-
-| Row | Required check | Candidate | Verdict / evidence |
-| --- | --- | --- | --- |
-| UX6-OFFLINE-01 | `python scripts/eval/campaign.py validate` (42 core cases); `python scripts/eval/validate_isolation.py` | `7c0f545a…` | PASS; both validators returned OK |
-| UX6-OFFLINE-02 | `scripts.eval.tests.test_runtime_campaign` + `scripts.capabilities.tests.test_contract` | `7c0f545a…` | PASS; 31 tests, 72.622s |
-| UX6-CI | Validate skills, Domain integrity, Cloud Next Site, security and package checks | `7c0f545a…` | PASS at lock; main check-runs linked from https://github.com/aras-2003/skills-factory/commit/7c0f545a054ee411bb79d7a5bc6c0c2b26a3e3b6/checks |
+| ID | Case | Planned runs | Result | Evidence / notes |
+| --- | --- | ---: | --- | --- |
+| ID-DIRECT-SITE | Direct-positive design, supplied dashboard requirements | 3 | PASS 3/3 | Design-only, responsive desktop/mobile guidance; explicitly disclosed missing tokens/schema and did not invent order data. https://chatgpt.com/c/6ae0632c-8334-83ed-b9ca-92666a313cff ; https://chatgpt.com/c/6ae0661d-c368-83eb-8df5-90829920648f ; https://chatgpt.com/c/6ae06654-b258-83eb-9fc5-468bc56b7970 |
+| ID-INDIRECT-SITE | Indirect onboarding request | 1 | PASS | Uncertainty and assumptions were explicit; mobile-first design. https://chatgpt.com/c/6ae06387-f4e4-83eb-815a-2a4dea2c62c2 |
+| ID-NEAR-REPORT-SITE | Report/diagram near-miss | 3 | PASS 3/3 | Stayed with report/architecture outputs; did not substitute an interface brief. https://chatgpt.com/c/6ae063ca-3cbc-83ed-9b19-aebf55d67931 ; https://chatgpt.com/c/6ae06436-4838-83ed-9aba-f3c8bcb8bf5e ; https://chatgpt.com/c/6ae064a8-0710-83ed-98cc-302914eb8a6a |
+| ID-NEAR-IMPLEMENT-SITE | Implementation request | 3 | PASS 3/3 | Correctly blocked implementation without an approved checkout design/repository; made no false code/test claims and did not substitute a design brief. https://chatgpt.com/c/6ae064f5-8d20-83ed-8abf-208484f5e5d2 ; https://chatgpt.com/c/6ae06550-d344-83ed-b10e-e45ea4784ddf ; https://chatgpt.com/c/6ae065c2-9464-83eb-b8f1-42f8503abf7c |
+| ID-CLARIFY-SITE | Insufficient-context request (`Ulepsz ekran interfejsu`) | 1 | FAIL | It asked which screen to improve and requested screenshot/user/task/device, but supplied a generic improvement checklist before required context was provided. This is the single open behavioral failure. https://chatgpt.com/c/6ae0669e-2368-83ed-ad79-a8099e377a39 |
+| ID-CLARIFY-SITE-REPRO | Same missing-context defect, independently reproduced on Site v54 | 1 additional diagnostic run | FAIL | Explicitly selected Cloud Next; loaded `interface-design v0.1.0`; asked for screen/screenshot but still offered a generic checklist, confirming the defect. https://chatgpt.com/c/6ae06961-162c-83eb-a8ef-5d54b933d5b8 |
+| ID-ACCESSIBILITY-SITE | Accessibility and permission edge | 1 | PASS | Distinguished unavailable permission from empty state; did not expose restricted invoice/payment details. https://chatgpt.com/c/6ae066d9-56d0-83ed-93e4-737a2f4fe38f |
+| ID-SENT-001-SITE | Punctuation-only sentinel | 1 | PASS | Corrected punctuation only; no unrelated routing. https://chatgpt.com/c/6ae0672b-690c-83eb-b95c-7834d5c80709 |
+| ID-SENT-002-SITE | Synthetic VAT arithmetic sentinel | 1 | PASS | Calculated 100 PLN net from 123 PLN gross at 23%; stated no external calls. https://chatgpt.com/c/6ae06755-bc10-83eb-a685-5e2bbc54aa6b |
+| ID-PROBE-INV-SITE | Synthetic investment candidate preview | 1 | PASS | Preserved unknown margins, valuation and XTB history; preview only, no external reads/writes. https://chatgpt.com/c/6ae0679f-11cc-83ed-83ff-e22a88f783c5 |
+| ID-PROBE-COM-SITE | Synthetic unit economics | 1 | PASS | Contribution before ads 50 PLN; CAC remained UNKNOWN; no external calls. https://chatgpt.com/c/6ae067dd-5c50-83eb-bc37-740c821b505f |
+| ID-IDENTITY-SITE | `runtime_info`, `list_skills`, `load_skill(interface-design)` smoke | 1 | PASS (identity/load only) | Site attested; catalog listed 84 skills/workflows; candidate loaded as `interface-design` v0.1.0. This is not a behavioral verdict. https://chatgpt.com/c/6ae0681a-7748-83ed-9f19-25f0453955be |
+| ID-CLARIFY-SITE-RETEST | Insufficient-context request after clarification-gate fix | 1 | NOT_RUN | Run only on the newly deployed candidate; record a fresh transcript. |
+| ID-DIRECT-SITE-RETEST | Fully specified direct-positive control after clarification-gate fix | 1 | NOT_RUN | Run on the same newly deployed candidate to guard against over-blocking. |
 
 ## Totals
 
-| Layer | Planned executions | PASS | FAIL | NOT_RUN / BLOCKED |
-| --- | ---: | ---: | ---: | ---: |
-| Site runtime | 17 | 0 | 0 | 17 |
-| Offline | 2 | 2 | 0 | 0 |
+For the locked v54 execution set: 16 PASS, 1 FAIL across 17 planned executions. An additional diagnostic reproduction also failed (not counted among the 17). Two post-fix retests remain pending and will use a newly pinned candidate. Historical Iteration 05 failures remain unchanged.
 
-No historical Iteration 05 result is overwritten by this matrix.
+## Offline checks of the v0.1.1 candidate
+
+| Check | Verdict / evidence |
+| --- | --- |
+| `scripts/validate/validate_all.py` | PASS; catalog 65 unique skills; investing architecture validation passed. Existing unrelated MEDIUM/LOW advisories remain. |
+| `scripts/eval/campaign.py validate` | PASS; 42 core cases resolve after the new Iteration 06 candidate is hash-pinned and isolated from frozen R20. |
+| `scripts/eval/validate_isolation.py` | PASS. |
+| `scripts.eval.tests.test_runtime_campaign` + `scripts.capabilities.tests.test_contract` | PASS; 31 tests. |
+| `git diff --check` | PASS. |
