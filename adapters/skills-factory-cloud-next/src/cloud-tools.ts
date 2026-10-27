@@ -112,14 +112,14 @@ export function routeInvestment(userRequest: string) {
   const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s);
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
-  const observation = /zmien|zmian|changed|happening|dzieje|obserw|watch|monitor|drift|dryf/.test(s);
+  const observation = /zmien|zmian|chang(?:e|es|ed|ing)|happening|dzieje|observ|obserw|watch|monitor|drift|dryf/.test(s);
   const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /thes|tez|holding|portfel|portfolio|watchlist/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /wplyw|impact|matter|znaczen|tez|thes|holdings|portfel|zmienia|watchlist/.test(s);
   const opportunity = /watchlist screen|screen my watchlist|screen watchlist|preview the screen|preview-only screen|screen these candidates|okazj|opportunit|kandydat|candidates|research next|badac dalej|szukaj spolek|znajdz spolk|find.*(stocks|securities)/.test(s);
   const explicitCandidateDiscovery = /(?:find|scan|discover|screen|szukaj|znajd|znalez|selekcj).{0,100}(?:stocks|securities|spolk|kandydat|candidates)/.test(s);
   const theme = /temat.*inwest|investment theme|trend|value chain|lancuch wartosc|beneficjen|second.order/.test(s);
   const nonTickers = new Set(["AI", "ETF", "ETFS", "USD", "PLN", "EUR", "CEO", "CIO", "CTO", "EPS", "FCF", "DCF", "ROIC", "TAM", "CAGR"]);
   const tickerCount = new Set((userRequest.match(/\b[A-Z]{2,5}\b/g) || []).filter(token => !nonTickers.has(token))).size;
-  const thesis = /thes|tez(?:a|y|e|ę|ą|ie)?/;
+  const thesis = /\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b/;
   const security = /spolk|stock|security|akcj|etf|wycen|valuation|underwrit|ticker/.test(s) || thesis.test(s) || /issuer|company case/.test(s) || (tickerCount === 1 && /review|ocen|analiz|kup|buy|sell|sprzed|investment|add|increase/.test(s));
   const singleSecurityIntent = security && (thesis.test(s) || /underwrit|valuation|wycen|review.{0,24}(stock|security|ticker)|analy[sz].{0,24}(stock|security|ticker)|assess.{0,24}(stock|security|ticker)|(ocen|analiz).{0,24}(spolke|akcje|instrument|papier)|stock review|security review|good investment|fit.*portfolio|portfolio fit|position|sizing|size|add|increase|reduce|trim|buy|sell|kup|dodaj|zwieksz|zmniejsz|sprzed|pozycj/.test(s));
   const aggregatePortfolioReview = portfolio && risk && !singleSecurityIntent;
@@ -128,12 +128,12 @@ export function routeInvestment(userRequest: string) {
   else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
   else if (technicalStructure) { candidates = [routes[8]]; reason = "The request evaluates price pivots, trend structure or invalidation levels."; }
   else if (policy && /defini|ustal|zaprojekt|design|define|create|regul|zasad|limits|limity/.test(s)) { candidates = [routes[6]]; reason = "The decision object is investment rules or risk limits."; }
-  else if (aggregatePortfolioReview) { candidates = [routes[1]]; reason = "Portfolio holdings or structure with a risk, concentration or allocation review."; }
   else if (event) { candidates = [routes[5]]; reason = "New information is being assessed against holdings or theses."; }
+  else if (portfolio && observation && !singleSecurityIntent) { candidates = [routes[0]]; reason = "Observation of changes or monitoring of existing holdings."; }
+  else if (aggregatePortfolioReview) { candidates = [routes[1]]; reason = "Portfolio holdings or structure with a risk, concentration or allocation review."; }
   else if (theme && !explicitCandidateDiscovery) { candidates = [routes[4]]; reason = "Thematic or value-chain research is the primary decision object; beneficiary opportunities are part of that research."; }
   else if (opportunity) { candidates = [routes[3]]; reason = "Discovery of new research candidates; incidental or excluded portfolio mentions do not change the decision object."; }
   else if (singleSecurityIntent) { candidates = [routes[2]]; reason = "A named security is the decision object, including its thesis, valuation, portfolio fit or sizing."; }
-  else if (portfolio && observation) { candidates = [routes[0]]; reason = "Observation of changes or monitoring of existing holdings."; }
   else if (portfolio) { candidates = [routes[1]]; reason = "A portfolio-level review is the decision object."; }
   else if (theme) { candidates = [routes[4]]; reason = "Thematic or value-chain research."; }
   else if (policy) { candidates = [routes[6]]; reason = "Investment policy or limits are the decision object."; }
