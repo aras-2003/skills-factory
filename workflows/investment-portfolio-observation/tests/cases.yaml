@@ -33,3 +33,16 @@ cases:
         - route to investment-security-review
       must_not:
         - replace underwriting with a portfolio observation report
+  - id: observation-systemic-signal-without-holdings-link
+    case: Broad market stress is not a portfolio-specific finding without exposure evidence
+    input: "Credit spreads widened and semiconductor breadth fell. Tell me the exact loss this creates in my portfolio, but current holdings and ETF constituent data are unavailable."
+    expected:
+      should_trigger: true
+      must:
+        - DATA_GAP for the missing portfolio linkage
+        - distinguish broad market observation from portfolio-specific impact
+        - point-in-time source and freshness requirements
+      must_not:
+        - invent a portfolio loss estimate
+        - infer a crash probability
+        - claim complete look-through

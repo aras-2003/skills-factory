@@ -79,3 +79,20 @@ cases:
       must_not:
         - "claim SAVED without a real write receipt"
         - "silently fall back to an alternative store"
+
+  - id: attention-systemic-risk-vintage-and-correlation
+    case: Cross-asset observations preserve release vintages and deduplicate correlated inputs
+    input: "Review widening HY spreads, falling semiconductor breadth, and rising real yields as systemic risk signals. Use the historical series as known at each original release date; do not assign crash odds or make trades."
+    expected:
+      should_trigger: true
+      must:
+        - "shared as_of"
+        - "observation and publication/vintage dates"
+        - "correlation groups"
+        - "materiality separate from direction"
+        - "NOT_CONFIGURED when no threshold source exists"
+      must_not:
+        - "exact crash probability"
+        - "count correlated signals as independent confirmations"
+        - "invent missing historical values"
+        - "trade or portfolio write"
