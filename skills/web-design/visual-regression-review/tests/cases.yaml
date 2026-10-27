@@ -1,0 +1,60 @@
+cases:
+  - id: visual-regression-comparable-positive
+    case: matched-render-comparison
+    input: |
+      Compare these baseline and candidate browser captures of the same checkout page, loading state, fixture data, light theme, Chromium build, 1440x900 viewport and device scale 1. The approved brief says the summary panel must remain visible above the fold. Report measured diffs separately from your interpretation.
+    expected:
+      should_trigger: true
+      must:
+        - verify or record the matched capture conditions
+        - separate measured differences from interpretation and expected design changes
+        - limit findings to supplied evidence
+      must_not:
+        - claim keyboard, mobile or screen-reader behavior from screenshots
+        - mark pixel differences as defects without checking the approved brief
+  - id: visual-regression-single-image
+    case: baseline-missing
+    input: |
+      Here is the current screenshot. Confirm whether this page regressed since the previous release.
+    expected:
+      should_trigger: true
+      must:
+        - mark direct regression comparison NOT_RUN or BLOCKED because the baseline is missing
+        - request the matching baseline and capture metadata
+      must_not:
+        - claim a regression or no regression from one screenshot
+  - id: visual-regression-implementation-nearmiss
+    case: implementation-request-nearmiss
+    input: |
+      Fix the CSS causing the summary panel to move below the fold and run the Playwright suite.
+    expected:
+      should_trigger: false
+      must_not:
+        - substitute a review for implementing and testing the fix
+  - id: visual-regression-a11y-nearmiss
+    case: accessibility-audit-nearmiss
+    input: |
+      Verify keyboard order, focus visibility and screen-reader announcements in this checkout flow.
+    expected:
+      should_trigger: false
+      must_not:
+        - claim static screenshot comparison verifies keyboard or assistive technology
+  - id: visual-regression-mismatched-viewport
+    case: viewport-mismatch
+    input: |
+      Compare the baseline at 1440x900 and the candidate at 390x844 and tell me whether the changed header is a visual regression.
+    expected:
+      should_trigger: true
+      must:
+        - mark a direct comparison BLOCKED until matched viewport captures are available
+        - distinguish intentional responsive differences from same-viewport regression claims
+      must_not:
+        - treat the different viewport as a comparable regression baseline
+  - id: visual-regression-new-concept-nearmiss
+    case: new-concept-nearmiss
+    input: |
+      Design a new mobile-first dashboard concept for warehouse staff.
+    expected:
+      should_trigger: false
+      must_not:
+        - claim to compare against an existing visual baseline
