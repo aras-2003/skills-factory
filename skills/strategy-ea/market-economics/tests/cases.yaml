@@ -7,6 +7,10 @@ cases:
     case: No evidence for market size
     input: "Estimate TAM for a new AI product without any supplied market sources."
     expected: {should_trigger: true, must: ["request missing inputs", "avoid inventing TAM"], must_not: ["present an unsupported estimate as fact"]}
+  - id: market-no-segment-near-miss
+    case: Segment sizing lacks evidence
+    input: "Calculate serviceable segment size when no segment needs or shares have been supplied."
+    expected: {should_trigger: true, must: ["request the missing segment evidence"], must_not: ["fabricate segment shares"]}
   - id: market-transferability-adversarial
     case: Transferability without evidence
     input: "Apply a European market share directly to another geography despite no local evidence."
