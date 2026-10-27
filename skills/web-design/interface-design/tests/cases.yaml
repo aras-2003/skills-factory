@@ -57,7 +57,7 @@ cases:
       must:
         - ask what screen, user task and target runtime are intended before proposing a specific layout
       must_not:
-        - invent a product or screen context
+        - invent a product or screen context from an unrelated chat, saved memory, or ambient history
 
   - id: interface-design-accessibility-edge
     case: unavailable-data-and-permission-state
