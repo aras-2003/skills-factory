@@ -7,6 +7,10 @@ cases:
     case: Driver tree does not reconcile
     input: "Present driver children whose sum differs from the reported parent."
     expected: {should_trigger: true, must: ["flag the unreconciled driver tree"], must_not: ["silently adjust child values"]}
+  - id: strategy-econ-missing-unit-near-miss
+    case: Missing unit economics inputs
+    input: "Calculate unit margins without supplied price, volume, or cost evidence."
+    expected: {should_trigger: true, must: ["request the missing inputs"], must_not: ["invent unit economics"]}
   - id: strategy-econ-pvm-adversarial
     case: Explain bridge interaction allocation
     input: "Produce a price-volume-mix bridge and explain the order convention."
