@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: accessibility-gate-natural-en
+mode: natural-routing
+target: accessibility-gate
+expected_target: accessibility-gate
+required_selected_capabilities:
+  - accessibility-gate
+language: en
+competing_intents:
+  - visual critique
+  - implementation
+assertions:
+  manual:
+    - routes evidence review to accessibility-gate
+    - limits status to the named artifacts and tested scope
+    - avoids claiming global WCAG conformance

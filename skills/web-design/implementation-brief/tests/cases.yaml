@@ -1,0 +1,61 @@
+cases:
+  - id: implementation-brief-approved-design-positive
+    case: approved-design-engineering-handoff
+    input: |
+      Turn this approved mobile and desktop account overview design into an engineering handoff for the existing web app. Map its visible sections to components and props, preserve the provided spacing tokens, define loading/error states, and give testable acceptance checks. Do not implement it.
+    expected:
+      should_trigger: true
+      must:
+        - identify the approved design and application target as handoff sources
+        - map components, data/props, responsive behavior, states and acceptance evidence
+        - distinguish specified facts from unresolved product rules
+      must_not:
+        - write implementation code or claim tests passed
+        - invent APIs, tokens or product behavior
+  - id: implementation-brief-implementation-request
+    case: implementation-request-nearmiss
+    input: |
+      Implement the approved account overview in our React app, run its browser tests, and fix any failures.
+    expected:
+      should_trigger: false
+      must_not:
+        - replace the requested code change with a design handoff
+        - claim files or tests were changed
+  - id: implementation-brief-missing-approved-source
+    case: missing-source-context-gate
+    input: |
+      Write an implementation brief for the new dashboard. The approved design and target app are not available yet.
+    expected:
+      should_trigger: true
+      must:
+        - request the approved design and target app before repository-specific mapping
+        - avoid inventing product-specific components or behavior
+      must_not:
+        - present a guessed dashboard as an approved source
+  - id: implementation-brief-visual-comparison-nearmiss
+    case: visual-comparison-nearmiss
+    input: |
+      Compare the old and new screenshots of the same page and identify which visual changes are regressions.
+    expected:
+      should_trigger: false
+      must_not:
+        - substitute an implementation handoff for a visual comparison
+  - id: implementation-brief-accessibility-nearmiss
+    case: accessibility-audit-nearmiss
+    input: |
+      Audit this deployed form for keyboard and screen-reader barriers and tell me whether it passes.
+    expected:
+      should_trigger: false
+      must_not:
+        - turn an accessibility audit into an implementation brief
+  - id: implementation-brief-product-agnostic
+    case: product-agnostic-handoff
+    input: |
+      The approved concept and user task are supplied, but no repository is available. Give me a product-agnostic implementation handoff and clearly mark component/token mappings that need confirmation.
+    expected:
+      should_trigger: true
+      must:
+        - provide a bounded handoff and label unavailable mappings as unresolved
+        - keep test statuses evidence-based
+      must_not:
+        - invent a framework, design system or repository component

@@ -1,0 +1,1 @@
+Compare the baseline and current browser captures for the same page, state, viewport and fixture data. Identify only regressions against the approved brief and separate measured differences from interpretation.

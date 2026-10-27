@@ -108,6 +108,23 @@ class RuntimeCampaignTests(unittest.TestCase):
             for fixture in (case.get("fixtures") or {}).values():
                 self.assertTrue((ROOT / "skills/web-design/design-critique/tests" / fixture).is_file())
 
+    def test_ux04_quality_candidates_are_isolated_only_with_complete_source_contracts(self) -> None:
+        paths = {
+            "skills/web-design/implementation-brief/SKILL.md",
+            "skills/web-design/visual-regression-review/SKILL.md",
+            "skills/web-design/accessibility-gate/SKILL.md",
+        }
+        self.assertEqual(paths, campaign.separately_validated_web_design_quality_paths(ROOT))
+        self.assertEqual([], campaign.validate_campaign())
+        fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
+        self.assertTrue({"implementation-brief", "visual-regression-review", "accessibility-gate"}.isdisjoint(fixtures["targets"]))
+        cfg = yaml.safe_load((ROOT / "evals/campaigns/web-design-quality-2026-10/campaign.yaml").read_text())
+        for candidate in cfg["candidate_skills"]:
+            cases = yaml.safe_load((ROOT / candidate["test_cases"]).read_text())["cases"]
+            self.assertEqual(6, len(cases))
+            self.assertGreaterEqual(sum(c["expected"]["should_trigger"] is True for c in cases), 2)
+            self.assertGreaterEqual(sum(c["expected"]["should_trigger"] is False for c in cases), 2)
+
     def test_skill_engineering_campaign_derives_lab_version_from_package_source(self) -> None:
         cfg = yaml.safe_load(
             (ROOT / "evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml").read_text()

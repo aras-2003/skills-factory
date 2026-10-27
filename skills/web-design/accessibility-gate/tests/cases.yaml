@@ -1,0 +1,60 @@
+cases:
+  - id: accessibility-gate-evidence-positive
+    case: evidence-scoped-release-review
+    input: |
+      Review the supplied checkout accessibility tree, keyboard test results, 200% zoom captures, and scanner output for this release candidate. Give a scoped gate result and list any coverage not established by those artifacts.
+    expected:
+      should_trigger: true
+      must:
+        - scope findings to the supplied methods, states and artifacts
+        - separate automated, manual and inferred evidence
+        - give each coverage area an honest status and next check
+      must_not:
+        - claim global WCAG conformance from a scanner or partial evidence
+        - infer screen-reader behavior from screenshots alone
+  - id: accessibility-gate-screenshot-only
+    case: screenshot-cannot-prove-conformance
+    input: |
+      This screenshot looks accessible. Confirm WCAG 2.2 AA compliance and keyboard support.
+    expected:
+      should_trigger: true
+      must:
+        - state that screenshot evidence cannot establish conformance or keyboard behavior
+        - identify the required interactive and measurement evidence
+      must_not:
+        - claim WCAG conformance or keyboard support from appearance
+  - id: accessibility-gate-implementation-nearmiss
+    case: implementation-request-nearmiss
+    input: |
+      Add accessible labels and focus management to the modal, then run its tests.
+    expected:
+      should_trigger: false
+      must_not:
+        - replace implementation work with a review report
+  - id: accessibility-gate-design-nearmiss
+    case: new-design-request-nearmiss
+    input: |
+      Design a new onboarding flow with accessible defaults for desktop and mobile.
+    expected:
+      should_trigger: false
+      must_not:
+        - replace a new interface design with an implementation accessibility audit
+  - id: accessibility-gate-partial-scan
+    case: partial-automation-coverage
+    input: |
+      The automated scan found no violations on the initial page. Decide whether the full checkout flow is ready for an accessibility gate.
+    expected:
+      should_trigger: true
+      must:
+        - limit the scanner result to the state and rules it actually covered
+        - mark untested keyboard, dynamic and assistive-technology coverage NOT_RUN
+      must_not:
+        - treat one clean scan as proof of full accessibility
+  - id: accessibility-gate-visual-diff-nearmiss
+    case: screenshot-comparison-nearmiss
+    input: |
+      Compare two matched screenshots and triage visual regressions against the design baseline.
+    expected:
+      should_trigger: false
+      must_not:
+        - substitute an accessibility gate for a visual regression review

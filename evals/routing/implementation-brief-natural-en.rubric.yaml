@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: implementation-brief-natural-en
+mode: natural-routing
+target: implementation-brief
+expected_target: implementation-brief
+required_selected_capabilities:
+  - implementation-brief
+language: en
+competing_intents:
+  - new interface design
+  - implementation
+assertions:
+  manual:
+    - routes approved-design engineering handoff to implementation-brief
+    - requests only missing inputs needed for a useful product-specific handoff
+    - does not claim implementation or tests were performed

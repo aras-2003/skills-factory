@@ -1,0 +1,14 @@
+schema_version: "1.0"
+id: visual-regression-a11y-nearmiss-en
+mode: natural-routing
+target: accessibility-gate
+expected_target: accessibility-gate
+required_selected_capabilities:
+  - accessibility-gate
+language: en
+competing_intents:
+  - visual regression review
+assertions:
+  manual:
+    - routes keyboard and assistive-technology audit to accessibility-gate
+    - does not select screenshot comparison as the primary capability

@@ -1,0 +1,69 @@
+schema_version: "1.0"
+campaign: web-design-quality-2026-10
+purpose: isolated-source-and-runtime-handoff-for-UX-04-quality-gate-candidates
+runtime_status: NOT_RUN
+release_approved: false
+out_of_scope_behavior_paths:
+  - skills/web-design/accessibility-gate/SKILL.md
+  - skills/web-design/implementation-brief/SKILL.md
+  - skills/web-design/visual-regression-review/SKILL.md
+candidate_skills:
+  - name: implementation-brief
+    version: "0.1.0"
+    source: skills/web-design/implementation-brief/SKILL.md
+    sha256: fc90081c53bc09b0bf318ec674f5d3f3425e5cc6e878b2b6e377f4d79a9d4426
+    test_cases: skills/web-design/implementation-brief/tests/cases.yaml
+    required_case_ids:
+      - implementation-brief-approved-design-positive
+      - implementation-brief-implementation-request
+      - implementation-brief-missing-approved-source
+      - implementation-brief-visual-comparison-nearmiss
+      - implementation-brief-accessibility-nearmiss
+      - implementation-brief-product-agnostic
+  - name: visual-regression-review
+    version: "0.1.0"
+    source: skills/web-design/visual-regression-review/SKILL.md
+    sha256: eae5ba31167a9f9711fb91f15ffed881fb06eba93649340db98891c680e2258d
+    test_cases: skills/web-design/visual-regression-review/tests/cases.yaml
+    required_case_ids:
+      - visual-regression-comparable-positive
+      - visual-regression-single-image
+      - visual-regression-implementation-nearmiss
+      - visual-regression-a11y-nearmiss
+      - visual-regression-mismatched-viewport
+      - visual-regression-new-concept-nearmiss
+  - name: accessibility-gate
+    version: "0.1.0"
+    source: skills/web-design/accessibility-gate/SKILL.md
+    sha256: 05088544453cbc9ae497e2a0d4d5ae72e34e44a8a00f787cc1800b79740dca68
+    test_cases: skills/web-design/accessibility-gate/tests/cases.yaml
+    required_case_ids:
+      - accessibility-gate-evidence-positive
+      - accessibility-gate-screenshot-only
+      - accessibility-gate-implementation-nearmiss
+      - accessibility-gate-design-nearmiss
+      - accessibility-gate-partial-scan
+      - accessibility-gate-visual-diff-nearmiss
+routing_cases:
+  - id: implementation-brief-natural-en
+    input: evals/routing/implementation-brief-natural-en.input.md
+    rubric: evals/routing/implementation-brief-natural-en.rubric.yaml
+  - id: implementation-brief-implementation-nearmiss-en
+    input: evals/routing/implementation-brief-implementation-nearmiss-en.input.md
+    rubric: evals/routing/implementation-brief-implementation-nearmiss-en.rubric.yaml
+  - id: visual-regression-natural-en
+    input: evals/routing/visual-regression-natural-en.input.md
+    rubric: evals/routing/visual-regression-natural-en.rubric.yaml
+  - id: visual-regression-a11y-nearmiss-en
+    input: evals/routing/visual-regression-a11y-nearmiss-en.input.md
+    rubric: evals/routing/visual-regression-a11y-nearmiss-en.rubric.yaml
+  - id: accessibility-gate-natural-en
+    input: evals/routing/accessibility-gate-natural-en.input.md
+    rubric: evals/routing/accessibility-gate-natural-en.rubric.yaml
+  - id: accessibility-gate-implementation-nearmiss-en
+    input: evals/routing/accessibility-gate-implementation-nearmiss-en.input.md
+    rubric: evals/routing/accessibility-gate-implementation-nearmiss-en.rubric.yaml
+evaluator_policy:
+  executor_must_not_receive_rubrics: true
+  runtime_model_and_surface_must_be_recorded: true
+  runtime_receipts_required_before_release: true

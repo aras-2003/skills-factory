@@ -1,0 +1,16 @@
+schema_version: "1.0"
+id: visual-regression-natural-en
+mode: natural-routing
+target: visual-regression-review
+expected_target: visual-regression-review
+required_selected_capabilities:
+  - visual-regression-review
+language: en
+competing_intents:
+  - implementation
+  - accessibility audit
+assertions:
+  manual:
+    - routes comparable baseline/candidate review to visual-regression-review
+    - checks capture comparability before making regression claims
+    - does not infer keyboard or screen-reader behavior from screenshots

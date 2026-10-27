@@ -660,6 +660,16 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "accessibility-gate",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review interface implementation evidence for accessibility risks and required follow-up checks. Use when a team needs an evidence-bound accessibility gate beyond deterministic CI; never claim WCAG conformance without an appropriate audit.",
+      "source": "skills/web-design/accessibility-gate/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "design-critique",
       "domain": "web-design",
       "maturity": "candidate",
@@ -670,12 +680,32 @@
       "capability_assessment": "DECLARED"
     },
     {
+      "name": "implementation-brief",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Turn an approved interface concept into a build-ready specification for an existing product implementation, including components, states, props, tokens, responsive rules and verifiable acceptance checks. Use when the user asks to hand a design to engineering; do not use to design a new concept or implement it.",
+      "source": "skills/web-design/implementation-brief/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "interface-design",
       "domain": "web-design",
       "maturity": "candidate",
       "version": "0.1.3",
       "description": "Design the information hierarchy, navigation, responsive layout, interaction states and accessible behavior for a specific product screen or user flow. Use when the requested outcome is a design brief for an interface, not an implemented page, general report, data visualization or architecture diagram.",
       "source": "skills/web-design/interface-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "visual-regression-review",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review rendered UI against an approved visual baseline and implementation brief. Use when the request is to find visual regressions in comparable screenshots or browser captures; distinguish measured diffs from human interpretation.",
+      "source": "skills/web-design/visual-regression-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "DECLARED"
     }

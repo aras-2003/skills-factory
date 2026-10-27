@@ -1,0 +1,15 @@
+schema_version: "1.0"
+id: accessibility-gate-implementation-nearmiss-en
+mode: natural-routing
+expected_target: no-skill
+required_selected_capabilities: []
+forbidden_selected_capabilities:
+  - implementation-brief
+  - visual-regression-review
+  - accessibility-gate
+language: en
+competing_intents:
+  - accessibility audit
+assertions:
+  manual:
+    - does not substitute an audit report for requested code changes and tests
