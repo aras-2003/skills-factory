@@ -14,8 +14,20 @@ class FundamentalIntelligenceCoverageTests(unittest.TestCase):
             "skills/investing/fundamental-intelligence/engine.py",
             "skills/investing/fundamental-intelligence/damodaran.py",
             "skills/investing/fundamental-intelligence/test_engine.py",
+            "skills/investing/market-opportunity-scan/SKILL.md",
+            "skills/investing/market-opportunity-scan/tests/cases.yaml",
         }
         self.assertEqual(expected,campaign.separately_validated_fundamental_intelligence_paths(ROOT))
+
+    def test_behavior_contract_is_pinned_to_not_run_campaign(self):
+        import yaml
+        manifest = yaml.safe_load((ROOT / "evals/campaigns/fundamental-intelligence-2026-10/source-coverage.yaml").read_text())
+        cases = yaml.safe_load((ROOT / manifest["behavior_case_suite"]).read_text())["cases"]
+        selected = [case for case in cases if case["id"] in manifest["behavior_case_ids"]]
+        self.assertEqual(["scan-opportunity-score-evidence-gate"], [case["id"] for case in selected])
+        self.assertFalse(manifest["release_approved"])
+        self.assertEqual("NOT_RUN", manifest["runtime_status"])
+        self.assertTrue(all(case.get("input") and case.get("expected", {}).get("must") and case.get("expected", {}).get("must_not") for case in selected))
 
     def test_source_unit_suite_executes(self):
         sys.path.insert(0,str(SOURCE))

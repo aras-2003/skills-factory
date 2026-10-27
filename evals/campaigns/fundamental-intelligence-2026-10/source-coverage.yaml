@@ -1,7 +1,13 @@
 campaign: fundamental-intelligence-2026-10
 runtime_status: NOT_RUN
 unit_test: skills/investing/fundamental-intelligence/test_engine.py
+behavior_case_suite: skills/investing/market-opportunity-scan/tests/cases.yaml
+behavior_case_ids:
+  - scan-opportunity-score-evidence-gate
+release_approved: false
 out_of_scope_behavior_paths:
   - skills/investing/fundamental-intelligence/damodaran.py
   - skills/investing/fundamental-intelligence/engine.py
   - skills/investing/fundamental-intelligence/test_engine.py
+  - skills/investing/market-opportunity-scan/SKILL.md
+  - skills/investing/market-opportunity-scan/tests/cases.yaml

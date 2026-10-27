@@ -110,6 +110,7 @@ jobs:
       - name: Run domain, readiness and release tests
         run: |
           python -m unittest discover -s tests/investing -p 'test_*.py'
+          python -m unittest discover -s skills/investing/fundamental-intelligence -p 'test_*.py'
           python -m unittest discover -s scripts/output/tests -p 'test_*.py'
           python -m unittest discover -s skills/commerce/economics/unit-economics-review/tests -p 'test_*.py'
           python -m unittest discover -s scripts/readiness/tests -p 'test_*.py'

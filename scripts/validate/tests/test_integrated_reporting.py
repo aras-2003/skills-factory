@@ -315,6 +315,23 @@ class IntegratedReportingTests(unittest.TestCase):
         self.assertIn("scan-cheap-not-enough", scan_cases)
         self.assertIn("underwriting-causal-attribution", underwriting_cases)
 
+    def test_opportunity_score_is_versioned_evidence_gated_and_separate_from_portfolio_fit(self) -> None:
+        scan = (ROOT / "skills/investing/market-opportunity-scan/SKILL.md").read_text(encoding="utf-8")
+        engine = (ROOT / "skills/investing/fundamental-intelligence/engine.py").read_text(encoding="utf-8")
+        tests = (ROOT / "skills/investing/fundamental-intelligence/test_engine.py").read_text(encoding="utf-8")
+        cases = (ROOT / "skills/investing/market-opportunity-scan/tests/cases.yaml").read_text(encoding="utf-8")
+
+        self.assertIn("opportunity-score-v0.1-provisional", scan)
+        self.assertIn("score_is_probability=false", scan)
+        self.assertIn("never renormalize", scan)
+        self.assertIn("Keep portfolio fit/overlap as a separate", scan)
+        self.assertIn("HORIZON_WEIGHTS", engine)
+        self.assertIn("rank_opportunities", engine)
+        self.assertIn("test_six_synthetic_candidates_distinguish_horizons_and_block_bad_inputs", tests)
+        self.assertIn("test_stale_future_low_confidence_and_incompatible_normalization_fail_closed", tests)
+        self.assertIn("scan-opportunity-score-evidence-gate", cases)
+        self.assertIn("I have not supplied research data", cases)
+
     def test_interaction_levels_require_actual_runtime_capability(self) -> None:
         routing = (ROOT / "skills/meta/visual-output-design/references/tool-routing.md").read_text(encoding="utf-8")
         renderer = (ROOT / "skills/meta/visual-output-design/SKILL.md").read_text(encoding="utf-8")

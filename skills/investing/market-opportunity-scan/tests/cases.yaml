@@ -49,6 +49,21 @@ cases:
       should_trigger: false
       must_not: ["broad XTB scan", "research queue"]
 
+  - id: scan-opportunity-score-evidence-gate
+    case: Do not fabricate a score when candidate evidence is absent
+    input: "Rank six stocks using the Opportunity Score across 1-3 months, 6-12 months and over 3 years. I have not supplied research data or factor evidence."
+    expected:
+      should_trigger: true
+      must:
+        - "opportunity-score-v0.1-provisional"
+        - "score_is_probability=false"
+        - "NOT_SCORED"
+        - "missing evidence"
+      must_not:
+        - "BUY"
+        - "impute missing factors as neutral"
+        - "invent research or factor evidence"
+
   - id: audit-near-miss-market-opportunity-scan
     case: second-competing-skill-negative
     input: "I have a named stock and its annual report. Challenge whether its margins can be sustained; don't shortlist other instruments."
