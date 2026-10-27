@@ -7,7 +7,7 @@ provenance_status: VERIFIED_SOURCE_CORPUS
 source_note: "Seven public archives were recovered and SHA-256 verified; source mapping is in docs/strategy-os/strategy-source-review.md. Method-reference only, no copied content; runtime remains NOT_RUN."
 as_of: "2026-10-27"
 sources:
-  skills/strategy-ea/market-economics/SKILL.md: 1c911c68cb857e7239c88cd9c9c85e45d0b210e3fa281a6390e82b190bad04f2
+  skills/strategy-ea/market-economics/SKILL.md: 2d66e9dbadb639e8c0f6e702a9e07fd4c141612b9abd94e56ae97b4d5e6cfc67
   skills/strategy-ea/market-economics/engine.py: 5eb18d226f3099a4d3329ca4f2052a4ca42a91f623c75328da71b8f2550edb3f
   skills/strategy-ea/market-economics/tests/cases.yaml: 7a6dd8c362a63ac5d19b5e1ece560b57ac5aef43253fe95625eac97d9d443533
 
