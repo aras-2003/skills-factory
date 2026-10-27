@@ -700,6 +700,16 @@
       "capability_assessment": "DECLARED"
     },
     {
+      "name": "strategy-economics",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Reconcile sourced profit pools, driver trees, price-volume-mix and cost bridges with explicit assumptions.",
+      "source": "skills/strategy-ea/strategy-economics/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "value-realization",
       "domain": "strategy-ea",
       "maturity": "candidate",
