@@ -199,7 +199,7 @@ test("embedded Lab release identity and executor isolation", () => {
   assert.equal(catalog.source_revision, LAB_RELEASE.source_revision);
   assert.equal(catalog.artifact_sha256, LAB_RELEASE.artifact_sha256);
   const attention = callTool("load_skill", { skill_name: "investment-attention-triage" });
-  assert.equal(attention.version, "0.2.3");
+  assert.equal(attention.version, "0.2.4");
   assert.match(attention.instructions, /materiality/i);
   for (const skill of catalog.skills) {
     const loaded = callTool("load_skill", { skill_name: skill.name });

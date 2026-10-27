@@ -650,6 +650,66 @@ def separately_validated_fundamental_intelligence_paths(root: Path = ROOT) -> se
     return expected
 
 
+def separately_validated_systemic_risk_paths(root: Path = ROOT) -> set[str]:
+    """Exclude only hash-bound systemic-risk behavior paths with an isolated NOT_RUN campaign."""
+    expected = {
+        "skills/investing/investment-attention-triage/SKILL.md",
+        "skills/investing/investment-attention-triage/references/systemic-risk-indicator-registry.yaml",
+        "skills/investing/portfolio-state-review/SKILL.md",
+        "workflows/investment-portfolio-observation/WORKFLOW.md",
+    }
+    manifest = root / "evals/campaigns/systemic-risk-signals-2026-10/campaign.yaml"
+    if not manifest.is_file():
+        return set()
+    try:
+        cfg = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
+        case_file = root / str(cfg.get("behavior_case_suite") or "")
+        cases_doc = yaml.safe_load(case_file.read_text(encoding="utf-8")) or {}
+        cases = cases_doc.get("cases") or []
+        required = {
+            "systemic-credit-rates-breadth": "cross_asset_observation",
+            "systemic-lookthrough-no-double-count": "portfolio_linkage",
+            "systemic-missing-vintage-data-gap": "missing_or_stale_data",
+            "systemic-no-threshold-no-probability": "threshold_and_probability_guard",
+        }
+        actual = {str(item.get("id")): item for item in cases if isinstance(item, dict)}
+        hashes = cfg.get("source_sha256") or {}
+        modules = {
+            "scripts/validate/tests/test_integrated_reporting.py",
+            "skills/investing/investment-attention-triage/tests/cases.yaml",
+            "workflows/investment-portfolio-observation/WORKFLOW.md",
+        }
+        if (
+            cfg.get("campaign") != "systemic-risk-signals-2026-10"
+            or cfg.get("execution_channel") != "lab"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("historical_r20_immutable") is not True
+            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
+            or set(hashes) != expected
+            or set(cfg.get("test_modules") or []) != modules
+            or cfg.get("required_case_ids") != list(required)
+            or cfg.get("required_dimensions") != list(required.values())
+            or cases_doc.get("campaign") != cfg.get("campaign")
+            or set(actual) != set(required)
+        ):
+            return set()
+        for rel in expected:
+            path = root / rel
+            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
+                return set()
+        for case_id, dimension in required.items():
+            case = actual[case_id]
+            if (case.get("dimension") != dimension or not case.get("input")
+                    or not case.get("must") or not case.get("must_not")):
+                return set()
+        if not all((root / path).is_file() for path in modules):
+            return set()
+        return expected
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError):
+        return set()
+
+
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     exists = subprocess.run(
         ["git", "cat-file", "-e", pinned + "^{commit}"],
@@ -688,6 +748,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
+    separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
         if not path:

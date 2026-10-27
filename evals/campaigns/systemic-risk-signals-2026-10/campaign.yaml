@@ -1,0 +1,32 @@
+campaign: systemic-risk-signals-2026-10
+schema_version: "1.0"
+scope: systemic_signal_registry_candidate
+execution_channel: lab
+runtime_status: NOT_RUN
+release_approved: false
+historical_r20_immutable: true
+out_of_scope_behavior_paths:
+  - skills/investing/investment-attention-triage/SKILL.md
+  - skills/investing/investment-attention-triage/references/systemic-risk-indicator-registry.yaml
+  - skills/investing/portfolio-state-review/SKILL.md
+  - workflows/investment-portfolio-observation/WORKFLOW.md
+behavior_case_suite: evals/campaigns/systemic-risk-signals-2026-10/cases.yaml
+required_case_ids:
+  - systemic-credit-rates-breadth
+  - systemic-lookthrough-no-double-count
+  - systemic-missing-vintage-data-gap
+  - systemic-no-threshold-no-probability
+required_dimensions:
+  - cross_asset_observation
+  - portfolio_linkage
+  - missing_or_stale_data
+  - threshold_and_probability_guard
+test_modules:
+  - scripts/validate/tests/test_integrated_reporting.py
+  - skills/investing/investment-attention-triage/tests/cases.yaml
+  - workflows/investment-portfolio-observation/WORKFLOW.md
+source_sha256:
+  skills/investing/investment-attention-triage/SKILL.md: b897050ff7b9f1cdc9714f15a8ee67b32954ba1802083e2e92c23913a240afdd
+  skills/investing/investment-attention-triage/references/systemic-risk-indicator-registry.yaml: 3370f92797b9fa1db685365d398d864a17161d7f2938deac6df5ef8de96b14c7
+  skills/investing/portfolio-state-review/SKILL.md: 3e0a1220ad70214d4e3fbe81ded0876eab11f158037f1bb727001b16ba869c8a
+  workflows/investment-portfolio-observation/WORKFLOW.md: 700bc3774d3624c959ee30224f1cf71419f300397576e43cffc8200857a3d7d2

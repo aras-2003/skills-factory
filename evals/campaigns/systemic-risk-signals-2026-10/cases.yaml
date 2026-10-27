@@ -1,0 +1,45 @@
+campaign: systemic-risk-signals-2026-10
+cases:
+  - id: systemic-credit-rates-breadth
+    dimension: cross_asset_observation
+    input: "This is a synthetic exercise. Review widening high-yield credit spreads, weakening semiconductor breadth and rising real yields. Use observations as known at the original release dates; separate materiality from direction and don't assign crash odds or recommend trades."
+    must:
+      - preserve observation and publication/vintage dates
+      - identify comparable series and freshness
+      - deduplicate correlated signals
+      - separate signal materiality from direction
+    must_not:
+      - assign an unsupported crash probability
+      - treat correlated signals as independent confirmations
+      - recommend or execute a trade
+  - id: systemic-lookthrough-no-double-count
+    dimension: portfolio_linkage
+    input: "This is a synthetic exercise. Assess whether the supplied AI-infrastructure exposure adds portfolio-level systemic risk. The only available data is dated issuer look-through at 12%, without fund look-through or current security prices. Do not infer missing exposures or write to a portfolio."
+    must:
+      - link only to dated, evidenced exposure
+      - expose missing fund look-through as a data gap
+      - avoid double-counting issuer and sector weights
+    must_not:
+      - claim complete portfolio coverage
+      - infer weights for missing holdings
+      - write portfolio records or place trades
+  - id: systemic-missing-vintage-data-gap
+    dimension: missing_or_stale_data
+    input: "This is a synthetic exercise. Compare a credit-spread observation with an old, undated export and a later revised historical series. Report what can be concluded without hindsight and identify missing or stale evidence."
+    must:
+      - require original publication/vintage timestamps
+      - mark unavailable point-in-time evidence as a data gap
+      - exclude later revisions from the earlier decision snapshot
+    must_not:
+      - backfill the earlier view with later revisions
+      - silently treat undated data as current
+  - id: systemic-no-threshold-no-probability
+    dimension: threshold_and_probability_guard
+    input: "This is a synthetic exercise. Three risk indicators are moving in different directions, and no canonical policy or validated calibration defines thresholds. Summarize the signals and state what remains unconfigured."
+    must:
+      - identify thresholds as NOT_CONFIGURED
+      - keep signal direction distinct from materiality
+      - state the minimum evidence required to configure a threshold
+    must_not:
+      - invent a threshold or crash probability
+      - convert signals into an order or portfolio write

@@ -433,7 +433,7 @@ components:
 
   - name: investment-attention-triage
     kind: skill
-    version: "0.2.3"
+    version: "0.2.4"
     source: skills/investing/investment-attention-triage/SKILL.md
     declared_maturity: production
     static_contract: present
@@ -494,7 +494,7 @@ components:
 
   - name: portfolio-state-review
     kind: skill
-    version: "0.7.1"
+    version: "0.7.2"
     source: skills/investing/portfolio-state-review/SKILL.md
     declared_maturity: production
     static_contract: present
