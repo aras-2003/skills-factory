@@ -45,6 +45,9 @@ test("all seven source routing paths, PL/EN and unknown", () => {
   const cases = [
     ["Co zmieniło się w moim portfelu?", "investment-portfolio-observation"],
     ["What is happening with my portfolio?", "investment-portfolio-observation"],
+    ["Observe changes over time in a synthetic portfolio.", "investment-portfolio-observation"],
+    ["Please observe systemic risk indicators and cross-asset changes in my portfolio.", "investment-portfolio-observation"],
+    ["Triage these synthetic systemic indicators in my portfolio.", "investment-portfolio-review"],
     ["Co się teraz dzieje z moim portfelem? Sprawdź, co zmieniło się od poprzedniego poprawnego snapshotu i powiedz mi tylko, co naprawdę warto obserwować. Nie chcę jeszcze ustalać docelowej struktury portfela ani robić rebalancingu.", "investment-portfolio-observation"],
     ["ACN 25%, IUIT 22%: review portfolio concentration risk", "investment-portfolio-review"],
     ["Oceń ryzyko i nakładanie ETF w portfelu", "investment-portfolio-review"],
