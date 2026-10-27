@@ -1,0 +1,12 @@
+campaign: strategy-economics-2026-10
+candidate: strategy-economics
+candidate_version: 0.1.0
+runtime_status: NOT_RUN
+release_approved: false
+provenance_status: BLOCKED_SOURCE_CORPUS
+source_note: "Original archives and per-file manifest are unavailable; this is an original candidate with no upstream-source equivalence claim."
+as_of: "2026-10-27"
+sources:
+  skills/strategy-ea/strategy-economics/SKILL.md: 23635b313a275513cdefb71e851820ed867b025d0f64027a9b213bdb4745e825
+  skills/strategy-ea/strategy-economics/engine.py: 02ec781743c4dcb660dd14b3ce129f2b8a43a7f7642b51bcd2433b181c5b6b6c
+  skills/strategy-ea/strategy-economics/tests/cases.yaml: c1da6f0114e6ffb98f280e4dbf6eef85530541e470981893079bef8d1c5aae34
