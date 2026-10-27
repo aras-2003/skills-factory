@@ -835,6 +835,15 @@ component_declarations:
       shell_exec: required
       credentials: none
       external_actions: none
+  market-economics:
+    source: skills/strategy-ea/market-economics/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: none
+      filesystem: read
+      shell_exec: required
+      credentials: none
+      external_actions: none
   financial-modeling:
     source: skills/strategy-ea/financial-modeling/SKILL.md
     review_state: STATIC_PARTIAL
