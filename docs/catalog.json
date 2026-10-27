@@ -693,7 +693,7 @@
       "name": "design-critique",
       "domain": "web-design",
       "maturity": "candidate",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Use when reviewing a supplied interface screenshot or visual artifact for hierarchy, clarity, affordance, responsiveness, consistency, distinctiveness and cognitive risk. Give evidence-bound findings and practical repairs; do not infer hidden behavior or claim automated accessibility/runtime checks.",
       "source": "skills/web-design/design-critique/SKILL.md",
       "source_status": "present",
@@ -1248,8 +1248,3 @@
         "skill-test-design",
         "skill-validation"
       ],
-      "optional_dependencies": [],
-      "capability_assessment": "UNASSESSED"
-    }
-  ]
-}
