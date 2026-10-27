@@ -25,3 +25,9 @@ cases:
     expected:
       should_trigger: false
       must_not: ["OPS/OPD", "trend invalidation"]
+  - id: technical-structure-fundamentals-near-miss
+    case: A fundamentals-only request is not technical structure
+    input: "Evaluate this company's earnings quality, balance sheet and valuation; do not inspect price structure."
+    expected:
+      should_trigger: false
+      must_not: ["OPS/OPD", "price trend", "support and resistance"]
