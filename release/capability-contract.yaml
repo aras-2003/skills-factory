@@ -330,6 +330,33 @@ component_declarations:
       shell_exec: none
       credentials: none
       external_actions: none
+  implementation-brief:
+    source: skills/web-design/implementation-brief/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: none
+      filesystem: none
+      shell_exec: none
+      credentials: none
+      external_actions: none
+  visual-regression-review:
+    source: skills/web-design/visual-regression-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: none
+      filesystem: none
+      shell_exec: none
+      credentials: none
+      external_actions: none
+  accessibility-gate:
+    source: skills/web-design/accessibility-gate/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: none
+      filesystem: none
+      shell_exec: none
+      credentials: none
+      external_actions: none
   investor-pattern-research:
     source: skills/investing/investor-pattern-research/SKILL.md
     review_state: STATIC_PARTIAL
