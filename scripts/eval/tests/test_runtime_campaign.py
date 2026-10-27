@@ -103,7 +103,7 @@ class RuntimeCampaignTests(unittest.TestCase):
         fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
         self.assertNotIn("design-critique", fixtures["targets"])
         cases = yaml.safe_load((ROOT / "skills/web-design/design-critique/tests/cases.yaml").read_text())
-        self.assertEqual(6, len(cases["cases"]))
+        self.assertEqual(7, len(cases["cases"]))
         for case in cases["cases"]:
             for fixture in (case.get("fixtures") or {}).values():
                 self.assertTrue((ROOT / "skills/web-design/design-critique/tests" / fixture).is_file())
