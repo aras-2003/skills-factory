@@ -192,6 +192,20 @@ def include_runtime_file(rel: Path) -> bool:
 
 def copy_runtime_support(src_skill: Path, dst_skill: Path) -> list[str]:
     inventory: list[str] = []
+    # Some skills explicitly reference a root-level calculator. Keep that
+    # source in the package as well as conventional scripts/ support files.
+    instructions = (src_skill / "SKILL.md").read_text(encoding="utf-8")
+    filenames = {
+        name for code in re.findall(r"`([^`\n]+)`", instructions)
+        for name in re.findall(r"(?<![A-Za-z0-9_./-])([A-Za-z_][A-Za-z0-9_-]*\.py)(?![A-Za-z0-9_./-])", code)
+    }
+    for filename in sorted(filenames):
+        source = src_skill / filename
+        if source.is_symlink():
+            raise ValueError(f"runtime support symlinks are not allowed: {source}")
+        if source.is_file():
+            shutil.copyfile(source, dst_skill / filename)
+            inventory.append(filename)
     for dirname in RUNTIME_DIRS:
         source = src_skill / dirname
         if not source.exists():

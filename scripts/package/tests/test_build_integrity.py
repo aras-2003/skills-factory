@@ -7,6 +7,9 @@ import sys
 import zipfile
 import json
 import subprocess
+import importlib.util
+import os
+from unittest.mock import patch
 
 HERE = Path(__file__).resolve()
 PACKAGE_DIR = HERE.parents[1]
@@ -15,10 +18,52 @@ if str(PACKAGE_DIR) not in sys.path:
     sys.path.insert(0, str(PACKAGE_DIR))
 
 from build_chatgpt_skills import _write_deterministic_zip
-from build_utils import atomic_output, package_runtime_mcp, sha256_file, validate_output_path
+from build_plugin import copy_skill
+from build_utils import atomic_output, copy_runtime_support, package_runtime_mcp, sha256_file, validate_output_path
 
 
 class BuildIntegrityTests(unittest.TestCase):
+    def test_strategy_calculators_survive_packaging_and_host_loading(self) -> None:
+        spec = importlib.util.spec_from_file_location("source_catalog", ROOT / "runtime/mcp/skill_catalog.py")
+        catalog = importlib.util.module_from_spec(spec)
+        assert spec and spec.loader
+        spec.loader.exec_module(catalog)
+        with tempfile.TemporaryDirectory() as td:
+            output = Path(td)
+            for name in ("financial-modeling", "market-economics", "strategy-economics", "value-realization"):
+                source = ROOT / "skills/strategy-ea" / name
+                copy_skill(source, output)
+                with patch.dict(os.environ, {"SKILLS_FACTORY_SKILLS_ROOT": str(output)}):
+                    loaded = catalog.load_skill(name)
+                references = {item["path"]: item["content"] for item in loaded["reference_files"]}
+                self.assertEqual((source / "engine.py").read_text(), references.get("engine.py"), name)
+                self.assertFalse(any("tests" in Path(path).parts or "evals" in Path(path).parts for path in references))
+
+    def test_explicit_root_calculator_is_packaged_as_exact_source(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            source, output = Path(td) / "source", Path(td) / "output"
+            source.mkdir()
+            output.mkdir()
+            (source / "SKILL.md").write_text("Use `python engine.py input.json` with supplied JSON.")
+            code = "raise RuntimeError('loading must not execute code')\n"
+            (source / "engine.py").write_text(code)
+            (source / "unreferenced.py").write_text("not runtime support")
+            self.assertEqual(["engine.py"], copy_runtime_support(source, output))
+            self.assertEqual(code, (output / "engine.py").read_text())
+            self.assertFalse((output / "unreferenced.py").exists())
+
+    def test_root_calculator_symlink_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            source, output = Path(td) / "source", Path(td) / "output"
+            source.mkdir()
+            output.mkdir()
+            (source / "SKILL.md").write_text("Use `engine.py`.")
+            outside = Path(td) / "outside.py"
+            outside.write_text("not packaged")
+            (source / "engine.py").symlink_to(outside)
+            with self.assertRaisesRegex(ValueError, "symlinks"):
+                copy_runtime_support(source, output)
+
     def test_local_mcp_configs_disable_python_bytecode_writes(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             stage = Path(td) / "stage"
