@@ -32,12 +32,11 @@ class FinancialModelingCoverageTests(unittest.TestCase):
         for case_id in (
             "finance-npv-golden", "finance-provenance-negative",
             "finance-lookahead-adversarial", "finance-scenario-weights-regression",
+            "finance-near-miss-report-format",
         ):
             self.assertIn(f"id: {case_id}", cases)
-        self.assertIn("kind: golden", cases)
-        self.assertIn("kind: negative", cases)
-        self.assertIn("kind: adversarial", cases)
-        self.assertIn("kind: regression", cases)
+        self.assertIn("should_trigger: false", cases)
+        self.assertIn("should_trigger: true", cases)
 
     def test_catalog_and_capability_declaration_reference_candidate(self):
         skill = (SOURCE / "SKILL.md").read_text()
