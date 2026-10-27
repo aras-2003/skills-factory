@@ -27,4 +27,4 @@ test_modules:
 source_sha256:
   skills/strategy-ea/financial-modeling/SKILL.md: cdd5fa83428ab98f314560f4294931d3cc4d303088d18f4d0a6f2b9cf765a04f
   skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
-  skills/strategy-ea/financial-modeling/tests/cases.yaml: 3fa1dda8a88f7c08426e177d635894c64b8842489fd32e605db88ef732d59056
+  skills/strategy-ea/financial-modeling/tests/cases.yaml: 87715fe0d0fbbe518e691debf8b13f8cd893d0b88bf2e18a45705882c8dead61
