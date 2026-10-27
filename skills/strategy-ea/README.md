@@ -1,6 +1,6 @@
 # Strategy / Enterprise Architecture / Executive Work
 
-> **Status:** mixed. The `financial-modeling`, `market-economics`, and `value-realization` directories contain candidate source implementations; other entries below remain proposed capability names, not current source or runtime availability.
+> **Status:** mixed. The `financial-modeling`, `market-economics`, `strategy-economics`, and `value-realization` directories contain candidate source implementations; other entries below remain proposed capability names, not current source or runtime availability.
 
 Skills for structured executive decision support and architecture work.
 
