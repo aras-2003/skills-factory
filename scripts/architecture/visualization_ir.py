@@ -22,7 +22,7 @@ POLICY = {
  "supports": {("application","capability"),("application","process"),("process","capability")},
  "owns": {("owner",target) for target in ("capability","process","application","data")},
  "contains": {("capability",target) for target in ("capability","process","application","owner")},
- "depends_on": {(type_,type_) for type_ in ("skill","workflow","tool","capability","process","application","data")} | {("workflow","process"),("workflow","data"),("skill","data")},
+ "depends_on": {(type_,type_) for type_ in ("skill","workflow","tool","capability","process","application","data")} | {("workflow","process"),("workflow","data"),("skill","data"),("skill","workflow")},
  "flows_to": {(type_,type_) for type_ in ("process","application","data","tool")},
  "unknown": set(),
 }

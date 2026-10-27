@@ -46,11 +46,11 @@ class SkillsFactoryExplorerTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
-    def test_extracts_pinned_13_skill_slice_with_verified_sources(self):
+    def test_extracts_pinned_15_skill_slice_with_verified_sources(self):
         model = extract_model(self.root, self.revision)
         skills = [node for node in model["nodes"] if node["type"] == "skill"]
         workflows = [node for node in model["nodes"] if node["type"] == "workflow"]
-        self.assertEqual(len(skills), 13)
+        self.assertEqual(len(skills), 15)
         self.assertEqual(len(workflows), 7)
         self.assertEqual(verify_sources(model, self.root)["source_revision"], self.revision)
         self.assertTrue(all(node["evidence"] for node in skills + workflows))

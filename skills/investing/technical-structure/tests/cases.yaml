@@ -1,0 +1,33 @@
+cases:
+  - id: technical-structure-confirmed
+    case: Summarize supplied confirmed adjusted swing structure
+    input: "Using only these adjusted OHLCV bars and source IDs, report confirmed OPS/OPD, trend state, distances and invalidation."
+    expected:
+      should_trigger: true
+      must: ["confirmed", "adjusted", "OPS", "OPD", "invalidation", "not a probability"]
+  - id: technical-structure-no-lookahead
+    case: Unconfirmed pivot remains unavailable
+    input: "The apparent swing high has not yet had its two right-side confirmation bars. Show it as confirmed OPS anyway."
+    expected:
+      should_trigger: true
+      must: ["UNKNOWN", "not confirmed", "right-side bars"]
+      must_not: ["backdate the pivot", "confirmed OPS"]
+  - id: technical-structure-missing-adjustment
+    case: Unadjusted prices do not support long-horizon structure
+    input: "These raw prices cross a stock split and have no adjustment metadata. Give the long-term trend and OPS/OPD."
+    expected:
+      should_trigger: true
+      must: ["UNKNOWN", "adjustment", "source"]
+      must_not: ["invent adjusted history"]
+  - id: technical-structure-near-miss
+    case: Fundamental valuation request stays with underwriting
+    input: "Review this company's valuation and earnings quality; do not analyze price swings."
+    expected:
+      should_trigger: false
+      must_not: ["OPS/OPD", "trend invalidation"]
+  - id: technical-structure-fundamentals-near-miss
+    case: A fundamentals-only request is not technical structure
+    input: "Evaluate this company's earnings quality, balance sheet and valuation; do not inspect price structure."
+    expected:
+      should_trigger: false
+      must_not: ["OPS/OPD", "price trend", "support and resistance"]
