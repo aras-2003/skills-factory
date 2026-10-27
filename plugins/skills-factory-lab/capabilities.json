@@ -434,7 +434,7 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "ef2faebe579b272a547abb24d87b9769bfd39eba452b4b192efe8e8f61418d36",
+      "content_sha256": "e902c3af4f4ac41f440beb8fa15080e894a6c37beb78470f191cb63eac5c38de",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -443,7 +443,7 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.0"
+      "version": "0.1.3"
     },
     {
       "capability_assessment": {
@@ -796,7 +796,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "daa0de9a50a173f243a00a62664148a8e93988e748b6af2f5b4464f6f4c2f381",
+      "content_sha256": "f71dad88ecdf83559eec7927202f303481109777cc1f31b70089e16261585dca",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -805,7 +805,7 @@
       "kind": "skill",
       "maturity": "production",
       "name": "market-opportunity-scan",
-      "version": "0.3.1"
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -2005,7 +2005,7 @@
   ],
   "runtime_tools": [
     {
-      "content_sha256": "5387dc49e75a49b31a6d4f3e0d2f68e5bf39a674eaa45ef7742c350c483b3cc0",
+      "content_sha256": "99c3cdaf551c274a0d08c33f2dad7097b73178018363b8c81f9cb8addbf39639",
       "kind": "mcp-server",
       "name": "skills-factory-runtime",
       "runtime_class": "skills-factory-runtime",
@@ -2022,5 +2022,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "63b9c002c7e672bb2999cca79cb7fae88b1e7260"
+  "source_revision": "862a139be13cd73ce0ff272807f590e24a08a98f"
 }
