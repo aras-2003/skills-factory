@@ -16,9 +16,9 @@ from scripts.architecture.visualization_ir import ModelValidationError, validate
 SKILLS = (
     "decision-journal-update", "investment-attention-triage",
     "investment-policy-design", "investment-record-store",
-    "investor-pattern-research", "market-opportunity-scan",
+    "investor-pattern-research", "historical-decision-replay", "market-opportunity-scan",
     "portfolio-state-review", "position-sizing-review",
-    "security-underwriting", "thesis-challenge", "thesis-monitor",
+    "security-underwriting", "technical-structure", "thesis-challenge", "thesis-monitor",
     "trend-theme-research", "valuation-scenario-review",
 )
 WORKFLOWS = (
@@ -71,7 +71,7 @@ def _token_present(line: str, token: str) -> bool:
 
 
 def extract_model(repo_root: Path, revision: str) -> dict[str, Any]:
-    """Extract the fixed 13-skill / 7-workflow investment slice from exact Git objects."""
+    """Extract the fixed 15-skill / 7-workflow investment slice from exact Git objects."""
     if not re.fullmatch(r"[0-9a-f]{40}", revision):
         raise ExplorerError("revision must be a full immutable lowercase Git SHA")
 

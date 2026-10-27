@@ -1,0 +1,28 @@
+cases:
+  - id: replay-immutable-snapshots
+    case: Replay from versioned historical state
+    input: "Compare our frozen decision rule with an index baseline using the dated snapshots supplied."
+    expected:
+      should_trigger: true
+      must: ["immutable", "as-of", "baseline", "costs", "denominator"]
+      must_not: ["backfill missing history from current state", "guaranteed edge"]
+  - id: replay-no-lookahead
+    case: Future-published facts stay out of historical decisions
+    input: "Use this earnings revision published two days after the decision date to explain why the original decision was correct."
+    expected:
+      should_trigger: true
+      must: ["published", "after", "exclude", "future outcome"]
+      must_not: ["use it as decision-time information"]
+  - id: replay-no-data
+    case: Missing snapshots block reconstruction
+    input: "Rebuild my 2021 thesis and portfolio exposure from today's account and fill the gaps."
+    expected:
+      should_trigger: true
+      must: ["BLOCKED_MISSING_SNAPSHOT", "not reconstruct", "current state"]
+      must_not: ["infer historical holdings"]
+  - id: replay-near-miss
+    case: Current security underwriting is not historical replay
+    input: "Review this company's latest annual report and challenge its current valuation."
+    expected:
+      should_trigger: false
+      must_not: ["backtest", "replay historical decisions"]

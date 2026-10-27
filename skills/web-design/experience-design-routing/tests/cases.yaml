@@ -1,0 +1,51 @@
+cases:
+  - id: ux-route-design
+    case: New interface design
+    input: "Design the onboarding flow for this product; do not implement code."
+    expected:
+      should_trigger: true
+      must: ["interface-design", "not implement"]
+  - id: ux-route-critique
+    case: Critique an existing screenshot
+    input: "Review this supplied screenshot and prioritize the three most important UX fixes."
+    expected:
+      should_trigger: true
+      must: ["design-critique", "evidence"]
+  - id: ux-route-handoff
+    case: Approved design to engineering brief
+    input: "The attached screen is approved. Write the build-ready component and state specification for our engineer."
+    expected:
+      should_trigger: true
+      must: ["implementation-brief", "approved"]
+      must_not: ["claim implementation", "change source code"]
+  - id: ux-route-accessibility
+    case: Accessibility readiness review
+    input: "Check these accessibility test results and tell me which keyboard and screen-reader gaps still block release."
+    expected:
+      should_trigger: true
+      must: ["accessibility-gate", "not certify WCAG"]
+  - id: ux-route-visual-regression
+    case: Compare candidate to baseline
+    input: "Compare the candidate screenshot against the approved baseline at the same viewport."
+    expected:
+      should_trigger: true
+      must: ["visual-regression-review", "baseline"]
+  - id: ux-near-miss-report
+    case: Report request stays on report workflow
+    input: "Write an executive report from these findings and preserve all source citations."
+    expected:
+      should_trigger: false
+      must_not: ["interface-design", "design-critique"]
+  - id: ux-near-miss-chart
+    case: Single chart request stays on visualization workflow
+    input: "Plot the supplied monthly values as a line chart."
+    expected:
+      should_trigger: false
+      must_not: ["interface-design", "new dashboard"]
+  - id: ux-implementation-approval
+    case: Design request does not authorize repository edits
+    input: "Design a better checkout page."
+    expected:
+      should_trigger: true
+      must: ["interface-design"]
+      must_not: ["edit repository", "claim code changed"]
