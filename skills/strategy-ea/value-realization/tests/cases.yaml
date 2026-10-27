@@ -39,3 +39,10 @@ cases:
       should_trigger: false
       tags: [near-miss]
       must_not: ["review initiative owners or benefit realization"]
+  - id: value-realization-near-miss-options
+    case: Compare strategic options without realized benefits
+    input: "Compare two future strategy options without an approved benefit baseline or actuals."
+    expected:
+      should_trigger: false
+      tags: [near-miss]
+      must_not: ["invent realized value", "report benefit realization"]
