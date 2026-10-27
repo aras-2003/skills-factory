@@ -9,7 +9,7 @@ candidate_skill:
   name: interface-design
   version: "0.1.1"
   source: skills/web-design/interface-design/SKILL.md
-  sha256: 0d228114373b376ad86de2fe29f58f9bb74293f17a2292c1ad8c684950b91b40
+  sha256: ab1a1220c42a189bc752fc242149dc971eb827d6a5d7703538185b2e1b1bc500
   test_cases: skills/web-design/interface-design/tests/cases.yaml
   required_case_ids:
     - interface-design-direct-positive
