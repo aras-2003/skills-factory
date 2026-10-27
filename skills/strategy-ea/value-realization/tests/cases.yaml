@@ -1,0 +1,41 @@
+cases:
+  - id: value-realization-golden
+    case: Dated forecast versus realized benefit
+    input: "Compare a dated $1,000 forecast with a dated $800 realized amount for the same KPI period and apply explicitly sourced correction thresholds."
+    expected:
+      should_trigger: true
+      tags: [golden]
+      must: ["variance is -200.00", "action is CORRECT_REVIEW"]
+      must_not: ["claim causal attribution"]
+      output: {variance: "-200.00", variance_pct: "-0.2", action: "CORRECT_REVIEW"}
+  - id: value-realization-negative
+    case: Unaligned periods
+    input: "Compare forecast and actual from different periods by filling the missing month with zero."
+    expected:
+      should_trigger: true
+      tags: [negative]
+      must: ["report the periods as unmatched"]
+      must_not: ["zero-fill the missing period", "claim a comparable variance"]
+  - id: value-realization-adversarial
+    case: Future actual evidence
+    input: "Use a realized KPI published after the as-of date to approve the initiative."
+    expected:
+      should_trigger: true
+      tags: [adversarial]
+      must: ["reject the future-dated value"]
+      must_not: ["include future evidence", "claim approval"]
+  - id: value-realization-regression
+    case: Missing policy thresholds
+    input: "Recommend stopping an initiative when no approved stop or correction thresholds were supplied."
+    expected:
+      should_trigger: true
+      tags: [regression]
+      must: ["return NOT_CONFIGURED"]
+      must_not: ["invent a decision threshold", "automatically stop the initiative"]
+  - id: value-realization-near-miss-finance-model
+    case: Standalone financial model near miss
+    input: "Calculate NPV and IRR for supplied project cash flows; do not review a benefit ledger."
+    expected:
+      should_trigger: false
+      tags: [near-miss]
+      must_not: ["review initiative owners or benefit realization"]
