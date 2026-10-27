@@ -690,6 +690,16 @@
       "capability_assessment": "DECLARED"
     },
     {
+      "name": "market-economics",
+      "domain": "strategy-ea",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Reconcile evidence-bound TAM/SAM/SOM estimates, customer segments and white-space economics without assuming transferability.",
+      "source": "skills/strategy-ea/market-economics/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "value-realization",
       "domain": "strategy-ea",
       "maturity": "candidate",
