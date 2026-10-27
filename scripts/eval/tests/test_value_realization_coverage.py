@@ -16,7 +16,7 @@ class ValueRealizationCoverageTests(unittest.TestCase):
         campaign = (ROOT / "evals/campaigns/value-realization-2026-10/campaign.yaml").read_text()
         self.assertIn("runtime_status: NOT_RUN", campaign)
         self.assertIn("release_approved: false", campaign)
-        self.assertIn("provenance_status: BLOCKED_SOURCE_CORPUS", campaign)
+        self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS", campaign)
         pins = dict(re.findall(r"^  (skills/strategy-ea/value-realization/[^:]+): ([a-f0-9]{64})$", campaign, re.M))
         expected = {
             "skills/strategy-ea/value-realization/SKILL.md",
