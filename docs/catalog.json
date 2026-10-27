@@ -243,7 +243,7 @@
       "name": "market-opportunity-scan",
       "domain": "investing",
       "maturity": "production",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "description": "Screen the XTB-investable equity and ETF universe for research candidates using changes in fundamentals, valuation, expectations, price behavior and portfolio relevance. Use for broad opportunity hunting or change detection. Prefer installed structured equity-research plugins for breadth, Firecrawl/primary sources for verification, and canonical portfolio context from investment-record-store. Do not issue buy/sell instructions.",
       "source": "skills/investing/market-opportunity-scan/SKILL.md",
       "source_status": "present",
