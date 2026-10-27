@@ -1,0 +1,21 @@
+cases:
+  - id: strategy-econ-profit-pool-golden
+    case: Sum sourced profit pools
+    input: "Aggregate sourced entity revenue and operating profit, then show margin."
+    expected: {should_trigger: true, must: ["show entity and aggregate amounts", "show the denominator used for margin"], must_not: ["infer unsupported entity values"]}
+  - id: strategy-econ-driver-reconcile-negative
+    case: Driver tree does not reconcile
+    input: "Present driver children whose sum differs from the reported parent."
+    expected: {should_trigger: true, must: ["flag the unreconciled driver tree"], must_not: ["silently adjust child values"]}
+  - id: strategy-econ-pvm-adversarial
+    case: Explain bridge interaction allocation
+    input: "Produce a price-volume-mix bridge and explain the order convention."
+    expected: {should_trigger: true, must: ["reconcile exactly", "state the sequential convention"], must_not: ["claim unique causal attribution"]}
+  - id: strategy-econ-future-evidence-regression
+    case: Future dated source
+    input: "Use next quarter's data in an as-of historical cost bridge."
+    expected: {should_trigger: true, must: ["reject future-dated evidence"], must_not: ["include look-ahead data"]}
+  - id: strategy-econ-competitor-near-miss
+    case: Competitor benchmarking
+    input: "Research competitors' product positioning and public strategy."
+    expected: {should_trigger: false, must_not: ["invent a profit-pool benchmark"]}
