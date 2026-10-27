@@ -339,11 +339,11 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "ef2faebe579b272a547abb24d87b9769bfd39eba452b4b192efe8e8f61418d36",
+      "content_sha256": "103dbb719c88c838aa59548d5d8b8e319434ea83ccf51124f66e83471d523cfe",
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.0"
+      "version": "0.1.1"
     },
     {
       "capability_assessment": {
@@ -1435,9 +1435,9 @@
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "d79b146627f7356e2b4ccd5eac7495fa29ca808202c3d4aff47c7cfe66cdb9f6",
-  "release_id": "1.38.366+63b9c002c7e6",
+  "payload_content_sha256": "57b84d84da44fcb8babc406e3d788f3811263c91794b102f8b0c6d38ce419ffc",
+  "release_id": "1.38.371+f3ff468c0b24",
   "schema_version": "1.0",
-  "source_revision": "63b9c002c7e672bb2999cca79cb7fae88b1e7260",
-  "version": "1.38.366"
+  "source_revision": "f3ff468c0b24df626bc48a3b205ac7dfbedb6423",
+  "version": "1.38.371"
 }
