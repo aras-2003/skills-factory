@@ -27,3 +27,25 @@ cases:
     case: Qualitative market trend research
     input: "Summarize the supplied market trend sources without estimating market size."
     expected: {should_trigger: false, must_not: ["invent TAM or segment shares"]}
+
+source_references:
+  - archive: oria-tier-one-strategy
+    path: skills/market-sizing/SKILL.md
+    sha256: 884d0050b34d53dd07a3fb0b86f0068888f541aade9367c8e23af8bfaefb21f0
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/customer-segmentation/SKILL.md
+    sha256: 1c607d76ae273c37231ab0043758a71f8ce93fcb3c10a4456433297172c668cd
+    use: method_reference_only_no_content_reuse
+  - archive: oria-tier-one-strategy
+    path: skills/white-space-mapping/SKILL.md
+    sha256: f949b7aaefe7a7c180b620fab08f5627f79e9195b8d2becfa2d9f923bed2a7db
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/tam-sam-som-model/SKILL.md
+    sha256: 793037bdc1cb6e2f6ff2b3db9b677b6175d40e4238d308ac2d2bc1f5198cd8c0
+    use: method_reference_only_no_content_reuse
+  - archive: oria-21-strategy
+    path: skills/customer-segmentation/SKILL.md
+    sha256: d42b9b1bca2bdd91cc9321070469c1801e5131d324ac89b3c941353e6d58d2b4
+    use: method_reference_only_no_content_reuse
