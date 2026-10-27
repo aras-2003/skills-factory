@@ -1,0 +1,11 @@
+{
+  "name": "skills-factory-promptfoo-adapter",
+  "private": true,
+  "description": "Pinned optional MCP smoke harness; evals/ and receipts remain canonical.",
+  "scripts": {
+    "smoke": "mkdir -p .tmp/promptfoo-config .tmp/matplotlib && python generate_config.py && PROMPTFOO_CONFIG_DIR=.tmp/promptfoo-config PROMPTFOO_DISABLE_TELEMETRY=1 MPLCONFIGDIR=.tmp/matplotlib promptfoo eval -c .tmp/promptfooconfig.yaml --no-cache"
+  },
+  "devDependencies": {
+    "promptfoo": "0.125.1"
+  }
+}

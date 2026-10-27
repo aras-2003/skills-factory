@@ -1,5 +1,8 @@
 schema_version: "1.0"
 cases:
+  - id: investment-portfolio-synthetic-smoke-en
+    input: evals/routing/investment-portfolio-synthetic-smoke-en.input.md
+    rubric: evals/routing/investment-portfolio-synthetic-smoke-en.rubric.yaml
   - id: career-company-facts-pl
     input: evals/routing/career-company-facts-pl.input.md
     rubric: evals/routing/career-company-facts-pl.rubric.yaml

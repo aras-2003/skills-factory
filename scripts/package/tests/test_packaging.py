@@ -164,6 +164,7 @@ class PackagingTests(unittest.TestCase):
             self.assertTrue((out / "mcp" / "chart_renderer.py").is_file())
             self.assertTrue((out / "mcp" / "investment_runtime.py").is_file())
             self.assertTrue((out / "mcp" / "server.py").is_file())
+            self.assertTrue((out / "mcp" / "observability.py").is_file())
 
             plugin_manifest = json.loads((out / "plugin.json").read_text(encoding="utf-8"))
             self.assertEqual(

@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Deterministic local MCP contract smoke (not a behavioral campaign)
+providers:
+  - id: mcp
+    config:
+      enabled: true
+      server:
+        command: python
+        args:
+          - ../../../runtime/mcp/server.py
+        name: skills-factory-local
+      tools:
+        - runtime_info
+        - list_skills
+        - load_skill
+        - route_investment_request
+      transformResponse: |
+        (result, content) => {
+          if (result?.structuredContent) return JSON.stringify(result.structuredContent);
+          const text = result?.content?.filter((block) => block.type === 'text').map((block) => block.text).join('\n');
+          return text || content;
+        }
+prompts:
+  - '{{prompt}}'

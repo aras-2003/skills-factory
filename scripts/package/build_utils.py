@@ -230,7 +230,8 @@ def package_runtime_mcp(
     server_src = source_dir / "server.py"
     cloud_src = source_dir / "cloud_server.py"
     catalog_src = source_dir / "skill_catalog.py"
-    if not all(path.is_file() for path in (config_src, renderer_src, investment_src, server_src, cloud_src, catalog_src)):
+    observability_src = source_dir / "observability.py"
+    if not all(path.is_file() for path in (config_src, renderer_src, investment_src, server_src, cloud_src, catalog_src, observability_src)):
         raise ValueError("runtime MCP sources are incomplete")
 
     config = json.loads(config_src.read_text(encoding="utf-8"))
@@ -262,6 +263,7 @@ def package_runtime_mcp(
         shutil.copyfile(server_src, mcp_out / "server.py")
         shutil.copyfile(cloud_src, mcp_out / "cloud_server.py")
         shutil.copyfile(catalog_src, mcp_out / "skill_catalog.py")
+        shutil.copyfile(observability_src, mcp_out / "observability.py")
         write_json(stage / ".mcp.json", {"mcpServers": servers})
 
     tree_digest = (
