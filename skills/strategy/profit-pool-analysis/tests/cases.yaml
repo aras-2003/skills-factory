@@ -4,17 +4,26 @@
 # Adapted independently; no source text copied.
 cases:
   - id: profit-pool-001
+    case: value-chain-pool
     input: "Map where profit accrues across the European heat-pump value chain and explain drivers."
     expected:
       should_trigger: true
       must: ["boundary", "comparable definitions", "value-driver", "reconciliation"]
   - id: profit-pool-002
+    case: profit-bridge
     input: "Bridge baseline profit to target using price, volume, mix and cost drivers."
     expected:
       should_trigger: true
       must: ["bridge", "residual", "double counting"]
   - id: profit-pool-negative
+    case: funding-prioritization-routing
     input: "Rank our approved transformation initiatives for funding."
     expected:
       should_trigger: false
       must: ["portfolio-prioritization"]
+  - id: profit-pool-negative-2
+    case: unit-economics-routing
+    input: "Calculate our one product's contribution margin after ads and fulfillment costs."
+    expected:
+      should_trigger: false
+      must: ["unit-economics-review"]

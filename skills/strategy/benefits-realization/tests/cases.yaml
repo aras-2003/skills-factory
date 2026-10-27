@@ -4,17 +4,26 @@
 # Adapted independently; no source text copied.
 cases:
   - id: benefits-001
+    case: ledger-setup
     input: "Set up a forecast-versus-actual benefits ledger for approved initiatives."
     expected:
       should_trigger: true
       must: ["baseline", "owner", "evidence", "variance"]
   - id: benefits-002
+    case: unsupported-attribution
     input: "Benefits rose after launch. Can we claim the initiative caused all of it?"
     expected:
       should_trigger: true
       must: ["counterfactual", "attribution", "unverified"]
   - id: benefits-negative
+    case: kpi-quality-routing
     input: "Design a KPI tree and define good metric quality."
     expected:
       should_trigger: false
       must: ["kpi-quality-review"]
+  - id: benefits-negative-2
+    case: capital-allocation-routing
+    input: "Select which initiatives get more funding and decide who may approve reallocation."
+    expected:
+      should_trigger: false
+      must: ["portfolio-prioritization", "decision-rights-review"]

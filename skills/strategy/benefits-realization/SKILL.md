@@ -11,6 +11,9 @@ metadata:
 
 # Benefits Realization
 
+## Purpose
+Maintain an auditable link from approved initiative assumptions to observed benefit evidence and variance decisions.
+
 ## Ledger fields
 Initiative and hypothesis; accountable owner; benefit metric and unit; baseline value/date/source; forecast value/date; realization window; attribution method; dependencies; costs/investment; actual values with dates and sources; confidence; status; corrective action and decision owner.
 

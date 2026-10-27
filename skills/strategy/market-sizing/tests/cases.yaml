@@ -3,19 +3,28 @@
 # Adapted independently; no source text copied. Rejected boundary: unsupported point estimate.
 cases:
   - id: market-size-001
+    case: scoped-market-sizing
     input: "Estimate TAM/SAM/SOM for Polish home energy audits, 2025–2030, separating top-down and bottom-up evidence."
     expected:
       should_trigger: true
       must: ["scope", "top-down", "bottom-up", "SOM", "assumptions"]
       must_not: ["unsupported point estimate"]
   - id: market-size-002
+    case: missing-boundaries
     input: "There is no target geography or unit yet. Tell me the exact TAM anyway."
     expected:
       should_trigger: true
       must: ["ask for scope", "unresolved"]
       must_not: ["invent a precise market size"]
   - id: market-size-negative
+    case: transferability-routing
     input: "Is this US product's demand transferable to Poland?"
     expected:
       should_trigger: false
       must: ["market-transferability-review"]
+  - id: market-size-negative-2
+    case: product-discovery-routing
+    input: "Discover emerging investment themes in European battery recycling."
+    expected:
+      should_trigger: false
+      must: ["trend-theme-research"]

@@ -24,6 +24,9 @@ Currency, period convention, initial and subsequent cash flows, timing, discount
 7. Audit units, signs, dates, formula lineage, scenario completeness and invariants. Report rounded display values alongside unrounded calculator results.
 8. No probabilities without evidence. Investment security analysis is outside scope: hand off to `valuation-scenario-review`.
 
+## Output contract
+Input register | scenario cash-flow schedule | NPV, IRR and payback with conventions | sensitivity table | reconciliation checks | unresolved assumptions and decision threshold.
+
 ## Quality checks
 - [ ] All cash-flow periods, currency and signs are consistent.
 - [ ] NPV includes time-zero flow exactly once.

@@ -3,17 +3,26 @@
 # Adapted independently; deterministic arithmetic is independently implemented and tested.
 cases:
   - id: financial-model-001
+    case: project-business-case
     input: "Model incremental cash flows for this factory upgrade; show NPV, IRR, payback and sensitivities."
     expected:
       should_trigger: true
       must: ["assumptions", "NPV", "IRR", "payback", "sensitivity"]
   - id: financial-model-002
+    case: missing-model-inputs
     input: "Calculate NPV but I have not supplied cash flows, dates, currency or discount rate."
     expected:
       should_trigger: true
       must: ["missing inputs", "no point result"]
   - id: financial-model-negative
+    case: public-security-valuation-routing
     input: "Value MSFT stock under bear, base and bull cases."
     expected:
       should_trigger: false
       must: ["valuation-scenario-review"]
+  - id: financial-model-negative-2
+    case: financial-research-near-miss
+    input: "Compare two companies' accounting policies; no cash-flow model or investment decision is requested."
+    expected:
+      should_trigger: false
+      must: ["company-context-research"]

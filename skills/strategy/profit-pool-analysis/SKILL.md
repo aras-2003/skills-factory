@@ -11,7 +11,10 @@ metadata:
 
 # Strategy Profit Pool Analysis
 
-## Method
+## Purpose
+Explain where economic value accrues across a defined value chain and which mechanisms account for the differences.
+
+## Procedure
 1. Bound the industry, geography, customer value chain and period; distinguish revenue from profit and cash flow.
 2. Map activities and participant types, including intermediaries and customer-owned alternatives.
 3. Estimate each pool with comparable definitions: revenue × operating margin, or invested capital × return on capital where supported. Keep sources, units and years aligned.

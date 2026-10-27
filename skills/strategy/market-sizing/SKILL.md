@@ -17,7 +17,7 @@ Produce a decision-useful market range, not a large unsupported headline.
 ## Required inputs
 Decision, geography, customer, use case, unit of demand, time period, value basis (revenue, units or spend), and as-of date. If any boundary changes the answer materially, request it or show separate cases.
 
-## Method
+## Procedure
 1. Define TAM as all demand meeting the stated need; SAM as demand reachable under the stated product, geography and channel constraints; SOM as a time-bounded attainable share constrained by capacity and route to market.
 2. Build a top-down estimate from a dated, scoped source, exposing every adjustment from reported market to target market.
 3. Independently build bottom-up demand as eligible entities × incidence/usage × units × net price; show each input, source, unit and period.
