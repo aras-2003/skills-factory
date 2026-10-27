@@ -101,12 +101,14 @@ export function loadSkill(skillName: string) {
   if (!skill) throw new Error("Unknown skill");
   return { ...skill, source_revision: LAB_RELEASE.source_revision, execution_mode: "host_model_executes_loaded_instructions" };
 }
-const routes = ["investment-portfolio-observation", "investment-portfolio-review", "investment-security-review", "investment-opportunity-hunter", "investment-theme-discovery", "investment-attention-review", "investment-policy-design"] as const;
+const routes = ["investment-portfolio-observation", "investment-portfolio-review", "investment-security-review", "investment-opportunity-hunter", "investment-theme-discovery", "investment-attention-review", "investment-policy-design", "historical-decision-replay", "technical-structure"] as const;
 export function routeInvestment(userRequest: string) {
   const editingOnly = /^(?:fix|correct|proofread|edit)\s+(?:(?:only|just)\s+)?(?:the\s+)?(?:punctuation|grammar|spelling)\b/i.test(userRequest.trim());
   const s = userRequest.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l")
     .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
+  const replay = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|published.{0,30}after.{0,30}decision|rebuild.{0,40}(thesis|portfolio|exposure)|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)/.test(s);
+  const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation/.test(s);
   const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s);
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
@@ -123,6 +125,8 @@ export function routeInvestment(userRequest: string) {
   const aggregatePortfolioReview = portfolio && risk && !singleSecurityIntent;
   let candidates: string[] = [], reason = "No unambiguous decision object matched.";
   if (explicit.length) { candidates = [...explicit]; reason = "Explicit workflow names in the request."; }
+  else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
+  else if (technicalStructure) { candidates = [routes[8]]; reason = "The request evaluates price pivots, trend structure or invalidation levels."; }
   else if (policy && /defini|ustal|zaprojekt|design|define|create|regul|zasad|limits|limity/.test(s)) { candidates = [routes[6]]; reason = "The decision object is investment rules or risk limits."; }
   else if (aggregatePortfolioReview) { candidates = [routes[1]]; reason = "Portfolio holdings or structure with a risk, concentration or allocation review."; }
   else if (event) { candidates = [routes[5]]; reason = "New information is being assessed against holdings or theses."; }
@@ -133,7 +137,7 @@ export function routeInvestment(userRequest: string) {
   else if (portfolio) { candidates = [routes[1]]; reason = "A portfolio-level review is the decision object."; }
   else if (theme) { candidates = [routes[4]]; reason = "Thematic or value-chain research."; }
   else if (policy) { candidates = [routes[6]]; reason = "Investment policy or limits are the decision object."; }
-  const investmentContext = explicit.length > 0 || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
+  const investmentContext = explicit.length > 0 || replay || technicalStructure || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
   const unrelatedGovernance = /security\.md|codeowners|report os.*production.ready/.test(s);
   const applicable = !editingOnly && !unrelatedGovernance && investmentContext;
   if (!applicable) { candidates = []; reason = editingOnly ? "request is limited to a non-investment editing task" : "no investment decision object was identified"; }
