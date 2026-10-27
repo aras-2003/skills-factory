@@ -61,6 +61,8 @@ Do not treat any research plugin as the canonical portfolio store.
 12. Remove ideas supported only by cheapness, price decline, momentum, social attention or narrative.
 13. Produce a broad research radar of roughly 10-15 candidates, then promote only the best 2-3 to detailed analysis by default. Match the requested coverage; if the evidence or available tools cannot support the minimum breadth or history, state the actual coverage and mark the scan incomplete rather than presenting a partial scan as the full universe.
 14. Return an explicit reject/defer rationale for attractive-looking but unsupported names.
+15. For a user-requested ranked opportunity comparison, calculate the **Opportunity Score** separately for each requested horizon using the versioned profile below. Score only factor inputs explicitly derived from evidence and carrying source IDs, definition, normalization profile, confidence, quality and as-of date. Do not invent normalized inputs or silently fill missing factors. If a deterministic calculation engine is available, use it; otherwise show the weighted inputs and arithmetic so the result can be independently reproduced. Missing, stale, future-dated, weak-confidence or non-comparable evidence makes that candidate/horizon `NOT_SCORED`; never renormalize remaining weights or substitute 0.50.
+16. Rank only candidates with the same horizon, model version, as-of date, factor definitions and compatible normalization profiles. Include score difference to the next candidate and explain material divergence across horizons. Keep portfolio fit/overlap as a separate, post-score assessment; never hide it as a company-score penalty.
 
 ## Decision rules
 - Discovery can be broad; conviction must be narrow.
@@ -74,6 +76,34 @@ Do not treat any research plugin as the canonical portfolio store.
 - Historical price/KPI moves require evidence-aware attribution; use UNKNOWN instead of a convenient narrative.
 - Missing historical series or an unavailable source is a coverage limitation, not a zero-change result. Do not claim a full 5Y or 12–20 quarter analysis unless the dates/periods are present; block promotion when missing history is decision-critical.
 - Analytics output cannot overwrite canonical records except through investment-record-store.
+- The Opportunity Score is an evidence-backed **research-prioritization index**, not expected return, probability, conviction, fair value or a trade instruction. Its proposed weights and bands are provisional until calibrated on bias-controlled historical data.
+- Use model version `opportunity-score-v0.1-provisional`; never compare scores across model versions or incompatible sector/metric normalization profiles.
+- Do not score a candidate/horizon unless every required factor below is present, dated no later than shared `as_of`, within its maximum age, confidence >= 0.50, and has at least one source ID and documented normalization profile. Missing evidence is not neutral.
+- Keep EPS and FCF quality visible: negative EPS, missing FCF or non-meaningful valuation multiples remain `NOT_SCORED` for the affected required factor unless a documented, sector-appropriate alternative normalization is supported by evidence. Stale consensus blocks the horizon's score; never carry it forward.
+- `VERIFIED` requires a primary or otherwise authoritative source and checked definition. `PROVISIONAL` evidence may produce a provisional score for comparison tests, but the only permitted action is `REVIEW_PROVISIONAL`; it cannot enter a production priority queue.
+- For fully verified scores, provisional queue thresholds are >=0.65 `PRIORITIZE`, >=0.45 `WATCH`, >=0.25 `DEPRIORITIZE`, otherwise `REJECT`. These are triage thresholds, not calibrated investment truths. For provisional data return `REVIEW_PROVISIONAL`.
+- Every score exposes factor values, weights, contributions, definitions, normalization profiles, source IDs, as-of date, confidence, completeness, model version, unrounded/displayed score and `score_is_probability=false`. Keep the verdict to 1–2 sentences and cite the three largest positive/negative contributions plus catalyst/kill criterion; leave the rest for drill-down.
+- Test weight sensitivity with a separately named model version. Do not claim historical predictive value, calibration or out-of-sample validation until a no-look-ahead, survivorship-aware backtest with costs and a baseline has run.
+
+## Opportunity Score v0.1 provisional factor profiles
+
+Factor values are already-normalized quality ranks in `[0, 1]` with higher always better; the model does not derive them from raw financial metrics. Each row must retain the normalization method and comparable peer set. A sector-specific value cannot be ranked against another sector until its cross-sector risk adjustment is documented and tested. Weights sum to `1.00` per horizon; never renormalize them after an evidence gate fails.
+
+| Factor | 1–3 months | Max age | 6–12 months | Max age | >3 years | Max age | Required meaning |
+|---|---:|---:|---:|---:|---:|---:|---|
+| `catalyst_timing` | 0.22 | 45d | — | — | — | — | Dated, verified catalyst relevance and proximity, net of event risk. |
+| `estimate_revisions` | 0.18 | 90d | 0.18 | 120d | — | — | Direction and breadth of consensus revisions using a stated EPS/FCF definition and timestamped consensus snapshot. |
+| `valuation_expectations` | 0.15 | 90d | 0.22 | 180d | 0.16 | 180d | Valuation relative to normalized growth/FCF and expectations, using comparable definitions; negative EPS or absent FCF cannot be silently mapped to a cheapness score. |
+| `price_setup` | 0.15 | 30d | — | — | — | — | Dated price/trend setup and risk/reward context, not a return forecast. |
+| `scenario_asymmetry` | 0.20 | 90d | 0.23 | 180d | — | — | Evidence-backed upside/downside scenario balance including horizon-specific costs and risks; scenario ranges are not probabilities. |
+| `cycle_resilience` | 0.10 | 180d | 0.10 | 365d | 0.10 | 730d | Resilience through the relevant business/commodity cycle, with cycle position explicit. |
+| `business_quality` | — | — | 0.17 | 365d | 0.22 | 365d | Durability of economics, governance and competitive position supported by dated operating evidence. |
+| `risk_resilience` | — | — | 0.10 | 180d | — | — | Balance of company-specific, financial, regulatory and event risks relevant to the horizon. |
+| `growth_durability` | — | — | — | — | 0.24 | 365d | Long-run demand, growth runway and execution durability, separated from valuation. |
+| `reinvestment_returns` | — | — | — | — | 0.18 | 365d | Evidence that reinvestment can earn attractive incremental returns; do not substitute revenue growth alone. |
+| `balance_sheet_resilience` | — | — | — | — | 0.10 | 180d | Liquidity, leverage, maturities and downside funding resilience. |
+
+The displayed score is `round-half-up(sum(weight × factor_value), 2)` and must retain the unrounded result. Confidence is the weight-normalized mean factor confidence, multiplied by `1.00` for VERIFIED and `0.70` for PROVISIONAL evidence. Completeness is the sum of valid factor weights. The baseline implementation fails closed unless completeness is `1.00`; the latter two fields are audit metadata, not missing-data compensation.
 
 ## Output contract
 For the broad radar:
@@ -87,6 +117,8 @@ For the top 2-3 promoted candidates additionally:
 - observed move vs likely cause with confidence;
 - strongest countercase;
 - exact reason this name outranked alternatives.
+- For each requested horizon, include `rank | candidate | score (0.00–1.00) | difference to next | confidence | completeness | research action | concise verdict`. Keep `NOT_SCORED` visible with evidence-gate reasons and no rank.
+- Include a compact score audit with model version, shared as-of date, factor weights/contributions, normalization-profile compatibility, sources and the strongest fact or valuation level that would change the verdict. State explicitly that the score is not a probability.
 
 ## Quality checks
 - [ ] Canonical portfolio/watchlist context was attempted.
