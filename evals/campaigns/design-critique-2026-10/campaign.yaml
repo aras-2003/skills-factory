@@ -17,6 +17,7 @@ candidate_skill:
     - design-critique-no-artifact
     - design-critique-hidden-behavior
     - design-critique-implementation-nearmiss
+    - design-critique-copy-edit-nearmiss
     - design-critique-single-viewport
 routing_cases:
   - id: design-critique-natural-en
