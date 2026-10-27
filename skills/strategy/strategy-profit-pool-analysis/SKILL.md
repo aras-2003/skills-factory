@@ -24,7 +24,7 @@ Explain where economic value accrues across a defined value chain and which mech
 7. Use a bridge to reconcile baseline to target. Contributions must sum to the total change; show interaction/residual explicitly rather than allocate it twice.
 8. Hand off initiative ranking/capital allocation to `portfolio-prioritization`; hand off offer-level contribution economics to `unit-economics-review`.
 
-## Output
+## Output contract
 Boundary | pool table (revenue, margin, profit, capital/returns where available) | evidence quality | structural drivers | value-driver tree | baseline-to-target bridge | residual | decision implications and gaps.
 
 ## Quality checks

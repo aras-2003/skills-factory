@@ -16,7 +16,7 @@ dimensions:
 availability_states: [supported, unavailable, requiring_approval, unknown]
 component_declarations:
   strategy-market-sizing:
-    source: skills/strategy/market-sizing/SKILL.md
+    source: skills/strategy/strategy-market-sizing/SKILL.md
     review_state: STATIC_PARTIAL
     requirements:
       network: unassessed
@@ -25,7 +25,7 @@ component_declarations:
       credentials: unassessed
       external_actions: unassessed
   strategy-profit-pool-analysis:
-    source: skills/strategy/profit-pool-analysis/SKILL.md
+    source: skills/strategy/strategy-profit-pool-analysis/SKILL.md
     review_state: STATIC_PARTIAL
     requirements:
       network: unassessed
@@ -34,7 +34,7 @@ component_declarations:
       credentials: unassessed
       external_actions: unassessed
   strategy-financial-model:
-    source: skills/strategy/financial-model/SKILL.md
+    source: skills/strategy/strategy-financial-model/SKILL.md
     review_state: STATIC_PARTIAL
     requirements:
       network: unassessed
@@ -43,7 +43,7 @@ component_declarations:
       credentials: unassessed
       external_actions: unassessed
   strategy-benefits-realization:
-    source: skills/strategy/benefits-realization/SKILL.md
+    source: skills/strategy/strategy-benefits-realization/SKILL.md
     review_state: STATIC_PARTIAL
     requirements:
       network: unassessed

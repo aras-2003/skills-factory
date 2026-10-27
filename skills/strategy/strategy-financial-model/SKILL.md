@@ -11,6 +11,9 @@ metadata:
 
 # Strategy Financial Model
 
+## Purpose
+Evaluate incremental business decisions with reproducible cash-flow arithmetic and explicit input uncertainty.
+
 ## Required inputs
 Currency, period convention, initial and subsequent cash flows, timing, discount rate, tax treatment if applicable, terminal value basis, and scenario assumptions. Missing decision-critical inputs block a point result.
 

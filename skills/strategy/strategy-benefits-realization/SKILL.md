@@ -25,7 +25,7 @@ Initiative and hypothesis; accountable owner; benefit metric and unit; baseline 
 5. Preserve evidence links and change history. Missing or stale evidence is `UNVERIFIED`, not realized.
 6. Escalate material variance against pre-agreed thresholds to the decision owner. Hand off KPI validity to `kpi-quality-review`, execution diagnosis to `strategy-to-execution-diagnostic`, and resource reallocation to `portfolio-prioritization`.
 
-## Output
+## Output contract
 Benefits ledger | forecast-versus-actual bridge | evidence status | variance owner | next review date | escalations. This skill records and reconciles; it does not authorize capital allocation.
 
 ## Quality checks

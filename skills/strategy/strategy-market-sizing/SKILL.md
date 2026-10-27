@@ -27,7 +27,7 @@ Decision, geography, customer, use case, unit of demand, time period, value basi
 7. Return low/base/high ranges with drivers and sensitivities. Mark unknowns; do not convert unknown to zero or present an unsupported point estimate.
 8. State the cheapest next evidence test and the decision threshold it could change.
 
-## Output
+## Output contract
 Scope | TAM/SAM/SOM ranges | top-down bridge | bottom-up equation | segment table | reconciliation | sensitivities | evidence/as-of | unresolved assumptions | next test.
 
 ## Boundaries
