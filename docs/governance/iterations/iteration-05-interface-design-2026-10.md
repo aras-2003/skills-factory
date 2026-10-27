@@ -64,6 +64,7 @@
 | Bug Issue / discovery iteration | Existing contract / frozen criterion | Severity / blocks closure | Fix / deferral | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
 | [#474](https://github.com/aras-2003/skills-factory/issues/474) | #423 AC-04 / `interface-design-direct-positive`: do not invent order data | Major / blocks closure | Corrective change in #475; no scope expansion | All six behavior cases, all routing cases, sentinels, probes, identity and smoke on C2 | Owner self-review; not independent |
+| [#480](https://github.com/aras-2003/skills-factory/issues/480) | #423 AC-03/AC-04 / `interface-design-insufficient-context`: do not import unrelated prior-chat context | Major / blocks closure | Corrective change in this branch/PR; context-boundary rule and stronger existing case only | Retest vague prompt and affected routing/behavior rows on exact updated Site; Lab pair remains blocked | Owner self-review; not independent |
 
 ## Closure decision
 

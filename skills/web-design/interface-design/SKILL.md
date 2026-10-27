@@ -49,6 +49,13 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 - Accessibility requirements, supported devices, localization, and brand constraints.
 - Existing user research or analytics. Treat supplied findings as evidence only to the extent their source and scope are known.
 
+## Context boundary
+
+- Use design context stated in the current request/conversation or in sources the user explicitly references for this request.
+- Do not carry a product, screen, user task, workflow, or design constraint from an unrelated past chat, saved memory, or ambient history into an underspecified request.
+- Generic phrases such as “the screen” do not identify a previously discussed screen unless the user explicitly asks to continue or revise that named conversation or artifact.
+- If the current request does not establish the screen goal, primary user task, and target runtime, ask a concise clarifying question before proposing a specific layout. Do not fill these gaps from unrelated context.
+
 ## Procedure
 
 1. Restate the user goal and primary task. Separate supplied facts from assumptions; ask for missing information that would change the hierarchy or interaction model.
