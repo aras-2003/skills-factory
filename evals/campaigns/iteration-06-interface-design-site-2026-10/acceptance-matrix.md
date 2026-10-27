@@ -1,6 +1,6 @@
 # Iteration 06 Site acceptance matrix — interface-design
 
-Status: active; Site v55 targeted post-fix retests passed. The full six-case Iteration 06 acceptance matrix is still incomplete.
+Status: active; Site v55 full-case spot checks found an onboarding positive-case FAIL. The six-case Iteration 06 acceptance matrix is still incomplete; two attempts ended in Chat response-load errors and are not behavioral verdicts.
 
 ## Candidate identity
 
@@ -10,7 +10,7 @@ The original behavioral matrix below remains pinned to Site v54 and is preserved
 - Deployed Site mirror: `6f34d0f539ead65191464d391aa65a41a05b6b4c` (Site v55).
 - Attestation: verified; channel `site`; contract `site-mcp-v2`.
 - Embedded Lab: `1.38.371+f3ff468c0b24`; payload SHA-256 `57b84d84da44fcb8babc406e3d788f3811263c91794b102f8b0c6d38ce419ffc`.
-- Site runtime receipt: `runtime_info` at `2026-10-27T09:41:39.155Z`, output SHA-256 `74701771cb6f8ac17078be6674453c796fee3ad4f4f01f5e912269d944787fe3`.
+- Site runtime receipt: `runtime_info` at `2026-10-27T09:57:36.989Z`, output SHA-256 `74701771cb6f8ac17078be6674453c796fee3ad4f4f01f5e912269d944787fe3`; verified again after the behavioral checks.
 - Both behavioral retests ran in ordinary Chat with the `Skills Factory Cloud Next` app explicitly selected; the completed responses identify `interface-design v0.1.1`. Links below are retained evidence. Chat does not expose per-case MCP receipt IDs or cryptographic input/output digests; none are fabricated here.
 - No separate Lab-host test was performed. The embedded Lab artifact is identity/provenance information only.
 
@@ -45,6 +45,15 @@ The v54 identity smoke confirmed skill version `0.1.0`. The correction candidate
 | ID-IDENTITY-SITE | `runtime_info`, `list_skills`, `load_skill(interface-design)` smoke | 1 | PASS (identity/load only) | Site attested; catalog listed 84 skills/workflows; candidate loaded as `interface-design` v0.1.0. This is not a behavioral verdict. https://chatgpt.com/c/6ae0681a-7748-83ed-9f19-25f0453955be |
 | ID-CLARIFY-SITE-RETEST | Insufficient-context request (`Ulepsz ekran interfejsu`) on Site v55 | 1 | PASS | Ordinary Chat, Cloud Next selected; loaded `interface-design v0.1.1`. Asked for screen, user/task and target device; offered only a screenshot as optional input and described future deliverable. No layout, generic checklist or assumed screen was supplied. https://chatgpt.com/c/6ae070d4-8d18-83ed-91db-e39f1ec7a964 |
 | ID-DIRECT-SITE-RETEST | Fully specified direct-positive control on Site v55 | 1 | PASS | Ordinary Chat, Cloud Next selected; completed a responsive desktop/mobile account dashboard brief with hierarchy, UI copy, interactions, accessibility and loading/empty/error/unavailable states. Unknown store rules and data stayed as placeholders; no order facts or capabilities were invented. Final answer attributes the result to `interface-design v0.1.1`. https://chatgpt.com/c/6ae0710b-a0a4-83ed-8f0e-b2f85b366828 |
+| ID-DIRECT-LOCKED-SITE-v55 | Locked direct-positive account dashboard case | 1 | PASS | Ordinary Chat, Cloud Next selected; loaded `interface-design v0.1.1`; produced responsive desktop/mobile brief and placeholder data without invented order facts. https://chatgpt.com/c/6ae072d4-0a20-83eb-8667-ae93adf78065 |
+| ID-INDIRECT-LOCKED-SITE-v55-1 | Locked indirect-positive onboarding flow | 1 | FAIL | Ordinary Chat, Cloud Next selected; loaded `interface-design v0.1.1`, but asked for product/platform details instead of proposing a mobile-first flow and marking product assumptions. The supplied prompt specified mobile first and desktop changes and contained user/goal context. https://chatgpt.com/c/6ae07355-49c4-83eb-ba22-037b22c8c92b |
+| ID-INDIRECT-LOCKED-SITE-v55-2 | Independent onboarding rerun | 1 | NOT_OBSERVABLE | Chat showed `Nie udało się wczytać tej odpowiedzi`; no answer content available to score. https://chatgpt.com/c/6ae075d5-b3ec-83ed-8e63-044f1b61f959 |
+| ID-NEAR-REPORT-LOCKED-SITE-v55-1 | Locked report/diagram near-miss | 1 | PASS | Ordinary Chat with Cloud Next selected returned an executive platform report; no interface-design substitution. https://chatgpt.com/c/6ae0739b-9080-83eb-a4ca-f36acaf631d7 |
+| ID-NEAR-REPORT-LOCKED-SITE-v55-2 | Independent report/diagram near-miss | 1 | PASS | Ordinary Chat, Cloud Next selected; output was an executive report with strategic assessment and architecture content, not an interface brief. https://chatgpt.com/c/6ae074f4-fd50-83ed-bf7b-eb08b962fd45 |
+| ID-NEAR-REPORT-LOCKED-SITE-v55-3 | Third report/diagram attempt | 1 | NOT_OBSERVABLE | Chat showed a response-load error after 32 seconds; no answer content available to score. https://chatgpt.com/c/6ae07531-2784-83ed-9a4c-6190a77df5c6 |
+| ID-NEAR-IMPLEMENT-LOCKED-SITE-v55-1 | Locked implementation near-miss | 1 | PASS | Ordinary Chat, Cloud Next selected; preserved the implementation request, reported BLOCKED due to missing approved design/repository, and made no false claims about edits or tests. https://chatgpt.com/c/6ae07400-35a4-83eb-9214-c56b46609978 |
+| ID-CLARIFY-LOCKED-SITE-v55 | Locked insufficient-context case | 1 | PASS | Ordinary Chat, Cloud Next selected; asked for screenshot/current screen before proposing changes and did not infer from unrelated context. https://chatgpt.com/c/6ae07446-8060-83eb-8cc0-a276f1a649ce |
+| ID-ACCESSIBILITY-LOCKED-SITE-v55 | Locked billing-permission edge case | 1 | PASS | Ordinary Chat, Cloud Next selected; separated permission-restricted from truly empty, loading, error and unavailable states; explained 403 must not mean empty; gave desktop/mobile layouts and accessible recovery guidance without exposing billing data. https://chatgpt.com/c/6ae07470-9c98-83ed-aea7-731d3318d0c1 |
 
 ## Totals
 
