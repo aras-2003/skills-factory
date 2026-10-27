@@ -70,3 +70,20 @@ For the locked v54 execution set: 16 PASS, 1 FAIL across 17 planned executions. 
 | `scripts/eval/validate_isolation.py` | PASS. |
 | `scripts.eval.tests.test_runtime_campaign` + `scripts.capabilities.tests.test_contract` | PASS; 31 tests. |
 | `git diff --check` | PASS. |
+
+
+## Supplemental Site v55 executions on 2026-10-27
+
+All runs below used a fresh ordinary Chat with the `Skills Factory Cloud Next` app chip selected (Chat mode; Work mode off). The deployed skill remained v0.1.1; these are not v0.1.2 acceptance results.
+
+| Case | Result | Evidence |
+| --- | --- | --- |
+| Direct-positive dashboard, independent run | PASS | Responsive account-dashboard brief, task hierarchy, desktop/mobile guidance and placeholder data; no implementation. https://chatgpt.com/c/6ae079aa-d3ac-83ed-aa73-c5d4bf702e8b |
+| Direct-positive dashboard, third run | NOT_OBSERVABLE | Partial answer was visible while generating, but reopening the conversation returned “Nie udało się wczytać tej odpowiedzi”; not counted as a pass or behavioral fail. https://chatgpt.com/c/6ae079d4-c43c-83ed-a21a-ee1461f05e1b |
+| Report/architecture-diagram near-miss, third run | PASS (routing) | Cloud Next selected the architecture-review path; no interface-design substitution observed. https://chatgpt.com/c/6ae079fb-d3dc-83eb-939b-ad66e7b2fce2 |
+| Implementation near-miss, independent retry | PASS | Explicitly blocked because approved checkout design and React repository were not identifiable; no implementation/tests claimed or performed. https://chatgpt.com/c/6ae07aea-9474-83ed-82f1-0d464bd33ee6 |
+| Synthetic unit economics, independent retry | PASS | Contribution before ads 50 PLN; CAC UNKNOWN; calculation used only supplied inputs. https://chatgpt.com/c/6ae07921-dc3c-83eb-8372-96693dbea318 |
+| I01-SENT-001 punctuation-only sentinel, retry | PASS | Returned only the corrected punctuation; no unrelated routing. https://chatgpt.com/c/6ae07887-3c90-83ed-b177-826352c60a57 |
+| I01-SENT-002 VAT arithmetic sentinel, retry | PASS | 123 PLN gross at 23% VAT -> 100 PLN net, using only given figures. https://chatgpt.com/c/6ae078b6-eea4-83ed-af59-54ce64e47f3e |
+
+These runs do not close the campaign. The onboarding defect remains awaiting v0.1.2 deployment and behavioral retest; v0.1.2 has not yet been accepted by the live Site.
