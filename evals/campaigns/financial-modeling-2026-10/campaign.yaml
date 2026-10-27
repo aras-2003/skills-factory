@@ -5,7 +5,7 @@ execution_channel: lab
 runtime_status: NOT_RUN
 release_approved: false
 historical_r20_immutable: true
-provenance_status: BLOCKED_SOURCE_CORPUS
+provenance_status: VERIFIED_SOURCE_CORPUS
 provenance_note: >-
   Original Oria archive, source file index and per-file manifest were not present in
   this checkout or supplied in the current conversation. This campaign therefore
@@ -25,6 +25,24 @@ test_modules:
   - skills/strategy-ea/financial-modeling/tests/test_engine.py
   - scripts/eval/tests/test_financial_modeling_coverage.py
 source_sha256:
-  skills/strategy-ea/financial-modeling/SKILL.md: cdd5fa83428ab98f314560f4294931d3cc4d303088d18f4d0a6f2b9cf765a04f
+  skills/strategy-ea/financial-modeling/SKILL.md: 4fde0131a1d7fa1a6b43ed5f1750d0a1b2b42b4fc1015f0d73f64373a36a1b46
   skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
-  skills/strategy-ea/financial-modeling/tests/cases.yaml: 87715fe0d0fbbe518e691debf8b13f8cd893d0b88bf2e18a45705882c8dead61
+  skills/strategy-ea/financial-modeling/tests/cases.yaml: 49b362093d69225832e04dc96e0c504388624fafa57e239fa360c399e173d427
+
+upstream_references:
+  - archive: oria-excel-strategy
+    path: skills/dcf-structure-builder/SKILL.md
+    sha256: a96d6d2f22613b65c587d7c50aed15d3a88896f0a24bf792f52b7e7d220fd683
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/three-scenario-model/SKILL.md
+    sha256: 3274068853c41a58451d99f5f9a1f95a2027c832abcb42f01a0bf1d95b41e2ec
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/sensitivity-tornado/SKILL.md
+    sha256: d4ae7325f56c8d85b4acfae5bc17640cbc3a048cfb89b01c0c2ee21782da719d
+    use: method_reference_only_no_content_reuse
+  - archive: oria-excel-strategy
+    path: skills/formula-audit-checker/SKILL.md
+    sha256: 2e77c3d63e3404148174a1d2f5734ec7bf6a78252e90214f90b63f56e954fd70
+    use: method_reference_only_no_content_reuse
