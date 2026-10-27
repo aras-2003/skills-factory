@@ -39,6 +39,37 @@ class BuildIntegrityTests(unittest.TestCase):
                 self.assertEqual((source / "engine.py").read_text(), references.get("engine.py"), name)
                 self.assertFalse(any("tests" in Path(path).parts or "evals" in Path(path).parts for path in references))
 
+    def test_site_reference_sync_preserves_declared_scripts_and_rejects_tampering(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            skill = root / "lab/skills/sample"
+            skill.mkdir(parents=True)
+            lib = root / "site/lib"
+            lib.mkdir(parents=True)
+            source = "raise RuntimeError('must not execute')\n"
+            (skill / "engine.py").write_text(source)
+            target = lib / "skill-catalog.ts"
+            command = ["node", str(ROOT / "adapters/skills-factory-cloud-next/scripts/sync-lab-references.mjs"), str(root / "lab"), str(root / "site")]
+
+            def generate(relative: str = "engine.py", content: str = source) -> None:
+                target.write_text("export const SKILL_CATALOG = " + json.dumps([{
+                    "name": "sample", "reference_files": {relative: content},
+                }]) + " as const;\n")
+
+            generate()
+            subprocess.run(command, check=True, capture_output=True)
+            self.assertIn(json.dumps(source), target.read_text())
+            generate(content="tampered")
+            self.assertNotEqual(0, subprocess.run(command, capture_output=True).returncode)
+            for relative in ("../engine.py", "scripts/tests/engine.py", "/engine.py"):
+                generate(relative)
+                self.assertNotEqual(0, subprocess.run(command, capture_output=True).returncode)
+            (skill / "engine.py").unlink()
+            (root / "outside.py").write_text(source)
+            (skill / "engine.py").symlink_to(root / "outside.py")
+            generate()
+            self.assertNotEqual(0, subprocess.run(command, capture_output=True).returncode)
+
     def test_explicit_root_calculator_is_packaged_as_exact_source(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             source, output = Path(td) / "source", Path(td) / "output"
