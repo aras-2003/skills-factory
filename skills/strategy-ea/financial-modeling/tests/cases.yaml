@@ -34,3 +34,9 @@ cases:
     expected:
       should_trigger: false
       must_not: ["launch or alter a financial model"]
+  - id: finance-near-miss-metric-definition
+    case: Explain a financial concept
+    input: "Explain what net present value means without calculating a model."
+    expected:
+      should_trigger: false
+      must_not: ["request or invent cash flows", "run a calculation"]
