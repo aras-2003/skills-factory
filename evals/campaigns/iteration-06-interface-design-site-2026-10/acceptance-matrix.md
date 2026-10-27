@@ -12,16 +12,18 @@ Status: active; candidate v54 is tested, and the sole failing case has a fix in 
 - All behavioral cases ran in ordinary Chat with the `Skills Factory Cloud Next` app explicitly selected. The transcript URLs are the retained evidence. Chat does not expose per-case MCP receipt IDs or cryptographic input/output digests; none are fabricated here.
 - No separate Lab-host test was performed. The embedded Lab artifact is identity/provenance information only.
 
-## Locked input digests
+## Pinned artifacts for the deployed v54 candidate
 
 | Artifact | SHA-256 |
 | --- | --- |
-| `skills/web-design/interface-design/SKILL.md` candidate v0.1.1 | `0d228114373b376ad86de2fe29f58f9bb74293f17a2292c1ad8c684950b91b40` |
+| Packaged `interface-design` content v0.1.0 | `b96b67e1c93ee756368dbacef80bd48a1cd5e5282b841a4a81bd998f0657a4b8` |
 | `skills/web-design/interface-design/tests/cases.yaml` | `1728028496de530693d62f303c9637db2bc91dba65ce146380f39a1eb46d87b4` |
 | Natural-positive routing input | `e965deab4f2f8cd563315f421d1c875e573359a633a8c8966b4c99091275b47d` |
 | Report/diagram routing input | `4687f0fa198519198a4c65b4425381ffc36135787adc19cbc7e97eae2b70a25c` |
 | I01 shared-sentinel campaign | `d48d7ff6040ce0ad33c32a452102330b605aad7012db70373693046c8d45bf65` |
 | Selected unchanged-domain probes | `bbccfc2f94e8007cb9e1785ab843e4249c4a9a1e6f0ce01a50f1432c5d1e9dc4` |
+
+The v54 identity smoke confirmed skill version `0.1.0`. The correction candidate is separately pinned as `interface-design v0.1.1`, source SHA-256 `0d228114373b376ad86de2fe29f58f9bb74293f17a2292c1ad8c684950b91b40`, in the Iteration 06 campaign manifest; none of the v54 behavioral verdicts claim to test v0.1.1.
 
 ## Behavioral executions
 
