@@ -856,6 +856,49 @@ def separately_validated_systemic_risk_paths(root: Path = ROOT) -> set[str]:
         return set()
 
 
+
+def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[str]:
+    """Exclude only exact, hash-bound candidate sources with isolated NOT_RUN contracts."""
+    expected = {
+        "skills/investing/historical-decision-replay/SKILL.md",
+        "skills/investing/historical-decision-replay/scripts/engine.py",
+        "skills/investing/technical-structure/SKILL.md",
+        "skills/investing/technical-structure/scripts/engine.py",
+        "skills/web-design/experience-design-routing/SKILL.md",
+    }
+    try:
+        cfg = yaml.safe_load((root / "evals/campaigns/unassigned-candidates-2026-10/campaign.yaml").read_text(encoding="utf-8")) or {}
+        hashes = cfg.get("source_sha256") or {}
+        suites = cfg.get("case_suites") or {}
+        modules = cfg.get("test_modules") or []
+        if (
+            cfg.get("campaign") != "unassigned-candidates-2026-10"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("historical_r20_immutable") is not True
+            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
+            or set(hashes) != expected
+            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing"}
+            or len(modules) != 3
+            or not all((root / path).is_file() for path in modules)
+        ):
+            return set()
+        for rel in expected:
+            path = root / rel
+            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
+                return set()
+        for rel in suites.values():
+            suite_path = root / str(rel)
+            suite = yaml.safe_load(suite_path.read_text(encoding="utf-8")) or {}
+            cases = [item for item in suite.get("cases", []) if isinstance(item, dict)]
+            if len(cases) < 4 or any(not item.get("expected", {}).get("must_not") for item in cases):
+                return set()
+            if not any(item.get("expected", {}).get("should_trigger") is False for item in cases):
+                return set()
+        return expected
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError):
+        return set()
+
 def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     exists = subprocess.run(
         ["git", "cat-file", "-e", pinned + "^{commit}"],
@@ -897,6 +940,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
     separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))
+    separate_meta_targets.update(separately_validated_unassigned_candidate_paths(ROOT))
     for raw in out.splitlines():
         path = raw.strip()
         if not path:

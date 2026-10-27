@@ -1,0 +1,24 @@
+campaign: unassigned-candidates-2026-10
+runtime_status: NOT_RUN
+release_approved: false
+historical_r20_immutable: true
+out_of_scope_behavior_paths:
+  - skills/investing/historical-decision-replay/SKILL.md
+  - skills/investing/historical-decision-replay/scripts/engine.py
+  - skills/investing/technical-structure/SKILL.md
+  - skills/investing/technical-structure/scripts/engine.py
+  - skills/web-design/experience-design-routing/SKILL.md
+source_sha256:
+  skills/investing/historical-decision-replay/SKILL.md: 6d9d5aeb95c8b4abb810592c8278d5626c3275e1181bffe1c69486075d7bb7a7
+  skills/investing/historical-decision-replay/scripts/engine.py: 1a741174ae2d98538088281591c13598de15c7a633eb0c4f656a0d3ab39f0517
+  skills/investing/technical-structure/SKILL.md: 8aaf21f8d6406789f83f6c9dcc80dc15aae5b9318e1ad90ea8c92a9f1900860e
+  skills/investing/technical-structure/scripts/engine.py: 018992a2404fe1e038da7174f5a812b38af4743bf1ee42d060bc407b585ec8fa
+  skills/web-design/experience-design-routing/SKILL.md: 02089646b4c0fcccdb375e8718ced7c41c79509baec740b70822e5dbb9ca18d5
+case_suites:
+  historical-decision-replay: skills/investing/historical-decision-replay/tests/cases.yaml
+  technical-structure: skills/investing/technical-structure/tests/cases.yaml
+  experience-design-routing: skills/web-design/experience-design-routing/tests/cases.yaml
+test_modules:
+  - skills/investing/historical-decision-replay/tests/test_engine.py
+  - skills/investing/technical-structure/tests/test_engine.py
+  - scripts/eval/tests/test_runtime_campaign.py

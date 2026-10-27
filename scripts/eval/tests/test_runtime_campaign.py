@@ -125,6 +125,18 @@ class RuntimeCampaignTests(unittest.TestCase):
             self.assertGreaterEqual(sum(c["expected"]["should_trigger"] is True for c in cases), 2)
             self.assertGreaterEqual(sum(c["expected"]["should_trigger"] is False for c in cases), 2)
 
+
+    def test_unassigned_candidates_are_isolated_only_with_hash_bound_test_contracts(self) -> None:
+        expected = {
+            "skills/investing/historical-decision-replay/SKILL.md",
+            "skills/investing/historical-decision-replay/scripts/engine.py",
+            "skills/investing/technical-structure/SKILL.md",
+            "skills/investing/technical-structure/scripts/engine.py",
+            "skills/web-design/experience-design-routing/SKILL.md",
+        }
+        self.assertEqual(expected, campaign.separately_validated_unassigned_candidate_paths(ROOT))
+        self.assertEqual([], campaign.validate_campaign())
+
     def test_skill_engineering_campaign_derives_lab_version_from_package_source(self) -> None:
         cfg = yaml.safe_load(
             (ROOT / "evals/campaigns/skill-engineering-2026-10/engineering-campaign.yaml").read_text()
