@@ -16,7 +16,7 @@ class FinancialModelingCoverageTests(unittest.TestCase):
         self.assertIn("campaign: financial-modeling-2026-10", campaign)
         self.assertIn("runtime_status: NOT_RUN", campaign)
         self.assertIn("release_approved: false", campaign)
-        self.assertIn("provenance_status: BLOCKED_SOURCE_CORPUS", campaign)
+        self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS", campaign)
         pins = dict(re.findall(r"^  (skills/strategy-ea/financial-modeling/[^:]+): ([a-f0-9]{64})$", campaign, re.M))
         expected = {
             "skills/strategy-ea/financial-modeling/SKILL.md",
