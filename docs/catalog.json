@@ -200,6 +200,16 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "historical-decision-replay",
+      "domain": "investing",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Use when evaluating historical investment decisions from immutable dated snapshots with explicit no-look-ahead controls and simple baselines.",
+      "source": "skills/investing/historical-decision-replay/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
       "name": "investment-attention-triage",
       "domain": "investing",
       "maturity": "production",
@@ -276,6 +286,16 @@
       "version": "0.5.1",
       "description": "Underwrite one equity or ETF as an investment using structured equity research for breadth and primary filings/IR for decision-critical verification, then analyze economics, financial quality, growth drivers, valuation, catalysts, risks, variant perception and thesis invalidation. Do not use for broad market scanning.",
       "source": "skills/investing/security-underwriting/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "technical-structure",
+      "domain": "investing",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Use as the technical-structure analyst when an investment request concerns confirmed price swings, Dow-style trend state, support/resistance, and invalidation from supplied adjusted OHLCV.",
+      "source": "skills/investing/technical-structure/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
     },
@@ -678,6 +698,16 @@
       "source": "skills/web-design/design-critique/SKILL.md",
       "source_status": "present",
       "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "experience-design-routing",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.",
+      "source": "skills/web-design/experience-design-routing/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
     },
     {
       "name": "implementation-brief",
