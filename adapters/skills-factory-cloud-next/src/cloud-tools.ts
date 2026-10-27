@@ -113,7 +113,7 @@ export function routeInvestment(userRequest: string) {
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
   const observation = /zmien|zmian|chang(?:e|es|ed|ing)|happening|dzieje|observ|obserw|watch|monitor|drift|dryf/.test(s);
-  const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /thes|tez|holding|portfel|portfolio|watchlist/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /wplyw|impact|matter|znaczen|tez|thes|holdings|portfel|zmienia|watchlist/.test(s);
+  const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /(?:\\b(?:thesis|theses)\\b|\\btez(?:a|y|e|ę|ą|ie)?\\b|holding|portfel|portfolio|watchlist)/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /(?:wplyw|impact|matter|znaczen|\\b(?:thesis|theses)\\b|\\btez(?:a|y|e|ę|ą|ie)?\\b|holdings|portfel|zmienia|watchlist)/.test(s);
   const opportunity = /watchlist screen|screen my watchlist|screen watchlist|preview the screen|preview-only screen|screen these candidates|okazj|opportunit|kandydat|candidates|research next|badac dalej|szukaj spolek|znajdz spolk|find.*(stocks|securities)/.test(s);
   const explicitCandidateDiscovery = /(?:find|scan|discover|screen|szukaj|znajd|znalez|selekcj).{0,100}(?:stocks|securities|spolk|kandydat|candidates)/.test(s);
   const theme = /temat.*inwest|investment theme|trend|value chain|lancuch wartosc|beneficjen|second.order/.test(s);
