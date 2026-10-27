@@ -78,7 +78,16 @@ class CapabilityContractTests(unittest.TestCase):
             row["name"] for row in report["components"]
             if row["status"] != "UNASSESSED"
         }
-        self.assertEqual({"interface-design", "design-critique"}, declared)
+        self.assertEqual(
+            {
+                "interface-design",
+                "design-critique",
+                "implementation-brief",
+                "visual-regression-review",
+                "accessibility-gate",
+            },
+            declared,
+        )
         self.assertEqual(report["component_count"] - len(declared), report["unassessed_count"])
         self.assertEqual("NOT_VERIFIED", report["runtime_compatibility"])
         self.assertIn("not evidence of no permissions", report["assessment_semantics"])
