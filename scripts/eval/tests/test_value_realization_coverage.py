@@ -12,9 +12,10 @@ SOURCE = ROOT / "skills/strategy-ea/value-realization"
 
 
 class ValueRealizationCoverageTests(unittest.TestCase):
-    def test_candidate_sources_are_hash_pinned_and_campaign_is_not_run(self):
+    def test_candidate_sources_are_hash_pinned_and_runtime_recorded(self):
         campaign = (ROOT / "evals/campaigns/value-realization-2026-10/campaign.yaml").read_text()
-        self.assertIn("runtime_status: NOT_RUN", campaign)
+        self.assertIn("runtime_status: PASS", campaign)
+        self.assertIn("runtime_bundle_sha256: 3136c6de1c156dde2eb799b114583e80a4372b73741947ba4ab8f966c5dba920", campaign)
         self.assertIn("release_approved: false", campaign)
         self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS", campaign)
         pins = dict(re.findall(r"^  (skills/strategy-ea/value-realization/[^:]+): ([a-f0-9]{64})$", campaign, re.M))
@@ -32,7 +33,7 @@ class ValueRealizationCoverageTests(unittest.TestCase):
         for case_id in (
             "value-realization-golden", "value-realization-negative",
             "value-realization-adversarial", "value-realization-regression",
-            "value-realization-near-miss-finance-model",
+            "value-realization-near-miss-finance-model", "value-realization-near-miss-options",
         ):
             self.assertIn(f"id: {case_id}", cases)
         for kind in ("golden", "negative", "adversarial", "regression", "near-miss"):

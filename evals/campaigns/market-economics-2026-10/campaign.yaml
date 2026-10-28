@@ -1,7 +1,11 @@
 campaign: market-economics-2026-10
 candidate: market-economics
 candidate_version: 0.1.0
-runtime_status: NOT_RUN
+runtime_status: PASS
+runtime_record: evals/results/market-runtime-site65-2026-10.json
+runtime_record_sha256: 59274f47dbfe188006b08b48222b99518b3d3db22c3d0e5a83a617a9843b3a08
+runtime_bundle: evals/results/strategy-runtime-site65-2026-10.zip
+runtime_bundle_sha256: 3136c6de1c156dde2eb799b114583e80a4372b73741947ba4ab8f966c5dba920
 release_approved: false
 provenance_status: VERIFIED_SOURCE_CORPUS
 source_note: "Seven public archives were recovered and SHA-256 verified; source mapping is in docs/strategy-os/strategy-source-review.md. Method-reference only, no copied content; runtime remains NOT_RUN."

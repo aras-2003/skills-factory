@@ -11,7 +11,8 @@ SOURCE=ROOT/"skills/strategy-ea/market-economics"
 class MarketEconomicsCoverageTests(unittest.TestCase):
     def test_sources_are_hash_pinned_and_runtime_is_not_run(self):
         campaign=(ROOT/"evals/campaigns/market-economics-2026-10/campaign.yaml").read_text()
-        self.assertIn("runtime_status: NOT_RUN",campaign)
+        self.assertIn("runtime_status: PASS",campaign)
+        self.assertIn("runtime_bundle_sha256: 3136c6de1c156dde2eb799b114583e80a4372b73741947ba4ab8f966c5dba920",campaign)
         self.assertIn("source_references:",(SOURCE/"tests/cases.yaml").read_text())
         self.assertIn("884d0050b34d53dd07a3fb0b86f0068888f541aade9367c8e23af8bfaefb21f0",(SOURCE/"tests/cases.yaml").read_text())
         self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS",campaign)
