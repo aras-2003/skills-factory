@@ -89,6 +89,7 @@ class CapabilityContractTests(unittest.TestCase):
                 "strategy-economics",
                 "financial-modeling",
                 "value-realization",
+                "creative-generation",
             },
             declared,
         )

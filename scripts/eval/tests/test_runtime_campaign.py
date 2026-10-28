@@ -141,6 +141,10 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/strategy-ea/strategy-economics/engine.py",
             "skills/strategy-ea/value-realization/SKILL.md",
             "skills/strategy-ea/value-realization/engine.py",
+            "skills/media/creative-generation/SKILL.md",
+            "skills/media/creative-generation/references/decision-and-setup.md",
+            "skills/media/creative-generation/references/local-engine-matrix.md",
+            "skills/media/creative-generation/scripts/comfyui_local.py",
         }
         self.assertEqual(expected, campaign.separately_validated_unassigned_candidate_paths(ROOT))
         self.assertEqual([], campaign.validate_campaign())
