@@ -15,7 +15,7 @@ class ValueRealizationCoverageTests(unittest.TestCase):
     def test_candidate_sources_are_hash_pinned_and_runtime_recorded(self):
         campaign = (ROOT / "evals/campaigns/value-realization-2026-10/campaign.yaml").read_text()
         self.assertIn("runtime_status: PASS", campaign)
-        self.assertIn("runtime_bundle_sha256: 3136c6de1c156dde2eb799b114583e80a4372b73741947ba4ab8f966c5dba920", campaign)
+        self.assertIn("runtime_bundle_sha256: 96468249dbae2d62c0e9422a81764362e8fa9794f652cc5c244f40bc8ca7b2ec", campaign)
         self.assertIn("release_approved: false", campaign)
         self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS", campaign)
         pins = dict(re.findall(r"^  (skills/strategy-ea/value-realization/[^:]+): ([a-f0-9]{64})$", campaign, re.M))

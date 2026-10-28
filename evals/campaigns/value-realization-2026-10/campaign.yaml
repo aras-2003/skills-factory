@@ -6,7 +6,7 @@ runtime_status: PASS
 runtime_record: evals/results/value-realization-runtime-site65-2026-10.json
 runtime_record_sha256: 7328031806a31c268ebea0eccde54344c87cba2d9e5a55b74493f42bef9ef52c
 runtime_bundle: evals/results/strategy-runtime-site65-2026-10.zip
-runtime_bundle_sha256: 3136c6de1c156dde2eb799b114583e80a4372b73741947ba4ab8f966c5dba920
+runtime_bundle_sha256: 96468249dbae2d62c0e9422a81764362e8fa9794f652cc5c244f40bc8ca7b2ec
 release_approved: false
 historical_r20_immutable: true
 provenance_status: VERIFIED_SOURCE_CORPUS
