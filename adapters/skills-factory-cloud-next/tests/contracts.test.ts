@@ -47,6 +47,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["What is happening with my portfolio?", "investment-portfolio-observation"],
     ["Observe changes over time in a synthetic portfolio.", "investment-portfolio-observation"],
     ["Please observe systemic risk indicators and cross-asset changes in my portfolio.", "investment-portfolio-observation"],
+    ["Synthetic only: assess whether supplied issuer exposure 12% with missing ETF look-through and no current prices adds systemic risk; distinguish materiality from direction; no portfolio access or writes.", "investment-portfolio-observation"],
     ["Triage these synthetic systemic indicators in my portfolio.", "investment-portfolio-review"],
     ["Co się teraz dzieje z moim portfelem? Sprawdź, co zmieniło się od poprzedniego poprawnego snapshotu i powiedz mi tylko, co naprawdę warto obserwować. Nie chcę jeszcze ustalać docelowej struktury portfela ani robić rebalancingu.", "investment-portfolio-observation"],
     ["ACN 25%, IUIT 22%: review portfolio concentration risk", "investment-portfolio-review"],

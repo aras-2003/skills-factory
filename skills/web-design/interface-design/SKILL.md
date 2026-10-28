@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.3"
+  version: "0.1.4"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-10-27"
@@ -46,7 +46,7 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 Before proposing any screen-specific design, verify that the current request or an explicitly referenced source provides all three required inputs: (1) the screen or user-flow goal, (2) the intended user and primary task, and (3) the target runtime or device context.
 
-If any required input is missing, stop and ask one concise question that names every missing input. Do not provide a layout, a partial design, a generic UX checklist, or a bounded assumption in place of the missing context. Do not infer these inputs from unrelated chats, profile data, saved memory, or ambient application context. Continue only after the user supplies the missing information.
+If any required input is missing, stop and ask one concise question that names every missing input. Do not provide a layout, a partial design, a generic UX checklist, or an assumption in place of missing context unless the user explicitly authorizes assumptions, placeholders, or a provisional concept in the current request. With that authorization, proceed only when the screen/flow goal and target device are clear; label the narrowest reasonable user/task assumption, keep unknown product rules as placeholders, and list the assumptions as open decisions. Never infer those inputs from unrelated chats, profile data, saved memory, or ambient application context.
 
 For this gate, the entire response must be that clarification question. Name only the missing fields (screen or flow, intended user and task, target runtime/device); do not add an introduction, examples, suggestions, a checklist, or a promise of a future deliverable. A request such as “make the screen better” has no identifiable screen, user task, or target runtime and must receive one question asking for those three items.
 
@@ -109,7 +109,7 @@ Return a concise **Interface brief** with these sections:
 7. **Accessibility** — semantics, keyboard/focus, contrast, announcements, motion, and touch risks.
 8. **Open decisions and handoff** — unresolved questions, dependencies, and what implementation must verify.
 
-When a required input is missing, follow the required-context gate before drafting the brief. Do not substitute assumptions or a generic checklist for a clarification. After the required inputs are supplied, do not omit a section; use “not applicable” with a reason.
+When a required input is missing, follow the required-context gate before drafting the brief unless the user explicitly authorizes assumptions/placeholders in the current request and the goal and target device are clear. In that case, follow the bounded-assumption rule above. Do not omit a section from a valid brief; use “not applicable” with a reason.
 
 The clarification-only response is the sole exception to the eight-section brief: do not emit any brief section until the required context is present. For a valid brief, keep the output textual and do not append a rendered or interactive artifact.
 
