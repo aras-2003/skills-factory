@@ -24,9 +24,9 @@ test_modules:
   - skills/strategy-ea/financial-modeling/tests/test_engine.py
   - scripts/eval/tests/test_financial_modeling_coverage.py
 source_sha256:
-  skills/strategy-ea/financial-modeling/SKILL.md: f1d33f05f94fc80d8ade8f22a92c80a9eb172854fdb314139c06830bc49f41c9
+  skills/strategy-ea/financial-modeling/SKILL.md: 98bc11e8f3f5694741db904814c8ce287c8b6312285d513b4d90bd1fc33a9f28
   skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
-  skills/strategy-ea/financial-modeling/tests/cases.yaml: 328bedbb892990c94d29213a99e4699e9ac1ba9d12375b4787eafb64ed134f8d
+  skills/strategy-ea/financial-modeling/tests/cases.yaml: 5fc2b7a5bebdf69f6f4657f208fc64892dc99e881f9b48e7552955a9acb580a9
 
 upstream_references:
   - archive: oria-excel-strategy

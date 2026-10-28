@@ -42,7 +42,7 @@ class FinancialModelingCoverageTests(unittest.TestCase):
         skill = (SOURCE / "SKILL.md").read_text()
         self.assertIn("name: financial-modeling", skill)
         self.assertIn("source: skills/strategy-ea/financial-modeling/SKILL.md", (ROOT / "release/capability-contract.yaml").read_text())
-        self.assertIn("| financial-modeling | strategy-ea | candidate | 0.1.0 |", (ROOT / "CATALOG.md").read_text())
+        self.assertIn("| financial-modeling | strategy-ea | candidate | 0.1.1 |", (ROOT / "CATALOG.md").read_text())
         self.assertTrue(any(item.get("name") == "financial-modeling" for item in __import__("json").loads((ROOT / "docs/catalog.json").read_text())["skills"]))
 
     def test_source_unit_suite_executes(self):
