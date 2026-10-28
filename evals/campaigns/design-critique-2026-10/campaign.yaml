@@ -4,6 +4,7 @@ purpose: isolated-source-and-runtime-handoff-for-design-critique-candidate
 runtime_status: PASS
 release_approved: false
 result_record: evals/results/design-critique-2026-10/2026-10-28-site-runtime/run.json
+runtime_content_sha256: 999433e57e9ef98388692f4c16076c187da3fe849f2a144031b338818725db8d
 out_of_scope_behavior_paths:
   - skills/web-design/design-critique/SKILL.md
 candidate_skill:
