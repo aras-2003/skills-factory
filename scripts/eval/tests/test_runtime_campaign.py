@@ -141,6 +141,9 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/strategy-ea/strategy-economics/engine.py",
             "skills/strategy-ea/value-realization/SKILL.md",
             "skills/strategy-ea/value-realization/engine.py",
+            "skills/seo/seo-research/SKILL.md",
+            "skills/seo/seo-research/references/open-seo-mcp-contract.md",
+            "skills/seo/seo-research/tests/cases.yaml",
         }
         self.assertEqual(expected, campaign.separately_validated_unassigned_candidate_paths(ROOT))
         self.assertEqual([], campaign.validate_campaign())
