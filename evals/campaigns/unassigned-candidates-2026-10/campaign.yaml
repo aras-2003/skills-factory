@@ -24,8 +24,8 @@ out_of_scope_behavior_paths:
   - skills/media/creative-generation/references/local-engine-matrix.md
   - skills/media/creative-generation/scripts/comfyui_local.py
 source_sha256:
-  skills/investing/historical-decision-replay/SKILL.md: 06382d99ea7168fd5576c6b376b720002135213faf2a1f6a1cbc31f015e7955e
-  skills/investing/historical-decision-replay/scripts/engine.py: 9e2d54c7e39178b9805a4cb368249c1e9cc8a3d3d3889bbafecdb7a96e7114f1
+  skills/investing/historical-decision-replay/SKILL.md: 6a730dc4a229dbbc4a93bcdf4b3d71bb46affef3ec3cd41150ca63f61b288161
+  skills/investing/historical-decision-replay/scripts/engine.py: 268f7950d0a0cfa79cfef0b6ddb670f0366e4ed3b60ea12bf90432c013526a3a
   skills/investing/technical-structure/SKILL.md: 8aaf21f8d6406789f83f6c9dcc80dc15aae5b9318e1ad90ea8c92a9f1900860e
   skills/investing/technical-structure/scripts/engine.py: 018992a2404fe1e038da7174f5a812b38af4743bf1ee42d060bc407b585ec8fa
   skills/web-design/experience-design-routing/SKILL.md: 02089646b4c0fcccdb375e8718ced7c41c79509baec740b70822e5dbb9ca18d5
