@@ -1,0 +1,17 @@
+{
+  "run_id": "bded1720a0db1cd5567cf747d1c47622",
+  "canonical_source": "ad9c7305d22d4ac276bf2762207a79b081888730",
+  "release_id": "1.38.387+ad9c7305d22d",
+  "tool_spans": 3,
+  "common_parent_verified": true,
+  "receipt_trace_identity_verified": true,
+  "scope": "Real embedded Python MCP handlers under a real host-created OpenTelemetry parent; not MCP wire transport or ChatGPT conversation correlation",
+  "phoenix_ui_verified": true,
+  "phoenix_ui_trace_id": "bded1720a0db1cd5567cf747d1c47622",
+  "phoenix_ui_observed_tools": [
+    "mcp.tool.runtime_info",
+    "mcp.tool.list_skills",
+    "mcp.tool.load_skill"
+  ],
+  "phoenix_ui_screenshot": "phoenix-trace.png"
+}

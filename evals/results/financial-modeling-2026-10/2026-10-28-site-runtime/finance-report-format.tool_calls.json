@@ -1,0 +1,10 @@
+[
+  {
+    "tool": "runtime_info",
+    "arguments": {}
+  },
+  {
+    "tool": "list_skills",
+    "arguments": {}
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "as_of": "2026-01-31",
+  "assumption_status": "USER_OR_EVIDENCE_SUPPLIED",
+  "cash_flows": [
+    {
+      "period": 0,
+      "published_at": "2026-01-01",
+      "source_id": "initial-investment",
+      "value": "-100"
+    },
+    {
+      "period": 1,
+      "published_at": "2026-01-01",
+      "source_id": "year-1-cash-flow",
+      "value": "60"
+    },
+    {
+      "period": 2,
+      "published_at": "2026-01-01",
+      "source_id": "year-2-cash-flow",
+      "value": "60"
+    }
+  ],
+  "currency": "USD",
+  "discount_rate": {
+    "published_at": "2026-01-01",
+    "source_id": "approved-wacc",
+    "value": "0.10"
+  },
+  "discounted_payback_periods": "1.916666666666666666666666666",
+  "irr": "0.1306623862921208722127630608156323432923",
+  "npv": "4.13",
+  "period_convention": "equally spaced periods; period 0 is undiscounted",
+  "risk_adjusted_value": null,
+  "simple_payback_periods": "1.666666666666666666666666667",
+  "source_ids": [
+    "approved-wacc",
+    "initial-investment",
+    "year-1-cash-flow",
+    "year-2-cash-flow"
+  ],
+  "statistical_or_outcome_probability_claimed": false,
+  "status": "CALCULATED",
+  "terminal_value": null
+}

@@ -1,0 +1,497 @@
+Browser tab: 1387414327, Title: "skills-factory-local-verification - Projects", URL: "http://127.0.0.1:6006/projects/UHJvamVjdDoy/spans/bded1720a0db1cd5567cf747d1c47622?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjoz".
+1 AXWebArea skills-factory-local-verification - Projects, URL: 127.0.0.1:6006/projects/UHJvamVjdDoy/spans/bded1720a0db1cd5567cf747d1c47622?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjoz
+	2 container root
+		3 container
+			4 link Description: version: 20.26.1, Value: 127.0.0.1:6006/
+			5 content list
+				6 button Search CMD K
+					7 image
+					8 text Search
+					9 container
+						10 text CMD K
+				11 link Description: Tracing 2, Value: 127.0.0.1:6006/projects
+				12 link Description: Dashboards, Value: 127.0.0.1:6006/dashboards
+				13 link Description: Datasets & Experiments 0, Value: 127.0.0.1:6006/datasets
+				14 link Description: Evaluators 0, Value: 127.0.0.1:6006/evaluators
+				15 link Description: Prompts 0, Value: 127.0.0.1:6006/prompts
+				16 link Description: Playground, Value: 127.0.0.1:6006/playground
+				17 link Description: Chat, Value: 127.0.0.1:6006/chat
+				18 link Description: REST API, Value: 127.0.0.1:6006/apis/rest
+				19 link Description: GraphQL, Value: 127.0.0.1:6006/apis/graphql
+			20 content list
+				21 button Star on GitHub
+					22 image
+					23 text Star on GitHub
+				24 link Description: Settings, Value: 127.0.0.1:6006/settings
+				25 pop up button (collapsed) Description: Account, ID: react-aria5268255944-_r_f_, Secondary Actions: Expand
+					26 image
+					27 text Account
+			28 button Description: Collapse side navigation, ID: react-aria5268255944-_r_k_
+				29 image
+			30 content list Struktura nawigacyjna
+				37 container
+					38 link Description: Projects, Value: 127.0.0.1:6006/projects
+					39 image
+				40 container
+					41 link Description: skills-factory-local-verification, Value: 127.0.0.1:6006/projects/UHJvamVjdDoy
+					42 pop up button (collapsed) Description: Copy, ID: react-aria5268255944-_r_1e_, Secondary Actions: Expand
+						43 image
+			44 container
+				45 container Time range
+					46 text 7d
+					47 button Last 7 Days
+					48 text CET
+				49 container Time range controls
+					50 button Description: Pan back in time, ID: react-aria5268255944-_r_1r_
+						51 image
+					52 button Description: Zoom out, ID: react-aria5268255944-_r_1u_
+						53 image
+					54 checkbox (disabled) Description: Resume live streaming, Value: 0
+						226 image
+					56 button Description: Zoom in, ID: react-aria5268255944-_r_22_
+						57 image
+					58 button (disabled) Description: Pan forward in time, ID: react-aria5268255944-_r_25_
+						59 image
+			36 button (collapsed) Ask PXI, ID: react-aria5268255944-_r_n_, Secondary Actions: Expand
+			60 container
+				61 tab group react-aria5268255944-_r_28_
+					62 tab (selected, settable, boolean) Spans, ID: react-aria5268255944-_r_28_-tab-spans, Value: 1
+Spans
+					63 tab (selectable, settable, boolean) Traces, Value: 0, ID: react-aria5268255944-_r_28_-tab-traces
+					64 tab (selectable, settable, boolean) Sessions, Value: 0, ID: react-aria5268255944-_r_28_-tab-sessions
+					65 tab (selectable, settable, boolean) Metrics, Value: 0, ID: react-aria5268255944-_r_28_-tab-metrics
+					66 tab (selectable, settable, boolean) Config, Value: 0, ID: react-aria5268255944-_r_28_-tab-config
+				67 container Description: Spans, ID: react-aria5268255944-_r_28_-tabpanel-spans
+					68 container spans-table-metrics-layout
+						69 container
+							70 heading Traffic, Value: 4
+								71 text Traffic
+							72 text Spans by status
+							359 container
+								360 content list
+									361 checkbox Description: Hide error, Value: 1
+										362 text error
+									363 checkbox Description: Hide ok, Value: 1
+										364 text ok
+									365 checkbox Description: Hide unset, Value: 1
+										366 text unset
+								367 image
+									368 container
+										369 text 21.10
+										370 text 22.10
+										371 text 23.10
+										372 text 24.10
+										373 text 25.10
+										374 text 26.10
+										375 text 27.10
+										376 text 28.10
+										377 text 0
+										378 text 1
+										379 text 2
+										380 text 3
+										381 text 4
+						96 splitter 25.246999740600582
+						97 container table-content
+							98 container
+								99 image
+								100 text field (settable) Description: Filter spans, Value: parent_id is None
+									101 container
+										102 text parent_id is None
+								103 checkbox Description: Plain-English query, Value: 0, ID: react-aria5268255944-_r_2u_
+									104 image
+								105 button (collapsed) Description: AI query settings, ID: react-aria5268255944-_r_31_, Secondary Actions: Expand
+									106 image
+								107 button Description: Clear filter condition, ID: react-aria5268255944-_r_34_
+									108 image
+							109 pop up button (collapsed) Description: Select metric charts, ID: react-aria5268255944-_r_36_, Secondary Actions: Expand
+								110 image
+								111 text Charts
+							112 button (collapsed) Columns, ID: react-aria5268255944-_r_3b_, Secondary Actions: Expand
+								113 image
+								114 text Columns
+							115 checkbox Description: Wrap each row over as many lines as it needs, Value: 0, ID: react-aria5268255944-_r_3f_
+								116 image
+							117 button Description: Hide aside panel, ID: react-aria5268255944-_r_3h_
+								118 image
+							119 container spans-table-layout
+								120 table
+									121 row
+										122 cell
+											123 checkbox (settable, integer) 0
+										124 cell
+											125 draggable Description: Reorder status column, Value: 0
+												126 image
+											127 text status
+										128 cell
+											129 draggable Description: Reorder kind column, Value: 0
+												130 image
+											131 text kind
+										132 cell
+											133 draggable Description: Reorder name column, Value: 0
+												134 image
+											135 text name
+										136 cell
+											137 draggable Description: Reorder input column, Value: 0
+												138 image
+											139 text input
+										140 cell
+											141 draggable Description: Reorder output column, Value: 0
+												142 image
+											143 text output
+										144 cell
+											145 draggable Description: Reorder error column, Value: 0
+												146 image
+											147 container
+												148 text error
+												149 button Description: More information, ID: react-aria5268255944-_r_3o_
+													150 image
+										151 cell
+											152 draggable Description: Reorder user column, Value: 0
+												153 image
+											154 text user
+										155 cell
+											156 draggable Description: Reorder annotations column, Value: 0
+												157 image
+											158 container
+												159 text annotations
+												160 button Description: More information, ID: react-aria5268255944-_r_3r_
+													161 image
+										162 cell
+											163 draggable Description: Reorder start time column, Value: 0
+												164 image
+											165 text start time
+										166 cell
+											167 draggable Description: Reorder latency column, Value: 0
+												168 image
+											169 text latency
+										170 cell
+											171 draggable Description: Reorder cumulative tokens column, Value: 0
+												172 image
+											173 text cumulative tokens
+										174 cell
+											175 draggable Description: Reorder cumulative cost column, Value: 0
+												176 image
+											177 text cumulative cost
+									178 row
+										179 cell
+											180 checkbox (settable, integer) 0
+										181 cell
+											182 container UNSET
+												183 image
+										184 cell
+											185 text chain
+										186 cell
+											382 link Description: local-host.mcp-trajectory, Value: 127.0.0.1:6006/projects/UHJvamVjdDoy/spans/bded1720a0db1cd5567cf747d1c47622?timeRangeKey=7d&selectedSpanNodeId=U3Bhbjo0
+										188 cell
+											189 text --
+										190 cell
+											191 text --
+										192 cell
+											193 text --
+										194 cell
+											195 text --
+										196 cell
+											197 text 28.10.2026, 10:55:53 AM
+										198 cell
+											199 image
+											200 text 1.4s
+										201 cell
+											202 button 0
+												203 image
+												204 text 0
+										205 cell
+											206 text --
+								207 splitter 78.28700256347656
+								208 container
+									209 button (collapsed) Project Info, Secondary Actions: Expand
+									210 splitter 0
+									211 button (expanded) Stats, Secondary Actions: Collapse
+									212 heading Total Traces, Value: 3
+										213 text Total Traces
+									214 text 1
+									215 heading Total Cost, Value: 3
+										216 text Total Cost
+									217 button $0
+									218 heading Latency P50, Value: 3
+										219 text Latency P50
+									220 image
+									221 text 1.4s
+									222 heading Latency P99, Value: 3
+										223 text Latency P99
+									224 image
+									225 text 1.4s
+			228 container Detail drawer
+				229 splitter Description: Resize drawer, Value: 75
+				230 container Trace Copy ID bded1720a0db1cd5567cf747d1c47622
+					231 button react-aria5268255944-_r_63_
+						232 image
+					233 button Description: Next trace, ID: next
+						234 image
+					235 button (disabled) Description: Previous trace, ID: previous
+						236 image
+					237 heading Trace Copy ID bded1720a0db1cd5567cf747d1c47622, Value: 2, ID: react-aria5268255944-_r_61_
+						238 heading Trace, Value: 3
+							239 text Trace
+						240 button Description: Copy ID bded1720a0db1cd5567cf747d1c47622, ID: react-aria5268255944-_r_6c_
+							241 image
+							242 text bded1720a0db1cd5567cf747d1c47622
+							243 image
+					244 button Share, ID: react-aria5268255944-_r_6f_
+						245 image
+						246 text Share
+					247 container
+						248 heading Status, Value: 3
+							249 text Status
+						250 text Unset
+						251 heading Total Cost, Value: 3
+							252 text Total Cost
+						253 button $0
+						254 heading Latency, Value: 3
+							255 text Latency
+						256 image
+						257 text 1.4s
+						258 container trace-tree
+							259 container
+								260 image
+								261 search text field (settable) Description: Search trace tree, ID: react-aria5268255944-_r_7u_
+							262 button Description: Collapse all, ID: react-aria5268255944-_r_86_
+								263 image
+							264 button Description: Hide metrics in trace tree, ID: react-aria5268255944-_r_89_
+								265 image
+							266 content list
+								267 button local-host.mcp-trajectory 1.4s
+									268 container
+										269 text local-host.mcp-trajectory 1.4s
+										270 button
+								271 button mcp.tool.runtime_info 563ms
+									272 container
+										273 text mcp.tool.runtime_info 563ms
+								274 button mcp.tool.list_skills 498ms
+									275 container
+										276 text mcp.tool.list_skills 498ms
+								277 button mcp.tool.load_skill 349ms
+									278 container
+										279 text mcp.tool.load_skill 349ms
+						280 splitter 30
+						281 container
+							282 text tool
+							283 text mcp.tool.load_skill
+							284 text Unset
+							285 link Description: Prompt Playground, Value: 127.0.0.1:6006/playground/spans/U3Bhbjoz
+							286 button (collapsed) Description: Add to Dataset, ID: react-aria5268255944-_r_8k_, Secondary Actions: Expand
+								287 image
+							288 pop up button (collapsed) Description: Download span, ID: react-aria5268255944-_r_8o_, Secondary Actions: Expand
+								289 image
+							290 button Description: Copy Span ID bf0f8b68a3617275, ID: react-aria5268255944-_r_8v_
+								291 text bf0f8b68a3617275
+								292 image
+							293 text ·
+							294 text 28.10.2026, 10:55:54 AM
+							295 text ·
+							296 text 349ms
+							297 tab group react-aria5268255944-_r_92_
+								298 tab (selected, settable, boolean) Info, ID: react-aria5268255944-_r_92_-tab-info, Value: 1
+Info
+								299 tab (selectable, settable, boolean) Attributes, Value: 0, ID: react-aria5268255944-_r_92_-tab-attributes
+								300 tab (selectable, settable, boolean) Events 0, Value: 0, ID: react-aria5268255944-_r_92_-tab-events
+							301 button Description: Collapse all sections, ID: react-aria5268255944-_r_9l_
+								302 image
+							303 container Description: Info, ID: react-aria5268255944-_r_92_-tabpanel-info
+								383 container
+									384 container
+										385 button (collapsed) Description: Annotations, Secondary Actions: Expand
+										386 heading Annotations 0, Value: 3
+											387 text Annotations 0
+										388 checkbox Description: Annotate this span, Value: 0
+											389 image
+									390 container
+										391 button (expanded) Tool: load_skill, Secondary Actions: Collapse
+											392 heading Tool: load_skill, Value: 3
+												544 text Tool: load_skill
+										393 button react-aria5268255944-_r_d3_
+											394 image
+									545 container Tool: load_skill
+									395 container
+										396 button (expanded) Description: Attributes, Secondary Actions: Collapse
+										397 heading Attributes 13 More information, Value: 3
+											398 text Attributes 13
+											399 button Description: More information, ID: react-aria5268255944-_r_a2_
+												400 image
+										401 button (collapsed) Description: Search JSON keys and values, ID: react-aria5268255944-_r_ab_, Secondary Actions: Expand
+										402 checkbox Description: Wrap each row over as many lines as it needs, Value: 0, ID: react-aria5268255944-_r_ae_
+											403 image
+										404 JSON view mode
+											405 radio button Table, Value: 1
+												406 text Table
+											407 radio button JSON, Value: 0
+										408 button react-aria5268255944-_r_ah_
+											409 image
+									410 container Attributes Attributes 13 More information Search attributes Search JSON keys and values Wrap each row over as many lines as it needs JSON view mode
+										411 table
+											412 row
+												413 cell
+													414 button Key
+												415 cell
+													416 button Value
+											417 row
+												418 cell
+													419 container
+														420 text openinference. span. kind
+														421 button Description: Copy key, ID: react-aria5268255944-_r_ak_
+															422 image
+												423 cell
+													424 container
+														425 text TOOL
+														426 button Description: Copy value, ID: react-aria5268255944-_r_an_
+															427 image
+											428 row
+												429 cell
+													430 container
+														546 text skills_factory. latency_ms
+														431 button Description: Copy key, ID: react-aria5268255944-_r_d6_
+															432 image
+												433 cell
+													434 container
+														547 text 350.3875
+														435 button Description: Copy value, ID: react-aria5268255944-_r_d9_
+															436 image
+											437 row
+												438 cell
+													439 container
+														548 text skills_factory. input_sha256
+														440 button Description: Copy key, ID: react-aria5268255944-_r_dc_
+															441 image
+												442 cell
+													443 container
+														549 text fe6cddeafe1d2f9458ebc0b766f2448c6d2d14844f91bac59f9f8c0c04c89353
+														444 button Description: Copy value, ID: react-aria5268255944-_r_df_
+															445 image
+											446 row
+												447 cell
+													448 container
+														550 text skills_factory. environment
+														449 button Description: Copy key, ID: react-aria5268255944-_r_di_
+															450 image
+												451 cell
+													452 container
+														551 text local-test
+														453 button Description: Copy value, ID: react-aria5268255944-_r_dl_
+															454 image
+											455 row
+												456 cell
+													457 container
+														552 text skills_factory. run_id
+														458 button Description: Copy key, ID: react-aria5268255944-_r_do_
+															459 image
+												460 cell
+													461 container
+														553 text bded1720a0db1cd5567cf747d1c47622
+														462 button Description: Copy value, ID: react-aria5268255944-_r_dr_
+															463 image
+											464 row
+												465 cell
+													466 container
+														554 text skills_factory. status
+														467 button Description: Copy key, ID: react-aria5268255944-_r_du_
+															468 image
+												469 cell
+													470 container
+														555 text success
+														471 button Description: Copy value, ID: react-aria5268255944-_r_e1_
+															472 image
+											473 row
+												474 cell
+													475 container
+														556 text skills_factory. external_write
+														476 button Description: Copy key, ID: react-aria5268255944-_r_e4_
+															477 image
+												478 cell
+													479 container
+														557 text false
+														480 button Description: Copy value, ID: react-aria5268255944-_r_e7_
+															481 image
+											482 row
+												483 cell
+													484 container
+														558 text skills_factory. capability. digest
+														485 button Description: Copy key, ID: react-aria5268255944-_r_ea_
+															486 image
+												487 cell
+													488 container
+														559 text edc26f85935b1d6c64b2d96f8f4e3fdf55cd8f33cb5cd2b5e934ba9a1edc5a9b
+														489 button Description: Copy value, ID: react-aria5268255944-_r_ed_
+															490 image
+											491 row
+												492 cell
+													493 container
+														560 text skills_factory. capability. name
+														494 button Description: Copy key, ID: react-aria5268255944-_r_eg_
+															495 image
+												496 cell
+													497 container
+														561 text financial-modeling
+														498 button Description: Copy value, ID: react-aria5268255944-_r_ej_
+															499 image
+											500 row
+												501 cell
+													502 container
+														562 text skills_factory. capability. version
+														503 button Description: Copy key, ID: react-aria5268255944-_r_em_
+															504 image
+												505 cell
+													506 container
+														563 text 0.1.1
+														507 button Description: Copy value, ID: react-aria5268255944-_r_ep_
+															508 image
+											509 row
+												510 cell
+													511 container
+														564 text skills_factory. external_read
+														512 button Description: Copy key, ID: react-aria5268255944-_r_es_
+															513 image
+												514 cell
+													515 container
+														565 text false
+														516 button Description: Copy value, ID: react-aria5268255944-_r_ev_
+															517 image
+											518 row
+												519 cell
+													520 container
+														566 text skills_factory. source_revision
+														521 button Description: Copy key, ID: react-aria5268255944-_r_f2_
+															522 image
+												523 cell
+													524 container
+														567 text ad9c7305d22d4ac276bf2762207a79b081888730
+														525 button Description: Copy value, ID: react-aria5268255944-_r_f5_
+															526 image
+											527 row
+												528 cell
+													529 container
+														568 text tool. name
+														530 button Description: Copy key, ID: react-aria5268255944-_r_f8_
+															531 image
+												532 cell
+													533 container
+														569 text load_skill
+														534 button Description: Copy value, ID: react-aria5268255944-_r_fb_
+															535 image
+									536 container
+										537 button (collapsed) Notes 0, Secondary Actions: Expand
+											538 heading Notes 0, Value: 3
+												539 text Notes 0
+										540 checkbox Description: Take notes, Value: 0
+											541 image
+							351 container
+								352 splitter 50
+								353 button (expanded) Edit Annotations, Secondary Actions: Collapse
+								542 button (collapsed) Description: Add Annotation, ID: react-aria5268255944-_r_fe_, Secondary Actions: Expand
+									543 image
+									570 text Annotation
+								357 button Description: Close annotations, ID: react-aria5268255944-_r_9e_
+									358 image
+								571 container
+									572 image
+									573 text No annotation configurations for this project.
+
+The focused UI element is 277 button mcp.tool.load_skill 349ms

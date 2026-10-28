@@ -126,7 +126,7 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
         cfg.get("campaign") != "presentation-os-creative-direction-2026-10"
         or set(declared_paths) != expected_paths
         or len(declared_paths) != len(expected_paths)
-        or cfg.get("runtime_status") != "NOT_RUN"
+        or cfg.get("runtime_status") not in {"NOT_RUN", "PASS"}
         or any(not (root / item).is_file() for item in expected_paths)
     ):
         return set()
@@ -374,7 +374,7 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
         required = list(map(str, candidate.get("required_case_ids") or []))
         if (
             cfg.get("campaign") != "design-critique-2026-10"
-            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("runtime_status") not in {"NOT_RUN", "PASS"}
             or cfg.get("release_approved") is not False
             or cfg.get("out_of_scope_behavior_paths") != [expected_path]
             or candidate.get("name") != "design-critique"
@@ -416,6 +416,41 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
             "runtime_receipts_required_before_release",
         )):
             return set()
+        if cfg.get("runtime_status") == "PASS":
+            record_rel = Path(str(cfg.get("result_record") or ""))
+            if not record_rel.parts or record_rel.is_absolute() or ".." in record_rel.parts:
+                return set()
+            record_path = root / record_rel
+            report = json.loads(record_path.read_text(encoding="utf-8"))
+            result_cases = report.get("cases") or []
+            result_routing = report.get("routing_cases") or []
+            result_case_ids = {str(row.get("case_id")) for row in result_cases}
+            routing_ids = {str(row.get("id")) for row in routing}
+            result_routing_ids = {str(row.get("case_id")) for row in result_routing}
+            report_candidate = report.get("candidate") or {}
+            if (
+                report.get("campaign") != cfg.get("campaign")
+                or report.get("campaign_verdict", "").split(";", 1)[0] != "PASS for the seven required skill cases and both configured routing cases on this Site MCP surface"
+                or not report.get("executor_model")
+                or not report.get("surface")
+                or report_candidate.get("name") != candidate.get("name")
+                or report_candidate.get("version") != candidate.get("version")
+                or report_candidate.get("content_sha256") != cfg.get("runtime_content_sha256")
+                or result_case_ids != set(required)
+                or result_routing_ids != routing_ids
+                or any(row.get("result") != "PASS" for row in [*result_cases, *result_routing])
+            ):
+                return set()
+            for row in [*result_cases, *result_routing]:
+                output_rel = Path(str(row.get("executor_output") or ""))
+                if not output_rel.parts or output_rel.is_absolute() or ".." in output_rel.parts:
+                    return set()
+                output_path = record_path.parent / output_rel
+                if hashlib.sha256(output_path.read_bytes()).hexdigest() != row.get("output_sha256"):
+                    return set()
+            receipts = report.get("receipt_integrity") or []
+            if not receipts or any(row.get("status") != "SUCCESS" or row.get("integrity_verified") is not True for row in receipts):
+                return set()
         return {expected_path}
     except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
         return set()

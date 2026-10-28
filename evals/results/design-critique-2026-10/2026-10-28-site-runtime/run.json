@@ -1,0 +1,329 @@
+{
+  "campaign": "design-critique-2026-10",
+  "candidate": {
+    "name": "design-critique",
+    "version": "0.1.1",
+    "site_mirror_sha": "c098184124770037780f7fbbce318297191f3ba3",
+    "canonical_source_sha": "ad9c7305d22d4ac276bf2762207a79b081888730",
+    "site_version": "64",
+    "lab_version": "1.38.387",
+    "content_sha256": "999433e57e9ef98388692f4c16076c187da3fe849f2a144031b338818725db8d"
+  },
+  "executor_model": "gpt-6-luna",
+  "surface": "isolated Codex agents with current Site Cloud Next MCP; actual output was reviewed independently",
+  "cases": [
+    {
+      "case_id": "design-critique-comparative-fixture",
+      "result": "PASS",
+      "executor_output": "design-critique-comparative-fixture.output.md",
+      "output_sha256": "2c78a40e707a8f3d04aacb98b27a2db5ddd0858b9d6a512305d7515a89f29b6e",
+      "evaluator_note": "Actual browser-rendered 1920x902 baseline/revised PNGs. Correctly identifies balance emphasis and button accent change; separates observations from hypothesis; states interaction, keyboard, screen-reader and responsive checks remain.",
+      "artifacts": [
+        {
+          "path": "dashboard-baseline.png",
+          "sha256": "43cad45abb85720f9532cd1e41213aaa61219dc98d698c5c246e84ffcdc2c746"
+        },
+        {
+          "path": "dashboard-revised.png",
+          "sha256": "8e2ca4bdb425a1bbba790a78d93a30ae78ac77220a73551f796d9656fa537173"
+        }
+      ]
+    },
+    {
+      "case_id": "design-critique-single-screen",
+      "result": "PASS",
+      "executor_output": "design-critique-single-screen.output.md",
+      "output_sha256": "1f5879e4f89af79af43af81cfe3edfb2e0b74f8a92225ed785048af0ee644acb",
+      "evaluator_note": "Actual browser-rendered 1920x902 synthetic checkout. Gives severity, visible placeholder evidence, task impact and conditional repairs; behavior/accessibility/mobile remain unverified.",
+      "artifacts": [
+        {
+          "path": "checkout-single.png",
+          "sha256": "3a37002de236abd8ed9c173d636789550900ae84ddcc34e02048cd8da70c13f2"
+        }
+      ]
+    },
+    {
+      "case_id": "design-critique-no-artifact",
+      "result": "PASS",
+      "executor_output": "design-critique-no-artifact.output.md",
+      "output_sha256": "0bff1b3859963e3a94fc59e1e424d54c783069183041cf29bbab4b01694efcac",
+      "evaluator_note": "Requests screenshot/link and intended user/task only; no speculative critique. Runtime source was d4f1608... (older Site mirror); candidate design-critique content is unchanged from current v0.1.1, but record this version difference.",
+      "artifacts": []
+    },
+    {
+      "case_id": "design-critique-hidden-behavior",
+      "result": "PASS",
+      "executor_output": "design-critique-hidden-behavior.output.md",
+      "output_sha256": "a9e10d327e8ac6b159e2953ec5212f572810de1af3dd54f39a1d86cb3adff177",
+      "evaluator_note": "Does not infer submission or focus from a static screenshot; suggests keyboard and interaction checks. Notes supplied fixture is gray outlined, correcting the prompt’s inaccurate blue description.",
+      "artifacts": []
+    },
+    {
+      "case_id": "design-critique-implementation-nearmiss",
+      "result": "PASS",
+      "executor_output": "design-critique-implementation-nearmiss.output.md",
+      "output_sha256": "1a5fbd4512c4715b017b9770d9a560e4f2491caf8a5817ef7ca068b693d7b6a0",
+      "evaluator_note": "Does not replace requested implementation with visual critique or claim edits/tests; requests repository, target color and setup.",
+      "artifacts": []
+    },
+    {
+      "case_id": "design-critique-copy-edit-nearmiss",
+      "result": "PASS",
+      "executor_output": "design-critique-copy-edit-nearmiss.output.md",
+      "output_sha256": "15f95e5fbdacebba02dd0d0bb26def9106d539968b123aa8f878b0a189d0a5f1",
+      "evaluator_note": "Returns a direct clarity edit without visual critique.",
+      "artifacts": []
+    },
+    {
+      "case_id": "design-critique-single-viewport",
+      "result": "PASS",
+      "executor_output": "design-critique-single-viewport.output.md",
+      "output_sha256": "5b484d7e7f92d50b692085522b56a6faeab27bb925ce7b96137347239e7497ec",
+      "evaluator_note": "Does not claim desktop evidence proves mobile; requests a viewport capture or actual responsive browser test.",
+      "artifacts": []
+    }
+  ],
+  "receipt_integrity": [
+    {
+      "file": "agent-design-copyedit-nearmiss/list_skills.json",
+      "tool": "list_skills",
+      "output_sha256": "47797b7c50615f69ef86e21a5da4277fab0d13731027b0bfb72dfa2aff2b3810",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:02:14.382Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-implementation-nearmiss/list_skills.json",
+      "tool": "list_skills",
+      "output_sha256": "47797b7c50615f69ef86e21a5da4277fab0d13731027b0bfb72dfa2aff2b3810",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:02:19.211Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-checkout/load_skill-design-critique.json",
+      "tool": "load_skill",
+      "output_sha256": "7f2d1041387ee0e790410ac7f209cc138d43925b7374f139dca127bf5df3ba8a",
+      "input_sha256": "2a627aab94eab7881c92f6156c05985c062d76f685f5a80198888b8222ca7838",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:01:03.898Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-compare/load_skill.json",
+      "tool": "load_skill",
+      "output_sha256": "7f2d1041387ee0e790410ac7f209cc138d43925b7374f139dca127bf5df3ba8a",
+      "input_sha256": "2a627aab94eab7881c92f6156c05985c062d76f685f5a80198888b8222ca7838",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:01:01.209Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-critique/load_skill.json",
+      "tool": "load_skill",
+      "output_sha256": "cb1d1393c2140f191515deaf1b7021d27fbb0aeae597107298ef49a3dce6a823",
+      "input_sha256": "2a627aab94eab7881c92f6156c05985c062d76f685f5a80198888b8222ca7838",
+      "source_revision": "d4f1608a6f481a3b1d8f8b42b4b4b2004f2b6182",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T09:51:20.940Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-hidden-behavior/load-skill-design-critique.json",
+      "tool": "load_skill",
+      "output_sha256": "7f2d1041387ee0e790410ac7f209cc138d43925b7374f139dca127bf5df3ba8a",
+      "input_sha256": "2a627aab94eab7881c92f6156c05985c062d76f685f5a80198888b8222ca7838",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:02:13.233Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-mobile-boundary/load_skill.json",
+      "tool": "load_skill",
+      "output_sha256": "7f2d1041387ee0e790410ac7f209cc138d43925b7374f139dca127bf5df3ba8a",
+      "input_sha256": "2a627aab94eab7881c92f6156c05985c062d76f685f5a80198888b8222ca7838",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:01:10.329Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-checkout/runtime_info.json",
+      "tool": "runtime_info",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:01:03.768Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-compare/runtime_info.json",
+      "tool": "runtime_info",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:01:01.366Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-copyedit-nearmiss/runtime_info.json",
+      "tool": "runtime_info",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:02:13.817Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-critique/runtime_info.json",
+      "tool": "runtime_info",
+      "output_sha256": "b3786d8ff2612fd1b7572c1d98f5ab41608e4e2a09f81bed0ab1f926a525bef7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "d4f1608a6f481a3b1d8f8b42b4b4b2004f2b6182",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T09:51:16.924Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-hidden-behavior/runtime-info.json",
+      "tool": "runtime_info",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:02:12.613Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-implementation-nearmiss/runtime_info.json",
+      "tool": "runtime_info",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:02:19.334Z",
+      "integrity_verified": true
+    },
+    {
+      "file": "agent-design-mobile-boundary/runtime_info.json",
+      "tool": "runtime_info",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:01:10.420Z",
+      "integrity_verified": true
+    },
+    {
+      "case_id": "design-critique-implementation-nearmiss-en",
+      "tool": "list_skills",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:04:49.470Z",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "output_sha256": "47797b7c50615f69ef86e21a5da4277fab0d13731027b0bfb72dfa2aff2b3810",
+      "integrity_verified": true
+    },
+    {
+      "case_id": "design-critique-implementation-nearmiss-en",
+      "tool": "load_skill",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:04:56.535Z",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "input_sha256": "6049d919f7423784d2514d5a71c8a265bbe2dc6a626660f69543a4be4ba05fb5",
+      "output_sha256": "a17dc8c41d360fc50307241ed886da1fc3ab5d926282d58366e0927d437b5dee",
+      "integrity_verified": true
+    },
+    {
+      "case_id": "design-critique-implementation-nearmiss-en",
+      "tool": "runtime_info",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:04:49.197Z",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "integrity_verified": true
+    },
+    {
+      "case_id": "design-critique-natural-en",
+      "tool": "list_skills",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:08:02.262Z",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "output_sha256": "47797b7c50615f69ef86e21a5da4277fab0d13731027b0bfb72dfa2aff2b3810",
+      "integrity_verified": true
+    },
+    {
+      "case_id": "design-critique-natural-en",
+      "tool": "load_skill",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:08:02.961Z",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "input_sha256": "2a627aab94eab7881c92f6156c05985c062d76f685f5a80198888b8222ca7838",
+      "output_sha256": "7f2d1041387ee0e790410ac7f209cc138d43925b7374f139dca127bf5df3ba8a",
+      "integrity_verified": true
+    },
+    {
+      "case_id": "design-critique-natural-en",
+      "tool": "runtime_info",
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "completed_at": "2026-10-28T10:08:02.035Z",
+      "source_revision": "c098184124770037780f7fbbce318297191f3ba3",
+      "input_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "output_sha256": "3cf8a3f0d628f8475b808a1b8fdef536324c918dcc409a445779687f88d341b7",
+      "integrity_verified": true
+    }
+  ],
+  "scope_limitations": [
+    "All seven skill cases and both configured routing cases passed on the Site MCP surface; the no-artifact run used a previous Site mirror but the loaded candidate content SHA-256 matched current v0.1.1 exactly.",
+    "This campaign does not claim Chat-Mobile, ChatGPT Cloud, browser-mobile, or cross-surface parity beyond the isolated Site MCP executor.",
+    "Fixtures are synthetic; no real customer product behavior or business impact is established."
+  ],
+  "campaign_verdict": "PASS for the seven required skill cases and both configured routing cases on this Site MCP surface; release_approved=false pending separate release review.",
+  "runtime_model_note": "Executor agents inherited the coordinator model for this run; tool receipts attest Site source and outputs but do not themselves attest a model ID.",
+  "routing_cases": [
+    {
+      "case_id": "design-critique-natural-en",
+      "result": "PASS",
+      "executor_output": "design-critique-natural-en.output.md",
+      "output_sha256": "5dcc7df4dce5edb75d3e23317f0e7edf29a87b240985114a0bda47565c2aa967"
+    },
+    {
+      "case_id": "design-critique-implementation-nearmiss-en",
+      "result": "PASS",
+      "executor_output": "design-critique-implementation-nearmiss-en.output.md",
+      "output_sha256": "eb0ea609f52d3e7d186d25cdfa341e08acb41bd3a8d278ebba878104b513b81b"
+    }
+  ]
+}

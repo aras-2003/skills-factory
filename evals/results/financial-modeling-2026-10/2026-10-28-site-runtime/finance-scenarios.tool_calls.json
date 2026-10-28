@@ -1,0 +1,12 @@
+[
+  {
+    "tool": "runtime_info",
+    "arguments": {}
+  },
+  {
+    "tool": "load_skill",
+    "arguments": {
+      "skill_name": "financial-modeling"
+    }
+  }
+]
