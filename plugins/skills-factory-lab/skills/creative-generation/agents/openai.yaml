@@ -1,0 +1,5 @@
+interface:
+  display_name: Creative Generation
+  short_description: Generate or revise a locally requested image or video with…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#F08FA3'
