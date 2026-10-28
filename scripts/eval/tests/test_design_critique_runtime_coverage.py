@@ -25,6 +25,10 @@ class DesignCritiqueRuntimeCoverageTests(unittest.TestCase):
         report = json.loads(REPORT.read_text())
         self.assertEqual("ad9c7305d22d4ac276bf2762207a79b081888730", report["candidate"]["canonical_source_sha"])
         self.assertEqual("999433e57e9ef98388692f4c16076c187da3fe849f2a144031b338818725db8d", report["candidate"]["content_sha256"])
+        campaign_text = CAMPAIGN.read_text()
+        runtime_sha = re.search(r"^runtime_content_sha256: ([a-f0-9]{64})$", campaign_text, re.M)
+        self.assertIsNotNone(runtime_sha)
+        self.assertEqual(runtime_sha.group(1), report["candidate"]["content_sha256"])
         required = {
             "design-critique-comparative-fixture", "design-critique-single-screen",
             "design-critique-no-artifact", "design-critique-hidden-behavior",
