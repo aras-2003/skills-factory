@@ -282,7 +282,7 @@ def separately_validated_interface_design_paths(root: Path = ROOT) -> set[str]:
                 or not candidate.get("version")
                 or f'version: "{candidate.get("version")}"' not in source.read_text(encoding="utf-8")
                 or not cases_by_id
-                or len(required) != 6
+                or len(required) != 7
                 or len(set(required)) != len(required)
                 or set(required) != set(cases_by_id)
             ):
