@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "campaign": "market-economics",
+  "candidate_version": "0.1.0",
+  "skill_content_sha256": "bb49685a42fc944815ff0f36759821e2b5667469d8f13fc67db34ec589ee8696",
+  "site_version": 65,
+  "lab_version": "1.38.388",
+  "canonical_source_revision": "c3f5144399c00af432c578685e5419534649b4d0",
+  "runtime_source_revision": "72a0d7171f6046f69d07c220bb19d021e4ba4946",
+  "runtime_attestation": "verified",
+  "evaluator": "isolated evaluator gpt-6-luna",
+  "case_verdicts": [
+    {
+      "case_id": "market-reconciliation-golden",
+      "verdict": "PASS",
+      "execution_note": "exact loaded engine plus host response; exit 0"
+    },
+    {
+      "case_id": "market-missing-source-negative",
+      "verdict": "PASS",
+      "execution_note": "host response; declined unsupported market sizing"
+    },
+    {
+      "case_id": "market-no-segment-near-miss",
+      "verdict": "PASS",
+      "execution_note": "host response; required segment evidence"
+    },
+    {
+      "case_id": "market-transferability-adversarial",
+      "verdict": "PASS",
+      "execution_note": "host response; rejected unsupported geographic transfer"
+    },
+    {
+      "case_id": "market-future-source-regression",
+      "verdict": "PASS",
+      "execution_note": "host response; rejected future-dated source"
+    },
+    {
+      "case_id": "market-competitor-near-miss",
+      "verdict": "PASS",
+      "execution_note": "host response; routed away from market sizing"
+    },
+    {
+      "case_id": "market-research-near-miss",
+      "verdict": "PASS",
+      "execution_note": "host response; no unsupported market estimate"
+    }
+  ],
+  "limitations": [
+    "The Site MCP exposes no arbitrary execute_skill endpoint; deterministic engine vectors ran locally against the exact engine returned by load_skill.",
+    "Host response verdicts reflect recorded test-agent review; MCP load_skill/runtime identity receipts are preserved, but the MCP wrapper does not issue a signed receipt for each host model answer."
+  ],
+  "release_approved": false
+}

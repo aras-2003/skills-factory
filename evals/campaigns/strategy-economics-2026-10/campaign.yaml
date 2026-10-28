@@ -1,10 +1,14 @@
 campaign: strategy-economics-2026-10
 candidate: strategy-economics
 candidate_version: 0.1.0
-runtime_status: NOT_RUN
+runtime_status: PASS
+runtime_record: evals/results/strategy-economics-runtime-site65-2026-10.json
+runtime_record_sha256: b893ce261b33fbe55028e5e900d509bccc2f3a3f1e32e533342b6cc6e171b4ab
+runtime_bundle: evals/results/strategy-runtime-site65-2026-10.zip
+runtime_bundle_sha256: 96468249dbae2d62c0e9422a81764362e8fa9794f652cc5c244f40bc8ca7b2ec
 release_approved: false
 provenance_status: VERIFIED_SOURCE_CORPUS
-source_note: "Seven public archives were recovered and SHA-256 verified; source mapping is in docs/strategy-os/strategy-source-review.md. Method-reference only, no copied content; runtime remains NOT_RUN."
+source_note: "Seven public archives were recovered and SHA-256 verified; source mapping is in docs/strategy-os/strategy-source-review.md. Method-reference only, no copied content. Site v65 runtime evidence is pinned in this campaign."
 as_of: "2026-10-27"
 sources:
   skills/strategy-ea/strategy-economics/SKILL.md: a38d813dafbd94e8ac33811c8b960d149cd88b6f4e382df6cdebe06c840cb505

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "campaign": "strategy-economics",
+  "candidate_version": "0.1.0",
+  "skill_content_sha256": "46b44e55bec88e4862c1702d585068d4eb47bf079cc04c6397c56f89ddea208f",
+  "site_version": 65,
+  "lab_version": "1.38.388",
+  "canonical_source_revision": "c3f5144399c00af432c578685e5419534649b4d0",
+  "runtime_source_revision": "72a0d7171f6046f69d07c220bb19d021e4ba4946",
+  "runtime_attestation": "verified",
+  "evaluator": "isolated evaluator gpt-6-luna",
+  "case_verdicts": [
+    {
+      "case_id": "strategy-econ-profit-pool-golden",
+      "verdict": "PASS",
+      "execution_note": "exact MCP-loaded engine vector and Site response; aggregate revenue 300, profit 50, margin 16.6667%, bridge calculations reconcile"
+    },
+    {
+      "case_id": "strategy-econ-driver-reconcile-negative",
+      "verdict": "PASS",
+      "execution_note": "complete synthetic vector; exact engine identified 30 versus 25 child-sum, gap 5"
+    },
+    {
+      "case_id": "strategy-econ-missing-unit-near-miss",
+      "verdict": "PASS",
+      "execution_note": "Site response requested missing price, volume and cost evidence"
+    },
+    {
+      "case_id": "strategy-econ-pvm-adversarial",
+      "verdict": "PASS",
+      "execution_note": "complete synthetic vector; bridge +44 = volume +20, mix 0, price +24; no unique causal attribution claimed"
+    },
+    {
+      "case_id": "strategy-econ-future-evidence-regression",
+      "verdict": "PASS",
+      "execution_note": "complete synthetic vector; future-dated actual rejected relative to as_of"
+    },
+    {
+      "case_id": "strategy-econ-competitor-near-miss",
+      "verdict": "PASS",
+      "execution_note": "Site response routed competitor research away from profit-pool calculation"
+    },
+    {
+      "case_id": "strategy-econ-option-design-near-miss",
+      "verdict": "PASS",
+      "execution_note": "Site response developed strategy options without inventing profit pools or bridges"
+    }
+  ],
+  "limitations": [
+    "Site MCP exposes no arbitrary execute_skill endpoint. Deterministic engine vectors ran locally against the exact engine returned by load_skill; runtime host responses were captured independently.",
+    "Runtime/load and host response evidence is preserved with raw SHA256SUMS; local runner receipts are not represented as signed MCP tool receipts."
+  ],
+  "release_approved": false
+}

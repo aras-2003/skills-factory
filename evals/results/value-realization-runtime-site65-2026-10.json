@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "campaign": "value-realization",
+  "candidate_version": "0.1.0",
+  "skill_content_sha256": "519dfc279db4313e1e1d3085283207f3cc86ae707023db525751746a9ff3365a",
+  "site_version": 65,
+  "lab_version": "1.38.388",
+  "canonical_source_revision": "c3f5144399c00af432c578685e5419534649b4d0",
+  "runtime_source_revision": "72a0d7171f6046f69d07c220bb19d021e4ba4946",
+  "runtime_attestation": "verified",
+  "evaluator": "isolated evaluator gpt-6-luna",
+  "case_verdicts": [
+    {
+      "case_id": "value-realization-golden",
+      "verdict": "PASS",
+      "execution_note": "deterministic engine vector and runtime response"
+    },
+    {
+      "case_id": "value-realization-negative",
+      "verdict": "PASS",
+      "execution_note": "deterministic engine vector and runtime response"
+    },
+    {
+      "case_id": "value-realization-adversarial",
+      "verdict": "PASS",
+      "execution_note": "engine exit 2; expected block of future-dated evidence"
+    },
+    {
+      "case_id": "value-realization-regression",
+      "verdict": "PASS",
+      "execution_note": "deterministic engine vector; no thresholds means no recommendation"
+    },
+    {
+      "case_id": "value-realization-near-miss-finance-model",
+      "verdict": "PASS",
+      "execution_note": "host response; routed away from benefit ledger"
+    },
+    {
+      "case_id": "value-realization-near-miss-options",
+      "verdict": "PASS",
+      "execution_note": "host response; routed away from benefit ledger"
+    }
+  ],
+  "limitations": [
+    "The Site MCP exposes no arbitrary execute_skill endpoint; deterministic engine vectors ran locally against the exact engine returned by load_skill.",
+    "Host response verdicts reflect recorded test-agent review; MCP load_skill/runtime identity receipts are preserved, but the MCP wrapper does not issue a signed receipt for each host model answer."
+  ],
+  "release_approved": false
+}
