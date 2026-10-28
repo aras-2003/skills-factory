@@ -16,6 +16,9 @@ out_of_scope_behavior_paths:
   - skills/strategy-ea/strategy-economics/engine.py
   - skills/strategy-ea/value-realization/SKILL.md
   - skills/strategy-ea/value-realization/engine.py
+  - skills/seo/seo-research/SKILL.md
+  - skills/seo/seo-research/references/open-seo-mcp-contract.md
+  - skills/seo/seo-research/tests/cases.yaml
   - skills/media/creative-generation/SKILL.md
   - skills/media/creative-generation/references/decision-and-setup.md
   - skills/media/creative-generation/references/local-engine-matrix.md
@@ -34,6 +37,9 @@ source_sha256:
   skills/strategy-ea/strategy-economics/engine.py: 02ec781743c4dcb660dd14b3ce129f2b8a43a7f7642b51bcd2433b181c5b6b6c
   skills/strategy-ea/value-realization/SKILL.md: 056c3e0205faf1eaa376c39133f57a051aab1bf42e00d8276a8f5b3f2d45b79e
   skills/strategy-ea/value-realization/engine.py: 031fedc9707b1ca5267bbbbd30f096063b7c40446181ce1cb4a3a3372863f601
+  skills/seo/seo-research/SKILL.md: baf11019b1cbe24848c05400bddde8cd6e6be70e924c18d81c2ea1936e70cfeb
+  skills/seo/seo-research/references/open-seo-mcp-contract.md: c257d88c300c2157ea2c42731c54d9573e005f37de7f9687f169f946089e7ef7
+  skills/seo/seo-research/tests/cases.yaml: d8e1a3e6b57ffd3a1f44a8a016b4ffef07f496ab1451bcebc085af23aae76537
   skills/media/creative-generation/SKILL.md: 49485b2c9e5fa2ae3d0c09194251cf615b443aaaa8ffb73a7b6ba276170e6647
   skills/media/creative-generation/references/decision-and-setup.md: a17a30245950fd4b6dd70fb06237d1512be6b8da48cdc640036133d97ce5ba6d
   skills/media/creative-generation/references/local-engine-matrix.md: 37243d6babf0407eeb427359eb5956ac96f935be2cdffe9ada40ffd27bf6423e
@@ -46,6 +52,7 @@ case_suites:
   market-economics: skills/strategy-ea/market-economics/tests/cases.yaml
   strategy-economics: skills/strategy-ea/strategy-economics/tests/cases.yaml
   value-realization: skills/strategy-ea/value-realization/tests/cases.yaml
+  seo-research: skills/seo/seo-research/tests/cases.yaml
   creative-generation: skills/media/creative-generation/tests/cases.yaml
 test_modules:
   - skills/investing/historical-decision-replay/tests/test_engine.py
@@ -55,4 +62,5 @@ test_modules:
   - skills/strategy-ea/market-economics/tests/test_engine.py
   - skills/strategy-ea/strategy-economics/tests/test_engine.py
   - skills/strategy-ea/value-realization/tests/test_engine.py
+  - scripts/validate/tests/test_seo_research_contract.py
   - tests/test_comfyui_local.py

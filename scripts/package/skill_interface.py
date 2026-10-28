@@ -14,6 +14,7 @@ DOMAIN_COLORS = {
     "oaf": "#83A9FF",
     "presentations": "#F0C982",
     "reports": "#8AB5D7",
+    "seo": "#77D9CA",
     "strategy-ea": "#75D8C1",
     "web-design": "#A998FF",
 }
