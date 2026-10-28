@@ -374,7 +374,7 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
         required = list(map(str, candidate.get("required_case_ids") or []))
         if (
             cfg.get("campaign") != "design-critique-2026-10"
-            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("runtime_status") not in {"NOT_RUN", "PASS"}
             or cfg.get("release_approved") is not False
             or cfg.get("out_of_scope_behavior_paths") != [expected_path]
             or candidate.get("name") != "design-critique"
