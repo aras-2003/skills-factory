@@ -35,11 +35,17 @@ cases:
       must: ["local runtime", "setup"]
       must_not: ["hosted API", "API key"]
   - id: normal-image-request-near-miss
-    case: Discuss an image without invoking generation
-    input: "Explain the difference between PNG and JPEG compression."
+    case: Explain image compression without asking for generation or editing
+    input: "Explain the difference between PNG and JPEG compression. Do not create or edit an image."
     expected:
       should_trigger: false
       must_not: ["ComfyUI", "queue a workflow"]
+  - id: image-editing-advice-near-miss
+    case: Discuss an image-editing technique without asking to generate or edit a file
+    input: "How does a soft brush help blend colors in a digital painting?"
+    expected:
+      should_trigger: false
+      must_not: ["ComfyUI", "queue a workflow", "write an output file"]
   - id: deployment-near-miss
     case: Do not deploy a site for an image request
     input: "Make a locally generated hero image for this website draft."
