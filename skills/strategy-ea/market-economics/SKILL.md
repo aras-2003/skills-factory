@@ -11,11 +11,11 @@ metadata:
 
 ## Purpose
 
-Use dated, sourced inputs to keep top-down TAM and bottom-up TAM separate, compare their difference, and calculate segment-derived SAM/SOM and uncovered serviceable value. The calculator requires an explicit as-of date, currency, source ID and publication date for each number. It rejects future evidence and invalid shares, leaves unknown segments unknown, and does not convert currencies or assume cross-market transferability.
+Use dated, sourced inputs to keep top-down TAM and bottom-up TAM separate, compare their difference, and calculate segment-derived SAM/SOM and uncovered serviceable value. The calculator requires an explicit as-of date, currency, source ID and publication date for each number. It rejects future evidence and invalid shares, leaves unknown segments unknown, and does not convert currencies or assume cross-market transferability. Uncovered serviceable value is not itself unmet demand; report validated whitespace only when independent evidence of unmet demand is supplied.
 
 ## Procedure
 
-Define segments by the supplied customer need/JTBD evidence and explain inclusion criteria in the narrative. Do not call an addressable estimate a forecast, or infer a customer voice from market totals. Reuse canonical competitive-intelligence and strategic-position work for competitor facts and transferability judgments.
+Define segments by the supplied customer need/JTBD evidence and explain inclusion criteria in the narrative. Do not call an addressable estimate a forecast, infer a customer voice from market totals, or label unserved SAM as whitespace without validating unmet demand. Reuse canonical competitive-intelligence and strategic-position work for competitor facts and transferability judgments.
 
 ## Output
 

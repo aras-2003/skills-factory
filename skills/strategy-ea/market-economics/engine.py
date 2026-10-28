@@ -72,7 +72,16 @@ def calculate(data: dict[str, Any]) -> dict[str, Any]:
     sam = total
     if covered > sam:
         raise InputError("currently_served cannot exceed segment-derived SAM")
-    return {"as_of": as_of.isoformat(), "currency": currency.upper(), "top_down_tam": str(top), "bottom_up_tam": str(bottom), "tam_difference": str(bottom - top), "segment_derived_sam": str(sam), "currently_served": str(covered), "white_space": str(sam - covered), "top_down_evidence": top_ev, "bottom_up_evidence": bottom_ev, "currently_served_evidence": covered_ev, "segments": segment_rows, "limitations": ["Top-down and bottom-up estimates remain separate; their difference is not auto-reconciled.", "Segment SAM/SOM is an assumption-driven sizing model, not a demand forecast.", "Missing segments are not inferred; no currency conversion or market transferability is assumed."]}
+    uncovered = sam - covered
+    unmet_raw = data.get("validated_unmet_demand")
+    whitespace = None
+    whitespace_ev = None
+    if unmet_raw is not None:
+        unmet, whitespace_ev = evidenced(unmet_raw, "validated_unmet_demand", as_of)
+        if unmet > uncovered:
+            raise InputError("validated_unmet_demand cannot exceed uncovered serviceable value")
+        whitespace = str(unmet)
+    return {"as_of": as_of.isoformat(), "currency": currency.upper(), "top_down_tam": str(top), "bottom_up_tam": str(bottom), "tam_difference": str(bottom - top), "segment_derived_sam": str(sam), "currently_served": str(covered), "uncovered_serviceable_value": str(uncovered), "validated_white_space": whitespace, "white_space_evidence": whitespace_ev, "top_down_evidence": top_ev, "bottom_up_evidence": bottom_ev, "currently_served_evidence": covered_ev, "segments": segment_rows, "limitations": ["Top-down and bottom-up estimates remain separate; their difference is not auto-reconciled.", "Segment SAM/SOM is an assumption-driven sizing model, not a demand forecast.", "Uncovered serviceable value is not proof of unmet demand; validated whitespace requires separate sourced unmet-demand evidence.", "Missing segments are not inferred; no currency conversion or market transferability is assumed."]}
 
 
 def main() -> int:

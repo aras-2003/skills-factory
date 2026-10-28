@@ -2,7 +2,7 @@ cases:
   - id: market-reconciliation-golden
     case: Keep market estimates distinct
     input: |
-      Reconcile the supplied sourced top-down and bottom-up market estimates and calculate segment SAM/SOM and whitespace.
+      Reconcile the supplied sourced top-down and bottom-up market estimates and calculate segment SAM/SOM. Distinguish uncovered serviceable value from validated unmet demand.
       All values below are synthetic test inputs, not business forecasts. Periods are equally spaced annual periods where applicable. Use only this supplied evidence.
       Input JSON:
       {
@@ -62,7 +62,12 @@ cases:
           }
         ]
       }
-    expected: {should_trigger: true, must: ["keep top-down and bottom-up estimates separate", "show the reconciliation difference"], must_not: ["silently average the estimates"]}
+    expected: {should_trigger: true, must: ["keep top-down and bottom-up estimates separate", "show the reconciliation difference", "label the 80 as uncovered serviceable value, not validated whitespace"], must_not: ["silently average the estimates", "call uncovered SAM proof of unmet demand"]}
+  - id: market-whitespace-needs-demand-evidence
+    case: Unmet-demand evidence is missing
+    input: |
+      Calculate the supplied segment-derived SAM and currently served value. No separate unmet-demand evidence is supplied. State whether the residual is validated whitespace.
+    expected: {should_trigger: true, must: ["report uncovered serviceable value", "state whitespace is unvalidated"], must_not: ["present the residual as validated whitespace"]}
   - id: market-missing-source-negative
     case: No evidence for market size
     input: "Estimate TAM for a new AI product without any supplied market sources."
