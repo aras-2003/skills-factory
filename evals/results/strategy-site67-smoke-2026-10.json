@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "evaluation_date": "2026-10-28",
+  "site": {
+    "version": 67,
+    "url": "https://skills-factory-cloud-next.arek2003.chatgpt.site",
+    "canonical_source_revision": "d9a461f9ccf54b4ebd979e3d1235cc72fbd12166",
+    "mirror_source_revision": "74ead30967b043118e9e182b665b62fbf20f3acc",
+    "lab_release": "1.38.390+d9a461f9ccf5",
+    "lab_source_revision": "d9a461f9ccf54b4ebd979e3d1235cc72fbd12166",
+    "attestation_status": "verified",
+    "execution_mode": "host_model_executes_loaded_instructions",
+    "tool_schema_digest": "sha256:020e72cd05ccc9ff93bdac00c54433911b0946da16c7f43032e76ee1851e24ef"
+  },
+  "mcp_load_receipts": {
+    "market-economics": {
+      "version": "0.1.0",
+      "content_sha256": "86f0dc9fba00c09b214f3bad3d6ac33fafa948e5ea03b1ecadf9842bf442b7b9",
+      "instruction_sha256": "b70351c76d0b29347881bc15d90aeac4a76f31b4914c6cf3961db90171edd7a5",
+      "host_surface_sha256": "8cebd763b1cb02eff85be4862f8e811b275efa6bc47c4e9f055afcec6ebf6d9b",
+      "tool_receipt": {
+        "status": "SUCCESS",
+        "source_revision": "74ead30967b043118e9e182b665b62fbf20f3acc",
+        "completed_at": "2026-10-28T18:58:49.824Z",
+        "input_sha256": "a9d6f7ac82337bd8aadf705daaae7e9ae403166e163693c802a36edb1dbf7cb0",
+        "output_sha256": "c1510a17d3973ddf4598825a5d9080bf440e7d4fb575b315af72d15b3998933e"
+      }
+    },
+    "strategy-economics": {
+      "version": "0.1.0",
+      "content_sha256": "46b44e55bec88e4862c1702d585068d4eb47bf079cc04c6397c56f89ddea208f",
+      "instruction_sha256": "aaaac3cb81ed65ef43eb049995f39eb3e15017f5ac6fa1c107ad8323dc940d5d",
+      "host_surface_sha256": "0f8578dda9c1efb64c5ad800930d0b0cb6cd6844370da846873fd777716d73f9",
+      "tool_receipt": {
+        "status": "SUCCESS",
+        "source_revision": "74ead30967b043118e9e182b665b62fbf20f3acc",
+        "completed_at": "2026-10-28T18:58:49.638Z",
+        "input_sha256": "7eee4bb116ce12978745a21706fad1f9bc6f4d7960961ecb68a609d5cda6f717",
+        "output_sha256": "932fb9160740addb7afb99557f09f096766628f01b9fe6f630d81faa697509e7"
+      }
+    },
+    "value-realization": {
+      "version": "0.1.0",
+      "content_sha256": "519dfc279db4313e1e1d3085283207f3cc86ae707023db525751746a9ff3365a",
+      "instruction_sha256": "6b6d4bd8a899426603e82e59f515dcb936d58963f427e41aeb2a699ab4bfb4c4",
+      "host_surface_sha256": "99e1d381e685ad18f085471a20381fb82da5a8aa3bcde02bce9d2ff3231235ba",
+      "tool_receipt": {
+        "status": "SUCCESS",
+        "source_revision": "74ead30967b043118e9e182b665b62fbf20f3acc",
+        "completed_at": "2026-10-28T18:58:49.412Z",
+        "input_sha256": "a718d7c7a2d9a445f03f515467980ca5956939cf7e78c6884d8fbcea8a2d8452",
+        "output_sha256": "10ac80f7addcf65cc012e1be605ba2b714bdb0768a9b988c8c339c4081ea49ac"
+      }
+    }
+  },
+  "evaluation_boundary": {
+    "evaluators": "isolated agents received test inputs only and did not inspect repository fixtures or expected answers",
+    "mcp_capabilities": ["runtime_info", "list_skills", "load_skill"],
+    "engine_execution": "NOT_EXECUTED_BY_SITE_MCP",
+    "engine_execution_reason": "load_skill returns engine.py as a reference and declares supporting_code_execution not_executed; the exposed MCP has no code-execution tool",
+    "result_type": "independent host-model interpretation of the deployed skill instructions, with arithmetic cross-checked by local unit/CI tests; not a Site-side Python engine receipt"
+  },
+  "checks": [
+    {
+      "skill": "market-economics",
+      "case": "separate uncovered value from validated whitespace",
+      "status": "MANUAL_PASS",
+      "observed": "With top-down TAM 1000, bottom-up TAM 1200, segment SAM 100, served value 20, and no separate unmet-demand evidence, the skill reported 80 as uncovered serviceable value and left validated whitespace unknown.",
+      "engine_execution": "NOT_EXECUTED_BY_SITE_MCP"
+    },
+    {
+      "skill": "market-economics",
+      "case": "sourced unmet demand and transferability boundary",
+      "status": "MANUAL_PASS",
+      "observed": "With separately evidenced unmet demand 30, the skill distinguished validated whitespace 30 from uncovered serviceable value 80. In a separate no-source request it refused to quantify TAM or transfer a European share to Poland without local evidence.",
+      "engine_execution": "NOT_EXECUTED_BY_SITE_MCP"
+    },
+    {
+      "skill": "strategy-economics",
+      "case": "profit-pool, PVM, driver-tree and cost-bridge example",
+      "status": "MANUAL_PASS_WITH_LIMITATION",
+      "observed": "Revenue 300, operating profit 50, aggregate margin 16.67%; PVM prior/current revenue 300/308 with volume 0, mix -20, price +28; driver tree 30 = 10 + 20; cost change 45 - 40 = +5.",
+      "limitation": "The isolated prompt did not include explicit period labels/comparability evidence; output was manually calculated from the loaded instructions, not produced by engine.py.",
+      "engine_execution": "NOT_EXECUTED_BY_SITE_MCP"
+    },
+    {
+      "skill": "strategy-economics",
+      "case": "future evidence and unreconciled driver tree",
+      "status": "MANUAL_PASS",
+      "observed": "The skill rejected operating-profit evidence published after the as-of date and flagged parent 30 versus children 10 + 21 as unreconciled by +1.",
+      "engine_execution": "NOT_EXECUTED_BY_SITE_MCP"
+    },
+    {
+      "skill": "value-realization",
+      "case": "aligned forecast-versus-actual review",
+      "status": "MANUAL_PASS",
+      "observed": "Forecast 1000 versus actual 800 for the same KPI period produced variance -200 and -20%; the 30-day review was due and sourced thresholds produced CORRECT_REVIEW with human decision required.",
+      "engine_execution": "NOT_EXECUTED_BY_SITE_MCP"
+    },
+    {
+      "skill": "value-realization",
+      "case": "missing evidence and policy boundary",
+      "status": "MANUAL_PASS",
+      "observed": "With no dated forecast/actual evidence, cadence, last review, or approved thresholds, the skill returned NOT_CONFIGURED/insufficient evidence and did not stop work or claim causality.",
+      "engine_execution": "NOT_EXECUTED_BY_SITE_MCP"
+    }
+  ],
+  "local_validation": {
+    "eval_tests": "304 passed, 1 skipped",
+    "market_economics_unit_tests": "5 passed",
+    "strategy_economics_unit_tests": "4 passed",
+    "value_realization_unit_tests": "9 passed",
+    "site_ci": "passed",
+    "repository_ci": "passed"
+  },
+  "release_decision": "The exact current packages loaded successfully and representative behavior was manually observed. Deterministic Python engines were not executed through the Site MCP; source and full local/CI test suites cover those calculations. The market-economics campaign remains NOT_RUN for its full declared suite and release approval remains false."
+}
