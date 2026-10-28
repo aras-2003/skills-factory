@@ -237,6 +237,14 @@ lab:
         self.assertTrue(icon.is_file())
         self.assertIn("<svg", icon.read_text(encoding="utf-8"))
 
+    def test_seo_domain_has_a_local_label_and_icon(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        icon = ROOT / "docs/assets/seo.svg"
+        self.assertIn('seo:"Widoczność w wyszukiwarkach"', page)
+        self.assertIn('.icon-seo{background-image:url("./assets/seo.svg")', page)
+        self.assertTrue(icon.is_file())
+        self.assertIn("<svg", icon.read_text(encoding="utf-8"))
+
     def test_lab_packager_uploads_candidate_and_opens_validated_marketplace_pr(self) -> None:
         workflow = (ROOT / ".github/workflows/release-lab-plugin.yml").read_text(encoding="utf-8")
         self.assertIn("cp plugins/skills-factory-lab/release-manifest.json docs/lab-release.json", workflow)
