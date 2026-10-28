@@ -16,6 +16,21 @@ cases:
         - invent order data or product capabilities
         - add unprovided tracking, delivery estimates, payment or cancellation flows, returns, refunds, addresses, support destinations, settings, order statuses, or navigation
 
+  - id: interface-design-explicit-placeholder-positive
+    case: order-dashboard-with-explicit-assumptions
+    input: |
+      Design a desktop and mobile order-management dashboard for an online store. We do not know the store’s order data, status rules, or platform capabilities. Provide a useful design brief and use explicit placeholders/assumptions.
+    expected:
+      should_trigger: true
+      must:
+        - proceed with a concise interface brief instead of asking for missing store details
+        - label the store operator and order review as bounded assumptions if needed
+        - use neutral placeholders for order fields and next actions
+        - specify desktop and mobile behavior plus loading, empty, error and unavailable-data states
+      must_not:
+        - invent operational records, order identifiers, status rules, capabilities, or navigation
+        - claim that placeholder actions are implemented product behavior
+
   - id: interface-design-indirect-positive
     case: onboarding-flow
     input: |
