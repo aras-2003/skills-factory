@@ -42,6 +42,15 @@ component_declarations:
       shell_exec: unassessed
       credentials: unassessed
       external_actions: unassessed
+  seo-research:
+    source: skills/seo/seo-research/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: read
+      filesystem: none
+      shell_exec: none
+      credentials: named_classes
+      external_actions: approval_required
   acquisition-fit-review:
     source: skills/commerce/growth/acquisition-fit-review/SKILL.md
     review_state: STATIC_PARTIAL
