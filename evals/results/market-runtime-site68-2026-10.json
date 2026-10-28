@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "evaluation_date": "2026-10-28",
+  "campaign": "market-economics-2026-10-current-site-behavior",
+  "site": {
+    "site_version": 68,
+    "lab_release": "1.38.391+5411933030b8",
+    "canonical_source_revision": "5411933030b8e07a134f21475dd4a762fd77f974",
+    "mirror_source_revision": "7c028c26558af63f8e269257a3573bdec7ed56cf",
+    "runtime_attestation": "verified",
+    "execution_mode": "host_model_executes_loaded_instructions",
+    "tool_schema_digest": "sha256:020e72cd05ccc9ff93bdac00c54433911b0946da16c7f43032e76ee1851e24ef"
+  },
+  "skill": {
+    "name": "market-economics",
+    "version": "0.1.0",
+    "content_sha256": "86f0dc9fba00c09b214f3bad3d6ac33fafa948e5ea03b1ecadf9842bf442b7b9",
+    "instruction_sha256": "b70351c76d0b29347881bc15d90aeac4a76f31b4914c6cf3961db90171edd7a5",
+    "host_surface_sha256": "8cebd763b1cb02eff85be4862f8e811b275efa6bc47c4e9f055afcec6ebf6d9"
+  },
+  "receipts": {
+    "runtime_info": {
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "source_revision": "7c028c26558af63f8e269257a3573bdec7ed56cf",
+      "completed_at": "2026-10-28T19:10:34.405Z",
+      "output_sha256": "0bb4008344d3833260be35fce4f6637687f123c82766a54db6d66a69bd0a445d"
+    },
+    "list_skills": {
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "source_revision": "7c028c26558af63f8e269257a3573bdec7ed56cf",
+      "completed_at": "2026-10-28T19:10:34.154Z",
+      "output_sha256": "5a7017066e140c5d8e644937361ad7a8c698c827580c613731b695e1e4e6e661"
+    },
+    "load_skill": {
+      "status": "SUCCESS",
+      "execution_state": "executed",
+      "source_revision": "7c028c26558af63f8e269257a3573bdec7ed56cf",
+      "completed_at": "2026-10-28T19:10:34.101Z",
+      "input_sha256": "a9d6f7ac82337bd8aadf705daaae7e9ae403166e163693c802a36edb1dbf7cb0",
+      "output_sha256": "098b150adc9df8f2ff515dfa1c5fea2c8328f4abdfeda4985f47d8d5ec3069b1"
+    }
+  },
+  "evaluator": "isolated agent; received inputs only and did not inspect repository fixtures, implementation or expected outcomes",
+  "cases": [
+    {
+      "id": "market-reconciliation-golden",
+      "outcome": "PASS",
+      "observed": "Kept top-down TAM 1000 and bottom-up TAM 1200 distinct with a +200 difference; segment SAM/SOM were SMB 50/10 and enterprise 50/5; total SAM 100, served 20, uncovered serviceable value 80; validated whitespace unknown without separate unmet-demand evidence."
+    },
+    {
+      "id": "market-whitespace-needs-demand-evidence",
+      "outcome": "PASS",
+      "observed": "Reported segment SAM 100 and served 20, described residual 80 as uncovered serviceable value, and left validated whitespace unproven."
+    },
+    {
+      "id": "market-missing-source-negative",
+      "outcome": "PASS",
+      "observed": "Did not estimate TAM without sourced market evidence; requested dated sources, as-of date and currency."
+    },
+    {
+      "id": "market-no-segment-near-miss",
+      "outcome": "PASS",
+      "observed": "Left segment sizing unknown without needs and shares; requested missing evidence rather than fabricating shares."
+    },
+    {
+      "id": "market-transferability-adversarial",
+      "outcome": "PASS",
+      "observed": "Rejected direct transfer of a European market share to another geography without local evidence."
+    },
+    {
+      "id": "market-future-source-regression",
+      "outcome": "PASS",
+      "observed": "Rejected evidence published after the historical as-of date."
+    },
+    {
+      "id": "market-competitor-near-miss",
+      "outcome": "PASS",
+      "observed": "Routed competitor positioning outside market-sizing arithmetic to the canonical competitive-intelligence capability."
+    },
+    {
+      "id": "market-research-near-miss",
+      "outcome": "PASS",
+      "observed": "Allowed an evidence-bound qualitative trend summary without inventing TAM or segment shares."
+    }
+  ],
+  "execution_boundary": {
+    "behavioral_cases": "8/8 PASS as independent host-model interpretation of the exact loaded Site instructions",
+    "engine_py": "NOT_EXECUTED_BY_SITE_MCP",
+    "engine_reason": "load_skill reports supporting_code_execution as not_executed; Site MCP exposes no code runner",
+    "deterministic_engine_validation": "Local unit tests and repository CI passed; this record does not claim that the Site MCP executed engine.py or signed each host response."
+  }
+}
