@@ -8,6 +8,23 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "f12c1e0b0a2280c5137647dac2783de9ccc2fc8486953f2e6739948fa6827be9",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "accessibility-gate",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -246,6 +263,23 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "dfc76bfe2fe1ee3bb85d9405e3b8b6d94261801349a245dba8d3c9369ddabd4d",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "design-critique",
+      "version": "0.1.1"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -305,6 +339,40 @@
         },
         "status": "UNASSESSED"
       },
+      "content_sha256": "dba17908539d2cbee7b02075b819cdf909d15b25cd8df4366d89705a2a6dfca1",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "experience-design-routing",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "a32c2f8810a24101660e4c74cd95aa0edb5fb6e203c13c57d7848dea1dee12d9",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "financial-modeling",
+      "version": "0.1.1"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
       "content_sha256": "5077d1c71e2eea87204bf6ee958571f45ea5f5ee82e58875104fa9bcf6b85549",
       "kind": "skill",
       "maturity": "production",
@@ -331,6 +399,23 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "a53de3f8f679d598aaf11bb133536a8a3d7390e718009f1d2ff4453773ed2e7b",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "historical-decision-replay",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "none",
           "external_actions": "none",
           "filesystem": "none",
@@ -339,11 +424,28 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "ef2faebe579b272a547abb24d87b9769bfd39eba452b4b192efe8e8f61418d36",
+      "content_sha256": "9f9c450df51c3bedc7dc06a38205f80d017c274b35b6cf2f22296042347d23f8",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "implementation-brief",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "e902c3af4f4ac41f440beb8fa15080e894a6c37beb78470f191cb63eac5c38de",
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.0"
+      "version": "0.1.3"
     },
     {
       "capability_assessment": {
@@ -390,11 +492,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "f1af1d3823b5a390d72013289462b92cc6d7db35f58fc2f3f1c753e0860d55ea",
+      "content_sha256": "233c03023436ff36a288a0ef0772fcef7c22929f836469b57dbd5b5af7447fcf",
       "kind": "skill",
       "maturity": "production",
       "name": "investment-attention-triage",
-      "version": "0.2.3"
+      "version": "0.2.4"
     },
     {
       "capability_assessment": {
@@ -458,7 +560,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "06617f850db45ee49a28cc1f301fbfc6cca46f44ec6258f4bb65ea8990d3ae72",
+      "content_sha256": "5dd34775b7c3c9e86d6689021a52be214e66bbb1c337b1a6ac585785b499321b",
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-portfolio-observation",
@@ -603,6 +705,23 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "31b04fd24741b6a98d9a3030d22489f5acaf755c5a6594cf308f31a3e93290ab",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "market-economics",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "named_classes",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -611,11 +730,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "daa0de9a50a173f243a00a62664148a8e93988e748b6af2f5b4464f6f4c2f381",
+      "content_sha256": "f71dad88ecdf83559eec7927202f303481109777cc1f31b70089e16261585dca",
       "kind": "skill",
       "maturity": "production",
       "name": "market-opportunity-scan",
-      "version": "0.3.1"
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -832,11 +951,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "444d9aa46e79463df073b764fd5d24405acfc09f64cc7d23c7410f871aab848e",
+      "content_sha256": "d1ff373545ebbf2a907f0d69455c15e75460138664435fbe4c95ac87a878edf5",
       "kind": "skill",
       "maturity": "production",
       "name": "portfolio-state-review",
-      "version": "0.7.1"
+      "version": "0.7.2"
     },
     {
       "capability_assessment": {
@@ -1283,6 +1402,23 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "fc8de96cb44b74a068a58df7ab68d38fb193554d094a6a6ff2df506b3ac57102",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "strategy-economics",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -1313,6 +1449,23 @@
       "maturity": "production",
       "name": "supplier-viability-review",
       "version": "1.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "ed93fdeba1977a7ef74b6063de12f934f141a3b2667072054d5f82c11a1348d0",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "technical-structure",
+      "version": "0.1.0"
     },
     {
       "capability_assessment": {
@@ -1419,6 +1572,23 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "9944e1a029f266d3db31f813d223dc05f1dc34949e66a8aa4924b777d5cbb7b1",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "value-realization",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -1432,12 +1602,29 @@
       "maturity": "candidate",
       "name": "visual-output-design",
       "version": "0.13.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "7a224bbaee800620b886bc9f70178b98e15f31b1ecb9c83a1359f843f39589ff",
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "visual-regression-review",
+      "version": "0.1.0"
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "d79b146627f7356e2b4ccd5eac7495fa29ca808202c3d4aff47c7cfe66cdb9f6",
-  "release_id": "1.38.366+63b9c002c7e6",
+  "payload_content_sha256": "3d4c9a938de99a621d1e4140f044dd9044f6fd0965eacce86b04c98bc26ed3d3",
+  "release_id": "1.38.388+c3f5144399c0",
   "schema_version": "1.0",
-  "source_revision": "63b9c002c7e672bb2999cca79cb7fae88b1e7260",
-  "version": "1.38.366"
+  "source_revision": "c3f5144399c00af432c578685e5419534649b4d0",
+  "version": "1.38.388"
 }
