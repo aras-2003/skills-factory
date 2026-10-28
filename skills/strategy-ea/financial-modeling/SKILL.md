@@ -3,10 +3,10 @@ name: financial-modeling
 description: Run deterministic, evidence-bound NPV, DCF, IRR, payback, scenario and sensitivity calculations from explicit supplied inputs.
 metadata:
   owner: skills-factory
-  version: 0.1.0
+  version: 0.1.1
   maturity: candidate
   risk: high
-  last_reviewed: '2026-10-27'
+  last_reviewed: '2026-10-28'
 ---
 
 # Financial Modeling
@@ -16,6 +16,11 @@ Calculate a declared financial model reproducibly. Separate model architecture a
 
 ## Inputs and evidence
 Require one currency, an `as_of` date, explicit equally spaced periods, cash flows including period zero, and a discount rate. Every numeric assumption, including sensitivity values and scenario weights, must carry `source_id` and `published_at` no later than `as_of`. Reject ambiguous period conventions, gaps, future-dated evidence, and missing provenance. Do not silently substitute a tax rate, discount rate, forecast, terminal growth, or scenario weight.
+
+## Required pre-calculation gate
+Before any arithmetic, require the complete input contract above. If currency, as-of date, source IDs, publication dates, or period conventions are missing or invalid, stop with `BLOCKED_INPUT_CONTRACT`, name the missing fields, and request them. Return no computed value, discounted cash-flow table, numeric demonstration, or partial financial result.
+
+This gate also applies to synthetic, educational, illustrative, and user-supplied numbers. Calling a result “arithmetic only”, “unverified”, or `MODEL_INPUT_INCOMPLETE` does not permit calculating it. Do not calculate first and add a disclaimer afterward. If the host cannot run `engine.py`, report that execution is unavailable rather than silently replacing it with mental arithmetic.
 
 ## Procedure
 1. Freeze the question, model boundary, currency, period convention, and as-of date.
