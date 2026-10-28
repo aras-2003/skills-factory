@@ -101,4 +101,16 @@ Candidate identity was read from the live Site immediately before this run: cano
 | ID-CLARIFY-SITE-v56 | “Make the screen better.” | 1 | FAIL | Asked for a screenshot but also supplied a generic improvement checklist before screen, task, and target runtime were identified. https://chatgpt.com/c/6ae07fed-a8f0-83eb-9a04-13f6cc675e69 |
 | ID-ACCESSIBILITY-SITE-v56 | Billing permission and unavailable-data edge | 1 | PASS | Distinguished permission denial from confirmed empty, request error and unavailable states; gave accessible recovery guidance and desktop/mobile behavior without exposing billing data. https://chatgpt.com/c/6ae0801c-36a4-83eb-afd4-b6f34096ab53 |
 
-The v0.1.2 checks add three behavioral failures and one pass. Iteration 06 remains active. The scoped v0.1.3 candidate addresses clarification-only gating, product-evidence boundaries and explicit failure paths; it requires a new Site identity lock and fresh behavioral retests before acceptance.
+The v0.1.2 checks add three behavioral failures and one pass. Iteration 06 remains active. The v0.1.3 candidate addressed clarification-only gating, product-evidence boundaries and explicit failure paths, but Site 69 testing found an additional conflict: a user who explicitly authorizes placeholders still receives a clarification question. A scoped v0.1.4 candidate now permits labelled assumptions only for that explicit authorization, while retaining the clarification-only gate for vague requests. It requires a new Site identity lock and fresh behavioral retests before acceptance.
+
+## Site 69 isolated checks — 2026-10-28
+
+Site identity was verified through `runtime_info`: canonical SHA `e8471eecd51fbfa6d4d8429a5434eaac613afb34`, Lab `1.38.392`, attestation `verified`. `load_skill(interface-design)` returned v0.1.3, content SHA-256 `5e9231cc36b1ac13e4cb05160ba0a74e08250846d5c483f935c559ad3d7c0c7f`; this is not the v0.1.4 candidate.
+
+| Check | Result | Evidence boundary |
+| --- | --- | --- |
+| Explicit placeholders for unknown order data/rules/platform | FAIL | Loaded skill asked for user/task context instead of honoring the current request's explicit authorization to use assumptions/placeholders. No data was invented. Isolated agent-host behavior check; tool call receipt is a load receipt, not a signed response receipt. |
+| Report/architecture-diagram near-miss | PASS | Stayed with report/diagram intent; no interface-design substitution. |
+| Implementation/visual-regression near-miss | PASS | Did not claim implementation or tests; asked for the missing approved design/repository. |
+
+The local v0.1.4 source is pinned in `campaign.yaml` and adds `interface-design-explicit-placeholder-positive`. These checks do not test that candidate, and the campaign remains active pending publication and fresh repetitions.
