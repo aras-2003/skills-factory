@@ -340,6 +340,16 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "creative-generation",
+      "domain": "media",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Generate or revise a locally requested image or video with an explicitly configured on-device ComfyUI instance and reviewed open-weight checkpoints. Use when the user asks for creative media output; do not use paid inference, hosted services, or untrusted workflows.",
+      "source": "skills/media/creative-generation/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
       "name": "report-composer",
       "domain": "meta",
       "maturity": "candidate",

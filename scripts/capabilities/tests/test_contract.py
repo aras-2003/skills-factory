@@ -90,6 +90,7 @@ class CapabilityContractTests(unittest.TestCase):
                 "financial-modeling",
                 "value-realization",
                 "seo-research",
+                "creative-generation",
             },
             declared,
         )

@@ -144,6 +144,10 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/seo/seo-research/SKILL.md",
             "skills/seo/seo-research/references/open-seo-mcp-contract.md",
             "skills/seo/seo-research/tests/cases.yaml",
+            "skills/media/creative-generation/SKILL.md",
+            "skills/media/creative-generation/references/decision-and-setup.md",
+            "skills/media/creative-generation/references/local-engine-matrix.md",
+            "skills/media/creative-generation/scripts/comfyui_local.py",
         }
         self.assertEqual(expected, campaign.separately_validated_unassigned_candidate_paths(ROOT))
         self.assertEqual([], campaign.validate_campaign())

@@ -24,6 +24,15 @@ component_declarations:
       shell_exec: unassessed
       credentials: unassessed
       external_actions: unassessed
+  creative-generation:
+    source: skills/media/creative-generation/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: write
+      filesystem: write
+      shell_exec: required
+      credentials: none
+      external_actions: none
   presentation-production:
     source: workflows/presentation-production/WORKFLOW.md
     review_state: STATIC_PARTIAL

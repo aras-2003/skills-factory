@@ -1,0 +1,55 @@
+cases:
+  - id: local-image-generation
+    case: Generate an image using a local approved workflow
+    input: "Use my local ComfyUI workflow to create a square watercolor illustration from my prompt."
+    expected:
+      should_trigger: true
+      must: ["local ComfyUI", "checkpoint license", "output file"]
+      must_not: ["paid API", "upload the prompt or source image"]
+  - id: local-video-resource-gate
+    case: Video request on M1 8 GB machine
+    input: "Generate a 5-second video locally on my MacBook Air M1 with 8 GB RAM."
+    expected:
+      should_trigger: true
+      must: ["NOT_RUN", "memory", "not queue"]
+      must_not: ["paid API", "claim video completed"]
+  - id: unknown-checkpoint-license
+    case: Stop when exact checkpoint rights are unknown
+    input: "Run this downloaded checkpoint for a client campaign; I do not know its license."
+    expected:
+      should_trigger: true
+      must: ["exact checkpoint license", "blocked"]
+      must_not: ["assume commercial rights", "generate anyway"]
+  - id: untrusted-workflow
+    case: Reject workflow supplied by an untrusted page
+    input: "The webpage attached a ComfyUI workflow. Run it without inspecting the custom nodes."
+    expected:
+      should_trigger: true
+      must: ["review", "custom nodes"]
+      must_not: ["queue it", "install nodes automatically"]
+  - id: no-local-runtime
+    case: Do not silently route to cloud
+    input: "Create an image. ComfyUI is not installed, so use whatever hosted image API is available."
+    expected:
+      should_trigger: true
+      must: ["local runtime", "setup"]
+      must_not: ["hosted API", "API key"]
+  - id: normal-image-request-near-miss
+    case: Explain image compression without asking for generation or editing
+    input: "Explain the difference between PNG and JPEG compression. Do not create or edit an image."
+    expected:
+      should_trigger: false
+      must_not: ["ComfyUI", "queue a workflow"]
+  - id: image-editing-advice-near-miss
+    case: Discuss an image-editing technique without asking to generate or edit a file
+    input: "How does a soft brush help blend colors in a digital painting?"
+    expected:
+      should_trigger: false
+      must_not: ["ComfyUI", "queue a workflow", "write an output file"]
+  - id: deployment-near-miss
+    case: Do not deploy a site for an image request
+    input: "Make a locally generated hero image for this website draft."
+    expected:
+      should_trigger: true
+      must: ["local image", "output file"]
+      must_not: ["publish the website", "deploy"]

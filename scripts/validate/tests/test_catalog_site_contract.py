@@ -232,7 +232,7 @@ lab:
     def test_web_design_candidate_has_a_local_domain_label_and_icon(self) -> None:
         page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
         icon = ROOT / "docs/assets/web-design.svg"
-        self.assertIn('web-design:"Projektowanie interfejsów"', page)
+        self.assertIn('"web-design":"Projektowanie interfejsów"', page)
         self.assertIn('.icon-web-design{background-image:url("./assets/web-design.svg")', page)
         self.assertTrue(icon.is_file())
         self.assertIn("<svg", icon.read_text(encoding="utf-8"))
@@ -242,6 +242,14 @@ lab:
         icon = ROOT / "docs/assets/seo.svg"
         self.assertIn('seo:"Widoczność w wyszukiwarkach"', page)
         self.assertIn('.icon-seo{background-image:url("./assets/seo.svg")', page)
+    def test_media_candidate_has_a_local_domain_label_and_icon(self) -> None:
+        page = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+        icon = ROOT / "docs/assets/media.svg"
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        skill = next(item for item in catalog["skills"] if item["name"] == "creative-generation")
+        self.assertIn('media:"Obraz i wideo"', page)
+        self.assertIn('.icon-media{background-image:url("./assets/media.svg")', page)
+        self.assertEqual(("media", "candidate"), (skill["domain"], skill["maturity"]))
         self.assertTrue(icon.is_file())
         self.assertIn("<svg", icon.read_text(encoding="utf-8"))
 

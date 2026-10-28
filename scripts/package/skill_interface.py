@@ -9,6 +9,7 @@ DOMAIN_COLORS = {
     "career": "#FFD18A",
     "commerce": "#FF8B72",
     "investing": "#9588F7",
+    "media": "#F08FA3",
     "meta": "#94D4B3",
     "oaf": "#83A9FF",
     "presentations": "#F0C982",
