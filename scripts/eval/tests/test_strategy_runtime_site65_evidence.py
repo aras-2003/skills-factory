@@ -3,21 +3,25 @@ import hashlib, json, zipfile, unittest
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = ROOT / "evals/results/strategy-runtime-site65-2026-10.zip"
-EXPECTED_BUNDLE_SHA256 = "84b77f2e2d1dbc4c12938c1b17fd2b3e61284b06dca08e95bdf4c48aef86eb38"
+EXPECTED_BUNDLE_SHA256 = "96468249dbae2d62c0e9422a81764362e8fa9794f652cc5c244f40bc8ca7b2ec"
 class StrategyRuntimeEvidenceTests(unittest.TestCase):
     def test_bundle_hash_and_all_nested_file_manifests(self):
         self.assertEqual(EXPECTED_BUNDLE_SHA256, hashlib.sha256(BUNDLE.read_bytes()).hexdigest())
         with zipfile.ZipFile(BUNDLE) as archive:
             market=json.loads(archive.read("agent-market-sizing/manifest.json"))
+            corrected=json.loads(archive.read("agent-market-sizing/manifest.integrity-corrected.json"))
+            self.assertEqual("988a53b89a5d73aba496bd250b65ad5702c061faa4394e7f72e709431b87998c",hashlib.sha256(archive.read("agent-market-sizing/manifest.integrity-corrected.json")).hexdigest())
+            self.assertEqual(7,len(corrected["cases"]))
             self.assertEqual(7,len(market["cases"]))
             self.assertEqual("bb49685a42fc944815ff0f36759821e2b5667469d8f13fc67db34ec589ee8696",market["skill"]["content_sha256"])
-            for case in market["cases"]:
-                receipt=json.loads(archive.read(f"agent-market-sizing/{case['case_id']}/receipt.json"))
-                self.assertEqual(case["input_sha256"],receipt["input_sha256"])
-                self.assertEqual(case["host_response_sha256"],receipt["host_response_sha256"])
+            for case in corrected["cases"]:
                 root=f"agent-market-sizing/{case['case_id']}/"
-                self.assertEqual(case["input_sha256"],hashlib.sha256(archive.read(root+"input.prompt.txt")).hexdigest())
-                self.assertEqual(case["host_response_sha256"],hashlib.sha256(archive.read(root+"host_response.txt")).hexdigest())
+                self.assertEqual(case["input_file_sha256"],hashlib.sha256(archive.read(root+case["input_file"])).hexdigest())
+                self.assertEqual(case["host_response_sha256"],hashlib.sha256(archive.read(root+case["host_response_file"])).hexdigest())
+                receipt=json.loads(archive.read(root+case["corrected_receipt_file"]))
+                self.assertEqual(case["input_file_sha256"],receipt["input_sha256"])
+                self.assertEqual(case["host_response_sha256"],receipt["host_response_sha256"])
+                self.assertEqual(case["corrected_receipt_sha256"],hashlib.sha256(archive.read(root+case["corrected_receipt_file"])).hexdigest())
             value=json.loads(archive.read("agent-value-realization/manifest.json"))
             for item in value["files"]:
                 self.assertEqual(item["sha256"],hashlib.sha256(archive.read(f"agent-value-realization/{item['path']}")).hexdigest(),item["path"])
