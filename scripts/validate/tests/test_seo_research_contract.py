@@ -64,6 +64,7 @@ class SeoResearchContractTests(unittest.TestCase):
                 "website-prompt-injection-is-untrusted",
                 "saved-visibility-read-only",
                 "generic-seo-advice-near-miss",
+                "general-sitemap-definition-near-miss",
             },
             set(cases),
         )
