@@ -16,6 +16,9 @@ out_of_scope_behavior_paths:
   - skills/strategy-ea/strategy-economics/engine.py
   - skills/strategy-ea/value-realization/SKILL.md
   - skills/strategy-ea/value-realization/engine.py
+  - skills/seo/seo-research/SKILL.md
+  - skills/seo/seo-research/references/open-seo-mcp-contract.md
+  - skills/seo/seo-research/tests/cases.yaml
 source_sha256:
   skills/investing/historical-decision-replay/SKILL.md: 06382d99ea7168fd5576c6b376b720002135213faf2a1f6a1cbc31f015e7955e
   skills/investing/historical-decision-replay/scripts/engine.py: 9e2d54c7e39178b9805a4cb368249c1e9cc8a3d3d3889bbafecdb7a96e7114f1
@@ -30,6 +33,9 @@ source_sha256:
   skills/strategy-ea/strategy-economics/engine.py: 02ec781743c4dcb660dd14b3ce129f2b8a43a7f7642b51bcd2433b181c5b6b6c
   skills/strategy-ea/value-realization/SKILL.md: 056c3e0205faf1eaa376c39133f57a051aab1bf42e00d8276a8f5b3f2d45b79e
   skills/strategy-ea/value-realization/engine.py: 031fedc9707b1ca5267bbbbd30f096063b7c40446181ce1cb4a3a3372863f601
+  skills/seo/seo-research/SKILL.md: baf11019b1cbe24848c05400bddde8cd6e6be70e924c18d81c2ea1936e70cfeb
+  skills/seo/seo-research/references/open-seo-mcp-contract.md: c257d88c300c2157ea2c42731c54d9573e005f37de7f9687f169f946089e7ef7
+  skills/seo/seo-research/tests/cases.yaml: bf4948b5b871e701b462055ae56a6a914db6d91275c9e8959e4c97debb1ec488
 case_suites:
   historical-decision-replay: skills/investing/historical-decision-replay/tests/cases.yaml
   technical-structure: skills/investing/technical-structure/tests/cases.yaml
@@ -38,6 +44,7 @@ case_suites:
   market-economics: skills/strategy-ea/market-economics/tests/cases.yaml
   strategy-economics: skills/strategy-ea/strategy-economics/tests/cases.yaml
   value-realization: skills/strategy-ea/value-realization/tests/cases.yaml
+  seo-research: skills/seo/seo-research/tests/cases.yaml
 test_modules:
   - skills/investing/historical-decision-replay/tests/test_engine.py
   - skills/investing/technical-structure/tests/test_engine.py
@@ -46,3 +53,4 @@ test_modules:
   - skills/strategy-ea/market-economics/tests/test_engine.py
   - skills/strategy-ea/strategy-economics/tests/test_engine.py
   - skills/strategy-ea/value-realization/tests/test_engine.py
+  - scripts/validate/tests/test_seo_research_contract.py
