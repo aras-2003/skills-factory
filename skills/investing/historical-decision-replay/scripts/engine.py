@@ -5,6 +5,10 @@ from decimal import Decimal, InvalidOperation
 import re
 
 
+REQUIRED_SNAPSHOT_DOMAINS = ("decision", "thesis", "policy", "portfolio", "market")
+_SHA256_RE = re.compile(r"[0-9a-f]{64}")
+
+
 class ReplayInputError(ValueError):
     pass
 
@@ -34,6 +38,28 @@ def validate_information_set(decision_at, inputs):
             raise ReplayInputError("future observation cannot enter a decision")
         eligible.append(dict(item))
     return eligible
+
+
+def validate_snapshot_manifest(decision_at, snapshots):
+    """Validate dated references; this does not authenticate external archives."""
+    cutoff = _time(decision_at)
+    if not isinstance(snapshots, dict) or any(
+        not isinstance(snapshots.get(domain), dict) for domain in REQUIRED_SNAPSHOT_DOMAINS
+    ):
+        return False
+    for domain in REQUIRED_SNAPSHOT_DOMAINS:
+        snapshot = snapshots[domain]
+        for field in ("snapshot_id", "source_id"):
+            if not isinstance(snapshot.get(field), str) or not snapshot[field].strip():
+                raise ReplayInputError(f"{domain} snapshot needs a {field}")
+        digest = snapshot.get("content_sha256")
+        if not isinstance(digest, str) or not _SHA256_RE.fullmatch(digest):
+            raise ReplayInputError(f"{domain} snapshot needs a lowercase SHA-256 content digest")
+        if _time(snapshot.get("published_at")) > cutoff:
+            raise ReplayInputError(f"future-published {domain} snapshot cannot enter a decision")
+        if _time(snapshot.get("observed_at")) > cutoff:
+            raise ReplayInputError(f"future-observed {domain} snapshot cannot enter a decision")
+    return True
 
 
 def net_return(entry, exit_, fee_bps, slippage_bps):
@@ -153,6 +179,12 @@ def evaluate_replay(rows, *, rule_id, rule_revision, rule_frozen_at,
     """
     if not isinstance(rows, list) or not rows:
         return {"status": "BLOCKED_NO_OBSERVATIONS", "n": 0}
+    # Missing historical state is a blocking condition, not an invitation to
+    # reconstruct from current records. Check the complete sample before metrics.
+    if any(not isinstance(row, dict) or not validate_snapshot_manifest(
+        row.get("decision_at"), row.get("snapshots")
+    ) for row in rows):
+        return {"status": "BLOCKED_MISSING_SNAPSHOT", "n": len(rows)}
     if fee_bps is None or slippage_bps is None:
         return {"status": "BLOCKED_MISSING_COSTS", "n": len(rows)}
     if not isinstance(rule_id, str) or not rule_id.strip() or not isinstance(rule_revision, str) or not re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64})", rule_revision):
