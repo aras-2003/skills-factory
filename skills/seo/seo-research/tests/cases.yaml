@@ -76,6 +76,16 @@ cases:
         - "Start a new AI visibility check."
         - "Change schedules or tracker configuration."
 
+  - id: general-sitemap-definition-near-miss
+    case: General SEO terminology is not account-specific research
+    input: "Explain what a sitemap is in general; do not inspect or analyze my site."
+    setup: "No account-specific research or OpenSEO operation was requested."
+    expected:
+      should_trigger: false
+      must_not:
+        - "Call any OpenSEO tool."
+        - "Claim to have inspected the site."
+
   - id: generic-seo-advice-near-miss
     case: Generic explanation is out of scope
     input: "What is a canonical URL?"
