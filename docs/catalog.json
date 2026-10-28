@@ -680,6 +680,16 @@
       "capability_assessment": "UNASSESSED"
     },
     {
+      "name": "seo-research",
+      "domain": "seo",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Use when the user requests evidence-backed SEO research about their own website, keywords, organic visibility, or AI-search visibility through an explicitly connected OpenSEO MCP. Require a configured connection and explicit approval before any credit-consuming call; do not use for generic SEO advice or when the OpenSEO project and target site do not match.",
+      "source": "skills/seo/seo-research/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
       "name": "financial-modeling",
       "domain": "strategy-ea",
       "maturity": "candidate",
