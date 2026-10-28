@@ -1,0 +1,69 @@
+{
+  "campaign": "financial-modeling-2026-10",
+  "candidate": {
+    "name": "financial-modeling",
+    "version": "0.1.1",
+    "site_mirror_sha": "c098184124770037780f7fbbce318297191f3ba3",
+    "canonical_source_sha": "ad9c7305d22d4ac276bf2762207a79b081888730",
+    "site_version": "64",
+    "lab_version": "1.38.387"
+  },
+  "executor_model": "gpt-6-luna",
+  "surface": "isolated Codex agent executor using current Site Cloud Next MCP; results independently reviewed",
+  "cases": [
+    {
+      "case_id": "finance-npv-golden",
+      "result": "PASS",
+      "executor_output": "finance-npv-golden.output.md",
+      "output_sha256": "654a1e33ab0dcfb10ab11686d17b1ceea28f2590b3eb0ba33f1c03ee75a499da",
+      "evaluator_note": "Executed the exact UTF-8 engine.py returned in the Site load_skill response (SHA 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769); exit 0; NPV 4.13 USD; period zero undiscounted; all dates and source IDs supplied."
+    },
+    {
+      "case_id": "finance-provenance-negative",
+      "result": "PASS",
+      "executor_output": "finance-provenance-negative.output.md",
+      "output_sha256": "3bd3b0544a62ffe1fe6547755ece93a02c87bbcd1e70e1c69dfa6938fa27481f",
+      "evaluator_note": "BLOCKED_INPUT_CONTRACT before arithmetic; asks currency, as-of, source IDs and publication dates; no NPV. Independent repeat in finance-provenance-negative-repeat.output.md gives the same gate."
+    },
+    {
+      "case_id": "finance-lookahead-adversarial",
+      "result": "PASS",
+      "executor_output": "finance-lookahead-adversarial.output.md",
+      "output_sha256": "22bd05a3d039d4bad72aa6cdefe0ed6ddf84d19e5c741629cffab6837661de6c",
+      "evaluator_note": "Identifies future-dated evidence as inadmissible, blocks missing DCF input contract, and performs no calculation."
+    },
+    {
+      "case_id": "finance-scenario-weights-regression",
+      "result": "PASS",
+      "executor_output": "finance-scenario-weights-regression.output.md",
+      "output_sha256": "e151a5d7cd09c53aa3122285f3a52254d9f7569ed2071fd6cdebecd1e7c9f641",
+      "evaluator_note": "Rejects weights summing to 0.9, requests corrected weights/omitted scenario and provenance, and returns no combined value."
+    },
+    {
+      "case_id": "finance-near-miss-report-format",
+      "result": "PASS",
+      "executor_output": "finance-near-miss-report-format.output.md",
+      "output_sha256": "ddfd716239b6ebf9f029ac4fbb9897d81599efae6dd781f3bad0fcccf28e7d6a",
+      "evaluator_note": "Treats visual report formatting as an editing request, asks for the report, and does not invoke financial modeling or calculate values."
+    }
+  ],
+  "supplemental_repeat": {
+    "case_id": "finance-provenance-negative",
+    "executor_output": "finance-provenance-negative-repeat.output.md",
+    "output_sha256": "12da78e9220355cb23cba0d8b60193d0578a31d0369efd1201533fa1d2fcab00"
+  },
+  "engine_execution": {
+    "exact_mcp_reference_file": "engine.py",
+    "engine_sha256": "90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769",
+    "expected_source_sha256": "90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769",
+    "exit_code": 0,
+    "npv": "4.13",
+    "currency": "USD"
+  },
+  "limitations": [
+    "Single isolated-agent runtime surface only; no mobile, other host, or cross-session parity claim.",
+    "The engine suite and behavioral campaign use synthetic test data only; no business forecast claim.",
+    "release_approved remains false pending the repository release-review gate."
+  ],
+  "campaign_verdict": "PASS for all five required runtime cases; release_approved=false pending separate release review."
+}

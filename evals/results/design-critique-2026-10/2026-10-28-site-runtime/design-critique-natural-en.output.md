@@ -1,0 +1,1 @@
+I don’t see a screenshot attached. Please upload the dashboard screenshot and tell me who uses it and what they’re trying to do; then I can give prioritized, evidence-based findings.

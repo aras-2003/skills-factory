@@ -1,0 +1,7 @@
+{
+  "skill": "financial-modeling",
+  "version": "0.1.1",
+  "status": "BLOCKED_INPUT_CONTRACT",
+  "engine_executed": false,
+  "reason": "Required pre-calculation gate: currency, as_of, source IDs and publication dates missing."
+}

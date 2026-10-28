@@ -683,7 +683,7 @@
       "name": "financial-modeling",
       "domain": "strategy-ea",
       "maturity": "candidate",
-      "version": "0.1.1",
+      "version": "0.1.0",
       "description": "Run deterministic, evidence-bound NPV, DCF, IRR, payback, scenario and sensitivity calculations from explicit supplied inputs.",
       "source": "skills/strategy-ea/financial-modeling/SKILL.md",
       "source_status": "present",

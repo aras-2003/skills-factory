@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import json
 import re
 import unittest
 from pathlib import Path
@@ -11,10 +12,11 @@ SOURCE = ROOT / "skills/strategy-ea/financial-modeling"
 
 
 class FinancialModelingCoverageTests(unittest.TestCase):
-    def test_candidate_source_and_behavior_suite_are_hash_pinned_not_run(self):
+    def test_candidate_source_and_behavior_suite_are_hash_pinned_and_runtime_verified(self):
         campaign = (ROOT / "evals/campaigns/financial-modeling-2026-10/campaign.yaml").read_text()
         self.assertIn("campaign: financial-modeling-2026-10", campaign)
-        self.assertIn("runtime_status: NOT_RUN", campaign)
+        self.assertIn("runtime_status: PASS", campaign)
+        self.assertIn("result_record: evals/results/financial-modeling-2026-10/2026-10-28-site-runtime/run.json", campaign)
         self.assertIn("release_approved: false", campaign)
         self.assertIn("provenance_status: VERIFIED_SOURCE_CORPUS", campaign)
         pins = dict(re.findall(r"^  (skills/strategy-ea/financial-modeling/[^:]+): ([a-f0-9]{64})$", campaign, re.M))
@@ -26,6 +28,26 @@ class FinancialModelingCoverageTests(unittest.TestCase):
         self.assertEqual(expected, set(pins))
         for relative, digest in pins.items():
             self.assertEqual(digest, hashlib.sha256((ROOT / relative).read_bytes()).hexdigest())
+
+    def test_runtime_campaign_record_covers_all_required_cases_and_output_hashes(self):
+        campaign = (ROOT / "evals/campaigns/financial-modeling-2026-10/campaign.yaml").read_text()
+        result_record = re.search(r"^result_record: (\S+)$", campaign, re.M)
+        self.assertIsNotNone(result_record)
+        report_path = ROOT / result_record.group(1)
+        report = json.loads(report_path.read_text())
+        required_block = campaign.split("required_case_ids:", 1)[1].split("test_modules:", 1)[0]
+        required = set(re.findall(r"^  - ([a-z0-9-]+)$", required_block, re.M))
+        recorded = {item["case_id"]: item for item in report["cases"]}
+        self.assertEqual(required, set(recorded))
+        self.assertTrue(all(item["result"] == "PASS" for item in recorded.values()))
+        for item in recorded.values():
+            output = report_path.parent / item["executor_output"]
+            self.assertEqual(item["output_sha256"], hashlib.sha256(output.read_bytes()).hexdigest())
+        engine = report_path.parent / report["engine_execution"]["exact_mcp_reference_file"]
+        self.assertEqual(report["engine_execution"]["engine_sha256"], hashlib.sha256(engine.read_bytes()).hexdigest())
+        self.assertEqual(report["engine_execution"]["expected_source_sha256"], hashlib.sha256((SOURCE / "engine.py").read_bytes()).hexdigest())
+        self.assertEqual(0, report["engine_execution"]["exit_code"])
+        self.assertEqual("4.13", report["engine_execution"]["npv"])
 
     def test_case_suite_contains_golden_negative_adversarial_regression(self):
         cases = (SOURCE / "tests/cases.yaml").read_text()

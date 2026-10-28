@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "/private/tmp/skills-factory-acceptance-20261028/agent-financial-complete/engine.py",
+    "/private/tmp/skills-factory-acceptance-20261028/agent-financial-complete/input.json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\n  \"as_of\": \"2026-01-31\",\n  \"assumption_status\": \"USER_OR_EVIDENCE_SUPPLIED\",\n  \"cash_flows\": [\n    {\n      \"period\": 0,\n      \"published_at\": \"2026-01-01\",\n      \"source_id\": \"initial-investment\",\n      \"value\": \"-100\"\n    },\n    {\n      \"period\": 1,\n      \"published_at\": \"2026-01-01\",\n      \"source_id\": \"year-1-cash-flow\",\n      \"value\": \"60\"\n    },\n    {\n      \"period\": 2,\n      \"published_at\": \"2026-01-01\",\n      \"source_id\": \"year-2-cash-flow\",\n      \"value\": \"60\"\n    }\n  ],\n  \"currency\": \"USD\",\n  \"discount_rate\": {\n    \"published_at\": \"2026-01-01\",\n    \"source_id\": \"approved-wacc\",\n    \"value\": \"0.10\"\n  },\n  \"discounted_payback_periods\": \"1.916666666666666666666666666\",\n  \"irr\": \"0.1306623862921208722127630608156323432923\",\n  \"npv\": \"4.13\",\n  \"period_convention\": \"equally spaced periods; period 0 is undiscounted\",\n  \"risk_adjusted_value\": null,\n  \"simple_payback_periods\": \"1.666666666666666666666666667\",\n  \"source_ids\": [\n    \"approved-wacc\",\n    \"initial-investment\",\n    \"year-1-cash-flow\",\n    \"year-2-cash-flow\"\n  ],\n  \"statistical_or_outcome_probability_claimed\": false,\n  \"status\": \"CALCULATED\",\n  \"terminal_value\": null\n}\n",
+  "stderr": "",
+  "engine_sha256": "90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769"
+}

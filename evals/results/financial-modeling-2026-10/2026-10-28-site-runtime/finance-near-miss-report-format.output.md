@@ -1,0 +1,1 @@
+Please upload the strategy report or paste its contents. I’ll improve its layout, typography, spacing, headings, and table formatting while preserving all financial figures, formulas, and calculations.

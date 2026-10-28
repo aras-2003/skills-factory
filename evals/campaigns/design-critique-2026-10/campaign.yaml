@@ -1,8 +1,9 @@
 schema_version: "1.0"
 campaign: design-critique-2026-10
 purpose: isolated-source-and-runtime-handoff-for-design-critique-candidate
-runtime_status: NOT_RUN
+runtime_status: PASS
 release_approved: false
+result_record: evals/results/design-critique-2026-10/2026-10-28-site-runtime/run.json
 out_of_scope_behavior_paths:
   - skills/web-design/design-critique/SKILL.md
 candidate_skill:
