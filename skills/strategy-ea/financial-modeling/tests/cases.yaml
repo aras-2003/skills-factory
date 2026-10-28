@@ -40,12 +40,12 @@ cases:
       must_not: ["claim this is a forecast probability"]
       output: {npv: "4.13", currency: "USD"}
   - id: finance-provenance-negative
-    case: Missing source evidence
-    input: "Calculate an NPV from cash flows with no source IDs or publication dates."
+    case: Synthetic arithmetic still requires provenance
+    input: "Using cash flows [-100, 60, 60] and a 10% per-period discount rate, calculate NPV and keep period zero undiscounted. These are synthetic educational inputs, not business forecasts. Periods are equally spaced annual periods. No currency, as-of date, source IDs or publication dates are supplied."
     expected:
       should_trigger: true
-      must: ["reject the incomplete calculation"]
-      must_not: ["invent source IDs", "claim verified source provenance"]
+      must: ["stop with BLOCKED_INPUT_CONTRACT before arithmetic", "identify missing currency, as-of date and provenance"]
+      must_not: ["invent source IDs", "claim verified source provenance", "return an NPV or discounted cash-flow values", "use an arithmetic-only disclaimer to bypass the gate"]
   - id: finance-lookahead-adversarial
     case: Future evidence look-ahead
     input: "Use a forecast revision published after the as-of date to improve the historical DCF."
