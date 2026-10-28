@@ -109,6 +109,7 @@ export function routeInvestment(userRequest: string) {
   const explicit = routes.filter(r => s.includes(r));
   const replay = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|published.{0,30}after.{0,30}decision|rebuild.{0,40}(thesis|portfolio|exposure)|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)|odtworz.{0,30}(decyz|portfel|tez)/.test(s);
   const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation|struktura cen|potwierdzon.{0,30}swing|zanegowan.{0,30}trendu/.test(s);
+  const systemicRisk = /systemic|cross.asset|credit spread|liquidity signal|market breadth|risk.off|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
   const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s);
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
@@ -121,12 +122,13 @@ export function routeInvestment(userRequest: string) {
   const tickerCount = new Set((userRequest.match(/\b[A-Z]{2,5}\b/g) || []).filter(token => !nonTickers.has(token))).size;
   const thesis = /\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b/;
   const security = /spolk|stock|security|akcj|etf|wycen|valuation|underwrit|ticker/.test(s) || thesis.test(s) || /issuer|company case/.test(s) || (tickerCount === 1 && /review|ocen|analiz|kup|buy|sell|sprzed|investment|add|increase/.test(s));
-  const singleSecurityIntent = security && (thesis.test(s) || /underwrit|valuation|wycen|review.{0,24}(stock|security|ticker)|analy[sz].{0,24}(stock|security|ticker)|assess.{0,24}(stock|security|ticker)|(ocen|analiz).{0,24}(spolke|akcje|instrument|papier)|stock review|security review|good investment|fit.*portfolio|portfolio fit|position|sizing|size|add|increase|reduce|trim|buy|sell|kup|dodaj|zwieksz|zmniejsz|sprzed|pozycj/.test(s));
+  const singleSecurityIntent = security && (thesis.test(s) || /underwrit|valuation|wycen|review.{0,24}(stock|security|ticker)|analy[sz].{0,24}(stock|security|ticker)|assess.{0,24}(stock|security|ticker)|(ocen|analiz).{0,24}(spolke|akcje|instrument|papier)|stock review|security review|good investment|fit.*portfolio|portfolio fit|position|sizing|size|\badd(?:ed|ing)?\b|\bincrease(?:d|s|ing)?\b|\breduce(?:d|s|ing)?\b|\btrim(?:med|s|ming)?\b|\bbuy\b|\bsell\b|kup|dodaj|zwieksz|zmniejsz|sprzed|pozycj/.test(s));
   const aggregatePortfolioReview = portfolio && risk && !singleSecurityIntent;
   let candidates: string[] = [], reason = "No unambiguous decision object matched.";
   if (explicit.length) { candidates = [...explicit]; reason = "Explicit workflow names in the request."; }
   else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
   else if (technicalStructure) { candidates = [routes[8]]; reason = "The request evaluates price pivots, trend structure or invalidation levels."; }
+  else if (systemicRisk && (!portfolio || /issuer exposure|cross.asset/.test(s))) { candidates = [routes[0]]; reason = "The decision object is systemic or cross-asset risk observation; missing portfolio evidence must remain explicit."; }
   else if (policy && /defini|ustal|zaprojekt|design|define|create|regul|zasad|limits|limity/.test(s)) { candidates = [routes[6]]; reason = "The decision object is investment rules or risk limits."; }
   else if (event) { candidates = [routes[5]]; reason = "New information is being assessed against holdings or theses."; }
   else if (portfolio && observation && !singleSecurityIntent) { candidates = [routes[0]]; reason = "Observation of changes or monitoring of existing holdings."; }
