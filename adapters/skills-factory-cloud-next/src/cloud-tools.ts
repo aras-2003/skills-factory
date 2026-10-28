@@ -107,7 +107,8 @@ export function routeInvestment(userRequest: string) {
   const s = userRequest.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l")
     .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
-  const replay = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|published.{0,30}after.{0,30}decision|rebuild.{0,40}(thesis|portfolio|exposure)|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)|odtworz.{0,30}(decyz|portfel|tez)/.test(s);
+  const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(s);
+  const replay = explicitReplayIntent || /published.{0,30}after.{0,30}decision|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)/.test(s);
   const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation|struktura cen|potwierdzon.{0,30}swing|zanegowan.{0,30}trendu/.test(s);
   const systemicRisk = /systemic|cross.asset|credit spread|liquidity signal|market breadth|risk.off|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
   const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s);
@@ -126,9 +127,9 @@ export function routeInvestment(userRequest: string) {
   const aggregatePortfolioReview = portfolio && risk && !singleSecurityIntent;
   let candidates: string[] = [], reason = "No unambiguous decision object matched.";
   if (explicit.length) { candidates = [...explicit]; reason = "Explicit workflow names in the request."; }
+  else if (systemicRisk && !explicitReplayIntent && (!portfolio || /issuer exposure|cross.asset/.test(s))) { candidates = [routes[0]]; reason = "The decision object is systemic or cross-asset risk observation; historical vintage and missing portfolio evidence remain explicit."; }
   else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
   else if (technicalStructure) { candidates = [routes[8]]; reason = "The request evaluates price pivots, trend structure or invalidation levels."; }
-  else if (systemicRisk && (!portfolio || /issuer exposure|cross.asset/.test(s))) { candidates = [routes[0]]; reason = "The decision object is systemic or cross-asset risk observation; missing portfolio evidence must remain explicit."; }
   else if (policy && /defini|ustal|zaprojekt|design|define|create|regul|zasad|limits|limity/.test(s)) { candidates = [routes[6]]; reason = "The decision object is investment rules or risk limits."; }
   else if (event) { candidates = [routes[5]]; reason = "New information is being assessed against holdings or theses."; }
   else if (portfolio && observation && !singleSecurityIntent) { candidates = [routes[0]]; reason = "Observation of changes or monitoring of existing holdings."; }
@@ -139,7 +140,7 @@ export function routeInvestment(userRequest: string) {
   else if (portfolio) { candidates = [routes[1]]; reason = "A portfolio-level review is the decision object."; }
   else if (theme) { candidates = [routes[4]]; reason = "Thematic or value-chain research."; }
   else if (policy) { candidates = [routes[6]]; reason = "Investment policy or limits are the decision object."; }
-  const investmentContext = explicit.length > 0 || replay || technicalStructure || singleSecurityIntent || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
+  const investmentContext = explicit.length > 0 || replay || technicalStructure || systemicRisk || singleSecurityIntent || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
   const unrelatedGovernance = /security\.md|codeowners|report os.*production.ready/.test(s);
   const applicable = !editingOnly && !unrelatedGovernance && investmentContext;
   if (!applicable) { candidates = []; reason = editingOnly ? "request is limited to a non-investment editing task" : "no investment decision object was identified"; }
