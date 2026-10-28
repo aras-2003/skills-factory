@@ -63,7 +63,26 @@ async function collectReferences(skillName) {
 }
 
 for (const skill of catalog) {
-  skill.reference_files = await collectReferences(skill.name);
+  const references = await collectReferences(skill.name);
+  // The packaged loader selected these declared sources. Preserve only exact
+  // artifact bytes, without following symlinks or accepting evaluator paths.
+  for (const [relative, content] of Object.entries(skill.reference_files)) {
+    if (!relative.endsWith(".py")) continue;
+    const parts = relative.split("/");
+    if (parts.some(part => !part || [".", "..", "tests", "evals", "__pycache__"].includes(part)) ||
+        (parts.length > 1 && parts[0] !== "scripts") || path.isAbsolute(relative)) {
+      throw new Error(`Invalid declared script: ${relative}`);
+    }
+    let absolute = path.join(skillsRoot, skill.name);
+    for (const part of parts) {
+      absolute = path.join(absolute, part);
+      if ((await lstat(absolute)).isSymbolicLink()) throw new Error(`Script symlink: ${relative}`);
+    }
+    const exact = await readFile(absolute, "utf8");
+    if (exact !== content) throw new Error(`Declared script content mismatch: ${relative}`);
+    references[relative] = exact;
+  }
+  skill.reference_files = references;
 }
 
 const updated = source.replace(match[1], JSON.stringify(catalog));

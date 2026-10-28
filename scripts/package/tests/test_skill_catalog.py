@@ -6,6 +6,7 @@ import json
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -256,6 +257,40 @@ class SkillCatalogTests(unittest.TestCase):
                 else:
                     os.environ["SKILLS_FACTORY_SKILLS_ROOT"] = previous
             self.assertEqual([], result["reference_files"])
+
+    def test_load_skill_returns_declared_calculator_without_executing_it(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            skill = root / "calculator"
+            skill.mkdir()
+            (skill / "SKILL.md").write_text("---\nname: calculator\n---\nUse `python engine.py input.json`.\n")
+            code = "raise RuntimeError('must never execute during loading')\n"
+            (skill / "engine.py").write_text(code)
+            (skill / "unreferenced.py").write_text("not exposed")
+            with patch.dict(os.environ, {"SKILLS_FACTORY_SKILLS_ROOT": str(root)}):
+                result = self.catalog.load_skill("calculator")
+            self.assertEqual([{"path": "engine.py", "content": code}], result["reference_files"])
+            self.assertIn("host code runner", result["supporting_code_execution"])
+
+    def test_declared_scripts_exclude_traversal_evals_and_symlink_directories(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            skill = Path(temp_dir) / "example"
+            (skill / "scripts").mkdir(parents=True)
+            (skill / "tests").mkdir()
+            outside = Path(temp_dir) / "outside.py"
+            outside.write_text("private")
+            (skill / "scripts" / "engine.py").write_text("public")
+            (skill / "tests" / "case.py").write_text("rubric")
+            (skill / "linked.py").symlink_to(outside)
+            (skill / "scripts" / "linked").symlink_to(Path(temp_dir), target_is_directory=True)
+            text = " ".join(f"`{path}`" for path in (
+                "scripts/engine.py", "tests/case.py", "../outside.py", "linked.py",
+                "scripts/linked/outside.py", "scripts/../linked.py", "missing.py",
+            ))
+            self.assertEqual(
+                [{"path": "scripts/engine.py", "content": "public"}],
+                self.catalog._declared_script_sources(skill, text),
+            )
 
     def test_public_digest_excludes_eval_and_test_files(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
