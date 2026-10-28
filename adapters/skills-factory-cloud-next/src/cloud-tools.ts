@@ -111,7 +111,7 @@ export function routeInvestment(userRequest: string) {
   const replay = explicitReplayIntent || /published.{0,30}after.{0,30}decision|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)/.test(s);
   const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation|struktura cen|potwierdzon.{0,30}swing|zanegowan.{0,30}trendu/.test(s);
   const systemicRisk = /systemic|cross.asset|credit spread|liquidity signal|market breadth|risk.off|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
-  const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s);
+  const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s.replace(/\bno\s+portfolio\b[^.!?;,\n]*/g, ""));
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
   const observation = /zmien|zmian|chang(?:e|es|ed|ing)|happening|dzieje|observ|obserw|watch|monitor|drift|dryf/.test(s);
