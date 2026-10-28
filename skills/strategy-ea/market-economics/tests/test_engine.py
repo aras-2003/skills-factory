@@ -20,8 +20,16 @@ class MarketEconomicsTests(unittest.TestCase):
         result=model.calculate(fixture())
         self.assertEqual("1200",result["bottom_up_tam"])
         self.assertEqual("100.00",result["segment_derived_sam"])
-        self.assertEqual("80.00",result["white_space"])
+        self.assertEqual("80.00",result["uncovered_serviceable_value"])
+        self.assertIsNone(result["validated_white_space"])
         self.assertEqual("200",result["tam_difference"])
+    def test_whitespace_requires_separate_unmet_demand_evidence(self):
+        data=fixture(); data["validated_unmet_demand"]=ev(30,"unmet-demand")
+        result=model.calculate(data)
+        self.assertEqual("30",result["validated_white_space"])
+        self.assertEqual("unmet-demand",result["white_space_evidence"]["source_id"])
+        data["validated_unmet_demand"]=ev(81,"unmet-demand")
+        with self.assertRaises(model.InputError): model.calculate(data)
     def test_source_missing_or_future_is_rejected(self):
         data=fixture(); del data["top_down"]["source_id"]
         with self.assertRaises(model.InputError): model.calculate(data)

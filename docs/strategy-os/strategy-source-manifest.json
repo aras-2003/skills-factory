@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-27T18:47:17+00:00",
+  "generated_at": "2026-10-28T18:24:31+00:00",
   "corpus_sha256_verified_against": "docs/strategy-os/external-source-register-2026-10-26.md",
   "source_handling": "Archives were retrieved from their listed public source URLs and hash-verified. ZIP members were read in place, never extracted. Third-party archive contents are not redistributed in this repository.",
   "archives": [

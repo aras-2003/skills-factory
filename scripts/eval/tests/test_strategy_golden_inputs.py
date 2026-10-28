@@ -33,7 +33,8 @@ class StrategyGoldenInputTests(unittest.TestCase):
         result = run_golden("market-economics", "market-reconciliation-golden", "calculate")
         self.assertEqual("200", result["tam_difference"])
         self.assertEqual("100.00", result["segment_derived_sam"])
-        self.assertEqual("80.00", result["white_space"])
+        self.assertEqual("80.00", result["uncovered_serviceable_value"])
+        self.assertIsNone(result["validated_white_space"])
 
     def test_strategy_golden_has_complete_evidence_and_reconciles(self):
         result = run_golden("strategy-economics", "strategy-econ-profit-pool-golden", "calculate")
