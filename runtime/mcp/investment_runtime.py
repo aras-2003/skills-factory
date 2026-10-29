@@ -222,7 +222,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     # This endpoint is an investment router, not a universal ambiguity
     # resolver. Do not misroute unrelated prompts just because they contain a
     # financial word in a negation, quoted string or explanation.
-    if not explicit_investment_context:
+    if not explicit_investment_context and not systemic_risk_triage:
         return {
             "is_investment_request": False,
             "route": "not_applicable",
