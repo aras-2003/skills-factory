@@ -357,6 +357,15 @@ component_declarations:
       shell_exec: none
       credentials: none
       external_actions: none
+  website-quality-review:
+    source: skills/web-design/website-quality-review/SKILL.md
+    review_state: STATIC_PARTIAL
+    requirements:
+      network: read
+      filesystem: read
+      shell_exec: required
+      credentials: none
+      external_actions: none
   visual-regression-review:
     source: skills/web-design/visual-regression-review/SKILL.md
     review_state: STATIC_PARTIAL

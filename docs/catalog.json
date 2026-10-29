@@ -798,6 +798,16 @@
       "source": "skills/web-design/visual-regression-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "website-quality-review",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review an existing website across rendered desktop and mobile views, user-task clarity, links, accessibility evidence and motion. Use for a whole-site quality review; report scoped findings without building, editing or claiming production readiness.",
+      "source": "skills/web-design/website-quality-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
     }
   ],
   "workflows": [

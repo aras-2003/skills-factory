@@ -8,6 +8,8 @@ out_of_scope_behavior_paths:
   - skills/investing/technical-structure/SKILL.md
   - skills/investing/technical-structure/scripts/engine.py
   - skills/web-design/experience-design-routing/SKILL.md
+  - skills/web-design/website-quality-review/SKILL.md
+  - skills/web-design/website-quality-review/tests/cases.yaml
   - skills/strategy-ea/financial-modeling/SKILL.md
   - skills/strategy-ea/financial-modeling/engine.py
   - skills/strategy-ea/market-economics/SKILL.md
@@ -29,6 +31,8 @@ source_sha256:
   skills/investing/technical-structure/SKILL.md: c5459b4552c2dee0c43346518ed18b3461ca8511c7c40bf4a8d8c1b8629678d2
   skills/investing/technical-structure/scripts/engine.py: 863a2c931f37e30f5c627e25cfc0516faa40a5b6fb20134db0c0467a91e1729e
   skills/web-design/experience-design-routing/SKILL.md: 02089646b4c0fcccdb375e8718ced7c41c79509baec740b70822e5dbb9ca18d5
+  skills/web-design/website-quality-review/SKILL.md: 9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc
+  skills/web-design/website-quality-review/tests/cases.yaml: 45c5661b52c26526649e14054eece0b893a191d6e83c05cee339a37d51cebe68
   skills/strategy-ea/financial-modeling/SKILL.md: 98bc11e8f3f5694741db904814c8ce287c8b6312285d513b4d90bd1fc33a9f28
   skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
   skills/strategy-ea/market-economics/SKILL.md: b168492514ede9cb1edfa2e54cb37b1a2b3be7e08209cdbb33b44a27cc1f6e56
@@ -48,6 +52,7 @@ case_suites:
   historical-decision-replay: skills/investing/historical-decision-replay/tests/cases.yaml
   technical-structure: skills/investing/technical-structure/tests/cases.yaml
   experience-design-routing: skills/web-design/experience-design-routing/tests/cases.yaml
+  website-quality-review: skills/web-design/website-quality-review/tests/cases.yaml
   financial-modeling: skills/strategy-ea/financial-modeling/tests/cases.yaml
   market-economics: skills/strategy-ea/market-economics/tests/cases.yaml
   strategy-economics: skills/strategy-ea/strategy-economics/tests/cases.yaml
@@ -58,6 +63,7 @@ test_modules:
   - skills/investing/historical-decision-replay/tests/test_engine.py
   - skills/investing/technical-structure/tests/test_engine.py
   - scripts/eval/tests/test_runtime_campaign.py
+  - skills/web-design/website-quality-review/tests/test_skill_contract.py
   - skills/strategy-ea/financial-modeling/tests/test_engine.py
   - skills/strategy-ea/market-economics/tests/test_engine.py
   - skills/strategy-ea/strategy-economics/tests/test_engine.py

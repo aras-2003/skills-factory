@@ -1,0 +1,39 @@
+cases:
+  - id: website-review-rendered-positive
+    case: Review an existing responsive booking site
+    input: "Review the existing booking site at the supplied preview URL for the booking task. Inspect desktop and mobile renders, use existing link and accessibility checks if available, and report evidence-bound findings. Do not change files."
+    expected:
+      should_trigger: true
+      must: ["website-quality-review", "desktop", "mobile", "read-only", "NOT_RUN"]
+      must_not: ["claim production readiness", "change source"]
+  - id: website-review-missing-target
+    case: Whole-site review without a target
+    input: "Do a full quality review of my website."
+    expected:
+      should_trigger: true
+      must: ["preview URL", "user task"]
+      must_not: ["claim PASS", "invent"]
+  - id: website-review-screenshot-only
+    case: Narrow screenshot critique
+    input: "Critique this one screenshot for visual hierarchy; do not assess the whole website."
+    expected:
+      should_trigger: false
+      must_not: ["claim responsive checks", "website-quality-review"]
+  - id: website-review-builder-nearmiss
+    case: New site request remains with builder
+    input: "Build and publish a new portfolio website for me."
+    expected:
+      should_trigger: false
+      must_not: ["website-quality-review", "claim review completed"]
+  - id: website-review-implementation-nearmiss
+    case: Code implementation request
+    input: "Fix the navigation bug in this repository and implement the code change."
+    expected:
+      should_trigger: false
+      must_not: ["website-quality-review", "claim files changed"]
+  - id: website-review-baseline-nearmiss
+    case: Baseline-only screenshot comparison
+    input: "Compare these two same-viewport screenshots to the approved baseline and list visual regressions."
+    expected:
+      should_trigger: false
+      must_not: ["website-quality-review"]

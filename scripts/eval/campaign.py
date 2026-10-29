@@ -899,6 +899,8 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
         "skills/investing/technical-structure/SKILL.md",
         "skills/investing/technical-structure/scripts/engine.py",
         "skills/web-design/experience-design-routing/SKILL.md",
+        "skills/web-design/website-quality-review/SKILL.md",
+        "skills/web-design/website-quality-review/tests/cases.yaml",
         "skills/strategy-ea/financial-modeling/SKILL.md",
         "skills/strategy-ea/financial-modeling/engine.py",
         "skills/strategy-ea/market-economics/SKILL.md",
@@ -927,7 +929,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             or cfg.get("historical_r20_immutable") is not True
             or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
             or set(hashes) != expected
-            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing", "financial-modeling", "market-economics", "strategy-economics", "value-realization", "seo-research", "creative-generation"}
+            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing", "website-quality-review", "financial-modeling", "market-economics", "strategy-economics", "value-realization", "seo-research", "creative-generation"}
             or len(modules) != len(suites)
             or not all((root / path).is_file() for path in modules)
         ):

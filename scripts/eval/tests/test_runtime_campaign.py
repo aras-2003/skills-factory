@@ -133,6 +133,8 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/investing/technical-structure/SKILL.md",
             "skills/investing/technical-structure/scripts/engine.py",
             "skills/web-design/experience-design-routing/SKILL.md",
+            "skills/web-design/website-quality-review/SKILL.md",
+            "skills/web-design/website-quality-review/tests/cases.yaml",
             "skills/strategy-ea/financial-modeling/SKILL.md",
             "skills/strategy-ea/financial-modeling/engine.py",
             "skills/strategy-ea/market-economics/SKILL.md",
