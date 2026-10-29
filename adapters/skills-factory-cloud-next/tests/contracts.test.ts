@@ -46,12 +46,12 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Co zmieniło się w moim portfelu?", "investment-portfolio-observation"],
     ["What is happening with my portfolio?", "investment-portfolio-observation"],
     ["Observe changes over time in a synthetic portfolio.", "investment-portfolio-observation"],
-    ["Please observe systemic risk indicators and cross-asset changes in my portfolio.", "investment-portfolio-observation"],
-    ["Synthetic only: assess whether supplied issuer exposure 12% with missing ETF look-through and no current prices adds systemic risk; distinguish materiality from direction; no portfolio access or writes.", "investment-portfolio-observation"],
-    ["Assess systemic risk indicators using only historical vintages available at each release date; mark stale data explicitly and do not assign crash odds or trades.", "investment-portfolio-observation"],
-    ["Synthetic-only: assess systemic risk indicators using historical vintages available at each release date; no portfolio reads or writes.", "investment-portfolio-observation"],
-    ["Review systemic risk across credit spreads and macro indicators using original publication dates; do not read portfolio data or write.", "investment-portfolio-observation"],
-    ["Review credit-spread and macro risk observations with original publication vintages, stale-data rules, and correlation groups. No portfolio reads or writes, no crash odds, no trades.", "investment-portfolio-observation"],
+    ["Please observe systemic risk indicators and cross-asset changes in my portfolio.", "investment-attention-review"],
+    ["Synthetic only: assess whether supplied issuer exposure 12% with missing ETF look-through and no current prices adds systemic risk; distinguish materiality from direction; no portfolio access or writes.", "investment-attention-review"],
+    ["Assess systemic risk indicators using only historical vintages available at each release date; mark stale data explicitly and do not assign crash odds or trades.", "investment-attention-review"],
+    ["Synthetic-only: assess systemic risk indicators using historical vintages available at each release date; no portfolio reads or writes.", "investment-attention-review"],
+    ["Review systemic risk across credit spreads and macro indicators using original publication dates; do not read portfolio data or write.", "investment-attention-review"],
+    ["Review credit-spread and macro risk observations with original publication vintages, stale-data rules, and correlation groups. No portfolio reads or writes, no crash odds, no trades.", "investment-attention-review"],
     ["Triage these synthetic systemic indicators in my portfolio.", "investment-portfolio-review"],
     ["Co się teraz dzieje z moim portfelem? Sprawdź, co zmieniło się od poprzedniego poprawnego snapshotu i powiedz mi tylko, co naprawdę warto obserwować. Nie chcę jeszcze ustalać docelowej struktury portfela ani robić rebalancingu.", "investment-portfolio-observation"],
     ["ACN 25%, IUIT 22%: review portfolio concentration risk", "investment-portfolio-review"],
@@ -87,6 +87,9 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["What does GPT mean?", "investment-os-review"], ["hello", "investment-os-review"],
   ];
   for (const [request, expected] of cases) { const r = routeInvestment(request); assert.equal(r.child_workflow, expected, request); assert.match(r.routing_receipt, new RegExp(`CHILD=${expected};`)); assert.equal(r.recommendation, null); assert.equal(r.workflow_executed, false); }
+  const educational = routeInvestment("Explain what systemic risk means in one sentence.");
+  assert.equal(educational.route, "not_applicable");
+  assert.equal(educational.is_investment_request, false);
   assert.equal(routeInvestment("investment-security-review and investment-portfolio-review").status, "clarification_required");
 });
 test("ambiguous share ownership requests ask for clarification, while a direct stock review still routes", () => {
