@@ -44,7 +44,9 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
             "ux-near-miss-ordinary-answer",
         ):
             with self.subTest(case=case_id):
-                self.assertFalse(self.cases[case_id]["expected"]["should_trigger"])
+                case = self.cases[case_id]
+                self.assertFalse(case["expected"]["should_trigger"])
+                self.assertTrue(case["expected"]["must_not"])
         self.assertIn("do not change the requested response format", self.body.lower())
         self.assertIn("single chart request", self.body.lower())
 
@@ -52,6 +54,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         case = self.cases["ux-route-provenance-preservation"]
         self.assertTrue(case["expected"]["should_trigger"])
         prompt = case["input"]
+        expected = " ".join(case["expected"]["must"])
         for token in (
             "finding ID F-17",
             "source revision abcdefabcdefabcdefabcdefabcdefabcdefabcd",
@@ -61,6 +64,9 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         ):
             with self.subTest(token=token):
                 self.assertIn(token, prompt)
+        for token in ("finding ID F-17", "source revision", "as-of date", "uncertainty", "written interface brief"):
+            with self.subTest(assertion=token):
+                self.assertIn(token, expected)
         self.assertIn(
             "Preserve each domain's evidence IDs, source revision, as-of date, uncertainty and output contract.",
             self.body,
@@ -74,7 +80,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
 
     def test_unsupported_surface_is_not_reported_as_pass(self):
         self.assertIn("Chat, mobile, Cloud or Codex", self.body)
-        self.assertIn("unsupported surface is `NOT_RUN`, not PASS", self.body)
+        self.assertIn("unsupported surface is \`NOT_RUN\`, not PASS", self.body)
 
 
 if __name__ == "__main__":
