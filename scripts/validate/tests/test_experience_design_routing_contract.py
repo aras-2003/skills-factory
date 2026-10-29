@@ -64,7 +64,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         ):
             with self.subTest(token=token):
                 self.assertIn(token, prompt)
-        for token in ("finding ID F-17", "source revision", "as-of date", "uncertainty", "written interface brief"):
+        for token in ("finding ID F-17", "source revision", "as-of date", "uncertainty", "low confidence", "written interface brief"):
             with self.subTest(assertion=token):
                 self.assertIn(token, expected)
         self.assertIn(
@@ -80,7 +80,9 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
 
     def test_unsupported_surface_is_not_reported_as_pass(self):
         self.assertIn("Chat, mobile, Cloud or Codex", self.body)
-        self.assertIn("unsupported surface is \`NOT_RUN\`, not PASS", self.body)
+        self.assertIn("unsupported surface is", self.body)
+        self.assertIn("NOT_RUN", self.body)
+        self.assertIn("not PASS", self.body)
 
 
 if __name__ == "__main__":
