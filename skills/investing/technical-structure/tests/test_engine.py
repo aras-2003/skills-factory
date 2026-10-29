@@ -45,10 +45,11 @@ class TechnicalStructureTests(unittest.TestCase):
         self.assertEqual(0, bearish["score"])
         self.assertEqual({"higher_high": False, "higher_low": False, "lower_high": True, "lower_low": True}, bearish["score_components"])
 
-        flat = analyze_structure(bars([(10, 8, 9)] * 8), as_of="2026-01-08T00:00:00+00:00", source_id="synthetic-series", adjusted=True, adjustment_id="synthetic-adjustment-v1", left=1, right=1)
-        self.assertEqual("RANGE_OR_MIXED", flat["trend"])
-        self.assertEqual(50, flat["score"])
-        self.assertEqual(0, sum(flat["score_components"].values()))
+        mixed_values = [(10, 8, 9), (12, 9, 11), (11, 8.5, 10), (14, 10, 12), (12, 9, 11), (16, 11, 14), (14, 8, 12), (13, 11, 12)]
+        mixed = analyze_structure(bars(mixed_values), as_of="2026-01-08T00:00:00+00:00", source_id="synthetic-series", adjusted=True, adjustment_id="synthetic-adjustment-v1", left=1, right=1)
+        self.assertEqual("RANGE_OR_MIXED", mixed["trend"])
+        self.assertEqual(50, mixed["score"])
+        self.assertEqual({"higher_high": True, "higher_low": False, "lower_high": False, "lower_low": True}, mixed["score_components"])
 
     def test_requires_adjusted_prices_and_provenance(self):
         data = bars([(10, 8, 9)] * 8)
