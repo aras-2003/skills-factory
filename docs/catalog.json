@@ -763,8 +763,8 @@
       "name": "experience-design-routing",
       "domain": "web-design",
       "maturity": "candidate",
-      "version": "0.1.0",
-      "description": "Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.",
+      "version": "0.1.1",
+      "description": "Use as the UI/UX task router when a user asks for interface design, visual critique, a website quality review, design handoff, accessibility review, or visual regression; route to the existing specialist skill.",
       "source": "skills/web-design/experience-design-routing/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
@@ -796,6 +796,16 @@
       "version": "0.1.0",
       "description": "Review rendered UI against an approved visual baseline and implementation brief. Use when the request is to find visual regressions in comparable screenshots or browser captures; distinguish measured diffs from human interpretation.",
       "source": "skills/web-design/visual-regression-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "DECLARED"
+    },
+    {
+      "name": "website-quality-review",
+      "domain": "web-design",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review an existing website across rendered desktop and mobile views, user-task clarity, links, accessibility evidence and motion. Use for a whole-site quality review; report scoped findings without building, editing or claiming production readiness.",
+      "source": "skills/web-design/website-quality-review/SKILL.md",
       "source_status": "present",
       "capability_assessment": "DECLARED"
     }
