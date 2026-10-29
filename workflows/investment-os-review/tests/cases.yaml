@@ -33,3 +33,34 @@ cases:
         - keep the scope on home financing
       must_not:
         - invoke Investment OS portfolio research
+  - id: router-positive-systemic-risk-triage
+    case: Cross-asset systemic signals route to attention triage
+    input: "Systemic risk indicators across credit markets and macro conditions have changed. Assess these indicator groups, distinguish published historical vintages, deduplicate correlated evidence, and state materiality and direction separately. No portfolio-specific assessment, no holdings, no trades, no policy change, and no writes."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-attention-review before portfolio-specific analysis
+        - distinguish routing receipt from child workflow execution
+        - preserve no-write and no-trade constraints
+  - id: router-positive-systemic-risk-without-portfolio
+    case: Cross-asset indicators route without portfolio vocabulary
+    input: "Triage these systemic market risk indicators: HY and IG spreads are correlated, breadth data is stale, and real yield is missing. Preserve vintages and say whether the evidence is material; do not estimate crash odds."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-attention-review
+        - preserve stale and missing data explicitly
+  - id: router-negative-generic-credit-definition
+    case: Generic credit spread definition is not Investment OS triage
+    input: "Explain what a credit spread means in one sentence."
+    expected:
+      should_trigger: false
+      must:
+        - answer as a general educational question without an investment workflow
+  - id: router-positive-portfolio-review-control
+    case: Explicit portfolio review keeps portfolio ownership
+    input: "Review my portfolio concentration and ETF overlap."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-portfolio-review as primary child
