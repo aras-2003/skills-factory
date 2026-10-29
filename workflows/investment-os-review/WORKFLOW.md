@@ -60,6 +60,8 @@ Use `investment-theme-discovery` for structural/cyclical investment themes, valu
 ### Attention route
 Use `investment-attention-review` when the user brings new company/industry/market information and asks whether it changes prior theses or deserves deeper work.
 
+Systemic and cross-asset market indicators (for example credit spreads, liquidity, breadth, real yields, or macro signals) are new market information. Use `investment-attention-review` first for vintage-aware, correlation-deduplicated materiality and direction triage. Delegate only evidenced portfolio exposure implications to `investment-portfolio-observation` or `portfolio-state-review`; do not turn a systemic indicator request into a generic historical replay or portfolio observation.
+
 ### Policy route
 Use `investment-policy-design` when the decision is about portfolio rules, risk limits, target bands, sizing constraints or investment governance rather than reviewing current holdings.
 
