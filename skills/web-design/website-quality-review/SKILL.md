@@ -3,7 +3,7 @@ name: website-quality-review
 description: Review an existing website across rendered desktop and mobile views, user-task clarity, links, accessibility evidence and motion. Use for a whole-site quality review; report scoped findings without building, editing or claiming production readiness.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: "0.1.0"
   maturity: candidate
   risk: medium
   last_reviewed: '2026-10-29'
