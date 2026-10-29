@@ -53,7 +53,7 @@ cases:
     input: "Design a responsive web screen for reviewing this fictional finding and return a written interface brief. Preserve these supplied facts verbatim in the handoff: finding ID F-17; source revision abcdefabcdefabcdefabcdefabcdefabcdefabcd; as-of date 2026-10-15; uncertainty: low confidence. Do not reinterpret the finding or turn the response into a report or chart."
     expected:
       should_trigger: true
-      must: ["interface-design", "finding ID F-17", "source revision", "as-of date 2026-10-15", "low confidence", "written interface brief"]
+      must: ["interface-design", "finding ID F-17", "source revision", "as-of date 2026-10-15", "uncertainty", "low confidence", "written interface brief"]
       must_not: ["rewrite the evidence", "drop provenance", "claim a chart was requested"]
   - id: ux-implementation-approval
     case: Design request does not authorize repository edits
