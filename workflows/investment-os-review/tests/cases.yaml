@@ -68,3 +68,13 @@ cases:
       should_trigger: true
       must:
         - choose investment-portfolio-review as primary child workflow
+
+  - id: router-positive-systemic-without-portfolio-context
+    case: Explicit systemic market triage is an investment request without portfolio terms
+    input: "Systemic risk indicators across credit markets and macro conditions have changed. Assess these indicator groups, distinguish published historical vintages, deduplicate correlated evidence, and state materiality and direction separately."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-attention-review as primary child workflow
+        - preserve vintage and deduplication requirements
+        - do not infer child workflow execution from route selection
