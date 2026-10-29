@@ -23,7 +23,7 @@ Use supplied adjusted OHLCV bars with stable source IDs, observation/publication
 3. Classify structure only when two confirmed highs and lows exist: HH+HL is `UPTREND`; LH+LL is `DOWNTREND`; otherwise `RANGE_OR_MIXED`. With insufficient history, return `UNKNOWN`.
 4. Report OPS/OPD levels, confirmation dates, source, distances from current adjusted close, breakout/retest conditions and invalidation. Distinguish observation from interpretation.
 5. Optionally add separately sourced volume, moving-average, benchmark-relative-strength or momentum context. Do not treat missing optional confirmations as neutral proof.
-6. The deterministic 0–100 structure score encodes only the observed higher-high/higher-low pattern (50 base, +25 for each). It is not probability or evidence of predictive edge. Keep it separate from the Opportunity Score.
+6. The deterministic 0–100 direction score uses 50 as the neutral midpoint: +25 for each of HH and HL, and −25 for each of LH and LL, clamped to [0, 100]. Report all four Boolean components and the formula. It is not probability or evidence of predictive edge. Keep it separate from the Opportunity Score.
 
 ## Output contract
 For each requested horizon, identify the bar window/parameters, as-of time, trend state, confirmed OPS/OPD price and percentage distance, source IDs, confirmation dates, level-trigger conditions, invalidation and missingness. The engine emits one supplied-window state; it does not independently validate 1–3 month, 6–12 month or >3 year predictive horizons. Never fill a missing pivot or price.
