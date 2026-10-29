@@ -62,15 +62,3 @@ cases:
       should_trigger: true
       must: ["interface-design"]
       must_not: ["edit repository", "claim code changed"]
-  - id: ux-route-whole-website-review
-    case: Existing website quality review
-    input: "Review this existing website across desktop and mobile renders for the user's primary task. Report evidence-bound findings without changing source."
-    expected:
-      should_trigger: true
-      must: ["website-quality-review", "desktop", "mobile", "read-only"]
-  - id: ux-near-miss-build-site
-    case: New website build remains with builder
-    input: "Build a new website and publish it."
-    expected:
-      should_trigger: false
-      must_not: ["website-quality-review", "claim review completed"]

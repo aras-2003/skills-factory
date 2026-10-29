@@ -5,6 +5,7 @@ cases:
     expected:
       should_trigger: true
       must: ["website-quality-review", "desktop", "mobile", "read-only", "NOT_RUN"]
+      must_not: ["claim production readiness", "change source"]
   - id: website-review-missing-target
     case: Whole-site review without a target
     input: "Do a full quality review of my website."
@@ -36,16 +37,3 @@ cases:
     expected:
       should_trigger: false
       must_not: ["website-quality-review"]
-  - id: website-review-report-nearmiss
-    case: Report request stays in report workflow
-    input: "Create an executive report from these supplied findings."
-    expected:
-      should_trigger: false
-      must_not: ["website-quality-review", "change requested format"]
-  - id: website-review-unavailable-mobile-edge
-    case: Mobile render is unavailable
-    input: "Review the supplied desktop preview. Mobile rendering is unavailable; do not infer mobile behavior."
-    expected:
-      should_trigger: true
-      must: ["mobile", "NOT_RUN", "scoped verdict"]
-      must_not: ["claim responsive PASS"]

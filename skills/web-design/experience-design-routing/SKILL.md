@@ -1,12 +1,12 @@
 ---
 name: experience-design-routing
-description: Use as the UI/UX task router when a user asks for interface design, visual critique, whole-website quality review, design handoff, accessibility review, or visual regression; route to the existing specialist skill.
+description: Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.1
+  version: 0.1.0
   maturity: candidate
   risk: low
-  last_reviewed: '2026-10-29'
+  last_reviewed: '2026-10-27'
 ---
 
 # Experience Design Routing

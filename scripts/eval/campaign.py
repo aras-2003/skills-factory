@@ -457,7 +457,7 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
 
 
 def separately_validated_web_design_quality_paths(root: Path = ROOT) -> set[str]:
-    """Isolate the three UX-04 candidates only while source, fixtures and routing contracts are valid."""
+    """Isolate UX-04 quality candidates only while source, fixtures and routing contracts are valid."""
     try:
         cfg = yaml.safe_load(
             (root / "evals/campaigns/web-design-quality-2026-10/campaign.yaml").read_text(encoding="utf-8")
@@ -466,6 +466,7 @@ def separately_validated_web_design_quality_paths(root: Path = ROOT) -> set[str]
             "implementation-brief": "skills/web-design/implementation-brief/SKILL.md",
             "visual-regression-review": "skills/web-design/visual-regression-review/SKILL.md",
             "accessibility-gate": "skills/web-design/accessibility-gate/SKILL.md",
+            "website-quality-review": "skills/web-design/website-quality-review/SKILL.md",
         }
         candidates = cfg.get("candidate_skills") or []
         candidate_names = [str(item.get("name") or "") for item in candidates if isinstance(item, dict)]
