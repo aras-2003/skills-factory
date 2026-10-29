@@ -33,3 +33,38 @@ cases:
         - keep the scope on home financing
       must_not:
         - invoke Investment OS portfolio research
+
+  - id: router-positive-systemic-cross-asset-portfolio
+    case: Systemic risk signals with fictional portfolio exposure remain attention triage
+    input: "Using ONLY this synthetic fixture as of 2026-10-28T12:00:00Z, review systemic risk signals: HY spread 410bp published at 2026-10-28T09:00Z; IG spread 90bp published same time (same credit_conditions correlation group). Market breadth is 45% (named fictional index, 2026-10-28) and stale 62% (2026-09-01). Real yield missing. Fictional issuer X reports 2027 maturity 20m and liquidity 50m published 2026-10-20. Two fictional ETFs overlap issuer X by 8% and 5%; ETF-B constituent source is incomplete and dated 2025-01-01. Preserve original vintages, do not treat correlated signals as independent, say stale/missing/partial data explicitly, no crash odds. Do not read canonical portfolio state and do not write/update policy, portfolio, orders, or alerts. Return only whether routed and which workflow is appropriate."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-attention-review as primary child workflow
+        - preserve the supplied vintage, correlation and missingness constraints
+        - do not infer child workflow execution from route selection
+  - id: router-positive-systemic-market-triage
+    case: Market-only systemic indicators route to attention rather than portfolio observation
+    input: "Triage these synthetic systemic market indicators only; no portfolio or holdings review: fictional HY spread 410bp and IG spread 90bp, both current as of 2026-10-28 and correlated within the credit_conditions group; a fictional index breadth figure is 45% current with prior value 62% from 2026-09-01 (stale); real yield is missing. Preserve publication vintages, separate direction and materiality, do not invent thresholds or crash probabilities, no external research, no canonical reads/writes, no policy changes."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-attention-review as primary child workflow
+        - keep materiality separate from direction
+        - do not invent thresholds or crash probabilities
+  - id: router-positive-systemic-macro-triage
+    case: Unscoped systemic indicator changes do not route to historical replay
+    input: "Systemic risk indicators across credit markets and macro conditions have changed. Assess these indicator groups, distinguish published historical vintages, deduplicate correlated evidence, and state materiality and direction separately. No portfolio-specific assessment, no holdings, no trades, no policy change, and no writes."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-attention-review as primary child workflow
+        - preserve vintage and deduplication requirements
+        - do not infer child workflow execution from route selection
+  - id: router-positive-explicit-portfolio-review-over-general-risk-context
+    case: Explicit portfolio allocation review remains portfolio review
+    input: "Review my portfolio risk, concentration and allocation across 40% FictionalCo and 60% Sample ETF. I am not asking for systemic indicator triage."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-portfolio-review as primary child workflow
