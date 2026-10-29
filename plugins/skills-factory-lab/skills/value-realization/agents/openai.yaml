@@ -1,0 +1,5 @@
+interface:
+  display_name: Value Realization
+  short_description: Review a funded strategy initiative against dated benefit…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#75D8C1'
