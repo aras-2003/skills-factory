@@ -26,8 +26,8 @@ out_of_scope_behavior_paths:
 source_sha256:
   skills/investing/historical-decision-replay/SKILL.md: 6a730dc4a229dbbc4a93bcdf4b3d71bb46affef3ec3cd41150ca63f61b288161
   skills/investing/historical-decision-replay/scripts/engine.py: 268f7950d0a0cfa79cfef0b6ddb670f0366e4ed3b60ea12bf90432c013526a3a
-  skills/investing/technical-structure/SKILL.md: 8aaf21f8d6406789f83f6c9dcc80dc15aae5b9318e1ad90ea8c92a9f1900860e
-  skills/investing/technical-structure/scripts/engine.py: 018992a2404fe1e038da7174f5a812b38af4743bf1ee42d060bc407b585ec8fa
+  skills/investing/technical-structure/SKILL.md: c5459b4552c2dee0c43346518ed18b3461ca8511c7c40bf4a8d8c1b8629678d2
+  skills/investing/technical-structure/scripts/engine.py: 863a2c931f37e30f5c627e25cfc0516faa40a5b6fb20134db0c0467a91e1729e
   skills/web-design/experience-design-routing/SKILL.md: 02089646b4c0fcccdb375e8718ced7c41c79509baec740b70822e5dbb9ca18d5
   skills/strategy-ea/financial-modeling/SKILL.md: 98bc11e8f3f5694741db904814c8ce287c8b6312285d513b4d90bd1fc33a9f28
   skills/strategy-ea/financial-modeling/engine.py: 90afb3a8fcc75061e9c6d0545db9cff0a4488f3ddd880a0b1ded849ccb9e5769
