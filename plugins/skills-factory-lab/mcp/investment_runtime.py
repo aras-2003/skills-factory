@@ -132,7 +132,17 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "limit jednej spółki", "limity sektorowe", "rebalancing",
         "maksymalny udział", "reguły portfela",
     )
-    attention = _contains(
+    systemic_risk_triage = _contains(
+        text,
+        "systemic risk", "cross-asset", "cross asset", "credit condition",
+        "credit spread", "market breadth", "real yield", "macro condition",
+        "macro indicator", "liquidity indicator", "risk indicator",
+    ) and _contains(
+        text,
+        "triage", "assess", "review", "monitor", "indicator", "signal",
+        "changed", "ocen", "przejrz", "monitoruj", "sygnał", "sygnal",
+    )
+    attention = systemic_risk_triage or _contains(
         text,
         "new information", "new news", "does this news", "does this change the thesis",
         "changes the thesis", "materiality", "headline", "nowe informacje",
@@ -212,7 +222,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     # This endpoint is an investment router, not a universal ambiguity
     # resolver. Do not misroute unrelated prompts just because they contain a
     # financial word in a negation, quoted string or explanation.
-    if not explicit_investment_context:
+    if not explicit_investment_context and not systemic_risk_triage:
         return {
             "is_investment_request": False,
             "route": "not_applicable",
