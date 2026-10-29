@@ -74,11 +74,20 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, l
     lower_high = highs[-1]["price"] < highs[-2]["price"]
     lower_low = lows[-1]["price"] < lows[-2]["price"]
     if higher_high and higher_low:
-        trend, score = "UPTREND", 100
+        trend = "UPTREND"
     elif lower_high and lower_low:
-        trend, score = "DOWNTREND", 0
+        trend = "DOWNTREND"
     else:
-        trend, score = "RANGE_OR_MIXED", 50 + 25 * int(higher_high) + 25 * int(higher_low)
+        trend = "RANGE_OR_MIXED"
+
+    score_components = {
+        "higher_high": higher_high,
+        "higher_low": higher_low,
+        "lower_high": lower_high,
+        "lower_low": lower_low,
+    }
+    score = max(0, min(100, 50 + 25 * int(higher_high) + 25 * int(higher_low)
+                       - 25 * int(lower_high) - 25 * int(lower_low)))
 
     close = rows[-1]["close"]
     ops, opd = highs[-1], lows[-1]
@@ -91,7 +100,8 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, l
         "trend": trend,
         "score": score,
         "score_is_probability": False,
-        "score_components": {"higher_high": higher_high, "higher_low": higher_low},
+        "score_components": score_components,
+        "score_formula": "50 + 25*HH + 25*HL - 25*LH - 25*LL, clamped to [0, 100]",
         "current_close": str(close),
         "ops": {"price": str(ops["price"]), "confirmed_at": ops["confirmed_at"].isoformat(), "source_id": ops["source_id"], "distance_pct": distance(ops["price"])},
         "opd": {"price": str(opd["price"]), "confirmed_at": opd["confirmed_at"].isoformat(), "source_id": opd["source_id"], "distance_pct": distance(opd["price"])},
