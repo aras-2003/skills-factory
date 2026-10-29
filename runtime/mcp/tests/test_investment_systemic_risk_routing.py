@@ -46,6 +46,16 @@ class InvestmentSystemicRiskRoutingTests(unittest.TestCase):
         self.assertEqual("attention", result["route"])
         self.assertEqual("investment-attention-review", result["child_workflow"])
 
+    def test_systemic_triage_without_portfolio_language_is_investment_intent(self):
+        result = route_investment_request(
+            "Systemic risk indicators across credit markets and macro conditions have changed. Assess these "
+            "indicator groups, distinguish published historical vintages, deduplicate correlated evidence, and "
+            "state materiality and direction separately."
+        )
+        self.assertTrue(result["is_investment_request"])
+        self.assertEqual("attention", result["route"])
+        self.assertEqual("investment-attention-review", result["child_workflow"])
+
     def test_explicit_portfolio_review_stays_portfolio_review(self):
         result = route_investment_request(
             "Review my portfolio risk, concentration and allocation across 40% FictionalCo and 60% Sample ETF. "
