@@ -51,6 +51,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Assess systemic risk indicators using only historical vintages available at each release date; mark stale data explicitly and do not assign crash odds or trades.", "investment-portfolio-observation"],
     ["Synthetic-only: assess systemic risk indicators using historical vintages available at each release date; no portfolio reads or writes.", "investment-portfolio-observation"],
     ["Review systemic risk across credit spreads and macro indicators using original publication dates; do not read portfolio data or write.", "investment-portfolio-observation"],
+    ["Review credit-spread and macro risk observations with original publication vintages, stale-data rules, and correlation groups. No portfolio reads or writes, no crash odds, no trades.", "investment-portfolio-observation"],
     ["Triage these synthetic systemic indicators in my portfolio.", "investment-portfolio-review"],
     ["Co się teraz dzieje z moim portfelem? Sprawdź, co zmieniło się od poprzedniego poprawnego snapshotu i powiedz mi tylko, co naprawdę warto obserwować. Nie chcę jeszcze ustalać docelowej struktury portfela ani robić rebalancingu.", "investment-portfolio-observation"],
     ["ACN 25%, IUIT 22%: review portfolio concentration risk", "investment-portfolio-review"],
