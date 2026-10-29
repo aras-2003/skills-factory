@@ -7,12 +7,11 @@ out_of_scope_behavior_paths:
   - skills/web-design/accessibility-gate/SKILL.md
   - skills/web-design/implementation-brief/SKILL.md
   - skills/web-design/visual-regression-review/SKILL.md
-  - skills/web-design/website-quality-review/SKILL.md
 candidate_skills:
   - name: implementation-brief
     version: "0.1.0"
     source: skills/web-design/implementation-brief/SKILL.md
-    sha256: 9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc
+    sha256: fc90081c53bc09b0bf318ec674f5d3f3425e5cc6e878b2b6e377f4d79a9d4426
     test_cases: skills/web-design/implementation-brief/tests/cases.yaml
     required_case_ids:
       - implementation-brief-approved-design-positive
@@ -45,18 +44,6 @@ candidate_skills:
       - accessibility-gate-design-nearmiss
       - accessibility-gate-partial-scan
       - accessibility-gate-visual-diff-nearmiss
-  - name: website-quality-review
-    version: "0.1.0"
-    source: skills/web-design/website-quality-review/SKILL.md
-    sha256: 9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc
-    test_cases: skills/web-design/website-quality-review/tests/cases.yaml
-    required_case_ids:
-      - website-review-rendered-positive
-      - website-review-missing-target
-      - website-review-screenshot-only
-      - website-review-builder-nearmiss
-      - website-review-implementation-nearmiss
-      - website-review-baseline-nearmiss
 routing_cases:
   - id: implementation-brief-natural-en
     input: evals/routing/implementation-brief-natural-en.input.md

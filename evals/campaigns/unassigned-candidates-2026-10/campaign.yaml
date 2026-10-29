@@ -8,6 +8,8 @@ out_of_scope_behavior_paths:
   - skills/investing/technical-structure/SKILL.md
   - skills/investing/technical-structure/scripts/engine.py
   - skills/web-design/experience-design-routing/SKILL.md
+  - skills/web-design/website-quality-review/SKILL.md
+  - skills/web-design/website-quality-review/tests/cases.yaml
   - skills/strategy-ea/financial-modeling/SKILL.md
   - skills/strategy-ea/financial-modeling/engine.py
   - skills/strategy-ea/market-economics/SKILL.md
@@ -48,6 +50,7 @@ case_suites:
   historical-decision-replay: skills/investing/historical-decision-replay/tests/cases.yaml
   technical-structure: skills/investing/technical-structure/tests/cases.yaml
   experience-design-routing: skills/web-design/experience-design-routing/tests/cases.yaml
+  website-quality-review: skills/web-design/website-quality-review/tests/cases.yaml
   financial-modeling: skills/strategy-ea/financial-modeling/tests/cases.yaml
   market-economics: skills/strategy-ea/market-economics/tests/cases.yaml
   strategy-economics: skills/strategy-ea/strategy-economics/tests/cases.yaml
@@ -58,6 +61,7 @@ test_modules:
   - skills/investing/historical-decision-replay/tests/test_engine.py
   - skills/investing/technical-structure/tests/test_engine.py
   - scripts/eval/tests/test_runtime_campaign.py
+  - skills/web-design/website-quality-review/tests/test_skill_contract.py
   - skills/strategy-ea/financial-modeling/tests/test_engine.py
   - skills/strategy-ea/market-economics/tests/test_engine.py
   - skills/strategy-ea/strategy-economics/tests/test_engine.py

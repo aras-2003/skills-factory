@@ -113,12 +113,11 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/web-design/implementation-brief/SKILL.md",
             "skills/web-design/visual-regression-review/SKILL.md",
             "skills/web-design/accessibility-gate/SKILL.md",
-            "skills/web-design/website-quality-review/SKILL.md",
         }
         self.assertEqual(paths, campaign.separately_validated_web_design_quality_paths(ROOT))
         self.assertEqual([], campaign.validate_campaign())
         fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
-        self.assertTrue({"implementation-brief", "visual-regression-review", "accessibility-gate", "website-quality-review"}.isdisjoint(fixtures["targets"]))
+        self.assertTrue({"implementation-brief", "visual-regression-review", "accessibility-gate"}.isdisjoint(fixtures["targets"]))
         cfg = yaml.safe_load((ROOT / "evals/campaigns/web-design-quality-2026-10/campaign.yaml").read_text())
         for candidate in cfg["candidate_skills"]:
             cases = yaml.safe_load((ROOT / candidate["test_cases"]).read_text())["cases"]
@@ -134,6 +133,8 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/investing/technical-structure/SKILL.md",
             "skills/investing/technical-structure/scripts/engine.py",
             "skills/web-design/experience-design-routing/SKILL.md",
+            "skills/web-design/website-quality-review/SKILL.md",
+            "skills/web-design/website-quality-review/tests/cases.yaml",
             "skills/strategy-ea/financial-modeling/SKILL.md",
             "skills/strategy-ea/financial-modeling/engine.py",
             "skills/strategy-ea/market-economics/SKILL.md",

@@ -457,7 +457,7 @@ def separately_validated_design_critique_paths(root: Path = ROOT) -> set[str]:
 
 
 def separately_validated_web_design_quality_paths(root: Path = ROOT) -> set[str]:
-    """Isolate UX-04 quality candidates only while source, fixtures and routing contracts are valid."""
+    """Isolate the three UX-04 candidates only while source, fixtures and routing contracts are valid."""
     try:
         cfg = yaml.safe_load(
             (root / "evals/campaigns/web-design-quality-2026-10/campaign.yaml").read_text(encoding="utf-8")
@@ -466,7 +466,6 @@ def separately_validated_web_design_quality_paths(root: Path = ROOT) -> set[str]
             "implementation-brief": "skills/web-design/implementation-brief/SKILL.md",
             "visual-regression-review": "skills/web-design/visual-regression-review/SKILL.md",
             "accessibility-gate": "skills/web-design/accessibility-gate/SKILL.md",
-            "website-quality-review": "skills/web-design/website-quality-review/SKILL.md",
         }
         candidates = cfg.get("candidate_skills") or []
         candidate_names = [str(item.get("name") or "") for item in candidates if isinstance(item, dict)]
@@ -900,6 +899,8 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
         "skills/investing/technical-structure/SKILL.md",
         "skills/investing/technical-structure/scripts/engine.py",
         "skills/web-design/experience-design-routing/SKILL.md",
+        "skills/web-design/website-quality-review/SKILL.md",
+        "skills/web-design/website-quality-review/tests/cases.yaml",
         "skills/strategy-ea/financial-modeling/SKILL.md",
         "skills/strategy-ea/financial-modeling/engine.py",
         "skills/strategy-ea/market-economics/SKILL.md",
@@ -928,7 +929,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             or cfg.get("historical_r20_immutable") is not True
             or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
             or set(hashes) != expected
-            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing", "financial-modeling", "market-economics", "strategy-economics", "value-realization", "seo-research", "creative-generation"}
+            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing", "website-quality-review", "financial-modeling", "market-economics", "strategy-economics", "value-realization", "seo-research", "creative-generation"}
             or len(modules) != len(suites)
             or not all((root / path).is_file() for path in modules)
         ):
