@@ -132,7 +132,17 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "limit jednej spółki", "limity sektorowe", "rebalancing",
         "maksymalny udział", "reguły portfela",
     )
-    attention = _contains(
+    systemic_risk_triage = _contains(
+        text,
+        "systemic risk", "cross-asset", "cross asset", "credit condition",
+        "credit spread", "market breadth", "real yield", "macro condition",
+        "macro indicator", "liquidity indicator", "risk indicator",
+    ) and _contains(
+        text,
+        "triage", "assess", "review", "monitor", "indicator", "signal",
+        "ocen", "przejrz", "monitoruj", "sygnał", "sygnal",
+    )
+    attention = systemic_risk_triage or _contains(
         text,
         "new information", "new news", "does this news", "does this change the thesis",
         "changes the thesis", "materiality", "headline", "nowe informacje",
