@@ -3,12 +3,13 @@ campaign: iteration-06-interface-design-site-2026-10
 state: ACTIVE
 execution_surface: site-ordinary-chat
 test_cases: skills/web-design/interface-design/tests/cases.yaml
-out_of_scope_behavior_paths: []
+out_of_scope_behavior_paths:
+  - skills/web-design/interface-design/SKILL.md
 candidate_skill:
   name: interface-design
   version: "0.1.5"
   source: skills/web-design/interface-design/SKILL.md
-  sha256: bbb14b50d3bc66ef5cb91089d72851252330a8fb7e62e9d194827a459638b7f8
+  sha256: b9d3ac4f9272a3c586633b51596f4d9bbe0d1c9b68b0cdb6a765ace4b8e87d39
   test_cases: skills/web-design/interface-design/tests/cases.yaml
   required_case_ids:
     - interface-design-direct-positive
