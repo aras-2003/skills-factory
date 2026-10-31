@@ -7,6 +7,7 @@ cases:
       should_trigger: true
       must:
         - identify the primary user task and hierarchy before choosing decoration
+        - explicitly leave entry, exit, and order-detail destinations unspecified because no navigation source is provided
         - specify mobile and desktop behavior
         - define loading, empty and error states with recovery actions
         - preserve supplied design tokens
@@ -62,6 +63,7 @@ cases:
       should_trigger: false
       must_not:
         - replace the implementation task with a design-only brief
+        - ask interface-design context questions or propose design output for an explicit implementation-and-testing request
 
   - id: interface-design-insufficient-context
     case: vague-screen-request

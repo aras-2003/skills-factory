@@ -50,3 +50,13 @@ Specific defect assertions:
 ## Closure
 
 Close only after every required matrix row passes on the pinned Site candidate, failed rows are corrected and re-run on a newly pinned candidate, and #423/#474/#480 are reconciled individually. Record residual risk and the explicit self-review limitation. Iteration 05's aborted record and failures are never rewritten.
+
+
+## Corrective re-pin — 2026-10-31
+
+The Site 82 behavioral probes found a direct-positive answer proposing an unprovided account-navigation route and an implementation near-miss that asked interface-design context questions. The frozen fixture now makes those failures explicit. This is corrective work for failed acceptance rows; the acceptance scope is unchanged, and the original failures remain preserved.
+
+- Corrective PR: #527.
+- Candidate `interface-design`: v0.1.5; source-file SHA-256 `b9d3ac4f9272a3c586633b51596f4d9bbe0d1c9b68b0cdb6a765ace4b8e87d39`.
+- The active campaign now includes the skill path and pins this exact content SHA. The Site canonical source revision is pending merge and publication.
+- No updated-runtime PASS is claimed until the frozen cases are rerun on the exact published Site candidate.

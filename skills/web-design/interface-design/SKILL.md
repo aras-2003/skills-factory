@@ -7,10 +7,10 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.4"
+  version: "0.1.5"
   maturity: candidate
   risk: medium
-  last_reviewed: "2026-10-27"
+  last_reviewed: "2026-10-31"
   execution:
     default_model_class: standard
 ---
@@ -41,6 +41,10 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 - Screen or user-flow goal.
 - Intended user and their primary task.
 - Target runtime or device context.
+
+## Applicability and required-context gates
+
+First decide whether the current request is for interface design. This applicability check comes before the required-context gate below. If the user asks to implement or edit a working page or application, or to run its tests, do not apply this skill and do not ask design-context questions; hand control to the implementation workflow. If this skill was loaded explicitly for an isolated test, state that it does not apply and stop.
 
 ## Required-context gate
 
@@ -91,6 +95,7 @@ For an onboarding or other multi-step flow, include at least one realistic failu
 - When the requested next action depends on missing product rules, show a neutral placeholder such as `[next action from approved order rules]` and list the required state/action mapping as an open decision. Do not invent sample order statuses or a condition-to-action matrix to fill that gap.
 - If design tokens, navigation patterns, or product capabilities are referenced but not supplied, say they are unavailable and make their use a handoff dependency. Do not invent token names or values, component names, or destinations.
 - A requested screen or page is not evidence that specific tabs, navigation destinations, actions, account fields, status labels, records, or operational copy exist. When product evidence does not define them, describe the information role generically or use a neutral placeholder; identify any required product mapping as unresolved. Do not present plausible labels or example content as existing product behavior.
+- **Navigation provenance check:** Before finalizing the navigation/interaction section, verify every route, destination, entry or exit path, detail-screen link, control label, and next action against the supplied request or an explicitly referenced source. A screen name or account context does not establish an `existing` route or clickable destination. When none is supplied, state that entry, exit, and destinations are not specified and list them as open decisions; do not propose a conventional or assumed route.
 - Produce the requested written interface brief only. Do not create an interactive preview, prototype, wireframe artifact, or implementation unless the user explicitly requests that deliverable.
 - Do not design a happy path only. Every screen needs explicit loading, empty, and error behavior; describe unavailable-data handling when data is part of the interface.
 - Do not prescribe a chart or diagram merely because the screen contains data. If the requested outcome is the visual itself, route to the relevant visualization capability.
