@@ -71,3 +71,11 @@ cases:
     expected:
       should_trigger: true
       must: ["cash flow", "maturities", "refinancing", "diluted shares", "equity bridge"]
+
+  - id: valuation-card-no-lookahead
+    case: Future-published data excluded from an as-of valuation
+    input: "As of 2026-06-30, value TEST-ASOF using information available by that timestamp only. The annual filing for the year ended 2025-12-31 was published 2026-03-15; a quarterly update for period ended 2026-06-30 was published 2026-08-15. Exclude the later filing from the as-of valuation and state why."
+    expected:
+      should_trigger: true
+      must: ["as-of", "2026-06-30", "2026-03-15", "exclude", "2026-08-15"]
+      must_not: ["use the later filing", "future data as known"]
