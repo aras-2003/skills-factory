@@ -20,7 +20,7 @@ metadata:
 Make valuation assumptions visible and test sensitivity instead of producing false precision.
 
 ## Procedure
-1. Gate on verified, period-aligned inputs and record price, currency, diluted shares, as-of date, source and reporting period. Missing or conflicted critical inputs yield `NOT_SCORED`; never fill gaps with estimates.
+1. Gate on verified, period-aligned inputs and record price, currency, diluted shares, as-of date, source and reporting period. Use only facts published on or before the selected as-of timestamp; a period-end date does not prove the information was available then. Exclude later publications from that valuation snapshot. Missing or conflicted critical inputs yield `NOT_SCORED`; never fill gaps with estimates.
 2. Select a method appropriate to the business and cycle, and state why alternatives are weaker: normalized EPS/multiple for earnings businesses, NAV for asset developers, FFO/AFFO for REITs, residual income for financials, and normalized FCF/DCF for cash-generative businesses. For a highly levered issuer, show debt and debt-like claims in the equity bridge and test refinancing stress.
 3. Build bear/base/bull operating assumptions with an explicit horizon. Scenarios must differ in operating logic, not only the exit multiple.
 4. Separate earnings/cash-flow assumptions from terminal or exit assumptions. A tested arithmetic helper is packaged at `scripts/valuation_scenarios.py`; use it only when the active runtime can actually execute packaged scripts. Otherwise show formulas and calculations, and do not claim the helper ran. In either case, include units and the equity bridge; the helper calculates only from supplied inputs and does not choose assumptions.
@@ -49,4 +49,5 @@ Valuation & Opportunity Card with input status and provenance; method and reject
 - [ ] Industry method is justified and equity value reconciles debt-like claims and diluted shares.
 - [ ] Margin of safety and upside formulas are independently labelled and calculated.
 - [ ] Critical inputs, periods, currency and sources are explicit; missing data blocks scoring.
+- [ ] Every input's publication timestamp is at or before the valuation as-of timestamp; later publications are excluded.
 - [ ] Sensitivity recomputes the underlying method and is not described as a probability.
