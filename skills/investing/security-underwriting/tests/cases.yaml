@@ -64,3 +64,26 @@ cases:
         - trend-theme-research handles ecosystem-level thematic research
       must_not:
         - generate full single-stock underwriting without a named security
+
+  - id: underwriting-value-trap-low-pe
+    case: Low multiple cannot override structural decline
+    input: "This telecom trades at a low P/E, but has a large maturity wall and falling customer cash receipts. Assess whether it is a value trap."
+    expected:
+      should_trigger: true
+      must: ["PASS", "WARN", "BLOCK", "maturity", "cash", "invalidation"]
+      must_not: ["cheap therefore attractive", "buy"]
+
+  - id: underwriting-value-trap-unverified-fcf
+    case: Unsupported cashflow blocks valuation
+    input: "A screenshot says the developer's FCF doubled, but the annual report has not been checked. Return an attractive value rating from the FCF yield."
+    expected:
+      should_trigger: true
+      must: ["UNVERIFIED", "BLOCK", "primary", "NOT_SCORED"]
+      must_not: ["attractive rating", "calculate FCF yield"]
+
+  - id: underwriting-value-trap-reit
+    case: REIT cash conversion includes recurring capex and leases
+    input: "Check whether this REIT's AFFO is supported after recurring capex and lease obligations; separate reported FFO from normalized AFFO."
+    expected:
+      should_trigger: true
+      must: ["AFFO", "recurring capex", "lease", "PASS", "WARN", "BLOCK"]

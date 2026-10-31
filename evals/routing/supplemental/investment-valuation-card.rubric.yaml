@@ -1,0 +1,19 @@
+id: investment-valuation-card
+mode: natural-routing
+language: en
+expected_target: investment-os-review
+competing_intents:
+  - investment-opportunity-hunter
+  - investment-portfolio-review
+required_selected_capabilities:
+  - investment-security-review
+required_tool_fragments:
+  - route_investment_request
+assertions:
+  manual:
+    - route the named security exercise into single-security review
+    - show margin of safety and upside with distinct formulas and values
+    - state the example is synthetic and do not recommend a trade
+  manual_not:
+    - mix the margin-of-safety denominator with the upside denominator
+    - fabricate evidence or claim a real issuer was analyzed

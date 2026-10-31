@@ -482,15 +482,15 @@ components:
 
   - name: market-opportunity-scan
     kind: skill
-    version: "0.4.0"
+    version: "0.4.1"
     source: skills/investing/market-opportunity-scan/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
+    evidence_gap: "Exact R20 runtime validation of weekly cheapness/priority separation is pending; dated historical snapshots and outcomes are unavailable."
+    limitation: "Lab candidate; historical outcomes must remain NOT_RUN without preserved point-in-time rankings, returns and benchmark data."
 
   - name: portfolio-state-review
     kind: skill
@@ -518,15 +518,15 @@ components:
 
   - name: security-underwriting
     kind: skill
-    version: "0.5.1"
+    version: "0.5.2"
     source: skills/investing/security-underwriting/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
+    evidence_gap: "Exact R20 runtime validation of the new cash-flow quality gate is pending."
+    limitation: "Lab candidate until the exact gate is retested; do not treat unverified outputs as a current-version PASS."
 
   - name: thesis-challenge
     kind: skill
@@ -567,16 +567,15 @@ components:
 
   - name: valuation-scenario-review
     kind: skill
-    version: "0.1.0"
+    version: "0.2.0"
     source: skills/investing/valuation-scenario-review/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
-    maturity_disposition: retain-existing-pending-evidence-review
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
-    exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    maturity_disposition: lab-candidate-pending-runtime-validation
+    candidate_channel: lab
+    evidence_gap: "Exact R20 runtime validation of the Valuation & Opportunity Card and formula labels is pending."
+    limitation: "Lab candidate until exact-version runtime checks confirm method selection and arithmetic; no investment action is implied."
 
   - name: investment-os-review
     kind: workflow
@@ -616,16 +615,15 @@ components:
 
   - name: investment-security-review
     kind: workflow
-    version: "0.4.1"
+    version: "0.4.2"
     source: workflows/investment-security-review/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
-    maturity_disposition: retain-existing-pending-evidence-review
-    evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
-    limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
-    exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    maturity_disposition: lab-candidate-pending-runtime-validation
+    candidate_channel: lab
+    evidence_gap: "Exact R20 runtime validation of the integrated cash-flow gate and valuation card is pending."
+    limitation: "Lab candidate until exact-version runtime checks pass; current workflow remains analysis-only and does not authorize canonical writes or trading."
 
   - name: investment-portfolio-observation
     kind: workflow

@@ -1,0 +1,1 @@
+Using this explicitly synthetic, non-company fixture as of 2026-10-30: price EUR 80; normalized EPS EUR 4; bear/base/bull EPS EUR 3/4/5; exit P/E 8/10/12; diluted shares 10 million; all figures are internally consistent for this exercise. Build the concise valuation card, show margin of safety and upside separately, and explain the method. Do not make a trade recommendation.

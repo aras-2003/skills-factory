@@ -1,0 +1,1 @@
+Prepare this week's opportunity shortlist. I have no saved point-in-time rankings, historical universe membership, or benchmark return series. Separate cheapness from decision priority, and tell me whether 3/6/12-month outcome attribution can be run. Do not invent historical results or recommend trades.
