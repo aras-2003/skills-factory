@@ -22,6 +22,11 @@ from valuation_scenarios import (
 
 
 class ValuationScenarioTests(unittest.TestCase):
+    def test_dcf_cash_flows_begin_in_period_one(self) -> None:
+        value = dcf_per_share([100], 0.10, 0.02, 0, 1)
+        expected = 100 / 1.10 + (100 * 1.02 / (0.10 - 0.02)) / 1.10
+        self.assertAlmostEqual(expected, value)
+
     def test_margin_of_safety_and_upside_use_distinct_denominators(self) -> None:
         self.assertAlmostEqual(0.2, margin_of_safety(100, 80))
         self.assertAlmostEqual(0.25, upside(100, 80))
@@ -31,6 +36,30 @@ class ValuationScenarioTests(unittest.TestCase):
         self.assertEqual(60, affo_multiple_per_share(3, 20))
         self.assertEqual(80, nav_per_share(1200, 400, 10))
         self.assertGreater(residual_income_per_share(50, [0.14, 0.13], [0.3, 0.3], 0.10, 0.02), 50)
+
+    def test_named_synthetic_industry_fixtures_and_telecom_equity_bridge(self) -> None:
+        # Synthetic fixtures keep method selection deterministic without implying real issuer data.
+        developer_nav = nav_per_share(asset_value=1200, liabilities=400, diluted_shares=10)
+        reit_affo = affo_multiple_per_share(affo_per_share=3, exit_multiple=20)
+        bank_residual_income = residual_income_per_share(50, [0.14, 0.13], [0.3, 0.3], 0.10, 0.02)
+        telecom_equity = dcf_per_share([120, 125, 130], 0.10, 0.02, 1500, 100)
+        telecom_enterprise_per_share = dcf_per_share([120, 125, 130], 0.10, 0.02, 0, 100)
+
+        self.assertEqual(80, developer_nav)
+        self.assertEqual(60, reit_affo)
+        self.assertGreater(bank_residual_income, 50)
+        self.assertAlmostEqual(15, telecom_enterprise_per_share - telecom_equity)
+
+    def test_as_of_contract_and_future_publication_regression_case_are_present(self) -> None:
+        from pathlib import Path
+
+        source_dir = Path(__file__).resolve().parents[1]
+        skill = (source_dir / "SKILL.md").read_text(encoding="utf-8")
+        cases = (source_dir / "tests/cases.yaml").read_text(encoding="utf-8")
+        self.assertIn("Use only facts published on or before the selected as-of timestamp", skill)
+        self.assertIn("period-end date does not prove the information was available then", skill)
+        self.assertIn("id: valuation-card-no-lookahead", cases)
+        self.assertIn("2026-08-15", cases)
 
     def test_dcf_discounting_and_equity_bridge(self) -> None:
         value = dcf_per_share([10, 12], 0.10, 0.02, 20, 2)
