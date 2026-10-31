@@ -333,7 +333,7 @@
       "name": "valuation-scenario-review",
       "domain": "investing",
       "maturity": "production",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "description": "Build bear, base and bull valuation scenarios for one security using explicit operating assumptions, valuation methods and market-implied expectations. Use when valuation could change an investment decision or position size. Do not use as a standalone price-target generator.",
       "source": "skills/investing/valuation-scenario-review/SKILL.md",
       "source_status": "present",

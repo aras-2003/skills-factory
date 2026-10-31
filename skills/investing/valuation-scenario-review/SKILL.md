@@ -6,7 +6,7 @@ description: >
   Do not use as a standalone price-target generator.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.2.0"
+  version: "0.3.0"
   maturity: production
   risk: high
   last_reviewed: 2026-10-31
@@ -25,7 +25,7 @@ Make valuation assumptions visible and test sensitivity instead of producing fal
 3. Build bear/base/bull operating assumptions with an explicit horizon. Scenarios must differ in operating logic, not only the exit multiple.
 4. Separate earnings/cash-flow assumptions from terminal or exit assumptions. A tested arithmetic helper is packaged at `scripts/valuation_scenarios.py`; use it only when the active runtime can actually execute packaged scripts. Otherwise show formulas and calculations, and do not claim the helper ran. In either case, include units and the equity bridge; the helper calculates only from supplied inputs and does not choose assumptions.
 5. Present one auditable Valuation & Opportunity Card: method and alternatives; as-of price/currency; bear/base/bull fair-value ranges; margin of safety `(fair value - price) / fair value`; upside `(fair value / price) - 1`; horizons; separate quality, valuation, catalyst/timing, portfolio fit and confidence; and source/provenance for every material input.
-6. For DCF/FCF methods, recompute ±20% FCF and discount-rate sensitivity. For other methods, show the corresponding earnings/AFFO/NAV and multiple sensitivities; do not label a generic sensitivity as a DCF result.
+6. For DCF/FCF methods, recompute FCF ±20% and discount rate ±20% relative to the base rate. For EPS/AFFO, recompute the earnings/FFO per-share input and multiple independently at ±20%. For NAV, recompute asset value and liabilities at ±20%, and price-to-NAV at ±20% when used. Do not label a generic sensitivity as a DCF result.
 7. Compare with historical ranges and relevant peers only when definitions and periods are comparable. Estimate what current price implies and identify the assumption driving the valuation range.
 8. Do not assign scenario probabilities unless there is an explicit, cited evidence basis. A scenario range is not a probability distribution or a price target.
 

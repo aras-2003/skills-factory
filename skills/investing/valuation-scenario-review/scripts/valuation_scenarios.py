@@ -68,6 +68,17 @@ def affo_multiple_per_share(affo_per_share: float, exit_multiple: float) -> floa
     return affo_per_share * exit_multiple
 
 
+def affo_multiple_sensitivity(affo_per_share: float, exit_multiple: float) -> dict[str, float]:
+    """Show independent ±20% AFFO/share and P/AFFO cases."""
+    return {
+        "base": affo_multiple_per_share(affo_per_share, exit_multiple),
+        "affo_down_20pct": affo_multiple_per_share(affo_per_share * 0.8, exit_multiple),
+        "affo_up_20pct": affo_multiple_per_share(affo_per_share * 1.2, exit_multiple),
+        "multiple_down_20pct": affo_multiple_per_share(affo_per_share, exit_multiple * 0.8),
+        "multiple_up_20pct": affo_multiple_per_share(affo_per_share, exit_multiple * 1.2),
+    }
+
+
 def nav_per_share(asset_value: float, liabilities: float, diluted_shares: float) -> float:
     """Net asset value per share from independently supported asset/liability values."""
     if not isfinite(asset_value) or asset_value < 0:
@@ -79,6 +90,27 @@ def nav_per_share(asset_value: float, liabilities: float, diluted_shares: float)
     if value <= 0:
         raise ValueError("net asset value per share must be positive")
     return value
+
+
+def nav_sensitivity(
+    asset_value: float, liabilities: float, diluted_shares: float,
+    price_to_nav: float = 1.0,
+) -> dict[str, float]:
+    """Recompute NAV/share for ±20% assets, liabilities and price-to-NAV."""
+    _positive("price_to_nav", price_to_nav)
+
+    def value(assets: float, claims: float, multiple: float = price_to_nav) -> float:
+        return nav_per_share(assets, claims, diluted_shares) * multiple
+
+    return {
+        "base": value(asset_value, liabilities),
+        "assets_down_20pct": value(asset_value * 0.8, liabilities),
+        "assets_up_20pct": value(asset_value * 1.2, liabilities),
+        "liabilities_down_20pct": value(asset_value, liabilities * 0.8),
+        "liabilities_up_20pct": value(asset_value, liabilities * 1.2),
+        "price_to_nav_down_20pct": value(asset_value, liabilities, price_to_nav * 0.8),
+        "price_to_nav_up_20pct": value(asset_value, liabilities, price_to_nav * 1.2),
+    }
 
 
 def residual_income_per_share(
@@ -109,17 +141,17 @@ def residual_income_per_share(
 
 def dcf_sensitivity(
     cash_flows: list[float], discount_rate: float, terminal_growth: float,
-    net_debt: float, diluted_shares: float, rate_shift: float = 0.02,
+    net_debt: float, diluted_shares: float, rate_change_pct: float = 0.20,
 ) -> dict[str, float]:
-    """Recompute DCF for ±20% FCF and ±rate_shift discount-rate cases."""
-    if not isfinite(rate_shift) or rate_shift <= 0:
-        raise ValueError("rate_shift must be finite and positive")
+    """Recompute DCF for ±20% FCF and relative discount-rate changes."""
+    if not isfinite(rate_change_pct) or not 0 < rate_change_pct < 1:
+        raise ValueError("rate_change_pct must be finite and between 0 and 1")
     scenarios = {
         "base": (cash_flows, discount_rate),
         "fcf_down_20pct": ([x * 0.8 for x in cash_flows], discount_rate),
         "fcf_up_20pct": ([x * 1.2 for x in cash_flows], discount_rate),
-        "discount_rate_up": (cash_flows, discount_rate + rate_shift),
-        "discount_rate_down": (cash_flows, discount_rate - rate_shift),
+        "discount_rate_up": (cash_flows, discount_rate * (1 + rate_change_pct)),
+        "discount_rate_down": (cash_flows, discount_rate * (1 - rate_change_pct)),
     }
     return {
         name: dcf_per_share(flows, rate, terminal_growth, net_debt, diluted_shares)
