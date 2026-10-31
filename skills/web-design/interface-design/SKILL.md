@@ -10,7 +10,7 @@ metadata:
   version: "0.1.5"
   maturity: candidate
   risk: medium
-  last_reviewed: "2026-10-27"
+  last_reviewed: "2026-10-31"
   execution:
     default_model_class: standard
 ---
@@ -41,10 +41,6 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 - Screen or user-flow goal.
 - Intended user and their primary task.
 - Target runtime or device context.
-
-## Applicability and required-context gates
-
-First decide whether the current request is for interface design. This applicability check comes before the required-context gate below. If the user asks to implement or edit a working page or application, or to run its tests, do not apply this skill and do not ask design-context questions; hand control to the implementation workflow. If this skill was loaded explicitly for an isolated test, state that it does not apply and stop.
 
 ## Applicability and required-context gates
 
