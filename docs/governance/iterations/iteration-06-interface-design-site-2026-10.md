@@ -57,6 +57,6 @@ Close only after every required matrix row passes on the pinned Site candidate, 
 The Site 82 behavioral probes found a direct-positive answer proposing an unprovided account-navigation route and an implementation near-miss that asked interface-design context questions. The frozen fixture now makes those failures explicit. This is corrective work for failed acceptance rows; the acceptance scope is unchanged, and the original failures remain preserved.
 
 - Corrective PR: #527.
-- Candidate `interface-design`: v0.1.5; source-file SHA-256 `61eaa16fab92802ee49b40cd07007ec8bd713bfd118008ea2872f0f86daa9158`.
+- Candidate `interface-design`: v0.1.5; source-file SHA-256 `bbb14b50d3bc66ef5cb91089d72851252330a8fb7e62e9d194827a459638b7f8`.
 - The active campaign now includes the skill path and pins this exact content SHA. The Site canonical source revision is pending merge and publication.
 - No updated-runtime PASS is claimed until the frozen cases are rerun on the exact published Site candidate.
