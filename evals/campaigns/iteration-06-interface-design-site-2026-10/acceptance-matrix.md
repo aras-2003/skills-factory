@@ -114,3 +114,20 @@ Site identity was verified through `runtime_info`: canonical SHA `e8471eecd51fbf
 | Implementation/visual-regression near-miss | PASS | Did not claim implementation or tests; asked for the missing approved design/repository. |
 
 The local v0.1.4 source is pinned in `campaign.yaml` and adds `interface-design-explicit-placeholder-positive`. These checks do not test that candidate, and the campaign remains active pending publication and fresh repetitions.
+
+
+## Site 83 exact-current-source checks — `interface-design` v0.1.5
+
+Candidate from the designated deployment chat: Site 83, attestation verified, canonical SHA `223fe6a581343ea6f9c1041ebfa3c6d91762fbca`, Lab `1.38.406`; loaded package v0.1.5 content SHA-256 `a2b42d14466e74cd3b892c3908f379ab233773e688b5bb4f85c7eeaae97a7398`. Runtime MCP identity/load receipts are exact-source provenance only. Behavioral results are host-agent observations without signed response receipts.
+
+| ID | Case | Runs | Result | Evidence |
+| --- | --- | ---: | --- | --- |
+| ID-DIRECT-SITE-v83 | Direct-positive account dashboard | 3 | PASS 3/3 | Three independent host responses used neutral placeholders, left route/destination details unspecified, covered mobile/desktop and states, and did not invent product behavior. |
+| ID-INDIRECT-SITE-v83 | Indirect onboarding | 1 | PASS | Mobile-first flow and desktop changes; observation was not presented as proof of cause. |
+| ID-PLACEHOLDER-SITE-v83 | Explicit placeholder authorization | 1 | PASS | Bounded role assumption, placeholders, and unresolved routes/rules. |
+| ID-NEAR-REPORT-SITE-v83 | Report/diagram near-miss | 3 | PASS 3/3 | All responses retained report/architecture scope; no interface brief. |
+| ID-NEAR-IMPLEMENT-SITE-v83 | Implementation/test near-miss | 3 | FAIL 1/3 | Two scope decisions; one response echoed the prompt verbatim without determining applicability. Original attempt preserved. |
+| ID-CLARIFY-SITE-v83 | Insufficient context | 1 | PASS | Asked which screen, user task, and runtime/device. |
+| ID-ACCESSIBILITY-SITE-v83 | Billing permission edge | 1 | PASS | Permission unavailable distinct from truly empty; no restricted data; responsive and accessible states described. |
+
+Current v0.1.5 behavioral matrix is incomplete: no I01-SENT-001/002 sentinels, no unchanged-domain probes, and one critical routing failure. The corrected v0.1.6 must be published and retested; historical attempts remain preserved.
