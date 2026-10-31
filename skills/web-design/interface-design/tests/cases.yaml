@@ -61,9 +61,12 @@ cases:
       Implement this approved checkout design in the existing React app, run the tests, and fix any runtime errors.
     expected:
       should_trigger: false
+      must:
+        - state concisely that interface-design does not apply and direct the request to implementation
       must_not:
         - replace the implementation task with a design-only brief
         - ask interface-design context questions or propose design output for an explicit implementation-and-testing request
+        - echo the prompt without a useful scope decision
 
   - id: interface-design-insufficient-context
     case: vague-screen-request
