@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.5"
+  version: "0.1.6"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-10-31"
@@ -44,7 +44,7 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 ## Applicability and required-context gates
 
-First decide whether the current request is for interface design. This applicability check comes before the required-context gate below. If the user asks to implement or edit a working page or application, or to run its tests, do not apply this skill and do not ask design-context questions; hand control to the implementation workflow. If this skill was loaded explicitly for an isolated test, state that it does not apply and stop.
+First decide whether the current request is for interface design. This applicability check comes before the required-context gate below. If the user asks to implement or edit a working page or application, or to run its tests, do not apply this skill and do not ask design-context questions; hand control to the implementation workflow. If this skill was loaded explicitly for an isolated test, state that it does not apply and stop. In either case, give a concise scope decision; do not echo or merely repeat the user request, and do not emit design questions or a design brief. If the active implementation workflow is unavailable during a real implementation request, state the specific missing repository or approved artifact needed to continue.
 
 ## Required-context gate
 
