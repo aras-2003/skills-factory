@@ -52,6 +52,12 @@ The default is **analysis only**. A user request to research, analyze, review, s
 - margin of safety and upside are separate metrics with separate formulas;
 - review threshold != hard ceiling.
 
+## Related components and scope
+- This workflow provides the single-security evidence package consumed by Tactical Review (#306); keep the detailed valuation card here rather than expanding the daily risk brief.
+- Reuse Financial Quality Audit (#318) for multi-year cash-flow and return evidence and the existing bear-case review (#307) for independent downside challenge; do not duplicate or override either result.
+- Pass explicitly separated quality, valuation, catalyst/timing, portfolio-fit and confidence inputs to the horizon-aware opportunity score (#360). This workflow does not replace that ranking, portfolio review or an owner decision.
+- Keep the sequence analysis-only. A valuation card or cash-flow gate never authorizes a canonical write, portfolio action or trade.
+
 ## Output contract
 WHY THIS / WHY NOW | historical price/KPI/valuation context | material event timeline | observed moves vs likely causes + confidence | business thesis | value-trap gates and reasons | evidence-sanity status | verified/blocked metrics | Valuation & Opportunity Card or NOT_SCORED | priced-in expectations | separate quality/valuation/catalyst/portfolio fit/confidence | strongest countercase | thesis state | portfolio constraints | lifecycle/sizing state if permitted | exact evidence gaps | next trigger | canonical READ/WRITE receipts.
 

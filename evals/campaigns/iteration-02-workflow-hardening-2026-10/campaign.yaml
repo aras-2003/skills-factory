@@ -11,7 +11,7 @@ out_of_scope_behavior_paths:
 workflow_versions:
   oaf-strategy-execution-reset: "0.1.1"
   investment-attention-review: "0.2.2"
-  investment-security-review: "0.4.2"
+  investment-security-review: "0.4.3"
   investment-theme-discovery: "0.2.1"
 source_case_file: evals/campaigns/iteration-02-workflow-hardening-2026-10/cases.yaml
 required_cases_per_workflow: 4

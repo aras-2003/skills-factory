@@ -1015,7 +1015,7 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.4.2",
+      "version": "0.4.3",
       "description": "Child workflow for one-security review. Use when selected by investment-os-review, explicitly requested, or when a single named security is already the clear decision object. Do not use as the default entry point for broad natural investment requests.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
