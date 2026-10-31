@@ -7,10 +7,10 @@ description: >
   canonical portfolio context from investment-record-store. Do not issue buy/sell instructions.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.4.0"
+  version: "0.4.1"
   maturity: production
   risk: medium
-  last_reviewed: "2026-10-27"
+  last_reviewed: "2026-10-31"
   execution:
     default_model_class: fast
 ---
@@ -19,6 +19,13 @@ metadata:
 
 ## Purpose
 Reduce a broad investable universe to a small research queue by looking for meaningful change, not merely popular tickers.
+
+## Weekly shortlist and outcome attribution
+- Use this as a mode of the existing scanner; do not create a parallel screener, replay engine, store or scheduler.
+- Freeze the universe, price, financial inputs, model version and `as_of` date for every run. Keep cheapness (peer/history valuation) separate from decision priority (quality, catalyst/timing, portfolio fit and confidence); do not rank missing or conflicted cases.
+- Report only material changes from the prior dated snapshot, with reason codes and confidence. If the prior snapshot or source history is absent, report `CHANGE_COMPARISON_NOT_RUN`.
+- Report 3/6/12-month outcomes only from preserved point-in-time rankings, dated total-return inputs and benchmark series with matching horizons. Include coverage, delisted/missing instruments, costs and a simple cheap-P/E baseline when inputs exist. Otherwise return `OUTCOME_ATTRIBUTION_NOT_RUN`; never reconstruct historical ranks from today's constituents or fill missing returns.
+- Do not introduce a table, migration or background schedule. Persist only through an existing documented canonical operation/schema, with separate write authorization. If the schema cannot store needed snapshot provenance/version safely, leave the result unpersisted and say so.
 
 ## Tool routing
 Use the narrowest available source for each job:
@@ -119,6 +126,7 @@ For the top 2-3 promoted candidates additionally:
 - exact reason this name outranked alternatives.
 - For each requested horizon, include `rank | candidate | score (0.00–1.00) | difference to next | confidence | completeness | research action | concise verdict`. Keep `NOT_SCORED` visible with evidence-gate reasons and no rank.
 - Include a compact score audit with model version, shared as-of date, factor weights/contributions, normalization-profile compatibility, sources and the strongest fact or valuation level that would change the verdict. State explicitly that the score is not a probability.
+- For weekly mode, add `as_of | model_version | cheapness view | decision-priority rank | prior-snapshot delta | 3/6/12m outcome state`; unavailable comparisons must remain explicitly NOT_RUN.
 
 ## Quality checks
 - [ ] Canonical portfolio/watchlist context was attempted.
@@ -132,3 +140,6 @@ For the top 2-3 promoted candidates additionally:
 - [ ] Decision-relevant claims were verified or marked unverified.
 - [ ] No candidate is labeled a buy.
 - [ ] Broker availability status is explicit.
+- [ ] Weekly cheapness is distinct from decision-priority ranking.
+- [ ] Historical snapshots, point-in-time constituents, benchmark returns or baseline outcomes are never reconstructed or imputed when absent.
+- [ ] Any comparison missing its dated inputs is explicitly `NOT_RUN`; no result is presented as verified.

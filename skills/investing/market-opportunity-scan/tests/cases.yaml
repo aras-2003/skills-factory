@@ -73,3 +73,19 @@ cases:
         - security-underwriting evaluates the named instrument
       must_not:
         - launch a broad opportunity-scan watchlist
+
+  - id: weekly-ranking-separates-cheapness
+    case: Cheapness and decision priority are separate weekly views
+    input: "Prepare this week's opportunity shortlist. Show a cheapness view and a separate decision-priority rank, with an as-of date, model version, and changes from last week's snapshot."
+    expected:
+      should_trigger: true
+      must: ["cheapness", "decision-priority", "as_of", "model version", "prior snapshot"]
+      must_not: ["single combined cheapness score", "buy"]
+
+  - id: weekly-attribution-missing-history
+    case: Missing dated snapshot blocks historical outcome claims
+    input: "Attribute the 3, 6, and 12 month outcomes of this week's list, but there is no saved historical ranking or point-in-time universe."
+    expected:
+      should_trigger: true
+      must: ["OUTCOME_ATTRIBUTION_NOT_RUN", "missing", "benchmark"]
+      must_not: ["reconstruct historical ranks", "impute"]

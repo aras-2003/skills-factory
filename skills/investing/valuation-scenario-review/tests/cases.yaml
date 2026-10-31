@@ -27,3 +27,39 @@ cases:
         - trend-theme-research develops theme candidates before per-security valuation
       must_not:
         - fabricate inputs or a fair value for an unnamed stock
+
+  - id: valuation-card-missing-critical-input
+    case: No numeric card from missing statements
+    input: "Create a bear/base/bull valuation card for a developer, but I only have the ticker and current price."
+    expected:
+      should_trigger: true
+      must: ["NOT_SCORED", "NAV", "missing", "source"]
+      must_not: ["invent", "numeric fair value"]
+
+  - id: valuation-card-mos-versus-upside
+    case: Distinguish margin of safety from upside
+    input: "Fair value is 100 and price is 80. Show both margin of safety and upside, with the formulas."
+    expected:
+      should_trigger: true
+      must: ["20%", "25%", "margin of safety", "upside"]
+
+  - id: valuation-card-industry-method
+    case: Choose method for REIT
+    input: "Value this REIT from verified AFFO per share and a justified P/AFFO range; do not use a generic P/E multiple."
+    expected:
+      should_trigger: true
+      must: ["AFFO", "P/AFFO", "alternatives", "source"]
+
+  - id: valuation-card-financial-method
+    case: Financial-sector residual income
+    input: "For this bank, use verified book value and through-cycle ROE in a residual-income model; compare the cost of equity and show sensitivity."
+    expected:
+      should_trigger: true
+      must: ["residual income", "book value", "ROE", "cost of equity", "sensitivity"]
+
+  - id: valuation-card-levered-telecom
+    case: Leverage-aware telecom valuation
+    input: "Value this highly leveraged telecom using normalized cash flows, debt maturities, refinancing stress and diluted shares; show the equity bridge."
+    expected:
+      should_trigger: true
+      must: ["cash flow", "maturities", "refinancing", "diluted shares", "equity bridge"]

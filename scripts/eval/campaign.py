@@ -553,6 +553,8 @@ def separately_validated_iteration02_workflow_paths(root: Path = ROOT) -> set[st
     cfg_path = root / "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml"
     if not cfg_path.is_file():
         return set()
+
+
     try:
         cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
         declared = cfg.get("out_of_scope_behavior_paths") or []
@@ -628,6 +630,42 @@ def separately_validated_iteration02_workflow_paths(root: Path = ROOT) -> set[st
                     return set()
         return expected
     except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
+        return set()
+
+
+def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]:
+    """Exclude only hash-bound valuation/cash-flow candidates from frozen R20."""
+    cfg_path = root / "evals/campaigns/investment-quality-2026-10/campaign.yaml"
+    expected = {
+        "skills/investing/security-underwriting/scripts/value_trap_gate.py",
+        "skills/investing/valuation-scenario-review/SKILL.md",
+        "skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py",
+    }
+    try:
+        cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+        hashes = cfg.get("source_sha256") or {}
+        test_modules = cfg.get("test_modules") or []
+        if (
+            cfg.get("campaign") != "investment-quality-2026-10"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("historical_r20_immutable") is not True
+            or cfg.get("release_approved") is not False
+            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
+            or set(hashes) != expected
+            or set(test_modules) != {
+                "skills/investing/security-underwriting/tests/test_value_trap_gate.py",
+                "skills/investing/valuation-scenario-review/tests/test_valuation_scenarios.py",
+            }
+        ):
+            return set()
+        for rel in expected:
+            path = root / rel
+            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
+                return set()
+        if not all((root / path).is_file() for path in test_modules):
+            return set()
+        return expected
+    except (OSError, ValueError, TypeError, AttributeError, yaml.YAMLError):
         return set()
 
 
@@ -989,6 +1027,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
+    separate_meta_targets.update(separately_validated_investment_quality_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
     separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))

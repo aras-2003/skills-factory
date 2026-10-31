@@ -1,0 +1,20 @@
+id: investment-weekly-attribution
+mode: natural-routing
+language: en
+expected_target: investment-os-review
+competing_intents:
+  - investment-security-review
+  - investment-portfolio-review
+required_selected_capabilities:
+  - investment-opportunity-hunter
+required_tool_fragments:
+  - route_investment_request
+assertions:
+  manual:
+    - route the weekly opportunity request into discovery
+    - separate cheapness from decision priority
+    - state that historical outcome attribution is NOT_RUN because dated rankings and benchmarks are absent
+    - identify missing evidence and avoid reconstructing past ranks
+  manual_not:
+    - fabricate 3/6/12-month outcomes
+    - collapse the two rankings into a single cheapness score

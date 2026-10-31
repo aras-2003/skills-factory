@@ -61,6 +61,25 @@ class RuntimeCampaignTests(unittest.TestCase):
         with patch.object(campaign, 'behavior_changes', return_value=['skills/new/SKILL.md']):
             self.assertTrue(any('behavior changed after pinned SHA' in error for error in campaign.validate_campaign()))
 
+    def test_investment_quality_candidate_is_hash_bound_and_not_runtime_approved(self) -> None:
+        expected = {
+            "skills/investing/security-underwriting/scripts/value_trap_gate.py",
+            "skills/investing/valuation-scenario-review/SKILL.md",
+            "skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py",
+        }
+        self.assertEqual(expected, campaign.separately_validated_investment_quality_paths())
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            cfg_path = root / "evals/campaigns/investment-quality-2026-10/campaign.yaml"
+            cfg_path.parent.mkdir(parents=True)
+            cfg_path.write_text((ROOT / "evals/campaigns/investment-quality-2026-10/campaign.yaml").read_text())
+            cfg = yaml.safe_load(cfg_path.read_text())
+            for rel in expected | set(cfg["test_modules"]):
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("fixture")
+            self.assertEqual(set(), campaign.separately_validated_investment_quality_paths(root))
+
     def test_campaign_resolves_exact_scope_and_isolation(self) -> None:
         self.assertEqual([], campaign.validate_campaign())
         cases = load_campaign_cases(ROOT, campaign.config()["campaign"])

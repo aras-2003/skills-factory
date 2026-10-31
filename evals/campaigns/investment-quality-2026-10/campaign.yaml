@@ -1,0 +1,15 @@
+campaign: investment-quality-2026-10
+runtime_status: NOT_RUN
+release_approved: false
+historical_r20_immutable: true
+out_of_scope_behavior_paths:
+  - skills/investing/security-underwriting/scripts/value_trap_gate.py
+  - skills/investing/valuation-scenario-review/SKILL.md
+  - skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py
+source_sha256:
+  skills/investing/security-underwriting/scripts/value_trap_gate.py: f2c03a7b5146b5f2ec33d594f956573d13baf12f4756b412c1890c8e0ad4f10d
+  skills/investing/valuation-scenario-review/SKILL.md: c409138c8ceacee6c2ae08ded9ee3a00bcbdce4007156d638db04d3111124ddb
+  skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: dd56f44a3345254b90350000bcc76144b7db117e46b12115343c55784cf937d9
+test_modules:
+  - skills/investing/security-underwriting/tests/test_value_trap_gate.py
+  - skills/investing/valuation-scenario-review/tests/test_valuation_scenarios.py

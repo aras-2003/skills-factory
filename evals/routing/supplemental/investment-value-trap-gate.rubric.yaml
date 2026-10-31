@@ -1,0 +1,20 @@
+id: investment-value-trap-gate
+mode: natural-routing
+language: en
+expected_target: investment-os-review
+competing_intents:
+  - investment-portfolio-review
+  - investment-opportunity-hunter
+required_selected_capabilities:
+  - investment-security-review
+required_tool_fragments:
+  - route_investment_request
+assertions:
+  manual:
+    - route the named fictional issuer into single-security review
+    - distinguish reported cash flow from residual cash after capex and leases
+    - show explicit WARN/BLOCK gates, reasons and invalidation triggers
+    - do not derive a positive investment conclusion from a yield alone
+  manual_not:
+    - label the synthetic example as verified real-world data
+    - recommend a buy or invent a universal leverage cutoff
