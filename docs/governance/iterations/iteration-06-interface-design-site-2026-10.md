@@ -11,7 +11,7 @@
 
 Verify the already merged `interface-design` behavior and fixes from #475/#478/#481 on the currently deployed Skills Factory Cloud Next Site in ordinary Chat. This is semantic verification, not new capability development. Keep #423, #474 and #480 open until evidence supports their individual closure. #424–#426 remain excluded.
 
-The six source cases are reused unchanged from `skills/web-design/interface-design/tests/cases.yaml`; input hashes and run counts are pinned in [the acceptance matrix](../../../evals/campaigns/iteration-06-interface-design-site-2026-10/acceptance-matrix.md). Evaluator assertions remain outside executor prompts.
+The seven source cases are reused unchanged from `skills/web-design/interface-design/tests/cases.yaml`; input hashes and run counts are pinned in [the acceptance matrix](../../../evals/campaigns/iteration-06-interface-design-site-2026-10/acceptance-matrix.md). Evaluator assertions remain outside executor prompts.
 
 ## Candidate and runtime lock
 
@@ -58,5 +58,21 @@ The Site 82 behavioral probes found a direct-positive answer proposing an unprov
 
 - Corrective PR: #527.
 - Candidate `interface-design`: v0.1.5; source-file SHA-256 `b9d3ac4f9272a3c586633b51596f4d9bbe0d1c9b68b0cdb6a765ace4b8e87d39`.
-- The active campaign now includes the skill path and pins this exact content SHA. The Site canonical source revision is pending merge and publication.
-- No updated-runtime PASS is claimed until the frozen cases are rerun on the exact published Site candidate.
+- The active campaign includes the skill path and pins this exact content SHA. PR #527 is merged and Site 83 runs canonical main `223fe6a581343ea6f9c1041ebfa3c6d91762fbca` / Lab `1.38.406`.
+- On v0.1.5, the 7 semantic source cases each passed once; the direct-positive, report/diagram and implementation routing rows were repeated three times. Direct positive and report/diagram passed 3/3. Implementation routing produced two scope decisions and one verbatim prompt echo (FAIL), so the corrected candidate is not accepted.
+
+
+## Site 83 corrective evidence — 2026-10-31
+
+Site MCP attestation verified; canonical source `223fe6a581343ea6f9c1041ebfa3c6d91762fbca`, embedded Lab `1.38.406`; `load_skill(interface-design)` returned v0.1.5, content digest `a2b42d14466e74cd3b892c3908f379ab233773e688b5bb4f85c7eeaae97a7398`. The v0.1.5 response attempts were isolated agent-host executions; individual responses were observed directly, but no signed response receipts are available. MCP identity/load receipts are provenance only, not behavioral verdicts.
+
+- Direct positive account dashboard: PASS 3/3. All three used placeholders for order/status/action, left entry/exit/detail destinations unspecified, described desktop/mobile and required states, and did not invent product behavior.
+- Indirect onboarding: PASS 1/1. Produced a mobile-first flow, desktop adaptation, and separated the observed abandonment signal from unverified causes.
+- Explicit-placeholder order dashboard: PASS 1/1. Used bounded assumptions and placeholders without invented records or routes.
+- Report/diagram near-miss: PASS 3/3. Stayed with report/architecture intent and did not produce an interface brief.
+- Implementation-and-testing near-miss: 2/3 PASS, 1 FAIL. Two responses stated the skill did not apply; one response merely echoed the input without a scope decision. This failed attempt is retained; no retry-until-green.
+- Insufficient context: PASS 1/1. Asked only which screen, user task and target runtime/device.
+- Accessibility/permission edge: PASS 1/1. Kept role-restricted data separate from a confirmed empty account and provided accessible responsive states.
+- Missing from this current-candidate matrix: I01 shared sentinels, unchanged-domain probes, and a complete re-run after correcting the implementation near-miss. No closure claim is made.
+
+PR #528 proposes v0.1.6 to make the out-of-scope response explicit and prevent a no-op echo; its fixture adds a matching assertion. Retest the frozen matrix on a newly pinned Site after merge/publication.
