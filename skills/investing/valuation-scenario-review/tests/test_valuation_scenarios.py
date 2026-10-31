@@ -8,12 +8,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 from valuation_scenarios import (
     affo_multiple_per_share,
+    affo_multiple_sensitivity,
     dcf_per_share,
     dcf_sensitivity,
     earnings_multiple_per_share,
     earnings_multiple_sensitivity,
     margin_of_safety,
     nav_per_share,
+    nav_sensitivity,
     residual_income_per_share,
     upside,
 )
@@ -42,6 +44,26 @@ class ValuationScenarioTests(unittest.TestCase):
         self.assertGreater(values["fcf_up_20pct"], values["base"])
         self.assertLess(values["discount_rate_up"], values["base"])
         self.assertGreater(values["discount_rate_down"], values["base"])
+        self.assertAlmostEqual(
+            dcf_per_share([10, 12], 0.12, 0.02, 20, 2),
+            values["discount_rate_up"],
+        )
+        self.assertAlmostEqual(
+            dcf_per_share([10, 12], 0.08, 0.02, 20, 2),
+            values["discount_rate_down"],
+        )
+
+    def test_affo_and_nav_sensitivities_recompute_method_inputs(self) -> None:
+        affo = affo_multiple_sensitivity(3, 20)
+        self.assertEqual(60, affo["base"])
+        self.assertAlmostEqual(48, affo["affo_down_20pct"])
+        self.assertAlmostEqual(72, affo["multiple_up_20pct"])
+
+        nav = nav_sensitivity(1200, 400, 10)
+        self.assertEqual(80, nav["base"])
+        self.assertEqual(56, nav["assets_down_20pct"])
+        self.assertEqual(72, nav["liabilities_up_20pct"])
+        self.assertAlmostEqual(64, nav["price_to_nav_down_20pct"])
 
     def test_eps_sensitivity_changes_earnings_and_multiple_separately(self) -> None:
         values = earnings_multiple_sensitivity(4, 10)

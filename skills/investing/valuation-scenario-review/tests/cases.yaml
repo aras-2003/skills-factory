@@ -50,6 +50,14 @@ cases:
       should_trigger: true
       must: ["AFFO", "P/AFFO", "alternatives", "source"]
 
+  - id: valuation-card-property-developer
+    case: Property developer NAV
+    input: "Value this property developer from independently verified asset value, project liabilities and diluted shares; show NAV per share and asset/liability sensitivity."
+    expected:
+      should_trigger: true
+      must: ["NAV", "asset value", "liabilities", "diluted shares", "sensitivity"]
+      must_not: ["generic P/E only"]
+
   - id: valuation-card-financial-method
     case: Financial-sector residual income
     input: "For this bank, use verified book value and through-cycle ROE in a residual-income model; compare the cost of equity and show sensitivity."

@@ -567,7 +567,7 @@ components:
 
   - name: valuation-scenario-review
     kind: skill
-    version: "0.2.0"
+    version: "0.3.0"
     source: skills/investing/valuation-scenario-review/SKILL.md
     declared_maturity: production
     static_contract: present
@@ -615,7 +615,7 @@ components:
 
   - name: investment-security-review
     kind: workflow
-    version: "0.4.2"
+    version: "0.4.3"
     source: workflows/investment-security-review/WORKFLOW.md
     declared_maturity: production
     static_contract: present

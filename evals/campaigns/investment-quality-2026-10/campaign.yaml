@@ -8,8 +8,8 @@ out_of_scope_behavior_paths:
   - skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py
 source_sha256:
   skills/investing/security-underwriting/scripts/value_trap_gate.py: f2c03a7b5146b5f2ec33d594f956573d13baf12f4756b412c1890c8e0ad4f10d
-  skills/investing/valuation-scenario-review/SKILL.md: c409138c8ceacee6c2ae08ded9ee3a00bcbdce4007156d638db04d3111124ddb
-  skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: dd56f44a3345254b90350000bcc76144b7db117e46b12115343c55784cf937d9
+  skills/investing/valuation-scenario-review/SKILL.md: 782f5e78f168deeecbac0681247f7008bdf8999696f19761ef8f1acde8827d03
+  skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: d67ff95ad731d6c03c539f8d58d683d4eb1acc88cf6c363f916ffa9cf3db248f
 test_modules:
   - skills/investing/security-underwriting/tests/test_value_trap_gate.py
   - skills/investing/valuation-scenario-review/tests/test_valuation_scenarios.py
