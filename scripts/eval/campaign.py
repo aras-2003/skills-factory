@@ -32,6 +32,7 @@ INTERACTIVE_REPORT_EXHIBIT_CAMPAIGN_REL = Path("evals/campaigns/interactive-repo
 INTERFACE_DESIGN_CAMPAIGN_REL = Path("evals/campaigns/interface-design-2026-10/campaign.yaml")
 EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS = {
     "skills/meta/report-composer/SKILL.md",
+    "skills/meta/report-composer/references/report-state-and-evidence-contract.md",
     "skills/meta/visual-output-design/SKILL.md",
     "skills/meta/visual-output-design/references/tool-routing.md",
 }
