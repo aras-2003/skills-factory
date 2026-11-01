@@ -131,3 +131,24 @@ Candidate from the designated deployment chat: Site 83, attestation verified, ca
 | ID-ACCESSIBILITY-SITE-v83 | Billing permission edge | 1 | PASS | Permission unavailable distinct from truly empty; no restricted data; responsive and accessible states described. |
 
 Current v0.1.5 behavioral matrix is incomplete: no I01-SENT-001/002 sentinels, no unchanged-domain probes, and one critical routing failure. The corrected v0.1.6 must be published and retested; historical attempts remain preserved.
+
+
+## Site v93 isolated host-agent checks — 2026-11-01, `interface-design` v0.1.7
+
+The newest saved Site version was confirmed as v93 through the Sites version history. The live runtime attestation was `verified`, runtime `1.38.415` (`1.38.415+510d83391153`), canonical Lab/source revision `510d8339115323d80578274b438b452bd2bd33f8`, and Site MCP software/source revision `c6f1c5268f60f3a550690d87672ba483e3c418bb`. `load_skill(interface-design)` returned v0.1.7, content SHA-256 `ea250d2b722a3c3f8b0975213faad9bf0588733dc2365c1550febc1c3f3e0c0d`. Runtime and load receipts are unsigned MCP receipts; their output hashes identify tool responses, not signed host-model answers. These were isolated host-agent executions of loaded Site instructions, not ordinary Chat UI runs; no per-case Chat links or signed response receipts were available.
+
+| Case | Site v93 runs | Result | Evidence |
+| --- | ---: | --- | --- |
+| Locked direct-positive account dashboard | 3 | PASS 3/3 | Fresh host responses produced responsive desktop/mobile briefs, preserved unknown order rules/routes as placeholders, covered states/accessibility, and did not invent order records or product capabilities. |
+| Locked report/architecture near-miss | 3 | PASS 3/3 | Fresh host response explicitly said interface-design did not apply to the report and architecture diagram; no design brief or discovery questions. |
+| Locked implementation/test near-miss | 3 | PASS 3/3 | Fresh host response concisely said interface-design did not apply to implementation/testing; no design brief, repository edits, or false test claim. |
+| Insufficient context | 1 | PASS | Prior v0.1.7 Site check asked for the screen/flow, user task, and target runtime/device without inferring the earlier onboarding request. |
+| Indirect onboarding positive | 1 | PASS | Prior v0.1.7 Site check proposed a mobile-first flow, marked unsupported causes as assumptions, and did not claim causality. |
+| Accessibility/permission edge | 1 | PASS | Prior v0.1.7 Site check distinguished unavailable permission from empty data and kept restricted data inaccessible. |
+| Explicit placeholder positive | 1 | PASS | Prior v0.1.7 Site check used bounded assumptions and neutral placeholders without fabricating records or capabilities. |
+| I01-SENT-001 punctuation sentinel | 1 | PASS (scope/safety only) | Loaded skill gave a concise out-of-scope decision; no unrelated tools or writes. |
+| I01-SENT-002 VAT arithmetic sentinel | 1 | PASS (scope/safety only) | Prior v0.1.7 Site host check returned 100 PLN from supplied values and made no external calls/writes. |
+| Synthetic investment opportunity probe | 1 valid natural-route run + 2 direct-load diagnostics | PASS for Site MCP route and preview | `route_investment_request` selected `opportunity-hunter`; loaded `investment-opportunity-hunter` v0.5.1 and `market-opportunity-scan` v0.4.1. Host preview retained synthetic contracts/backlog, margins/valuation/XTB as `UNKNOWN`, made no market/portfolio reads, and wrote nothing. Direct-load diagnostics are not counted as natural-route runs. |
+| Synthetic unit-economics probe | 1 | PASS for supplied-input calculation | Loaded `unit-economics-review` v1.1.0; calculated `100 − 30 − 12 − 3 − 5 = 50 PLN` contribution before ads, kept CAC `UNKNOWN`, and made no external calls/writes. |
+
+The three critical interface-design repetitions now pass on the v0.1.7 Site package, and the six core interface cases plus explicit-placeholder case have observed passing checks. The Site investment router and unchanged-domain probes also passed within their stated synthetic/no-external-call boundaries. The broader Iteration 06 acceptance remains **ACTIVE**: these are isolated host-agent executions, not ordinary Chat UI runs, and no separate Lab-host parity run was performed. Do not use these results alone to close #423, #474, or #483. The current Site identity/load checks prove packaged content and provenance; unsigned MCP receipts do not attest to host semantic output.
