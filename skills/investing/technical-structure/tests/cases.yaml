@@ -1,4 +1,27 @@
 cases:
+  - id: technical-structure-synthetic-known-answer
+    case: Synthetic adjusted bars produce a bounded confirmed-structure result
+    input: |
+      Using only the following explicitly synthetic adjusted daily bars, compute one supplied-window state with the default two left/two right confirmation bars. Dates represent 00:00 UTC and each bar's published_at equals its timestamp. Keep the output clear that this is a synthetic calculation, not real-market evidence or an investment recommendation. Source series: SYNTHETIC-XYZ-DAILY-v1; adjustment ID: synthetic-adjustment-v1; as of 2026-01-11T00:00:00+00:00.
+
+      | timestamp / published_at (UTC) | open | high | low | close | volume | source_id |
+      | --- | ---: | ---: | ---: | ---: | ---: | --- |
+      | 2026-01-01 | 9 | 10 | 8 | 9 | 100 | SYNTHETIC-XYZ-0 |
+      | 2026-01-02 | 11 | 12 | 9 | 11 | 100 | SYNTHETIC-XYZ-1 |
+      | 2026-01-03 | 12 | 14 | 10 | 12 | 100 | SYNTHETIC-XYZ-2 |
+      | 2026-01-04 | 10 | 12 | 9 | 10 | 100 | SYNTHETIC-XYZ-3 |
+      | 2026-01-05 | 9 | 11 | 8 | 9 | 100 | SYNTHETIC-XYZ-4 |
+      | 2026-01-06 | 13 | 14 | 10 | 13 | 100 | SYNTHETIC-XYZ-5 |
+      | 2026-01-07 | 15 | 16 | 11 | 15 | 100 | SYNTHETIC-XYZ-6 |
+      | 2026-01-08 | 12 | 14 | 10 | 12 | 100 | SYNTHETIC-XYZ-7 |
+      | 2026-01-09 | 11 | 13 | 9 | 11 | 100 | SYNTHETIC-XYZ-8 |
+      | 2026-01-10 | 11 | 12 | 10 | 11 | 100 | SYNTHETIC-XYZ-9 |
+      | 2026-01-11 | 11 | 12 | 10 | 11 | 100 | SYNTHETIC-XYZ-10 |
+    expected:
+      should_trigger: true
+      must: ["synthetic", "UPTREND", "OPS 16", "confirmed 2026-01-09", "SYNTHETIC-XYZ-6", "45.45%", "OPD 9", "confirmed 2026-01-11", "SYNTHETIC-XYZ-8", "-18.18%", "score 100", "not a probability"]
+      must_not: ["real market observation", "investment recommendation", "predictive edge"]
+
   - id: technical-structure-confirmed
     case: Summarize supplied confirmed adjusted swing structure
     input: "Using only these adjusted OHLCV bars and source IDs, report confirmed OPS/OPD, trend state, distances and invalidation."
