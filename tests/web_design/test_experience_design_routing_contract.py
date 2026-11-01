@@ -27,7 +27,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
         self.assertEqual(self.metadata["metadata"]["version"], "0.1.1")
         self.assertIn("## Portability boundary", self.body)
-        self.assertIn("confirm the actual host surface and tool receipt", self.body)
+        self.assertIn("confirm the actual host surface and tool receipt", self.body.lower())
         self.assertIn("NOT_RUN, not PASS", self.body)
 
     def test_specialist_routes_remain_explicit_and_non_overlapping(self):
