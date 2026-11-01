@@ -1,0 +1,5 @@
+interface:
+  display_name: Website Quality Review
+  short_description: Review an existing website across rendered desktop and…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'

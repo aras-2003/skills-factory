@@ -1,0 +1,5 @@
+interface:
+  display_name: Experience Design Routing
+  short_description: Use as the UI/UX task router when a user asks for interface…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'
