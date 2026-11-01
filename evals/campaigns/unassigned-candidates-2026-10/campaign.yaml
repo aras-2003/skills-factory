@@ -7,6 +7,7 @@ out_of_scope_behavior_paths:
   - skills/investing/historical-decision-replay/scripts/engine.py
   - skills/investing/technical-structure/SKILL.md
   - skills/investing/technical-structure/scripts/engine.py
+  - skills/web-design/experience-design-routing/SKILL.md
   - skills/web-design/website-quality-review/SKILL.md
   - skills/web-design/website-quality-review/tests/cases.yaml
   - skills/strategy-ea/financial-modeling/SKILL.md
@@ -30,7 +31,6 @@ source_sha256:
   skills/investing/technical-structure/SKILL.md: c5459b4552c2dee0c43346518ed18b3461ca8511c7c40bf4a8d8c1b8629678d2
   skills/investing/technical-structure/scripts/engine.py: 863a2c931f37e30f5c627e25cfc0516faa40a5b6fb20134db0c0467a91e1729e
   skills/web-design/experience-design-routing/SKILL.md: 472fab04584665b04e7f01c0804a44c9a9ec2e51fd16c861cddce692e2eb67b6
-  skills/web-design/experience-design-routing/tests/cases.yaml: de889a9f83ede021fd2fb99f753a51a9afaff27f29036ae35ddec14ddd23cea6
   skills/web-design/website-quality-review/SKILL.md: 9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc
   skills/web-design/website-quality-review/tests/cases.yaml: 45c5661b52c26526649e14054eece0b893a191d6e83c05cee339a37d51cebe68
   skills/strategy-ea/financial-modeling/SKILL.md: 98bc11e8f3f5694741db904814c8ce287c8b6312285d513b4d90bd1fc33a9f28
