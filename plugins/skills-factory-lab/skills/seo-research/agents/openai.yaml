@@ -1,0 +1,5 @@
+interface:
+  display_name: Seo Research
+  short_description: Use when the user requests evidence-backed SEO research…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#77D9CA'
