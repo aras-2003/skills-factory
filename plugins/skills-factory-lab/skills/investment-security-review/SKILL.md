@@ -5,7 +5,7 @@ description: Child workflow for one-security review. Use when selected by invest
   object. Do not use as the default entry point for broad natural investment requests.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.4.1
+  version: 0.4.3
   maturity: production
   risk: high
   last_reviewed: '2026-10-13'
