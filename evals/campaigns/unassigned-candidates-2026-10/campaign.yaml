@@ -47,7 +47,7 @@ source_sha256:
   skills/media/creative-generation/SKILL.md: 49485b2c9e5fa2ae3d0c09194251cf615b443aaaa8ffb73a7b6ba276170e6647
   skills/media/creative-generation/references/decision-and-setup.md: a17a30245950fd4b6dd70fb06237d1512be6b8da48cdc640036133d97ce5ba6d
   skills/media/creative-generation/references/local-engine-matrix.md: 37243d6babf0407eeb427359eb5956ac96f935be2cdffe9ada40ffd27bf6423e
-  skills/media/creative-generation/scripts/comfyui_local.py: 1533642ef91eebe2f519c0c6cf5889dc9fceb4e516f9566c04711543eb3c75d3
+  skills/media/creative-generation/scripts/comfyui_local.py: 1f4596f4ea9125b4a333a8bb5999470375e15fc7569de2e46e4e52d2d81af0f9
 case_suites:
   historical-decision-replay: skills/investing/historical-decision-replay/tests/cases.yaml
   technical-structure: skills/investing/technical-structure/tests/cases.yaml
