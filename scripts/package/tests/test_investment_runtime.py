@@ -102,6 +102,26 @@ class InvestmentRuntimeTests(unittest.TestCase):
             "investment-opportunity-hunter",
         )
 
+    def test_horizon_opportunity_score_routes_to_discovery_without_portfolio_context(self) -> None:
+        self.assert_route(
+            "Synthetic runtime acceptance test only: using fictional candidate fixture symbols TESTA through TESTF "
+            "and explicitly supplied fixture data (no web, plugins, portfolio, or external reads), execute the existing "
+            "horizon-aware opportunity-scoring workflow for six fictional candidates across 1–3 months, 6–12 months, "
+            "and >3 years. Preserve per-horizon scores, confidence/completeness, the three ranked lists, score "
+            "explanations, provenance/as-of flags, and any NOT_SCORED gates. Clearly label all data synthetic and "
+            "scores provisional; make no buy/sell or portfolio action. If a documented workflow/engine cannot consume "
+            "supplied fixture data without inventing facts, stop and report NOT_RUN.",
+            "opportunity",
+            "investment-opportunity-hunter",
+        )
+
+    def test_explicit_portfolio_observation_keeps_ownership_with_opportunity_score(self) -> None:
+        self.assert_route(
+            "Monitor my portfolio and tell me what changed in its opportunity score since the prior snapshot.",
+            "portfolio_observation",
+            "investment-portfolio-observation",
+        )
+
     def test_negative_portfolio_mention_does_not_override_opportunity_discovery(self) -> None:
         self.assert_route(
             "Find a few new stocks worth researching, not a review of my current portfolio.",
