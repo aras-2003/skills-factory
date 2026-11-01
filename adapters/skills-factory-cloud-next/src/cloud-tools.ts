@@ -105,7 +105,7 @@ const routes = ["investment-portfolio-observation", "investment-portfolio-review
 export function routeInvestment(userRequest: string) {
   const editingOnly = /^(?:fix|correct|proofread|edit)\s+(?:(?:only|just)\s+)?(?:the\s+)?(?:punctuation|grammar|spelling)\b/i.test(userRequest.trim());
   const s = userRequest.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l")
-    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*/g, "");
+    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
   const replayText = s.replace(/\bno\s+(?:portfolio|holdings?|trades?|policy|writes?)\b[^.!?;,\n]*/g, "");
   const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);
@@ -114,6 +114,9 @@ export function routeInvestment(userRequest: string) {
   const systemicRisk = /systemic|cross[.\s-]*asset|credit[\s-]+spread|liquidity signal|market breadth|risk[.\s-]+off|risk[.\s-]+indicators?|risk[.\s-]+signals?|macro(?:economic)? risk|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
   const systemicRiskTriage = systemicRisk && /triage|assess|review|monitor|observe|indicator|signal|changed|observ|ocen|przejrz|monitoruj/.test(s);
   const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s.replace(/\bno\s+portfolio\b[^.!?;,\n]*/g, ""));
+  const portfolioAction = portfolio
+    && /\b(?:all proceeds|all holdings|holdings to cash|liquidat\w*)\b/.test(s)
+    && /\b(?:buy|sell|purchase|trade|execute|transfer|kup|sprzed\w*)\b/.test(s);
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
   const policyDesignIntent = /^(?:(?:please|help me|pomoz(?: mi)?)\s+)?(?:define|set|design|create|establish|regulate|ustal\w*|zaprojektuj|stworz|okresl|wyznacz)\b.{0,120}\b(?:investment\s+)?(?:policy|rules|risk|limits?|thresholds?|target bands|sizing constraints|polityk|zasad|limit|progi|ryzyk)/.test(s)
@@ -135,6 +138,7 @@ export function routeInvestment(userRequest: string) {
   else if (systemicRiskTriage && !replay && (!portfolio || /issuer exposure|cross.asset|credit|macro/.test(s))) { candidates = [routes[5]]; reason = "The decision object is systemic or cross-asset risk observation; historical vintage and missing portfolio evidence remain explicit."; }
   else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
   else if (technicalStructure) { candidates = [routes[8]]; reason = "The request evaluates price pivots, trend structure or invalidation levels."; }
+  else if (portfolioAction) { candidates = [routes[1]]; reason = "The request reallocates or liquidates multiple holdings, so the portfolio owns the decision."; }
   else if (policy && /defini|ustal|zaprojekt|design|define|create|regul|zasad|limits|limity/.test(s)) { candidates = [routes[6]]; reason = "The decision object is investment rules or risk limits."; }
   else if (event) { candidates = [routes[5]]; reason = "New information is being assessed against holdings or theses."; }
   else if (portfolio && observation && !singleSecurityIntent) { candidates = [routes[0]]; reason = "Observation of changes or monitoring of existing holdings."; }

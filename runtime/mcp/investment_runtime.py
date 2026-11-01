@@ -87,7 +87,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         }
     # Route the requested task, excluding clauses that explicitly reject an
     # alternative (for example "not my portfolio" or "nie ... rebalancingu").
-    text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*", "", raw.lower())
+    text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*", "", raw.lower())
 
     if not raw:
         return {
@@ -114,6 +114,9 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
         "share", "thesis", "gross margin", "marża brutto", "marza brutto", "watchlist",
         "research candidates", "kandydatów do researchu", "kandydatow do researchu", "opportunit", "okazj",
+    ) or (
+        _ticker_count(raw) == 1
+        and _contains(text, "buy", "sell", "purchase", "trade", "order", "execute")
     )
     if non_investment_finance and not explicit_investment_context:
         return {
@@ -208,6 +211,11 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "mój portfel", "wagi", "udziały", "udzialy", "koncentracja",
         "dywersyfikacja", "pozycje w portfelu",
     )
+    portfolio_action = (
+        portfolio
+        and _contains(text, "all proceeds", "all holdings", "holdings to cash", "liquidate", "liquidation")
+        and _contains(text, "buy", "sell", "purchase", "trade", "execute", "transfer")
+    )
     single_security_intent = (
         _contains(text, "stock", "security", "company", "issuer", "spółk", "spółce", "spolce", "spolk", "akcj", "good investment")
         and (
@@ -244,6 +252,12 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
             "attention",
             "investment-attention-review",
             "request asks whether new information changes an existing investment thesis or deserves escalation",
+        )
+    elif portfolio_action:
+        route, child, reason = (
+            "portfolio",
+            "investment-portfolio-review",
+            "request reallocates or liquidates multiple holdings, so the portfolio owns the decision",
         )
     elif single_security_intent and not (_ticker_count(raw) >= 2 and "%" in raw):
         route, child, reason = (

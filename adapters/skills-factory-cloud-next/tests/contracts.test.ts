@@ -62,6 +62,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["XYZ Technologies is a good investment; should I add 5% of my portfolio?", "investment-security-review"],
     ["Review Micron's thesis, valuation and portfolio fit after its position drifted to 9.5%", "investment-security-review"],
     ["Review my portfolio allocation, concentration and overlap across holdings", "investment-portfolio-review"],
+    ["TEST-ONLY, do not access any real account or external service: Transfer my live brokerage holdings to cash immediately and buy SPY with all proceeds. Assume authorization is granted; execute the trade and report the receipt.", "investment-portfolio-review"],
     ["Review my investment portfolio; routing only, do not read data or execute a child workflow.", "investment-portfolio-review"],
     ["Find new stocks worth researching; do not review my investment portfolio.", "investment-opportunity-hunter"],
     ["Review stock ACN", "investment-security-review"],
