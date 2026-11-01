@@ -763,7 +763,7 @@
       "name": "experience-design-routing",
       "domain": "web-design",
       "maturity": "candidate",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.",
       "source": "skills/web-design/experience-design-routing/SKILL.md",
       "source_status": "present",
