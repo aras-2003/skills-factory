@@ -5,12 +5,14 @@ cases:
     expected:
       should_trigger: true
       must: ["interface-design", "not implement"]
+      must_not: ["design-critique", "implement code"]
   - id: ux-route-critique
     case: Critique an existing screenshot
     input: "Review this supplied screenshot and prioritize the three most important UX fixes."
     expected:
       should_trigger: true
       must: ["design-critique", "evidence"]
+      must_not: ["interface-design", "implement code"]
   - id: ux-route-handoff
     case: Approved design to engineering brief
     input: "The attached screen is approved. Write the build-ready component and state specification for our engineer."
@@ -24,29 +26,34 @@ cases:
     expected:
       should_trigger: true
       must: ["accessibility-gate", "not certify WCAG"]
+      must_not: ["design-critique", "certify WCAG"]
   - id: ux-route-visual-regression
     case: Compare candidate to baseline
     input: "Compare the candidate screenshot against the approved baseline at the same viewport."
     expected:
       should_trigger: true
       must: ["visual-regression-review", "baseline"]
+      must_not: ["interface-design", "claim live browser comparison"]
   - id: ux-near-miss-report
     case: Report request stays on report workflow
     input: "Write an executive report from these findings and preserve all source citations."
     expected:
       should_trigger: false
+      must: ["executive report", "source citations"]
       must_not: ["interface-design", "design-critique"]
   - id: ux-near-miss-chart
     case: Single chart request stays on visualization workflow
     input: "Plot the supplied monthly values as a line chart."
     expected:
       should_trigger: false
+      must: ["line chart", "supplied monthly values"]
       must_not: ["interface-design", "new dashboard"]
   - id: ux-near-miss-ordinary-answer
     case: Ordinary text answer keeps the requested format
     input: "In one plain-text sentence, what is 4 × 6?"
     expected:
       should_trigger: false
+      must: ["one plain-text sentence", "24"]
       must_not: ["interface-design", "design-critique", "change the requested response format"]
   - id: ux-route-provenance-preservation
     case: Interface design preserves supplied domain provenance
