@@ -21,12 +21,12 @@ Use supplied adjusted OHLCV bars with stable source IDs, observation/publication
 1. Confirm chronological unique bars, valid OHLC relationships, adjusted-price declaration, and timestamps no later than as-of.
 2. Detect swing highs/lows using explicit left/right bar counts. A pivot becomes visible only at the timestamp of its right-side confirmation bar.
 3. Classify structure only when two confirmed highs and lows exist: HH+HL is `UPTREND`; LH+LL is `DOWNTREND`; otherwise `RANGE_OR_MIXED`. With insufficient history, return `UNKNOWN`.
-4. Report OPS/OPD levels, confirmation dates, source, distances from current adjusted close, breakout/retest conditions and invalidation. Distinguish observation from interpretation.
+4. Report OPS/OPD levels, confirmation dates, source, distances from current adjusted close, breakout/retest conditions and invalidation. The engine labels the supplied-window phase from the latest close versus confirmed levels; a close through the structural invalidation level marks the prior structure invalidated. This is a state description, not a forecast. Distinguish observation from interpretation.
 5. Optionally add separately sourced volume, moving-average, benchmark-relative-strength or momentum context. Do not treat missing optional confirmations as neutral proof.
 6. The deterministic 0–100 direction score uses 50 as the neutral midpoint: +25 for each of HH and HL, and −25 for each of LH and LL, clamped to [0, 100]. Report all four Boolean components and the formula. It is not probability or evidence of predictive edge. Keep it separate from the Opportunity Score.
 
 ## Output contract
-For each requested horizon, identify the bar window/parameters, as-of time, supplied currency, trend state, confirmed OPS/OPD price and percentage distance, source IDs, confirmation dates, level-trigger conditions, invalidation and missingness. The engine emits one supplied-window state; it does not independently validate 1–3 month, 6–12 month or >3 year predictive horizons. Never fill a missing currency, pivot or price.
+For each requested horizon, identify the bar window/parameters, as-of time, supplied currency, trend state and phase, confirmed OPS/OPD price and percentage distance, source IDs, confirmation dates, breakout/retest conditions, invalidation and missingness. The engine emits one supplied-window state; it does not independently validate 1–3 month, 6–12 month or >3 year predictive horizons. Never fill a missing currency, pivot or price.
 
 ## Limits
 No historical instrument corpus, corporate-action processor, market calendar, signal-cost simulation, chart rendering, walk-forward or out-of-sample validation is bundled. Do not claim those have passed. Never automate portfolio changes or trades.
