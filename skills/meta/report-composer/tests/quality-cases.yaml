@@ -83,3 +83,17 @@ cases:
         - avoid presenting Top 5 concentration as independently derived
       must_not:
         - claim 72.10% was calculated from the visible five rows
+
+  - id: quality-no-evidence-for-requested-causes
+    case: Report must not invent an observed user-behavior finding
+    input: |
+      Give me a concise report on three causes of onboarding drop-off and next steps. No event data, interviews or other observations are provided.
+    expected:
+      should_trigger: true
+      must:
+        - mark user-behavior causes as hypotheses or UNKNOWN
+        - state that no observation or source was supplied
+        - propose the minimum evidence needed to distinguish causes
+      must_not:
+        - invent an observed cause, analytics result, quote or sample
+        - describe an unsupported claim as an available observation or known finding
