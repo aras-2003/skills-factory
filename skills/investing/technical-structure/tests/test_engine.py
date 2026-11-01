@@ -27,10 +27,30 @@ class TechnicalStructureTests(unittest.TestCase):
         data = bars([(10, 8, 9), (12, 9, 11), (11, 8.5, 10), (14, 10, 12), (12, 9, 11), (16, 11, 14), (14, 10, 12), (13, 11, 12)])
         result = analyze_structure(data, as_of=data[-1]["timestamp"], source_id="synthetic-series", adjusted=True, adjustment_id="synthetic-adjustment-v1", currency="USD", left=1, right=1)
         self.assertEqual("UPTREND", result["trend"])
+        self.assertEqual("UPTREND_CONTINUATION", result["phase"])
+        self.assertEqual("supplied_window_only", result["horizon_scope"])
         self.assertEqual(100, result["score"])
         self.assertFalse(result["score_is_probability"])
         self.assertEqual("16", result["ops"]["price"])
         self.assertEqual("10", result["opd"]["price"])
+        self.assertIn("revisits that level and closes above it", result["retest_condition"])
+
+    def test_breakout_and_structural_invalidation_are_distinguished(self):
+        values = [(10, 8, 9), (12, 9, 11), (11, 8.5, 10), (14, 10, 12),
+                  (12, 9, 11), (16, 11, 14), (14, 10, 12), (13, 11, 12)]
+        breakout = bars(values)
+        breakout[-1].update(open=16, high=18, low=15, close=17)
+        result = analyze_structure(breakout, as_of=breakout[-1]["timestamp"], source_id="synthetic-series",
+                                   adjusted=True, adjustment_id="synthetic-adjustment-v1", currency="USD", left=1, right=1)
+        self.assertEqual("BREAKOUT_UP", result["phase"])
+        self.assertEqual("UPTREND", result["trend"])
+
+        invalidated = bars(values)
+        invalidated[-1].update(open=8.7, high=9, low=8, close=8.5)
+        result = analyze_structure(invalidated, as_of=invalidated[-1]["timestamp"], source_id="synthetic-series",
+                                   adjusted=True, adjustment_id="synthetic-adjustment-v1", currency="USD", left=1, right=1)
+        self.assertEqual("UPTREND_INVALIDATED", result["phase"])
+        self.assertEqual("UPTREND", result["trend"])
 
     def test_direction_score_is_symmetric_and_explainable(self):
         rising = [(10, 8, 9), (12, 9, 11), (11, 8.5, 10), (14, 10, 12), (12, 9, 11), (16, 11, 14), (14, 10, 12), (13, 11, 12)]

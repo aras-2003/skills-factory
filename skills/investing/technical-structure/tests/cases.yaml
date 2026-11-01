@@ -19,7 +19,7 @@ cases:
       | 2026-01-11 | 11 | 12 | 10 | 11 | 100 | SYNTHETIC-XYZ-10 |
     expected:
       should_trigger: true
-      must: ["synthetic", "USD", "UPTREND", "OPS 16", "confirmed 2026-01-09", "SYNTHETIC-XYZ-6", "45.45%", "OPD 9", "confirmed 2026-01-11", "SYNTHETIC-XYZ-8", "-18.18%", "score 100", "not a probability"]
+      must: ["synthetic", "USD", "UPTREND", "UPTREND_CONTINUATION", "supplied-window-only", "OPS 16", "confirmed 2026-01-09", "SYNTHETIC-XYZ-6", "45.45%", "OPD 9", "confirmed 2026-01-11", "SYNTHETIC-XYZ-8", "-18.18%", "score 100", "not a probability"]
       must_not: ["real market observation", "investment recommendation", "predictive edge"]
 
   - id: technical-structure-confirmed

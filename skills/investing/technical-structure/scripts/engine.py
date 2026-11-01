@@ -94,6 +94,20 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
     close = rows[-1]["close"]
     ops, opd = highs[-1], lows[-1]
     distance = lambda level: str(((level - close) / close * Decimal(100)).quantize(Decimal("0.01")))
+    if trend == "UPTREND" and close < opd["price"]:
+        phase = "UPTREND_INVALIDATED"
+    elif trend == "DOWNTREND" and close > ops["price"]:
+        phase = "DOWNTREND_INVALIDATED"
+    elif close > ops["price"]:
+        phase = "BREAKOUT_UP"
+    elif close < opd["price"]:
+        phase = "BREAKDOWN_DOWN"
+    elif trend == "UPTREND":
+        phase = "UPTREND_CONTINUATION"
+    elif trend == "DOWNTREND":
+        phase = "DOWNTREND_CONTINUATION"
+    else:
+        phase = "RANGE_OR_MIXED"
     return {
         "status": "OBSERVED",
         "as_of": as_of,
@@ -101,6 +115,9 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
         "adjustment_id": adjustment_id,
         "currency": currency.strip(),
         "trend": trend,
+        "phase": phase,
+        "phase_basis": "latest adjusted close compared with the latest confirmed OPS/OPD; not a forecast",
+        "horizon_scope": "supplied_window_only",
         "score": score,
         "score_is_probability": False,
         "score_components": score_components,
@@ -109,6 +126,7 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
         "ops": {"price": str(ops["price"]), "confirmed_at": ops["confirmed_at"].isoformat(), "source_id": ops["source_id"], "distance_pct": distance(ops["price"])},
         "opd": {"price": str(opd["price"]), "confirmed_at": opd["confirmed_at"].isoformat(), "source_id": opd["source_id"], "distance_pct": distance(opd["price"])},
         "breakout_condition": f"adjusted close above {ops['price']}",
+        "retest_condition": f"after a confirmed close above {ops['price']}, price revisits that level and closes above it",
         "invalidation_condition": f"adjusted close below {opd['price']}",
         "confirmed_pivots": len(pivots),
         "window": {"left_bars": left, "right_bars": right},
