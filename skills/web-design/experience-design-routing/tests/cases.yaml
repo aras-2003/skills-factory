@@ -62,3 +62,15 @@ cases:
       should_trigger: true
       must: ["interface-design"]
       must_not: ["edit repository", "claim code changed"]
+  - id: ux-near-miss-implementation-request
+    case: Explicit code implementation stays with the coding workflow
+    input: "Implement this approved checkout design in the existing React app, run the tests, and fix any runtime errors."
+    expected:
+      should_trigger: false
+      must:
+        - state concisely that interface-design does not apply
+        - direct the request to the implementation workflow
+      must_not:
+        - replace implementation with a design-only brief
+        - ask interface-design context questions
+        - claim repository inspection, code edits or tests without evidence
