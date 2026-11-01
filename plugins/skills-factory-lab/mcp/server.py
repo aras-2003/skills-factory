@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["mcp==2.3.0", "matplotlib==3.11.2", "PyYAML==6.0.3"]
+# dependencies = ["mcp==2.3.0", "matplotlib==3.11.2", "PyYAML==6.0.3", "opentelemetry-sdk==1.45.0", "opentelemetry-exporter-otlp-proto-http==1.45.0"]
 # ///
 
 """Single Skills Factory MCP runtime for local stdio and remote HTTP profiles."""
@@ -28,6 +28,7 @@ from skill_catalog import (
 )
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
+from observability import execute_tool, tool_span
 
 SERVER_INSTRUCTIONS = """
 Skills Factory runtime contract.
@@ -142,7 +143,7 @@ def _json_sha256(value: Any) -> str:
     return hashlib.sha256(canonical).hexdigest()
 
 
-def _tool_receipt(tool_name: str, arguments: Any, result: Any) -> dict[str, Any]:
+def _tool_receipt(tool_name: str, arguments: Any, result: Any, run_id: str | None = None) -> dict[str, Any]:
     receipt = {
         "schema_version": "1.0",
         "kind": "unsigned_mcp_tool_call_receipt",
@@ -158,11 +159,13 @@ def _tool_receipt(tool_name: str, arguments: Any, result: Any) -> dict[str, Any]
     }
     if tool_name in {"render_bar_chart", "render_line_chart"}:
         receipt.update({"artifact_state": "rendered", "client_display_state": "not_observable"})
+    if run_id:
+        receipt["run_id"] = run_id
     return receipt
 
 
-def _with_tool_receipt(tool_name: str, arguments: Any, result: Any) -> Any:
-    receipt = _tool_receipt(tool_name, arguments, result)
+def _with_tool_receipt(tool_name: str, arguments: Any, result: Any, run_id: str | None = None) -> Any:
+    receipt = _tool_receipt(tool_name, arguments, result, run_id)
     if isinstance(result, dict):
         return {**result, "tool_receipt": receipt}
     if isinstance(result, list):
@@ -171,21 +174,26 @@ def _with_tool_receipt(tool_name: str, arguments: Any, result: Any) -> Any:
 
 
 def _render_with_receipt(tool_name: str, arguments: dict[str, Any], render) -> Any:
-    try:
-        result = render()
-    except Exception as exc:
-        error = {"error_type": type(exc).__name__, "error_sha256": _json_sha256(str(exc))}
-        receipt = _tool_receipt(tool_name, arguments, error)
-        receipt.update(
-            {
-                "status": "FAILURE",
-                "artifact_state": "FAIL_RENDERER_INVOCATION",
-                "client_display_state": "not_applicable",
-                **error,
-            }
-        )
-        raise ToolError("CHART_RENDER_FAILED " + json.dumps(receipt, sort_keys=True)) from exc
-    return _with_tool_receipt(tool_name, arguments, result)
+    with tool_span(tool_name, arguments) as (span, run_id):
+        try:
+            result = render()
+        except Exception as exc:
+            error = {"error_type": type(exc).__name__, "error_sha256": _json_sha256(str(exc))}
+            receipt = _tool_receipt(tool_name, arguments, error, run_id)
+            receipt.update(
+                {
+                    "status": "FAILURE",
+                    "artifact_state": "FAIL_RENDERER_INVOCATION",
+                    "client_display_state": "not_applicable",
+                    **error,
+                }
+            )
+            raise ToolError("CHART_RENDER_FAILED " + json.dumps(receipt, sort_keys=True)) from exc
+        if isinstance(result, Mapping):
+            for key, attribute in (("version", "version"), ("content_sha256", "digest")):
+                if result.get(key):
+                    span.set_attribute(f"skills_factory.capability.{attribute}", str(result[key]))
+        return _with_tool_receipt(tool_name, arguments, result, run_id)
 
 mcp = MCPServer(
     "Skills Factory runtime",
@@ -197,81 +205,87 @@ mcp = MCPServer(
 @mcp.tool()
 def runtime_info() -> dict[str, Any]:
     """Return deployment identity without performing any external action."""
-    values = {
-        "runtime_name": "Skills Factory runtime",
-        "release_id": _runtime_value("SKILLS_FACTORY_RELEASE_ID"),
-        "source_revision": _runtime_value("SKILLS_FACTORY_SOURCE_REVISION"),
-        "channel": _runtime_value("SKILLS_FACTORY_CHANNEL", "unknown"),
-        "capability_contract_version": _runtime_value(
-            "SKILLS_FACTORY_CAPABILITY_CONTRACT_VERSION", "repository-side-v1"
-        ),
-        "tool_schema_digest": _runtime_value("SKILLS_FACTORY_TOOL_SCHEMA_DIGEST"),
-        "deployed_at": _runtime_value("SKILLS_FACTORY_DEPLOYED_AT"),
-    }
-    values["attestation_status"] = (
-        "verified" if _runtime_identity_is_well_formed(values) else "unattested"
-    )
-    values["attestation_basis"] = "unsigned_runtime_environment_fields_only"
-    values["installation_behavior_verified"] = False
-    installed = packaged_release_identity()
-    package_integrity = packaged_payload_integrity(installed)
-    values["package_integrity_status"] = package_integrity["status"]
-    values["package_integrity_basis"] = "installed_payload_digest_matches_adjacent_unsigned_manifest"
-    if package_integrity.get("payload_content_sha256"):
-        values["package_integrity_sha256"] = package_integrity["payload_content_sha256"]
-    values["lab_release"] = installed or None
-    values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
-    values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "render_bar_chart", "render_line_chart"]
-    if (installed and package_integrity["status"] == "verified"
-            and values["channel"] == "lab"
-            and installed["source_revision"] == values["source_revision"]
-            and installed["release_id"] == values["release_id"]):
-        values["payload_content_sha256"] = installed["payload_content_sha256"]
-        values["catalog_digest"] = catalog_digest()
-        values["manifest_binding"] = "installed_manifest_matches_runtime_environment"
-    elif installed and package_integrity["status"] == "verified":
-        values["payload_content_sha256"] = installed["payload_content_sha256"]
-        values["catalog_digest"] = catalog_digest()
-        values["manifest_binding"] = "installed_manifest_matches_runtime_payload"
-    else:
-        values["manifest_binding"] = "unavailable_or_mismatched"
-    return _with_tool_receipt("runtime_info", {}, values)
+    def operation() -> dict[str, Any]:
+        values = {
+            "runtime_name": "Skills Factory runtime",
+            "release_id": _runtime_value("SKILLS_FACTORY_RELEASE_ID"),
+            "source_revision": _runtime_value("SKILLS_FACTORY_SOURCE_REVISION"),
+            "channel": _runtime_value("SKILLS_FACTORY_CHANNEL", "unknown"),
+            "capability_contract_version": _runtime_value(
+                "SKILLS_FACTORY_CAPABILITY_CONTRACT_VERSION", "repository-side-v1"
+            ),
+            "tool_schema_digest": _runtime_value("SKILLS_FACTORY_TOOL_SCHEMA_DIGEST"),
+            "deployed_at": _runtime_value("SKILLS_FACTORY_DEPLOYED_AT"),
+        }
+        values["attestation_status"] = (
+            "verified" if _runtime_identity_is_well_formed(values) else "unattested"
+        )
+        values["attestation_basis"] = "unsigned_runtime_environment_fields_only"
+        values["installation_behavior_verified"] = False
+        installed = packaged_release_identity()
+        package_integrity = packaged_payload_integrity(installed)
+        values["package_integrity_status"] = package_integrity["status"]
+        values["package_integrity_basis"] = "installed_payload_digest_matches_adjacent_unsigned_manifest"
+        if package_integrity.get("payload_content_sha256"):
+            values["package_integrity_sha256"] = package_integrity["payload_content_sha256"]
+        values["lab_release"] = installed or None
+        values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
+        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "render_bar_chart", "render_line_chart"]
+        if (installed and package_integrity["status"] == "verified"
+                and values["channel"] == "lab"
+                and installed["source_revision"] == values["source_revision"]
+                and installed["release_id"] == values["release_id"]):
+            values["payload_content_sha256"] = installed["payload_content_sha256"]
+            values["catalog_digest"] = catalog_digest()
+            values["manifest_binding"] = "installed_manifest_matches_runtime_environment"
+        elif installed and package_integrity["status"] == "verified":
+            values["payload_content_sha256"] = installed["payload_content_sha256"]
+            values["catalog_digest"] = catalog_digest()
+            values["manifest_binding"] = "installed_manifest_matches_runtime_payload"
+        else:
+            values["manifest_binding"] = "unavailable_or_mismatched"
+        return values
+    return execute_tool("runtime_info", {}, operation, _with_tool_receipt)
 
 
 @mcp.tool()
 def list_skills() -> dict:
     """List the skills packaged in the same catalog as the active Lab profile."""
-    return _with_tool_receipt("list_skills", {}, _list_skills())
+    return execute_tool("list_skills", {}, _list_skills, _with_tool_receipt)
 
 
 @mcp.tool()
 def load_skill(skill_name: str) -> dict:
     """Load packaged skill instructions and safe textual references for host-model execution."""
-    return _with_tool_receipt(
-        "load_skill", {"skill_name": skill_name}, _load_skill(skill_name)
+    return execute_tool(
+        "load_skill", {"skill_name": skill_name}, lambda: _load_skill(skill_name), _with_tool_receipt
     )
 
 
 @mcp.tool()
 def route_investment_request(user_request: str) -> dict[str, Any]:
     """MANDATORY first step for every investment request, before analysis."""
-    result = _route_investment_request(user_request)
-    if result.get("is_investment_request"):
-        result.update(
-            {
-                "workflow_executed": False,
-                "execution_state": "routed_only",
-                "workflow_execution_state": "not_executed",
-                "execution_state_reason": "router selected a workflow but did not execute it",
-                "outcome": None,
-                "response_policy": (
-                    "load_front_door_then_clarify_before_analysis"
-                    if result.get("next_action") == "load_front_door_then_clarify"
-                    else "load_child_workflow_then_follow"
-                ),
-            }
-        )
-    return _with_tool_receipt("route_investment_request", {"user_request": user_request}, result)
+    def operation() -> dict[str, Any]:
+        result = _route_investment_request(user_request)
+        if result.get("is_investment_request"):
+            result.update(
+                {
+                    "workflow_executed": False,
+                    "execution_state": "routed_only",
+                    "workflow_execution_state": "not_executed",
+                    "execution_state_reason": "router selected a workflow but did not execute it",
+                    "outcome": None,
+                    "response_policy": (
+                        "load_front_door_then_clarify_before_analysis"
+                        if result.get("next_action") == "load_front_door_then_clarify"
+                        else "load_child_workflow_then_follow"
+                    ),
+                }
+            )
+        return result
+    return execute_tool(
+        "route_investment_request", {"user_request": user_request}, operation, _with_tool_receipt
+    )
 
 
 @mcp.tool()
