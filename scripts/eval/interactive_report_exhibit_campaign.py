@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CONFIG_REL = Path("evals/campaigns/interactive-report-exhibits-2026-10/campaign.yaml")
 EXPECTED_PATHS = {
     "skills/meta/report-composer/SKILL.md",
+    "skills/meta/report-composer/references/report-state-and-evidence-contract.md",
     "skills/meta/visual-output-design/SKILL.md",
     "skills/meta/visual-output-design/references/tool-routing.md",
 }
