@@ -94,7 +94,12 @@ class ReplayEngineTests(unittest.TestCase):
         self.assertEqual(3, result["strategy"]["denominator"])
         self.assertLess(Decimal(result["strategy"]["max_drawdown"]), 0)
         self.assertGreater(Decimal(result["turnover"]["strategy_one_way_notional"]), 0)
-        self.assertEqual(1, result["out_of_sample"]["n"])
+        oos = result["out_of_sample"]
+        self.assertEqual(1, oos["n"])
+        self.assertEqual(Decimal("0.0"), Decimal(oos["strategy"]["cumulative_return"]))
+        self.assertEqual(Decimal("0.01388"), Decimal(oos["buy_and_hold"]["cumulative_return"]))
+        self.assertEqual(Decimal("0.00394"), Decimal(oos["benchmark"]["cumulative_return"]))
+        self.assertEqual(Decimal("0.00394"), Decimal(oos["trend_following_baseline"]["cumulative_return"]))
         self.assertEqual("NOT_MODELED", result["costs"]["taxes"])
         self.assertEqual(1, result["alert_precision_recall"]["true_positives"])
         self.assertFalse(result["economic_edge_claimed"])
@@ -114,6 +119,13 @@ class ReplayEngineTests(unittest.TestCase):
             sample_metadata={"universe": "fixture", "selection_method": "fixed", "exclusions": "none", "survivorship_status": "ASSESSED"},
         )
         self.assertEqual(Decimal("0.089"), Decimal(result["strategy"]["cumulative_return"]))
+        # Independent one-period arithmetic: 50 bps per-side cost is charged
+        # on entry and exit, so each fully invested baseline retains 99% of
+        # its gross ending value.
+        self.assertEqual(Decimal("0.089"), Decimal(result["buy_and_hold"]["cumulative_return"]))
+        self.assertEqual(Decimal("0.0395"), Decimal(result["benchmark"]["cumulative_return"]))
+        self.assertEqual(Decimal("0.0692"), Decimal(result["trend_following_baseline"]["cumulative_return"]))
+        self.assertFalse(result["economic_edge_claimed"])
         self.assertEqual({"status": "BLOCKED_MISSING_SPLIT", "n": 0}, result["out_of_sample"])
 
     def test_replay_blocks_missing_costs_future_information_overlap_and_bad_split(self):
