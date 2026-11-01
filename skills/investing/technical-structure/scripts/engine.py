@@ -20,10 +20,12 @@ def _timestamp(value):
     return result
 
 
-def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, left=2, right=2, max_gap_days=5):
+def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, currency=None, left=2, right=2, max_gap_days=5):
     if (not isinstance(source_id, str) or not source_id.strip() or adjusted is not True
             or not isinstance(adjustment_id, str) or not adjustment_id.strip()):
         return {"status": "UNKNOWN", "reason": "MISSING_SOURCE_OR_ADJUSTMENT"}
+    if not isinstance(currency, str) or not currency.strip():
+        return {"status": "UNKNOWN", "reason": "MISSING_CURRENCY"}
     if not isinstance(left, int) or not isinstance(right, int) or min(left, right) < 1:
         raise StructureInputError("left and right pivot windows must be positive integers")
     cutoff = _timestamp(as_of)
@@ -97,6 +99,7 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, l
         "as_of": as_of,
         "source_id": source_id,
         "adjustment_id": adjustment_id,
+        "currency": currency.strip(),
         "trend": trend,
         "score": score,
         "score_is_probability": False,

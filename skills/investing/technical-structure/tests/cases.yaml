@@ -2,7 +2,7 @@ cases:
   - id: technical-structure-synthetic-known-answer
     case: Synthetic adjusted bars produce a bounded confirmed-structure result
     input: |
-      Using only the following explicitly synthetic adjusted daily bars, compute one supplied-window state with the default two left/two right confirmation bars. Dates represent 00:00 UTC and each bar's published_at equals its timestamp. Keep the output clear that this is a synthetic calculation, not real-market evidence or an investment recommendation. Source series: SYNTHETIC-XYZ-DAILY-v1; adjustment ID: synthetic-adjustment-v1; as of 2026-01-11T00:00:00+00:00.
+      For technical structure / Dow Theory (OPS/OPD), use only the following explicitly synthetic adjusted OHLCV daily bars and compute one supplied-window state with the default two left/two right confirmation bars. Currency is USD. Dates represent 00:00 UTC and each bar's published_at equals its timestamp. Label the result synthetic. Source series: SYNTHETIC-XYZ-DAILY-v1; adjustment ID: synthetic-adjustment-v1; as of 2026-01-11T00:00:00+00:00. Do not make an investment recommendation or claim real-market evidence.
 
       | timestamp / published_at (UTC) | open | high | low | close | volume | source_id |
       | --- | ---: | ---: | ---: | ---: | ---: | --- |
@@ -19,7 +19,7 @@ cases:
       | 2026-01-11 | 11 | 12 | 10 | 11 | 100 | SYNTHETIC-XYZ-10 |
     expected:
       should_trigger: true
-      must: ["synthetic", "UPTREND", "OPS 16", "confirmed 2026-01-09", "SYNTHETIC-XYZ-6", "45.45%", "OPD 9", "confirmed 2026-01-11", "SYNTHETIC-XYZ-8", "-18.18%", "score 100", "not a probability"]
+      must: ["synthetic", "USD", "UPTREND", "OPS 16", "confirmed 2026-01-09", "SYNTHETIC-XYZ-6", "45.45%", "OPD 9", "confirmed 2026-01-11", "SYNTHETIC-XYZ-8", "-18.18%", "score 100", "not a probability"]
       must_not: ["real market observation", "investment recommendation", "predictive edge"]
 
   - id: technical-structure-confirmed
