@@ -34,6 +34,7 @@ Do not create a second "visual report" beside the chat answer. Do not create an 
    - classify each decision-relevant claim as CANONICAL / USER_PROVIDED / EXTERNAL_VERIFIED / DERIVED / UNKNOWN;
    - require reproducible inputs for every DERIVED claim;
    - run the causal-attribution gate before stating why something changed.
+   - when no observation, dataset or source was supplied or verified, do not invent findings, user behavior or an "available observation"; mark the factual claim UNKNOWN and label any possible causes as hypotheses.
 4. Run `capability_preflight` before finalising each visual-floor slot:
    - inspect tools and host-native components actually documented and exposed by this runtime;
    - bind the slot to a concrete, callable renderer; never infer a widget API from a product name or create response syntax that is not documented;

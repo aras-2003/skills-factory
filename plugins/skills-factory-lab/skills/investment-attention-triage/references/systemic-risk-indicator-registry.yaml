@@ -1,0 +1,100 @@
+registry_id: systemic-risk-indicator-registry
+version: 0.1.0
+status: source-and-measurement-contract
+scope: >-
+  Evidence-bound systemic risk observations for investment-attention-triage,
+  investment-portfolio-observation and portfolio-state-review. This registry
+  does not fetch data, set investment policy, forecast crashes or authorize trades.
+rules:
+  point_in_time:
+    require: [series_id, source, unit, observation_date, published_at, retrieved_at]
+    as_of_rule: Use only values published on or before the report's shared as_of timestamp.
+    revisions: Preserve the value and vintage actually available at that timestamp; never backfill a historical run with a later revision.
+    comparison: Compare only identical definitions, units, source methodology and universe; state the exact comparison dates.
+  freshness:
+    rule: Reject stale values using the per-signal max_age_days field; do not carry the last value forward as current.
+    calibration: Per-signal ages are initial operational guardrails based on release cadence, not claims of predictive value; revise only with a versioned review.
+    missing: Missing or stale inputs produce DATA_GAP / NOT_ASSESSED, never a neutral or zero reading.
+  thresholds:
+    source: A canonical policy rule or a separately versioned and validated calibration profile.
+    default: null
+    unconfigured_result: NOT_CONFIGURED
+    semantics: A configured threshold is an observation/attention trigger, not a policy breach, prediction or trade instruction.
+  aggregation:
+    rule: Assign one materiality state and a separate direction to each evidenced indicator group.
+    correlation: Correlated indicators in one correlation_group may corroborate a narrative but must not be counted as independent confirmations.
+    probability: Do not derive or state an exact probability of a market crash from this registry.
+    portfolio: Keep direct issuer holdings, issuer look-through and sector-level exposure separate. Never sum overlapping holding_weight and sector_weight rows.
+signals:
+  - id: credit-spreads
+    permitted_series: [investment-grade option-adjusted spread, high-yield option-adjusted spread]
+    definition: Spread in basis points over the source-defined comparable government curve; retain the publisher's exact series definition.
+    interval: business_daily
+    max_age_days: 7
+    derivation: delta_bp = current_bp - prior_bp for two dated observations from the same series and source vintage.
+    correlation_group: credit_conditions
+    allowed_sources: [series_publisher, licensed_market_data_vendor]
+    gap_rule: Do not substitute a different spread family or infer a missing value.
+  - id: refinancing-and-floating-debt
+    permitted_series: [issuer debt maturity by fiscal year, floating-rate debt amount or share, liquidity and interest coverage]
+    definition: Issuer-reported debt and coverage values with period, currency, denominator and filing date.
+    interval: quarterly_or_filing_event
+    max_age_days: 180
+    derivation: Compare the same issuer, fiscal period basis and definition; report 2027-2029 maturities as dated amounts, not an aggregate risk score.
+    correlation_group: issuer_funding
+    allowed_sources: [regulatory_filing, issuer_filing]
+    gap_rule: Missing issuer coverage or maturity schedules remain issuer-specific DATA_GAP.
+  - id: market-breadth
+    permitted_series: [share_of_named_index_constituents_above_200_day_moving_average]
+    definition: Percentage of the explicitly named, dated index constituents whose close exceeds the same 200-trading-day average definition.
+    interval: business_daily
+    max_age_days: 7
+    derivation: delta_percentage_points = current_share_pct - prior_share_pct over the same named index and methodology.
+    correlation_group: market_participation
+    allowed_sources: [index_provider, licensed_market_data_vendor]
+    gap_rule: A changed constituent universe or calculation method is not a comparable time series.
+  - id: sector-relative-strength
+    permitted_series: [SOX, SMH, explicitly_named_sector_or_broad_market_index]
+    definition: Total-return or price-return series, explicitly labeled and measured on aligned dates.
+    interval: business_daily
+    max_age_days: 7
+    derivation: relative_return_pp = sector_return_pct - benchmark_return_pct over identical start and end timestamps.
+    correlation_group: market_participation
+    allowed_sources: [index_provider, licensed_market_data_vendor]
+    gap_rule: Do not compare price return with total return or use an unlabelled benchmark.
+  - id: macro-cycle
+    permitted_series: [real_yield, inflation, leading_economic_index, ism_new_orders, ism_employment]
+    definition: Preserve the publisher's unit, seasonal adjustment, period, release timestamp and revision vintage.
+    interval: publisher_defined_release
+    max_age_days: 120
+    derivation: Compare dated published observations in native units; derived deltas require identical series and vintage policy.
+    correlation_group: macro_conditions
+    allowed_sources: [statistical_agency, series_publisher, licensed_data_vendor]
+    gap_rule: Never treat unreleased periods as zero or substitute a forecast for an observed value.
+  - id: earnings-revisions
+    permitted_series: [consensus_revision_breadth_for_named_universe_and_metric]
+    definition: Counts or fractions of upgrades and downgrades for one explicitly named metric, horizon, provider and constituent universe.
+    interval: provider_snapshot
+    max_age_days: 45
+    derivation: net_revision_breadth = (upgrades - downgrades) / eligible_coverage_count; retain counts and denominator.
+    correlation_group: earnings_expectations
+    allowed_sources: [licensed_consensus_provider]
+    gap_rule: Missing denominator, changed constituents or stale snapshot blocks the derived breadth.
+  - id: ai-infrastructure
+    permitted_series: [hyperscaler_capex, backlog, book_to_bill, cash_conversion, grid_or_power_capacity_constraint]
+    definition: Issuer or operator reported metric with exact period, accounting definition, currency and source document.
+    interval: quarterly_or_filing_event
+    max_age_days: 180
+    derivation: Compare like-for-like periods; calculate ratios only when numerator, denominator and units are explicitly available.
+    correlation_group: ai_infrastructure_cycle
+    allowed_sources: [regulatory_filing, issuer_filing, grid_operator_publication]
+    gap_rule: Backlog is not revenue, capex is not demand, and an unquantified power constraint stays qualitative.
+  - id: portfolio-look-through
+    permitted_series: [direct_issuer_weight, dated_fund_constituent_weight, source_coverage, decomposition_completeness]
+    definition: Canonical holding weights and source-backed issuer/sector decomposition with separate source coverage and decomposition completeness.
+    interval: canonical_snapshot_or_source_refresh
+    max_age_days: 180
+    derivation: Compute issuer look-through only from compatible, dated constituents; preserve direct exposure, look-through exposure and partial minimum separately.
+    correlation_group: portfolio_exposure
+    allowed_sources: [canonical_investment_store, dated_fund_or_issuer_source]
+    gap_rule: Missing or partial constituents block complete exposure claims; never combine heterogeneous weights into coverage.
