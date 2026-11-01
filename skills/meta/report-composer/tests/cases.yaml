@@ -133,3 +133,19 @@ cases:
         - visual-output-design should render the requested local visual
       must_not:
         - recompose or expand the report when only a chart is needed
+
+  - id: report-without-evidence-does-not-invent-observation
+    case: A report asks for causes but supplies no observation or dataset
+    input: |
+      Write a concise executive-summary report with three possible causes of onboarding drop-off and next steps. Do not produce a UI screen, layout or design brief. No analytics, user interviews or source excerpts are provided.
+    expected:
+      should_trigger: true
+      must:
+        - explicitly state that no onboarding observation or analytics were supplied
+        - label possible causes as hypotheses, not findings
+        - identify the minimum evidence needed to validate the hypotheses
+        - preserve the requested concise report format without producing a UI design
+      must_not:
+        - claim that users abandoned onboarding for a particular reason
+        - refer to an "available observation" or study that was not supplied or verified
+        - invent research, metrics, quotes, sample sizes or source provenance

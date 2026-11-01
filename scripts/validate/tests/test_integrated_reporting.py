@@ -159,6 +159,18 @@ class IntegratedReportingTests(unittest.TestCase):
         self.assertIn("quality-payload-client-not-observable", quality_cases)
         self.assertIn("quality-user-provided-unreproducible-metric", quality_cases)
 
+    def test_report_composer_does_not_invent_observations_for_missing_evidence(self) -> None:
+        composer = (ROOT / "skills/meta/report-composer/SKILL.md").read_text(encoding="utf-8")
+        contract = (ROOT / "skills/meta/report-composer/references/report-state-and-evidence-contract.md").read_text(encoding="utf-8")
+        cases = (ROOT / "skills/meta/report-composer/tests/cases.yaml").read_text(encoding="utf-8")
+        quality_cases = (ROOT / "skills/meta/report-composer/tests/quality-cases.yaml").read_text(encoding="utf-8")
+
+        self.assertIn("do not invent findings, user behavior", composer)
+        self.assertIn("do not invent an observation", contract)
+        self.assertIn("available observation", contract)
+        self.assertIn("report-without-evidence-does-not-invent-observation", cases)
+        self.assertIn("quality-no-evidence-for-requested-causes", quality_cases)
+
     def test_portfolio_attribution_fails_closed_without_causal_evidence(self) -> None:
         workflow = (ROOT / "workflows/investment-portfolio-review/WORKFLOW.md").read_text(encoding="utf-8")
         state = (ROOT / "skills/investing/portfolio-state-review/SKILL.md").read_text(encoding="utf-8")

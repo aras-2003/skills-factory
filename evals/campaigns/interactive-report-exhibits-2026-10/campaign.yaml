@@ -5,6 +5,7 @@ runtime_status: NOT_RUN
 release_approved: false
 out_of_scope_behavior_paths:
   - skills/meta/report-composer/SKILL.md
+  - skills/meta/report-composer/references/report-state-and-evidence-contract.md
   - skills/meta/visual-output-design/SKILL.md
   - skills/meta/visual-output-design/references/tool-routing.md
 candidate_skills:
@@ -19,6 +20,7 @@ candidate_skills:
       - no-unsolicited-artifact
       - exhibit-adapts-to-requested-output-format
       - integrated-investment-report
+      - report-without-evidence-does-not-invent-observation
   visual-output-design:
     version: "0.13.0"
     source: skills/meta/visual-output-design/SKILL.md
@@ -45,6 +47,7 @@ case_suites:
       - no-unsolicited-artifact
       - exhibit-adapts-to-requested-output-format
       - integrated-investment-report
+      - report-without-evidence-does-not-invent-observation
   - path: skills/meta/visual-output-design/tests/cases.yaml
     required_case_ids:
       - visual-output-chart
