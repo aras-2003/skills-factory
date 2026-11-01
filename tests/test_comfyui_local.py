@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import io
+import os
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from urllib.error import HTTPError
+from urllib.request import ProxyHandler, Request
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills/media/creative-generation/scripts"))
@@ -26,6 +30,13 @@ class BaseUrlTests(unittest.TestCase):
 
         handler = next(handler for handler in _opener().handlers if isinstance(handler, _LoopbackOnlyRedirectHandler))
         self.assertIsNone(handler.redirect_request(None, None, 302, "Found", {}, "https://example.com"))
+
+    def test_opener_does_not_use_proxy_environment(self) -> None:
+        from comfyui_local import _opener
+
+        with patch.dict(os.environ, {"HTTP_PROXY": "http://192.0.2.1:1234", "http_proxy": "http://192.0.2.1:1234"}):
+            opener = _opener()
+        self.assertFalse(any(isinstance(handler, ProxyHandler) for handler in opener.handlers))
 
     def test_rejects_credentials_and_url_suffixes(self) -> None:
         for value in ("http://user:pass@127.0.0.1:8188", "http://127.0.0.1:8188/api", "http://127.0.0.1:8188/?q=x"):
@@ -79,6 +90,63 @@ class WorkflowTests(unittest.TestCase):
                 with self.assertRaisesRegex(AdapterError, "download limit"):
                     _download("http://127.0.0.1:8188", {"filename": "image.png"}, target, 4)
             self.assertFalse(target.exists())
+
+    def test_download_limit_is_enforced_without_content_length(self) -> None:
+        from comfyui_local import _download
+
+        class Response:
+            headers = {}
+
+            def __init__(self) -> None:
+                self.sent = False
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self, _size: int) -> bytes:
+                if self.sent:
+                    return b""
+                self.sent = True
+                return b"12345"
+
+        class Opener:
+            def open(self, *_args, **_kwargs):
+                return Response()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "output.png"
+            with patch("comfyui_local._opener", return_value=Opener()):
+                with self.assertRaisesRegex(AdapterError, "download limit"):
+                    _download("http://127.0.0.1:8188", {"filename": "image.png"}, target, 4)
+            self.assertFalse(target.exists())
+
+    def test_http_errors_close_response_and_preserve_adapter_error(self) -> None:
+        from comfyui_local import _download, _json_request
+
+        class Opener:
+            def __init__(self) -> None:
+                self.response_body = io.BytesIO(b"")
+
+            def open(self, request: Request, *_args, **_kwargs):
+                raise HTTPError(request.full_url, 404, "Not Found", {}, self.response_body)
+
+        for operation in ("json", "download"):
+            with self.subTest(operation=operation), tempfile.TemporaryDirectory() as tmp:
+                opener = Opener()
+                with patch("comfyui_local._opener", return_value=opener):
+                    with self.assertRaisesRegex(AdapterError, "HTTP 404"):
+                        if operation == "json":
+                            _json_request("http://127.0.0.1:8188", "/missing")
+                        else:
+                            target = Path(tmp) / "output.png"
+                            _download("http://127.0.0.1:8188", {"filename": "image.png"}, target, 100)
+                            self.fail("HTTP error should prevent an output file")
+                self.assertTrue(opener.response_body.closed)
+                if operation == "download":
+                    self.assertFalse(target.exists())
 
     @patch("comfyui_local._download")
     @patch("comfyui_local._json_request")
