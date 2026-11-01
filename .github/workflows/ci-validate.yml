@@ -115,6 +115,7 @@ jobs:
           python -m unittest discover -s skills/investing/fundamental-intelligence -p 'test_*.py'
           python -m unittest discover -s scripts/output/tests -p 'test_*.py'
           python -m unittest discover -s skills/commerce/economics/unit-economics-review/tests -p 'test_*.py'
+          python -m unittest discover -s tests -p 'test_comfyui_local.py'
           python -m unittest discover -s scripts/readiness/tests -p 'test_*.py'
           python -m unittest discover -s scripts/release/tests -p 'test_*.py'
           python scripts/readiness/validate_readiness.py
