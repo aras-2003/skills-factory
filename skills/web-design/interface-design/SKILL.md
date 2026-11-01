@@ -7,10 +7,10 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.6"
+  version: "0.1.7"
   maturity: candidate
   risk: medium
-  last_reviewed: "2026-10-31"
+  last_reviewed: "2026-11-01"
   execution:
     default_model_class: standard
 ---
@@ -67,10 +67,11 @@ When a user supplies a concrete problem observation and the intended user, goal,
 
 ## Context boundary
 
-- Use design context stated in the current request/conversation or in sources the user explicitly references for this request.
-- Do not carry a product, screen, user task, workflow, or design constraint from an unrelated past chat, saved memory, or ambient history into an underspecified request.
-- Generic phrases such as “the screen” do not identify a previously discussed screen unless the user explicitly asks to continue or revise that named conversation or artifact.
-- The required-context gate applies even when prior or ambient context appears to make a plausible design possible. Ask before offering a layout or general screen-improvement checklist.
+- Use the current request as the source of truth. Earlier turns in the same chat provide design context only when the current request clearly identifies that context as part of the task.
+- Do not carry a product, screen, user task, workflow, or design constraint from another chat, saved memory, ambient application context, or an earlier turn in this chat into an underspecified request.
+- A generic reference such as “the screen,” “make it better,” or “improve this” does not identify a previously discussed screen, even when the chat contains a plausible design immediately above it. The user must explicitly identify the screen or ask to continue/revise the named prior artifact.
+- When a generic reference leaves any required input unknown, apply the required-context gate to the current request. Ask for all missing inputs in one concise question; do not infer a screen, task, user, or device from earlier turns and do not provide any layout, recommendations, or checklist.
+- The required-context gate applies even when prior or ambient context makes a plausible design possible. Ask before offering a layout or general screen-improvement checklist.
 
 ## Procedure
 

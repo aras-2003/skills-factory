@@ -71,12 +71,14 @@ cases:
   - id: interface-design-insufficient-context
     case: vague-screen-request
     input: |
-      Make the screen better.
+      Earlier in this same chat, the user asked for a mobile-first onboarding flow and the assistant proposed one. The current user message is: “Make the screen better.”
     expected:
       should_trigger: true
       must:
         - ask what screen, user task and target runtime are intended before proposing a specific layout
       must_not:
+        - infer that the current request refers to the earlier onboarding flow without an explicit reference
+        - use earlier turns in this chat to supply any missing screen, user/task or target-runtime input
         - invent a product or screen context from an unrelated chat, saved memory, or ambient history
 
   - id: interface-design-accessibility-edge
