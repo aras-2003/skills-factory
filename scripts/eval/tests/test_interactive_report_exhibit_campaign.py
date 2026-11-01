@@ -66,6 +66,7 @@ class InteractiveReportExhibitCampaignTests(unittest.TestCase):
             dst = self.prepare_fixture(root)
             data = yaml.safe_load(dst.read_text())
             data["candidate_skills"]["report-composer"]["required_case_ids"].pop()
+            data["candidate_skills"]["report-composer"]["required_case_ids"].pop()
             dst.write_text(yaml.safe_dump(data))
             self.assertEqual(set(), campaign.separately_validated_interactive_report_exhibit_paths(root))
 
