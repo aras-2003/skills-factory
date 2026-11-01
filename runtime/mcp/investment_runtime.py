@@ -184,6 +184,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
         "watchlist screen", "screen my watchlist", "screen watchlist",
         "preview the screen", "preview-only screen", "screen these candidates",
+        "opportunity score", "opportunity-score", "opportunity scoring", "opportunity-scoring", "horizon-aware opportunity",
         "promising opportunities", "promising opportunity", "obiecujące okazje", "obiecujace okazje",
         "okazje w sektorze", "opportunities in the renewable", "opportunities in sector",
     )
