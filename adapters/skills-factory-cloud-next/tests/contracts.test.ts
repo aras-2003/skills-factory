@@ -53,6 +53,8 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Review systemic risk across credit spreads and macro indicators using original publication dates; do not read portfolio data or write.", "investment-attention-review"],
     ["Review credit-spread and macro risk observations with original publication vintages, stale-data rules, and correlation groups. No portfolio reads or writes, no crash odds, no trades.", "investment-attention-review"],
     ["Systemic risk indicators across credit markets and macro conditions have changed. Assess these indicator groups, distinguish published historical vintages, deduplicate correlated evidence, and state materiality and direction separately. No portfolio-specific assessment, no holdings, no trades, no policy change, and no writes.", "investment-attention-review"],
+    ["This is a synthetic exercise. Three risk indicators are moving in different directions, and no canonical policy or validated calibration defines thresholds. Summarize the signals and state what remains unconfigured.", "investment-attention-review"],
+    ["Please define a policy threshold for systemic risk indicators and explain the governance needed to approve it.", "investment-policy-design"],
     ["Triage these synthetic systemic indicators in my portfolio.", "investment-portfolio-review"],
     ["Co się teraz dzieje z moim portfelem? Sprawdź, co zmieniło się od poprzedniego poprawnego snapshotu i powiedz mi tylko, co naprawdę warto obserwować. Nie chcę jeszcze ustalać docelowej struktury portfela ani robić rebalancingu.", "investment-portfolio-observation"],
     ["ACN 25%, IUIT 22%: review portfolio concentration risk", "investment-portfolio-review"],
