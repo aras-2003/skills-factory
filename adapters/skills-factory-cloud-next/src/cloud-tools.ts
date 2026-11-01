@@ -111,11 +111,13 @@ export function routeInvestment(userRequest: string) {
   const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);
   const replay = explicitReplayIntent || /published.{0,30}after.{0,30}decision|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)/.test(replayText);
   const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation|struktura cen|potwierdzon.{0,30}swing|zanegowan.{0,30}trendu/.test(s);
-  const systemicRisk = /systemic|cross[.\s-]*asset|credit[\s-]+spread|liquidity signal|market breadth|risk[.\s-]+off|macro(?:economic)? risk|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
+  const systemicRisk = /systemic|cross[.\s-]*asset|credit[\s-]+spread|liquidity signal|market breadth|risk[.\s-]+off|risk[.\s-]+indicators?|risk[.\s-]+signals?|macro(?:economic)? risk|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
   const systemicRiskTriage = systemicRisk && /triage|assess|review|monitor|observe|indicator|signal|changed|observ|ocen|przejrz|monitoruj/.test(s);
   const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s.replace(/\bno\s+portfolio\b[^.!?;,\n]*/g, ""));
   const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
   const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
+  const policyDesignIntent = /^(?:(?:please|help me|pomoz(?: mi)?)\s+)?(?:define|set|design|create|establish|regulate|ustal\w*|zaprojektuj|stworz|okresl|wyznacz)\b.{0,120}\b(?:investment\s+)?(?:policy|rules|risk|limits?|thresholds?|target bands|sizing constraints|polityk|zasad|limit|progi|ryzyk)/.test(s)
+    || /\b(?:i need to|we need to|i want to|pomoz mi|chce|musimy)\s+(?:define|set|design|create|establish|regulate|ustal\w*|zaprojektowac|stworzyc|okreslic|wyznaczyc)\b.{0,100}\b(?:investment\s+)?(?:policy|rules|risk|limits?|thresholds?|target bands|sizing constraints|polityk|zasad|limit|progi|ryzyk)/.test(s);
   const observation = /zmien|zmian|chang(?:e|es|ed|ing)|happening|dzieje|observ|obserw|watch|monitor|drift|dryf/.test(s);
   const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /(?:\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b|holding|portfel|portfolio|watchlist)/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /(?:wplyw|impact|matter|znaczen|\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b|holdings|portfel|zmienia|watchlist)/.test(s);
   const opportunity = /watchlist screen|screen my watchlist|screen watchlist|preview the screen|preview-only screen|screen these candidates|okazj|opportunit|kandydat|candidates|research next|badac dalej|szukaj spolek|znajdz spolk|find.*(stocks|securities)/.test(s);
@@ -129,6 +131,7 @@ export function routeInvestment(userRequest: string) {
   const aggregatePortfolioReview = portfolio && risk && !singleSecurityIntent;
   let candidates: string[] = [], reason = "No unambiguous decision object matched.";
   if (explicit.length) { candidates = [...explicit]; reason = "Explicit workflow names in the request."; }
+  else if (policyDesignIntent) { candidates = [routes[6]]; reason = "The user explicitly asks to define or change investment rules or risk limits."; }
   else if (systemicRiskTriage && !replay && (!portfolio || /issuer exposure|cross.asset|credit|macro/.test(s))) { candidates = [routes[5]]; reason = "The decision object is systemic or cross-asset risk observation; historical vintage and missing portfolio evidence remain explicit."; }
   else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
   else if (technicalStructure) { candidates = [routes[8]]; reason = "The request evaluates price pivots, trend structure or invalidation levels."; }
