@@ -9,10 +9,10 @@ description: 'Reconstruct and review the current investment portfolio plus histo
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.7.1
+  version: 0.7.2
   maturity: production
   risk: high
-  last_reviewed: '2026-10-09'
+  last_reviewed: '2026-10-27'
 ---
 
 # Portfolio State Review
@@ -31,6 +31,8 @@ Turn canonical holdings/history into a decision-useful portfolio state while pre
    - "source coverage" means current portfolio weight attached to instruments with any exposure metadata.
    - Do not infer decomposition completeness from source coverage, exposure row counts, or sums across heterogeneous exposure types.
    - Never sum `holding_weight` and `sector_weight` weighted exposures into one coverage percentage.
+   - When systemic/cross-asset signals are relevant, require dated issuer or constituent evidence before translating a broad signal into portfolio impact; report direct holdings, issuer look-through, source coverage and decomposition completeness separately.
+   - Use the `investment-attention-triage` systemic-risk indicator registry for point-in-time series, freshness and correlation handling. Unconfigured thresholds are not policy breaches.
 6. For observation requests, prefer the canonical `portfolio_position_changes` view for latest-valid versus previous-valid snapshot comparison. It establishes observed state only; it does not establish cause.
 7. Classify each observed position/exposure state when useful:
    - REQUIRES_ATTENTION;

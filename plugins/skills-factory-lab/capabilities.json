@@ -3,6 +3,28 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "f12c1e0b0a2280c5137647dac2783de9ccc2fc8486953f2e6739948fa6827be9",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "accessibility-gate",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -203,6 +225,31 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "write",
+          "network": "write",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "41a71ad335229829ee9c21ce3bc37049df12a82184f0e7172c75c5d6ffff284f",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "references/decision-and-setup.md",
+        "references/local-engine-matrix.md",
+        "scripts/comfyui_local.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "creative-generation",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -313,6 +360,28 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "dfc76bfe2fe1ee3bb85d9405e3b8b6d94261801349a245dba8d3c9369ddabd4d",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "design-critique",
+      "version": "0.1.1"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -390,6 +459,51 @@
         },
         "status": "UNASSESSED"
       },
+      "content_sha256": "b017d31c567e9881224b538b92892f61450c3bdd486476195d2a83f2ecfd3f3b",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "experience-design-routing",
+      "version": "0.1.1"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "a32c2f8810a24101660e4c74cd95aa0edb5fb6e203c13c57d7848dea1dee12d9",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "engine.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "financial-modeling",
+      "version": "0.1.1"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
       "content_sha256": "5077d1c71e2eea87204bf6ee958571f45ea5f5ee82e58875104fa9bcf6b85549",
       "inventory": [
         "SKILL.md",
@@ -426,6 +540,29 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "bdaa461a35e8127ec45a08bb53ba68a6fe2c065665997a673784d42738d48883",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "scripts/engine.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "historical-decision-replay",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "none",
           "external_actions": "none",
           "filesystem": "none",
@@ -434,7 +571,29 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "ef2faebe579b272a547abb24d87b9769bfd39eba452b4b192efe8e8f61418d36",
+      "content_sha256": "9f9c450df51c3bedc7dc06a38205f80d017c274b35b6cf2f22296042347d23f8",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "implementation-brief",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "b186ceffcd6ea0176e4b33bcddbfc135b1d40a5c5f34b5cb9572d15c7141c4c6",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -443,7 +602,7 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.0"
+      "version": "0.1.6"
     },
     {
       "capability_assessment": {
@@ -501,16 +660,17 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "f1af1d3823b5a390d72013289462b92cc6d7db35f58fc2f3f1c753e0860d55ea",
+      "content_sha256": "233c03023436ff36a288a0ef0772fcef7c22929f836469b57dbd5b5af7447fcf",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
-        "assets/skills-factory-domain-icon.svg"
+        "assets/skills-factory-domain-icon.svg",
+        "references/systemic-risk-indicator-registry.yaml"
       ],
       "kind": "skill",
       "maturity": "production",
       "name": "investment-attention-triage",
-      "version": "0.2.3"
+      "version": "0.2.4"
     },
     {
       "capability_assessment": {
@@ -591,7 +751,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "06617f850db45ee49a28cc1f301fbfc6cca46f44ec6258f4bb65ea8990d3ae72",
+      "content_sha256": "5dd34775b7c3c9e86d6689021a52be214e66bbb1c337b1a6ac585785b499321b",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -662,7 +822,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "0823d4240f4c8259d37cbf5dbeaf2d60f4b0f081a43ba9ed0edb84d4262d7a1c",
+      "content_sha256": "1a07cdbba2ffa08f468f304ae1eef4dbeb9bc1ac017c5bd3e16f78e23b9d167d",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -672,7 +832,7 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-security-review",
-      "version": "0.4.1"
+      "version": "0.4.3"
     },
     {
       "capability_assessment": {
@@ -788,6 +948,29 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "5b3fd033078dca40b3f04763a4bd11d869b1db52a2855f2aaf89d634f2f5a7c7",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "engine.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "market-economics",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "named_classes",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -796,7 +979,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "daa0de9a50a173f243a00a62664148a8e93988e748b6af2f5b4464f6f4c2f381",
+      "content_sha256": "e224f93ad057463d34c060887200502e20e0619913c6efbb0806b834034b24c8",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -805,7 +988,7 @@
       "kind": "skill",
       "maturity": "production",
       "name": "market-opportunity-scan",
-      "version": "0.3.1"
+      "version": "0.4.1"
     },
     {
       "capability_assessment": {
@@ -1089,7 +1272,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "444d9aa46e79463df073b764fd5d24405acfc09f64cc7d23c7410f871aab848e",
+      "content_sha256": "d1ff373545ebbf2a907f0d69455c15e75460138664435fbe4c95ac87a878edf5",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1098,7 +1281,7 @@
       "kind": "skill",
       "maturity": "production",
       "name": "portfolio-state-review",
-      "version": "0.7.1"
+      "version": "0.7.2"
     },
     {
       "capability_assessment": {
@@ -1498,19 +1681,43 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "679f6526708a0db0a4a9c822ee739bb93491d8be4ac0886852746ebe450df30b",
+      "content_sha256": "b7f59d0a79735b468c4a58770cc0a08deb1ea574a7d8cc31e8bc35e57e39262c",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
         "assets/skills-factory-domain-icon.svg",
         "references/business-lifecycle.md",
         "scripts/business_lifecycle.py",
-        "scripts/business_lifecycle_visual.py"
+        "scripts/business_lifecycle_visual.py",
+        "scripts/value_trap_gate.py"
       ],
       "kind": "skill",
       "maturity": "production",
       "name": "security-underwriting",
-      "version": "0.5.1"
+      "version": "0.5.2"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "named_classes",
+          "external_actions": "approval_required",
+          "filesystem": "none",
+          "network": "read",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "2cbaa6f2d11058fca18a232fbba2c4e970eef1409945fb740c73406fd1e3369a",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "references/open-seo-mcp-contract.md"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "seo-research",
+      "version": "0.1.0"
     },
     {
       "capability_assessment": {
@@ -1692,6 +1899,29 @@
     {
       "capability_assessment": {
         "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "fc8de96cb44b74a068a58df7ab68d38fb193554d094a6a6ff2df506b3ac57102",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "engine.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "strategy-economics",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
           "credentials": "unassessed",
           "external_actions": "unassessed",
           "filesystem": "unassessed",
@@ -1732,6 +1962,29 @@
       "maturity": "production",
       "name": "supplier-viability-review",
       "version": "1.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "unassessed",
+          "external_actions": "unassessed",
+          "filesystem": "unassessed",
+          "network": "unassessed",
+          "shell_exec": "unassessed"
+        },
+        "status": "UNASSESSED"
+      },
+      "content_sha256": "82bd88fa27c103fdee7d422b38d2dcca8aa6547dd4de8f6406daea3df87074ce",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "scripts/engine.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "technical-structure",
+      "version": "0.1.0"
     },
     {
       "capability_assessment": {
@@ -1856,15 +2109,39 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "15007ce14551b4b3b2e8e4adcc4757a2ed477b8b5422e04f57fae2bee824d538",
+      "content_sha256": "4ab20deb0b290eae0be9a9648619fd839b2342fd890dc9f2243f14f0cefd8774",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
-        "assets/skills-factory-domain-icon.svg"
+        "assets/skills-factory-domain-icon.svg",
+        "scripts/valuation_scenarios.py"
       ],
       "kind": "skill",
       "maturity": "production",
       "name": "valuation-scenario-review",
+      "version": "0.3.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "none",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "9944e1a029f266d3db31f813d223dc05f1dc34949e66a8aa4924b777d5cbb7b1",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg",
+        "engine.py"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "value-realization",
       "version": "0.1.0"
     },
     {
@@ -1890,6 +2167,50 @@
       "maturity": "candidate",
       "name": "visual-output-design",
       "version": "0.13.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "none",
+          "network": "none",
+          "shell_exec": "none"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "7a224bbaee800620b886bc9f70178b98e15f31b1ecb9c83a1359f843f39589ff",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "visual-regression-review",
+      "version": "0.1.0"
+    },
+    {
+      "capability_assessment": {
+        "requirements": {
+          "credentials": "none",
+          "external_actions": "none",
+          "filesystem": "read",
+          "network": "read",
+          "shell_exec": "required"
+        },
+        "status": "DECLARED"
+      },
+      "content_sha256": "5e313be991eaff3c7f9c590aa57ea81cf4c1a45b7792706b76c04d345429e875",
+      "inventory": [
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/skills-factory-domain-icon.svg"
+      ],
+      "kind": "skill",
+      "maturity": "candidate",
+      "name": "website-quality-review",
+      "version": "0.1.0"
     }
   ],
   "capability_contract": {
@@ -2005,7 +2326,7 @@
   ],
   "runtime_tools": [
     {
-      "content_sha256": "5387dc49e75a49b31a6d4f3e0d2f68e5bf39a674eaa45ef7742c350c483b3cc0",
+      "content_sha256": "387cdf7f8e3e0eec664152eafc2231c4f0c7eb532414e9c7f07d22b1a7450234",
       "kind": "mcp-server",
       "name": "skills-factory-runtime",
       "runtime_class": "skills-factory-runtime",
@@ -2022,5 +2343,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "63b9c002c7e672bb2999cca79cb7fae88b1e7260"
+  "source_revision": "a022809a978dc2fb304b9b60cdc7e99d2d8dd60e"
 }
