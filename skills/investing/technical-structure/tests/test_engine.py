@@ -51,6 +51,34 @@ class TechnicalStructureTests(unittest.TestCase):
         self.assertEqual(50, mixed["score"])
         self.assertEqual({"higher_high": True, "higher_low": False, "lower_high": False, "lower_low": True}, mixed["score_components"])
 
+    def test_synthetic_known_answer_confirms_pivots_only_after_right_bars(self):
+        values = [(10, 8, 9), (12, 9, 11), (14, 10, 12), (12, 9, 10), (11, 8, 9),
+                  (14, 10, 13), (16, 11, 15), (14, 10, 12), (13, 9, 11), (12, 10, 11), (12, 10, 11)]
+        data = bars(values)
+        for index, bar in enumerate(data):
+            bar["source_id"] = f"SYNTHETIC-XYZ-{index}"
+
+        result = analyze_structure(
+            data,
+            as_of="2026-01-11T00:00:00+00:00",
+            source_id="SYNTHETIC-XYZ-DAILY-v1",
+            adjusted=True,
+            adjustment_id="synthetic-adjustment-v1",
+        )
+
+        self.assertEqual("OBSERVED", result["status"])
+        self.assertEqual("UPTREND", result["trend"])
+        self.assertEqual(100, result["score"])
+        self.assertFalse(result["score_is_probability"])
+        self.assertEqual("16", result["ops"]["price"])
+        self.assertEqual("2026-01-09T00:00:00+00:00", result["ops"]["confirmed_at"])
+        self.assertEqual("SYNTHETIC-XYZ-6", result["ops"]["source_id"])
+        self.assertEqual("45.45", result["ops"]["distance_pct"])
+        self.assertEqual("9", result["opd"]["price"])
+        self.assertEqual("2026-01-11T00:00:00+00:00", result["opd"]["confirmed_at"])
+        self.assertEqual("SYNTHETIC-XYZ-8", result["opd"]["source_id"])
+        self.assertEqual("-18.18", result["opd"]["distance_pct"])
+
     def test_requires_adjusted_prices_and_provenance(self):
         data = bars([(10, 8, 9)] * 8)
         self.assertEqual("UNKNOWN", analyze_structure(data, as_of=data[-1]["timestamp"], source_id="fixture", adjusted=False, adjustment_id="none")["status"])
