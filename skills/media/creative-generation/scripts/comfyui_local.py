@@ -72,6 +72,7 @@ def _json_request(base_url: str, path: str, *, method: str = "GET", body: dict[s
         with _opener().open(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
+        exc.close()
         raise AdapterError(f"ComfyUI returned HTTP {exc.code} for {path}") from exc
     except URLError as exc:
         raise AdapterError(f"Cannot reach local ComfyUI at {validate_base_url(base_url)}: {exc.reason}") from exc
@@ -166,6 +167,7 @@ def _download(base_url: str, descriptor: dict[str, Any], target: Path, max_bytes
                     raise AdapterError(f"ComfyUI output exceeds the {max_bytes}-byte download limit")
                 output.write(chunk)
     except HTTPError as exc:
+        exc.close()
         target.unlink(missing_ok=True)
         raise AdapterError(f"ComfyUI could not return output {filename!r} (HTTP {exc.code})") from exc
     except (URLError, OSError, ValueError) as exc:
