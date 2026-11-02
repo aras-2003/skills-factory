@@ -18,6 +18,8 @@ from threading import Lock
 from typing import Any, Callable, Iterator
 
 from opentelemetry import trace
+from opentelemetry.trace import get_current_span
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 from opentelemetry.sdk.resources import Resource
 from opentelemetry.sdk.trace import Span, TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -63,13 +65,40 @@ def _tracer() -> trace.Tracer:
     return trace.get_tracer("skills_factory.runtime.mcp", "1.0.0")
 
 
+def _parent_trace_context(request_meta: Mapping[str, Any] | None):
+    """Extract only the W3C traceparent supplied in MCP request metadata.
+
+    MCP metadata is peer-provided and is used for correlation only. It does not
+    affect tool behavior, authorization, or the receipt's input digest.
+    """
+    if not isinstance(request_meta, Mapping):
+        return None, "not_provided"
+    traceparent = request_meta.get("traceparent")
+    if not isinstance(traceparent, str) or not traceparent:
+        return None, "not_provided"
+    extracted = TraceContextTextMapPropagator().extract({"traceparent": traceparent})
+    if not get_current_span(extracted).get_span_context().is_valid:
+        return None, "invalid"
+    return extracted, "accepted"
+
+
 @contextmanager
-def tool_span(tool_name: str, arguments: Any) -> Iterator[tuple[Span, str]]:
-    """Emit one bounded span and yield it with a trace-derived run identifier."""
+def tool_span(
+    tool_name: str,
+    arguments: Any,
+    request_meta: Mapping[str, Any] | None = None,
+) -> Iterator[tuple[Span, str]]:
+    """Emit one bounded span and yield it with a trace-derived run identifier.
+
+    Calls share a trace only when the MCP client propagates W3C traceparent in
+    request metadata. Without it, each invocation remains a separate trace.
+    """
     started = time.perf_counter_ns()
+    parent_context, parent_status = _parent_trace_context(request_meta)
     with _tracer().start_as_current_span(
         f"mcp.tool.{tool_name}",
         kind=SpanKind.INTERNAL,
+        context=parent_context,
         record_exception=False,
         set_status_on_exception=False,
     ) as span:
@@ -77,6 +106,7 @@ def tool_span(tool_name: str, arguments: Any) -> Iterator[tuple[Span, str]]:
         run_id = f"{context.trace_id:032x}" if context.is_valid else "unavailable"
         capability = arguments.get("skill_name", tool_name) if isinstance(arguments, Mapping) else tool_name
         span.set_attribute("skills_factory.run_id", run_id)
+        span.set_attribute("skills_factory.trace_parent_status", parent_status)
         span.set_attribute("skills_factory.environment", os.environ.get("SKILLS_FACTORY_ENVIRONMENT", "local"))
         span.set_attribute("skills_factory.capability.name", str(capability))
         span.set_attribute("skills_factory.source_revision", os.environ.get("SKILLS_FACTORY_SOURCE_REVISION", "unknown"))
@@ -103,9 +133,10 @@ def execute_tool(
     arguments: Any,
     operation: Callable[[], Any],
     add_receipt: Callable[[str, Any, Any, str], Any],
+    request_meta: Mapping[str, Any] | None = None,
 ) -> Any:
     """Run a tool, attach its existing receipt, and correlate receipt to span."""
-    with tool_span(tool_name, arguments) as (span, run_id):
+    with tool_span(tool_name, arguments, request_meta=request_meta) as (span, run_id):
         result = operation()
         if isinstance(result, Mapping):
             version = result.get("version") or result.get("release_id")
