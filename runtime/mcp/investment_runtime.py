@@ -87,7 +87,14 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         }
     # Route the requested task, excluding clauses that explicitly reject an
     # alternative (for example "not my portfolio" or "nie ... rebalancingu").
-    text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*", "", raw.lower())
+    # Keep comma-separated terms inside a negated list together, but stop before
+    # a new comma-separated negation so each guardrail is removed independently.
+    negation = r"(?:do not|don't|not|without|nie)"
+    text = re.sub(
+        rf"\b{negation}\b(?:(?!,\s*\b{negation}\b)[^.!?;:\n])*",
+        "",
+        raw.lower(),
+    )
     # Polish exclusion lists often contain comma-separated items after "bez".
     text = re.sub(r"\bbez\b[^.!?;:\n]*", "", text)
 

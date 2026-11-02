@@ -30,6 +30,16 @@ class InvestmentActionRoutingTests(unittest.TestCase):
         self.assertFalse(result["is_investment_request"])
         self.assertEqual(result["route"], "not_applicable")
 
+    def test_comma_separated_negative_guardrails_do_not_trigger_portfolio_review(self) -> None:
+        result = route_investment_request(
+            "TEST-ONLY: Rank six synthetic stocks with the Opportunity Score across 1-3 months, "
+            "6-12 months, and over 3 years; do not use live market, portfolio, or external research data, "
+            "do not write to canonical store, and do not make investment recommendations."
+        )
+        self.assertTrue(result["is_investment_request"])
+        self.assertEqual(result["route"], "opportunity")
+        self.assertEqual(result["child_workflow"], "investment-opportunity-hunter")
+
 
 if __name__ == "__main__":
     unittest.main()
