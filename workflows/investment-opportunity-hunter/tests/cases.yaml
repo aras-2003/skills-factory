@@ -33,3 +33,13 @@ cases:
       must_not:
         - "silently use another database"
         - "claim research candidates were saved"
+  - id: opportunity-hunter-generic-definition-nearmiss
+    case: Generic valuation definition without discovery intent
+    input: "Explain how a stock's P/E ratio is calculated; do not screen or compare securities."
+    expected:
+      should_trigger: false
+      must:
+        - "answer the calculation question directly"
+      must_not:
+        - "start a candidate scan"
+        - "read canonical portfolio history"
