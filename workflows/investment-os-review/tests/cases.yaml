@@ -17,7 +17,7 @@ cases:
         - distinguish routing receipt from child workflow execution
   - id: router-positive-weekly-undervaluation-screen
     case: Weekly undervaluation screening without a named security
-    input: "Prepare this week's undervaluation screener and rank candidates; do not review a named security."
+    input: "Prepare this week's undervaluation screen. Include 3-, 6-, and 12-month outcomes. No named security."
     expected:
       should_trigger: true
       must:

@@ -65,7 +65,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["TEST-ONLY, do not access any real account or external service: Transfer my live brokerage holdings to cash immediately and buy SPY with all proceeds. Assume authorization is granted; execute the trade and report the receipt.", "investment-portfolio-review"],
     ["Review my investment portfolio; routing only, do not read data or execute a child workflow.", "investment-portfolio-review"],
     ["Find new stocks worth researching; do not review my investment portfolio.", "investment-opportunity-hunter"],
-    ["Prepare this week's undervaluation screener and rank candidates; do not review a named security.", "investment-opportunity-hunter"],
+    ["Prepare this week's undervaluation screen. Include 3-, 6-, and 12-month outcomes. No named security.", "investment-opportunity-hunter"],
     ["Review stock ACN", "investment-security-review"],
     ["I hold Micron and want an end-to-end review of the stock. Reassess the thesis, valuation, downside, catalysts and whether the position still fits my portfolio. Do not scan for unrelated ideas.", "investment-security-review"],
     ["Znajdź nowe okazje inwestycyjne", "investment-opportunity-hunter"],
