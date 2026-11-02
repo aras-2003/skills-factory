@@ -3,10 +3,10 @@ name: experience-design-routing
 description: Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.1
+  version: 0.1.2
   maturity: candidate
   risk: low
-  last_reviewed: '2026-11-01'
+  last_reviewed: '2026-11-02'
 ---
 
 # Experience Design Routing
@@ -18,10 +18,10 @@ Select the smallest existing design capability for an explicit UI/UX task. This 
 1. Classify the requested deliverable before checking which artifacts are available.
 2. For an explicit request to implement, build, edit, debug or test code in an existing application, treat it as an implementation task. State concisely that `interface-design` does not apply and direct the request to the application's coding workflow. Do not replace implementation with a design-only brief or ask UX discovery questions. If the coding workflow cannot proceed, request only the missing implementation inputs (such as repository access or an approved design) and state that edits/tests have not run.
 3. For an active design/review request, route only as follows:
-   - Design a new screen or short product flow: `interface-design`.
+   - Design a new screen or short product flow: `interface-design`. A request to design a screen that includes role-based access, permission states, or accessible behavior remains an interface-design request; mentioning accessibility or permissions does not turn it into an implementation accessibility review.
    - Critique a supplied visual artifact and propose repairs: `design-critique`.
    - Convert an approved concept into an engineering handoff: `implementation-brief`.
-   - Review implementation accessibility evidence and gaps: `accessibility-gate`.
+   - Review accessibility evidence and gaps for an existing implementation: `accessibility-gate`.
    - Compare a rendering to an approved baseline: `visual-regression-review`.
 4. If intent is genuinely unclear between design and implementation, ask one narrow question. Do not infer permission to edit code from a design request.
 5. If the primary output is a report, presentation, chart, diagram or data analysis, keep its existing domain/output workflow. Use UX skills only when the user explicitly asks for interface design or review.
