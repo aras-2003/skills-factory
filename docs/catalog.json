@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 17028)
-Total output lines: 1325
-
 {
   "metadata": {
     "packages": {
@@ -509,7 +506,145 @@ Total output lines: 1325
       "version": "1.0.0",
       "description": "Assess whether a business capability map is coherent and decision-useful, including level consistency, overlap, gaps, ownership and linkage to strategy, investments, applications, risks or performance. Use to improve a map for a defined decision; do not infer detailed processes or technology defects from capability names alone.",
       "source": "skills/oaf/enterprise-architecture/capability-map-review/SKILL.md",
-      "source_status"…2028 tokens truncated…onnector actions.",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "evidence-loop-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Review whether organisational KPIs, outcomes, reviews and feedback loops actually inform decisions and adaptation. Use when governance produces reporting but weak learning; do not use as a generic KPI-design task.",
+      "source": "skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "kpi-quality-review",
+      "domain": "oaf",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review whether a defined KPI set is decision-useful, interpretable and linked to outcomes, owners, thresholds and actions. Use after the relevant decisions/outcomes are known; do not generate a generic KPI catalogue.",
+      "source": "skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "global-local-model-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Review how responsibilities, standards, capabilities and decisions are split between global/central and local units. Use when the organisation needs to balance scale and consistency against local context and speed; do not default to centralisation.",
+      "source": "skills/oaf/operating-model/global-local-model-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "operating-model-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.1.0",
+      "description": "Review an operating model for role clarity, interfaces, accountability, autonomy, coordination and authority/resource alignment. Use as the lead diagnosis when symptoms span cross-unit handoffs plus unclear accountability or capacity/funding authority and the failure has not yet been isolated to one decision class. Do not reduce the review to an org chart.",
+      "source": "skills/oaf/operating-model/operating-model-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "organizational-interface-review",
+      "domain": "oaf",
+      "maturity": "candidate",
+      "version": "0.1.0",
+      "description": "Review critical organisational interfaces where ownership, work, information, funding or decisions cross unit boundaries. Use when handoffs, dependencies or coordination create delay or accountability loss; do not redesign the whole operating model.",
+      "source": "skills/oaf/operating-model/organizational-interface-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "portfolio-health-review",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Review whether an initiative portfolio is coherent, affordable, capacity-feasible, dependency-aware and aligned to strategic outcomes. Use for portfolio health diagnosis; do not force ranking when comparable evidence is missing.",
+      "source": "skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "portfolio-prioritization",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Structure transparent prioritisation of initiatives using agreed strategic, value, risk, capacity and dependency criteria. Use when a portfolio needs comparable decisions; use deterministic calculation for scoring where possible.",
+      "source": "skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "transformation-blueprint",
+      "domain": "oaf",
+      "maturity": "production",
+      "version": "1.0.0",
+      "description": "Convert an approved organisational diagnosis and target direction into a sequenced transformation blueprint with workstreams, dependencies, decision gates, capacity needs and evidence checkpoints. Use after diagnosis and target-state direction are sufficiently agreed; do not roadmap unresolved design choices as facts.",
+      "source": "skills/oaf/portfolio-execution/transformation-blueprint/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-brief",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Establish the audience, communication objective, intended decision or behavior and constraints before producing a slide deck. Use when someone asks to prepare a presentation from a topic, idea, notes, brief or source documents; do not use for a narrow request to edit a known slide.",
+      "source": "skills/presentations/presentation-brief/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-deck-review",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Critique a real or draft presentation for strategy, audience fit, evidence integrity, narrative and visual craft; rank specific defects and guide targeted revision. Use before final delivery or after deck changes; do not confuse an opinion score with verified rendered output.",
+      "source": "skills/presentations/presentation-deck-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-evidence-review",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Check source-to-slide fidelity, citations, claim sufficiency, conflicting evidence and chart inputs in presentations. Use when slide assertions/exhibits need source mapping; delegate substantive new strategy research and analysis to their domain/shared owners.",
+      "source": "skills/presentations/presentation-evidence-review/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-exhibit-design",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Choose data-faithful charts, diagrams and presentation exhibits for an approved slide claim and audience, delegating actual rendering to existing visual-output-design and deterministic tools. Use after storyline/evidence planning; do not use for decorative image prompts alone.",
+      "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-export-verification",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Verify a presentation's actual rendered slides, delivery format, PowerPoint/PDF round-trip behavior, editability, fonts and animation limitations. Use when a deck exists and the user needs final deliverable QA; do not treat a planned export or tool invocation as successful delivery.",
+      "source": "skills/presentations/presentation-export-verification/SKILL.md",
+      "source_status": "present",
+      "capability_assessment": "UNASSESSED"
+    },
+    {
+      "name": "presentation-slide-authoring",
+      "domain": "presentations",
+      "maturity": "draft",
+      "version": "0.1.0",
+      "description": "Create or revise an editable presentation in a supported Figma Slides, Canva or Google Slides runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
       "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
       "source_status": "present",
       "capability_assessment": "UNASSESSED"
