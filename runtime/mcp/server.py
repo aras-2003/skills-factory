@@ -27,6 +27,7 @@ from skill_catalog import (
     catalog_digest,
 )
 from mcp.server import MCPServer
+from mcp.server.mcpserver import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from observability import execute_tool, tool_span
 
@@ -173,8 +174,13 @@ def _with_tool_receipt(tool_name: str, arguments: Any, result: Any, run_id: str 
     return {"result": result, "tool_receipt": receipt}
 
 
-def _render_with_receipt(tool_name: str, arguments: dict[str, Any], render) -> Any:
-    with tool_span(tool_name, arguments) as (span, run_id):
+def _request_meta(context: Context) -> Mapping[str, Any] | None:
+    """Return untrusted MCP metadata only for W3C trace correlation."""
+    return context.request_context.meta
+
+
+def _render_with_receipt(tool_name: str, arguments: dict[str, Any], render, context: Context) -> Any:
+    with tool_span(tool_name, arguments, request_meta=_request_meta(context)) as (span, run_id):
         try:
             result = render()
         except Exception as exc:
@@ -203,7 +209,7 @@ mcp = MCPServer(
 
 
 @mcp.tool()
-def runtime_info() -> dict[str, Any]:
+def runtime_info(context: Context) -> dict[str, Any]:
     """Return deployment identity without performing any external action."""
     def operation() -> dict[str, Any]:
         values = {
@@ -245,25 +251,26 @@ def runtime_info() -> dict[str, Any]:
         else:
             values["manifest_binding"] = "unavailable_or_mismatched"
         return values
-    return execute_tool("runtime_info", {}, operation, _with_tool_receipt)
+    return execute_tool("runtime_info", {}, operation, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()
-def list_skills() -> dict:
+def list_skills(context: Context) -> dict:
     """List the skills packaged in the same catalog as the active Lab profile."""
-    return execute_tool("list_skills", {}, _list_skills, _with_tool_receipt)
+    return execute_tool("list_skills", {}, _list_skills, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()
-def load_skill(skill_name: str) -> dict:
+def load_skill(skill_name: str, context: Context) -> dict:
     """Load packaged skill instructions and safe textual references for host-model execution."""
     return execute_tool(
-        "load_skill", {"skill_name": skill_name}, lambda: _load_skill(skill_name), _with_tool_receipt
+        "load_skill", {"skill_name": skill_name}, lambda: _load_skill(skill_name), _with_tool_receipt,
+        request_meta=_request_meta(context),
     )
 
 
 @mcp.tool()
-def route_investment_request(user_request: str) -> dict[str, Any]:
+def route_investment_request(user_request: str, context: Context) -> dict[str, Any]:
     """MANDATORY first step for every investment request, before analysis."""
     def operation() -> dict[str, Any]:
         result = _route_investment_request(user_request)
@@ -284,7 +291,8 @@ def route_investment_request(user_request: str) -> dict[str, Any]:
             )
         return result
     return execute_tool(
-        "route_investment_request", {"user_request": user_request}, operation, _with_tool_receipt
+        "route_investment_request", {"user_request": user_request}, operation, _with_tool_receipt,
+        request_meta=_request_meta(context),
     )
 
 
@@ -296,6 +304,7 @@ def render_bar_chart(
     title: str,
     unit: str,
     horizontal: bool,
+    context: Context,
 ):
     """Render a deterministic factual bar chart from explicit values."""
     arguments = {
@@ -310,6 +319,7 @@ def render_bar_chart(
         "render_bar_chart",
         arguments,
         lambda: _render_bar_chart(labels, values, expected_points, title, unit, horizontal),
+        context,
     )
 
 
@@ -323,6 +333,7 @@ def render_line_chart(
     expected_points_per_series: int,
     title: str,
     unit: str,
+    context: Context,
 ):
     """Render a deterministic factual line chart from explicit values."""
     arguments = {
@@ -343,6 +354,7 @@ def render_line_chart(
             expected_x_labels, expected_series, expected_points_per_series,
             title, unit,
         ),
+        context,
     )
 
 
