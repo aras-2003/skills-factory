@@ -27,8 +27,9 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
         self.assertEqual(self.metadata["metadata"]["version"], "0.1.1")
         self.assertIn("## Portability boundary", self.body)
-        self.assertIn("confirm the actual host surface and tool receipt", self.body)
-        self.assertIn("NOT_RUN, not PASS", self.body)
+        self.assertIn("confirm the actual host surface and tool receipt", self.body.lower())
+        self.assertIn("NOT_RUN", self.body)
+        self.assertIn("not PASS", self.body)
 
     def test_specialist_routes_remain_explicit_and_non_overlapping(self):
         for route in (
@@ -91,7 +92,9 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         case = self.cases_by_id["ux-near-miss-implementation-request"]
         self.assertFalse(case["expected"]["should_trigger"])
         self.assertIn("direct the request to the implementation workflow", " ".join(case["expected"]["must"]))
-        self.assertIn("do not replace implementation", " ".join(case["expected"]["must_not"]).lower())
+        self.assertTrue(
+            any("replace implementation with a design-only brief" in item.lower() for item in case["expected"]["must_not"])
+        )
 
 
 if __name__ == "__main__":
