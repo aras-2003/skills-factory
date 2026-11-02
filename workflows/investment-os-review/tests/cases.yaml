@@ -15,6 +15,15 @@ cases:
       must:
         - choose investment-theme-discovery as primary child
         - distinguish routing receipt from child workflow execution
+  - id: router-positive-weekly-undervaluation-screen
+    case: Weekly undervaluation screening without a named security
+    input: "Prepare this week's undervaluation screener and rank candidates; do not review a named security."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-opportunity-hunter as primary child
+        - keep screening distinct from valuation review of a named security
+        - distinguish routing receipt from child workflow execution
   - id: router-negative-generic-education
     case: General term definition outside personal investment workflow
     input: "Explain in two sentences what the price-to-earnings ratio means, without discussing any security or my holdings."
