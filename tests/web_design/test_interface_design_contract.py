@@ -24,7 +24,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_candidate_metadata_and_identity(self):
         self.assertEqual(self.metadata["name"], "interface-design")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.3")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.8")
 
     def test_contract_sections_are_present(self):
         for section in (
