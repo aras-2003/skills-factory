@@ -174,12 +174,12 @@ def _with_tool_receipt(tool_name: str, arguments: Any, result: Any, run_id: str 
     return {"result": result, "tool_receipt": receipt}
 
 
-def _request_meta(context: Context) -> Mapping[str, Any] | None:
+def _request_meta(context: Context | None) -> Mapping[str, Any] | None:
     """Return untrusted MCP metadata only for W3C trace correlation."""
-    return context.request_context.meta
+    return context.request_context.meta if context is not None else None
 
 
-def _render_with_receipt(tool_name: str, arguments: dict[str, Any], render, context: Context) -> Any:
+def _render_with_receipt(tool_name: str, arguments: dict[str, Any], render, context: Context | None = None) -> Any:
     with tool_span(tool_name, arguments, request_meta=_request_meta(context)) as (span, run_id):
         try:
             result = render()
@@ -209,7 +209,7 @@ mcp = MCPServer(
 
 
 @mcp.tool()
-def runtime_info(context: Context) -> dict[str, Any]:
+def runtime_info(context: Context = None) -> dict[str, Any]:
     """Return deployment identity without performing any external action."""
     def operation() -> dict[str, Any]:
         values = {
@@ -255,13 +255,13 @@ def runtime_info(context: Context) -> dict[str, Any]:
 
 
 @mcp.tool()
-def list_skills(context: Context) -> dict:
+def list_skills(context: Context = None) -> dict:
     """List the skills packaged in the same catalog as the active Lab profile."""
     return execute_tool("list_skills", {}, _list_skills, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()
-def load_skill(skill_name: str, context: Context) -> dict:
+def load_skill(skill_name: str, context: Context = None) -> dict:
     """Load packaged skill instructions and safe textual references for host-model execution."""
     return execute_tool(
         "load_skill", {"skill_name": skill_name}, lambda: _load_skill(skill_name), _with_tool_receipt,
@@ -270,7 +270,7 @@ def load_skill(skill_name: str, context: Context) -> dict:
 
 
 @mcp.tool()
-def route_investment_request(user_request: str, context: Context) -> dict[str, Any]:
+def route_investment_request(user_request: str, context: Context = None) -> dict[str, Any]:
     """MANDATORY first step for every investment request, before analysis."""
     def operation() -> dict[str, Any]:
         result = _route_investment_request(user_request)
@@ -304,7 +304,7 @@ def render_bar_chart(
     title: str,
     unit: str,
     horizontal: bool,
-    context: Context,
+    context: Context = None,
 ):
     """Render a deterministic factual bar chart from explicit values."""
     arguments = {
@@ -333,7 +333,7 @@ def render_line_chart(
     expected_points_per_series: int,
     title: str,
     unit: str,
-    context: Context,
+    context: Context = None,
 ):
     """Render a deterministic factual line chart from explicit values."""
     arguments = {
