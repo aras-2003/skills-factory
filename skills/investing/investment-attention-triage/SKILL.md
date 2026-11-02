@@ -24,8 +24,8 @@ Convert noisy new information into a decision-focused queue: what changed, wheth
 2. Use structured equity/ETF research tools for breadth, then retrieve primary evidence for material claims where practical; Firecrawl may be used for live retrieval/parsing.
 3. For each item, identify the affected thesis assumption, KPI, catalyst, risk or valuation expectation.
 4. Compare the new evidence with the prior thesis/expectation and assess whether it can change a decision. Check the evidence against: revenue/earnings/free-cash-flow, demand/pricing/margins, competitive position, strategic relevance, valuation assumptions, catalyst timing, and thesis invalidation/kill criteria. Use only dimensions relevant to the item; do not turn this into a full company valuation.
-5. Classify materiality using exactly one value from `NOISE`, `MONITOR`, `REVIEW`, `ESCALATE`. Preserve the selected enum verbatim in structured output; do not replace it with a synonym or omit the classification. Give a short reason tied to the affected decision assumption.
-6. Classify direction separately: STRENGTHENS / WEAKENS / MIXED / NEUTRAL.
+5. When evidence is sufficient, classify materiality using exactly one value from `NOISE`, `MONITOR`, `REVIEW`, `ESCALATE`. Preserve the selected enum verbatim in structured output and give a short reason tied to the affected decision assumption. If a required input is missing, stale, or not comparable, use `materiality=NOT_ASSESSED` and `data_status=DATA_GAP`; do not force an enum classification from inadequate evidence.
+6. Classify direction separately: STRENGTHENS / WEAKENS / MIXED / NEUTRAL. If the direction cannot be derived from eligible dated evidence, use `direction=NOT_ASSESSED`; do not use `NEUTRAL` to represent missing evidence.
 7. Assess market reaction and whether the evidence may already be priced in only as interpretations, not proof.
 8. State the smallest next research question and specialist path, plus the decision it could change (for example, no action, monitor, or deeper review).
 9. For systemic or cross-asset evidence, use [the systemic-risk indicator registry](references/systemic-risk-indicator-registry.yaml). Keep each series' observation date, publication/vintage date, source, unit and permitted universe. Do not compare revised history with a real-time snapshot. If a threshold is not configured by canonical policy or a separately versioned calibration profile, report it as `NOT_CONFIGURED`; do not invent an alert cutoff.
@@ -42,10 +42,10 @@ If the user has not supplied a ticker, the new information, or the prior thesis/
 - Company good news can coexist with worse valuation.
 - Portfolio concentration can raise decision relevance.
 - Materiality classification is a research judgment, not write authorization. No canonical side effects without a verified write boundary.
-- `NOISE`, `MONITOR`, `REVIEW`, and `ESCALATE` are the complete allowed materiality enum; do not create alternate labels.
+- `NOISE`, `MONITOR`, `REVIEW`, and `ESCALATE` are the complete allowed materiality enum when evidence supports assessment. `NOT_ASSESSED` is reserved for missing, stale, future-dated, or non-comparable required evidence; it is not a fifth materiality level.
 
 ## Output contract
-For each item assessed, show: what changed versus prior expectation; relevant decision dimension(s); materiality enum with a brief rationale; direction; priced-in view when evidence permits; decision consequence; provenance; next research question and smallest escalation path. Suppress noise. When inputs are missing, show a provisional decision rule and the minimum missing inputs instead of returning only a questionnaire. Include a canonical persistence status (`NOT_WRITTEN`, `SAVED`, or `WRITE_FAILED`); include the actual WRITE receipt only when a write was attempted.
+For each item assessed, show: what changed versus prior expectation; relevant decision dimension(s); materiality (`NOISE`, `MONITOR`, `REVIEW`, `ESCALATE`, or the evidence-gap sentinel `NOT_ASSESSED`) with a brief rationale; direction (`STRENGTHENS`, `WEAKENS`, `MIXED`, `NEUTRAL`, or `NOT_ASSESSED` when it cannot be derived); priced-in view when evidence permits; decision consequence; provenance; next research question and smallest escalation path. Suppress noise. When inputs are missing, show a provisional decision rule and the minimum missing inputs instead of returning only a questionnaire. Include a canonical persistence status (`NOT_WRITTEN`, `SAVED`, or `WRITE_FAILED`); include the actual WRITE receipt only when a write was attempted.
 
 ## Quality checks
 - [ ] Every queued item says what changed versus prior state/expectation.

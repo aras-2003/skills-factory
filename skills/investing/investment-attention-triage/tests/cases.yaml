@@ -96,3 +96,22 @@ cases:
         - "count correlated signals as independent confirmations"
         - "invent missing historical values"
         - "trade or portfolio write"
+
+  - id: attention-systemic-risk-missing-data-unassessed
+    case: Missing or stale systemic evidence is not neutral
+    input: "TEST ONLY, use only these supplied synthetic facts at shared as_of 2026-06-30: no dated IG/HY spread snapshots or prior values are available; market breadth is 42% above its 200-day average, observed 2026-05-31 and published 2026-06-07; real yield is missing. Do not retrieve external data, read a portfolio, or write. State what can and cannot be assessed."
+    expected:
+      should_trigger: true
+      must:
+        - "DATA_GAP for missing or stale inputs"
+        - "NOT_ASSESSED for unsupported materiality or direction"
+        - "NOT_CONFIGURED when no threshold source exists"
+        - "shared as_of and observation/publication dates"
+        - "materiality separate from direction"
+        - "provisional decision rule and minimum missing evidence"
+        - "persistence NOT_WRITTEN"
+      must_not:
+        - "NEUTRAL as a substitute for missing evidence"
+        - "invented spread values, source IDs, or prior observations"
+        - "exact crash probability"
+        - "portfolio access or writes"

@@ -26,7 +26,7 @@ test_modules:
   - skills/investing/investment-attention-triage/tests/cases.yaml
   - workflows/investment-portfolio-observation/WORKFLOW.md
 source_sha256:
-  skills/investing/investment-attention-triage/SKILL.md: b897050ff7b9f1cdc9714f15a8ee67b32954ba1802083e2e92c23913a240afdd
+  skills/investing/investment-attention-triage/SKILL.md: 230d5e9160a6c649b82e9224dc0a08b747b0046ca00a8fc053b253f7aefa5089
   skills/investing/investment-attention-triage/references/systemic-risk-indicator-registry.yaml: 3370f92797b9fa1db685365d398d864a17161d7f2938deac6df5ef8de96b14c7
   skills/investing/portfolio-state-review/SKILL.md: 3e0a1220ad70214d4e3fbe81ded0876eab11f158037f1bb727001b16ba869c8a
   workflows/investment-portfolio-observation/WORKFLOW.md: 700bc3774d3624c959ee30224f1cf71419f300397576e43cffc8200857a3d7d2
