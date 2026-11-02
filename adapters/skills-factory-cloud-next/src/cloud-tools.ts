@@ -132,7 +132,10 @@ export function routeInvestment(userRequest: string) {
   const thesis = /\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b/;
   const security = /spolk|stock|security|akcj|etf|wycen|valuation|underwrit|ticker/.test(s) || thesis.test(s) || /issuer|company case/.test(s) || (tickerCount === 1 && /review|ocen|analiz|kup|buy|sell|sprzed|investment|add|increase/.test(s));
   const singleSecurityIntent = security && (thesis.test(s) || /underwrit|valuation|wycen|review.{0,24}(stock|security|ticker)|analy[sz].{0,24}(stock|security|ticker)|assess.{0,24}(stock|security|ticker)|(ocen|analiz).{0,24}(spolke|akcje|instrument|papier)|stock review|security review|good investment|fit.*portfolio|portfolio fit|position|sizing|size|\badd(?:ed|ing)?\b|\bincrease(?:d|s|ing)?\b|\breduce(?:d|s|ing)?\b|\btrim(?:med|s|ming)?\b|\bbuy\b|\bsell\b|kup|dodaj|zwieksz|zmniejsz|sprzed|pozycj/.test(s));
-  const aggregatePortfolioReview = portfolio && risk && !singleSecurityIntent;
+  const aggregateExposureIntent = /issuer exposure|issuer look[ -]?through|look[ -]?through|cross[ -]?(?:etf|fund)|sector exposure|exposure coverage|exposure drift|etf overlap|fund overlap|portfolio concentration/.test(s);
+  const aggregatePortfolioReview = portfolio
+    && (risk || tickerCount >= 2 || aggregateExposureIntent)
+    && (!singleSecurityIntent || aggregateExposureIntent);
   let candidates: string[] = [], reason = "No unambiguous decision object matched.";
   if (explicit.length) { candidates = [...explicit]; reason = "Explicit workflow names in the request."; }
   else if (policyDesignIntent) { candidates = [routes[6]]; reason = "The user explicitly asks to define or change investment rules or risk limits."; }
