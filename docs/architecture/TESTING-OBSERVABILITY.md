@@ -35,9 +35,13 @@ status, error type, and whether external reads or writes occurred. Current MCP
 tools perform no external reads or writes, so both are explicitly `false`.
 Arguments are hashed before export. Prompts, raw arguments, results, skill
 instructions, secrets, exception messages and model reasoning are excluded.
-Receipts carry the same `run_id`, making a single tool invocation auditable;
-the MCP host must supply a conversation/run correlation ID before separate
-tool calls can be represented as one multi-step trace.
+Receipts carry the same `run_id`, making a single tool invocation auditable.
+When an MCP client propagates the W3C `traceparent` in request `_meta`, the
+server uses it as the parent context so separate tool calls can share a trace.
+Only `traceparent` is read; it is peer-supplied and used for correlation only,
+never authorization or tool behavior. Malformed or missing context produces an
+independent trace. A multi-step trajectory is still unverified until a host
+actually propagates the context and the resulting trace is observed in Phoenix.
 
 Export is disabled unless an OTLP endpoint is configured. A local Phoenix OSS
 instance can receive OTLP/HTTP traces at `http://127.0.0.1:6006/v1/traces`.
