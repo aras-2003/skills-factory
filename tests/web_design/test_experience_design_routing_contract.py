@@ -25,7 +25,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
     def test_candidate_identity_and_portability_boundary(self):
         self.assertEqual(self.metadata["name"], "experience-design-routing")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.1")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.2")
         self.assertIn("## Portability boundary", self.body)
         self.assertIn("confirm the actual host surface and tool receipt", self.body.lower())
         self.assertIn("NOT_RUN", self.body)
@@ -34,9 +34,10 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
     def test_specialist_routes_remain_explicit_and_non_overlapping(self):
         for route in (
             "Design a new screen or short product flow: `interface-design`.",
+            "A request to design a screen that includes role-based access, permission states, or accessible behavior remains an interface-design request",
             "Critique a supplied visual artifact and propose repairs: `design-critique`.",
             "Convert an approved concept into an engineering handoff: `implementation-brief`.",
-            "Review implementation accessibility evidence and gaps: `accessibility-gate`.",
+            "Review accessibility evidence and gaps for an existing implementation: `accessibility-gate`.",
             "Compare a rendering to an approved baseline: `visual-regression-review`.",
         ):
             with self.subTest(route=route):
@@ -71,6 +72,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
             "ux-route-critique",
             "ux-route-handoff",
             "ux-route-accessibility",
+            "ux-route-role-restricted-screen",
             "ux-route-visual-regression",
             "ux-near-miss-report",
             "ux-near-miss-chart",

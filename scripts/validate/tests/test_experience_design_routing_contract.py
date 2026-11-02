@@ -32,6 +32,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
             "ux-route-critique",
             "ux-route-handoff",
             "ux-route-accessibility",
+            "ux-route-role-restricted-screen",
             "ux-route-visual-regression",
         ):
             with self.subTest(case=case_id):

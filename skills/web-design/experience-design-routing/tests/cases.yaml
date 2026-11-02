@@ -27,6 +27,13 @@ cases:
       should_trigger: true
       must: ["accessibility-gate", "not certify WCAG"]
       must_not: ["design-critique", "certify WCAG"]
+  - id: ux-route-role-restricted-screen
+    case: Permission-aware interface design stays with interface-design
+    input: "Design a desktop and mobile account page where some users cannot access billing data because of their role. Include empty, loading, error and unavailable states; do not imply that missing permission means the account has no billing history."
+    expected:
+      should_trigger: true
+      must: ["interface-design", "role-based access", "permission", "empty", "unavailable"]
+      must_not: ["accessibility-gate", "claim implementation", "label permission denial as an empty state"]
   - id: ux-route-visual-regression
     case: Compare candidate to baseline
     input: "Compare the candidate screenshot against the approved baseline at the same viewport."
