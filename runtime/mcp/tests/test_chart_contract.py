@@ -19,10 +19,18 @@ class ChartContractTests(unittest.TestCase):
         contract = json.loads((ROOT / "runtime/contracts/mcp-tools-v1.json").read_text())
         actual = {
             name: sorted(parameter for parameter, value in inspect.signature(getattr(server, name)).parameters.items()
-                         if value.default is inspect.Parameter.empty)
+                         if value.default is inspect.Parameter.empty and parameter != "context")
             for name in contract["tools"]
         }
         self.assertEqual(actual, contract["tools"])
+
+    def test_trace_context_is_injected_without_changing_published_tool_arguments(self):
+        for name in json.loads((ROOT / "runtime/contracts/mcp-tools-v1.json").read_text())["tools"]:
+            with self.subTest(tool=name):
+                function_parameters = inspect.signature(getattr(server, name)).parameters
+                self.assertEqual(function_parameters["context"].annotation, "Context")
+                advertised = server.mcp._tool_manager.get_tool(name).parameters
+                self.assertNotIn("context", advertised.get("properties", {}))
 
     def test_bar_chart_requires_original_shape_and_matches_cloud_limits(self):
         with self.assertRaises(ToolError):
