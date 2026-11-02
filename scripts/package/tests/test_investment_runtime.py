@@ -129,6 +129,21 @@ class InvestmentRuntimeTests(unittest.TestCase):
             "investment-opportunity-hunter",
         )
 
+    def test_polish_negated_portfolio_mention_does_not_trigger_attention_triage(self) -> None:
+        self.assert_route(
+            "Oceń sześciu fikcyjnych kandydatów w horyzontach 1–3M, 6–12M i >3Y "
+            "na podstawie wyłącznie podanych syntetycznych czynników. Quality A: "
+            "quality 0.90, valuation 0.65, momentum 0.45, risk 0.25, growth 0.80, "
+            "expectations 0.55. Event B: 0.55, 0.60, 0.95, 0.45, 0.70, 0.40. "
+            "Cyclical C: 0.40, 0.85, 0.55, 0.90, 0.30, 0.50. MU-cycle D: "
+            "0.70, 0.65, 0.80, 0.70, 0.75, 0.60. Value-trap E: 0.35, 0.95, "
+            "0.40, 0.95, 0.25, 0.45. Stale-consensus F: 0.80, 0.70, 0.50, "
+            "0.35, 0.75, 0.90. Używaj tylko tych fikcyjnych danych; wynik ma być "
+            "preview, bez zewnętrznego researchu, portfela, transakcji ani zapisów.",
+            "opportunity",
+            "investment-opportunity-hunter",
+        )
+
     def test_positive_holdings_request_survives_negative_portfolio_comparison(self) -> None:
         self.assert_route(
             "Review these holdings and weights, not a generic portfolio overview: ACN 25%, IUIT 20%.",
