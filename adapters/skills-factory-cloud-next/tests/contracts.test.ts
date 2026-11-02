@@ -59,6 +59,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Co się teraz dzieje z moim portfelem? Sprawdź, co zmieniło się od poprzedniego poprawnego snapshotu i powiedz mi tylko, co naprawdę warto obserwować. Nie chcę jeszcze ustalać docelowej struktury portfela ani robić rebalancingu.", "investment-portfolio-observation"],
     ["ACN 25%, IUIT 22%: review portfolio concentration risk", "investment-portfolio-review"],
     ["Oceń ryzyko i nakładanie ETF w portfelu", "investment-portfolio-review"],
+    ["Synthetic fixture only: calculate combined issuer look-through for ACN and two ETFs in my portfolio. Do not add sector rows to issuer totals; keep partial minimum exposure and coverage separate.", "investment-portfolio-review"],
     ["XYZ Technologies is a good investment; should I add 5% of my portfolio?", "investment-security-review"],
     ["Review Micron's thesis, valuation and portfolio fit after its position drifted to 9.5%", "investment-security-review"],
     ["Review my portfolio allocation, concentration and overlap across holdings", "investment-portfolio-review"],
