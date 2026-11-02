@@ -27,7 +27,7 @@ from skill_catalog import (
     catalog_digest,
 )
 from mcp.server import MCPServer
-from mcp.server.mcpserver import Context
+from mcp.server.mcpserver.context import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from observability import execute_tool, tool_span
 
