@@ -66,3 +66,13 @@ cases:
       must_not:
         - "claim SAVED"
         - "retry a potentially partial write without idempotency check"
+  - id: attention-workflow-generic-definition-nearmiss
+    case: Generic credit definition without monitoring intent
+    input: "What is the difference between investment-grade and high-yield credit spreads?"
+    expected:
+      should_trigger: false
+      must:
+        - "answer the generic definition directly"
+      must_not:
+        - "read canonical portfolio state"
+        - "triage holdings"
