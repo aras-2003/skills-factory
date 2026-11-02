@@ -105,7 +105,9 @@ const routes = ["investment-portfolio-observation", "investment-portfolio-review
 export function routeInvestment(userRequest: string) {
   const editingOnly = /^(?:fix|correct|proofread|edit)\s+(?:(?:only|just)\s+)?(?:the\s+)?(?:punctuation|grammar|spelling)\b/i.test(userRequest.trim());
   const s = userRequest.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l")
-    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*/g, "");
+    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*/g, "")
+    // Polish exclusion lists commonly separate items with commas after "bez".
+    .replace(/\bbez\b[^.!?;:\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
   const replayText = s.replace(/\bno\s+(?:portfolio|holdings?|trades?|policy|writes?)\b[^.!?;,\n]*/g, "");
   const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);

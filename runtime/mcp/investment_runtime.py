@@ -88,6 +88,8 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     # Route the requested task, excluding clauses that explicitly reject an
     # alternative (for example "not my portfolio" or "nie ... rebalancingu").
     text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*", "", raw.lower())
+    # Polish exclusion lists often contain comma-separated items after "bez".
+    text = re.sub(r"\bbez\b[^.!?;:\n]*", "", text)
 
     if not raw:
         return {
@@ -112,7 +114,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "investment", "investing", "portfolio", "stock", "stocks", "security", "securities",
         "etf", "fund", "holdings", "investment policy", "risk limit",
         "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
-        "share", "thesis", "gross margin", "marża brutto", "marza brutto", "watchlist",
+        "share", "thesis", "valuation", "wycen", "gross margin", "marża brutto", "marza brutto", "watchlist",
         "research candidates", "kandydatów do researchu", "kandydatow do researchu", "opportunit", "okazj",
     ) or (
         _ticker_count(raw) == 1
@@ -182,6 +184,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         text,
         "find opportunities", "find stocks", "new stocks", "new securities",
         "research candidates", "what should i research", "scan for",
+        "candidate", "candidates", "kandydat",
         "znaleźć kilka nowych spółek", "znalezc kilka nowych spolek",
         "nowe spółki", "nowe spolki", "kandydatów do researchu",
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
