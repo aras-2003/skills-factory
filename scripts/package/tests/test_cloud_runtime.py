@@ -33,6 +33,8 @@ def load_cloud_server():
     fake_mcp_server.MCPServer = TestMCPServer
     fake_mcp.server = fake_mcp_server
     fake_mcpserver = types.ModuleType("mcp.server.mcpserver")
+    fake_context = types.ModuleType("mcp.server.mcpserver.context")
+    fake_context.Context = type("Context", (), {})
     fake_exceptions = types.ModuleType("mcp.server.mcpserver.exceptions")
     class TestToolError(Exception):
         pass
@@ -68,6 +70,7 @@ def load_cloud_server():
             "mcp": fake_mcp,
             "mcp.server": fake_mcp_server,
             "mcp.server.mcpserver": fake_mcpserver,
+            "mcp.server.mcpserver.context": fake_context,
             "mcp.server.mcpserver.exceptions": fake_exceptions,
             "chart_renderer": fake_renderer,
             "investment_runtime": fake_investment,
