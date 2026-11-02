@@ -1,17 +1,17 @@
 ---
 name: investment-attention-triage
-description: 'Triage new market, company, industry and portfolio information into
-  a short attention queue based on materiality, thesis impact, valuation/expectations
+description: 'Use when new market, company, industry or portfolio information needs
+  triage into a short attention queue based on materiality, thesis impact, valuation/expectations
   and decision relevance. Use structured research plugins for breadth, Firecrawl/primary
   sources for verification, and canonical Investment OS history for change detection.
 
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.2.3
+  version: 0.2.4
   maturity: production
   risk: high
-  last_reviewed: '2026-10-09'
+  last_reviewed: '2026-10-27'
 ---
 
 # Investment Attention Triage
@@ -28,7 +28,10 @@ Convert noisy new information into a decision-focused queue: what changed, wheth
 6. Classify direction separately: STRENGTHENS / WEAKENS / MIXED / NEUTRAL.
 7. Assess market reaction and whether the evidence may already be priced in only as interpretations, not proof.
 8. State the smallest next research question and specialist path, plus the decision it could change (for example, no action, monitor, or deeper review).
-9. For material items, **consider** canonical persistence only after confirming explicit current-user authorization or a specific, verifiable standing write mandate. A request to review, analyze, monitor or summarize information is not permission to write. Honor read-only/no-save/preview/test instructions and unknown environments: do not write, and report `NOT_WRITTEN`. If authorized, delegate only an idempotent material research-state append to the verified canonical target through investment-record-store; never authorize trades, owner decisions, policy changes or thesis activation. Report `SAVED` only with a successful real WRITE receipt; return `WRITE_FAILED` on failure, not an invented saved state.
+9. For systemic or cross-asset evidence, use [the systemic-risk indicator registry](references/systemic-risk-indicator-registry.yaml). Keep each series' observation date, publication/vintage date, source, unit and permitted universe. Do not compare revised history with a real-time snapshot. If a threshold is not configured by canonical policy or a separately versioned calibration profile, report it as `NOT_CONFIGURED`; do not invent an alert cutoff.
+10. Deduplicate correlated indicators by the registry's correlation group. Materiality (`NOISE`, `MONITOR`, `REVIEW`, `ESCALATE`) and direction (`STRENGTHENS`, `WEAKENS`, `MIXED`, `NEUTRAL`) remain separate; several correlated observations are not several independent confirmations. Never express an exact crash probability from these signals.
+11. For portfolio implications, pass only evidenced exposures to `investment-portfolio-observation` / `portfolio-state-review`. Keep direct holdings, issuer look-through and sector-level aggregates separate; do not add overlapping or heterogeneous weights. A missing constituent breakdown remains a data gap.
+12. For material items, **consider** canonical persistence only after confirming explicit current-user authorization or a specific, verifiable standing write mandate. A request to review, analyze, monitor or summarize information is not permission to write. Honor read-only/no-save/preview/test instructions and unknown environments: do not write, and report `NOT_WRITTEN`. If authorized, delegate only an idempotent material research-state append to the verified canonical target through investment-record-store; never authorize trades, owner decisions, policy changes or thesis activation. Report `SAVED` only with a successful real WRITE receipt; return `WRITE_FAILED` on failure, not an invented saved state.
 
 If the user has not supplied a ticker, the new information, or the prior thesis/expectation, do not stop at an intake form. State a provisional decision rule using the relevant dimensions above, name the exact missing inputs, and ask only for the minimum needed to apply it. Mark the conclusion provisional; do not invent company facts or imply that a materiality assessment has already been completed.
 
