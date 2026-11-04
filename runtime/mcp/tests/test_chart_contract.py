@@ -89,6 +89,34 @@ class ChartContractTests(unittest.TestCase):
         with self.assertRaises(ToolError):
             server.calculate_opportunity_scores(as_of="2026-02-30", rows=[row])
 
+    def test_python_issuer_exposure_calculates_complete_direct_position_with_receipt(self):
+        result = server.calculate_issuer_exposure(
+            as_of="2026-11-04",
+            base_currency="PLN",
+            portfolio_id="synthetic-portfolio",
+            fund_snapshots=[],
+            positions=[{
+                "position_id": "synthetic-position",
+                "account_id": "synthetic-account",
+                "instrument_id": "SYNTHETIC-EQUITY",
+                "isin": "US0000000001",
+                "share_class": "Common",
+                "source_id": "synthetic:position",
+                "source_uri": "https://example.test/position",
+                "published_at": "2026-11-04",
+                "retrieved_at": "2026-11-04",
+                "weight_pct": 100,
+                "instrument_type": "equity",
+                "issuer_id": "SYNTHETIC-ISSUER",
+                "issuer_name": "Synthetic Issuer",
+                "factors": ["SEMICONDUCTOR"],
+            }],
+        )
+        self.assertEqual("COMPLETE", result["status"])
+        self.assertEqual(100, result["issuers"][0]["known_minimum_total_pct"])
+        self.assertEqual("SEMICONDUCTOR", result["overlapping_factor_views"][0]["factor"])
+        self.assertEqual("calculate_issuer_exposure", result["tool_receipt"]["tool_name"])
+
 
 if __name__ == "__main__":
     unittest.main()

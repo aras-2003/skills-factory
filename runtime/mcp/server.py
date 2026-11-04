@@ -31,6 +31,7 @@ from mcp.server.mcpserver.context import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from observability import execute_tool, tool_span
 from opportunity_score import calculate_opportunity_scores as _calculate_opportunity_scores
+from issuer_exposure import calculate_issuer_exposure as _calculate_issuer_exposure
 
 SERVER_INSTRUCTIONS = """
 Skills Factory runtime contract.
@@ -69,6 +70,11 @@ evidence, use calculate_opportunity_scores for the fixed provisional model.
 It applies evidence gates and comparable ranking only; it does not verify
 sources, derive factors, research candidates, estimate probabilities or
 recommend trades. Preserve NOT_SCORED results.
+
+Use calculate_issuer_exposure only for explicit caller-supplied positions and
+dated fund constituent snapshots. It is a read-only calculation: it does not
+retrieve or verify sources, access canonical portfolios, persist data, or
+execute trades. Preserve partial coverage and blocked concentration results.
 
 Use chart tools only with explicit numeric inputs from the user or a completed,
 source-backed workflow. Preserve supplied labels, values and units. Do not
@@ -243,7 +249,7 @@ def runtime_info(context: Context = None) -> dict[str, Any]:
             values["package_integrity_sha256"] = package_integrity["payload_content_sha256"]
         values["lab_release"] = installed or None
         values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
-        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "calculate_opportunity_scores", "render_bar_chart", "render_line_chart"]
+        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "calculate_opportunity_scores", "calculate_issuer_exposure", "render_bar_chart", "render_line_chart"]
         if (installed and package_integrity["status"] == "verified"
                 and values["channel"] == "lab"
                 and installed["source_revision"] == values["source_revision"]
@@ -313,6 +319,39 @@ def calculate_opportunity_scores(as_of: str, rows: list[dict[str, Any]], context
         except (ValueError, TypeError) as exc:
             raise ToolError("INVALID_OPPORTUNITY_SCORE_INPUT") from exc
     return execute_tool("calculate_opportunity_scores", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
+
+
+@mcp.tool()
+def calculate_issuer_exposure(
+    as_of: str,
+    base_currency: str,
+    fund_snapshots: list[dict[str, Any]],
+    portfolio_id: str,
+    positions: list[dict[str, Any]],
+    portfolio_value_pln: float | None = None,
+    previous_snapshot: dict[str, Any] | None = None,
+    scenario_positions: list[dict[str, Any]] | None = None,
+    factor_shocks: list[dict[str, Any]] | None = None,
+    context: Context = None,
+) -> dict[str, Any]:
+    """Calculate issuer look-through from explicit, dated caller evidence only."""
+    arguments = {
+        "as_of": as_of,
+        "base_currency": base_currency,
+        "fund_snapshots": fund_snapshots,
+        "portfolio_id": portfolio_id,
+        "positions": positions,
+        "portfolio_value_pln": portfolio_value_pln,
+        "previous_snapshot": previous_snapshot,
+        "scenario_positions": scenario_positions,
+        "factor_shocks": factor_shocks,
+    }
+    def operation() -> dict[str, Any]:
+        try:
+            return _calculate_issuer_exposure(arguments)
+        except (ValueError, TypeError, KeyError) as exc:
+            raise ToolError("INVALID_ISSUER_EXPOSURE_INPUT") from exc
+    return execute_tool("calculate_issuer_exposure", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()
