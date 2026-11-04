@@ -118,3 +118,16 @@ Three other v94 attempts—explicit-placeholder positive, onboarding positive an
 A fresh ordinary Chat session on verified Site v94 received the exact locked insufficient-context prompt from the Iteration 06 fixture, including its description of an earlier onboarding exchange and the quoted current request “Make the screen better.” The response generated a full interface brief for the described onboarding flow instead of asking for the missing screen, user/task and runtime. This is a FAIL for the v0.1.7 context-gate case, Chat: https://chatgpt.com/c/6ae7a9cd-ba14-83eb-a051-41585e243714.
 
 Candidate v0.1.8 now says that when a message narrates or quotes a current request, that operative request governs; surrounding description alone does not authorize continuing prior work. Its pinned source digest is `0583d14d5cbf39617ebebca816e1cf24c254b1c91e59382678af434154e72398`. This candidate has not been built into Lab/Site or executed at runtime. Campaign remains ACTIVE; no issue is closed based on the candidate text alone.
+
+### Supplemental `interface-design` v0.1.9 isolated probes — 2026-11-04
+
+The live Site was independently attested as verified, canonical Skills Factory/Lab source `32a7ae592582c225627895accd366fa758fc6505`, Site MCP source `677c0a553ac35f984267d9cfd6f27d7e4a5567dd`, Lab `1.38.435`, with deployment time `2026-11-04T19:37:36.348Z`. Each isolated host agent loaded `interface-design` v0.1.9, content SHA-256 `a901585e3b3b2913ff540aff670858452f26c64e0d387550953d9f98f9083d1e`, before receiving its test input. The executor agents were not given evaluator assertions.
+
+| Fixture | Observed result | Assessment |
+| --- | --- | --- |
+| Insufficient context: quoted current request “Make the screen better” after narrated onboarding history | Asked which screen, user task, and device/runtime the user intended. | PASS for this isolated run. |
+| Report and architecture-diagram near-miss | Said the skill did not apply because the request was an executive report and system architecture diagram. | PASS for this isolated run. |
+| Implementation and testing near-miss | Said the skill did not apply to implementing a working page or running tests; did not produce a design brief. | PASS for this isolated run. |
+| Billing permission edge | Kept role-restricted data distinct from an empty account; described mobile/desktop states, accessible status announcements, and bounded recovery guidance. | PASS for this isolated run. |
+
+These are isolated agent-host probes over the current Site package, not ordinary Chat UI acceptance runs. They do not satisfy the required three independent routing attempts, sentinels, unchanged-domain probes, ordinary Chat routing, or the full Iteration 06 acceptance matrix. The user-facing output was observed, but there are no signed semantic-response receipts; the runtime attestation and skill-load identity prove package provenance only. #423, #474, #480, and #483 remain open pending the full matrix and ordinary Chat verification.
