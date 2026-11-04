@@ -178,8 +178,8 @@ function rankRows(rows: Scored[]): Scored[] {
       continue;
     }
     group.sort((a, b) => {
-      const left = BigInt(String(a.unrounded_score).replace(".", ""));
-      const right = BigInt(String(b.unrounded_score).replace(".", ""));
+      const left = scoreToTenDecimalUnits(String(a.unrounded_score));
+      const right = scoreToTenDecimalUnits(String(b.unrounded_score));
       return left === right ? a.candidate_id.localeCompare(b.candidate_id) : left > right ? -1 : 1;
     });
     group.forEach((row, index) => {

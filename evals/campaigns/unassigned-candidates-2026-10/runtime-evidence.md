@@ -1,6 +1,18 @@
-# Supplemental Site v93 runtime evidence — 2026-11-01
+# Supplemental unassigned-candidate runtime evidence
 
-This is partial, isolated host-agent evidence for the unassigned-candidate campaign. It does not change `campaign.yaml`'s `runtime_status: NOT_RUN` or approve a release.
+The historical Site v93 checks and newer per-issue checks below are partial evidence. They do not change `campaign.yaml`'s `runtime_status: NOT_RUN` or approve a release. MCP receipts are unsigned tool-call receipts; they do not attest to host-model semantic output.
+
+## #360 — live Site ranking regression, 2026-11-04
+
+The current verified Site runtime was rechecked before publishing the local fix: canonical Skills Factory/Lab source `6417c08509fc13c5c61193c3408749a254dcfbec`, Site release/source `9082993829750967a2260d998330cf081fa4dfbc`, Lab `1.38.434`. A deterministic `calculate_opportunity_scores` call used two synthetic, fully evidenced candidates in the same `1-3m` horizon; no company or market data was supplied.
+
+- `event-driven`: unrounded score `0.782`, displayed score `0.78`.
+- `MU-cycle`: unrounded score `0.6855`, displayed score `0.69`.
+- Expected numeric order: `event-driven`, then `MU-cycle`, with the difference `0.097`.
+- Observed live order: `MU-cycle` rank 1, `event-driven` rank 2; reported `score_difference_to_next` was the invalid string `0.-96`.
+- MCP receipt: `2026-11-04T19:07:01.978Z`, input SHA-256 `0dcdb817ae71d31504816f2924a11d626e4528e90219c8e4f31e6fcc2f417c48`, output SHA-256 `11ed04ff49103f144b6f691038b60d1acb51e8faecbc045f1ec7aec7313cede3` (unsigned tool-call receipt).
+
+The local regression test now checks those exact expected ranks, displayed scores, and gap; Cloud Next contract tests pass 28/28. The source correction is committed locally in `243f35a7b301b6da4a2c3d1219a9e30ea7b4f16e` and is not in the deployed runtime. This is confirmed current-Site failure plus local-source regression coverage, not deployed-fix acceptance. Keep #360 open until the corrected source is released and retested on Site; its broader historical calibration and cross-sector acceptance also remain open.
 
 ## Site identity
 
