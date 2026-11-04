@@ -7,10 +7,10 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.8"
+  version: "0.1.9"
   maturity: candidate
   risk: medium
-  last_reviewed: "2026-11-01"
+  last_reviewed: "2026-11-04"
   execution:
     default_model_class: standard
 ---
@@ -42,21 +42,17 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 - Intended user and their primary task.
 - Target runtime or device context.
 
-## Applicability and required-context gates
+## Applicability gate
 
-First decide whether the current request is for interface design. This applicability check comes before the required-context gate below. If the user asks to implement or edit a working page or application, or to run its tests, do not apply this skill and do not ask design-context questions; hand control to the implementation workflow. If this skill was loaded explicitly for an isolated test, state that it does not apply and stop. In either case, give a concise scope decision; do not echo or merely repeat the user request, and do not emit design questions or a design brief. If the active implementation workflow is unavailable during a real implementation request, state the specific missing repository or approved artifact needed to continue.
+First decide whether the current request asks for interface design. If it asks to implement/edit a working page or run its tests, do not apply this skill or ask design questions; hand off to the implementation workflow. If loaded explicitly for an isolated test, state briefly that it does not apply and stop. Do not echo the request or emit a design brief. If implementation is requested but its workflow is unavailable, name the missing repository or approved artifact.
 
 ## Required-context gate
 
-Before proposing any screen-specific design, verify that the current request or an explicitly referenced source provides all three required inputs: (1) the screen or user-flow goal, (2) the intended user and primary task, and (3) the target runtime or device context.
+Before designing, confirm the current request or an explicitly referenced source gives all three inputs: (1) screen/flow goal, (2) intended user and primary task, and (3) target runtime/device. If any is missing, ask one concise question naming only the missing fields. That question must be the whole response; provide no introduction, examples, suggestions, checklist, partial design or promise.
 
-If any required input is missing, stop and ask one concise question that names every missing input. Do not provide a layout, a partial design, a generic UX checklist, or an assumption in place of missing context unless the user explicitly authorizes assumptions, placeholders, or a provisional concept in the current request. With that authorization, proceed only when the screen/flow goal and target device are clear; label the narrowest reasonable user/task assumption, keep unknown product rules as placeholders, and list the assumptions as open decisions. Never infer those inputs from unrelated chats, profile data, saved memory, or ambient application context.
+Proceed with assumptions/placeholders only when the current request explicitly authorizes them and both goal and target device are clear. Label the narrowest user/task assumption, keep unknown product rules as placeholders, and list assumptions as open decisions. Never infer required context from other chats, saved memory, ambient context, or unreferenced earlier turns. A vague request such as “make the screen better” still needs the missing fields, even if a plausible screen appeared earlier. If the current message quotes or narrates a different “current user message,” treat only the quoted message as operative; continue an earlier artifact only when that message names or asks to revise it.
 
-For this gate, the entire response must be that clarification question. Name only the missing fields (screen or flow, intended user and task, target runtime/device); do not add an introduction, examples, suggestions, a checklist, or a promise of a future deliverable. A request such as “make the screen better” has no identifiable screen, user task, or target runtime and must receive one question asking for those three items.
-
-A product name, industry, or native/web label is not an extra required input when the stated user-flow goal, intended user and primary task, and target device context are already clear. For a product-agnostic flow, proceed with explicit, limited assumptions and list product-specific decisions for handoff. Do not ask for details that would not change the requested flow.
-
-When a user supplies a concrete problem observation and the intended user, goal, and device context are clear, design a flow that responds to that observation. Treat unverified causes as assumptions; do not block the flow by asking for product or platform details that can be left as handoff decisions.
+Product name, industry, and native/web label are not extra required inputs when the goal, user/task, and device are clear. For product-agnostic flows, proceed with limited assumptions and leave product-specific decisions for handoff; do not ask questions that would not change the flow. When a concrete problem observation and user/task/device are clear, design for it and label unverified causes as assumptions instead of blocking on product details.
 
 ### Optional
 
@@ -65,18 +61,9 @@ When a user supplies a concrete problem observation and the intended user, goal,
 - Accessibility requirements, supported devices, localization, and brand constraints.
 - Existing user research or analytics. Treat supplied findings as evidence only to the extent their source and scope are known.
 
-## Context boundary
-
-- Use the current request as the source of truth. Earlier turns in the same chat provide design context only when the current request clearly identifies that context as part of the task.
-- Do not carry a product, screen, user task, workflow, or design constraint from another chat, saved memory, ambient application context, or an earlier turn in this chat into an underspecified request.
-- A generic reference such as “the screen,” “make it better,” or “improve this” does not identify a previously discussed screen, even when the chat contains a plausible design immediately above it. The user must explicitly identify the screen or ask to continue/revise the named prior artifact.
-- When a message narrates or quotes a “current user message” (for example, a test case that describes earlier turns and then quotes “Make the screen better”), treat the quoted request as the operative request. The surrounding narrative is not an instruction to continue or revise the described prior work. Continue only if the operative request itself explicitly names the prior artifact or asks to continue/revise it.
-- When a generic reference leaves any required input unknown, apply the required-context gate to the current request. Ask for all missing inputs in one concise question; do not infer a screen, task, user, or device from earlier turns and do not provide any layout, recommendations, or checklist.
-- The required-context gate applies even when prior or ambient context makes a plausible design possible. Ask before offering a layout or general screen-improvement checklist.
-
 ## Procedure
 
-1. Restate the user goal and primary task. Separate supplied facts from assumptions; ask for missing information that would change the hierarchy or interaction model.
+1. Confirm the user goal and primary task. Separate supplied facts from assumptions; ask only for missing information that would change the hierarchy or interaction model.
 2. Identify the key information users need, the actions they can take, and the decision or outcome each action supports.
 3. Define the information hierarchy and screen anatomy. Use existing design-system components and tokens when supplied. Do not invent an established system or silently replace it.
 4. Describe navigation, interaction behavior, feedback, validation, permissions, and any destructive or irreversible action.

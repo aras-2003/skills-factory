@@ -1,6 +1,6 @@
 """Deterministic swing-structure primitives for supplied adjusted OHLCV only."""
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 
 
@@ -26,8 +26,12 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
         return {"status": "UNKNOWN", "reason": "MISSING_SOURCE_OR_ADJUSTMENT"}
     if not isinstance(currency, str) or not currency.strip():
         return {"status": "UNKNOWN", "reason": "MISSING_CURRENCY"}
-    if not isinstance(left, int) or not isinstance(right, int) or min(left, right) < 1:
+    if (not isinstance(left, int) or isinstance(left, bool)
+            or not isinstance(right, int) or isinstance(right, bool)
+            or min(left, right) < 1):
         raise StructureInputError("left and right pivot windows must be positive integers")
+    if not isinstance(max_gap_days, int) or isinstance(max_gap_days, bool) or max_gap_days < 1:
+        raise StructureInputError("max_gap_days must be a positive integer")
     cutoff = _timestamp(as_of)
     if not isinstance(bars, list) or len(bars) < left + right + 3:
         return {"status": "UNKNOWN", "reason": "INSUFFICIENT_BARS"}
@@ -44,7 +48,7 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
                 raise StructureInputError("OHLC prices must be positive and volume non-negative")
             if values["high"] < max(values["open"], values["low"], values["close"]) or values["low"] > min(values["open"], values["high"], values["close"]):
                 raise StructureInputError("invalid high/low/close relationship")
-            if not bar.get("source_id"):
+            if not isinstance(bar.get("source_id"), str) or not bar["source_id"].strip():
                 raise StructureInputError("each bar needs a source_id")
             rows.append({**values, "timestamp": stamp, "source_id": bar["source_id"]})
     except (KeyError, InvalidOperation, TypeError) as exc:
@@ -53,7 +57,8 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
     rows.sort(key=lambda row: row["timestamp"])
     if len({row["timestamp"] for row in rows}) != len(rows):
         raise StructureInputError("duplicate bar timestamps")
-    if any((b["timestamp"] - a["timestamp"]).days > max_gap_days for a, b in zip(rows, rows[1:])):
+    if any(b["timestamp"] - a["timestamp"] > timedelta(days=max_gap_days)
+           for a, b in zip(rows, rows[1:])):
         return {"status": "UNKNOWN", "reason": "DATA_GAP_EXCEEDS_LIMIT"}
 
     pivots = []
