@@ -3,6 +3,7 @@ import { LAB_RELEASE, DRAFT_RELEASE, RUNTIME_RELEASE, SKILL_CATALOG } from "./sk
 import { CANONICAL_SOURCE_REVISION, ROUTING_CONTRACT_BLOB_SHA } from "./canonical-provenance";
 import { CHART_UI_URI } from "./chart-ui";
 import { calculateOpportunityScores, opportunityScoreInputSchema } from "./opportunity-score";
+import { calculateIssuerExposure, type IssuerExposureInput } from "./issuer-exposure";
 
 export const SOURCE = {
   repository: "https://github.com/aras-2003/skills-factory",
@@ -19,12 +20,21 @@ export const SKILLS = SKILL_CATALOG.map((skill) => skill.name);
 const text = z.string().trim().min(1).max(160);
 const label = z.string().trim().min(1).max(80);
 const number = z.number().finite().min(-1e12).max(1e12);
+const issuerPositionSchema = z.object({ position_id: z.string().min(1).max(120), account_id: z.string().min(1).max(120), instrument_id: z.string().min(1).max(120), isin: z.string().min(1).max(24), share_class: z.string().min(1).max(100), instrument_type: z.enum(["equity", "fund"]), weight_pct: z.number().finite().min(0).max(100), market_value_pln: z.number().finite().min(0).optional(), issuer_id: z.string().min(1).max(200).optional(), issuer_name: z.string().min(1).max(200).optional(), factors: z.array(z.string().min(1).max(100)).max(30).optional(), source_id: z.string().min(1).max(200), source_uri: z.string().url().startsWith("https://"), published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), retrieved_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }).strict();
 export const schemas = {
   runtime_info: z.object({}).strict(),
   list_skills: z.object({}).strict(),
   load_skill: z.object({ skill_name: z.string().trim().min(1).max(160) }).strict(),
   route_investment_request: z.object({ user_request: z.string().trim().min(1).max(8000) }).strict(),
   calculate_opportunity_scores: opportunityScoreInputSchema,
+  calculate_issuer_exposure: z.object({
+    as_of: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), base_currency: z.string().trim().min(1).max(8), portfolio_id: z.string().trim().min(1).max(120), portfolio_value_pln: z.number().finite().positive().optional(),
+    positions: z.array(issuerPositionSchema).min(1).max(100),
+    fund_snapshots: z.array(z.object({ instrument_id: z.string().min(1).max(120), as_of: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), published_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), retrieved_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), source_id: z.string().min(1).max(200), source_uri: z.string().url().startsWith("https://"), completeness: z.enum(["COMPLETE", "PARTIAL"]), coverage_pct: z.number().finite().min(0).max(100), constituents: z.array(z.object({ security_type: z.enum(["issuer", "fund"]), instrument_id: z.string().min(1).max(120).optional(), issuer_id: z.string().min(1).max(200).optional(), issuer_name: z.string().min(1).max(200).optional(), isin: z.string().min(1).max(24), share_class: z.string().min(1).max(100), weight_pct: z.number().finite().min(0).max(100), factors: z.array(z.string().min(1).max(100)).max(30) }).strict()).max(500) }).strict()).max(100),
+    previous_snapshot: z.object({ method: z.string().min(1).max(120), portfolio_id: z.string().min(1).max(120), base_currency: z.string().min(1).max(8), as_of: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), status: z.string().min(1).max(40), source_coverage_pct: z.number().finite().min(0).max(100), decomposition_complete: z.boolean(), issuers: z.array(z.object({ issuer_id: z.string().min(1).max(200), known_minimum_total_pct: z.number().finite().min(0).max(100) }).strict()).max(500) }).strict().optional(),
+    scenario_positions: z.array(issuerPositionSchema).min(1).max(100).optional(),
+    factor_shocks: z.array(z.object({ factor: z.string().min(1).max(100), shock_pct: z.number().finite().min(-100).max(100), scenario_id: z.string().min(1).max(120) }).strict()).max(30).optional(),
+  }).strict(),
   render_bar_chart: z.object({ labels: z.array(label).min(1).max(60), values: z.array(number).min(1).max(60), expected_points: z.number().int().positive(), title: text, unit: z.string().trim().max(30), horizontal: z.boolean() }).strict().superRefine((v, ctx) => {
     if (v.labels.length !== v.values.length) ctx.addIssue({ code: "custom", message: "labels and values must have equal lengths" });
     if (v.labels.length !== v.expected_points || v.values.length !== v.expected_points) ctx.addIssue({ code: "custom", message: "received chart data length does not match expected_points; refusing partial render" });
@@ -75,12 +85,49 @@ const opportunityScoreToolInputSchema = {
   },
   required: ["as_of", "rows"], additionalProperties: false,
 };
+const dateSchema = { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" };
+const issuerExposureToolInputSchema = {
+  type: "object", additionalProperties: false,
+  required: ["as_of", "base_currency", "portfolio_id", "positions", "fund_snapshots"],
+  properties: {
+    as_of: dateSchema,
+    base_currency: { type: "string", minLength: 1, maxLength: 8 },
+    portfolio_id: { type: "string", minLength: 1, maxLength: 120 },
+    portfolio_value_pln: { type: "number", exclusiveMinimum: 0 },
+    positions: { type: "array", minItems: 1, maxItems: 100, items: { type: "object", additionalProperties: false,
+      required: ["position_id", "account_id", "instrument_id", "isin", "share_class", "instrument_type", "weight_pct", "source_id", "source_uri", "published_at", "retrieved_at"],
+      properties: {
+        position_id: { type: "string" }, account_id: { type: "string" }, instrument_id: { type: "string" }, isin: { type: "string" }, share_class: { type: "string" },
+        instrument_type: { type: "string", enum: ["equity", "fund"] }, weight_pct: { type: "number", minimum: 0, maximum: 100 }, market_value_pln: { type: "number", minimum: 0 },
+        issuer_id: { type: "string" }, issuer_name: { type: "string" }, factors: { type: "array", maxItems: 30, items: { type: "string" } }, source_id: { type: "string" }, source_uri: { type: "string", format: "uri" }, published_at: dateSchema, retrieved_at: dateSchema,
+      },
+    } },
+    fund_snapshots: { type: "array", maxItems: 100, items: { type: "object", additionalProperties: false,
+      required: ["instrument_id", "as_of", "published_at", "retrieved_at", "source_id", "source_uri", "completeness", "coverage_pct", "constituents"],
+      properties: {
+        instrument_id: { type: "string" }, as_of: dateSchema, published_at: dateSchema, retrieved_at: dateSchema, source_id: { type: "string" }, source_uri: { type: "string", format: "uri" },
+        completeness: { type: "string", enum: ["COMPLETE", "PARTIAL"] }, coverage_pct: { type: "number", minimum: 0, maximum: 100 },
+        constituents: { type: "array", maxItems: 500, items: { type: "object", additionalProperties: false, required: ["security_type", "isin", "share_class", "weight_pct", "factors"], properties: {
+          security_type: { type: "string", enum: ["issuer", "fund"] }, instrument_id: { type: "string" }, issuer_id: { type: "string" }, issuer_name: { type: "string" }, isin: { type: "string" }, share_class: { type: "string" }, weight_pct: { type: "number", minimum: 0, maximum: 100 }, factors: { type: "array", maxItems: 30, items: { type: "string" } },
+        } } },
+      },
+    } },
+    previous_snapshot: { type: "object", additionalProperties: false, required: ["method", "portfolio_id", "base_currency", "as_of", "status", "source_coverage_pct", "decomposition_complete", "issuers"], properties: {
+      method: { type: "string" }, portfolio_id: { type: "string" }, base_currency: { type: "string" }, as_of: dateSchema, status: { type: "string" }, source_coverage_pct: { type: "number", minimum: 0, maximum: 100 }, decomposition_complete: { type: "boolean" },
+      issuers: { type: "array", maxItems: 500, items: { type: "object", additionalProperties: false, required: ["issuer_id", "known_minimum_total_pct"], properties: { issuer_id: { type: "string" }, known_minimum_total_pct: { type: "number", minimum: 0, maximum: 100 } } } },
+    } },
+    scenario_positions: { type: "array", minItems: 1, maxItems: 100, items: { $ref: "#/$defs/issuer_position" } },
+    factor_shocks: { type: "array", maxItems: 30, items: { type: "object", additionalProperties: false, required: ["factor", "shock_pct", "scenario_id"], properties: { factor: { type: "string", minLength: 1 }, shock_pct: { type: "number", minimum: -100, maximum: 100 }, scenario_id: { type: "string", minLength: 1 } } } },
+  },
+  $defs: { issuer_position: { type: "object", additionalProperties: false, required: ["position_id", "account_id", "instrument_id", "isin", "share_class", "instrument_type", "weight_pct", "source_id", "source_uri", "published_at", "retrieved_at"], properties: { position_id: { type: "string" }, account_id: { type: "string" }, instrument_id: { type: "string" }, isin: { type: "string" }, share_class: { type: "string" }, instrument_type: { type: "string", enum: ["equity", "fund"] }, weight_pct: { type: "number", minimum: 0, maximum: 100 }, market_value_pln: { type: "number", minimum: 0 }, issuer_id: { type: "string" }, issuer_name: { type: "string" }, factors: { type: "array", maxItems: 30, items: { type: "string" } }, source_id: { type: "string" }, source_uri: { type: "string", format: "uri" }, published_at: dateSchema, retrieved_at: dateSchema } } },
+};
 export const TOOLS = [
   { name: "runtime_info", description: "Return this Site Worker's deployment attestation and the embedded Skills Factory Lab release. Missing platform identity is reported as unattested. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
   { name: "list_skills", description: "List every skill and workflow in the source-bound Lab artifact irrespective of maturity, including kind, version, maturity and content digests. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
   { name: "load_skill", description: "Load the exact packaged SKILL.md instructions and allow-listed supporting references for one Lab skill or workflow by name, irrespective of maturity. Eval fixtures are excluded. The host model executes the loaded instructions; this MCP does not claim to perform model reasoning itself.", inputSchema: { type: "object", properties: { skill_name: { type: "string", minLength: 1, maxLength: 160 } }, required: ["skill_name"], additionalProperties: false }, annotations },
   { name: "route_investment_request", description: "Call before substantive investment analysis to route a Polish or English request through Investment OS. Preserve the returned routing_receipt, then call load_skill for the exact child_workflow and execute its instructions. Routing alone does not execute a workflow, read portfolio data, trade or provide recommendations. Ambiguous requests return clarification_required: load the front door, then ask the clarification question before analysis; do not silently substitute another specialist.", inputSchema: { type: "object", properties: { user_request: { type: "string", minLength: 1, maxLength: 8000 } }, required: ["user_request"], additionalProperties: false }, annotations },
   { name: "calculate_opportunity_scores", description: "Deterministically score supplied candidates from dated, source-identified, already-normalized factor evidence using opportunity-score-v0.1-provisional. Evidence gates fail closed; weights are never renormalized. Returns provenance, confidence, completeness, comparability-aware ranks and score gaps. No source verification, research, probability, trade recommendation, retrieval or persistence. Use only after opportunity-hunter independently derives the supplied evidence.", inputSchema: opportunityScoreToolInputSchema, annotations },
+  { name: "calculate_issuer_exposure", description: "Calculate a deterministic, read-only issuer look-through preview from explicitly supplied positions and dated fund constituent snapshots. Requires account/instrument/ISIN/share-class and source identity; UCITS, US listings and accounts remain distinct by instrument_id/account_id. Partial constituents produce minimum known exposure, source coverage is separate from decomposition completeness, overlapping factors are never summed, and incomplete issuer decomposition blocks concentration metrics. PLN outputs require reconciled position and portfolio values. Optional prior snapshots are compared only when method, portfolio, currency and completeness match; post-trade positions produce a labelled preview only. User-defined factor shocks are separate non-additive scenario views, never probabilities. No database access, retrieval, actual trade, policy change or persistence.", inputSchema: issuerExposureToolInputSchema, annotations },
   { name: "render_bar_chart", description: "Internal report visual renderer: use from report-composer/visual-output-design to embed an interactive chart in a chat-native report or presentation of results; do not create a separate dashboard. Direct invocation is for an explicit chart-only request. Renders an inline interactive HTML/SVG bar chart exclusively from explicitly supplied finite JSON numbers, including zero and negatives. labels and values must match. Supply expected_points equal to both array lengths; the server rejects missing or mismatched counts so stale connectors cannot silently truncate data. Maximum 60 points, 80 characters per label, 160 per title and 30 per unit. No fetching, inference, totals, advice or persistence. MCP Apps hosts show a clickable chart; structuredContent preserves the exact SVG and data for other clients.", inputSchema: { type: "object", properties: { labels: labelsSchema(1, 60), values: numbersSchema(1, 60), expected_points: expectedCount("Required: original number of labels and values before connector transport; server rejects a mismatch."), title: str, unit: unitSchema, horizontal: { type: "boolean" } }, required: ["labels", "values", "expected_points", "title", "unit", "horizontal"], additionalProperties: false }, annotations, _meta: { ui: { resourceUri: CHART_UI_URI }, "openai/outputTemplate": CHART_UI_URI, "openai/toolInvocation/invoking": "Rendering interactive chart", "openai/toolInvocation/invoked": "Interactive chart ready" } },
   { name: "render_line_chart", description: "Internal report visual renderer: use from report-composer/visual-output-design to embed an interactive chart in a chat-native report or presentation of results; do not create a separate dashboard. Direct invocation is for an explicit chart-only request. Renders an inline interactive HTML/SVG line chart exclusively from supplied finite JSON numbers. series_values is series-major: one numeric array for each series_name, each matching x_labels. Supply expected_x_labels, expected_series and expected_points_per_series from the original input; mismatches fail closed so stale connectors cannot silently truncate data. Maximum 100 points and 8 series; labels 80 characters, title 160 and unit 30. x_labels are categorical, equally spaced, with no date interpretation. No missing-value inference, fetching, advice or persistence. MCP Apps hosts show a clickable chart with toggleable series; structuredContent preserves the exact SVG and data for other clients.", inputSchema: { type: "object", properties: { x_labels: labelsSchema(2, 100), series_names: labelsSchema(1, 8), series_values: { type: "array", minItems: 1, description: "Server rejects more than 8 series or 100 values per series; no truncation.", items: numbersSchema(2, 100) }, expected_x_labels: expectedCount("Required: original number of x_labels before connector transport."), expected_series: expectedCount("Required: original number of series before connector transport."), expected_points_per_series: expectedCount("Required: original number of values in every series before connector transport."), title: str, unit: unitSchema }, required: ["x_labels", "series_names", "series_values", "expected_x_labels", "expected_series", "expected_points_per_series", "title", "unit"], additionalProperties: false }, annotations, _meta: { ui: { resourceUri: CHART_UI_URI }, "openai/outputTemplate": CHART_UI_URI, "openai/toolInvocation/invoking": "Rendering interactive chart", "openai/toolInvocation/invoked": "Interactive chart ready" } },
 ];
@@ -247,12 +294,13 @@ export function lineChart(a: LineChartData) {
   const description = `Line chart with ${a.series_names.length} series across ${a.x_labels.length} equally spaced categories; categories are not interpreted as dates. Exact values are available in each point's SVG tooltip.`;
   return chartResult("line", a.title, frame(a.title, a.unit, width, height, description, body), a);
 }
-export type ToolOutput = ReturnType<typeof listSkills> | ReturnType<typeof loadSkill> | ReturnType<typeof routeInvestment> | ReturnType<typeof barChart> | ReturnType<typeof lineChart> | ReturnType<typeof calculateOpportunityScores> | Awaited<ReturnType<typeof runtimeInfo>>;
+export type ToolOutput = ReturnType<typeof listSkills> | ReturnType<typeof loadSkill> | ReturnType<typeof routeInvestment> | ReturnType<typeof barChart> | ReturnType<typeof lineChart> | ReturnType<typeof calculateOpportunityScores> | ReturnType<typeof calculateIssuerExposure> | Awaited<ReturnType<typeof runtimeInfo>>;
 export function callTool(name: "runtime_info", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof runtimeInfo>;
 export function callTool(name: "list_skills", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof listSkills>;
 export function callTool(name: "load_skill", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof loadSkill>;
 export function callTool(name: "route_investment_request", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof routeInvestment>;
 export function callTool(name: "calculate_opportunity_scores", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof calculateOpportunityScores>;
+export function callTool(name: "calculate_issuer_exposure", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof calculateIssuerExposure>;
 export function callTool(name: "render_bar_chart", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof barChart>;
 export function callTool(name: "render_line_chart", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof lineChart>;
 export function callTool(name: string, args: unknown, metadata?: SiteVersionMetadata): ToolOutput | Promise<ToolOutput>;
@@ -263,6 +311,7 @@ export function callTool(name: string, args: unknown, metadata?: SiteVersionMeta
     case "load_skill": return loadSkill(schemas.load_skill.parse(args).skill_name);
     case "route_investment_request": return routeInvestment(schemas.route_investment_request.parse(args).user_request);
     case "calculate_opportunity_scores": return calculateOpportunityScores(schemas.calculate_opportunity_scores.parse(args));
+    case "calculate_issuer_exposure": return calculateIssuerExposure(schemas.calculate_issuer_exposure.parse(args) as IssuerExposureInput);
     case "render_bar_chart": {
       const parsed = schemas.render_bar_chart.parse(args);
       return barChart({ labels: parsed.labels, values: parsed.values, title: parsed.title, unit: parsed.unit, horizontal: parsed.horizontal });

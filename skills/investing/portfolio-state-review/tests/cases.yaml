@@ -54,6 +54,33 @@ cases:
         - "complete total from partial constituents"
         - "double count issuer and sector aggregates"
 
+  - id: issuer-lookthrough-partial-overlap
+    case: Account-aware UCITS issuer look-through preserves partial uncertainty
+    input: "Synthetic fixture only: calculate issuer look-through for direct Alphabet shares plus UCITS IUIT and two account-specific XDWT positions. Keep UCITS and US SMH distinct, expose partial fund coverage, overlap, source dates and AI/semiconductor factor views without adding overlapping themes. No portfolio reads, writes, trades or probabilities."
+    expected:
+      should_trigger: true
+      must:
+        - "explicit instrument ID, account, ISIN and share class"
+        - "issuer_id only for share-class consolidation"
+        - "partial minimum issuer exposure"
+        - "coverage separate from decomposition completeness"
+        - "as-of, published, retrieved and source provenance"
+        - "overlapping factor views are not additive"
+        - "no portfolio retrieval or persistence"
+      must_not:
+        - "UCITS SMH is US SMH"
+        - "complete concentration metrics from partial constituents"
+        - "probability or forecast"
+        - "trade execution"
+
+  - id: issuer-lookthrough-unavailable-source
+    case: Missing constituent source blocks look-through comparison
+    input: "Review issuer exposure from positions where a fund has no dated constituent snapshot. Return known minimum exposure and state what cannot be compared; do not invent holdings."
+    expected:
+      should_trigger: true
+      must: ["MISSING", "partial minimum", "comparison blocked"]
+      must_not: ["inferred constituents", "complete decomposition"]
+
   - id: portfolio-attribution-empty-transactions
     case: Empty canonical transaction query is not evidence of no trades
     input: "Current and prior portfolio snapshots are available and weights are unchanged. The canonical transaction query returned zero rows. Tell me whether there were no trades and whether any drift was market-driven."
