@@ -132,6 +132,37 @@ class TechnicalStructureTests(unittest.TestCase):
         result = analyze_structure(data, as_of="2026-02-01T00:00:00+00:00", source_id="fixture", adjusted=True, adjustment_id="synthetic-adjustment-v1", currency="USD")
         self.assertEqual("DATA_GAP_EXCEEDS_LIMIT", result["reason"])
 
+    def test_gap_limit_uses_exact_elapsed_time(self):
+        exact = bars([(10, 8, 9)] * 8)
+        for row in exact[4:]:
+            row["timestamp"] = (datetime.fromisoformat(row["timestamp"]) + timedelta(days=4)).isoformat()
+            row["published_at"] = row["timestamp"]
+        boundary = analyze_structure(exact, as_of="2026-02-01T00:00:00+00:00", source_id="fixture", adjusted=True, adjustment_id="synthetic-adjustment-v1", currency="USD")
+        self.assertNotEqual("DATA_GAP_EXCEEDS_LIMIT", boundary.get("reason"))
+
+        data = bars([(10, 8, 9)] * 8)
+        for row in data[4:]:
+            row["timestamp"] = (datetime.fromisoformat(row["timestamp"]) + timedelta(days=5, hours=1)).isoformat()
+            row["published_at"] = row["timestamp"]
+        result = analyze_structure(data, as_of="2026-02-01T00:00:00+00:00", source_id="fixture", adjusted=True, adjustment_id="synthetic-adjustment-v1", currency="USD")
+        self.assertEqual("DATA_GAP_EXCEEDS_LIMIT", result["reason"])
+
+    def test_rejects_boolean_windows_and_invalid_gap_limit(self):
+        data = bars([(10, 8, 9)] * 8)
+        arguments = dict(as_of=data[-1]["timestamp"], source_id="fixture", adjusted=True,
+                         adjustment_id="synthetic-adjustment-v1", currency="USD")
+        with self.assertRaises(StructureInputError):
+            analyze_structure(data, **arguments, left=True)
+        with self.assertRaises(StructureInputError):
+            analyze_structure(data, **arguments, max_gap_days=0)
+
+    def test_each_bar_requires_a_nonblank_string_source_id(self):
+        data = bars([(10, 8, 9)] * 8)
+        data[3]["source_id"] = "  "
+        with self.assertRaises(StructureInputError):
+            analyze_structure(data, as_of=data[-1]["timestamp"], source_id="fixture", adjusted=True,
+                              adjustment_id="synthetic-adjustment-v1", currency="USD")
+
 
 if __name__ == "__main__":
     unittest.main()

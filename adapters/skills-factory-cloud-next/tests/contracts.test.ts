@@ -82,6 +82,22 @@ test("opportunity score calculator is deterministic, evidence-gated and ranks on
   ] }) as { scores: Array<Record<string, unknown>> };
   assert.ok(duplicate.scores.every((row) => row.ranking_reason === "DUPLICATE_CANDIDATE_ID"));
 });
+test("opportunity ranking compares scores with different decimal lengths numerically", () => {
+  const factors = ["catalyst_timing", "estimate_revisions", "valuation_expectations", "price_setup", "scenario_asymmetry", "cycle_resilience"];
+  const makeEvidence = (values: number[]) => Object.fromEntries(factors.map((name, index) => [name, {
+    value: values[index], confidence: 0.8, as_of_date: "2026-10-27", source_ids: [`synthetic:${name}`],
+    definition: name, normalization_profile: `normalized:${name}:v1`, quality: "PROVISIONAL",
+  }]));
+  const result = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [
+    { candidate_id: "MU-cycle", horizon: "1-3m", evidence: makeEvidence([0.8, 0.9, 0.7, 0.85, 0.45, 0.25]) },
+    { candidate_id: "event-driven", horizon: "1-3m", evidence: makeEvidence([0.9, 0.8, 0.55, 0.85, 0.8, 0.7]) },
+  ] }) as { scores: Array<Record<string, unknown>> };
+  const ranked = result.scores.filter((row) => row.ranking_status === "COMPARABLE");
+  assert.deepEqual(ranked.map((row) => row.candidate_id), ["event-driven", "MU-cycle"]);
+  assert.deepEqual(ranked.map((row) => row.rank_within_horizon), [1, 2]);
+  assert.deepEqual(ranked.map((row) => row.score), ["0.78", "0.69"]);
+  assert.equal(ranked[0].score_difference_to_next, "0.097");
+});
 test("catalog authoring skill serves essential-provider stop and authorized fallback rules", () => {
   const loaded = callTool("load_skill", { skill_name: "skill-authoring" });
   const catalog = callTool("list_skills", {});
