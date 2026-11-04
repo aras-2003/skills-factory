@@ -131,3 +131,11 @@ The live Site was independently attested as verified, canonical Skills Factory/L
 | Billing permission edge | Kept role-restricted data distinct from an empty account; described mobile/desktop states, accessible status announcements, and bounded recovery guidance. | PASS for this isolated run. |
 
 These are isolated agent-host probes over the current Site package, not ordinary Chat UI acceptance runs. They do not satisfy the required three independent routing attempts, sentinels, unchanged-domain probes, ordinary Chat routing, or the full Iteration 06 acceptance matrix. The user-facing output was observed, but there are no signed semantic-response receipts; the runtime attestation and skill-load identity prove package provenance only. #423, #474, #480, and #483 remain open pending the full matrix and ordinary Chat verification.
+
+### #526 — current Site weekly-screen missing-history retest — 2026-11-04
+
+An isolated executor loaded the current `investment-opportunity-hunter` v0.5.1 (SHA-256 `fe9b8fc6d43af2a2a709186ccbaa6341b55fcab1eeddcdf593691abe81172d93`) and `market-opportunity-scan` v0.4.2 (SHA-256 `d821e6760ffb54340095530419da7b3bd9ce44ff8a1edb296e63c76cd3732129`) from verified Site MCP `677c0a553ac35f984267d9cfd6f27d7e4a5567dd`, canonical Skills Factory/Lab source `32a7ae592582c225627895accd366fa758fc6505`, Lab 1.38.435. The router selected `investment-opportunity-hunter` with `workflow_executed=false`; the loaded child instructions were then executed by the isolated host agent against a synthetic-only request.
+
+The host withheld shortlist ranking (`NOT_SCORED`), prior-run comparison (`CHANGE_COMPARISON_NOT_RUN`) and all 3/6/12-month outcomes (`OUTCOME_ATTRIBUTION_NOT_RUN`) because no dated universe, prior ranking, returns, matching benchmarks, or costs were supplied. It reported no canonical read or write and invented no data. This is a PASS for this isolated missing-history behavior on the current Site package only. Receipts are unsigned routing/load records and do not attest the semantic response.
+
+Historical point-in-time rankings and matched outcomes remain unavailable. This probe does not establish scoring quality on complete inputs, costs/coverage, 3/6/12-month attribution, or overlap resolution with #383. Keep #526 open in Verification.
