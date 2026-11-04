@@ -62,13 +62,19 @@ class ChartContractTests(unittest.TestCase):
                 for name in names
             }}
         inputs = {"as_of": "2026-10-27", "rows": [
-            candidate("lower", dict(zip(names, [0.600, 0.600, 0.550, 0.500, 0.550, 0.500]))),
+            candidate(" lower ", dict(zip(names, [0.600, 0.600, 0.550, 0.500, 0.550, 0.500]))),
             candidate("higher", dict(zip(names, [0.600, 0.600, 0.550, 0.50625, 0.550, 0.500]))),
         ]}
+        first = inputs["rows"][0]["evidence"][names[0]]
+        first["source_ids"] = [" synthetic:lower " ]
+        first["definition"] = " Synthetic test factor: growth_durability "
+        first["normalization_profile"] = " normalized-growth_durability-v1 "
         result = server.calculate_opportunity_scores(**inputs)
         self.assertEqual("0.56", result["scores"][0]["score"])
         self.assertEqual("0.001", result["scores"][0]["score_difference_to_next"])
         self.assertEqual("COMPARABLE", result["scores"][0]["ranking_status"])
+        self.assertEqual("lower", result["scores"][1]["candidate_id"])
+        self.assertEqual(["synthetic:lower"], result["scores"][1]["factor_evidence"][names[0]]["source_ids"])
         self.assertEqual("unsigned_mcp_tool_call_receipt", result["tool_receipt"]["kind"])
 
     def test_python_opportunity_score_fails_closed_for_stale_evidence_and_bad_shape(self):

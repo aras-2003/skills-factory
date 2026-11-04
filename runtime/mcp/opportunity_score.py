@@ -6,7 +6,7 @@ caller-supplied normalized evidence and deliberately performs no research.
 from __future__ import annotations
 
 from datetime import date
-from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP
 from typing import Any
 
 MODEL = "opportunity-score-v0.1-provisional"
@@ -40,7 +40,7 @@ def _validate(payload: Any) -> tuple[str, list[dict[str, Any]]]:
     if not isinstance(payload, dict) or set(payload) != {"as_of", "rows"}:
         raise ValueError("input must contain only as_of and rows")
     as_of = payload["as_of"]
-    target = _date(as_of)
+    _date(as_of)
     rows = payload["rows"]
     if not isinstance(rows, list) or not 1 <= len(rows) <= 30:
         raise ValueError("rows must contain 1 to 30 candidates")
@@ -50,6 +50,7 @@ def _validate(payload: Any) -> tuple[str, list[dict[str, Any]]]:
         cid = row["candidate_id"]
         if not isinstance(cid, str) or not cid.strip() or len(cid.strip()) > 120:
             raise ValueError("candidate_id must contain 1 to 120 characters")
+        row["candidate_id"] = cid.strip()
         if row["horizon"] not in WEIGHTS:
             raise ValueError("unsupported horizon")
         evidence = row["evidence"]
@@ -70,6 +71,9 @@ def _validate(payload: Any) -> tuple[str, list[dict[str, Any]]]:
                     raise ValueError(f"invalid {key}")
             if factor["quality"] not in {"VERIFIED", "PROVISIONAL", "BLOCKED"}:
                 raise ValueError("invalid quality")
+            factor["source_ids"] = [source_id.strip() for source_id in ids]
+            factor["definition"] = factor["definition"].strip()
+            factor["normalization_profile"] = factor["normalization_profile"].strip()
     return as_of, rows
 
 

@@ -11,7 +11,6 @@ import os
 import hashlib
 import json
 import re
-from decimal import InvalidOperation
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from typing import Any
@@ -311,7 +310,7 @@ def calculate_opportunity_scores(as_of: str, rows: list[dict[str, Any]], context
     def operation() -> dict[str, Any]:
         try:
             return _calculate_opportunity_scores(arguments)
-        except (ValueError, TypeError, InvalidOperation) as exc:
+        except (ValueError, TypeError) as exc:
             raise ToolError("INVALID_OPPORTUNITY_SCORE_INPUT") from exc
     return execute_tool("calculate_opportunity_scores", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
 
