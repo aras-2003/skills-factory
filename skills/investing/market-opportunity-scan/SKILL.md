@@ -7,10 +7,10 @@ description: >
   canonical portfolio context from investment-record-store. Do not issue buy/sell instructions.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.4.1"
+  version: "0.4.2"
   maturity: production
   risk: medium
-  last_reviewed: "2026-10-31"
+  last_reviewed: "2026-11-04"
   execution:
     default_model_class: fast
 ---
@@ -68,7 +68,7 @@ Do not treat any research plugin as the canonical portfolio store.
 12. Remove ideas supported only by cheapness, price decline, momentum, social attention or narrative.
 13. Produce a broad research radar of roughly 10-15 candidates, then promote only the best 2-3 to detailed analysis by default. Match the requested coverage; if the evidence or available tools cannot support the minimum breadth or history, state the actual coverage and mark the scan incomplete rather than presenting a partial scan as the full universe.
 14. Return an explicit reject/defer rationale for attractive-looking but unsupported names.
-15. For a user-requested ranked opportunity comparison, calculate the **Opportunity Score** separately for each requested horizon using the versioned profile below. Score only factor inputs explicitly derived from evidence and carrying source IDs, definition, normalization profile, confidence, quality and as-of date. Do not invent normalized inputs or silently fill missing factors. If a deterministic calculation engine is available, use it; otherwise show the weighted inputs and arithmetic so the result can be independently reproduced. Missing, stale, future-dated, weak-confidence or non-comparable evidence makes that candidate/horizon `NOT_SCORED`; never renormalize remaining weights or substitute 0.50.
+15. For a user-requested ranked opportunity comparison, calculate the **Opportunity Score** separately for each requested horizon using the versioned profile below. Score only factor inputs explicitly derived from evidence and carrying source IDs, definition, normalization profile, confidence, quality and as-of date. Do not invent normalized inputs or silently fill missing factors. When the Site MCP `calculate_opportunity_scores` tool is available, call it with the complete evidence set and preserve its deterministic output; do not do score arithmetic manually. If the tool is unavailable, show the weighted inputs and arithmetic so the result can be independently reproduced. Missing, stale, future-dated, weak-confidence or non-comparable evidence makes that candidate/horizon `NOT_SCORED`; never renormalize remaining weights or substitute 0.50.
 16. Rank only candidates with the same horizon, model version, as-of date, factor definitions and compatible normalization profiles. Include score difference to the next candidate and explain material divergence across horizons. Keep portfolio fit/overlap as a separate, post-score assessment; never hide it as a company-score penalty.
 
 ## Decision rules

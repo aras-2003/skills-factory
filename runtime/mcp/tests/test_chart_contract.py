@@ -54,6 +54,41 @@ class ChartContractTests(unittest.TestCase):
         with self.assertRaises(ToolError):
             render_line_chart(["a", "b"], [f"s{i}" for i in range(9)], [[0, 1] for _ in range(9)], 2, 9, 2, "Example", "")
 
+    def test_python_opportunity_score_matches_known_synthetic_contract(self):
+        names = ["growth_durability", "business_quality", "reinvestment_returns", "valuation_expectations", "balance_sheet_resilience", "cycle_resilience"]
+        def candidate(cid, values):
+            return {"candidate_id": cid, "horizon": ">3y", "evidence": {
+                name: {"value": values[name], "confidence": 0.8, "as_of_date": "2026-10-27", "source_ids": [f"synthetic:{cid}:{name}"], "definition": f"Synthetic test factor: {name}", "normalization_profile": f"normalized-{name}-v1", "quality": "PROVISIONAL"}
+                for name in names
+            }}
+        inputs = {"as_of": "2026-10-27", "rows": [
+            candidate(" lower ", dict(zip(names, [0.600, 0.600, 0.550, 0.500, 0.550, 0.500]))),
+            candidate("higher", dict(zip(names, [0.600, 0.600, 0.550, 0.50625, 0.550, 0.500]))),
+        ]}
+        first = inputs["rows"][0]["evidence"][names[0]]
+        first["source_ids"] = [" synthetic:lower " ]
+        first["definition"] = " Synthetic test factor: growth_durability "
+        first["normalization_profile"] = " normalized-growth_durability-v1 "
+        result = server.calculate_opportunity_scores(**inputs)
+        self.assertEqual("0.56", result["scores"][0]["score"])
+        self.assertEqual("0.001", result["scores"][0]["score_difference_to_next"])
+        self.assertEqual("COMPARABLE", result["scores"][0]["ranking_status"])
+        self.assertEqual("lower", result["scores"][1]["candidate_id"])
+        self.assertEqual(["synthetic:lower"], result["scores"][1]["factor_evidence"][names[0]]["source_ids"])
+        self.assertEqual("unsigned_mcp_tool_call_receipt", result["tool_receipt"]["kind"])
+
+    def test_python_opportunity_score_fails_closed_for_stale_evidence_and_bad_shape(self):
+        names = ["growth_durability", "business_quality", "reinvestment_returns", "valuation_expectations", "balance_sheet_resilience", "cycle_resilience"]
+        row = {"candidate_id": "synthetic", "horizon": ">3y", "evidence": {
+            name: {"value": 0.6, "confidence": 0.8, "as_of_date": "2024-01-01" if name == "cycle_resilience" else "2026-10-27", "source_ids": [f"synthetic:{name}"], "definition": name, "normalization_profile": f"normalized-{name}-v1", "quality": "VERIFIED"}
+            for name in names
+        }}
+        result = server.calculate_opportunity_scores(as_of="2026-10-27", rows=[row])
+        self.assertEqual("NOT_SCORED", result["scores"][0]["status"])
+        self.assertIn("cycle_resilience", result["scores"][0]["stale_factors"])
+        with self.assertRaises(ToolError):
+            server.calculate_opportunity_scores(as_of="2026-02-30", rows=[row])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -30,6 +30,7 @@ from mcp.server import MCPServer
 from mcp.server.mcpserver.context import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from observability import execute_tool, tool_span
+from opportunity_score import calculate_opportunity_scores as _calculate_opportunity_scores
 
 SERVER_INSTRUCTIONS = """
 Skills Factory runtime contract.
@@ -62,6 +63,12 @@ investment theme, opportunity, policy or risk limit:
    NOT RUN. Never imply that route execution alone completed the workflow.
 Do not draft policy, thresholds, allocations, valuations or buy/sell opinions
 from a routing result alone.
+
+When the caller supplies already-normalized, dated, source-identified factor
+evidence, use calculate_opportunity_scores for the fixed provisional model.
+It applies evidence gates and comparable ranking only; it does not verify
+sources, derive factors, research candidates, estimate probabilities or
+recommend trades. Preserve NOT_SCORED results.
 
 Use chart tools only with explicit numeric inputs from the user or a completed,
 source-backed workflow. Preserve supplied labels, values and units. Do not
@@ -236,7 +243,7 @@ def runtime_info(context: Context = None) -> dict[str, Any]:
             values["package_integrity_sha256"] = package_integrity["payload_content_sha256"]
         values["lab_release"] = installed or None
         values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
-        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "render_bar_chart", "render_line_chart"]
+        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "calculate_opportunity_scores", "render_bar_chart", "render_line_chart"]
         if (installed and package_integrity["status"] == "verified"
                 and values["channel"] == "lab"
                 and installed["source_revision"] == values["source_revision"]
@@ -294,6 +301,18 @@ def route_investment_request(user_request: str, context: Context = None) -> dict
         "route_investment_request", {"user_request": user_request}, operation, _with_tool_receipt,
         request_meta=_request_meta(context),
     )
+
+
+@mcp.tool()
+def calculate_opportunity_scores(as_of: str, rows: list[dict[str, Any]], context: Context = None) -> dict[str, Any]:
+    """Score supplied normalized candidate evidence with the fixed provisional model."""
+    arguments = {"as_of": as_of, "rows": rows}
+    def operation() -> dict[str, Any]:
+        try:
+            return _calculate_opportunity_scores(arguments)
+        except (ValueError, TypeError) as exc:
+            raise ToolError("INVALID_OPPORTUNITY_SCORE_INPUT") from exc
+    return execute_tool("calculate_opportunity_scores", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()
