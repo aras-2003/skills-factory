@@ -27,6 +27,18 @@ class SystemicRiskRoutingTests(unittest.TestCase):
         )
         self.assertEqual(result["route"], "attention")
 
+    def test_missing_historical_vintages_and_holdings_do_not_become_replay_intent(self) -> None:
+        result = route_investment_request(
+            "Systemic risk indicators across credit markets and macro conditions have changed. "
+            "Assess these synthetic observations. All values are fictional and incomplete; no "
+            "historical vintages, portfolio holdings, calibrated thresholds, or policy are available. "
+            "Preserve observation/publication dates, deduplicate correlated evidence, separate "
+            "materiality from direction, and state unknowns. No portfolio-specific assessment, "
+            "holdings, trades, policy changes, or writes."
+        )
+        self.assertEqual(result["route"], "attention")
+        self.assertEqual(result["child_workflow"], "investment-attention-review")
+
     def test_generic_credit_spread_definition_stays_outside_investment_os(self) -> None:
         result = route_investment_request("Explain what a credit spread means in one sentence.")
         self.assertFalse(result["is_investment_request"])

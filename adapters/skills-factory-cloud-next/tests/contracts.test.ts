@@ -294,6 +294,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Research investment themes and value chains", "investment-theme-discovery"],
     ["Research investment themes that could benefit from AI infrastructure spending over the next few years. I want value-chain and second-order opportunities, not an immediate buy list.", "investment-theme-discovery"],
     ["Does this news matter for my holdings?", "investment-attention-review"],
+    ["Systemic risk indicators across credit markets and macro conditions have changed. Assess these synthetic observations. All values are fictional and incomplete; no historical vintages, portfolio holdings, calibrated thresholds, or policy are available. Preserve observation/publication dates, deduplicate correlated evidence, separate materiality from direction, and state unknowns. No portfolio-specific assessment, holdings, trades, policy changes, or writes.", "investment-attention-review"],
     ["Rebuild my 2021 thesis and portfolio exposure using only the as-of snapshot available on the decision date; mark missing history blocked.", "historical-decision-replay"],
     ["Compare our frozen decision rule with buy-and-hold using chronological walk-forward out-of-sample periods and realistic costs.", "historical-decision-replay"],
     ["Backtest systemic-risk alerts against a frozen rule using walk-forward out-of-sample periods.", "historical-decision-replay"],

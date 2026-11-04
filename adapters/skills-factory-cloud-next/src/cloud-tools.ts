@@ -192,7 +192,10 @@ export function routeInvestment(userRequest: string) {
   const explicit = routes.filter(r => s.includes(r));
   const replayText = s.replace(/\bno\s+(?:portfolio|holdings?|trades?|policy|writes?)\b[^.!?;,\n]*/g, "");
   const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);
-  const replay = explicitReplayIntent || /published.{0,30}after.{0,30}decision|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)/.test(replayText);
+  const historicalContext = replayText.split(/[.!?;,:]/).some(clause =>
+    /historical.{0,30}(portfolio|thesis|holding)|history.{0,30}(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)/.test(clause),
+  );
+  const replay = explicitReplayIntent || /published.{0,30}after.{0,30}decision/.test(replayText) || historicalContext;
   const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation|struktura cen|potwierdzon.{0,30}swing|zanegowan.{0,30}trendu/.test(s);
   const systemicRisk = /systemic|cross[.\s-]*asset|credit[\s-]+spread|liquidity signal|market breadth|risk[.\s-]+off|risk[.\s-]+indicators?|risk[.\s-]+signals?|macro(?:economic)? risk|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
   const systemicRiskTriage = systemicRisk && /triage|assess|review|monitor|observe|indicator|signal|changed|observ|ocen|przejrz|monitoruj/.test(s);
