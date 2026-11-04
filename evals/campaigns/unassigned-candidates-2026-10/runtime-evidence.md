@@ -155,3 +155,11 @@ Two negative cases failed closed as required: an unconfirmed high without two ri
 A separate current-Site chart-tool call accepted 11 synthetic close observations with OPS/OPD horizontal lines and returned `PAYLOAD_RENDERED` for three series. The receipt marked client display `NOT_OBSERVABLE`; the chart is categorical and explicitly does not interpret x-labels as dates. This does not demonstrate a user-visible historical price chart integrated with confirmed swing annotations.
 
 These probes cover only synthetic arithmetic/gating and the chart payload contract. No historical multi-instrument corpus, adjusted corporate-action data, market-calendar/gap/fake-breakout regimes, user-visible desktop/mobile visual, or walk-forward/out-of-sample comparison against costs and baselines was available. Keep #464 in Verification.
+
+### #556 — current Site issuer-exposure live tool smoke test — 2026-11-04
+
+After the merged issuer look-through change, a direct call to the deployed `calculate_issuer_exposure` tool completed on verified Site software source `e851f787624067dc94d57659e034b24dec0b9d75`, with canonical repository/Lab source `4c511c1e5911ebe5a0cdc96c26c6e459159d4b67` (Lab 1.38.438). The synthetic input contained one explicitly identified direct issuer position weighted at 10% of a declared PLN 100,000 portfolio and no fund snapshots.
+
+The tool returned `PARTIAL_MINIMUM`, `decomposition_complete=false`, and reason `PORTFOLIO_POSITION_WEIGHT_UNDER_100`; it reported the known direct exposure as PLN 10,000 and left concentration metrics null with `BLOCKED_INCOMPLETE_ISSUER_DECOMPOSITION`. Its unsigned receipt records completion at `2026-11-04T21:30:43.547Z`, input SHA-256 `049fa3d04a9e41eb5bcbd80ee5a26a27968d655bdce722b3209cea50fec751a9`, and output SHA-256 `0bae8536fe25d27d28cb6024b5caa1b24a96a873ed78f434a43320fd506bdd39`.
+
+This is a live synthetic-input smoke test of the deployed tool and its incomplete-portfolio guard only. It does not establish holdings retrieval, real fund constituents, source verification, persistent/auditable history, a dashboard, or portfolio-level acceptance. #556 remains open.
