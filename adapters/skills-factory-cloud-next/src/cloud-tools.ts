@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 10939)
+Total output lines: 328
+
 import { z } from "zod";
 import { LAB_RELEASE, DRAFT_RELEASE, RUNTIME_RELEASE, SKILL_CATALOG } from "./skill-catalog";
 import { CANONICAL_SOURCE_REVISION, ROUTING_CONTRACT_BLOB_SHA } from "./canonical-provenance";
@@ -123,98 +126,7 @@ const issuerExposureToolInputSchema = {
 };
 export const TOOLS = [
   { name: "runtime_info", description: "Return this Site Worker's deployment attestation and the embedded Skills Factory Lab release. Missing platform identity is reported as unattested. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
-  { name: "list_skills", description: "List every skill and workflow in the source-bound Lab artifact irrespective of maturity, including kind, version, maturity and content digests. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
-  { name: "load_skill", description: "Load the exact packaged SKILL.md instructions and allow-listed supporting references for one Lab skill or workflow by name, irrespective of maturity. Eval fixtures are excluded. The host model executes the loaded instructions; this MCP does not claim to perform model reasoning itself.", inputSchema: { type: "object", properties: { skill_name: { type: "string", minLength: 1, maxLength: 160 } }, required: ["skill_name"], additionalProperties: false }, annotations },
-  { name: "route_investment_request", description: "Call before substantive investment analysis to route a Polish or English request through Investment OS. Preserve the returned routing_receipt, then call load_skill for the exact child_workflow and execute its instructions. Routing alone does not execute a workflow, read portfolio data, trade or provide recommendations. Ambiguous requests return clarification_required: load the front door, then ask the clarification question before analysis; do not silently substitute another specialist.", inputSchema: { type: "object", properties: { user_request: { type: "string", minLength: 1, maxLength: 8000 } }, required: ["user_request"], additionalProperties: false }, annotations },
-  { name: "calculate_opportunity_scores", description: "Deterministically score supplied candidates from dated, source-identified, already-normalized factor evidence using opportunity-score-v0.1-provisional. Evidence gates fail closed; weights are never renormalized. Returns provenance, confidence, completeness, comparability-aware ranks and score gaps. No source verification, research, probability, trade recommendation, retrieval or persistence. Use only after opportunity-hunter independently derives the supplied evidence.", inputSchema: opportunityScoreToolInputSchema, annotations },
-  { name: "calculate_issuer_exposure", description: "Calculate a deterministic, read-only issuer look-through preview from explicitly supplied positions and dated fund constituent snapshots. Requires account/instrument/ISIN/share-class and source identity; UCITS, US listings and accounts remain distinct by instrument_id/account_id. Partial constituents produce minimum known exposure, source coverage is separate from decomposition completeness, overlapping factors are never summed, and incomplete issuer decomposition blocks concentration metrics. PLN outputs require reconciled position and portfolio values. Optional prior snapshots are compared only when method, portfolio, currency and completeness match; post-trade positions produce a labelled preview only. User-defined factor shocks are separate non-additive scenario views, never probabilities. No database access, retrieval, actual trade, policy change or persistence.", inputSchema: issuerExposureToolInputSchema, annotations },
-  { name: "render_bar_chart", description: "Internal report visual renderer: use from report-composer/visual-output-design to embed an interactive chart in a chat-native report or presentation of results; do not create a separate dashboard. Direct invocation is for an explicit chart-only request. Renders an inline interactive HTML/SVG bar chart exclusively from explicitly supplied finite JSON numbers, including zero and negatives. labels and values must match. Supply expected_points equal to both array lengths; the server rejects missing or mismatched counts so stale connectors cannot silently truncate data. Maximum 60 points, 80 characters per label, 160 per title and 30 per unit. No fetching, inference, totals, advice or persistence. MCP Apps hosts show a clickable chart; structuredContent preserves the exact SVG and data for other clients.", inputSchema: { type: "object", properties: { labels: labelsSchema(1, 60), values: numbersSchema(1, 60), expected_points: expectedCount("Required: original number of labels and values before connector transport; server rejects a mismatch."), title: str, unit: unitSchema, horizontal: { type: "boolean" } }, required: ["labels", "values", "expected_points", "title", "unit", "horizontal"], additionalProperties: false }, annotations, _meta: { ui: { resourceUri: CHART_UI_URI }, "openai/outputTemplate": CHART_UI_URI, "openai/toolInvocation/invoking": "Rendering interactive chart", "openai/toolInvocation/invoked": "Interactive chart ready" } },
-  { name: "render_line_chart", description: "Internal report visual renderer: use from report-composer/visual-output-design to embed an interactive chart in a chat-native report or presentation of results; do not create a separate dashboard. Direct invocation is for an explicit chart-only request. Renders an inline interactive HTML/SVG line chart exclusively from supplied finite JSON numbers. series_values is series-major: one numeric array for each series_name, each matching x_labels. Supply expected_x_labels, expected_series and expected_points_per_series from the original input; mismatches fail closed so stale connectors cannot silently truncate data. Maximum 100 points and 8 series; labels 80 characters, title 160 and unit 30. x_labels are categorical, equally spaced, with no date interpretation. No missing-value inference, fetching, advice or persistence. MCP Apps hosts show a clickable chart with toggleable series; structuredContent preserves the exact SVG and data for other clients.", inputSchema: { type: "object", properties: { x_labels: labelsSchema(2, 100), series_names: labelsSchema(1, 8), series_values: { type: "array", minItems: 1, description: "Server rejects more than 8 series or 100 values per series; no truncation.", items: numbersSchema(2, 100) }, expected_x_labels: expectedCount("Required: original number of x_labels before connector transport."), expected_series: expectedCount("Required: original number of series before connector transport."), expected_points_per_series: expectedCount("Required: original number of values in every series before connector transport."), title: str, unit: unitSchema }, required: ["x_labels", "series_names", "series_values", "expected_x_labels", "expected_series", "expected_points_per_series", "title", "unit"], additionalProperties: false }, annotations, _meta: { ui: { resourceUri: CHART_UI_URI }, "openai/outputTemplate": CHART_UI_URI, "openai/toolInvocation/invoking": "Rendering interactive chart", "openai/toolInvocation/invoked": "Interactive chart ready" } },
-];
-export type SiteVersionMetadata = {
-  id?: string | null;
-  tag?: string | null;
-  timestamp?: string | number | null;
-  source?: "cloudflare_version_metadata" | "site_environment";
-};
-let toolSchemaDigestPromise: Promise<string> | undefined;
-async function getToolSchemaDigest() {
-  toolSchemaDigestPromise ??= (async () => {
-    const schema = TOOLS.map(({ name, inputSchema }) => ({ name, inputSchema }));
-    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(JSON.stringify(schema)));
-    return `sha256:${Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")}`;
-  })();
-  return toolSchemaDigestPromise;
-}
-const safeSkillName = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-export async function runtimeInfo(metadata?: SiteVersionMetadata) {
-  const siteTag = typeof metadata?.tag === "string" && /^[a-f0-9]{40}$/i.test(metadata.tag) ? metadata.tag : null;
-  let deployedAt: string | null = null;
-  if (metadata?.timestamp != null) {
-    const parsed = new Date(metadata.timestamp);
-    if (Number.isFinite(parsed.getTime())) deployedAt = parsed.toISOString();
-  }
-  const schemaDigest = await getToolSchemaDigest();
-  const attested = typeof metadata?.id === "string" && metadata.id.length > 0 && siteTag !== null && deployedAt !== null;
-  return {
-    ...SOURCE,
-    release_id: metadata?.id || "unattested",
-    source_revision: siteTag || "unattested",
-    canonical_source_revision: CANONICAL_SOURCE_REVISION,
-    software_release: { version: LAB_RELEASE.version, release_id: LAB_RELEASE.release_id, source_revision: LAB_RELEASE.source_revision },
-    routing_contract_blob_sha: ROUTING_CONTRACT_BLOB_SHA,
-    channel: "site",
-    capability_contract_version: "site-mcp-v2",
-    tool_schema_digest: schemaDigest,
-    deployed_at: deployedAt || "unattested",
-    attestation_status: attested ? "verified" : "unattested",
-    identity_source: attested ? (metadata?.source || "cloudflare_version_metadata") : "unattested",
-    capabilities: TOOLS.map((tool) => tool.name),
-    execution_mode: "host_model_executes_loaded_instructions",
-  };
-}
-export function listSkills() {
-  return { evidence_boundary: { scope: "Packaged capabilities only; not historical backlog or GitHub Project membership/acceptance.", reconciliation: "For a source/backlog count mismatch, request the exact source revision and both ID sets. Report only verified set differences; counts alone cannot identify the missing ID. Keep source mapping, live Project fields/dependencies and runtime acceptance separate.", unverified_revision: "If a required source revision is unavailable, mark that comparison BLOCKED_SOURCE_REVISION and ask for it; never guess the authoritative version." }, ...RUNTIME_RELEASE, lab_release: LAB_RELEASE, draft_extension: DRAFT_RELEASE, skills: SKILL_CATALOG.map((skill) => { const { instructions, reference_files, ...metadata } = skill; void instructions; void reference_files; return metadata; }) };
-}
-export function loadSkill(skillName: string) {
-  if (!safeSkillName.test(skillName)) throw new Error("Invalid skill name");
-  const skill = SKILL_CATALOG.find((item) => item.name === skillName);
-  if (!skill) throw new Error("Unknown skill");
-  return { ...skill, source_revision: LAB_RELEASE.source_revision, execution_mode: "host_model_executes_loaded_instructions" };
-}
-const routes = ["investment-portfolio-observation", "investment-portfolio-review", "investment-security-review", "investment-opportunity-hunter", "investment-theme-discovery", "investment-attention-review", "investment-policy-design", "historical-decision-replay", "technical-structure"] as const;
-export function routeInvestment(userRequest: string) {
-  const editingOnly = /^(?:fix|correct|proofread|edit)\s+(?:(?:only|just)\s+)?(?:the\s+)?(?:punctuation|grammar|spelling)\b/i.test(userRequest.trim());
-  const s = userRequest.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l")
-    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*/g, "")
-    // Polish exclusion lists commonly separate items with commas after "bez".
-    .replace(/\bbez\b[^.!?;:\n]*/g, "");
-  const explicit = routes.filter(r => s.includes(r));
-  const replayText = s.replace(/\bno\s+(?:portfolio|holdings?|trades?|policy|writes?)\b[^.!?;,\n]*/g, "");
-  const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);
-  const replay = explicitReplayIntent || /published.{0,30}after.{0,30}decision|historical.*(portfolio|thesis|holding)|history.*(portfolio|exposure)|historyczn.{0,30}(decyz|portfel|tez)/.test(replayText);
-  const technicalStructure = /technical structure|dow theory|ops\s*[/＆&]\s*opd|ops\s+opd|adjusted ohlcv|price structure|swing high|swing low|trend invalidation|pivot confirmation|struktura cen|potwierdzon.{0,30}swing|zanegowan.{0,30}trendu/.test(s);
-  const systemicRisk = /systemic|cross[.\s-]*asset|credit[\s-]+spread|liquidity signal|market breadth|risk[.\s-]+off|risk[.\s-]+indicators?|risk[.\s-]+signals?|macro(?:economic)? risk|ryzyko systemowe|sygnal.{0,20}plynnosc/.test(s) && /risk|signal|indicator|exposure|liquidity|spread|ryzyk|sygnal|plynnosc/.test(s);
-  const systemicRiskTriage = systemicRisk && /triage|assess|review|monitor|observe|indicator|signal|changed|observ|ocen|przejrz|monitoruj/.test(s);
-  const portfolio = /portfel|portfolio|holdings|pozycj|positions|allocat|alokac|udzial|weights/.test(s.replace(/\bno\s+portfolio\b[^.!?;,\n]*/g, ""));
-  const portfolioAction = portfolio
-    && /\b(?:all proceeds|all holdings|holdings to cash|liquidat\w*)\b/.test(s)
-    && /\b(?:buy|sell|purchase|trade|execute|transfer|kup|sprzed\w*)\b/.test(s);
-  const risk = /ryzyk|risk|koncentrac|concentrat|dywers|diversif|overlap|naklad|rebalans|rebalanc|restruktur|restructur|strukture|structure/.test(s);
-  const policy = /polityk|policy|zasady|rules|limit|target bands|sizing constraints/.test(s);
-  const policyDesignIntent = /^(?:(?:please|help me|pomoz(?: mi)?)\s+)?(?:define|set|design|create|establish|regulate|ustal\w*|zaprojektuj|stworz|okresl|wyznacz)\b.{0,120}\b(?:investment\s+)?(?:policy|rules|risk|limits?|thresholds?|target bands|sizing constraints|polityk|zasad|limit|progi|ryzyk)/.test(s)
-    || /\b(?:i need to|we need to|i want to|pomoz mi|chce|musimy)\s+(?:define|set|design|create|establish|regulate|ustal\w*|zaprojektowac|stworzyc|okreslic|wyznaczyc)\b.{0,100}\b(?:investment\s+)?(?:policy|rules|risk|limits?|thresholds?|target bands|sizing constraints|polityk|zasad|limit|progi|ryzyk)/.test(s);
-  const observation = /zmien|zmian|chang(?:e|es|ed|ing)|happening|dzieje|observ|obserw|watch|monitor|drift|dryf/.test(s);
-  const event = (/give attention|attention next|next research|research next|attention review/.test(s) && /(?:\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b|holding|portfel|portfolio|watchlist)/.test(s)) || /news|wiadomosc|wydarzen|event|informacj|wynik|earnings/.test(s) && /(?:wplyw|impact|matter|znaczen|\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b|holdings|portfel|zmienia|watchlist)/.test(s);
-  const weeklyUndervaluationScreen = /\b(?:weekly|this week|week's)\b.{0,80}\b(?:undervalu|value|valuation)\w*\b.{0,50}\b(?:screen|screener|screening|rank|shortlist)\b|\b(?:weekly|this week|week's)\b.{0,80}\b(?:screen|screener|screening)\b.{0,50}\b(?:undervalu|value|valuation)\w*\b/.test(s);
-  const opportunity = weeklyUndervaluationScreen || /watchlist screen|screen my watchlist|screen watchlist|preview the screen|preview-only screen|screen these candidates|okazj|opportunit|kandydat|candidates|research next|badac dalej|szukaj spolek|znajdz spolk|find.*(stocks|securities)/.test(s);
-  const explicitCandidateDiscovery = /(?:find|scan|discover|screen|szukaj|znajd|znalez|selekcj).{0,100}(?:stocks|securities|spolk|kandydat|candidates)/.test(s);
-  const theme = /temat.*inwest|investment theme|trend|value chain|lancuch wartosc|beneficjen|second.order/.test(s);
-  const nonTickers = new Set(["AI", "ETF", "ETFS", "USD", "PLN", "EUR", "CEO", "CIO", "CTO", "EPS", "FCF", "DCF", "ROIC", "TAM", "CAGR"]);
-  const tickerCount = new Set((userRequest.match(/\b[A-Z]{2,5}\b/g) || []).filter(token => !nonTickers.has(token))).size;
-  const thesis = /\b(?:thesis|theses)\b|\btez(?:a|y|e|ę|ą|ie)?\b/;
-  const security = /spolk|stock|security|akcj|etf|wycen|valuation|underwrit|ticker/.test(s) || thesis.test(s) || /issuer|company case/.test(s) || (tickerCount === 1 && /review|ocen|analiz|kup|buy|sell|sprzed|investment|add|increase/.test(s));
-  const singleSecurityIntent = security && (thesis.test(s) || /underwrit|valuation|wycen|review.{0,24}(stock|security|ticker)|analy[sz].{0,24}(stock|security|ticker)|assess.{0,24}(stock|security|ticker)|(ocen|analiz).{0,24}(spolke|akcje|instrument|papier)|stock review|security review|good investment|fit.*portfolio|portfolio fit|position|sizing|size|\badd(?:ed|ing)?\b|\bincrease(?:d|s|ing)?\b|\breduce(?:d|s|ing)?\b|\btrim(?:med|s|ming)?\b|\bbuy\b|\bsell\b|kup|dodaj|zwieksz|zmniejsz|sprzed|pozycj/.test(s));
+  { name: "list_skills", description: "List every skill and workflow in the source-bound Lab artifact irrespective of maturity, inclu…3939 tokens truncated…:med|s|ming)?\b|\bbuy\b|\bsell\b|kup|dodaj|zwieksz|zmniejsz|sprzed|pozycj/.test(s));
   const aggregateExposureIntent = /issuer exposure|issuer look[ -]?through|look[ -]?through|cross[ -]?(?:etf|fund)|sector exposure|exposure coverage|exposure drift|etf overlap|fund overlap|portfolio concentration/.test(s);
   const aggregatePortfolioReview = portfolio
     && (risk || tickerCount >= 2 || aggregateExposureIntent)
