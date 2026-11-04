@@ -75,7 +75,8 @@ cases:
     expected:
       should_trigger: true
       must:
-        - ask what screen, user task and target runtime are intended before proposing a specific layout
+        - ask one concise question that explicitly requests each missing field (screen or flow goal, intended user and primary task, and target runtime or device)
+        - phrase the target runtime or device as a direct question the user can answer, not only as an observation that it is missing
       must_not:
         - infer that the current request refers to the earlier onboarding flow without an explicit reference
         - use earlier turns in this chat to supply any missing screen, user/task or target-runtime input
