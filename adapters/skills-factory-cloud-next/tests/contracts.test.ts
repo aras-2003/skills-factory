@@ -19,6 +19,69 @@ test("Cloud Next facade matches the canonical cross-adapter MCP tool contract", 
   const actual = Object.fromEntries(TOOLS.map((tool) => [tool.name, [...((tool.inputSchema as { required?: string[] }).required ?? [])].sort()]));
   assert.deepEqual(actual, contract.tools);
 });
+test("opportunity score calculator is deterministic, evidence-gated and ranks only comparable rows", () => {
+  const names = ["catalyst_timing", "estimate_revisions", "valuation_expectations", "price_setup", "scenario_asymmetry", "cycle_resilience"];
+  const makeEvidence = (cycle: number, date = "2026-10-27") => Object.fromEntries(names.map((name) => [name, {
+    value: name === "cycle_resilience" ? cycle : 0.5, confidence: 0.8, as_of_date: date,
+    source_ids: [`synthetic:${name}`], definition: name, normalization_profile: `normalized:${name}:v1`, quality: "VERIFIED",
+  }]));
+  const result = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [
+    { candidate_id: "a", horizon: "1-3m", evidence: makeEvidence(0.5) },
+    { candidate_id: "b", horizon: "1-3m", evidence: makeEvidence(0.51) },
+  ] }) as { scores: Array<Record<string, unknown>> };
+  const ranked = result.scores.filter((row) => row.ranking_status === "COMPARABLE");
+  assert.deepEqual(ranked.map((row) => row.candidate_id), ["b", "a"]);
+  assert.equal(ranked[0].score_difference_to_next, "0.001");
+  assert.equal(ranked[0].score, "0.50");
+  assert.equal(ranked[0].score_is_probability, false);
+
+  const stale = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [
+    { candidate_id: "stale-consensus", horizon: ">3y", evidence: {
+      growth_durability: { value: 0.6, confidence: 0.8, as_of_date: "2026-10-27", source_ids: ["synthetic:growth"], definition: "growth", normalization_profile: "growth:v1", quality: "PROVISIONAL" },
+      business_quality: { value: 0.6, confidence: 0.8, as_of_date: "2026-10-27", source_ids: ["synthetic:quality"], definition: "quality", normalization_profile: "quality:v1", quality: "PROVISIONAL" },
+      reinvestment_returns: { value: 0.55, confidence: 0.8, as_of_date: "2026-10-27", source_ids: ["synthetic:reinvestment"], definition: "reinvestment", normalization_profile: "reinvestment:v1", quality: "PROVISIONAL" },
+      valuation_expectations: { value: 0.5, confidence: 0.8, as_of_date: "2026-10-27", source_ids: ["synthetic:valuation"], definition: "valuation", normalization_profile: "valuation:v1", quality: "PROVISIONAL" },
+      balance_sheet_resilience: { value: 0.55, confidence: 0.8, as_of_date: "2026-10-27", source_ids: ["synthetic:balance"], definition: "balance", normalization_profile: "balance:v1", quality: "PROVISIONAL" },
+      cycle_resilience: { value: 0.5, confidence: 0.8, as_of_date: "2026-10-27", source_ids: ["synthetic:cycle"], definition: "cycle", normalization_profile: "cycle:v1", quality: "PROVISIONAL" },
+      estimate_revisions: { value: 0.1, confidence: 0.8, as_of_date: "2026-01-01", source_ids: ["synthetic:stale"], definition: "revision", normalization_profile: "revision:v1", quality: "VERIFIED" },
+    } },
+  ] }) as { scores: Array<Record<string, unknown>> };
+  assert.equal(stale.scores[0].score, "0.56");
+  assert.equal(stale.scores[0].status, "PROVISIONAL");
+  const future = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [{ candidate_id: "future", horizon: "1-3m", evidence: makeEvidence(0.5, "2027-01-01") }] }) as { scores: Array<Record<string, unknown>> };
+  assert.equal(future.scores[0].status, "NOT_SCORED");
+  assert.deepEqual(future.scores[0].future_dated_factors, names);
+  const missing = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [{ candidate_id: "missing", horizon: "1-3m", evidence: {} }] }) as { scores: Array<Record<string, unknown>> };
+  assert.equal(missing.scores[0].status, "NOT_SCORED");
+  assert.equal(missing.scores[0].rank_within_horizon, null);
+  const staleEvidence = makeEvidence(0.5) as Record<string, { as_of_date: string }>;
+  staleEvidence.catalyst_timing.as_of_date = "2026-09-01";
+  const weakEvidence = makeEvidence(0.5) as Record<string, { confidence: number }>;
+  weakEvidence.price_setup.confidence = 0.49;
+  const blockedEvidence = makeEvidence(0.5) as Record<string, { quality: string }>;
+  blockedEvidence.cycle_resilience.quality = "BLOCKED";
+  for (const [evidence, reasonField, reason] of [
+    [staleEvidence, "stale_factors", "catalyst_timing"],
+    [weakEvidence, "weak_evidence_factors", "price_setup"],
+    [blockedEvidence, "invalid_factors", "cycle_resilience"],
+  ] as Array<[Record<string, unknown>, string, string]>) {
+    const gated = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [{ candidate_id: reason, horizon: "1-3m", evidence }] }) as { scores: Array<Record<string, unknown>> };
+    assert.equal(gated.scores[0].status, "NOT_SCORED");
+    assert.ok((gated.scores[0][reasonField] as string[]).includes(reason));
+  }
+  const mismatched = makeEvidence(0.5) as Record<string, { normalization_profile: string }>;
+  mismatched.price_setup.normalization_profile = "incompatible-profile:v2";
+  const incomparable = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [
+    { candidate_id: "same-a", horizon: "1-3m", evidence: makeEvidence(0.5) },
+    { candidate_id: "same-b", horizon: "1-3m", evidence: mismatched },
+  ] }) as { scores: Array<Record<string, unknown>> };
+  assert.ok(incomparable.scores.every((row) => row.ranking_status === "NOT_COMPARABLE"));
+  const duplicate = callTool("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [
+    { candidate_id: "duplicate", horizon: "1-3m", evidence: makeEvidence(0.5) },
+    { candidate_id: "duplicate", horizon: "1-3m", evidence: makeEvidence(0.5) },
+  ] }) as { scores: Array<Record<string, unknown>> };
+  assert.ok(duplicate.scores.every((row) => row.ranking_reason === "DUPLICATE_CANDIDATE_ID"));
+});
 test("catalog authoring skill serves essential-provider stop and authorized fallback rules", () => {
   const loaded = callTool("load_skill", { skill_name: "skill-authoring" });
   const catalog = callTool("list_skills", {});
@@ -155,7 +218,7 @@ test("escape SVG injection and external resources", () => {
 });
 test("MCP initialize, discover parity tools, authenticate and call", async () => {
   const init = await (await handleMcp(rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } }))).json() as { result: { protocolVersion: string; serverInfo: { version: string }; instructions: string; capabilities: { resources?: unknown } } }; assert.equal(init.result.protocolVersion, "2025-06-18"); assert.equal(init.result.serverInfo.version, "site-mcp-v2"); assert.match(init.result.instructions, /call route_investment_request before analysis/); assert.match(init.result.instructions, /load_skill for the exact returned child_workflow/); assert.ok(init.result.capabilities.resources);
-  const list = await (await handleMcp(rpc("tools/list"))).json() as { result: { tools: Array<{ name: string; _meta?: { ui?: { resourceUri?: string }; "openai/outputTemplate"?: string } }> } }; assert.equal(list.result.tools.length, 6);
+  const list = await (await handleMcp(rpc("tools/list"))).json() as { result: { tools: Array<{ name: string; _meta?: { ui?: { resourceUri?: string }; "openai/outputTemplate"?: string } }> } }; assert.equal(list.result.tools.length, 7);
   const chartTools = list.result.tools.filter((tool) => tool.name.startsWith("render_")); assert.equal(chartTools.length, 2); assert.ok(chartTools.every((tool) => tool._meta?.ui?.resourceUri === "ui://skills-factory/charts/inline-v2.html" && tool._meta["openai/outputTemplate"] === tool._meta.ui.resourceUri));
   const resources = await (await handleMcp(rpc("resources/list"))).json() as { result: { resources: Array<{ uri: string; mimeType: string }> } }; assert.deepEqual(resources.result.resources, [{ uri: "ui://skills-factory/charts/inline-v2.html", name: "Interactive charts", description: "Self-contained HTML/CSS/SVG chart view for bar and line chart tools.", mimeType: "text/html;profile=mcp-app" }]);
   const ui = await (await handleMcp(rpc("resources/read", { uri: "ui://skills-factory/charts/inline-v2.html" }))).json() as { result: { contents: Array<{ mimeType: string; text: string; _meta?: { "openai/ui"?: { availableDisplayModes?: string[] } } }> } }; assert.equal(ui.result.contents[0].mimeType, "text/html;profile=mcp-app"); assert.match(ui.result.contents[0].text, /window\.openai\?\.toolOutput/); assert.match(ui.result.contents[0].text, /addEventListener\('click'/); assert.match(ui.result.contents[0].text, /<details class=\"table\">/); assert.doesNotMatch(ui.result.contents[0].text, /max-height:150px;overflow:auto/); assert.match(ui.result.contents[0].text, /requestDisplayMode\(\{mode:'inline'\}\)/); assert.deepEqual(ui.result.contents[0]._meta?.["openai/ui"]?.availableDisplayModes, ["inline"]); assert.doesNotMatch(JSON.stringify(ui.result.contents[0]), /fullscreen/);
@@ -278,6 +341,10 @@ test("MCP receipts bind content and distinguish routing, rendering and validatio
   assert.equal(tool_receipt.status, "SUCCESS");
   assert.equal(output.workflow_execution_state, "not_executed");
   assert.equal(output.outcome, null);
+  const scoreCall = await invoke("calculate_opportunity_scores", { as_of: "2026-10-27", rows: [{ candidate_id: "mcp-test", horizon: "1-3m", evidence: {} }] });
+  assert.equal(scoreCall.isError, false);
+  assert.equal((scoreCall.structuredContent.scores as Array<Record<string, unknown>>)[0].status, "NOT_SCORED");
+  assert.equal((scoreCall.structuredContent.tool_receipt as Record<string, unknown>).tool_name, "calculate_opportunity_scores");
   const chartArgs = { ...bar, expected_points: 3 };
   const chart = await invoke("render_bar_chart", chartArgs);
   const chartReceipt = chart.structuredContent.tool_receipt as Record<string, unknown>;
