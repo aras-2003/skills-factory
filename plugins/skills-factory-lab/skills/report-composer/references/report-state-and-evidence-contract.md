@@ -70,6 +70,15 @@ Every decision-relevant factual claim should resolve to one of:
 
 For `DERIVED` claims, preserve enough inputs/formula to reproduce the result.
 
+When the user asks for causes, patterns, findings or user behavior but supplies no
+observations, dataset or source, do not invent an observation to make the report
+feel evidence-based. State that the evidence was not supplied; classify the
+underlying factual claim as `UNKNOWN`. Any possible causes may be offered only
+as clearly labeled hypotheses or examples, never as observations, research
+findings, or facts about the user's product. Do not write phrases such as
+"available observation shows" unless the observation is actually present and
+its source/provenance is identified.
+
 A user-provided metric that cannot be reproduced from the visible inputs remains `USER_PROVIDED`; do not relabel it `DERIVED`.
 
 ## 7. Causal attribution gate

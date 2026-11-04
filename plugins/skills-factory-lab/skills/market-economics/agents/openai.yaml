@@ -1,0 +1,5 @@
+interface:
+  display_name: Market Economics
+  short_description: Reconcile explicit market sizing and customer-segment…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#75D8C1'
