@@ -131,3 +131,27 @@ The live Site was independently attested as verified, canonical Skills Factory/L
 | Billing permission edge | Kept role-restricted data distinct from an empty account; described mobile/desktop states, accessible status announcements, and bounded recovery guidance. | PASS for this isolated run. |
 
 These are isolated agent-host probes over the current Site package, not ordinary Chat UI acceptance runs. They do not satisfy the required three independent routing attempts, sentinels, unchanged-domain probes, ordinary Chat routing, or the full Iteration 06 acceptance matrix. The user-facing output was observed, but there are no signed semantic-response receipts; the runtime attestation and skill-load identity prove package provenance only. #423, #474, #480, and #483 remain open pending the full matrix and ordinary Chat verification.
+
+### #526 — current Site weekly-screen missing-history retest — 2026-11-04
+
+An isolated executor loaded the current `investment-opportunity-hunter` v0.5.1 (SHA-256 `fe9b8fc6d43af2a2a709186ccbaa6341b55fcab1eeddcdf593691abe81172d93`) and `market-opportunity-scan` v0.4.2 (SHA-256 `d821e6760ffb54340095530419da7b3bd9ce44ff8a1edb296e63c76cd3732129`) from verified Site MCP `677c0a553ac35f984267d9cfd6f27d7e4a5567dd`, canonical Skills Factory/Lab source `32a7ae592582c225627895accd366fa758fc6505`, Lab 1.38.435. The router selected `investment-opportunity-hunter` with `workflow_executed=false`; the loaded child instructions were then executed by the isolated host agent against a synthetic-only request.
+
+The host withheld shortlist ranking (`NOT_SCORED`), prior-run comparison (`CHANGE_COMPARISON_NOT_RUN`) and all 3/6/12-month outcomes (`OUTCOME_ATTRIBUTION_NOT_RUN`) because no dated universe, prior ranking, returns, matching benchmarks, or costs were supplied. It reported no canonical read or write and invented no data. This is a PASS for this isolated missing-history behavior on the current Site package only. Receipts are unsigned routing/load records and do not attest the semantic response.
+
+Historical point-in-time rankings and matched outcomes remain unavailable. This probe does not establish scoring quality on complete inputs, costs/coverage, 3/6/12-month attribution, or overlap resolution with #383. Keep #526 open in Verification.
+
+### #526 — current Site provisional scoring path — 2026-11-04
+
+Using only synthetic source-identified factor values (all quality `PROVISIONAL`, confidence 0.90, same `as_of` and normalization profile), `calculate_opportunity_scores` returned comparable rankings for two fictional candidates across `1-3m`, `6-12m`, and `>3y`. `SYNTH-A` scored 0.80 at rank 1 and `SYNTH-B` 0.50 at rank 2 for each horizon; each displayed gap was 0.300. All six rows remained `PROVISIONAL` / `REVIEW_PROVISIONAL`, with `score_is_probability=false`. No external source verification or data retrieval occurred. This demonstrates deterministic scoring/ranking and the provisional-action gate on the supplied fixture only.
+
+The unsigned tool receipt identifies Site source `677c0a553ac35f984267d9cfd6f27d7e4a5567dd`, input SHA-256 `79bd717eb42136d3c6d217878c1a2c4f74d1a1fa227abe684802f0fa3794f050`, and output SHA-256 `6dbd42b86a370d038af56b55497c8dc245fc63752d9118779a2241239528e571`. It proves deterministic tool execution over supplied factors, not truth or calibration of the factors. Cheapness separation and historical outcome attribution remain unverified; no historical ranks or outcomes were calculated.
+
+### #464 — current Site synthetic technical-structure probes — 2026-11-04
+
+On verified Site source `677c0a553ac35f984267d9cfd6f27d7e4a5567dd` / Lab 1.38.435, three isolated agents independently loaded `technical-structure` v0.1.0, packaged content SHA-256 `b369dd555364843a83b2c10d1748f3f645c79cd7d9cf7bf8010275ae7a389523`. The complete 11-bar synthetic fixture returned UPTREND_CONTINUATION, OPS 16 confirmed 2026-01-09 from `SYNTHETIC-XYZ-6`, OPD 9 confirmed 2026-01-11 from `SYNTHETIC-XYZ-8`, and direction score 100; it labeled the result synthetic and made no probability, forecast, or investment recommendation claim. The agent explicitly reported that the Site did not execute the bundled Python engine; its result was compared against the canonical engine and known-answer test locally, so this is isolated host response evidence, not Site engine execution.
+
+Two negative cases failed closed as required: an unconfirmed high without two right-side bars returned `UNKNOWN`, and raw prices crossing a split without adjustment metadata returned `UNKNOWN` for long-term trend, OPS, and OPD. Separate local validation of the current source engine passed **13/13** unit tests; engine file SHA-256 `03bca52a56aff5467339ed8c03b221b0ff7a349e16d23cb554c615cfc52385d4`.
+
+A separate current-Site chart-tool call accepted 11 synthetic close observations with OPS/OPD horizontal lines and returned `PAYLOAD_RENDERED` for three series. The receipt marked client display `NOT_OBSERVABLE`; the chart is categorical and explicitly does not interpret x-labels as dates. This does not demonstrate a user-visible historical price chart integrated with confirmed swing annotations.
+
+These probes cover only synthetic arithmetic/gating and the chart payload contract. No historical multi-instrument corpus, adjusted corporate-action data, market-calendar/gap/fake-breakout regimes, user-visible desktop/mobile visual, or walk-forward/out-of-sample comparison against costs and baselines was available. Keep #464 in Verification.
