@@ -21,9 +21,9 @@ const issuerFixture = () => ({ as_of: "2026-11-04", base_currency: "PLN", portfo
   { position_id: "xdwt-one", account_id: "acct-1", instrument_id: "XDWT", isin: "IE00B3WJKG14", share_class: "UCITS", instrument_type: "fund", weight_pct: 5, source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
   { position_id: "xdwt-two", account_id: "acct-2", instrument_id: "XDWT", isin: "IE00B3WJKG14", share_class: "UCITS", instrument_type: "fund", weight_pct: 5, source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
 ], fund_snapshots: [
-  { instrument_id: "SMH-UCITS", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:ucits", source_uri: "https://example.test/ucits", completeness: "PARTIAL", coverage_pct: 80, constituents: [{ issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K3059", share_class: "A", weight_pct: 10, factors: ["AI_HYPERSCALER", "SEMICONDUCTOR"] }, { issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 50, factors: ["SEMICONDUCTOR", "AI_HYPERSCALER"] }] },
-  { instrument_id: "SMH-US", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:us", source_uri: "https://example.test/us", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K1079", share_class: "C", weight_pct: 5, factors: ["AI_HYPERSCALER"] }, { issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 95, factors: ["SEMICONDUCTOR"] }] },
-  { instrument_id: "XDWT", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:xdwt", source_uri: "https://example.test/xdwt", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K3059", share_class: "A", weight_pct: 20, factors: ["AI_HYPERSCALER"] }, { issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 80, factors: ["SEMICONDUCTOR"] }] },
+  { instrument_id: "SMH-UCITS", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:ucits", source_uri: "https://example.test/ucits", completeness: "PARTIAL", coverage_pct: 80, constituents: [{ security_type: "issuer", issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K3059", share_class: "A", weight_pct: 10, factors: ["AI_HYPERSCALER", "SEMICONDUCTOR"] }, { security_type: "issuer", issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 50, factors: ["SEMICONDUCTOR", "AI_HYPERSCALER"] }] },
+  { instrument_id: "SMH-US", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:us", source_uri: "https://example.test/us", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ security_type: "issuer", issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K1079", share_class: "C", weight_pct: 5, factors: ["AI_HYPERSCALER"] }, { security_type: "issuer", issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 95, factors: ["SEMICONDUCTOR"] }] },
+  { instrument_id: "XDWT", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:xdwt", source_uri: "https://example.test/xdwt", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ security_type: "issuer", issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K3059", share_class: "A", weight_pct: 20, factors: ["AI_HYPERSCALER"] }, { security_type: "issuer", issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 80, factors: ["SEMICONDUCTOR"] }] },
 ] });
 test("Cloud Next facade matches the canonical cross-adapter MCP tool contract", () => {
   const contractPath = path.resolve(process.cwd(), "../../runtime/contracts/mcp-tools-v1.json");
@@ -156,7 +156,7 @@ test("issuer exposure aggregates explicit issuer IDs, keeps instrument/account b
   assert.equal(withScenarios.stress.aggregate_result, "NOT_SUMMED_OVERLAPPING_FACTORS");
   assert.equal(withScenarios.stress.results[0].impact_pct_points, -4.9);
   assert.equal(withScenarios.stress.results[0].probabilities, null);
-  assert.equal(withScenarios.pre_trade_preview.status, "PREVIEW_ONLY_CALLER_SUPPLIED_POST_TRADE_POSITIONS");
+  assert.equal(withScenarios.pre_trade_preview.status, "PARTIAL_PREVIEW");
   assert.equal(withScenarios.pre_trade_preview.trades_executed, false);
   assert.equal(withScenarios.pre_trade_preview.issuer_deltas.find((row: any) => row.issuer_id === "ALPHABET").delta_pct_points, 2);
   assert.ok(withScenarios.pre_trade_preview.factor_deltas.some((row: any) => row.factor === "AI_HYPERSCALER"));
@@ -215,6 +215,30 @@ test("issuer exposure compares only compatible complete prior snapshots", () => 
   const incompatible = callTool("calculate_issuer_exposure", current) as Record<string, any>;
   assert.equal(incompatible.snapshot_comparison.status, "NOT_COMPARABLE");
   assert.ok(incompatible.snapshot_comparison.reasons.includes("CURRENCY_MISMATCH"));
+});
+test("issuer exposure recursively expands fund-of-funds and preserves the source path", () => {
+  const input = issuerFixture();
+  input.positions = [{ ...input.positions[2], position_id: "nested-parent", instrument_id: "PARENT-FUND", weight_pct: 100 }];
+  input.fund_snapshots = [
+    { instrument_id: "PARENT-FUND", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:parent", source_uri: "https://example.test/parent", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ security_type: "fund", instrument_id: "CHILD-FUND", isin: "LU0000000001", share_class: "UCITS", weight_pct: 100, factors: [] }] },
+    { instrument_id: "CHILD-FUND", as_of: "2026-11-02", published_at: "2026-11-02", retrieved_at: "2026-11-04", source_id: "synthetic:child", source_uri: "https://example.test/child", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ security_type: "issuer", issuer_id: "NVIDIA", issuer_name: "NVIDIA Corporation", isin: "US67066G1040", share_class: "Common", weight_pct: 100, factors: ["SEMICONDUCTOR"] }] },
+  ];
+  const expanded = callTool("calculate_issuer_exposure", input) as Record<string, any>;
+  assert.equal(expanded.status, "COMPLETE");
+  assert.equal(expanded.issuers[0].issuer_id, "NVIDIA");
+  assert.deepEqual(expanded.issuers[0].weight_evidence[0].instrument_path, ["PARENT-FUND", "CHILD-FUND"]);
+  const cycle = structuredClone(input); cycle.fund_snapshots[1].constituents = [{ security_type: "fund", instrument_id: "PARENT-FUND", isin: "LU0000000002", share_class: "UCITS", weight_pct: 100, factors: [] }];
+  const blocked = callTool("calculate_issuer_exposure", cycle) as Record<string, any>;
+  assert.equal(blocked.status, "PARTIAL_MINIMUM");
+  assert.ok(blocked.decomposition_reasons.includes("NESTED_FUND_SNAPSHOT_MISSING_OR_CYCLE"));
+});
+test("issuer exposure marks older inputs stale by as-of date and rejects impossible retrieval provenance", () => {
+  const input = issuerFixture();
+  input.fund_snapshots.forEach(row => { row.published_at = "2026-11-02"; row.retrieved_at = "2026-11-03"; });
+  const stale = callTool("calculate_issuer_exposure", input) as Record<string, any>;
+  assert.equal(stale.funds.find((row: any) => row.instrument_id === "XDWT").freshness, "STALE_BY_DATE");
+  const invalid = issuerFixture(); invalid.fund_snapshots[0].retrieved_at = "2026-11-02";
+  assert.throws(() => callTool("calculate_issuer_exposure", invalid), /invalid or future provenance/);
 });
 test("issuer exposure is reachable through authenticated read-only MCP invocation", async () => {
   const response = await handleMcp(rpc("tools/call", { name: "calculate_issuer_exposure", arguments: issuerFixture() }, { "oai-authenticated-user-id": "synthetic-test-user" }));

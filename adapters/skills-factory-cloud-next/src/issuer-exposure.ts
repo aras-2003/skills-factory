@@ -14,7 +14,7 @@ export type IssuerExposureInput = {
   fund_snapshots: Array<{
     instrument_id: string; as_of: string; published_at: string; retrieved_at: string; source_id: string; source_uri: string;
     completeness: "COMPLETE" | "PARTIAL"; coverage_pct: number;
-    constituents: Array<{ issuer_id: string; issuer_name: string; isin: string; share_class: string; weight_pct: number; factors: string[] }>;
+    constituents: Array<{ security_type: "issuer" | "fund"; instrument_id?: string; issuer_id?: string; issuer_name?: string; isin: string; share_class: string; weight_pct: number; factors: string[] }>;
   }>;
   previous_snapshot?: { method: string; portfolio_id: string; base_currency: string; as_of: string; status: string; source_coverage_pct: number; decomposition_complete: boolean; issuers: Array<{ issuer_id: string; known_minimum_total_pct: number }> };
 };
@@ -44,8 +44,9 @@ export function calculateIssuerExposure(input: IssuerExposureInput): IssuerExpos
   const snapshots = new Map<string, IssuerExposureInput["fund_snapshots"][number]>();
   for (const s of input.fund_snapshots) {
     if (snapshots.has(s.instrument_id)) throw new Error(`duplicate fund snapshot: ${s.instrument_id}`);
-    if (!dateOk(s.as_of) || !dateOk(s.published_at) || !dateOk(s.retrieved_at) || s.as_of > input.as_of || s.published_at > input.as_of || s.retrieved_at > input.as_of || !/^https:\/\//.test(s.source_uri)) throw new Error("fund snapshot has invalid or future provenance date or source URI");
+    if (!dateOk(s.as_of) || !dateOk(s.published_at) || !dateOk(s.retrieved_at) || s.as_of > input.as_of || s.published_at > input.as_of || s.retrieved_at > input.as_of || s.retrieved_at < s.published_at || !/^https:\/\//.test(s.source_uri)) throw new Error("fund snapshot has invalid or future provenance date or source URI");
     if (s.coverage_pct < 0 || s.coverage_pct > 100 || s.constituents.some(c => c.weight_pct < 0 || c.weight_pct > 100)) throw new Error("weights and coverage_pct must be between 0 and 100");
+    if (s.constituents.some(c => c.security_type === "issuer" ? !c.issuer_id || !c.issuer_name : !c.instrument_id)) throw new Error("constituents require issuer identity or nested fund instrument_id according to security_type");
     if (s.completeness === "COMPLETE" && (s.coverage_pct !== 100 || Math.abs(s.constituents.reduce((sum, c) => sum + c.weight_pct, 0) - 100) > 1e-4)) throw new Error("COMPLETE fund snapshots require constituent weights and coverage to total 100%");
     if (s.constituents.reduce((sum, c) => sum + c.weight_pct, 0) > s.coverage_pct + 1e-6) throw new Error("constituent weights cannot exceed declared coverage");
     snapshots.set(s.instrument_id, s);
@@ -55,14 +56,37 @@ export function calculateIssuerExposure(input: IssuerExposureInput): IssuerExpos
     if (positionIds.has(p.position_id)) throw new Error(`duplicate position_id: ${p.position_id}`);
     positionIds.add(p.position_id);
     if (!p.position_id || !p.account_id || !p.instrument_id || !p.isin || !p.share_class || !p.source_id || !/^https:\/\//.test(p.source_uri)) throw new Error("positions require account, instrument, ISIN, share class and source identity");
-    if (!dateOk(p.published_at) || !dateOk(p.retrieved_at) || p.published_at > input.as_of || p.retrieved_at > input.as_of) throw new Error("position has invalid or future provenance date");
+    if (!dateOk(p.published_at) || !dateOk(p.retrieved_at) || p.published_at > input.as_of || p.retrieved_at > input.as_of || p.retrieved_at < p.published_at) throw new Error("position has invalid or future provenance date");
     if (p.weight_pct < 0 || p.weight_pct > 100) throw new Error("position weight_pct must be between 0 and 100");
     if (p.market_value_pln !== undefined && (!Number.isFinite(p.market_value_pln) || p.market_value_pln < 0)) throw new Error("market_value_pln must be finite and nonnegative");
+    if (p.market_value_pln !== undefined && input.portfolio_value_pln === undefined) throw new Error("market_value_pln requires portfolio_value_pln for reconciliation");
     if (input.portfolio_value_pln !== undefined && (p.market_value_pln === undefined || Math.abs(p.market_value_pln - input.portfolio_value_pln * p.weight_pct / 100) > Math.max(1, input.portfolio_value_pln * 0.0001))) throw new Error("market_value_pln must reconcile with weight_pct and portfolio_value_pln");
     positionWeightTotal += p.weight_pct;
     if (p.instrument_type === "equity" && (!p.issuer_id || !p.issuer_name)) throw new Error("direct equity positions require explicit issuer_id and issuer_name");
   }
   if (positionWeightTotal > 100 + 1e-6) throw new Error("portfolio position weights cannot exceed 100%");
+
+  const resolveFund = (fundId: string, scale: number, stack: string[] = []): { contributions: Array<{ issuer_id: string; issuer_name: string; weight_pct: number; factors: string[]; source_id: string; source_uri: string; instrument_id: string; isin: string; share_class: string; fund_path: string[]; as_of: string; published_at: string; retrieved_at: string }>; covered_weight_pct: number; unknown_weight_pct: number; complete: boolean; missing: boolean } => {
+    const snapshot = snapshots.get(fundId);
+    if (!snapshot || stack.includes(fundId)) return { contributions: [], covered_weight_pct: 0, unknown_weight_pct: scale, complete: false, missing: true };
+    const contributions: Array<{ issuer_id: string; issuer_name: string; weight_pct: number; factors: string[]; source_id: string; source_uri: string; instrument_id: string; isin: string; share_class: string; fund_path: string[]; as_of: string; published_at: string; retrieved_at: string }> = [];
+    let complete = snapshot.completeness === "COMPLETE";
+    let missing = false;
+    for (const constituent of snapshot.constituents) {
+      const weight = scale * constituent.weight_pct / 100;
+      if (constituent.security_type === "issuer") {
+        contributions.push({ issuer_id: constituent.issuer_id!, issuer_name: constituent.issuer_name!, weight_pct: weight, factors: constituent.factors, source_id: snapshot.source_id, source_uri: snapshot.source_uri, instrument_id: fundId, isin: constituent.isin, share_class: constituent.share_class, fund_path: [...stack, fundId], as_of: snapshot.as_of, published_at: snapshot.published_at, retrieved_at: snapshot.retrieved_at });
+      } else {
+        const nested = resolveFund(constituent.instrument_id!, weight, [...stack, fundId]);
+        contributions.push(...nested.contributions);
+        complete &&= nested.complete;
+        missing ||= nested.missing;
+      }
+    }
+    const mapped = contributions.reduce((sum, row) => sum + row.weight_pct, 0);
+    complete &&= Math.abs(mapped - scale) <= 1e-4;
+    return { contributions, covered_weight_pct: scale * snapshot.coverage_pct / 100, unknown_weight_pct: Math.max(0, scale - mapped), complete, missing };
+  };
 
   const issuerRows = new Map<string, { issuer_id: string; issuer_name: string; direct_weight_pct: number; lookthrough_min_pct: number; factors: Set<string>; sources: Set<string>; instruments: Set<string>; weight_evidence: Array<Record<string, unknown>> }>();
   const factorWeights = new Map<string, number>();
@@ -71,13 +95,13 @@ export function calculateIssuerExposure(input: IssuerExposureInput): IssuerExpos
   let decompositionComplete = Math.abs(positionWeightTotal - 100) <= 1e-6;
   const decompositionReasons = new Set<string>();
   if (!decompositionComplete) decompositionReasons.add("PORTFOLIO_POSITION_WEIGHT_UNDER_100");
-  const add = (issuerId: string, name: string, amount: number, kind: "direct" | "fund", factors: string[], source: string, uri: string, instrument: string, isin: string, shareClass: string, account: string, asOf: string, publishedAt: string, retrievedAt: string) => {
+  const add = (issuerId: string, name: string, amount: number, kind: "direct" | "fund", factors: string[], source: string, uri: string, instrument: string, isin: string, shareClass: string, account: string, asOf: string, publishedAt: string, retrievedAt: string, sourceInstrument = instrument, instrumentPath = [instrument]) => {
     const row = issuerRows.get(issuerId) ?? { issuer_id: issuerId, issuer_name: name, direct_weight_pct: 0, lookthrough_min_pct: 0, factors: new Set<string>(), sources: new Set<string>(), instruments: new Set<string>(), weight_evidence: [] };
     if (kind === "direct") row.direct_weight_pct += amount;
     else row.lookthrough_min_pct += amount;
     factors.forEach(factor => factorWeights.set(factor, (factorWeights.get(factor) ?? 0) + amount));
-    row.weight_evidence.push({ contribution_pct: pct(amount), basis: kind, account_id: account, instrument_id: instrument, isin, share_class: shareClass, as_of: asOf, published_at: publishedAt, retrieved_at: retrievedAt, freshness: input.as_of > retrievedAt ? "STALE_BY_DATE" : "CURRENT_AS_OF_DATE", source_id: source, source_uri: uri });
-    factors.forEach(f => row.factors.add(f)); row.sources.add(source); row.instruments.add(instrument); issuerRows.set(issuerId, row);
+    row.weight_evidence.push({ contribution_pct: pct(amount), basis: kind, account_id: account, instrument_id: instrument, source_instrument_id: sourceInstrument, instrument_path: instrumentPath, isin, share_class: shareClass, as_of: asOf, published_at: publishedAt, retrieved_at: retrievedAt, freshness: input.as_of > retrievedAt ? "STALE_BY_DATE" : "CURRENT_AS_OF_DATE", source_id: source, source_uri: uri });
+    factors.forEach(f => row.factors.add(f)); row.sources.add(source); row.instruments.add(instrument); row.instruments.add(sourceInstrument); issuerRows.set(issuerId, row);
   };
 
   for (const p of input.positions) {
@@ -91,12 +115,14 @@ export function calculateIssuerExposure(input: IssuerExposureInput): IssuerExpos
     const partial = snapshot.completeness !== "COMPLETE";
     if (partial) decompositionReasons.add("FUND_SNAPSHOT_PARTIAL");
     const covered = p.weight_pct * snapshot.coverage_pct / 100;
-    const mappedConstituentPct = snapshot.constituents.reduce((sum, c) => sum + c.weight_pct, 0);
-    const unmappedInCoveredPct = Math.max(0, snapshot.coverage_pct - mappedConstituentPct);
+    const resolved = resolveFund(p.instrument_id, p.weight_pct);
     portfolioCoverage += covered;
-    decompositionComplete &&= !partial;
-    for (const c of snapshot.constituents) add(c.issuer_id, c.issuer_name, p.weight_pct * c.weight_pct / 100, "fund", c.factors, snapshot.source_id, snapshot.source_uri, p.instrument_id, c.isin, c.share_class, p.account_id, snapshot.as_of, snapshot.published_at, snapshot.retrieved_at);
-    fundRows.push({ instrument_id: p.instrument_id, account_id: p.account_id, isin: p.isin, share_class: p.share_class, market_value_pln: p.market_value_pln ?? null, source_id: snapshot.source_id, source_uri: snapshot.source_uri, source_as_of: snapshot.as_of, published_at: snapshot.published_at, retrieved_at: snapshot.retrieved_at, freshness: input.as_of > snapshot.retrieved_at ? "STALE_BY_DATE" : "CURRENT_AS_OF_DATE", source_coverage_pct: snapshot.coverage_pct, decomposition: snapshot.completeness, covered_portfolio_weight_pct: pct(covered), unmapped_in_covered_portfolio_weight_pct: pct(p.weight_pct * unmappedInCoveredPct / 100), unknown_weight_pct: pct(p.weight_pct * (100 - mappedConstituentPct) / 100) });
+    decompositionComplete &&= resolved.complete;
+    if (!resolved.complete && !partial) decompositionReasons.add("NESTED_FUND_LOOKTHROUGH_INCOMPLETE");
+    if (resolved.missing) decompositionReasons.add("NESTED_FUND_SNAPSHOT_MISSING_OR_CYCLE");
+    for (const c of resolved.contributions) add(c.issuer_id, c.issuer_name, c.weight_pct, "fund", c.factors, c.source_id, c.source_uri, p.instrument_id, c.isin, c.share_class, p.account_id, c.as_of, c.published_at, c.retrieved_at, c.instrument_id, c.fund_path);
+    const mapped = resolved.contributions.reduce((sum, row) => sum + row.weight_pct, 0);
+    fundRows.push({ instrument_id: p.instrument_id, account_id: p.account_id, isin: p.isin, share_class: p.share_class, market_value_pln: p.market_value_pln ?? null, source_id: snapshot.source_id, source_uri: snapshot.source_uri, source_as_of: snapshot.as_of, published_at: snapshot.published_at, retrieved_at: snapshot.retrieved_at, freshness: input.as_of > snapshot.retrieved_at ? "STALE_BY_DATE" : "CURRENT_AS_OF_DATE", source_coverage_pct: snapshot.coverage_pct, decomposition: resolved.complete ? "COMPLETE" : partial ? "PARTIAL" : "INCOMPLETE_NESTED", covered_portfolio_weight_pct: pct(covered), unmapped_in_covered_portfolio_weight_pct: pct(Math.max(0, covered - mapped)), unknown_weight_pct: pct(resolved.unknown_weight_pct) });
   }
 
   const issuerList = [...issuerRows.values()].map(r => ({ issuer_id: r.issuer_id, issuer_name: r.issuer_name, direct_weight_pct: pct(r.direct_weight_pct), lookthrough_min_pct: pct(r.lookthrough_min_pct), known_minimum_total_pct: pct(r.direct_weight_pct + r.lookthrough_min_pct), factors: [...r.factors].sort(), source_ids: [...r.sources].sort(), instrument_ids: [...r.instruments].sort(), weight_evidence: r.weight_evidence })).sort((a, b) => b.known_minimum_total_pct - a.known_minimum_total_pct || a.issuer_id.localeCompare(b.issuer_id));
@@ -106,11 +132,12 @@ export function calculateIssuerExposure(input: IssuerExposureInput): IssuerExpos
     const a = snapshots.get(etfs[i].instrument_id), b = snapshots.get(etfs[j].instrument_id);
     if (!a || !b) { overlap.push({ instrument_a: etfs[i].instrument_id, instrument_b: etfs[j].instrument_id, status: "NOT_COMPUTED_MISSING_SOURCE" }); continue; }
     const am = new Map<string, number>(), bm = new Map<string, number>();
-    for (const c of a.constituents) am.set(c.issuer_id, (am.get(c.issuer_id) ?? 0) + c.weight_pct);
-    for (const c of b.constituents) bm.set(c.issuer_id, (bm.get(c.issuer_id) ?? 0) + c.weight_pct);
+    const resolvedA = resolveFund(etfs[i].instrument_id, 100), resolvedB = resolveFund(etfs[j].instrument_id, 100);
+    for (const c of resolvedA.contributions) am.set(c.issuer_id, (am.get(c.issuer_id) ?? 0) + c.weight_pct);
+    for (const c of resolvedB.contributions) bm.set(c.issuer_id, (bm.get(c.issuer_id) ?? 0) + c.weight_pct);
     const shared = [...am.keys()].filter(id => bm.has(id));
     const sharedMin = shared.reduce((n, id) => n + Math.min(am.get(id)!, bm.get(id)!), 0);
-    overlap.push({ instrument_a: etfs[i].instrument_id, instrument_b: etfs[j].instrument_id, status: a.completeness === "COMPLETE" && b.completeness === "COMPLETE" ? "COMPLETE" : "PARTIAL_MINIMUM", shared_issuer_count: shared.length, shared_weight_pct_of_fund_a_min: pct(sharedMin), shared_weight_pct_of_fund_b_min: pct(sharedMin), shared_issuer_ids: shared.sort() });
+    overlap.push({ instrument_a: etfs[i].instrument_id, instrument_b: etfs[j].instrument_id, status: resolvedA.complete && resolvedB.complete ? "COMPLETE" : "PARTIAL_MINIMUM", shared_issuer_count: shared.length, shared_weight_pct_of_fund_a_min: pct(sharedMin), shared_weight_pct_of_fund_b_min: pct(sharedMin), shared_issuer_ids: shared.sort() });
   }
   const comparison = !input.previous_snapshot ? { status: "NOT_REQUESTED", deltas: [] } : (() => {
     const previous = input.previous_snapshot!;
@@ -145,7 +172,7 @@ export function calculateIssuerExposure(input: IssuerExposureInput): IssuerExpos
     const currentFactors = new Map([...factorWeights].map(([factor, exposure]) => [factor, exposure]));
     const scenarioFactors = new Map(scenario.overlapping_factor_views.map(row => [row.factor, row.exposure_pct]));
     const factorIds = [...new Set([...currentFactors.keys(), ...scenarioFactors.keys()])].sort();
-    return { status: "PREVIEW_ONLY_CALLER_SUPPLIED_POST_TRADE_POSITIONS", scenario_status: scenario.status, issuer_deltas: issuerIds.map(issuer_id => { const delta = (scenarioById.get(issuer_id) ?? 0) - (currentById.get(issuer_id) ?? 0); return { issuer_id, current_weight_pct: pct(currentById.get(issuer_id) ?? 0), scenario_weight_pct: pct(scenarioById.get(issuer_id) ?? 0), delta_pct_points: pct(delta), delta_pln: input.portfolio_value_pln === undefined ? null : pct(delta * input.portfolio_value_pln / 100) }; }), factor_deltas: factorIds.map(factor => ({ factor, current_exposure_pct: pct(currentFactors.get(factor) ?? 0), scenario_exposure_pct: pct(scenarioFactors.get(factor) ?? 0), delta_pct_points: pct((scenarioFactors.get(factor) ?? 0) - (currentFactors.get(factor) ?? 0)), overlapping_non_additive: true })), current_concentration: concentrationSummary(issuerList, decompositionComplete), scenario_concentration: scenario.concentration, position_review_threshold_pct: 8, scenario_issuers_over_review_threshold: scenario.issuers.filter(row => row.known_minimum_total_pct > 8).map(row => row.issuer_id), threshold_is_review_only: true, trades_executed: false };
+    return { status: decompositionComplete && scenario.decomposition_complete ? "COMPARABLE_PREVIEW" : "PARTIAL_PREVIEW", preview_basis: "CALLER_SUPPLIED_POST_TRADE_POSITIONS", scenario_status: scenario.status, issuer_deltas: issuerIds.map(issuer_id => { const delta = (scenarioById.get(issuer_id) ?? 0) - (currentById.get(issuer_id) ?? 0); return { issuer_id, current_weight_pct: pct(currentById.get(issuer_id) ?? 0), scenario_weight_pct: pct(scenarioById.get(issuer_id) ?? 0), delta_pct_points: pct(delta), delta_pln: input.portfolio_value_pln === undefined ? null : pct(delta * input.portfolio_value_pln / 100) }; }), factor_deltas: factorIds.map(factor => ({ factor, current_exposure_pct: pct(currentFactors.get(factor) ?? 0), scenario_exposure_pct: pct(scenarioFactors.get(factor) ?? 0), delta_pct_points: pct((scenarioFactors.get(factor) ?? 0) - (currentFactors.get(factor) ?? 0)), overlapping_non_additive: true })), current_concentration: concentrationSummary(issuerList, decompositionComplete), scenario_concentration: scenario.concentration, position_review_threshold_pct: 8, scenario_issuers_over_review_threshold: scenario.issuers.filter(row => row.known_minimum_total_pct > 8).map(row => row.issuer_id), threshold_is_review_only: true, threshold_check_is_minimum_only: !scenario.decomposition_complete, trades_executed: false };
   })() : { status: "NOT_REQUESTED" };
   const result = {
     method: "issuer-lookthrough-v1",
