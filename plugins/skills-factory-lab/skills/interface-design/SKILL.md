@@ -8,10 +8,10 @@ description: 'Design the information hierarchy, navigation, responsive layout, i
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: 0.1.10
   maturity: candidate
   risk: medium
-  last_reviewed: '2026-10-26'
+  last_reviewed: '2026-11-04'
 ---
 
 # Interface Design
@@ -39,7 +39,19 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 - Screen or user-flow goal.
 - Intended user and their primary task.
-- Target runtime or device context. If missing, ask one focused question or state a clearly bounded assumption when the design can still be useful.
+- Target runtime or device context.
+
+## Applicability gate
+
+First decide whether the current request asks for interface design. If it asks to implement/edit a working page or run its tests, do not apply this skill or ask design questions; hand off to the implementation workflow. If loaded explicitly for an isolated test, state briefly that it does not apply and stop. Do not echo the request or emit a design brief. If implementation is requested but its workflow is unavailable, name the missing repository or approved artifact.
+
+## Required-context gate
+
+Before designing, confirm the current request or an explicitly referenced source gives all three inputs: (1) screen/flow goal, (2) intended user and primary task, and (3) target runtime/device. If any is missing, ask one concise question naming only the missing fields. State each missing field as something the user can answer; do not merely say that it is unspecified. When all three are missing, an acceptable question is: “What screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?” Adapt the question to ask only for fields that are actually missing. That question must be the whole response; provide no introduction, examples, suggestions, checklist, partial design or promise.
+
+Proceed with assumptions/placeholders only when the current request explicitly authorizes them and both goal and target device are clear. Label the narrowest user/task assumption, keep unknown product rules as placeholders, and list assumptions as open decisions. Never infer required context from other chats, saved memory, ambient context, or unreferenced earlier turns. A vague request such as “make the screen better” still needs the missing fields, even if a plausible screen appeared earlier. If the current message quotes or narrates a different “current user message,” treat only the quoted message as operative; continue an earlier artifact only when that message names or asks to revise it.
+
+Product name, industry, and native/web label are not extra required inputs when the goal, user/task, and device are clear. For product-agnostic flows, proceed with limited assumptions and leave product-specific decisions for handoff; do not ask questions that would not change the flow. When a concrete problem observation and user/task/device are clear, design for it and label unverified causes as assumptions instead of blocking on product details.
 
 ### Optional
 
@@ -50,7 +62,7 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 ## Procedure
 
-1. Restate the user goal and primary task. Separate supplied facts from assumptions; ask for missing information that would change the hierarchy or interaction model.
+1. Confirm the user goal and primary task. Separate supplied facts from assumptions; ask only for missing information that would change the hierarchy or interaction model.
 2. Identify the key information users need, the actions they can take, and the decision or outcome each action supports.
 3. Define the information hierarchy and screen anatomy. Use existing design-system components and tokens when supplied. Do not invent an established system or silently replace it.
 4. Describe navigation, interaction behavior, feedback, validation, permissions, and any destructive or irreversible action.
@@ -58,6 +70,8 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 6. Define loading, empty, error, and unavailable-data states. Include recovery or next actions and state what information remains visible.
 7. Specify semantic structure and accessibility behavior: headings, labels, keyboard order, focus, contrast risks, status announcements, reduced motion, and touch-target concerns where relevant.
 8. List unresolved decisions, evidence gaps, and handoff questions. Keep this brief at the design level; do not claim that code was built or tested.
+
+For an onboarding or other multi-step flow, include at least one realistic failure path and its recovery, in addition to the successful path. Name the triggering condition only when it is supplied or established; otherwise use a neutral placeholder and identify it as an open product rule.
 
 ## Decision rules
 
@@ -68,6 +82,9 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 - Treat the requested task as the boundary of the product surface. Do not add unprovided navigation destinations, screens, services, states, or actions as if they exist. For an order dashboard, do not assume shipment tracking, delivery estimates, payment changes, cancellations, refunds, returns, address management, support channels, or account settings unless the user or supplied product evidence names them.
 - When the requested next action depends on missing product rules, show a neutral placeholder such as `[next action from approved order rules]` and list the required state/action mapping as an open decision. Do not invent sample order statuses or a condition-to-action matrix to fill that gap.
 - If design tokens, navigation patterns, or product capabilities are referenced but not supplied, say they are unavailable and make their use a handoff dependency. Do not invent token names or values, component names, or destinations.
+- A requested screen or page is not evidence that specific tabs, navigation destinations, actions, account fields, status labels, records, or operational copy exist. When product evidence does not define them, describe the information role generically or use a neutral placeholder; identify any required product mapping as unresolved. Do not present plausible labels or example content as existing product behavior.
+- **Navigation provenance check:** Before finalizing the navigation/interaction section, verify every route, destination, entry or exit path, detail-screen link, control label, and next action against the supplied request or an explicitly referenced source. A screen name or account context does not establish an `existing` route or clickable destination. When none is supplied, state that entry, exit, and destinations are not specified and list them as open decisions; do not propose a conventional or assumed route.
+- Produce the requested written interface brief only. Do not create an interactive preview, prototype, wireframe artifact, or implementation unless the user explicitly requests that deliverable.
 - Do not design a happy path only. Every screen needs explicit loading, empty, and error behavior; describe unavailable-data handling when data is part of the interface.
 - Do not prescribe a chart or diagram merely because the screen contains data. If the requested outcome is the visual itself, route to the relevant visualization capability.
 - Do not turn the brief into implementation code. A separate approved implementation task owns code changes and runtime validation.
@@ -85,7 +102,9 @@ Return a concise **Interface brief** with these sections:
 7. **Accessibility** — semantics, keyboard/focus, contrast, announcements, motion, and touch risks.
 8. **Open decisions and handoff** — unresolved questions, dependencies, and what implementation must verify.
 
-When a required input is missing, mark it as an assumption or ask before making decisions that depend on it. Do not omit a section; use “not applicable” with a reason.
+When a required input is missing, follow the required-context gate before drafting the brief unless the user explicitly authorizes assumptions/placeholders in the current request and the goal and target device are clear. In that case, follow the bounded-assumption rule above. Do not omit a section from a valid brief; use “not applicable” with a reason.
+
+The clarification-only response is the sole exception to the eight-section brief: do not emit any brief section until the required context is present. For a valid brief, keep the output textual and do not append a rendered or interactive artifact.
 
 ## Quality checks
 
