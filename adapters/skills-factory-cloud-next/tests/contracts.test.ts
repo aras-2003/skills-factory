@@ -13,6 +13,18 @@ const chartCall = (name: "render_bar_chart" | "render_line_chart", args: Record<
   ? callTool("render_bar_chart", { ...args, expected_points: (args.labels as string[]).length })
   : callTool("render_line_chart", { ...args, expected_x_labels: (args.x_labels as string[]).length, expected_series: (args.series_names as string[]).length, expected_points_per_series: (args.x_labels as string[]).length });
 const rpc = (method: string, params: unknown = {}, headers: Record<string, string> = {}) => new Request("https://skills-factory-cloud.arek2003.chatgpt.site/mcp", { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+const issuerFixture = () => ({ as_of: "2026-11-04", base_currency: "PLN", portfolio_id: "synthetic-portfolio", positions: [
+  { position_id: "direct-a", account_id: "acct-1", instrument_id: "GOOGL-A", isin: "US02079K3059", share_class: "A", instrument_type: "equity", weight_pct: 4, issuer_id: "ALPHABET", issuer_name: "Alphabet Inc.", factors: ["AI_HYPERSCALER"], source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
+  { position_id: "direct-c", account_id: "acct-2", instrument_id: "GOOG-C", isin: "US02079K1079", share_class: "C", instrument_type: "equity", weight_pct: 6, issuer_id: "ALPHABET", issuer_name: "Alphabet Inc.", factors: ["AI_HYPERSCALER"], source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
+  { position_id: "ucits", account_id: "acct-1", instrument_id: "SMH-UCITS", isin: "IE00BMC38736", share_class: "UCITS", instrument_type: "fund", weight_pct: 20, source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
+  { position_id: "us", account_id: "acct-1", instrument_id: "SMH-US", isin: "US92189F6768", share_class: "US", instrument_type: "fund", weight_pct: 10, source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
+  { position_id: "xdwt-one", account_id: "acct-1", instrument_id: "XDWT", isin: "IE00B3WJKG14", share_class: "UCITS", instrument_type: "fund", weight_pct: 5, source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
+  { position_id: "xdwt-two", account_id: "acct-2", instrument_id: "XDWT", isin: "IE00B3WJKG14", share_class: "UCITS", instrument_type: "fund", weight_pct: 5, source_id: "synthetic:positions", source_uri: "https://example.test/positions", published_at: "2026-11-04", retrieved_at: "2026-11-04" },
+], fund_snapshots: [
+  { instrument_id: "SMH-UCITS", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:ucits", source_uri: "https://example.test/ucits", completeness: "PARTIAL", coverage_pct: 80, constituents: [{ issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K3059", share_class: "A", weight_pct: 10, factors: ["AI_HYPERSCALER", "SEMICONDUCTOR"] }, { issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 50, factors: ["SEMICONDUCTOR", "AI_HYPERSCALER"] }] },
+  { instrument_id: "SMH-US", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:us", source_uri: "https://example.test/us", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K1079", share_class: "C", weight_pct: 5, factors: ["AI_HYPERSCALER"] }, { issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 95, factors: ["SEMICONDUCTOR"] }] },
+  { instrument_id: "XDWT", as_of: "2026-11-03", published_at: "2026-11-03", retrieved_at: "2026-11-04", source_id: "synthetic:xdwt", source_uri: "https://example.test/xdwt", completeness: "COMPLETE", coverage_pct: 100, constituents: [{ issuer_id: "ALPHABET", issuer_name: "Alphabet", isin: "US02079K3059", share_class: "A", weight_pct: 20, factors: ["AI_HYPERSCALER"] }, { issuer_id: "NVIDIA", issuer_name: "NVIDIA", isin: "US67066G1040", share_class: "Common", weight_pct: 80, factors: ["SEMICONDUCTOR"] }] },
+] });
 test("Cloud Next facade matches the canonical cross-adapter MCP tool contract", () => {
   const contractPath = path.resolve(process.cwd(), "../../runtime/contracts/mcp-tools-v1.json");
   const contract = JSON.parse(readFileSync(contractPath, "utf8")) as { tools: Record<string, string[]> };
@@ -113,6 +125,105 @@ test("authoring serves missing-input and conflicting-source clarification rules"
   assert.match(loaded.instructions, /ask for material missing details instead of inventing/);
   assert.match(loaded.instructions, /surface the conflict and pause dependent work until resolved/);
   assert.match(loaded.instructions, /Make assumptions only when authorized/);
+});
+test("issuer exposure aggregates explicit issuer IDs, keeps instrument/account bridge and blocks partial concentration", () => {
+  const input = issuerFixture();
+  const result = callTool("calculate_issuer_exposure", input) as Record<string, any>;
+  const alphabet = result.issuers.find((row: any) => row.issuer_id === "ALPHABET");
+  assert.equal(result.status, "PARTIAL_MINIMUM");
+  assert.ok(result.decomposition_reasons.includes("PORTFOLIO_POSITION_WEIGHT_UNDER_100"));
+  assert.ok(result.decomposition_reasons.includes("FUND_SNAPSHOT_PARTIAL"));
+  assert.equal(result.source_coverage_pct, 46);
+  assert.equal(alphabet.direct_weight_pct, 10);
+  assert.equal(alphabet.lookthrough_min_pct, 4.5);
+  assert.equal(alphabet.known_minimum_total_pct, 14.5);
+  assert.equal(alphabet.weight_evidence.length, 6);
+  assert.equal(result.funds.filter((row: any) => row.instrument_id === "XDWT").length, 2);
+  const ucitsFund = result.funds.find((row: any) => row.instrument_id === "SMH-UCITS");
+  assert.equal(ucitsFund.covered_portfolio_weight_pct, 16);
+  assert.equal(ucitsFund.unmapped_in_covered_portfolio_weight_pct, 4);
+  assert.equal(ucitsFund.unknown_weight_pct, 8);
+  assert.equal(result.funds.filter((row: any) => row.instrument_id.startsWith("SMH-")).length, 2);
+  assert.equal(result.concentration.completeness, "BLOCKED_INCOMPLETE_ISSUER_DECOMPOSITION");
+  assert.equal(result.concentration.hhi_pct_squared, null);
+  assert.equal(result.overlapping_factor_views.find((row: any) => row.factor === "AI_HYPERSCALER").exposure_pct, 24.5);
+  assert.deepEqual(result.stress.results, []);
+  const scenarios = structuredClone(input) as any;
+  scenarios.factor_shocks = [{ factor: "AI_HYPERSCALER", shock_pct: -20, scenario_id: "synthetic-ai-down" }, { factor: "SEMICONDUCTOR", shock_pct: -30, scenario_id: "synthetic-semis-down" }];
+  scenarios.scenario_positions = structuredClone(input.positions);
+  scenarios.scenario_positions[0].weight_pct = 6;
+  const withScenarios = callTool("calculate_issuer_exposure", scenarios) as Record<string, any>;
+  assert.equal(withScenarios.stress.aggregate_result, "NOT_SUMMED_OVERLAPPING_FACTORS");
+  assert.equal(withScenarios.stress.results[0].impact_pct_points, -4.9);
+  assert.equal(withScenarios.stress.results[0].probabilities, null);
+  assert.equal(withScenarios.pre_trade_preview.status, "PREVIEW_ONLY_CALLER_SUPPLIED_POST_TRADE_POSITIONS");
+  assert.equal(withScenarios.pre_trade_preview.trades_executed, false);
+  assert.equal(withScenarios.pre_trade_preview.issuer_deltas.find((row: any) => row.issuer_id === "ALPHABET").delta_pct_points, 2);
+  assert.ok(withScenarios.pre_trade_preview.factor_deltas.some((row: any) => row.factor === "AI_HYPERSCALER"));
+  assert.equal(withScenarios.pre_trade_preview.position_review_threshold_pct, 8);
+  assert.equal(withScenarios.pre_trade_preview.threshold_is_review_only, true);
+  const pln = structuredClone(input) as any; pln.portfolio_value_pln = 100000; pln.positions.forEach((row: any) => { row.market_value_pln = row.weight_pct * 1000; });
+  const withPln = callTool("calculate_issuer_exposure", pln) as Record<string, any>;
+  assert.equal(withPln.issuers.find((row: any) => row.issuer_id === "ALPHABET").known_minimum_pln, 14500);
+  pln.positions[0].market_value_pln = 4015;
+  assert.throws(() => callTool("calculate_issuer_exposure", pln), /must reconcile/);
+  assert.deepEqual(result.funds.filter((row: any) => row.instrument_id.startsWith("SMH-")).map((row: any) => row.instrument_id), ["SMH-UCITS", "SMH-US"]);
+});
+test("issuer exposure rejects future source dates, duplicate positions and unsupported sector-like rows", () => {
+  const input = issuerFixture();
+  const future = structuredClone(input); future.fund_snapshots[0].retrieved_at = "2026-11-05";
+  assert.throws(() => callTool("calculate_issuer_exposure", future), /invalid or future provenance/);
+  const duplicate = structuredClone(input); duplicate.positions[1].position_id = duplicate.positions[0].position_id;
+  assert.throws(() => callTool("calculate_issuer_exposure", duplicate), /duplicate position_id/);
+  const extra = structuredClone(input) as any; extra.fund_snapshots[0].constituents.push({ exposure_type: "sector", sector: "Technology", weight_pct: 20 });
+  assert.throws(() => callTool("calculate_issuer_exposure", extra));
+  const totalOver = structuredClone(input); totalOver.positions[0].weight_pct = 60;
+  assert.throws(() => callTool("calculate_issuer_exposure", totalOver), /cannot exceed 100%/);
+  const completeMismatch = structuredClone(input); completeMismatch.fund_snapshots[0].completeness = "COMPLETE";
+  assert.throws(() => callTool("calculate_issuer_exposure", completeMismatch), /require constituent weights and coverage to total 100%/);
+});
+test("issuer exposure calculates full concentration only for a complete decomposition and marks missing funds", () => {
+  const input = issuerFixture();
+  [10, 10, 30, 20, 15, 15].forEach((weight, index) => { input.positions[index].weight_pct = weight; });
+  input.fund_snapshots[0].completeness = "COMPLETE";
+  input.fund_snapshots[0].coverage_pct = 100;
+  input.fund_snapshots[0].constituents[1].weight_pct = 90;
+  const complete = callTool("calculate_issuer_exposure", input) as Record<string, any>;
+  assert.equal(complete.status, "COMPLETE");
+  assert.equal(complete.concentration.completeness, "COMPLETE_ISSUER_DECOMPOSITION");
+  assert.equal(typeof complete.concentration.effective_issuer_count, "number");
+  const missing = issuerFixture();
+  missing.fund_snapshots = missing.fund_snapshots.filter(row => row.instrument_id !== "SMH-US");
+  const partial = callTool("calculate_issuer_exposure", missing) as Record<string, any>;
+  assert.equal(partial.funds.find((row: any) => row.instrument_id === "SMH-US").decomposition, "MISSING");
+  assert.ok(partial.etf_overlap.some((row: any) => row.status === "NOT_COMPUTED_MISSING_SOURCE"));
+  assert.equal(partial.concentration.hhi_pct_squared, null);
+});
+test("issuer exposure compares only compatible complete prior snapshots", () => {
+  const input = issuerFixture();
+  [10, 10, 30, 20, 15, 15].forEach((weight, index) => { input.positions[index].weight_pct = weight; });
+  input.fund_snapshots[0].completeness = "COMPLETE";
+  input.fund_snapshots[0].coverage_pct = 100;
+  input.fund_snapshots[0].constituents[1].weight_pct = 90;
+  const priorResult = callTool("calculate_issuer_exposure", input) as Record<string, any>;
+  const prior = { method: priorResult.method, portfolio_id: input.portfolio_id, base_currency: input.base_currency, as_of: "2026-11-03", status: "COMPLETE", source_coverage_pct: 100, decomposition_complete: true, issuers: priorResult.issuers.map((row: any) => ({ issuer_id: row.issuer_id, known_minimum_total_pct: row.known_minimum_total_pct })) };
+  const current = structuredClone(input); current.previous_snapshot = prior;
+  const compared = callTool("calculate_issuer_exposure", current) as Record<string, any>;
+  assert.equal(compared.snapshot_comparison.status, "COMPARABLE");
+  assert.ok(compared.snapshot_comparison.deltas.every((row: any) => row.delta_pct_points === 0));
+  current.previous_snapshot.base_currency = "USD";
+  const incompatible = callTool("calculate_issuer_exposure", current) as Record<string, any>;
+  assert.equal(incompatible.snapshot_comparison.status, "NOT_COMPARABLE");
+  assert.ok(incompatible.snapshot_comparison.reasons.includes("CURRENCY_MISMATCH"));
+});
+test("issuer exposure is reachable through authenticated read-only MCP invocation", async () => {
+  const response = await handleMcp(rpc("tools/call", { name: "calculate_issuer_exposure", arguments: issuerFixture() }, { "oai-authenticated-user-id": "synthetic-test-user" }));
+  assert.equal(response.status, 200);
+  const payload = await response.json() as { result: { structuredContent: Record<string, any>; isError: boolean } };
+  assert.equal(payload.result.isError, false);
+  assert.equal(payload.result.structuredContent.status, "PARTIAL_MINIMUM");
+  assert.equal(payload.result.structuredContent.tool_receipt.tool_name, "calculate_issuer_exposure");
+  assert.equal(payload.result.structuredContent.tool_receipt.execution_state, "executed");
 });
 test("authoring serves source-artifact and evidence requirements", () => {
   const loaded = callTool("load_skill", { skill_name: "skill-authoring" });
@@ -234,7 +345,7 @@ test("escape SVG injection and external resources", () => {
 });
 test("MCP initialize, discover parity tools, authenticate and call", async () => {
   const init = await (await handleMcp(rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } }))).json() as { result: { protocolVersion: string; serverInfo: { version: string }; instructions: string; capabilities: { resources?: unknown } } }; assert.equal(init.result.protocolVersion, "2025-06-18"); assert.equal(init.result.serverInfo.version, "site-mcp-v2"); assert.match(init.result.instructions, /call route_investment_request before analysis/); assert.match(init.result.instructions, /load_skill for the exact returned child_workflow/); assert.ok(init.result.capabilities.resources);
-  const list = await (await handleMcp(rpc("tools/list"))).json() as { result: { tools: Array<{ name: string; _meta?: { ui?: { resourceUri?: string }; "openai/outputTemplate"?: string } }> } }; assert.equal(list.result.tools.length, 7);
+  const list = await (await handleMcp(rpc("tools/list"))).json() as { result: { tools: Array<{ name: string; _meta?: { ui?: { resourceUri?: string }; "openai/outputTemplate"?: string } }> } }; assert.equal(list.result.tools.length, 8);
   const chartTools = list.result.tools.filter((tool) => tool.name.startsWith("render_")); assert.equal(chartTools.length, 2); assert.ok(chartTools.every((tool) => tool._meta?.ui?.resourceUri === "ui://skills-factory/charts/inline-v2.html" && tool._meta["openai/outputTemplate"] === tool._meta.ui.resourceUri));
   const resources = await (await handleMcp(rpc("resources/list"))).json() as { result: { resources: Array<{ uri: string; mimeType: string }> } }; assert.deepEqual(resources.result.resources, [{ uri: "ui://skills-factory/charts/inline-v2.html", name: "Interactive charts", description: "Self-contained HTML/CSS/SVG chart view for bar and line chart tools.", mimeType: "text/html;profile=mcp-app" }]);
   const ui = await (await handleMcp(rpc("resources/read", { uri: "ui://skills-factory/charts/inline-v2.html" }))).json() as { result: { contents: Array<{ mimeType: string; text: string; _meta?: { "openai/ui"?: { availableDisplayModes?: string[] } } }> } }; assert.equal(ui.result.contents[0].mimeType, "text/html;profile=mcp-app"); assert.match(ui.result.contents[0].text, /window\.openai\?\.toolOutput/); assert.match(ui.result.contents[0].text, /addEventListener\('click'/); assert.match(ui.result.contents[0].text, /<details class=\"table\">/); assert.doesNotMatch(ui.result.contents[0].text, /max-height:150px;overflow:auto/); assert.match(ui.result.contents[0].text, /requestDisplayMode\(\{mode:'inline'\}\)/); assert.deepEqual(ui.result.contents[0]._meta?.["openai/ui"]?.availableDisplayModes, ["inline"]); assert.doesNotMatch(JSON.stringify(ui.result.contents[0]), /fullscreen/);
