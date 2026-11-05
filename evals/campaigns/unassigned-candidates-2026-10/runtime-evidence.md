@@ -302,3 +302,14 @@ After deployment of source `dd2a1794ea79550ccc9d4bf33e0bbbf410fec8da` (verified 
 | Role-based billing accessibility edge | PASS 1/1 | Permission denial was distinct from verified empty history; restricted data was not exposed, and the response specified accessible unavailable/loading/error/empty states. |
 
 Runtime identity and skill package loads were independently verified for the positive and accessibility cases. Explicit per-attempt tool receipt metadata was not returned for every near-miss run; where available, receipts are unsigned MCP call records and do not attest to answer semantics. Therefore the response-count matrix is direct host-output evidence, while complete per-attempt MCP receipt linkage is not established. These are isolated host-agent runs, not ordinary Chat natural-routing, Chat-Mobile, or Codex portability tests. They do not satisfy all remaining acceptance rows or the full #423/#474/#483 criteria. Keep those issues open.
+
+
+### Site 111 explicit-placeholder and unchanged sentinel retest — 2026-11-05
+
+A fresh `runtime_info` call at `2026-11-05T06:33:08Z` verified attested Site MCP v2, Lab `1.38.452`, canonical source `dd2a1794ea79550ccc9d4bf33e0bbbf410fec8da`, and Site runtime release/source `bf847aed675140da3c33faabc884b900c400898e`.
+
+- Exact frozen explicit-placeholder positive prompt: **PASS 1/1**. The response began with the applicable interface-design opening, labeled order review as a bounded assumption, used neutral placeholders, and did not invent order records, status rules or platform actions. It covered desktop/mobile and loading, empty, error and unavailable states. The package load reported `interface-design` v0.1.17, content SHA-256 `66be3a49e294cf47c0548ce81febfdcdd61df3ec0e84bab567059dc808c748b7`.
+- I01-SENT-001 exact punctuation-only request: **PASS**. Response was exactly `Zespół pracuje sprawnie.`; the Site router returned `not_applicable`, `workflow_executed=false`. Unsigned route receipt completed `2026-11-05T06:32:15.173Z`, input SHA-256 `4d4e1628fa4ce9aedb6c596e1353c93cd3de087e49c8e7f4ae7b67d77195468b`, output SHA-256 `41a7df52cad304b7012fee35cf3a690ed933777b2bbf4319a7337f4b7c074020`.
+- VAT arithmetic prompt: observed response `100 PLN` for `123 PLN gross at 23% VAT`. The executor's reported canonical source identifier did not match the independent current `runtime_info` SHA, and it did not return the raw receipt, so this result is **NOT SOURCE-VERIFIED** and is not counted as a source-bound campaign pass. The independent current identity is recorded above; the discrepancy remains unresolved for this attempt.
+
+The MCP receipts are unsigned call evidence, not semantic attestation. The exact candidate's remaining acceptance matrix, complete receipt-to-attempt linkage, and ordinary Chat/Chat-Mobile/Codex portability are still incomplete; do not close #423, #474 or #483 from these checks.
