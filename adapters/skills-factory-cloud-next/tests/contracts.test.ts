@@ -692,3 +692,11 @@ test("chart shape guards fail closed for stale connectors and silently truncated
   const info = await runtimeInfo();
   assert.deepEqual(info.software_release, {version: LAB_RELEASE.version, release_id: LAB_RELEASE.release_id, source_revision: LAB_RELEASE.source_revision});
 });
+
+test("list_skills provides a discovery path for matching Cloud Next requests", () => {
+  const description = TOOLS.find((tool) => tool.name === "list_skills")?.description;
+  assert.ok(description);
+  assert.match(description, /when the user requests substantive work and a matching skill or workflow may exist, call list_skills before answering/i);
+  assert.match(description, /call load_skill for its exact packaged instructions/i);
+  assert.match(description, /does not execute a skill/i);
+});
