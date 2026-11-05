@@ -413,8 +413,9 @@ workflows:
         - investment-theme-discovery
         - investment-attention-review
         - investment-policy-design
-        - technical-structure
-      optional: []
+      optional:
+        - name: technical-structure
+          on_missing: "This specialist is a Lab candidate and is unavailable in the production plugin. Return BLOCKED_CANDIDATE_SKILL_NOT_AVAILABLE for technical-structure analysis; do not substitute generic commentary or another workflow."
     description: >
       Default Investment OS front door for natural investment requests. Use when the user asks in ordinary language
       to observe what changed in their portfolio, review their portfolio risk/structure, assess a stock/security, interpret supplied adjusted OHLCV price structure,

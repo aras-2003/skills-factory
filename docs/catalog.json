@@ -950,10 +950,11 @@
         "investment-portfolio-observation",
         "investment-portfolio-review",
         "investment-security-review",
-        "investment-theme-discovery",
+        "investment-theme-discovery"
+      ],
+      "optional_dependencies": [
         "technical-structure"
       ],
-      "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"
     },
     {

@@ -6,7 +6,7 @@ metadata:
   version: 0.1.1
   maturity: candidate
   risk: high
-  last_reviewed: '2026-10-27'
+  last_reviewed: '2026-11-05'
 ---
 
 # Technical Structure

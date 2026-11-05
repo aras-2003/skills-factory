@@ -55,6 +55,8 @@ Use `investment-security-review` for one named security when the user wants end-
 ### Technical structure route
 Use `technical-structure` when the decision is limited to supplied adjusted OHLCV and asks for confirmed swing highs/lows (OPS/OPD), Dow-style trend state, support/resistance, breakout/retest conditions or structural invalidation. Require source IDs, adjustment metadata, currency and an as-of timestamp; missing inputs must remain `UNKNOWN` rather than being fetched, inferred or filled.
 
+`technical-structure` is a Lab candidate until its historical and out-of-sample acceptance evidence is complete. If the active channel cannot load it, return `BLOCKED_CANDIDATE_SKILL_NOT_AVAILABLE`; do not replace the specialist analysis with generic commentary or route it to another workflow.
+
 Keep this route distinct from `investment-theme-discovery`, which researches structural or cyclical market themes and value chains. A request about price swings in a named security is not theme research. If the user also asks for valuation, thesis, portfolio fit or sizing, route to `investment-security-review` and include technical structure only when the request explicitly asks for it and the supplied data supports it.
 
 ### Opportunity route
