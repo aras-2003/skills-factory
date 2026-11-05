@@ -1,0 +1,5 @@
+interface:
+  display_name: Financial Modeling
+  short_description: Run deterministic, evidence-bound NPV, DCF, IRR, payback…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#75D8C1'
