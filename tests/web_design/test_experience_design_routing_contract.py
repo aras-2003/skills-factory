@@ -98,7 +98,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
         complete = self.cases_by_id["ux-route-role-restricted-screen"]["expected"]
         self.assertIn("For an interface-design brief, what screen or flow should change", " ".join(complete["must_not"]))
 
-        partial = self.cases_by_id["ux-route-provenance-preservation"]["expected"]
+        partial = self.cases_by_id["ux-route-provenance-partial-context"]["expected"]
         self.assertIn("who will use it and what task should they complete", " ".join(partial["must"]))
         self.assertIn("mobile, desktop, or a specific runtime", " ".join(partial["must_not"]))
 
@@ -114,6 +114,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
             "ux-near-miss-chart",
             "ux-near-miss-ordinary-answer",
             "ux-route-provenance-preservation",
+            "ux-route-provenance-partial-context",
             "ux-implementation-approval",
             "ux-near-miss-implementation-request",
         }

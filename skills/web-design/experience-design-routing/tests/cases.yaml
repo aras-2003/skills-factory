@@ -63,8 +63,15 @@ cases:
       must: ["one plain-text sentence", "24"]
       must_not: ["interface-design", "design-critique", "change the requested response format"]
   - id: ux-route-provenance-preservation
-    case: Interface design preserves supplied domain provenance
-    input: "Design a responsive web screen for reviewing this fictional finding and return a written interface brief. Preserve these supplied facts verbatim in the handoff: finding ID F-17; source revision abcdefabcdefabcdefabcdefabcdefabcdefabcd; as-of date 2026-10-15; uncertainty: low confidence. Do not reinterpret the finding or turn the response into a report or chart."
+    case: Fully specified interface design preserves supplied domain provenance
+    input: "Design a desktop and mobile screen for an analyst to review this fictional finding and return a written interface brief. Preserve these supplied facts verbatim in the handoff: finding ID F-17; source revision abcdefabcdefabcdefabcdefabcdefabcdefabcd; as-of date 2026-10-15; uncertainty: low confidence. Do not reinterpret the finding or turn the response into a report or chart."
+    expected:
+      should_trigger: true
+      must: ["interface-design", "finding ID F-17", "source revision", "as-of date 2026-10-15", "uncertainty", "low confidence", "written interface brief"]
+      must_not: ["rewrite the evidence", "drop provenance", "claim a chart was requested", "For an interface-design brief, what screen or flow should change"]
+  - id: ux-route-provenance-partial-context
+    case: Interface design asks only for missing user and task context
+    input: "Design a desktop and mobile screen for reviewing this fictional finding and return a written interface brief. Preserve these supplied facts verbatim in the handoff: finding ID F-17; source revision abcdefabcdefabcdefabcdefabcdefabcdefabcd; as-of date 2026-10-15; uncertainty: low confidence. Do not reinterpret the finding or turn the response into a report or chart."
     expected:
       should_trigger: true
       must: ["interface-design", "who will use it and what task should they complete", "finding ID F-17", "source revision", "as-of date 2026-10-15", "uncertainty", "low confidence"]
