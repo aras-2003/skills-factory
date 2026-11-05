@@ -7,9 +7,9 @@ out_of_scope_behavior_paths:
   - skills/web-design/interface-design/SKILL.md
 candidate_skill:
   name: interface-design
-  version: "0.1.15"
+  version: "0.1.16"
   source: skills/web-design/interface-design/SKILL.md
-  sha256: 076dc85e18db0f3c161ba5b2fb3d3df0709d6df6a7a188011694365ff2a4f7a0
+  sha256: dfd4848b06516b4801738cc589467cc707b8e9be55a7e1ba3e29e37670c7ed86
   test_cases: skills/web-design/interface-design/tests/cases.yaml
   required_case_ids:
     - interface-design-direct-positive
