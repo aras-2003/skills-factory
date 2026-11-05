@@ -24,7 +24,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_candidate_metadata_and_identity(self):
         self.assertEqual(self.metadata["name"], "interface-design")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.16")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.17")
 
     def test_contract_sections_are_present(self):
         for section in (
@@ -109,7 +109,10 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_indirect_flow_keeps_failure_recovery(self):
         self.assertIn("include at least one realistic failure path and its recovery", self.body)
         self.assertIn("derive a short noun phrase from the requested deliverable", self.body)
-        self.assertIn("Do not extend the opening label with the problem, purpose, benefit, or explanation", self.body)
+        self.assertIn(
+            "Do not omit “the” or extend the opening label with the problem, purpose, benefit, or explanation for the flow. Keep those details in the brief body.",
+            self.body,
+        )
         case = next(c for c in self.cases if c["id"] == "interface-design-indirect-positive")
         self.assertTrue(any("append the observation, purpose, or benefit" in item for item in case["expected"]["must_not"]))
 
