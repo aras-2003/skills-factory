@@ -267,3 +267,22 @@ Three fresh isolated host executors received the frozen mobile-first onboarding 
 All three produced a substantive mobile-first onboarding brief, covered desktop changes and assumptions, and avoided inventing product rules. The exact opening contract passed 1/3; this is a repeatable opening-format failure despite the v0.1.15 instruction to use the exact opening before the brief heading. The runs were isolated host executions of loaded MCP instructions, not ordinary Chat UI natural-routing tests. MCP receipts do not attest to host answer semantics.
 
 The exact onboarding opening remains a release blocker for the frozen positive case. Do not count this as acceptance for #423, #474, or #483; their broader required repetitions, natural Chat routing, complete sentinel matrix and cross-surface/runtime criteria remain outstanding.
+
+
+### Site 111 onboarding opening retest — 2026-11-05
+
+After PR #575 merged as `dd2a1794ea79550ccc9d4bf33e0bbbf410fec8da`, the live runtime reported verified Site MCP v2, Lab `1.38.452`, canonical Skills Factory/Lab source `dd2a1794ea79550ccc9d4bf33e0bbbf410fec8da`, Site runtime release/source `bf847aed675140da3c33faabc884b900c400898e`, deployed at `2026-11-05T06:09:57.576Z`. It loaded `interface-design` v0.1.17. The packaged skill content SHA-256 reported by one successful load was `66be3a49e294cf47c0548ce81febfdcdd61df3ec0e84bab567059dc808c748b7`.
+
+Three fresh isolated host executors received the exact frozen mobile-first onboarding prompt without expected answers or rubric text. All three began with the exact required first line: `I’ll use interface-design for the mobile-first onboarding flow.` This is 3/3 for the opening requirement, correcting the prior v0.1.15 result (1/3). The executors loaded the Site MCP skill; one returned the successful load receipt and source revision alongside its opening. MCP receipts are unsigned tool-call records and do not attest to host answer semantics. The three runs test isolated host execution, not ordinary Chat natural routing, Chat-Mobile or Codex UI portability. Keep #423, #474 and #483 open until their complete acceptance matrices and remaining cross-surface evidence pass.
+
+### Site 111 interface-design regression matrix — 2026-11-05
+
+Fresh isolated host executors used the current Site MCP v2 and `interface-design` v0.1.17 from canonical source `dd2a1794ea79550ccc9d4bf33e0bbbf410fec8da` (Site runtime release/source `bf847aed675140da3c33faabc884b900c400898e`; Lab `1.38.452`).
+
+- Frozen account-dashboard positive prompt: **3/3** began with the exact required opening, `I’ll use interface-design for the account dashboard screen.`. All three used placeholders for missing order fields, destinations and action rules, covered desktop/mobile and loading/empty/error/unavailable states, and did not claim implementation. One recorded package content SHA-256 was `66be3a49e294cf47c0548ce81febfdcdd61df3ec0e84bab567059dc808c748b7`.
+- Frozen insufficient-context prompt (“Make the screen better,” with earlier onboarding only narrated in the input): **PASS**. It returned only the required three-part clarification question and did not infer the prior flow.
+- Frozen accessibility/role-permission prompt: **PASS**. The response distinguished denied billing access from verified empty history, kept restricted data hidden, and specified accessible loading/error/unavailable states.
+- Report/architecture near-miss: **PASS** for not replacing the request with an interface brief; the executor requested strategy findings/citations and actual system components before preparing the requested report/diagram.
+- Implementation-and-testing near-miss: **PASS** for retaining implementation scope; it said interface-design did not apply and asked for the repository and approved design before making any change or test claim.
+
+These are isolated host executions with successful Site skill-load evidence, not ordinary Chat natural-routing or cross-surface tests. MCP receipts are unsigned tool-call records and do not attest to semantic answers. The dashboard, insufficient-context and accessibility responses were directly observed; the report and implementation prompts were retained in their requested scopes. This targeted retest does not satisfy the full acceptance matrices, required repeated near-miss attempts, natural Chat routing, sentinel set, or Chat-Mobile/Codex portability. Keep #423, #474 and #483 open.
