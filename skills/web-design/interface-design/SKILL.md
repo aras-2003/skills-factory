@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.16"
+  version: "0.1.17"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-11-05"
@@ -111,9 +111,9 @@ When a required input is missing, follow the required-context gate before drafti
 
 The clarification-only response is the sole exception to the eight-section brief: do not emit any brief section until the required context is present. For a valid brief, keep the output textual and do not append a rendered or interactive artifact.
 
-Every valid interface brief must begin with the exact unformatted sentence “I’ll use interface-design for <requested screen or flow>.” Replace only the screen or flow name. This is the first line of the response, before any heading, greeting, or other text, regardless of the requested interface type. The next line is “## Interface brief”, followed by the eight sections below. Do not use this opening for clarification-only responses; their single question already names the specialist and must remain the whole response.
+Every valid interface brief must begin with the exact unformatted sentence “I’ll use interface-design for the <screen or flow name>.” Keep the definite article “the” before the name in every valid brief, including when the user used an indefinite article or the name is derived from the requested flow. This is the first line of the response, before any heading, greeting, or other text, regardless of the requested interface type. The next line is “## Interface brief”, followed by the eight sections below. Do not use this opening for clarification-only responses; their single question already names the specialist and must remain the whole response.
 
-**Opening label selection:** If the request names a screen or flow, use that concise name. If it describes a problem and asks you to propose a flow without naming it, derive a short noun phrase from the requested deliverable (for example, “mobile-first onboarding flow”). Do not extend the opening label with the problem, purpose, benefit, or explanation for the flow. Keep those details in the brief body.
+**Opening label selection:** If the request names a screen or flow, use that concise noun phrase without its leading article, then place it after “for the”. If it describes a problem and asks you to propose a flow without naming it, derive a short noun phrase from the requested deliverable (for example, “the mobile-first onboarding flow”). Do not omit “the” or extend the opening label with the problem, purpose, benefit, or explanation for the flow. Keep those details in the brief body.
 
 ## Quality checks
 
