@@ -214,6 +214,14 @@ Three isolated blind executors received raw prompts without rubrics. Across 19 i
 
 These were isolated host-agent outputs, not ordinary Chat UI sessions; MCP receipts are unsigned and do not attest to semantic answers. Chat-Mobile, Codex UI, host-level trace correlation and Phoenix trajectory remain `NOT_RUN`. Keep #335, #423, #474 and #483 open until their remaining acceptance rows are met.
 
+### Site 106 positive-route repeat — 2026-11-05
+
+After PR #568 merged as `4041ff5f14e7d72bb9c9f7f7543ae5cd6f67377d`, the live runtime verified as Site 106 / Lab 1.38.445, canonical source `4041ff5f14e7d72bb9c9f7f7543ae5cd6f67377d`, Site runtime revision `5cbe9c81dfdf5f5e109681ead5fe3b70bd9f15df`, attestation `verified`. Packaged `experience-design-routing` v0.1.4 loaded with content SHA-256 `18d10a85fe349f8c4d4302b862b235819df5956701bf6e7a6fe7c69a907f9754`; `interface-design` v0.1.12 loaded with content SHA-256 `12d3c5a2d77253c3b42b84b519a2e63fe3239d8057987cc3021fc58cd528f75d`.
+
+Three fresh isolated executors received the same direct-positive dashboard prompt without rubrics. Two responses named `interface-design` in their first sentence; one began with only “Interface brief.” The content of all three remained within the requested responsive dashboard scope, used placeholders for unspecified order rules, and avoided invented destinations/actions. This is a response-opening consistency failure (2/3), not a content or route-scope failure. The v0.1.13 candidate now makes the opening sentence explicit in `interface-design` itself. Each MCP call receipt is unsigned; shared successful load receipts used input SHA-256 `6049d919f7423784d2514d5a71c8a265bbe2dc6a626660f69543a4be4ba05fb5` / output `7580bf122858f9a3635b89685b2b0c3249b46597b66f7e959de0bc0165e17228` for the router and input `18cde4bcf64d26abd47d23dfbf4071e9700351d9ec789fbfa57f2e5b7cea554a` / output `02cccfa110165a795d79d98725b0b2ab3b77732c5055751d3ca9ec139ed30878` for interface-design.
+
+Separate Site 106 blind checks passed the clarification-only response (“For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?”) and preserved an executive-report request as report work, asking for findings/citations and architecture source. These outputs are host-agent observations, not signed semantic receipts. The contract correction is still pending deployment and fresh repeats; keep #423, #474 and #483 open.
+
 ### #335 — current Site blind routing and safety probe — 2026-11-05
 
 An isolated executor received three raw inputs without expected routes or answers. The runtime was verified as Site v104 / Lab 1.38.443, Site mirror `54bdb07c903f409dacc13547a8fea8c386a4e1cb`, canonical repository/Lab source `a11a262d5aa82da880f6b2bef1483e20dd8b889c`.

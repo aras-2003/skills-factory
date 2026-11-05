@@ -24,7 +24,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_candidate_metadata_and_identity(self):
         self.assertEqual(self.metadata["name"], "interface-design")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.12")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.13")
 
     def test_contract_sections_are_present(self):
         for section in (
@@ -88,6 +88,11 @@ class InterfaceDesignContractTests(unittest.TestCase):
         self.assertTrue(
             any("For an interface-design brief, what screen or flow should change" in item for item in case["expected"]["must"])
         )
+
+    def test_valid_brief_opens_by_naming_the_selected_specialist(self):
+        self.assertIn("the first sentence must name `interface-design`", self.body)
+        case = next(c for c in self.cases if c["id"] == "interface-design-direct-positive")
+        self.assertTrue(any("begin the response with a sentence naming interface-design" in item for item in case["expected"]["must"]))
 
     def test_product_unknowns_are_not_presented_as_existing_ui(self):
         self.assertIn("Do not present plausible labels or example content as existing product behavior", self.body)
