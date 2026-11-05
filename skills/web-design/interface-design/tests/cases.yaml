@@ -6,7 +6,7 @@ cases:
     expected:
       should_trigger: true
       must:
-        - begin the response with a sentence naming interface-design and the requested dashboard
+        - begin with the unformatted sentence "I’ll use interface-design for the responsive account dashboard screen."
         - identify the primary user task and hierarchy before choosing decoration
         - explicitly leave entry, exit, and order-detail destinations unspecified because no navigation source is provided
         - specify mobile and desktop behavior
