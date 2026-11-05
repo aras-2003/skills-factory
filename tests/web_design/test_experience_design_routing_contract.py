@@ -25,7 +25,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
     def test_candidate_identity_and_portability_boundary(self):
         self.assertEqual(self.metadata["name"], "experience-design-routing")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.2")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.3")
         self.assertIn("## Portability boundary", self.body)
         self.assertIn("confirm the actual host surface and tool receipt", self.body.lower())
         self.assertIn("NOT_RUN", self.body)
@@ -56,6 +56,21 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
                 self.assertTrue(case["expected"].get("must_not"))
         ordinary = self.cases_by_id["ux-near-miss-ordinary-answer"]["expected"]["must_not"]
         self.assertTrue(any("change the requested response format" in item for item in ordinary))
+
+    def test_active_routes_name_specialist_and_near_misses_name_original_format(self):
+        self.assertIn("name the selected specialist in the first sentence", self.body)
+        self.assertIn("preserve the user's requested deliverable by name", self.body)
+        for case_id, phrase in {
+            "ux-route-design": "I’ll use `interface-design` for",
+            "ux-route-critique": "I’ll use `design-critique` for",
+            "ux-route-handoff": "I’ll use `implementation-brief` for",
+            "ux-route-accessibility": "I’ll use `accessibility-gate` for",
+            "ux-route-visual-regression": "I’ll use `visual-regression-review` for",
+            "ux-near-miss-report": "I’ll prepare the executive report",
+            "ux-near-miss-chart": "I’ll prepare the line chart",
+        }.items():
+            with self.subTest(case=case_id):
+                self.assertIn(phrase, self.cases_by_id[case_id]["expected"]["must"])
 
     def test_domain_provenance_is_a_required_positive_case(self):
         case = self.cases_by_id["ux-route-provenance-preservation"]
