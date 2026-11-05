@@ -15,6 +15,19 @@ cases:
       must:
         - choose investment-theme-discovery as primary child
         - distinguish routing receipt from child workflow execution
+  - id: router-positive-technical-structure
+    case: Supplied price swings route to technical structure, not theme research
+    input: "For ticker TEST-TECH, I want to analyze adjusted daily OHLCV swings, identify confirmed Dow-style highs/lows (OPS/OPD), trend state and invalidation. I can provide the bar data; do not research a market theme or make an investment recommendation."
+    expected:
+      should_trigger: true
+      must:
+        - choose technical-structure as primary child
+        - require supplied adjustment metadata, currency, timestamps and source IDs
+        - distinguish a price-structure request from market-theme research
+        - distinguish routing receipt from child workflow execution
+      must_not:
+        - choose investment-theme-discovery for the supplied price-structure task
+        - invent OHLCV inputs or claim to execute the bundled Python engine
   - id: router-positive-weekly-undervaluation-screen
     case: Weekly undervaluation screening without a named security
     input: "Prepare this week's undervaluation screen. Include 3-, 6-, and 12-month outcomes. No named security."

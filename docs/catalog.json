@@ -936,8 +936,8 @@
       "source_status": "present",
       "runtime_registration": "registered",
       "maturity": "production",
-      "version": "0.3.1",
-      "description": "Default Investment OS front door for natural investment requests. Use when the user asks in ordinary language to observe what changed in their portfolio, review their portfolio risk/structure, assess a stock/security, find investment opportunities, research themes, evaluate whether new market/company information matters, or define portfolio policy/risk limits. Route first, then invoke the matching specialist workflow; use the MCP routing preflight when available and do not answer with generic investment commentary.",
+      "version": "0.3.2",
+      "description": "Default Investment OS front door for natural investment requests. Use when the user asks in ordinary language to observe what changed in their portfolio, review their portfolio risk/structure, assess a stock/security, interpret supplied adjusted OHLCV price structure, find investment opportunities, research themes, evaluate whether new market/company information matters, or define portfolio policy/risk limits. Route first, then load and follow the matching specialist workflow or skill; use the MCP routing preflight when available and do not answer with generic investment commentary.",
       "declared_channels": {
         "chatgpt-zip": "unavailable",
         "lab": "supported",
@@ -950,7 +950,8 @@
         "investment-portfolio-observation",
         "investment-portfolio-review",
         "investment-security-review",
-        "investment-theme-discovery"
+        "investment-theme-discovery",
+        "technical-structure"
       ],
       "optional_dependencies": [],
       "capability_assessment": "UNASSESSED"

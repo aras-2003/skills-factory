@@ -3,10 +3,10 @@
 ## Purpose
 Act as the default orchestration front door for natural investment requests. Route the request into the smallest evidence-backed Investment OS workflow that can answer it, rather than answering with generic investment commentary.
 
-This workflow does not replace the specialist workflows. It selects and invokes them.
+This front door does not replace specialist workflows or skills. It selects the best fit and directs the host to load and follow that specialist's instructions.
 
 ## Natural activation
-Use this workflow when the user asks about their investments in ordinary language and does not explicitly name a narrower Investment OS workflow.
+Use this workflow when the user asks about their investments in ordinary language and does not explicitly name a narrower Investment OS workflow or skill.
 
 Typical requests include:
 - "review my portfolio" / "review this portfolio";
@@ -15,14 +15,15 @@ Typical requests include:
 - "find opportunities" / "what should I research next?";
 - "what investment themes are worth researching?";
 - "does this news/event matter for my holdings?";
-- "help me define my investment policy/risk limits."
+- "help me define my investment policy/risk limits";
+- classify supplied adjusted OHLCV into confirmed price swings, trend state or invalidation.
 
 Do not require the user to know Investment OS terminology, canonical storage, specialist names or workflow names.
 
 ## Runtime routing preflight
 When the MCP tool `route_investment_request` is available, call it with the user's full natural-language request before substantive investment analysis. Preserve its returned `routing_receipt` in the execution trace; it proves routing only, not child execution.
 
-Treat the returned `child_workflow` as the primary route when it is specific. If the tool returns `investment-os-review` / unknown, resolve the ambiguity with the routing matrix below rather than inventing a specialist result.
+Treat the returned `child_workflow` as the primary route when it is specific; it can identify either a workflow or specialist skill. If the tool returns `investment-os-review` / unknown, resolve the ambiguity with the routing matrix below rather than inventing a specialist result.
 
 The routing tool is a classifier only. It does not replace loading and executing the selected child workflow.
 
@@ -51,6 +52,11 @@ A prompt containing holdings/weights plus a request to review risk or next decis
 ### Security route
 Use `investment-security-review` for one named security when the user wants end-to-end underwriting, valuation, thesis challenge, portfolio fit or sizing.
 
+### Technical structure route
+Use `technical-structure` when the decision is limited to supplied adjusted OHLCV and asks for confirmed swing highs/lows (OPS/OPD), Dow-style trend state, support/resistance, breakout/retest conditions or structural invalidation. Require source IDs, adjustment metadata, currency and an as-of timestamp; missing inputs must remain `UNKNOWN` rather than being fetched, inferred or filled.
+
+Keep this route distinct from `investment-theme-discovery`, which researches structural or cyclical market themes and value chains. A request about price swings in a named security is not theme research. If the user also asks for valuation, thesis, portfolio fit or sizing, route to `investment-security-review` and include technical structure only when the request explicitly asks for it and the supplied data supports it.
+
 ### Opportunity route
 Use `investment-opportunity-hunter` when the user asks to scan for new securities/candidates or asks what to research next without a known security.
 
@@ -70,8 +76,8 @@ For one named security, thesis, valuation, downside, portfolio fit or a stated p
 
 ## Orchestration rules
 1. Run the runtime routing preflight when available; otherwise use the routing matrix.
-2. Select the primary route before doing substantive analysis and load the exact matching child workflow/skill by name.
-3. Invoke the selected child workflow/skill and follow its evidence/canonical rules.
+2. Select the primary route before doing substantive analysis and load the exact matching child workflow or skill by name.
+3. Invoke the selected specialist workflow or skill and follow its evidence/canonical rules.
    - Count the child as executed only when a runtime execution receipt identifies the child workflow, execution status, and correlated run. A selected route, planned invocation, or prose claim is not proof that the child ran.
    - If routing succeeded but the exact child cannot be loaded or no child execution mechanism/receipt is available, return a blocked/not-run state and the missing runtime evidence; do not synthesize the child result or switch to a different specialist.
    - The final status must name the same child as the routing receipt. A different route is a stop condition requiring a corrected pre-analysis route, not an acceptable substitution.
@@ -92,7 +98,7 @@ For one named security, thesis, valuation, downside, portfolio fit or a stated p
 8. Missing evidence narrows the child workflow result; it does not justify bypassing the child workflow.
 
 ## Output contract
-Return the selected child workflow's normal output. Do not add a separate router report.
+Return the selected specialist's normal output. Do not add a separate router report.
 
 When runtime diagnostics are explicitly requested, include:
 - selected Investment OS route;
