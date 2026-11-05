@@ -293,7 +293,7 @@
       "name": "technical-structure",
       "domain": "investing",
       "maturity": "candidate",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Use as the technical-structure analyst when an investment request concerns confirmed price swings, Dow-style trend state, support/resistance, and invalidation from supplied adjusted OHLCV.",
       "source": "skills/investing/technical-structure/SKILL.md",
       "source_status": "present",

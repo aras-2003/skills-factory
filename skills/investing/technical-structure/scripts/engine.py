@@ -20,6 +20,42 @@ def _timestamp(value):
     return result
 
 
+def _chart_payload(rows, pivots, *, source_id, adjustment_id, as_of, currency):
+    """Build a no-lookahead close/OPS/OPD line-chart payload when renderable."""
+    active = {"HIGH": None, "LOW": None}
+    pivot_index = 0
+    visible = []
+    for row in rows:
+        while pivot_index < len(pivots) and pivots[pivot_index]["confirmed_at"] <= row["timestamp"]:
+            pivot = pivots[pivot_index]
+            active[pivot["kind"]] = pivot
+            pivot_index += 1
+        if active["HIGH"] is not None and active["LOW"] is not None:
+            visible.append((row, active["HIGH"], active["LOW"]))
+
+    if len(visible) < 2:
+        return {"status": "NOT_AVAILABLE", "reason": "INSUFFICIENT_POST_CONFIRMATION_BARS"}
+    clipped = len(visible) > 100
+    visible = visible[-100:]
+    return {
+        "status": "READY",
+        "source_id": source_id,
+        "adjustment_id": adjustment_id,
+        "as_of": as_of,
+        "window_policy": "last_100_post_confirmation_observations" if clipped else "all_post_confirmation_observations",
+        "x_labels": [row["timestamp"].isoformat() for row, _, _ in visible],
+        "series_names": ["Adjusted close", "OPS", "OPD"],
+        "series_values": [
+            [float(row["close"]) for row, _, _ in visible],
+            [float(high["price"]) for _, high, _ in visible],
+            [float(low["price"]) for _, _, low in visible],
+        ],
+        "title": f"Technical structure as of {as_of[:10]}",
+        "unit": currency.strip(),
+        "provenance_note": "OPS/OPD are step levels available only from their right-bar confirmation dates; supplied-window chart, not a forecast.",
+    }
+
+
 def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, currency=None, left=2, right=2, max_gap_days=5):
     if (not isinstance(source_id, str) or not source_id.strip() or adjusted is not True
             or not isinstance(adjustment_id, str) or not adjustment_id.strip()):
@@ -134,5 +170,15 @@ def analyze_structure(bars, *, as_of, source_id, adjusted, adjustment_id=None, c
         "retest_condition": f"after a confirmed close above {ops['price']}, price revisits that level and closes above it",
         "invalidation_condition": f"adjusted close below {opd['price']}",
         "confirmed_pivots": len(pivots),
+        "pivot_history": [
+            {"kind": pivot["kind"], "price": str(pivot["price"]),
+             "timestamp": pivot["timestamp"].isoformat(),
+             "confirmed_at": pivot["confirmed_at"].isoformat(),
+             "source_id": pivot["source_id"]}
+            for pivot in pivots
+        ],
         "window": {"left_bars": left, "right_bars": right},
+        "chart": _chart_payload(rows, pivots, source_id=source_id,
+                                adjustment_id=adjustment_id, as_of=as_of,
+                                currency=currency),
     }

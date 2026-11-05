@@ -28,8 +28,8 @@ out_of_scope_behavior_paths:
 source_sha256:
   skills/investing/historical-decision-replay/SKILL.md: 6a730dc4a229dbbc4a93bcdf4b3d71bb46affef3ec3cd41150ca63f61b288161
   skills/investing/historical-decision-replay/scripts/engine.py: 268f7950d0a0cfa79cfef0b6ddb670f0366e4ed3b60ea12bf90432c013526a3a
-  skills/investing/technical-structure/SKILL.md: 31b93e023d59107376545208646d3b02b38cecf5df268f02d5b857d05a0a2867
-  skills/investing/technical-structure/scripts/engine.py: 03bca52a56aff5467339ed8c03b221b0ff7a349e16d23cb554c615cfc52385d4
+  skills/investing/technical-structure/SKILL.md: 2011062566b65c400039d9885dbf1df6d7ff2ba4f9eb47fb28eafe0584a4724c
+  skills/investing/technical-structure/scripts/engine.py: 06847a01eb9810b480a05017e43a430e464018a84eb7a02b6d71ae20a742d031
   skills/web-design/experience-design-routing/SKILL.md: 48b9b3113f20a4852d60c85ab8691ce5f0550343c795592ef085f3e23faa80c6
   skills/web-design/website-quality-review/SKILL.md: 9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc
   skills/web-design/website-quality-review/tests/cases.yaml: 45c5661b52c26526649e14054eece0b893a191d6e83c05cee339a37d51cebe68
