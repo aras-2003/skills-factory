@@ -1,0 +1,5 @@
+interface:
+  display_name: Historical Decision Replay
+  short_description: Use when evaluating historical investment decisions from…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#9588F7'
