@@ -511,6 +511,30 @@ test("MCP receipts bind content and distinguish routing, rendering and validatio
   assert.equal(invalidReceipt.client_display_state, "not_applicable");
 });
 
+test("MCP receipts correlate only valid W3C traceparent metadata", async () => {
+  type ToolResult = { structuredContent: Record<string, unknown> };
+  const invoke = async (traceparent?: unknown) => {
+    const params = { name: "runtime_info", arguments: {}, ...(traceparent === undefined ? {} : { _meta: { traceparent } }) };
+    const response = await handleMcp(rpc("tools/call", params, { "oai-authenticated-user-id": "test-only" }));
+    return (await response.json() as { result: ToolResult }).result.structuredContent.tool_receipt as Record<string, unknown>;
+  };
+  const first = await invoke("00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01");
+  const second = await invoke("00-4bf92f3577b34da6a3ce929d0e0e4736-b7ad6b7169203331-00");
+  assert.equal(first.run_id, "4bf92f3577b34da6a3ce929d0e0e4736");
+  assert.equal(second.run_id, first.run_id);
+  assert.equal(first.trace_parent_status, "accepted");
+  assert.equal(second.trace_parent_status, "accepted");
+  assert.equal(first.input_sha256, createHash("sha256").update("{}").digest("hex"));
+  assert.doesNotMatch(JSON.stringify(first), /00f067aa0ba902b7|traceparent/);
+
+  const absent = await invoke();
+  assert.equal(absent.trace_parent_status, "not_provided");
+  assert.ok(!("run_id" in absent));
+  const invalid = await invoke("00-00000000000000000000000000000000-00f067aa0ba902b7-01");
+  assert.equal(invalid.trace_parent_status, "invalid");
+  assert.ok(!("run_id" in invalid));
+});
+
 test("catalog investment record store resolves the canonical bootstrap and reports writes", () => {
   const loaded = callTool("load_skill", { skill_name: "investment-record-store" });
   const catalog = callTool("list_skills", {});
