@@ -1,0 +1,5 @@
+interface:
+  display_name: Technical Structure
+  short_description: Use as the technical-structure analyst when an investment…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#9588F7'
