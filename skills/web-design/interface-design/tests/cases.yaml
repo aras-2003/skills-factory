@@ -6,7 +6,7 @@ cases:
     expected:
       should_trigger: true
       must:
-        - begin with the unformatted sentence "I’ll use interface-design for the responsive account dashboard screen."
+        - begin with the unformatted sentence "I’ll use interface-design for the account dashboard screen."
         - identify the primary user task and hierarchy before choosing decoration
         - explicitly leave entry, exit, and order-detail destinations unspecified because no navigation source is provided
         - specify mobile and desktop behavior
@@ -40,6 +40,7 @@ cases:
     expected:
       should_trigger: true
       must:
+        - begin with the unformatted sentence "I’ll use interface-design for the mobile-first onboarding flow."
         - design a specific user flow and explain the purpose of each step
         - mark unsupported causes or user behavior as assumptions
         - include mobile and desktop behavior and failure states
@@ -91,6 +92,7 @@ cases:
     expected:
       should_trigger: true
       must:
+        - begin with the unformatted sentence "I’ll use interface-design for the desktop and mobile account page with role-based billing access."
         - distinguish unavailable due to permission from a genuinely empty account
         - provide accessible status and recovery or contact guidance
         - specify mobile and desktop layouts
