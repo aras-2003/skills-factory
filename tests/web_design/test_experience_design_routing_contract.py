@@ -25,7 +25,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
     def test_candidate_identity_and_portability_boundary(self):
         self.assertEqual(self.metadata["name"], "experience-design-routing")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.4")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.5")
         self.assertIn("## Portability boundary", self.body)
         self.assertIn("confirm the actual host surface and tool receipt", self.body.lower())
         self.assertIn("NOT_RUN", self.body)
@@ -59,10 +59,10 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
 
     def test_active_routes_name_specialist_and_near_misses_name_original_format(self):
         self.assertIn("name the selected specialist in the first sentence", self.body)
-        self.assertIn("the single question must name `interface-design` itself", self.body)
+        self.assertIn("The single question must name `interface-design` itself", self.body)
         self.assertIn("preserve the user's requested deliverable by name", self.body)
         for case_id, phrase in {
-            "ux-route-design": "For an interface-design brief, what screen or flow should change",
+            "ux-route-design": "mobile, desktop, or a specific runtime",
             "ux-route-critique": "I’ll use `design-critique` for",
             "ux-route-handoff": "I’ll use `implementation-brief` for",
             "ux-route-accessibility": "I’ll use `accessibility-gate` for",
@@ -82,6 +82,26 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
                 self.assertIn(field, required)
         self.assertIn("Preserve each domain's evidence IDs, source revision, as-of date, uncertainty and output contract.", self.body)
 
+    def test_interface_design_clarification_asks_only_missing_required_fields(self):
+        for required in (
+            "screen/flow goal, intended user and primary task, and target runtime/device",
+            "Ask only about fields that are genuinely missing",
+            "whenever runtime/device is missing, directly ask whether to target mobile, desktop, or a specific runtime",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, self.body)
+
+        onboarding = self.cases_by_id["ux-route-design"]["expected"]
+        self.assertIn("who will use it and what task should they complete", " ".join(onboarding["must"]))
+        self.assertIn("mobile, desktop, or a specific runtime", " ".join(onboarding["must"]))
+
+        complete = self.cases_by_id["ux-route-role-restricted-screen"]["expected"]
+        self.assertIn("For an interface-design brief, what screen or flow should change", " ".join(complete["must_not"]))
+
+        partial = self.cases_by_id["ux-route-provenance-partial-context"]["expected"]
+        self.assertIn("who will use it and what task should they complete", " ".join(partial["must"]))
+        self.assertIn("mobile, desktop, or a specific runtime", " ".join(partial["must_not"]))
+
     def test_fixture_matrix_covers_each_specialist_and_code_boundary(self):
         required_ids = {
             "ux-route-design",
@@ -94,6 +114,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
             "ux-near-miss-chart",
             "ux-near-miss-ordinary-answer",
             "ux-route-provenance-preservation",
+            "ux-route-provenance-partial-context",
             "ux-implementation-approval",
             "ux-near-miss-implementation-request",
         }

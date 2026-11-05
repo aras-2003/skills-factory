@@ -3,7 +3,7 @@ name: experience-design-routing
 description: Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.4
+  version: 0.1.5
   maturity: candidate
   risk: low
   last_reviewed: '2026-11-02'
@@ -24,13 +24,14 @@ Select the smallest existing design capability for an explicit UI/UX task. This 
    - Review accessibility evidence and gaps for an existing implementation: `accessibility-gate`.
    - Compare a rendering to an approved baseline: `visual-regression-review`.
 4. If intent is genuinely unclear between design and implementation, ask one narrow question. Do not infer permission to edit code from a design request.
-5. If the primary output is a report, presentation, chart, diagram or data analysis, keep its existing domain/output workflow. Use UX skills only when the user explicitly asks for interface design or review.
-6. Preserve each domain's evidence IDs, source revision, as-of date, uncertainty and output contract. A visual handoff may reference those facts but must not replace or rewrite their provenance.
-7. Do not change the requested response format, render an artifact, or invoke a design capability for ordinary text, calculations or a single chart request.
+5. Before routing a design request to `interface-design`, check its required-context gate against the current request and explicitly referenced sources: screen/flow goal, intended user and primary task, and target runtime/device. Ask only about fields that are genuinely missing. When runtime/device is missing, directly ask whether the target is mobile, desktop, or a specific runtime. Do not substitute product name, industry, or audience discovery for these required fields, and do not ask for fields already supplied. If all three are present, proceed without a clarification question.
+6. If the primary output is a report, presentation, chart, diagram or data analysis, keep its existing domain/output workflow. Use UX skills only when the user explicitly asks for interface design or review.
+7. Preserve each domain's evidence IDs, source revision, as-of date, uncertainty and output contract. A visual handoff may reference those facts but must not replace or rewrite their provenance.
+8. Do not change the requested response format, render an artifact, or invoke a design capability for ordinary text, calculations or a single chart request.
 
 ## Output contract
 For an explicit implementation-only request, say that `interface-design` does not apply and route to the coding workflow; do not emit a design brief. Ask only for missing inputs that block implementation, and never claim code or tests changed unless they actually did.
-For an active design request with enough context to proceed, name the selected specialist in the first sentence and identify the supplied artifact or target it will use. Do not imply the specialist has already run. When `interface-design` lacks required context, follow its clarification-only gate: the single question must name `interface-design` itself, with no introductory sentence. For other specialists, if a required artifact or approval is missing, state the missing prerequisite and stop at that boundary.
+For an active design request with enough context to proceed, name the selected specialist in the first sentence and identify the supplied artifact or target it will use. Do not imply the specialist has already run. When `interface-design` lacks required context, ask only for the missing required fields from its gate (screen/flow goal, intended user and primary task, target runtime/device). In particular, whenever runtime/device is missing, directly ask whether to target mobile, desktop, or a specific runtime. The single question must name `interface-design` itself, with no introductory sentence. For other specialists, if a required artifact or approval is missing, state the missing prerequisite and stop at that boundary.
 For a near-miss, preserve the user's requested deliverable by name (for example, “executive report” or “line chart”), continue its existing workflow, and preserve requested evidence and citations. Do not name or invoke a design specialist when the router says `should_trigger: false`.
 When inputs are missing for other specialists, make the routing visible without claiming execution: “I’ll use `<specialist>` for `<target>`. Please provide `<missing prerequisite>` so I can proceed.” For a near-miss, keep the original output type visible while asking for inputs (for example, “I’ll prepare the executive report once you share the findings and citations.”).
 
