@@ -43,6 +43,14 @@ never authorization or tool behavior. Malformed or missing context produces an
 independent trace. A multi-step trajectory is still unverified until a host
 actually propagates the context and the resulting trace is observed in Phoenix.
 
+The Cloud Next Site adapter accepts the same W3C `traceparent` from MCP request
+`_meta` and places only its validated trace ID in `tool_receipt.run_id`. It
+reports `trace_parent_status` as `accepted`, `invalid`, or `not_provided`; it
+never returns the raw header. This enables receipt correlation when the host
+propagates context, but the Site adapter does not export an OpenTelemetry span.
+Site-side trajectory observability remains incomplete until spans are exported
+and observed in Phoenix.
+
 Export is disabled unless an OTLP endpoint is configured. A local Phoenix OSS
 instance can receive OTLP/HTTP traces at `http://127.0.0.1:6006/v1/traces`.
 For example, run a pinned local release with:

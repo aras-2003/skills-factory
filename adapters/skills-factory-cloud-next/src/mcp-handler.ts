@@ -1,10 +1,21 @@
 import { ZodError } from "zod";
 import { CHART_UI_HTML, CHART_UI_URI } from "./chart-ui";
-import { toolReceipt } from "./tool-receipt";
+import { toolReceipt, type TraceCorrelation } from "./tool-receipt";
 import { callTool, TOOLS, type SiteVersionMetadata } from "./cloud-tools";
 
 const LIMIT = 128 * 1024;
 const versions = ["2026-07-28", "2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
+function traceCorrelation(params: Record<string, unknown> | undefined): TraceCorrelation {
+  const meta = params?._meta;
+  if (meta === undefined) return { traceParentStatus: "not_provided" };
+  if (!meta || typeof meta !== "object" || Array.isArray(meta)) return { traceParentStatus: "invalid" };
+  const traceparent = (meta as Record<string, unknown>).traceparent;
+  if (traceparent === undefined) return { traceParentStatus: "not_provided" };
+  if (typeof traceparent !== "string") return { traceParentStatus: "invalid" };
+  const match = /^00-([0-9a-f]{32})-([0-9a-f]{16})-([0-9a-f]{2})$/i.exec(traceparent);
+  if (!match || /^0+$/.test(match[1]) || /^0+$/.test(match[2])) return { traceParentStatus: "invalid" };
+  return { runId: match[1].toLowerCase(), traceParentStatus: "accepted" };
+}
 const json = (v: unknown, status = 200) => Response.json(v, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 const error = (id: unknown, code: number, message: string, status = 200) => {
   const headers = status === 401 ? { "WWW-Authenticate": "Bearer" } : undefined;
@@ -53,16 +64,17 @@ export async function handleMcp(request: Request, versionMetadata?: SiteVersionM
       if (!request.headers.get("oai-authenticated-user-id")) return error(id, -32001, "Sites authenticated identity required", 401);
       if (typeof params?.name !== "string") return error(id, -32602, "Tool name required");
       if (!TOOLS.some(t => t.name === params.name)) return error(id, -32602, "Unknown tool");
+      const correlation = traceCorrelation(params);
       try {
         const value = await callTool(params.name, params.arguments, versionMetadata);
-        const output = { ...value, tool_receipt: await toolReceipt(params.name, params.arguments, value, versionMetadata) };
+        const output = { ...value, tool_receipt: await toolReceipt(params.name, params.arguments, value, versionMetadata, undefined, correlation) };
         const summary = "svg" in output ? { ...output, svg: "[interactive MCP App; exact SVG retained in structuredContent]" } : output;
         const content: unknown[] = [{ type: "text", text: JSON.stringify(summary) }];
         result = { content, structuredContent: output, isError: false };
       } catch (e) {
         const message = e instanceof Error ? e.message : "Invalid tool arguments";
         const failure = e instanceof ZodError ? "FAIL_VALIDATION" : params.name.startsWith("render_") ? "FAIL_RENDERER_INVOCATION" : "FAIL_TOOL_INVOCATION";
-        const output = { error: message, tool_receipt: await toolReceipt(params.name, params.arguments, { error: message }, versionMetadata, failure) };
+        const output = { error: message, tool_receipt: await toolReceipt(params.name, params.arguments, { error: message }, versionMetadata, failure, correlation) };
         result = { content: [{ type: "text", text: JSON.stringify(output) }], structuredContent: output, isError: true };
       }
       break;
