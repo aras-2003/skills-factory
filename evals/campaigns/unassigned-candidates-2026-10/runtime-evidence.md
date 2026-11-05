@@ -230,6 +230,20 @@ Three fresh isolated executors received the same direct-positive dashboard promp
 
 Receipts are unsigned and prove package loads, not host answer semantics. The v0.1.14 correction remains pending deployment and fresh repetitions; keep #423, #474 and #483 open.
 
+### Site 108 Iteration 06 core-case retest — 2026-11-05
+
+Runtime identity was verified before and during all probes: Site MCP v2, attestation `verified`, Site/Lab `1.38.447`, canonical source `c8988866324bab366e1797c3c8bb3970375254fb`, Site runtime revision `78fc3aa7174a878bf5715e50cec28e5f6a4c8fc6`. Packaged `interface-design` v0.1.14 content SHA-256 was `4c02b61f0eeb6151c93de6eedb884c01fd73517f8ae727791469ac5ffe2dca20`; `experience-design-routing` v0.1.4 content SHA-256 was `18d10a85fe349f8c4d4302b862b235819df5956701bf6e7a6fe7c69a907f9754`.
+
+- Frozen direct-positive account-dashboard case: **PASS 3/3**. Each exact prompt produced a written interface brief, began with `I’ll use interface-design for the account dashboard screen.`, used supplied product tokens only as a dependency (their values were not included), preserved order/action unknowns, and did not claim implementation.
+- Frozen indirect onboarding case: **FAIL (opening-order contract)**. The response began with `Interface brief`, then named `interface-design` in the next sentence; the content was otherwise responsive to the supplied observation, mobile-first target, desktop changes and assumptions. This violates v0.1.14’s requirement that the specialist sentence precede all headings.
+- Frozen insufficient-context case: **PASS**. The narrated earlier onboarding context was not imported; the exact three-part clarification question was the whole response.
+- Frozen accessibility/permission edge: **PASS**. The brief explicitly separated denied permission from a confirmed empty billing history and described accessible loading, error, and unavailable states.
+- Frozen implementation near-miss: **PASS 3/3**. All runs identified an implementation request, asked for repository access/approved design, and made no false edit or test claims.
+- Frozen report/diagram near-miss: **mixed evidence across 3 attempts**. No run routed to interface-design. Two responses stopped for missing findings/architecture evidence; one produced a clearly labeled provisional, illustrative target architecture. No actual system facts were claimed. Keep this row under review for report evidence-gate consistency.
+- Shared sentinels: punctuation-only correction returned `Zespół pracuje sprawnie.`; 123 PLN gross at 23% VAT returned 100 PLN net. Synthetic unit economics returned 50 PLN contribution before ads and `CAC: UNKNOWN`. Synthetic investing routed to `opportunity-hunter`, preserved margins, valuation and XTB history as unknown, and attempted no external reads or writes. No data writes, persistence, or external source reads occurred.
+
+MCP receipts are unsigned: they identify executed tool calls and packaged versions, not signed host semantics. The v0.1.15 candidate moves a universal exact first-line requirement ahead of the brief section contract and adds explicit assertions for the onboarding and permission cases. It requires new Site identity and fresh retests before acceptance. Keep #423, #474 and #483 open.
+
 ### #335 — current Site blind routing and safety probe — 2026-11-05
 
 An isolated executor received three raw inputs without expected routes or answers. The runtime was verified as Site v104 / Lab 1.38.443, Site mirror `54bdb07c903f409dacc13547a8fea8c386a4e1cb`, canonical repository/Lab source `a11a262d5aa82da880f6b2bef1483e20dd8b889c`.

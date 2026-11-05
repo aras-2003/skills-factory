@@ -24,7 +24,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_candidate_metadata_and_identity(self):
         self.assertEqual(self.metadata["name"], "interface-design")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.14")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.15")
 
     def test_contract_sections_are_present(self):
         for section in (
@@ -90,10 +90,17 @@ class InterfaceDesignContractTests(unittest.TestCase):
         )
 
     def test_valid_brief_opens_by_naming_the_selected_specialist(self):
-        self.assertIn("start the response with this exact unformatted opening line", self.body)
-        self.assertIn("Do not start with a heading, greeting, or any other text", self.body)
-        case = next(c for c in self.cases if c["id"] == "interface-design-direct-positive")
-        self.assertTrue(any('begin with the unformatted sentence "I’ll use interface-design for the responsive account dashboard screen."' in item for item in case["expected"]["must"]))
+        self.assertIn("Every valid interface brief must begin with the exact unformatted sentence", self.body)
+        self.assertIn("This is the first line of the response, before any heading", self.body)
+        expected_openings = {
+            "interface-design-direct-positive": "I’ll use interface-design for the account dashboard screen.",
+            "interface-design-indirect-positive": "I’ll use interface-design for the mobile-first onboarding flow.",
+            "interface-design-accessibility-edge": "I’ll use interface-design for the desktop and mobile account page with role-based billing access.",
+        }
+        for case_id, opening in expected_openings.items():
+            case = next(c for c in self.cases if c["id"] == case_id)
+            with self.subTest(case=case_id):
+                self.assertTrue(any(f'begin with the unformatted sentence "{opening}"' in item for item in case["expected"]["must"]))
 
     def test_product_unknowns_are_not_presented_as_existing_ui(self):
         self.assertIn("Do not present plausible labels or example content as existing product behavior", self.body)
