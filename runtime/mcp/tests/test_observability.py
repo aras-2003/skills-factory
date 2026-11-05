@@ -106,6 +106,43 @@ class ObservabilityTests(unittest.TestCase):
         self.assertNotIn("must not become telemetry", repr(attributes))
         self.assertNotIn("traceparent", attributes)
 
+    def test_sequential_tool_calls_share_trace_when_client_propagates_traceparent(self):
+        exporter = InMemorySpanExporter()
+        provider = TracerProvider()
+        provider.add_span_processor(SimpleSpanProcessor(exporter))
+        request_meta = {"traceparent": TRACEPARENT}
+        receipts = []
+
+        with patch("observability.trace.get_tracer_provider", return_value=provider):
+            for tool_name, arguments in (
+                ("route_investment_request", {"user_request": "synthetic routing probe"}),
+                ("load_skill", {"skill_name": "example"}),
+            ):
+                result = execute_tool(
+                    tool_name,
+                    arguments,
+                    lambda: {"status": "synthetic"},
+                    lambda name, args, output, run_id: {
+                        "result": output,
+                        "tool_receipt": {"tool_name": name, "run_id": run_id},
+                    },
+                    request_meta=request_meta,
+                )
+                receipts.append(result["tool_receipt"])
+
+        spans = exporter.get_finished_spans()
+        self.assertEqual([span.name for span in spans], [
+            "mcp.tool.route_investment_request",
+            "mcp.tool.load_skill",
+        ])
+        trace_ids = {f"{span.context.trace_id:032x}" for span in spans}
+        self.assertEqual(trace_ids, {"4bf92f3577b34da6a3ce929d0e0e4736"})
+        self.assertEqual({receipt["run_id"] for receipt in receipts}, trace_ids)
+        self.assertEqual(
+            [dict(span.attributes)["skills_factory.trace_parent_status"] for span in spans],
+            ["accepted", "accepted"],
+        )
+
     def test_invalid_traceparent_starts_an_independent_trace(self):
         exporter = InMemorySpanExporter()
         provider = TracerProvider()
