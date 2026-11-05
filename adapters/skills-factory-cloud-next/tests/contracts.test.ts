@@ -696,7 +696,8 @@ test("chart shape guards fail closed for stale connectors and silently truncated
 test("list_skills provides a discovery path for matching Cloud Next requests", () => {
   const description = TOOLS.find((tool) => tool.name === "list_skills")?.description;
   assert.ok(description);
-  assert.match(description, /when the user requests substantive work and a matching skill or workflow may exist, call list_skills before answering/i);
-  assert.match(description, /call load_skill for its exact packaged instructions/i);
-  assert.match(description, /does not execute a skill/i);
+  assert.match(description, /MANDATORY discovery step for this app: before answering any substantive user request, call list_skills/i);
+  assert.match(description, /call load_skill for its exact packaged instructions before answering/i);
+  assert.match(description, /never answer a substantive request before these calls/i);
+  assert.match(description, /read-only; does not execute a skill/i);
 });
