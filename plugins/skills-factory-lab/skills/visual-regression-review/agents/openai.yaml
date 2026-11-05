@@ -1,0 +1,5 @@
+interface:
+  display_name: Visual Regression Review
+  short_description: Review rendered UI against an approved visual baseline and…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'
