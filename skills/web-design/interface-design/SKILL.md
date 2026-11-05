@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.11"
+  version: "0.1.12"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-11-04"
@@ -50,9 +50,9 @@ First decide whether the current request asks for interface design. If it asks t
 
 Before designing, check whether the current request or an explicitly referenced source gives all three inputs: (1) screen/flow goal, (2) intended user and primary task, and (3) target runtime/device. Never use narrated prior turns to fill any missing field.
 
-If all three inputs are missing, respond with this exact question and no other text: “What screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?” Do not replace any clause with an inferred context.
+If all three inputs are missing, respond with this exact question and no other text: “For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?” Do not replace any clause with an inferred context. The question itself names this specialist; do not add an introduction or any other text.
 
-If only some inputs are missing, ask one concise question naming only those fields. When target runtime/device is missing, the question must directly ask whether the screen should target mobile, desktop, or a specific runtime; do not omit this question even when a mobile-first or desktop flow appeared only in narrated prior turns. Every missing field must be asked as something the user can answer, not merely described as unspecified. The question must be the whole response: no introduction, examples, suggestions, checklist, partial design or promise.
+If only some inputs are missing, ask one concise question naming only those fields and identify the `interface-design` specialist in the question itself. When target runtime/device is missing, the question must directly ask whether the screen should target mobile, desktop, or a specific runtime; do not omit this question even when a mobile-first or desktop flow appeared only in narrated prior turns. Every missing field must be asked as something the user can answer, not merely described as unspecified. The question must be the whole response: no introduction, examples, suggestions, checklist, partial design or promise.
 
 Proceed with assumptions/placeholders only when the current request explicitly authorizes them and both goal and target device are clear. Label the narrowest user/task assumption, keep unknown product rules as placeholders, and list assumptions as open decisions. Never infer required context from other chats, saved memory, ambient context, or unreferenced earlier turns. A vague request such as “make the screen better” still needs the missing fields, even if a plausible screen appeared earlier. If the current message quotes or narrates a different “current user message,” treat only the quoted message as operative; continue an earlier artifact only when that message names or asks to revise it.
 

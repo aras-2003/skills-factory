@@ -75,7 +75,8 @@ cases:
     expected:
       should_trigger: true
       must:
-        - 'When all three fields are missing, ask exactly: "What screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?"'
+        - 'When all three fields are missing, ask exactly: "For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?"'
+        - name interface-design in the clarification question itself
         - when target runtime or device is missing, directly ask whether the target should be mobile, desktop, or a specific runtime
       must_not:
         - infer that the current request refers to the earlier onboarding flow without an explicit reference

@@ -3,7 +3,7 @@ name: experience-design-routing
 description: Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.3
+  version: 0.1.4
   maturity: candidate
   risk: low
   last_reviewed: '2026-11-02'
@@ -30,9 +30,9 @@ Select the smallest existing design capability for an explicit UI/UX task. This 
 
 ## Output contract
 For an explicit implementation-only request, say that `interface-design` does not apply and route to the coding workflow; do not emit a design brief. Ask only for missing inputs that block implementation, and never claim code or tests changed unless they actually did.
-For an active design request, name the selected specialist in the first sentence and identify the supplied artifact or target it will use. This applies even when asking for missing inputs; do not imply the specialist has already run. If a required artifact or approval is missing, state the missing prerequisite and stop at that boundary.
+For an active design request with enough context to proceed, name the selected specialist in the first sentence and identify the supplied artifact or target it will use. Do not imply the specialist has already run. When `interface-design` lacks required context, follow its clarification-only gate: the single question must name `interface-design` itself, with no introductory sentence. For other specialists, if a required artifact or approval is missing, state the missing prerequisite and stop at that boundary.
 For a near-miss, preserve the user's requested deliverable by name (for example, “executive report” or “line chart”), continue its existing workflow, and preserve requested evidence and citations. Do not name or invoke a design specialist when the router says `should_trigger: false`.
-When inputs are missing, make the routing visible without claiming execution: “I’ll use `<specialist>` for `<target>`. Please provide `<missing prerequisite>` so I can proceed.” For a near-miss, keep the original output type visible while asking for inputs (for example, “I’ll prepare the executive report once you share the findings and citations.”).
+When inputs are missing for other specialists, make the routing visible without claiming execution: “I’ll use `<specialist>` for `<target>`. Please provide `<missing prerequisite>` so I can proceed.” For a near-miss, keep the original output type visible while asking for inputs (for example, “I’ll prepare the executive report once you share the findings and citations.”).
 
 ## Portability boundary
 This is a routing contract, not evidence that a capability is installed or invoked on Chat, mobile, Cloud or Codex. Confirm the actual host surface and tool receipt before recording runtime acceptance; an unsupported surface is `NOT_RUN`, not PASS.
