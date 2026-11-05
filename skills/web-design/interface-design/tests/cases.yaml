@@ -46,6 +46,7 @@ cases:
         - include mobile and desktop behavior and failure states
       must_not:
         - claim the observation proves a causal explanation
+        - append the observation, purpose, or benefit to the opening flow label
         - implement the flow
 
   - id: interface-design-nearmiss-report-diagram
