@@ -13,7 +13,19 @@ async function digest(value: unknown) {
   const hash = await crypto.subtle.digest("SHA-256", bytes);
   return Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, "0")).join("");
 }
-export async function toolReceipt(name: string, input: unknown, output: unknown, metadata?: SiteVersionMetadata, failure?: "FAIL_VALIDATION" | "FAIL_RENDERER_INVOCATION" | "FAIL_TOOL_INVOCATION") {
+export type TraceCorrelation = {
+  runId?: string;
+  traceParentStatus: "accepted" | "invalid" | "not_provided";
+};
+
+export async function toolReceipt(
+  name: string,
+  input: unknown,
+  output: unknown,
+  metadata?: SiteVersionMetadata,
+  failure?: "FAIL_VALIDATION" | "FAIL_RENDERER_INVOCATION" | "FAIL_TOOL_INVOCATION",
+  correlation: TraceCorrelation = { traceParentStatus: "not_provided" },
+) {
   const chart = name === "render_bar_chart" || name === "render_line_chart";
   return {
     schema_version: "1.0",
@@ -25,6 +37,8 @@ export async function toolReceipt(name: string, input: unknown, output: unknown,
     source_revision: metadata?.tag && /^[a-f0-9]{40}$/i.test(metadata.tag) ? metadata.tag : "unattested",
     input_sha256: await digest(input),
     output_sha256: await digest(output),
+    ...(correlation.runId ? { run_id: correlation.runId } : {}),
+    trace_parent_status: correlation.traceParentStatus,
     ...(failure ? { failure_state: failure } : {}),
     ...(chart ? { artifact_state: failure ?? "rendered", client_display_state: failure ? "not_applicable" : "not_observable" } : {}),
   };
