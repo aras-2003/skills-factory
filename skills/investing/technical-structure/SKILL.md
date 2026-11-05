@@ -3,10 +3,10 @@ name: technical-structure
 description: Use as the technical-structure analyst when an investment request concerns confirmed price swings, Dow-style trend state, support/resistance, and invalidation from supplied adjusted OHLCV.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.0
+  version: 0.1.1
   maturity: candidate
   risk: high
-  last_reviewed: '2026-10-27'
+  last_reviewed: '2026-11-05'
 ---
 
 # Technical Structure
@@ -26,7 +26,10 @@ Use supplied adjusted OHLCV bars with stable source IDs, observation/publication
 6. The deterministic 0–100 direction score uses 50 as the neutral midpoint: +25 for each of HH and HL, and −25 for each of LH and LL, clamped to [0, 100]. Report all four Boolean components and the formula. It is not probability or evidence of predictive edge. Keep it separate from the Opportunity Score.
 
 ## Output contract
-For each requested horizon, identify the bar window/parameters, as-of time, supplied currency, trend state and phase, confirmed OPS/OPD price and percentage distance, source IDs, confirmation dates, breakout/retest conditions, invalidation and missingness. The engine emits one supplied-window state; it does not independently validate 1–3 month, 6–12 month or >3 year predictive horizons. Never fill a missing currency, pivot or price.
+For each requested horizon, identify the bar window/parameters, as-of time, supplied currency, trend state and phase, confirmed OPS/OPD price and percentage distance, source IDs, confirmation dates, breakout/retest conditions, invalidation and missingness. Include pivot history with both occurrence and confirmation timestamps when available. The engine emits one supplied-window state; it does not independently validate 1–3 month, 6–12 month or >3 year predictive horizons. Never fill a missing currency, pivot or price.
+
+## Chart output
+When a chart is requested or materially helps explain the supplied structure, use the engine's `chart` payload only when `status` is `READY`. Pass its `x_labels`, `series_names`, `series_values`, `title` and `unit` unchanged to `render_line_chart`, setting each expected count from the corresponding array length. The payload plots adjusted closes and stepwise OPS/OPD levels as they became knowable on their right-bar confirmation dates; do not replace these series with the final levels stretched backward over earlier dates. If the payload is `NOT_AVAILABLE`, report its reason and do not invent points. If `window_policy` says `last_100_post_confirmation_observations`, describe the chart as a recent-window view. The chart is a supplied-window state display, not a forecast or evidence of predictive edge.
 
 ## Limits
 No historical instrument corpus, corporate-action processor, market calendar, signal-cost simulation, chart rendering, walk-forward or out-of-sample validation is bundled. Do not claim those have passed. Never automate portfolio changes or trades.

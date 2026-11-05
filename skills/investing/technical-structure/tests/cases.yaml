@@ -54,3 +54,10 @@ cases:
     expected:
       should_trigger: false
       must_not: ["OPS/OPD", "price trend", "support and resistance"]
+  - id: technical-structure-chart-confirmation-timeline
+    case: Chart uses dated close and confirmation-aware step levels
+    input: "For these explicitly synthetic adjusted OHLCV bars, create a dated chart of adjusted close, OPS and OPD. Show each level only from its right-bar confirmation date and label the chart synthetic."
+    expected:
+      should_trigger: true
+      must: ["adjusted close", "OPS", "OPD", "confirmation date", "source", "synthetic", "not a forecast"]
+      must_not: ["backdate levels", "invent missing bars", "predictive edge"]

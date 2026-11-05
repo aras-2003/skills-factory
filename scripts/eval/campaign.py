@@ -937,6 +937,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
         "skills/investing/historical-decision-replay/scripts/engine.py",
         "skills/investing/technical-structure/SKILL.md",
         "skills/investing/technical-structure/scripts/engine.py",
+        "workflows/investment-os-review/WORKFLOW.md",
         "skills/web-design/experience-design-routing/SKILL.md",
         "skills/web-design/website-quality-review/SKILL.md",
         "skills/web-design/website-quality-review/tests/cases.yaml",

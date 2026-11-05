@@ -99,6 +99,66 @@ class TechnicalStructureTests(unittest.TestCase):
         self.assertEqual("2026-01-11T00:00:00+00:00", result["opd"]["confirmed_at"])
         self.assertEqual("SYNTHETIC-XYZ-8", result["opd"]["source_id"])
         self.assertEqual("-18.18", result["opd"]["distance_pct"])
+        self.assertEqual("READY", result["chart"]["status"])
+        self.assertEqual("2026-01-11T00:00:00+00:00", result["chart"]["x_labels"][-1])
+
+    def test_chart_levels_are_stepwise_and_begin_only_after_confirmation(self):
+        values = [(10, 8, 9), (12, 9, 11), (11, 8.5, 10), (14, 10, 12),
+                  (12, 9, 11), (16, 11, 14), (14, 10, 12), (13, 11, 12)]
+        data = bars(values)
+        result = analyze_structure(
+            data,
+            as_of=data[-1]["timestamp"],
+            source_id="synthetic-series",
+            adjusted=True,
+            adjustment_id="synthetic-adjustment-v1",
+            currency="USD",
+            left=1,
+            right=1,
+        )
+
+        chart = result["chart"]
+        self.assertEqual("READY", chart["status"])
+        self.assertEqual("synthetic-series", chart["source_id"])
+        self.assertEqual("synthetic-adjustment-v1", chart["adjustment_id"])
+        self.assertEqual("USD", chart["unit"])
+        self.assertEqual("all_post_confirmation_observations", chart["window_policy"])
+        self.assertEqual([
+            "2026-01-04T00:00:00+00:00",
+            "2026-01-05T00:00:00+00:00",
+            "2026-01-06T00:00:00+00:00",
+            "2026-01-07T00:00:00+00:00",
+            "2026-01-08T00:00:00+00:00",
+        ], chart["x_labels"])
+        self.assertEqual(["Adjusted close", "OPS", "OPD"], chart["series_names"])
+        self.assertEqual([
+            [12.0, 11.0, 14.0, 12.0, 12.0],
+            [12.0, 14.0, 14.0, 16.0, 16.0],
+            [8.5, 8.5, 9.0, 9.0, 10.0],
+        ], chart["series_values"])
+        self.assertEqual(len(chart["x_labels"]), len(chart["series_values"][0]))
+        self.assertIn("confirmation dates", chart["provenance_note"])
+
+    def test_chart_payload_caps_only_the_display_window(self):
+        values = [(10 + (i % 3), 8 + (i % 2), 9 + (i % 3)) for i in range(140)]
+        data = bars(values)
+        result = analyze_structure(
+            data,
+            as_of=data[-1]["timestamp"],
+            source_id="synthetic-long-series",
+            adjusted=True,
+            adjustment_id="synthetic-adjustment-v1",
+            currency="USD",
+            left=1,
+            right=1,
+        )
+
+        chart = result["chart"]
+        self.assertEqual("READY", chart["status"])
+        self.assertEqual("last_100_post_confirmation_observations", chart["window_policy"])
+        self.assertEqual(100, len(chart["x_labels"]))
+        self.assertTrue(all(len(series) == 100 for series in chart["series_values"]))
+        self.assertEqual(result["confirmed_pivots"], len(result["pivot_history"]))
 
     def test_requires_adjusted_prices_and_provenance(self):
         data = bars([(10, 8, 9)] * 8)

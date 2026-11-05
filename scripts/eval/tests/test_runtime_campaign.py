@@ -151,6 +151,7 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/investing/historical-decision-replay/scripts/engine.py",
             "skills/investing/technical-structure/SKILL.md",
             "skills/investing/technical-structure/scripts/engine.py",
+            "workflows/investment-os-review/WORKFLOW.md",
             "skills/web-design/experience-design-routing/SKILL.md",
             "skills/web-design/website-quality-review/SKILL.md",
             "skills/web-design/website-quality-review/tests/cases.yaml",
@@ -171,6 +172,9 @@ class RuntimeCampaignTests(unittest.TestCase):
             "skills/media/creative-generation/scripts/comfyui_local.py",
         }
         self.assertEqual(expected, campaign.separately_validated_unassigned_candidate_paths(ROOT))
+        workflow = (ROOT / "workflows/investment-os-review/WORKFLOW.md").read_text()
+        self.assertIn("technical-structure` is a Lab candidate", workflow)
+        self.assertIn("BLOCKED_CANDIDATE_SKILL_NOT_AVAILABLE", workflow)
         self.assertEqual([], campaign.validate_campaign())
 
     def test_skill_engineering_campaign_derives_lab_version_from_package_source(self) -> None:
