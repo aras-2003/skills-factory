@@ -87,7 +87,16 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         }
     # Route the requested task, excluding clauses that explicitly reject an
     # alternative (for example "not my portfolio" or "nie ... rebalancingu").
-    text = re.sub(r"\b(?:do not|don't|not|without|nie)\b[^.!?;,\n]*", "", raw.lower())
+    # Keep comma-separated terms inside a negated list together, but stop before
+    # a new comma-separated negation so each guardrail is removed independently.
+    negation = r"(?:do not|don't|not|without|nie)"
+    text = re.sub(
+        rf"\b{negation}\b(?:(?!,\s*\b{negation}\b)[^.!?;:\n])*",
+        "",
+        raw.lower(),
+    )
+    # Polish exclusion lists often contain comma-separated items after "bez".
+    text = re.sub(r"\bbez\b[^.!?;:\n]*", "", text)
 
     if not raw:
         return {
@@ -112,8 +121,11 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "investment", "investing", "portfolio", "stock", "stocks", "security", "securities",
         "etf", "fund", "holdings", "investment policy", "risk limit",
         "inwestyc", "portfel", "spół", "spolk", "akcj", "fundusz",
-        "share", "thesis", "gross margin", "marża brutto", "marza brutto", "watchlist",
+        "share", "thesis", "valuation", "wycen", "gross margin", "marża brutto", "marza brutto", "watchlist",
         "research candidates", "kandydatów do researchu", "kandydatow do researchu", "opportunit", "okazj",
+    ) or (
+        _ticker_count(raw) == 1
+        and _contains(text, "buy", "sell", "purchase", "trade", "order", "execute")
     )
     if non_investment_finance and not explicit_investment_context:
         return {
@@ -132,7 +144,17 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "limit jednej spółki", "limity sektorowe", "rebalancing",
         "maksymalny udział", "reguły portfela",
     )
-    attention = _contains(
+    systemic_risk_triage = _contains(
+        text,
+        "systemic risk", "cross-asset", "cross asset", "credit condition",
+        "credit spread", "market breadth", "real yield", "macro condition",
+        "macro indicator", "liquidity indicator", "risk indicator",
+    ) and _contains(
+        text,
+        "triage", "assess", "review", "monitor", "indicator", "signal",
+        "changed", "ocen", "przejrz", "monitoruj", "sygnał", "sygnal",
+    )
+    attention = systemic_risk_triage or _contains(
         text,
         "new information", "new news", "does this news", "does this change the thesis",
         "changes the thesis", "materiality", "headline", "nowe informacje",
@@ -169,11 +191,13 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         text,
         "find opportunities", "find stocks", "new stocks", "new securities",
         "research candidates", "what should i research", "scan for",
+        "candidate", "candidates", "kandydat",
         "znaleźć kilka nowych spółek", "znalezc kilka nowych spolek",
         "nowe spółki", "nowe spolki", "kandydatów do researchu",
         "kandydatow do researchu", "co warto zbadać", "co warto zbadac",
         "watchlist screen", "screen my watchlist", "screen watchlist",
         "preview the screen", "preview-only screen", "screen these candidates",
+        "opportunity score", "opportunity-score", "opportunity scoring", "opportunity-scoring", "horizon-aware opportunity",
         "promising opportunities", "promising opportunity", "obiecujące okazje", "obiecujace okazje",
         "okazje w sektorze", "opportunities in the renewable", "opportunities in sector",
     )
@@ -197,6 +221,11 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
         "mój portfel", "wagi", "udziały", "udzialy", "koncentracja",
         "dywersyfikacja", "pozycje w portfelu",
     )
+    portfolio_action = (
+        portfolio
+        and _contains(text, "all proceeds", "all holdings", "holdings to cash", "liquidate", "liquidation")
+        and _contains(text, "buy", "sell", "purchase", "trade", "execute", "transfer")
+    )
     single_security_intent = (
         _contains(text, "stock", "security", "company", "issuer", "spółk", "spółce", "spolce", "spolk", "akcj", "good investment")
         and (
@@ -212,7 +241,7 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
     # This endpoint is an investment router, not a universal ambiguity
     # resolver. Do not misroute unrelated prompts just because they contain a
     # financial word in a negation, quoted string or explanation.
-    if not explicit_investment_context:
+    if not explicit_investment_context and not systemic_risk_triage:
         return {
             "is_investment_request": False,
             "route": "not_applicable",
@@ -233,6 +262,12 @@ def route_investment_request(user_request: str) -> dict[str, str | bool]:
             "attention",
             "investment-attention-review",
             "request asks whether new information changes an existing investment thesis or deserves escalation",
+        )
+    elif portfolio_action:
+        route, child, reason = (
+            "portfolio",
+            "investment-portfolio-review",
+            "request reallocates or liquidates multiple holdings, so the portfolio owns the decision",
         )
     elif single_security_intent and not (_ticker_count(raw) >= 2 and "%" in raw):
         route, child, reason = (
