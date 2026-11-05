@@ -253,3 +253,17 @@ The synthetic portfolio-review input routed through `portfolio-observation` to `
 Unsigned route-call receipt SHA-256 input/output pairs were respectively `e91c0cd841ff4ced2dd77afbe505a943f4af4b8ba6902e6882615b5916d6d892` / `6b278f8975e16cc9a15d78bf21d017c4516be482baeb79dbe1d3e8739239a6dd`, `fbae4a9835352ed86c20059370cdd3b5fee08620224f6e93e728670d1463b7e5` / `6287f9c28a460adb83d45abb9a3cf292e46c2b22bf1ae31f3b9f076f532dc816`, and `9861cc7755daea25da37e46b6e53acd521dbcc7ed19b8ff81163ad43d71148f6` / `acb74ad409dcf05c32465c05137ef3793fbfb42ab92d4d0e36ad8069031fd7f8`. Loaded-skill receipt pairs: `investment-portfolio-observation` `78784d5d47064797b5bb041ff7e797cfb7a957d917ad8863243c63c4e2508003` / `ab3f61a0b60de80ee2cae9f8d41d61e3e3f1b8749b4ab0b0b075149a335911e3`; `investment-security-review` `95524b2c75374b6cfce3ded2fbdae97a908541e91b3b81f34b0f84808aabb0bf` / `bf785683803c1875e8b27c9a80da6d0b033700ffa9a4fcf1a8fddce7030c3819`; `portfolio-state-review` `4c137590b8143586a626ab461116cf53d99516af47995b83837a062f85416cab` / `b215eeecd18102f3436f969034fb7bd31ce3ab511720f1c06dbfe96571c2a2b6`; `investment-record-store` `09eb7798494f1101194db6b6db4a126af64745f0ee710e66b464967c5e1324a8` / `0e4c23153ec580f17a5f7a4911e5617fcdb8bfed9ec32101c4c90190911dff3f`.
 
 This is narrow host-response evidence for routing, missing-data restraint and the no-trade boundary. The unsigned receipts attest tool calls only, not semantic answers; they do not establish ChatGPT `_meta` propagation or a Phoenix multi-call trajectory. The #335 host-trace/Phoenix acceptance criteria remain NOT RUN, so #335 stays open.
+
+### Site 109 interface-design opening-order retest — 2026-11-05
+
+The current Site runtime was verified immediately before retesting: Site MCP v2 attestation `verified`; Lab `1.38.448`; canonical Skills Factory/Lab source `79c3d3cfa3c48f016b8aaec4b0cd9b41e0df790a`; Site runtime revision `0c276b71cf01c267f771a590ae8c60f5a9a61ed9`. The packaged `interface-design` v0.1.15 loaded with content SHA-256 `6ec10ce5783ec41b3170ab76dda6e073b09509b5f9743d782e0f9e2143079af3`. Runtime-info and load receipts are unsigned MCP call records.
+
+Three fresh isolated host executors received the frozen mobile-first onboarding prompt without expected answers. The required first line was `I’ll use interface-design for the mobile-first onboarding flow.`
+
+- Attempt 1 began `I’ll use interface-design for the mobile-first onboarding flow for explaining and collecting profile details.` — FAIL: added a purpose phrase to the flow name.
+- Attempt 2 began with the exact required line — PASS.
+- Attempt 3 began `I’ll use interface-design for the mobile-first onboarding flow explaining profile details.` — FAIL: added a purpose phrase to the flow name.
+
+All three produced a substantive mobile-first onboarding brief, covered desktop changes and assumptions, and avoided inventing product rules. The exact opening contract passed 1/3; this is a repeatable opening-format failure despite the v0.1.15 instruction to use the exact opening before the brief heading. The runs were isolated host executions of loaded MCP instructions, not ordinary Chat UI natural-routing tests. MCP receipts do not attest to host answer semantics.
+
+The exact onboarding opening remains a release blocker for the frozen positive case. Do not count this as acceptance for #423, #474, or #483; their broader required repetitions, natural Chat routing, complete sentinel matrix and cross-surface/runtime criteria remain outstanding.
