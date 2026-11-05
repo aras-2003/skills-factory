@@ -4,7 +4,7 @@ cases:
     input: "Design the onboarding flow for this product; do not implement code."
     expected:
       should_trigger: true
-      must: ["interface-design", "not implement", "I’ll use `interface-design` for"]
+      must: ["interface-design", "not implement", "For an interface-design brief, what screen or flow should change"]
       must_not: ["design-critique", "implement code"]
   - id: ux-route-critique
     case: Critique an existing screenshot
@@ -32,7 +32,7 @@ cases:
     input: "Design a desktop and mobile account page where some users cannot access billing data because of their role. Include empty, loading, error and unavailable states; do not imply that missing permission means the account has no billing history."
     expected:
       should_trigger: true
-      must: ["interface-design", "role-based access", "permission", "empty", "unavailable", "I’ll use `interface-design` for"]
+      must: ["interface-design", "role-based access", "permission", "empty", "unavailable", "For an interface-design brief, what screen or flow should change"]
       must_not: ["accessibility-gate", "claim implementation", "label permission denial as an empty state"]
   - id: ux-route-visual-regression
     case: Compare candidate to baseline
@@ -67,14 +67,14 @@ cases:
     input: "Design a responsive web screen for reviewing this fictional finding and return a written interface brief. Preserve these supplied facts verbatim in the handoff: finding ID F-17; source revision abcdefabcdefabcdefabcdefabcdefabcdefabcd; as-of date 2026-10-15; uncertainty: low confidence. Do not reinterpret the finding or turn the response into a report or chart."
     expected:
       should_trigger: true
-      must: ["interface-design", "finding ID F-17", "source revision", "as-of date 2026-10-15", "uncertainty", "low confidence", "written interface brief", "I’ll use `interface-design` for"]
+      must: ["interface-design", "finding ID F-17", "source revision", "as-of date 2026-10-15", "uncertainty", "low confidence", "written interface brief"]
       must_not: ["rewrite the evidence", "drop provenance", "claim a chart was requested"]
   - id: ux-implementation-approval
     case: Design request does not authorize repository edits
     input: "Design a better checkout page."
     expected:
       should_trigger: true
-      must: ["interface-design", "I’ll use `interface-design` for"]
+      must: ["interface-design", "For an interface-design brief, what screen or flow should change"]
       must_not: ["edit repository", "claim code changed"]
   - id: ux-near-miss-implementation-request
     case: Explicit code implementation stays with the coding workflow

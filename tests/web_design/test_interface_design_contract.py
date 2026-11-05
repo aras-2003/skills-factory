@@ -24,7 +24,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_candidate_metadata_and_identity(self):
         self.assertEqual(self.metadata["name"], "interface-design")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.11")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.12")
 
     def test_contract_sections_are_present(self):
         for section in (
@@ -79,13 +79,14 @@ class InterfaceDesignContractTests(unittest.TestCase):
     def test_missing_context_gate_is_clarification_only(self):
         self.assertIn("The question must be the whole response", self.body)
         self.assertIn(
-            "What screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?",
+            "For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?",
             self.body,
         )
         self.assertIn("do not replace any clause with an inferred context", self.body.lower())
+        self.assertIn("The question itself names this specialist", self.body)
         case = next(c for c in self.cases if c["id"] == "interface-design-insufficient-context")
         self.assertTrue(
-            any("What screen or flow should change" in item for item in case["expected"]["must"])
+            any("For an interface-design brief, what screen or flow should change" in item for item in case["expected"]["must"])
         )
 
     def test_product_unknowns_are_not_presented_as_existing_ui(self):

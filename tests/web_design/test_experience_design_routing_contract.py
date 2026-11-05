@@ -25,7 +25,7 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
     def test_candidate_identity_and_portability_boundary(self):
         self.assertEqual(self.metadata["name"], "experience-design-routing")
         self.assertEqual(self.metadata["metadata"]["maturity"], "candidate")
-        self.assertEqual(self.metadata["metadata"]["version"], "0.1.3")
+        self.assertEqual(self.metadata["metadata"]["version"], "0.1.4")
         self.assertIn("## Portability boundary", self.body)
         self.assertIn("confirm the actual host surface and tool receipt", self.body.lower())
         self.assertIn("NOT_RUN", self.body)
@@ -59,9 +59,10 @@ class ExperienceDesignRoutingContractTests(unittest.TestCase):
 
     def test_active_routes_name_specialist_and_near_misses_name_original_format(self):
         self.assertIn("name the selected specialist in the first sentence", self.body)
+        self.assertIn("the single question must name `interface-design` itself", self.body)
         self.assertIn("preserve the user's requested deliverable by name", self.body)
         for case_id, phrase in {
-            "ux-route-design": "I’ll use `interface-design` for",
+            "ux-route-design": "For an interface-design brief, what screen or flow should change",
             "ux-route-critique": "I’ll use `design-critique` for",
             "ux-route-handoff": "I’ll use `implementation-brief` for",
             "ux-route-accessibility": "I’ll use `accessibility-gate` for",

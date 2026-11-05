@@ -206,6 +206,14 @@ Observed behavior: routing decisions were broadly correct across design, critiqu
 
 The MCP load receipts were unsigned and establish packaged skill loads only, not semantic answer attestation. Chat-Mobile and Codex UI were not tested (`NOT_RUN`).
 
+## Site 105 blind interface-design and routing probe — 2026-11-05
+
+The Site runtime was independently verified as attested, canonical source `2c8dcff32fed53e9ec8544e6328f7544c365f8a7`, Site mirror `03d7742120008faa9262f953fe0ba28b2b9d5ecd`, Lab `1.38.444`, software identity `1.38.444+2c8dcff32fed`; deployed `2026-11-05T01:42:32.238Z`. `load_skill` returned `interface-design` v0.1.11 (content SHA-256 `cc765ba5eb14b2d078e09a75e1ebd5e429f44aea55d5715ad2dfc6bd5937a5b9`) and `experience-design-routing` v0.1.3 (content SHA-256 `acc615927206387368931abca0523eb74688de3947471ee3fe03a10c3da061de`). These load receipts verify package identity, not answer semantics.
+
+Three isolated blind executors received raw prompts without rubrics. Across 19 interface prompts, clarification and near-miss boundaries generally held: vague design requests received only a clarification question; report, diagram and implementation requests retained their requested outcome; outputs preserved supplied provenance, left unavailable inputs as unknown, and did not claim implementation or rendering. Three fresh routing repeats produced inconsistent positive-route openings: one named `interface-design`, one used only “Interface brief,” and one omitted a specialist introduction when asking for missing context. The conflict was in the written instructions: the router required a first-sentence specialist preface even for missing inputs, while `interface-design` required a clarification question as the entire response. This finding motivated the scoped v0.1.12 / v0.1.4 contract correction. The exact missing-context wording now names `interface-design` inside that single question, preserving both requirements without a preface.
+
+These were isolated host-agent outputs, not ordinary Chat UI sessions; MCP receipts are unsigned and do not attest to semantic answers. Chat-Mobile, Codex UI, host-level trace correlation and Phoenix trajectory remain `NOT_RUN`. Keep #335, #423, #474 and #483 open until their remaining acceptance rows are met.
+
 ### #335 — current Site blind routing and safety probe — 2026-11-05
 
 An isolated executor received three raw inputs without expected routes or answers. The runtime was verified as Site v104 / Lab 1.38.443, Site mirror `54bdb07c903f409dacc13547a8fea8c386a4e1cb`, canonical repository/Lab source `a11a262d5aa82da880f6b2bef1483e20dd8b889c`.
