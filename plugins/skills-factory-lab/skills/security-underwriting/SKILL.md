@@ -8,10 +8,10 @@ description: 'Underwrite one equity or ETF as an investment using structured equ
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.5.1
+  version: 0.5.2
   maturity: production
   risk: high
-  last_reviewed: '2026-10-09'
+  last_reviewed: '2026-10-31'
 ---
 
 # Security Underwriting
@@ -40,23 +40,29 @@ Produce an evidence-backed investment case that can later be challenged, valued,
    - dated material events aligned to major changes.
 5. Explain business model, segment economics, competitive position and capital intensity.
 6. Review revenue, margins, cash flow, ROIC/returns, balance sheet, dilution and capex using dated sources.
-7. Run a hard evidence-sanity gate on every decision-critical reported metric before any valuation or sizing:
+7. Run a value-trap and cash-flow quality gate before interpreting low multiples, yield, drawdowns or valuation:
+   - reconcile CFO, capex, lease payments/liabilities, working capital, real-estate customer advances, buybacks/dilution and normalized FCF over 3–5 years and across a cycle;
+   - inspect net debt, maturity wall, interest coverage, covenants, refinancing sensitivity, and ROE versus ROIC;
+   - test structural decline, demand concentration, regulation, state ownership/governance, asset revaluation and cyclicality where relevant;
+   - label each gate PASS / WARN / BLOCK with a concise reason and falsifiable invalidation trigger. Unsupported or implausible primary cash-flow evidence blocks an attractive final rating and any FCF-based valuation. Data defects are UNVERIFIED/CONFLICTED, not zero or neutral.
+   - the tested deterministic gate is packaged at `scripts/value_trap_gate.py`; run it only where the active runtime actually exposes script execution. Otherwise apply and show the same evidence fields in the response without claiming code execution. The helper does not impose universal ratio thresholds or decide whether a concern is material.
+8. Run a hard evidence-sanity gate on every decision-critical reported metric before any valuation or sizing:
    - verify the exact metric in primary-source context where possible;
    - confirm period, units, currency, GAAP/non-GAAP basis, quarterly vs annual basis, per-share vs absolute values and arithmetic consistency;
    - compare magnitude against adjacent disclosures and prior-period/company scale;
    - extraordinary values trigger re-verification, not automatic rejection;
    - mark unresolved conflicting/extraction-uncertain figures UNVERIFIED or CONFLICTED.
-8. If any decision-critical metric remains UNVERIFIED/CONFLICTED:
+9. If any decision-critical metric remains UNVERIFIED/CONFLICTED:
    - classify research state as VERIFY / RESEARCH;
    - do not compute P/E, FCF yield, numeric valuation scenarios or numeric sizing from those figures;
    - state exactly what must be verified next.
    - If an event, company-specific fact, or key input remains unresolved, identify it as a blocking uncertainty and limit downstream conclusions; do not bury it in a generic risk list or continue to a definitive thesis/valuation conclusion.
-9. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations. Classify business lifecycle with the deterministic `scripts/business_lifecycle.py` classifier and `references/business-lifecycle.md` contract when three comparable annual/TTM observations are available. Report phase and uncalibrated affinity separately from valuation. For insufficient or conflicted inputs, show NOT_CLASSIFIED, not invented phase odds.
-10. Evaluate valuation relative to history, peers and scenario economics.
-11. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.
-12. State catalysts, risks, dependencies and variant perception.
-13. Form a compact thesis with explicit assumptions and kill criteria.
-14. Hand off conviction challenge to thesis-challenge before portfolio action.
+10. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations. Classify business lifecycle with the deterministic `scripts/business_lifecycle.py` classifier and `references/business-lifecycle.md` contract when three comparable annual/TTM observations are available. Report phase and uncalibrated affinity separately from valuation. For insufficient or conflicted inputs, show NOT_CLASSIFIED, not invented phase odds.
+11. Evaluate valuation relative to history, peers and scenario economics.
+12. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.
+13. State catalysts, risks, dependencies and variant perception.
+14. Form a compact thesis with explicit assumptions and kill criteria.
+15. Hand off conviction challenge to thesis-challenge before portfolio action.
 
 ## Historical attribution
 For material historical price/fundamental moves, separate:
@@ -75,6 +81,8 @@ Do not write "the stock fell because X" merely because X happened nearby in time
 - Extreme numbers may be real; verify before accepting or rejecting them.
 - Good business != good security at any price.
 - A cheap multiple can reflect peak earnings.
+- No attractive rating may override a BLOCK gate; low P/E or high FCF yield cannot bypass weak cash conversion, leverage, refinancing or structural decline.
+- Keep accounting-data uncertainty distinct from business risk and valuation uncertainty.
 - Never pass UNVERIFIED/CONFLICTED critical metrics into valuation or sizing.
 
 ## Visual lifecycle contract
@@ -95,6 +103,9 @@ WHY THIS / WHY NOW; historical price context; historical KPI trends; historical 
 - [ ] Critical metrics were independently verified in primary-source context.
 - [ ] Extreme values were verified rather than rejected merely for magnitude.
 - [ ] No valuation or sizing was computed from blocked metrics.
+- [ ] Value-trap gates show PASS/WARN/BLOCK, concise reasons and invalidation triggers.
+- [ ] Cash-flow quality, leverage/refinancing and structural-decline risks were tested where relevant.
+- [ ] An unresolved critical cash-flow input cannot produce an attractive final rating or FCF-based valuation.
 - [ ] Business thesis and security attractiveness are separate.
 - [ ] Kill criteria are falsifiable.
 - [ ] Lifecycle graphic or explicitly blocked fallback rendered from verified classifier output, with five phases and uncalibrated-affinity warning.
