@@ -69,6 +69,9 @@ Do not require the user to ask for policy enforcement, rebalancing or a full por
    - do not turn incomplete look-through into a precise total.
 7. Use soft reference bands, if configured, only as attention signals. They are not policy breaches, target allocations or automatic rebalance instructions.
 8. Run investment-attention-triage only for positions/exposures with material new evidence or meaningful observed change.
+   - When systemic or cross-asset series may matter, load the `investment-attention-triage` registry and preserve each observation's publication vintage, age, source and correlation group.
+   - Join a market signal to portfolio state only when dated issuer/constituent exposure supports that link; broad market stress alone does not prove portfolio-specific impact.
+   - An absent canonical or external series remains `DATA_GAP`; do not replace it with headline summaries, stale values or inferred probabilities.
 9. Run thesis-monitor only when an ACTIVE thesis exists. If only DRAFT exists, state that thesis monitoring is not yet active.
 10. Suppress unchanged/noise items from the main attention queue; summarize them compactly under no material change.
 11. Do not create buy/sell/rebalance instructions unless the user separately asks for a portfolio decision.
@@ -85,6 +88,10 @@ Use the minimum dimensions supported by evidence:
 - stale/missing data.
 
 Do not invent unsupported dimensions merely for completeness.
+
+## Systemic and cross-asset signals
+
+Use the `investment-attention-triage` systemic-risk indicator registry for permitted series, freshness, vintage and derivation rules. It defines measurements, not a crisis forecast or trading policy. If no canonical policy or versioned calibration supplies a threshold, report the signal as `NOT_CONFIGURED` and do not elevate it to a policy breach or action recommendation.
 
 ## Soft reference semantics
 Reference bands are optional observation heuristics.
