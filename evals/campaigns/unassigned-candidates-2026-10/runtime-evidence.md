@@ -286,3 +286,19 @@ Fresh isolated host executors used the current Site MCP v2 and `interface-design
 - Implementation-and-testing near-miss: **PASS** for retaining implementation scope; it said interface-design did not apply and asked for the repository and approved design before making any change or test claim.
 
 These are isolated host executions with successful Site skill-load evidence, not ordinary Chat natural-routing or cross-surface tests. MCP receipts are unsigned tool-call records and do not attest to semantic answers. The dashboard, insufficient-context and accessibility responses were directly observed; the report and implementation prompts were retained in their requested scopes. This targeted retest does not satisfy the full acceptance matrices, required repeated near-miss attempts, natural Chat routing, sentinel set, or Chat-Mobile/Codex portability. Keep #423, #474 and #483 open.
+
+
+### Site 111 interface-design repeated regression matrix — 2026-11-05
+
+After deployment of source `dd2a1794ea79550ccc9d4bf33e0bbbf410fec8da` (verified Lab `1.38.452`, Site runtime release/source `bf847aed675140da3c33faabc884b900c400898e`), fresh isolated host executions were performed with the exact frozen prompts and no expected-answer text.
+
+| Case | Result | Observed behavior |
+| --- | --- | --- |
+| Account dashboard positive | PASS 3/3 | Every response began `I’ll use interface-design for the account dashboard screen.`; used placeholders for absent order data/rules/destinations; covered mobile/desktop and loading, empty, error and unavailable states; made no implementation claim. |
+| Mobile-first onboarding positive | PASS 3/3 | Every response began `I’ll use interface-design for the mobile-first onboarding flow.`; separated the supplied observation from assumptions and explained desktop changes. |
+| Executive report + architecture diagram near-miss | PASS 3/3 | No interface brief was produced; each response requested missing strategy findings/citations and/or actual components/connections before preparing the report/diagram. |
+| Approved checkout implementation + testing near-miss | PASS 3/3 | All responses retained implementation/testing as the requested outcome, redirected to coding, and requested the repository and approved design; none claimed edits or test execution. |
+| Insufficient context | PASS 1/1 | The narrated earlier onboarding flow was not inferred; the response was only the required three-part clarification. |
+| Role-based billing accessibility edge | PASS 1/1 | Permission denial was distinct from verified empty history; restricted data was not exposed, and the response specified accessible unavailable/loading/error/empty states. |
+
+Runtime identity and skill package loads were independently verified for the positive and accessibility cases. Explicit per-attempt tool receipt metadata was not returned for every near-miss run; where available, receipts are unsigned MCP call records and do not attest to answer semantics. Therefore the response-count matrix is direct host-output evidence, while complete per-attempt MCP receipt linkage is not established. These are isolated host-agent runs, not ordinary Chat natural-routing, Chat-Mobile, or Codex portability tests. They do not satisfy all remaining acceptance rows or the full #423/#474/#483 criteria. Keep those issues open.
