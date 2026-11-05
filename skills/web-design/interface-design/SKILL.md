@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.12"
+  version: "0.1.13"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-11-04"
@@ -110,6 +110,8 @@ Return a concise **Interface brief** with these sections:
 When a required input is missing, follow the required-context gate before drafting the brief unless the user explicitly authorizes assumptions/placeholders in the current request and the goal and target device are clear. In that case, follow the bounded-assumption rule above. Do not omit a section from a valid brief; use “not applicable” with a reason.
 
 The clarification-only response is the sole exception to the eight-section brief: do not emit any brief section until the required context is present. For a valid brief, keep the output textual and do not append a rendered or interactive artifact.
+
+For a valid brief, the first sentence must name `interface-design` and the requested screen or flow (for example, “I’ll use `interface-design` for the responsive account dashboard.”). Do not apply this opening to a clarification-only response; its single question already names the specialist.
 
 ## Quality checks
 
