@@ -1,0 +1,5 @@
+interface:
+  display_name: Strategy Economics
+  short_description: Reconcile sourced profit pools, value-driver trees…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#75D8C1'
