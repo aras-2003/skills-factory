@@ -222,6 +222,14 @@ Three fresh isolated executors received the same direct-positive dashboard promp
 
 Separate Site 106 blind checks passed the clarification-only response (“For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?”) and preserved an executive-report request as report work, asking for findings/citations and architecture source. These outputs are host-agent observations, not signed semantic receipts. The contract correction is still pending deployment and fresh repeats; keep #423, #474 and #483 open.
 
+### Site 107 positive-route repeat — 2026-11-05
+
+After PR #569 merged as `a9aef20f6858aa936d30a303c4b7c5b805fd398d`, the live runtime verified as Site 107 / Lab 1.38.446, canonical source `a9aef20f6858aa936d30a303c4b7c5b805fd398d`, Site runtime revision `fe2ba15a77d872fe38c3d096a2cb2fe2a4e0038f`, attestation `verified`. Packaged `experience-design-routing` v0.1.4 and `interface-design` v0.1.13 loaded successfully.
+
+Three fresh isolated executors received the same direct-positive dashboard prompt without rubrics. Two responses began with a sentence naming `interface-design`; the third began with only “Interface brief.” All three stayed within the responsive account-dashboard task and used placeholders for unspecified data, status rules, actions, and destinations. This is a format-ordering failure (2/3), despite the v0.1.13 first-sentence instruction. The v0.1.14 candidate now requires an exact unformatted opening line before any heading. Shared unsigned load receipts: runtime input/output `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a` / `a237fe41388c56f5a7073922974254fc840a04270793a1b92d48cbb46738f268`; router load `6049d919f7423784d2514d5a71c8a265bbe2dc6a626660f69543a4be4ba05fb5` / `2ebf6c6c706e1caa9e09c53d249aad61d91cdcc42a189eef5b17d239c0a64058`; interface-design load `18cde4bcf64d26abd47d23dfbf4071e9700351d9ec789fbfa57f2e5b7cea554a` / `f91635d4da24597d4d63cda4ee939020b1c32491ba4353f0d650fd6ae191cecb`.
+
+Receipts are unsigned and prove package loads, not host answer semantics. The v0.1.14 correction remains pending deployment and fresh repetitions; keep #423, #474 and #483 open.
+
 ### #335 — current Site blind routing and safety probe — 2026-11-05
 
 An isolated executor received three raw inputs without expected routes or answers. The runtime was verified as Site v104 / Lab 1.38.443, Site mirror `54bdb07c903f409dacc13547a8fea8c386a4e1cb`, canonical repository/Lab source `a11a262d5aa82da880f6b2bef1483e20dd8b889c`.
