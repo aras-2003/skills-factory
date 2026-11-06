@@ -4,7 +4,7 @@ scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
 runtime_status: NOT_RUN
-candidate_source_revision: NOT_YET_COMMITTED
+candidate_source_revision: 47c96cefb83d2ef2d4a38f751b1bd121bd064149
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
 runtime_source_revision_required: true
 release_approved: false
@@ -59,7 +59,7 @@ source_sha256:
   CATALOG.md: 413be588ba692f6f797c4af5aac01958d8b6466d592758de4be423c62acf7fef
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: aba52de132399ccace0c51824f29f65516750f33e5dafb14f61c544c7365f848
   docs/catalog.json: 98cf3ff245ae7a5f023a84c8bb286312129c11e51b4c99a9ab88442f0b43dafc
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 2ec2e342653092290330f3d5c1c2ac5ffc103d1937072fd7c7612f3ea465bbcb
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: e6307d7b4964818bb0ec0dd4f3b31bdce14b91812082effe15668dd3bcc5115a
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 8697105ff61ccb98bf3418c2d2c042444411aa5b404af92b4dfb683d01ac1bbf
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: f45ab971daac4314b2324dd4ccd6ea751f19fd133aad3865733bc097e192fda6

@@ -35,7 +35,7 @@
 
 - Scope lock created before implementation. Lock commit is recorded after commit creation.
 - Scope-lock commit: `32f0bdaa9cb48206fe3e1ba6cbdc28f0705e65b6`; the Iteration 06 abort record was committed before Iteration 07 implementation resumed.
-- Candidate development is complete on branch `iter-07/issue-318-financial-quality`. Helpers are packaged under existing security-underwriting and valuation-scenario-review directories; no new skill is registered. Production readiness now points to the candidate versions while retaining `lab-candidate-pending-runtime-validation` for all changed components.
+- Candidate development is committed on the GitHub PR branch at `47c96cefb83d2ef2d4a38f751b1bd121bd064149`. Helpers are packaged under existing security-underwriting and valuation-scenario-review directories; no new skill is registered. Production readiness now points to the candidate versions while retaining `lab-candidate-pending-runtime-validation` for all changed components.
 - The unexecuted `investment-quality-2026-10` manifest had a stale valuation skill hash, and the unexecuted Iteration 02 workflow manifest had a stale security-review version. Both candidate manifests were synchronized without changing `NOT_RUN`, release approval, or frozen R20 history.
 
 ### Iteration 07 local validation — 2026-11-06
