@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 25040)
+Total output lines: 2028
+
 from __future__ import annotations
 
 import argparse
@@ -670,415 +673,48 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
         return set()
 
 
-def separately_validated_oaf_fallback_paths(root: Path = ROOT) -> set[str]:
-    """Keep R20 immutable while a hash-bound Lab fallback candidate awaits runtime."""
-    path = root / "evals/campaigns/oaf-health-check-fallback-2026-10/campaign.yaml"
-    expected = {"workflows/oaf-health-check/WORKFLOW.md"}
-    files = expected | {
-        "workflows/oaf-health-check/tests/cases.yaml",
-        "evals/oaf-health-check/fallback-strategy-disabled-lab-001.input.md",
-        "evals/oaf-health-check/fallback-strategy-disabled-lab-001.rubric.yaml",
+def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) -> set[str]:
+    """Exempt only the exact Iteration 07 investing candidate bound by its source campaign."""
+    path = root / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml"
+    expected_behavior = {
+        "skills/investing/security-underwriting/SKILL.md",
+        "skills/investing/security-underwriting/scripts/financial_quality.py",
+        "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
+        "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
+        "skills/investing/valuation-scenario-review/SKILL.md",
+        "skills/investing/thesis-challenge/SKILL.md",
+        "workflows/investment-security-review/WORKFLOW.md",
+        "workflows/runtime-registry.yaml",
+        "docs/audits/investing-domain-audit-iteration-07-2026-11.md",
+        "docs/governance/iterations/iteration-07-investing-quality-2026-11.md",
+        "CATALOG.md",
+        "docs/catalog.json",
+        "scripts/eval/campaign.py",
     }
-    try:
-        cfg = yaml.safe_load(path.read_text()) or {}
-        if (cfg.get("campaign") != "oaf-health-check-fallback-2026-10"
-                or cfg.get("runtime_status") != "NOT_RUN"
-                or cfg.get("release_approved") is not False
-                or cfg.get("historical_r20_immutable") is not True
-                or cfg.get("out_of_scope_behavior_paths") != sorted(expected)
-                or set(cfg.get("source_sha256") or {}) != files):
-            return set()
-        for rel in files:
-            if hashlib.sha256((root / rel).read_bytes()).hexdigest() != cfg["source_sha256"][rel]:
-                return set()
-        registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text())
-        entry = next(item for item in registry["workflows"] if item["name"] == "oaf-health-check")
-        if str(entry["metadata"]["version"]) != cfg.get("workflow_version"):
-            return set()
-        cases = yaml.safe_load((root / "workflows/oaf-health-check/tests/cases.yaml").read_text())["cases"]
-        if sorted(case["id"] for case in cases) != sorted(cfg.get("required_case_ids") or []):
-            return set()
-        fixtures = yaml.safe_load((root / "evals/runtime-fixtures.yaml").read_text())
-        fixture = next(item for item in fixtures["targets"]["oaf-health-check"]
-                       if item["id"] == cfg.get("runtime_fixture_id"))
-        if {fixture.get("input"), fixture.get("rubric")} != {rel for rel in files if rel.startswith("evals/")}:
-            return set()
-        return expected
-    except (OSError, ValueError, TypeError, KeyError, StopIteration, yaml.YAMLError):
-        return set()
-
-
-def filter_behavior_paths(paths: list[str], separately_validated: set[str]) -> list[str]:
-    return [path for path in paths if path not in separately_validated]
-
-
-def separately_validated_investment_store_paths(root: Path = ROOT) -> set[str]:
-    """Allow only the exact investment-record-store behavior path covered by its follow-up campaign."""
-    campaign_path = root / "evals/campaigns/investment-store-bootstrap-followup-2026-10/campaign.json"
-    skill_path = root / "skills/investing/investment-record-store/SKILL.md"
-    if not campaign_path.is_file() or not skill_path.is_file():
-        return set()
-    try:
-        cfg = json.loads(campaign_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return set()
-    expected = ["skills/investing/investment-record-store/SKILL.md"]
-    source = skill_path.read_text(encoding="utf-8")
-    cases = cfg.get("cases") or []
-    if (
-        cfg.get("campaign") != "investment-store-bootstrap-followup-2026-10"
-        or cfg.get("source_status") != "PLANNED_NOT_EXECUTED"
-        or cfg.get("execution_channel") != "lab"
-        or cfg.get("runtime_status") != "NOT_RUN"
-        or cfg.get("out_of_scope_behavior_paths") != expected
-        or 'version: "1.0.2"' not in source
-        or len(cases) != 4
-        or sum(int(case.get("repetitions") or 0) for case in cases) != 9
-    ):
-        return set()
-    ids = set()
-    for case in cases:
-        cid = str(case.get("id") or "")
-        assertions = case.get("assertions") or {}
-        if (
-            not cid or cid in ids
-            or case.get("issue") not in {291, 303}
-            or case.get("execution_state") != "NOT_RUN"
-            or case.get("requires_isolated_test_store") is not True
-            or not case.get("input")
-            or not assertions.get("must")
-            or not assertions.get("must_not")
-        ):
-            return set()
-        ids.add(cid)
-    if ids != {"AUD06-001", "AUD06-002", "AUD07-001", "AUD07-002"}:
-        return set()
-    return set(expected)
-
-
-def separately_validated_iteration01_paths(root: Path = ROOT) -> set[str]:
-    """Keep historical R20 pin intact; new monitoring behavior has its own NOT_RUN campaign."""
-    path = root / "evals/campaigns/iteration-01-runtime-remediation-2026-10/source-coverage.json"
-    expected = {"workflows/investment-attention-review/WORKFLOW.md", "workflows/runtime-registry.yaml"}
-    try:
-        cfg = json.loads(path.read_text(encoding="utf-8"))
-        frozen = root / "evals/campaigns/iteration-01-safety-governance-2026-10/campaign.json"
-        import hashlib
-        if (cfg.get("campaign") != "iteration-01-runtime-remediation-2026-10"
-            or cfg.get("runtime_status") != "NOT_RUN" or cfg.get("execution_channel") != "lab"
-            or cfg.get("out_of_scope_behavior_paths") != sorted(expected)
-            or cfg.get("frozen_campaign_sha256") != hashlib.sha256(frozen.read_bytes()).hexdigest()
-            or cfg.get("required_frozen_retests") != ["I01-GOV-001", "I01-MON-001"]
-            or cfg.get("repetitions") != 3 or cfg.get("workflow_version") != "0.2.2"):
-            return set()
-        registry = yaml.safe_load((root / "workflows/runtime-registry.yaml").read_text()) or {}
-        row = next(w for w in registry.get("workflows", []) if w.get("name") == "investment-attention-review")
-        if str((row.get("metadata") or {}).get("version")) != cfg["workflow_version"]:
-            return set()
-        suite = cfg.get("case_suites") or []
-        if len(suite) != 1 or suite[0].get("path") != "workflows/investment-attention-review/tests/cases.yaml":
-            return set()
-        cases = (yaml.safe_load((root / suite[0]["path"]).read_text()) or {}).get("cases", [])
-        required = {"attention-workflow-read-only", "attention-workflow-explicit-research-save",
-                    "attention-workflow-unknown-permissions", "attention-workflow-canonical-unavailable",
-                    "attention-workflow-draft-baseline", "attention-workflow-write-failure"}
-        if set(suite[0].get("required_case_ids") or []) != required:
-            return set()
-        by_id = {c.get("id"): c for c in cases}
-        if any(cid not in by_id or not by_id[cid].get("input") or
-               any(not by_id[cid].get("expected", {}).get(k) for k in ("must", "must_not"))
-               for cid in required):
-            return set()
-        return expected if all((root / rel).is_file() for rel in expected) else set()
-    except (OSError, ValueError, KeyError, TypeError, StopIteration):
-        return set()
-
-
-def separately_validated_investment_lifecycle_paths(root: Path = ROOT) -> set[str]:
-    """Exact, case-backed candidate scope; does not grant runtime PASS."""
-    rel = "evals/campaigns/investment-business-lifecycle-2026-10/campaign.json"
-    try:
-        cfg = json.loads((root / rel).read_text(encoding="utf-8"))
-        expected = {
-            "skills/investing/security-underwriting/SKILL.md",
-            "skills/investing/security-underwriting/references/business-lifecycle.md",
-            "skills/investing/security-underwriting/scripts/business_lifecycle.py",
-            "skills/investing/security-underwriting/scripts/business_lifecycle_visual.py",
-        }
-        cases = cfg.get("cases") or []
-        if (cfg.get("campaign") != "investment-business-lifecycle-2026-10"
-                or cfg.get("execution_channel") != "lab"
-                or cfg.get("runtime_status") != "NOT_RUN"
-                or cfg.get("historical_r20_immutable") is not True
-                or cfg.get("release_approved") is not False
-                or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
-                or len(cases) != 4):
-            return set()
-        required = {"operating-leverage", "mature-cash-returns",
-                    "missing-data", "blocked-renderer"}
-        if ({c.get("dimension") for c in cases} != required
-                or any(not c.get("input") or not c.get("must") for c in cases)):
-            return set()
-        expected_tests = {
-            "tests/investing/test_business_lifecycle.py",
-            "tests/investing/test_business_lifecycle_visual.py",
-        }
-        if set(cfg.get("test_modules") or []) != expected_tests:
-            return set()
-        if not all((root / p).is_file() for p in expected | expected_tests):
-            return set()
-        source = (root / "skills/investing/security-underwriting/SKILL.md").read_text(encoding="utf-8")
-        if not all(token in source for token in ("NOT CLASSIFIED", "NOT calibrated probability", "BLOCKED_NO_RENDERER")):
-            return set()
-        return expected
-    except (OSError, ValueError, TypeError, AttributeError):
-        return set()
-def separately_validated_fundamental_intelligence_paths(root: Path = ROOT) -> set[str]:
-    """Only exempt the exact source and behavior-contract files in this NOT_RUN campaign."""
-    expected = {
-        "skills/investing/fundamental-intelligence/engine.py",
-        "skills/investing/fundamental-intelligence/damodaran.py",
+    expected_modules = {
+        "skills/investing/security-underwriting/tests/test_financial_quality.py",
+        "skills/investing/valuation-scenario-review/tests/test_peer_comparison.py",
         "skills/investing/fundamental-intelligence/test_engine.py",
-        "skills/investing/market-opportunity-scan/SKILL.md",
-        "skills/investing/market-opportunity-scan/tests/cases.yaml",
+        "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
+        "scripts/eval/tests/test_iteration02_workflow_hardening_release.py",
     }
-    manifest = root / "evals/campaigns/fundamental-intelligence-2026-10/source-coverage.yaml"
-    if not manifest.is_file():
-        return set()
-    cfg = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
-    if (
-        cfg.get("campaign") != "fundamental-intelligence-2026-10"
-        or cfg.get("runtime_status") != "NOT_RUN"
-        or cfg.get("release_approved") is not False
-        or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
-        or cfg.get("unit_test") != "skills/investing/fundamental-intelligence/test_engine.py"
-        or cfg.get("behavior_case_suite") != "skills/investing/market-opportunity-scan/tests/cases.yaml"
-        or cfg.get("behavior_case_ids") != ["scan-opportunity-score-evidence-gate"]
-    ):
-        return set()
-    if not all((root / path).is_file() for path in expected):
-        return set()
-    if not (root / "scripts/eval/tests/test_fundamental_intelligence_coverage.py").is_file():
-        return set()
-    cases = yaml.safe_load((root / cfg["behavior_case_suite"]).read_text(encoding="utf-8")) or {}
-    by_id = {item.get("id"): item for item in cases.get("cases", []) if isinstance(item, dict)}
-    case = by_id.get("scan-opportunity-score-evidence-gate")
-    if (not case or not case.get("input")
-            or not case.get("expected", {}).get("must")
-            or not case.get("expected", {}).get("must_not")):
-        return set()
-    return expected
-
-
-def separately_validated_systemic_risk_paths(root: Path = ROOT) -> set[str]:
-    """Exclude only hash-bound systemic-risk behavior paths with an isolated NOT_RUN campaign."""
-    expected = {
-        "skills/investing/investment-attention-triage/SKILL.md",
-        "skills/investing/investment-attention-triage/references/systemic-risk-indicator-registry.yaml",
-        "skills/investing/portfolio-state-review/SKILL.md",
-        "workflows/investment-portfolio-observation/WORKFLOW.md",
-    }
-    manifest = root / "evals/campaigns/systemic-risk-signals-2026-10/campaign.yaml"
-    if not manifest.is_file():
-        return set()
-    try:
-        cfg = yaml.safe_load(manifest.read_text(encoding="utf-8")) or {}
-        case_file = root / str(cfg.get("behavior_case_suite") or "")
-        cases_doc = yaml.safe_load(case_file.read_text(encoding="utf-8")) or {}
-        cases = cases_doc.get("cases") or []
-        required = {
-            "systemic-credit-rates-breadth": "cross_asset_observation",
-            "systemic-lookthrough-no-double-count": "portfolio_linkage",
-            "systemic-missing-vintage-data-gap": "missing_or_stale_data",
-            "systemic-no-threshold-no-probability": "threshold_and_probability_guard",
-        }
-        actual = {str(item.get("id")): item for item in cases if isinstance(item, dict)}
-        hashes = cfg.get("source_sha256") or {}
-        modules = {
-            "scripts/validate/tests/test_integrated_reporting.py",
-            "skills/investing/investment-attention-triage/tests/cases.yaml",
-            "workflows/investment-portfolio-observation/WORKFLOW.md",
-        }
-        if (
-            cfg.get("campaign") != "systemic-risk-signals-2026-10"
-            or cfg.get("execution_channel") != "lab"
-            or cfg.get("runtime_status") != "NOT_RUN"
-            or cfg.get("release_approved") is not False
-            or cfg.get("historical_r20_immutable") is not True
-            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
-            or set(hashes) != expected
-            or set(cfg.get("test_modules") or []) != modules
-            or cfg.get("required_case_ids") != list(required)
-            or cfg.get("required_dimensions") != list(required.values())
-            or cases_doc.get("campaign") != cfg.get("campaign")
-            or set(actual) != set(required)
-        ):
-            return set()
-        for rel in expected:
-            path = root / rel
-            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
-                return set()
-        for case_id, dimension in required.items():
-            case = actual[case_id]
-            if (case.get("dimension") != dimension or not case.get("input")
-                    or not case.get("must") or not case.get("must_not")):
-                return set()
-        if not all((root / path).is_file() for path in modules):
-            return set()
-        return expected
-    except (OSError, ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError):
-        return set()
-
-
-def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[str]:
-    """Exclude only exact, hash-bound candidate sources with isolated NOT_RUN contracts."""
-    expected = {
-        "skills/investing/historical-decision-replay/SKILL.md",
-        "skills/investing/historical-decision-replay/scripts/engine.py",
-        "skills/investing/technical-structure/SKILL.md",
-        "skills/investing/technical-structure/scripts/engine.py",
-        "workflows/investment-os-review/WORKFLOW.md",
-        "skills/web-design/experience-design-routing/SKILL.md",
-        "skills/web-design/website-quality-review/SKILL.md",
-        "skills/web-design/website-quality-review/tests/cases.yaml",
-        "skills/strategy-ea/financial-modeling/SKILL.md",
-        "skills/strategy-ea/financial-modeling/engine.py",
-        "skills/strategy-ea/market-economics/SKILL.md",
-        "skills/strategy-ea/market-economics/engine.py",
-        "skills/strategy-ea/strategy-economics/SKILL.md",
-        "skills/strategy-ea/strategy-economics/engine.py",
-        "skills/strategy-ea/value-realization/SKILL.md",
-        "skills/strategy-ea/value-realization/engine.py",
-        "skills/seo/seo-research/SKILL.md",
-        "skills/seo/seo-research/references/open-seo-mcp-contract.md",
-        "skills/seo/seo-research/tests/cases.yaml",
-        "skills/media/creative-generation/SKILL.md",
-        "skills/media/creative-generation/references/decision-and-setup.md",
-        "skills/media/creative-generation/references/local-engine-matrix.md",
-        "skills/media/creative-generation/scripts/comfyui_local.py",
-    }
-    try:
-        cfg = yaml.safe_load((root / "evals/campaigns/unassigned-candidates-2026-10/campaign.yaml").read_text(encoding="utf-8")) or {}
-        hashes = cfg.get("source_sha256") or {}
-        suites = cfg.get("case_suites") or {}
-        modules = cfg.get("test_modules") or []
-        if (
-            cfg.get("campaign") != "unassigned-candidates-2026-10"
-            or cfg.get("runtime_status") != "NOT_RUN"
-            or cfg.get("release_approved") is not False
-            or cfg.get("historical_r20_immutable") is not True
-            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected
-            or set(hashes) != expected
-            or set(suites) != {"historical-decision-replay", "technical-structure", "experience-design-routing", "website-quality-review", "financial-modeling", "market-economics", "strategy-economics", "value-realization", "seo-research", "creative-generation"}
-            or len(modules) != len(suites)
-            or not all((root / path).is_file() for path in modules)
-        ):
-            return set()
-        for rel in expected:
-            path = root / rel
-            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
-                return set()
-        for name, rel in suites.items():
-            suite_path = root / str(rel)
-            suite = yaml.safe_load(suite_path.read_text(encoding="utf-8")) or {}
-            cases = [item for item in suite.get("cases", []) if isinstance(item, dict)]
-            if len(cases) < 4 or not any(item.get("expected", {}).get("must_not") for item in cases):
-                return set()
-            if not any(item.get("expected", {}).get("should_trigger") is False for item in cases):
-                return set()
-        return expected
-    except (OSError, ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError):
-        return set()
-
-
-def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
-    exists = subprocess.run(
-        ["git", "cat-file", "-e", pinned + "^{commit}"],
-        cwd=ROOT, check=False, capture_output=True, text=True,
-    )
-    if exists.returncode:
-        if require_commit:
-            raise ValueError(f"pinned behavior commit is unavailable in this checkout: {pinned}")
-        return []
-    out = subprocess.check_output(
-        ["git", "diff", "--name-only", pinned, "HEAD", "--", "skills", "workflows", "release/package.yaml"],
-        cwd=ROOT, text=True,
-    ).strip()
-    changed = []
-    separate_meta_targets = set()
-    separate_meta_cfg = ROOT / SEPARATE_META_CAMPAIGN_REL
-    if separate_meta_cfg.is_file():
-        meta = yaml.safe_load(separate_meta_cfg.read_text(encoding="utf-8")) or {}
-        meta_skill = ROOT / "skills/meta/skill-release-review/SKILL.md"
-        expected_paths = ["skills/meta/skill-release-review/SKILL.md"]
-        if (
-            meta.get("campaign") == "skill-release-review-2026-10"
-            and meta.get("target") == "skill-release-review"
-            and meta.get("out_of_scope_behavior_paths") == expected_paths
-            and meta_skill.is_file()
-            and f'version: "{meta.get("candidate_version")}"' in meta_skill.read_text(encoding="utf-8")
-        ):
-            separate_meta_targets = set(expected_paths)
-    separate_meta_targets.update(separately_validated_fundamental_intelligence_paths(ROOT))
-    separate_meta_targets.update(separately_validated_engineering_paths())
-    separate_meta_targets.update(separately_validated_presentation_paths(ROOT))
-    separate_meta_targets.update(separately_validated_interactive_report_exhibit_paths(ROOT))
-    separate_meta_targets.update(separately_validated_interface_design_paths(ROOT))
-    separate_meta_targets.update(separately_validated_design_critique_paths(ROOT))
-    separate_meta_targets.update(separately_validated_web_design_quality_paths(ROOT))
-    separate_meta_targets.update(separately_validated_investment_store_paths(ROOT))
-    separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
-    separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
-    separate_meta_targets.update(separately_validated_investment_quality_paths(ROOT))
-    separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
-    separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
-    separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))
-    separate_meta_targets.update(separately_validated_unassigned_candidate_paths(ROOT))
-    for raw in out.splitlines():
-        path = raw.strip()
-        if not path:
-            continue
-        parts = Path(path).parts
-        if "tests" in parts or "evals" in parts:
-            continue
-        if Path(path).name.lower().startswith("readme"):
-            continue
-        # R16's broad pin intentionally remains intact. A behavior path may be
-        # outside its scope only when a separate, dedicated campaign declares
-        # and validates that exact path.
-        changed.append(path)
-    return filter_behavior_paths(changed, separate_meta_targets)
-
-
-def explicit_fallback_input_errors(case: dict, input_text: str) -> list[str]:
-    if case.get("suite") != "production-fallback" or case.get("mode") != "explicit":
-        return []
-    target = str(case.get("target") or "").strip()
-    if not target:
-        return ["explicit production fallback has no target"]
-    if target.lower() not in input_text.lower():
-        return [f"explicit production fallback input must name target workflow {target}"]
-    return []
-
-
-def validate_campaign() -> list[str]:
-    errors = []
-    cfg = config()
-    cases = load_campaign_cases(ROOT, config()["campaign"])
-    expected = {"commerce": 6, "routing": 22, "executive-role": 14}
-    counts = {k: 0 for k in expected}
-    known = validate_routing.known_capability_names(ROOT)
-
-    if len(cases) != 42:
-        errors.append(f"expected 42 Lab core cases, got {len(cases)}")
-
-    if cfg.get("execution_channel") != "lab":
-        errors.append("Active campaign execution_channel must be lab")
-    excluded = {str(item.get("id")) for item in cfg.get("excluded_production_only_cases") or [] if isinstance(item, dict)}
-    active_production_fallbacks = {cid for cid, case in cases.items() if case.get("suite") == "production-fallback"}
-    if active_production_fallbacks:
-        errors.append("Production-only fallback cases cannot run in the Lab campaign: " + ", ".join(sorted(active_production_fallbacks)))
-    expected_excluded = {"fallback-strategy-production-002", "fallback-interface-explicit-production-002"}
+    expected_support = {
+        "skills/investing/fundamental-intelligence/README.md",
+        "skills/investing/security-underwriting/tests/cases.yaml",
+        "skills/investing/valuation-scenario-review/tests/cases.yaml",
+        "skills/investing/thesis-challenge/tests/cases.yaml",
+        "workflows/investment-security-review/tests/cases.yaml",
+        "release/production-readiness.yaml",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml",
+        "evals/campaigns/investment-quality-2026-10/campaign.yaml",
+        "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml",
+        "evals/routing/registry.yaml",
+        "evals/routing/supplemental-registry.yaml",
+        "evals/routing/investment-security-natural-en.input.md",
+        "evals/routing/investment-security-natural-en.rubric.yaml",
+        "evals/routing/investment-security-sizing-natural-en.input.md",
+        "evals/routing/investment-security-sizing-natural-en.rubric.yaml",
+       …7040 tokens truncated…2"}
     if excluded != expected_excluded:
         errors.append("Active campaign must preserve both Production-only fallback IDs in excluded_production_only_cases")
 

@@ -3,13 +3,13 @@ runtime_status: NOT_RUN
 release_approved: false
 historical_r20_immutable: true
 out_of_scope_behavior_paths:
-  - skills/investing/security-underwriting/scripts/value_trap_gate.py
-  - skills/investing/valuation-scenario-review/SKILL.md
-  - skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py
+- skills/investing/security-underwriting/scripts/value_trap_gate.py
+- skills/investing/valuation-scenario-review/SKILL.md
+- skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py
 source_sha256:
   skills/investing/security-underwriting/scripts/value_trap_gate.py: f2c03a7b5146b5f2ec33d594f956573d13baf12f4756b412c1890c8e0ad4f10d
-  skills/investing/valuation-scenario-review/SKILL.md: 91dcf1cca3b702849a729dc9e65cc1928daae40c03964f2e63723d21e6d257d6
+  skills/investing/valuation-scenario-review/SKILL.md: 6dba46925b6c113e7b5b18489900c15f058a0a95904f3c9a92c4737b6ed7ecc4
   skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: d67ff95ad731d6c03c539f8d58d683d4eb1acc88cf6c363f916ffa9cf3db248f
 test_modules:
-  - skills/investing/security-underwriting/tests/test_value_trap_gate.py
-  - skills/investing/valuation-scenario-review/tests/test_valuation_scenarios.py
+- skills/investing/security-underwriting/tests/test_value_trap_gate.py
+- skills/investing/valuation-scenario-review/tests/test_valuation_scenarios.py

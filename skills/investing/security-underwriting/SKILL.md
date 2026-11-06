@@ -6,10 +6,10 @@ description: >
   risks, variant perception and thesis invalidation. Do not use for broad market scanning.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.5.2"
+  version: "0.5.3"
   maturity: production
   risk: high
-  last_reviewed: "2026-10-31"
+  last_reviewed: "2026-11-06"
   execution:
     default_model_class: strong
 ---
@@ -40,29 +40,37 @@ Produce an evidence-backed investment case that can later be challenged, valued,
    - dated material events aligned to major changes.
 5. Explain business model, segment economics, competitive position and capital intensity.
 6. Review revenue, margins, cash flow, ROIC/returns, balance sheet, dilution and capex using dated sources.
-7. Run a value-trap and cash-flow quality gate before interpreting low multiples, yield, drawdowns or valuation:
+7. Complete a multi-period Financial Quality Audit before interpreting low multiples, yield, drawdowns or valuation:
+   - use 3–5 fiscal years where filed plus the latest YTD and the same-quarter YTD comparator; state fiscal calendar and missing periods;
+   - show revenue, margins, CFO, capex, FCF (CFO − capex), FCF conversion (FCF / positive net income), ROIC (NOPAT / average invested capital where supported), debt/maturities, cash, working capital, diluted shares, SBC and dilution as applicable;
+   - for every material value retain source URL, filing/publication date, fiscal period, currency, unit, accounting basis, definition and evidence state. Normalize supported unit scales before arithmetic; do not perform implicit FX conversion;
+   - reconcile or keep GAAP and adjusted measures separate. If a period, unit, currency, definition, sign convention, filing vintage or source conflicts, mark it CONFLICTED/UNVERIFIED and block dependent ratios. Never fill missing values with zero;
+   - use the packaged `scripts/financial_quality.py` only when the active runtime actually exposes local code execution and the required reviewed facts are supplied. Otherwise show formulas and evidence fields directly, mark calculations not independently executed, and never imply this script ran;
+   - banks/insurers and ETFs require an industry-specific capital/provider path; mark industrial ratios NOT_APPLICABLE rather than zero where they mislead;
+   - flag multi-year deterioration and cyclicality. Peak margins or FCF do not become a forward run-rate without cycle normalization.
+8. Run a value-trap and cash-flow quality gate before interpreting low multiples, yield, drawdowns or valuation:
    - reconcile CFO, capex, lease payments/liabilities, working capital, real-estate customer advances, buybacks/dilution and normalized FCF over 3–5 years and across a cycle;
    - inspect net debt, maturity wall, interest coverage, covenants, refinancing sensitivity, and ROE versus ROIC;
    - test structural decline, demand concentration, regulation, state ownership/governance, asset revaluation and cyclicality where relevant;
    - label each gate PASS / WARN / BLOCK with a concise reason and falsifiable invalidation trigger. Unsupported or implausible primary cash-flow evidence blocks an attractive final rating and any FCF-based valuation. Data defects are UNVERIFIED/CONFLICTED, not zero or neutral.
    - the tested deterministic gate is packaged at `scripts/value_trap_gate.py`; run it only where the active runtime actually exposes script execution. Otherwise apply and show the same evidence fields in the response without claiming code execution. The helper does not impose universal ratio thresholds or decide whether a concern is material.
-8. Run a hard evidence-sanity gate on every decision-critical reported metric before any valuation or sizing:
+9. Run a hard evidence-sanity gate on every decision-critical reported metric before any valuation or sizing:
    - verify the exact metric in primary-source context where possible;
    - confirm period, units, currency, GAAP/non-GAAP basis, quarterly vs annual basis, per-share vs absolute values and arithmetic consistency;
    - compare magnitude against adjacent disclosures and prior-period/company scale;
    - extraordinary values trigger re-verification, not automatic rejection;
    - mark unresolved conflicting/extraction-uncertain figures UNVERIFIED or CONFLICTED.
-9. If any decision-critical metric remains UNVERIFIED/CONFLICTED:
+10. If any decision-critical metric remains UNVERIFIED/CONFLICTED:
    - classify research state as VERIFY / RESEARCH;
    - do not compute P/E, FCF yield, numeric valuation scenarios or numeric sizing from those figures;
    - state exactly what must be verified next.
    - If an event, company-specific fact, or key input remains unresolved, identify it as a blocking uncertainty and limit downstream conclusions; do not bury it in a generic risk list or continue to a definitive thesis/valuation conclusion.
-10. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations. Classify business lifecycle with the deterministic `scripts/business_lifecycle.py` classifier and `references/business-lifecycle.md` contract when three comparable annual/TTM observations are available. Report phase and uncalibrated affinity separately from valuation. For insufficient or conflicted inputs, show NOT_CLASSIFIED, not invented phase odds.
-11. Evaluate valuation relative to history, peers and scenario economics.
-12. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.
-13. State catalysts, risks, dependencies and variant perception.
-14. Form a compact thesis with explicit assumptions and kill criteria.
-15. Hand off conviction challenge to thesis-challenge before portfolio action.
+11. Only after the evidence gate passes, identify growth/cycle drivers and consensus expectations. Classify business lifecycle with the deterministic `scripts/business_lifecycle.py` classifier and `references/business-lifecycle.md` contract when three comparable annual/TTM observations are available. Report phase and uncalibrated affinity separately from valuation. For insufficient or conflicted inputs, show NOT_CLASSIFIED, not invented phase odds.
+12. Evaluate valuation relative to history, economically comparable peers and scenario economics. Show incompatible peers and metrics as exclusions/N/M; do not rank across different business models or sectors.
+13. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.
+14. State catalysts, risks, dependencies and variant perception.
+15. Form a compact thesis with explicit assumptions and kill criteria.
+16. Hand off conviction challenge to thesis-challenge before portfolio action.
 
 ## Historical attribution
 For material historical price/fundamental moves, separate:
@@ -93,6 +101,8 @@ Do not write "the stock fell because X" merely because X happened nearby in time
 
 ## Output contract
 WHY THIS / WHY NOW; historical price context; historical KPI trends; historical valuation context; event timeline; observed moves vs likely causes with confidence; business; financial quality; evidence-sanity status; verified/blocked metrics; drivers; business-thesis strength; valuation context if permitted; priced-in expectations; security attractiveness; catalysts; risks; variant perception; thesis; assumptions; kill criteria; exact verification requirements; confidence; provenance.
+
+Financial Quality Audit detail: 3–5 FY plus latest/comparable YTD table; period and basis definitions; normalized units; formula per derived value; source and publication date per fact; VERIFIED/UNVERIFIED/CONFLICTED/NOT_APPLICABLE state; deterioration/cycle flags; critical blockers; smallest next verification. A source URL or calculation helper alone does not establish VERIFIED evidence.
 
 ## Quality checks
 - [ ] Prior canonical context was attempted when relevant.

@@ -518,19 +518,19 @@ components:
 
   - name: security-underwriting
     kind: skill
-    version: "0.5.2"
+    version: "0.5.3"
     source: skills/investing/security-underwriting/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact R20 runtime validation of the new cash-flow quality gate is pending."
+    evidence_gap: "Exact-source Iteration 07 Cloud Next Lab validation of financial-quality behavior is pending."
     limitation: "Lab candidate until the exact gate is retested; do not treat unverified outputs as a current-version PASS."
 
   - name: thesis-challenge
     kind: skill
-    version: "0.1.1"
+    version: "0.1.2"
     source: skills/investing/thesis-challenge/SKILL.md
     declared_maturity: production
     static_contract: present
@@ -567,14 +567,14 @@ components:
 
   - name: valuation-scenario-review
     kind: skill
-    version: "0.3.0"
+    version: "0.3.1"
     source: skills/investing/valuation-scenario-review/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact R20 runtime validation of the Valuation & Opportunity Card and formula labels is pending."
+    evidence_gap: "Exact-source Iteration 07 Cloud Next Lab validation of peer comparison and valuation behavior is pending."
     limitation: "Lab candidate until exact-version runtime checks confirm method selection and arithmetic; no investment action is implied."
 
   - name: investment-os-review
@@ -615,14 +615,14 @@ components:
 
   - name: investment-security-review
     kind: workflow
-    version: "0.4.3"
+    version: "0.4.4"
     source: workflows/investment-security-review/WORKFLOW.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact R20 runtime validation of the integrated cash-flow gate and valuation card is pending."
+    evidence_gap: "Exact-source Iteration 07 Cloud Next Lab validation of the integrated review sequence is pending."
     limitation: "Lab candidate until exact-version runtime checks pass; current workflow remains analysis-only and does not authorize canonical writes or trading."
 
   - name: investment-portfolio-observation

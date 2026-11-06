@@ -79,3 +79,43 @@ cases:
       should_trigger: true
       must: ["as-of", "2026-06-30", "2026-03-15", "exclude", "2026-08-15"]
       must_not: ["use the later filing", "future data as known"]
+
+  - id: valuation-peer-compatibility-and-peg
+    case: Peer table excludes incompatible estimates and treats PEG as descriptive
+    input: "Compare forward P/E and forecast EPS CAGR only across same-industry peers with matching definitions and horizons. Show exclusions, N/M for stale data, at least three peers for a table, and at least five for percentiles. Mark PEG=1 as a heuristic, not a buy signal."
+    expected:
+      should_trigger: true
+      must: ["business model", "forecast horizon", "N/M", "three", "five", "PEG=1", "heuristic"]
+      must_not: ["cheap therefore buy", "cross-sector ranking"]
+
+  - id: valuation-peer-plot-same-snapshot
+    case: Plot provenance must match comparison table
+    input: "Plot peer forecast EPS growth against forward P/E from the exact same filtered, dated peer table, with source provenance and the PEG=1 line."
+    expected:
+      should_trigger: true
+      must: ["same snapshot", "source", "as-of", "PEG=1"]
+      must_not: ["refetch different peer data", "recommend a trade"]
+
+  - id: valuation-peer-history-revisions-cycle
+    case: Historical multiple, estimate revisions and cyclicality are contextual
+    input: "Compare dated consensus revisions, historical P/E, FCF yield, ROIC and dilution only when definitions match. Flag the explicitly cyclical memory business and separate 3-5Y EPS growth from a 1-3 month catalyst."
+    expected:
+      should_trigger: true
+      must: ["source", "definition", "N/M", "cyclical", "3-5Y", "1-3 month"]
+      must_not: ["infer cyclicality from ticker", "low PEG means buy"]
+
+  - id: valuation-ps-growth-optional
+    case: P/S growth ratio remains a non-ranking heuristic
+    input: "Where source-supported, show P/S divided by positive revenue growth in percentage points. Keep it descriptive, outside peer ranking, and N/M for negative growth."
+    expected:
+      should_trigger: true
+      must: ["P/S", "positive revenue growth", "N/M", "descriptive"]
+      must_not: ["primary rank", "buy signal"]
+
+  - id: valuation-stale-consensus-revisions
+    case: Stale estimate revisions are excluded
+    input: "Show source-backed consensus EPS estimate revisions from the latest 90 days. Mark older revisions N/M and do not use them in a peer summary."
+    expected:
+      should_trigger: true
+      must: ["90 days", "source", "N/M"]
+      must_not: ["stale revision as current consensus"]

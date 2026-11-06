@@ -87,3 +87,43 @@ cases:
     expected:
       should_trigger: true
       must: ["AFFO", "recurring capex", "lease", "PASS", "WARN", "BLOCK"]
+
+  - id: underwriting-financial-quality-periods
+    case: Financial quality needs comparable multi-year and YTD periods
+    input: "Audit these source-linked annual filings for the last four fiscal years plus the latest and prior-year same-quarter YTD before discussing valuation."
+    expected:
+      should_trigger: true
+      must: ["3–5 fiscal years", "same-quarter YTD", "period", "publication date", "units", "FCF conversion", "ROIC"]
+      must_not: ["invent missing years", "treat missing metrics as zero"]
+
+  - id: underwriting-financial-quality-unit-basis-conflict
+    case: Scale and accounting basis conflict blocks dependent calculations
+    input: "Revenue is reported in USD millions, CFO in USD thousands, and the broker adds adjusted EBITDA excluding SBC. Reconcile the source facts before calculating cash conversion or valuation."
+    expected:
+      should_trigger: true
+      must: ["normalize unit scale", "GAAP", "adjusted", "SBC", "UNVERIFIED", "block"]
+      must_not: ["silently combine accounting bases", "compute valuation from unreconciled inputs"]
+
+  - id: underwriting-financial-quality-cyclical-peak
+    case: Peak-cycle margins cannot be extrapolated
+    input: "The semiconductor issuer has unusually high peak-cycle margins and FCF. Review the last five years and latest comparable YTD without extrapolating the peak."
+    expected:
+      should_trigger: true
+      must: ["cycle", "normalization", "3–5 fiscal years", "comparable YTD", "scenario"]
+      must_not: ["treat peak FCF as a run-rate"]
+
+  - id: underwriting-financial-quality-industry-path
+    case: Bank and ETF accounting need alternative metric paths
+    input: "Review a bank and a broad ETF with the same generic industrial FCF template. Do not report inapplicable metrics as zero."
+    expected:
+      should_trigger: true
+      must: ["NOT_APPLICABLE", "bank-specific", "ETF/provider data"]
+      must_not: ["score inapplicable fields as zero", "apply industrial ROIC to the ETF"]
+
+  - id: underwriting-financial-quality-revisions-and-dilution
+    case: Revised facts, one-off cash drivers and share dilution remain traceable
+    input: "The latest filing restated revenue, working capital changed sharply, one-off restructuring affected cash, and diluted shares rose. Show the selected version and prior-source history, cash-flow drivers, SBC and dilution without silently overwriting older evidence."
+    expected:
+      should_trigger: true
+      must: ["revision history", "working capital", "one-off", "stock compensation", "dilution", "source per value"]
+      must_not: ["silently discard the earlier filing", "treat one-off as recurring"]

@@ -1,0 +1,14 @@
+schema_version: "1.0"
+id: investment-security-sizing-natural-pl
+mode: natural-routing
+expected_target: investment-os-review
+language: pl
+required_selected_capabilities:
+  - investment-security-review
+  - investment-portfolio-review
+assertions:
+  manual:
+    - One named security with a proposed allocation starts in investment-security-review.
+    - Portfolio fit is a separate child review; do not route the single-security decision only to portfolio review.
+    - No sizing recommendation without canonical portfolio and policy reads.
+    - A sizing/review request does not authorize a canonical write or trade.
