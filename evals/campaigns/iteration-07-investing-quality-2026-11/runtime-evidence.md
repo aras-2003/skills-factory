@@ -39,473 +39,52 @@ The route's `workflow_executed=false` is significant. The exact workflow declare
 
 Annual values are reported in AMD's 2025 10-K; interim facts in the Q3 2026 10-Q. Gross margins for 9M are gross profit divided by revenue (11,575/24,369 and 18,829/35,166). FCF values use continuing CFO less cash PP&E purchases; this is not adjusted for leases or other capital commitments. Continuing income avoids mixing FY2025 discontinued ZT income ($66m) and 9M 2025 discontinued income ($175m) into the conversion denominator.
 
-The YTD profile is mixed: revenue +44.3% YoY; continuing CFO +55.7%; PP&E cash purchases +145.3%; FCF +36.1%; and FCF conversion fell from 129.7% to …23627 tokens truncated…e"]: x for x in caps.get("capabilities", [])}
-        catalogs[channel] = by_name
-        packages[channel] = {
-            "name": plugin.get("name"),
-            "version": plugin.get("version"),
-            "release_id": rel.get("release_id"),
-            "source_revision": rel.get("source_revision"),
-            "payload_content_sha256": rel.get("payload_content_sha256"),
-        }
-        for item in by_name.values():
-            components.append({
-                "channel": channel,
-                "name": item.get("name"),
-                "kind": item.get("kind"),
-                "version": item.get("version"),
-                "maturity": item.get("maturity"),
-                "content_sha256": item.get("content_sha256"),
-            })
+The YTD profile is mixed: revenue +44.3% YoY; continuing CFO +55.7%; PP&E cash purchases +145.3%; FCF +36.1%; and FCF conversion fell from 129.7% to 76.6%. The ratio is sensitive to non-cash items and tax: 9M 2026 included a $1.179bn non-cash customer-warrant adjustment in CFO reconciliation and a $918m discrete stock-compensation tax benefit. These are visible items, not silently normalized earnings.
 
-    if config().get("execution_channel") != "lab":
-        for unavailable in ("strategy-to-execution-diagnostic", "organizational-interface-review"):
-            if unavailable in catalogs["production"]:
-                raise ValueError(f"fallback campaign precondition changed: {unavailable} is now in production")
+At Sep 26, 2026 AMD reported cash and short-term investments of $15.776bn and long-term debt of $7.079bn, net cash of $8.697bn on that restricted definition; lease liabilities and guarantees are additional exposures. Continuing CFO reflected $3.6bn net operating-asset/liability outflows, including inventory $3.543bn, receivables $2.894bn and prepaid/other assets $2.061bn, partially offset by $4.483bn higher accounts payable. This is a cash-conversion watch item while Data Center revenue grows.
 
-    all_cases = {**load_campaign_cases(ROOT, config()["campaign"]), **load_supplemental_cases(ROOT, config()["campaign"])}
-    case_channels = {}
-    execution_channel = config().get("execution_channel")
-    if execution_channel not in (None, "lab", "production"):
-        raise ValueError(f"unsupported execution_channel: {execution_channel}")
-    for case in all_cases.values():
-        target = case["target"]
-        if execution_channel:
-            if target not in catalogs[execution_channel]:
-                raise ValueError(f"{case['id']} target {target} is absent from {execution_channel} catalog")
-            case_channels[case["id"]] = execution_channel
-        elif target in catalogs["production"]:
-            case_channels[case["id"]] = "production"
-        elif target in catalogs["lab"]:
-            case_channels[case["id"]] = "lab"
-        else:
-            raise ValueError(f"campaign subject absent from both package catalogs: {target}")
+Dilution context: 9M diluted weighted-average shares were 1.657bn versus 1.632bn (+1.5%); stock-based compensation was $1.513bn versus $1.152bn (+31.3%). ROIC is **N/M** because this probe did not establish a consistent sourced NOPAT and average invested-capital series. A complete debt maturity/coverage analysis and 12–20-quarter KPI context were not produced in this bounded acceptance probe; no lifecycle classifier or renderer was invoked. Accordingly this is a real-source financial-quality probe, not a complete integrated security-underwriting report.
 
-    case_definitions = current_case_definitions(ROOT)
+**Outcome:** source provenance, same-quarter YTD, unit discipline and FCF arithmetic pass for the listed fields. Cash conversion and increased capex/working capital warrant `WARN`; no “healthy” or normalized-run-rate claim. ROIC and unsupplied metrics remain N/M. No valuation, sizing, canonical read/write or trade.
 
-    lock = {
-        "schema_version": LOCK_SCHEMA_VERSION,
-        "campaign": cfg["campaign"],
-        "campaign_definition_sha256": sha256_file(CONFIG),
-        "behavior_source_revision": pinned,
-        "execution_channel": config().get("execution_channel"),
-        "excluded_production_only_cases": sorted(
-            item.get("id") for item in config().get("excluded_production_only_cases") or []
-        ),
-        "packages": packages,
-        "expected_catalogs": {name: sorted(items) for name, items in catalogs.items()},
-        "case_channels": case_channels,
-        "core_case_count": len(load_campaign_cases(ROOT, config()["campaign"])),
-        "supplemental_case_ids": sorted(load_supplemental_cases(ROOT, config()["campaign"])),
-        "case_definitions": sorted(case_definitions, key=lambda x: x["id"]),
-        "components": components,
-    }
-    (out / "lock.json").write_text(json.dumps(lock, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    (out / "QUEUE.md").write_text(queue_text(), encoding="utf-8")
-    for channel in ("production", "lab"):
-        package_info = packages[channel]
-        smoke = {
-            "channel": channel,
-            "package": {
-                "name": package_info["name"],
-                "version": package_info["version"],
-                "release_id": None,
-                "source_revision": None,
-                "payload_content_sha256": None,
-            },
-            "components": [],
-            "enabled_packages": [package_info["name"]],
-            "catalog": [],
-            "runtime": {
-                "provider": None,
-                "model_id": None,
-                "reasoning": None,
-                "available_tools": [],
-            },
-        }
-        (out / f"smoke-{channel}-template.json").write_text(
-            json.dumps(smoke, indent=2) + "\n", encoding="utf-8"
-        )
+## #307 — thesis challenge probe (AMD)
 
+**Supplied baseline thesis:** “Continued AI/Data Center growth can sustain elevated market expectations.” It is treated as a user-supplied hypothesis, not an established fact. The integrated workflow was blocked at the canonical-read gate described above; the following is a separate direct execution of the packaged `thesis-challenge` instructions against the supplied thesis and cited public facts only.
 
-def verify_smoke(lock_path: Path, observed_path: Path) -> list[str]:
-    lock = json.loads(lock_path.read_text(encoding="utf-8"))
-    obs = json.loads(observed_path.read_text(encoding="utf-8"))
-    errors = []
-    channel = obs.get("channel")
-    if channel not in lock.get("packages", {}):
-        return [f"unknown smoke channel: {channel}"]
-    expected_package = lock["packages"][channel]
-    pkg = obs.get("package") or {}
-    runtime = obs.get("runtime") or {}
-    enabled = list(obs.get("enabled_packages") or [])
-    catalog = list(obs.get("catalog") or [])
-    observed_components = obs.get("components")
-    if not isinstance(observed_components, list):
-        observed_components = []
+1. **Working-capital and capex conversion (strongest; UNRESOLVED).** 9M revenue and continuing CFO rose, but PP&E purchases grew faster and FCF conversion fell to 76.6%. Management attributed $3.6bn of working-capital cash outflow principally to inventory, receivables and supplier prepayments. If data-center demand or shipment timing decelerates after inventory/prepayments are committed, cash conversion, inventory risk and returns on capacity could worsen; no source supports a numerical downside range. Contradictory evidence: 9M revenue +44.3%, CFO +55.7%, FCF remains positive and rose +36.1%. Disconfirming evidence: subsequent quarters convert the current inventory/receivable build into collections and shipments without persistent FCF-conversion deterioration.
+2. **Commercial-partner guarantees and customer-linked warrants (UNRESOLVED).** At Sep 26, 2026 AMD disclosed up to $7.7bn gross data-center lease-guarantee exposure over terms up to 15 years and $750m commercial-partner debt guarantees up to six months; no partner was in default and no amounts had been paid. It also disclosed $4.5bn unrecognized grant-date fair value on customer warrants to be recorded as a revenue reduction as qualifying customer revenue is recognized; no shares had vested/exercised. Partner distress could create lease/debt obligations, while warrants reduce recognized revenue and can dilute if conditions vest. Maximum exposures are not expected losses; no probability or valuation impact is derived. Disconfirming evidence: falling guarantee balances/termination, no defaults, customer revenue achieved with transparent recognized warrant accounting and no sustained margin/cash deterioration.
 
-    for field in ("name", "version", "release_id", "source_revision", "payload_content_sha256"):
-        value = pkg.get(field)
-        if not value:
-            errors.append(f"installed artifact identity is not observed: package.{field}")
-        elif value != expected_package.get(field):
-            errors.append(f"installed artifact identity mismatch: package.{field}")
+No third objection is forced. A dated price/consensus snapshot exists in secondary QDD Research (Nov 5, 2026), but it does not establish what expectations are embedded in price or offer a decision-grade scenario; this probe does not equate consensus targets with fair value. Business thesis state: **WEAKENED at the cash-conversion and partner-commitment assumptions, not invalidated**. Valuation, timing and portfolio-sizing conclusions remain untested. No trade instruction.
 
-    if expected_package["name"] not in enabled:
-        errors.append(f"{channel} package is not enabled")
-    if "skills-factory" in enabled and "skills-factory-lab" in enabled:
-        errors.append("production and Lab are simultaneously enabled")
-    if len(catalog) != len(set(catalog)):
-        errors.append("observed catalog contains duplicate capability names")
-    if set(catalog) != set(lock.get("expected_catalogs", {}).get(channel, [])):
-        errors.append(f"observed catalog differs from locked {channel} catalog")
+## #306 — issuer peer-comparison probe (AMD, MU, MSFT)
 
-    expected_components = {
-        x["name"]: x for x in lock.get("components", []) if x.get("channel") == channel
-    }
-    observed_by_name = {
-        str(x.get("name")): x for x in observed_components
-        if isinstance(x, dict) and x.get("name")
-    }
-    if set(observed_by_name) != set(expected_components):
-        errors.append("observed component identity set differs from locked artifact")
-    else:
-        for name, expected in expected_components.items():
-            observed = observed_by_name[name]
-            for field in ("version", "content_sha256"):
-                value = observed.get(field)
-                if not value:
-                    errors.append(f"installed artifact identity is not observed: component {name}.{field}")
-                elif value != expected.get(field):
-                    errors.append(f"installed artifact identity mismatch: component {name}.{field}")
+**As-of:** Nov 5, 2026; single secondary data source QDD Research for quote/EV and consensus snapshot. Raw FY2027 fields are transcribed below for diagnostic display, not treated as aligned peers. Fiscal year ends differ (AMD Dec 31, MU Aug 31, Microsoft Jun 30); QDD's forward multiples use next-fiscal-year estimates, so that row label does not establish a common forward period. Financial-cycle economics and business models also differ.
 
-    for field in ("provider", "model_id", "reasoning"):
-        if not runtime.get(field):
-            errors.append(f"runtime metadata missing {field}")
-    available_tools = runtime.get("available_tools")
-    if not isinstance(available_tools, list):
-        errors.append("runtime available_tools must be a list")
-    else:
-        rendered = [str(item) for item in available_tools]
-        for fragment in config().get("required_runtime_tool_fragments") or []:
-            if not any(str(fragment) in tool for tool in rendered):
-                errors.append(f"required runtime tool capability not observed: {fragment}")
-    return errors
+| Issuer | Business model | Close | EV | FY2027 consensus sales / EV-sales | EBITDA / EV-EBITDA | EPS / P-E | Comparison disposition |
+|---|---|---:|---:|---:|---:|---:|---|
+| AMD | Fabless high-performance compute, AI accelerators, CPUs, GPUs, embedded | $404.40 | $651.5bn | $95.396bn / 6.8x | $35.842bn / 18.2x | $17.53 / 23.1x | Target; its Dec fiscal period differs from peer fiscal-year periods |
+| MU | Integrated DRAM/NAND memory producer; highly cyclical | $656.39 | $704.4bn | $276.194bn / 2.6x | $246.546bn / 2.9x | $173.76 / 3.8x | Exclude as direct AMD peer: memory cycle/product economics differ; FY ends Aug 31 |
+| MSFT | Cloud/software/services platform | $535.93 | $4.02tn | $396.033bn / 10.2x | $244.007bn / 16.5x | $20.02 / 26.8x | Exclude: different software/cloud model; FY ends Jun 30 |
 
+The table is descriptive of source observations, **not apples-to-apples**. NTM valuation charts are described by QDD but numeric NTM values were not publicly exposed on the reviewed pages. More importantly, there is only one clearly direct AI-accelerator peer (NVDA); AVGO and MRVL have partial datacenter AI/ASIC/network exposure but mixed software/IP or broader data-infrastructure economics. Their company-level metrics cannot be asserted comparable to AMD merely because the vendor assigns the same broad semiconductor sector. The same-source FY2027 annual forecasts cannot repair differing fiscal periods; 3–5Y EPS CAGR is not present in this public snapshot, so PEG is N/M.
 
-def client_display_evidence_errors(case_id: str, trace: dict, requested_status: str) -> list[str]:
-    if requested_status != "PASS":
-        return []
+For an offline deterministic-helper probe (not a Site tool execution), `peer_comparison.py` received AMD plus MU, Microsoft, NVDA, AVGO and MRVL snapshots dated Nov 5, 2026. Source-reported forward EV/Sales was included only where observed (AMD 6.8x, MU 2.6x, Microsoft 10.2x, NVDA 10.5x, MRVL 9.8x); AVGO's FY2027 value was left missing because it was not exposed in the reviewed page output. Each candidate had its explicit business-model label and actual vendor fiscal-year period. The helper returned `INSUFFICIENT_COMPARABLE_PEERS`, `included_peer_count=0`, all five peers excluded (four `BUSINESS_MODEL_MISMATCH`, Microsoft `SECTOR_OR_INDUSTRY_MISMATCH`), empty plot points, `recommendation=null`, `ranked=false`, snapshot ID `8cf4a0c11f659c232ee6b645e6555ef266e9133fc8968a096f1bd35d9213acab`. Thus it did not silently compare mismatched FY periods or unlike business models. The Site runtime itself loaded the exact skill but does not expose this Python helper for execution. No BUY rank or recommendation.
 
-    cfg = config()
-    required_cases = {str(x) for x in (cfg.get("client_display_validation_case_ids") or [])}
-    if case_id not in required_cases:
-        return []
+This is the intended safe behavior against false comparability but **does not satisfy** #306's acceptance requirement for a reproducible apples-to-apples 3–5-peer table for AMD and MU. A sufficient same-snapshot, period-aligned, economically comparable real peer dataset remains missing.
 
-    evidence = trace.get("client_display_evidence")
-    if not isinstance(evidence, dict):
-        return ["external client-display evidence is required for visual PASS"]
+## Integrated-runtime acceptance and remaining blockers
 
-    if str(evidence.get("status") or "").upper() != "CONFIRMED":
-        return ["client-display evidence status must be CONFIRMED"]
+- Route smoke succeeded for one named issuer and selected `investment-security-review`; no specialist was invoked by the router.
+- Required `investment-record-store` capability is not present in the current Site runtime. The integrated workflow therefore correctly stops at `BLOCKED_CANONICAL_READ`; direct skill probes do not turn the integrated workflow into PASS.
+- #318 has the source-backed calculations above plus passing synthetic regression suites, but the end-to-end integrated workflow is still blocked by the missing canonical-read tool; full security review requirements (history, lifecycle, renderer, debt coverage) were outside this probe.
+- #307 direct challenge behavior was exercised with two evidence-backed countercases and no fabricated third; the integrated workflow remains blocked at its required context read.
+- #306 remains **BLOCKED** on a real-source, compatible 3–5 peer cohort and complete runtime acceptance. Do not close it based on synthetic fixtures or N/M output alone.
+- #231 source inventory is complete, but the now-observed required-tool gap must be reflected in its audit and routing residual.
+- No deployment, merge, or issue status was changed as part of this follow-up evidence capture.
 
-    evidence_type = str(evidence.get("type") or "")
-    allowed = {str(x) for x in (cfg.get("client_display_evidence_types") or [])}
-    if evidence_type not in allowed:
-        return [f"unsupported client-display evidence type: {evidence_type or '<missing>'}"]
+## Sources
 
-    if not str(evidence.get("reference") or "").strip():
-        return ["client-display evidence requires a reference"]
-
-    return []
-
-
-def trace_schema_errors(trace: dict) -> list[str]:
-    errors: list[str] = []
-    if not isinstance(trace, dict):
-        return ["runtime trace must be an object"]
-
-    selected = trace.get("selected_capabilities")
-    if not isinstance(selected, list):
-        errors.append("selected_capabilities must be a list")
-        selected = []
-    elif not all(isinstance(item, str) and item.strip() for item in selected):
-        errors.append("selected_capabilities must contain only non-empty capability names")
-
-    known = validate_routing.known_capability_names(ROOT)
-    unknown = sorted({
-        str(item) for item in selected
-        if isinstance(item, str) and item.strip() and item not in known
-    })
-    if unknown:
-        errors.append(
-            "selected_capabilities contains non-capability/tool names: " + ", ".join(unknown)
-        )
-
-    tool_calls = trace.get("tool_calls")
-    if not isinstance(tool_calls, list):
-        errors.append("tool_calls must be a list")
-
-    return errors
-
-
-def selection_errors(case: dict, trace: dict) -> list[str]:
-    selected = list(trace.get("selected_capabilities") or [])
-    rubric = yaml.safe_load((ROOT / case["rubric"]).read_text(encoding="utf-8")) or {}
-    suite = case["suite"]
-    if suite == "executive-role":
-        should = bool(rubric.get("should_trigger"))
-        present = "executive-role-evaluator" in selected
-        if should and not present:
-            return ["expected executive-role-evaluator selection is absent"]
-        if not should and present:
-            return ["negative executive-role case selected executive-role-evaluator"]
-        return []
-    if suite in {"routing", "supplemental-routing"}:
-        errors: list[str] = []
-        expected = rubric.get("expected_target")
-        if expected not in selected:
-            errors.append(f"expected routing target absent: {expected}")
-        for required in rubric.get("required_selected_capabilities") or []:
-            if required not in selected:
-                errors.append(f"required child capability absent: {required}")
-        for forbidden in rubric.get("forbidden_selected_capabilities") or []:
-            if forbidden in selected:
-                errors.append(f"forbidden capability selected: {forbidden}")
-
-        tool_calls_text = json.dumps(trace.get("tool_calls") or [], ensure_ascii=False)
-        for fragment in rubric.get("required_tool_fragments") or []:
-            if str(fragment) not in tool_calls_text:
-                errors.append(f"required routing tool call absent: {fragment}")
-        return errors
-    return [] if case["target"] in selected else [f"invoked subject absent from trace: {case['target']}"]
-
-
-def import_run(args) -> Path:
-    cfg = config()
-    lock = validate_lock_file(Path(args.lock), root=ROOT)
-    cases = {**load_campaign_cases(ROOT, config()["campaign"]), **load_supplemental_cases(ROOT, config()["campaign"])}
-    if args.case_id not in cases:
-        raise ValueError(f"unknown active campaign case: {args.case_id}")
-    case = cases[args.case_id]
-
-    # Lock validation is intentionally separate from installed-artifact smoke.
-    smoke_errors = verify_smoke(Path(args.lock), Path(args.smoke))
-    if smoke_errors:
-        raise ValueError("; ".join(smoke_errors))
-    obs = json.loads(Path(args.smoke).read_text(encoding="utf-8"))
-    required_channel = lock["case_channels"][args.case_id]
-    if obs.get("channel") != required_channel:
-        raise ValueError(f"case {args.case_id} requires {required_channel} session")
-    trace = json.loads(Path(args.trace).read_text(encoding="utf-8"))
-    schema_errors = trace_schema_errors(trace)
-    sel_errors = schema_errors + selection_errors(case, trace)
-    if sel_errors and args.status == "PASS":
-        raise ValueError("PASS forbidden when runtime trace/selection findings exist: " + "; ".join(sel_errors))
-
-    display_errors = client_display_evidence_errors(args.case_id, trace, args.status)
-    if display_errors:
-        raise ValueError(
-            "PASS forbidden without external client-display evidence: " + "; ".join(display_errors)
-        )
-
-    component = {
-        (x["channel"], x["name"]): x for x in lock["components"]
-    }[(required_channel, case["target"])]
-    source_version, source_digest = receipt.current_component_identity(ROOT, case["target"])
-    dest = ROOT / cfg["evidence_root"] / args.case_id / args.run_id
-    dest.mkdir(parents=True, exist_ok=False)
-    out_dest = dest / "output.md"
-    trace_dest = dest / "trace.json"
-    shutil.copyfile(args.output, out_dest)
-    shutil.copyfile(args.trace, trace_dest)
-
-    runtime = obs["runtime"]
-    ns = argparse.Namespace(
-        case_id=args.case_id,
-        status=args.status,
-        evidence_scope="current-version",
-        source_revision=lock["behavior_source_revision"],
-        component=case["target"],
-        component_version=source_version,
-        component_digest=source_digest,
-        provider=runtime["provider"],
-        model_id=runtime["model_id"],
-        reasoning=runtime["reasoning"],
-        catalog=list(obs["catalog"]),
-        tools=list(runtime.get("available_tools") or []),
-        prompt=(ROOT / case["input"]).read_text(encoding="utf-8"),
-        output=str(out_dest),
-        tool_trace=str(trace_dest),
-        reviewer=args.reviewer,
-        assisted=args.assisted,
-        runtime_artifact={
-            "channel": required_channel,
-            "package_name": obs["package"]["name"],
-            "package_version": obs["package"]["version"],
-            "release_id": obs["package"]["release_id"],
-            "source_revision": obs["package"]["source_revision"],
-            "payload_content_sha256": obs["package"]["payload_content_sha256"],
-            "component_content_sha256": component["content_sha256"],
-        },
-        selection_findings=sel_errors,
-        evidence_origin=str(getattr(args, "evidence_origin", "runtime")),
-        note=args.note,
-    )
-    old = os.environ.get("SOURCE_REVISION")
-    os.environ["SOURCE_REVISION"] = lock["behavior_source_revision"]
-    try:
-        rec = receipt.create_receipt(ns)
-    finally:
-        if old is None:
-            os.environ.pop("SOURCE_REVISION", None)
-        else:
-            os.environ["SOURCE_REVISION"] = old
-    path = dest / "receipt.json"
-    path.write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    return path
-
-
-def evidence_compatibility_profile(source_revision: str, root: Path = ROOT) -> str:
-    active_revision = str(config(root).get("behavior_source_revision") or "")
-    if source_revision == active_revision:
-        return "active-r2"
-    historical_campaign = HISTORICAL_RECEIPT_COMPATIBILITY.get(source_revision)
-    if historical_campaign:
-        historical_config = root / "evals" / "campaigns" / historical_campaign / "campaign.yaml"
-        if not historical_config.is_file():
-            raise ValueError(
-                f"historical compatibility campaign is missing: {historical_campaign}"
-            )
-        if historical_campaign == "runtime-validation-2026-10":
-            return "historical-r1"
-        if historical_campaign == "runtime-validation-2026-10-r2":
-            return "historical-r2"
-        if historical_campaign == "runtime-validation-2026-10-r3":
-            return "historical-r3"
-        if historical_campaign == "runtime-validation-2026-10-r4":
-            return "historical-r4"
-        if historical_campaign == "runtime-validation-2026-10-r5":
-            return "historical-r5"
-        if historical_campaign == "runtime-validation-2026-10-r6":
-            return "historical-r6"
-        if historical_campaign == "runtime-validation-2026-10-r7":
-            return "historical-r7"
-        if historical_campaign == "runtime-validation-2026-10-r8":
-            return "historical-r8"
-        if historical_campaign == "runtime-validation-2026-10-r9":
-            return "historical-r9"
-        if historical_campaign == "runtime-validation-2026-10-r10":
-            return "historical-r10"
-        if historical_campaign == "runtime-validation-2026-10-r11":
-            return "historical-r11"
-        if historical_campaign == "runtime-validation-2026-10-r12":
-            return "historical-r12"
-        if historical_campaign == "runtime-validation-2026-10-r13":
-            return "historical-r13"
-        if historical_campaign == "runtime-validation-2026-10-r14":
-            return "historical-r14"
-        if historical_campaign == "runtime-validation-2026-10-r15":
-            return "historical-r15"
-        return "historical-r14"
-    raise ValueError(f"unsupported evidence source revision: {source_revision}")
-
-
-def validate_evidence() -> list[str]:
-    root = ROOT / config()["evidence_root"]
-    if not root.exists():
-        return []
-    errors = []
-    for path in sorted(root.rglob("receipt.json")):
-        data = json.loads(path.read_text(encoding="utf-8"))
-        source_revision = str(data.get("source_revision") or "")
-        try:
-            compatibility = evidence_compatibility_profile(source_revision, root=ROOT)
-        except ValueError as exc:
-            errors.append(f"{path.relative_to(ROOT)}: {exc}")
-            continue
-        for err in receipt.validate_receipt_data(
-            data, root=ROOT, current_revision=source_revision
-        ):
-            errors.append(f"{path.relative_to(ROOT)} [{compatibility}]: {err}")
-    return errors
-
-
-def main() -> int:
-    p = argparse.ArgumentParser()
-    s = p.add_subparsers(dest="cmd", required=True)
-    s.add_parser("validate")
-    q = s.add_parser("queue")
-    q.add_argument("--output", type=Path)
-    q.add_argument("--include-supplemental", action="store_true")
-    prep = s.add_parser("prepare")
-    prep.add_argument("--output", type=Path, default=ROOT / ".tmp/runtime-campaign")
-    prep.add_argument("--production-plugin", type=Path, help="Reuse a production package built from this exact source.")
-    prep.add_argument("--lab-plugin", type=Path, help="Reuse a Lab package built from this exact source.")
-    lock_cmd = s.add_parser("validate-lock")
-    lock_cmd.add_argument("--lock", required=True, type=Path)
-    smoke = s.add_parser("verify-smoke")
-    smoke.add_argument("--lock", required=True, type=Path)
-    smoke.add_argument("--observed", required=True, type=Path)
-    imp = s.add_parser("import-run")
-    imp.add_argument("--case-id", required=True)
-    imp.add_argument("--run-id", required=True)
-    imp.add_argument("--lock", required=True)
-    imp.add_argument("--smoke", required=True)
-    imp.add_argument("--output", required=True)
-    imp.add_argument("--trace", required=True)
-    imp.add_argument("--status", required=True, choices=["REVIEW_REQUIRED", "PASS", "FAIL"])
-    imp.add_argument("--reviewer", required=True)
-    imp.add_argument("--assisted", action="store_true")
-    imp.add_argument("--evidence-origin", choices=["runtime", "offline"], default="runtime")
-    imp.add_argument("--note")
-    s.add_parser("validate-evidence")
-    args = p.parse_args()
-
-    if args.cmd == "validate":
-        errors = validate_campaign()
-        for e in errors:
-            print("[BLOCKER]", e)
-        if not errors:
-            print(f"Runtime campaign definition: OK ({len(load_campaign_cases(ROOT, config()["campaign"]))} core cases)")
-        return 1 if errors else 0
-    if args.cmd == "queue":
-        text = queue_text(args.include_supplemental)
-        if args.output:
-            args.output.parent.mkdir(parents=True, exist_ok=True)
-            args.output.write_text(text, encoding="utf-8")
-        else:
-            print(text, end="")
-        return 0
-    if args.cmd == "prepare":
-        prepare(args.output, production_plugin=args.production_plugin, lab_plugin=args.lab_plugin)
-        print(args.output)
-        return 0
-    if args.cmd == "validate-lock":
-        try:
-            validate_lock_file(args.lock, root=ROOT)
-        except ValueError as exc:
-            print("[BLOCKER]", exc)
-            return 1
-        print("Campaign lock: OK")
-        return 0
-    if args.cmd == "verify-smoke":
-        errors = verify_smoke(args.lock, args.observed)
-        for e in errors:
-            print("[BLOCKER]", e)
-        if not errors:
-            print("Runtime smoke evidence: OK")
-        return 1 if errors else 0
-    if args.cmd == "import-run":
-        print(import_run(args))
-        return 0
-    errors = validate_evidence()
-    for e in errors:
-        print("[BLOCKER]", e)
-    if not errors:
-        print("Runtime campaign evidence: OK")
-    return 1 if errors else 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+- AMD 2025 Form 10-K, filed Feb 3, 2026, fiscal years ended Dec 30, 2023, Dec 28, 2024, Dec 27, 2025: https://www.sec.gov/Archives/edgar/data/2488/000000248826000018/amd-20251227.htm. The Feb 4 10-K/A corrected MD&A presentation and did not restate the financial statements: https://www.sec.gov/Archives/edgar/data/2488/000000248826000021/amd-20251227.htm
+- AMD Q3 2026 Form 10-Q, nine months ended Sep 26, 2026, signed Nov 3, 2026: https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm
+- Micron 2026 Form 10-K, year ended Sep 3, 2026, signed Oct 9, 2026: https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm
+- QDD Research AMD, MU, Microsoft, NVIDIA, Broadcom, Marvell reports, all dated Nov 5, 2026: https://www.qddresearch.com/us/amd/ ; https://www.qddresearch.com/us/mu/ ; https://www.qddresearch.com/us/msft/ ; https://www.qddresearch.com/us/nvda/ ; https://www.qddresearch.com/us/avgo/ ; https://www.qddresearch.com/us/mrvl/ . Secondary vendor source, used for same-date context/consensus only; definitions and forecast periods remain subject to the limitations above.
