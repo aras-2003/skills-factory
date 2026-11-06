@@ -57,3 +57,41 @@ remain open before production use.
 Portfolio overlap and position suitability are intentionally excluded from the
 intrinsic candidate score. A separate portfolio-fit layer must use verified
 holdings and report overlap without changing this score or implying a trade.
+
+## Iteration 07 evidence audits (#318, #306)
+
+The security-underwriting helper at
+`skills/investing/security-underwriting/scripts/financial_quality.py` accepts caller-reviewed facts and computes explicitly
+defined multi-period FCF, operating/gross margins, revenue and FCF growth where
+comparable, FCF conversion, net debt, debt-due share, stock-compensation ratio,
+share dilution and optional ROIC. It preserves revision history and each
+reported optional fact's provenance instead of silently selecting a new value.
+It expects three to five contiguous fiscal years plus current/prior same-quarter
+YTD; missing, conflicting, future-published, mixed-basis or mixed-currency
+inputs block dependent outputs. It scales units but performs no FX conversion,
+source retrieval, canonical writes or investment recommendation. Banks, insurers
+and ETFs require their own accounting/provider path.
+
+The valuation helper at
+`skills/investing/valuation-scenario-review/scripts/peer_comparison.py` builds
+a reproducible peer table and the exact snapshot consumed by the optional PEG
+reference plot (`scripts/peer_growth_plot.py`). A peer is
+included only for matching sector, industry, business model and as-of date.
+Metric definition, period, basis, unit, currency and forecast horizon must also
+match. Forward estimates older than 90 days, lookahead, or nonpositive EPS
+growth produce N/M. A compact table requires three compatible peers; percentiles
+require five and remain descriptive. PEG=1 is a heuristic reference, never a
+buy signal or cross-sector rank. Plot generation uses table snapshot data only;
+it neither fetches nor repairs inputs.
+
+Consensus revisions, historical multiples, FCF yield, capital intensity and
+cycle-normalized measures may be compared only when supplied with a consistent
+definition, period, basis, unit, currency and source. Missing provider data stay
+N/M. Cyclical issuers can be explicitly flagged; ticker identity never guesses
+cyclicality. These helpers do not independently calculate consensus history,
+historical valuation, or calibrated peer scores.
+
+These helpers are local calculations, not a verified runtime capability or
+production data pipeline. If the selected runtime cannot execute the packaged
+code, use the stated gates and formulas manually and do not claim the helper ran.
+All fixtures are synthetic. No market conclusion is implied.

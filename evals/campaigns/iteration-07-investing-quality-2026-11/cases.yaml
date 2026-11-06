@@ -1,0 +1,79 @@
+schema_version: "1.0"
+cases:
+  - id: iter07-financial-quality-synthetic
+    expected_issue: 318
+    case_paths:
+      - skills/investing/security-underwriting/tests/cases.yaml
+      - workflows/investment-security-review/tests/cases.yaml
+    required_cases:
+      - underwriting-financial-quality-periods
+      - underwriting-financial-quality-unit-basis-conflict
+      - underwriting-financial-quality-cyclical-peak
+      - underwriting-financial-quality-industry-path
+      - underwriting-financial-quality-revisions-and-dilution
+      - investment-review-financial-quality-before-valuation
+      - investment-review-comparable-peer-screen
+      - investment-review-ranked-thesis-challenges
+    assertions:
+      - period, unit, currency, basis and source publication date are explicit per value
+      - 3–5 contiguous annual facts and comparable current/prior same-quarter YTD required
+      - restatements visible; lookahead, conflicting facts, mixed currency and missing critical values block dependent calculations
+      - FCF, FCF conversion, ROIC, margins, debt, cash, working capital, SBC and dilution use named formulas or source facts
+      - no portfolio or canonical write
+  - id: iter07-peer-comparison
+    expected_issue: 306
+    case_paths:
+      - skills/investing/valuation-scenario-review/tests/cases.yaml
+    required_cases:
+      - valuation-peer-compatibility-and-peg
+      - valuation-peer-plot-same-snapshot
+      - valuation-peer-history-revisions-cycle
+      - valuation-ps-growth-optional
+      - valuation-stale-consensus-revisions
+    assertions:
+      - comparable peers and metric definitions have explicit inclusion/exclusion and N/M reasons
+      - minimum three peers for a compact table and five for percentiles
+      - positive compatible forward P/E and EPS CAGR only; PEG one is heuristic, never a buy signal
+      - plot data hash to exact table snapshot with date, filters and source provenance
+      - no recommendation, cross-sector rank or write
+  - id: iter07-thesis-challenge
+    expected_issue: 307
+    case_paths:
+      - skills/investing/thesis-challenge/tests/cases.yaml
+    required_cases:
+      - challenge-direct
+      - challenge-confirmation
+      - challenge-rank-material-bear-cases
+      - challenge-missing-evidence-unresolved
+      - challenge-separate-business-and-price-risk
+      - challenge-fewer-than-three-supported-cases
+    assertions:
+      - up to three materially plausible challenges ranked by impact and evidence
+      - dated source and causal transmission per challenge; missing magnitude remains N/M
+      - explicit disconfirming evidence and thesis state
+      - no fabricated bear case, false probability or trade instruction
+  - id: iter07-investing-domain-routing
+    expected_issue: 231
+    case_paths:
+      - evals/routing/registry.yaml
+      - evals/routing/supplemental-registry.yaml
+    required_cases:
+      - investment-security-sizing-natural-pl
+      - investment-security-natural-en
+      - investment-security-sizing-natural-en
+      - investment-opportunity-natural-pl
+      - investment-theme-natural-en
+      - investment-portfolio-natural-en
+      - investment-portfolio-observation-natural-pl
+      - investment-policy-natural-pl
+      - investment-ambiguous-shares-pl
+      - investment-top-two-screen-pl
+      - investment-top-twenty-screen-en
+      - investment-acronym-vat-pl
+      - investment-acronym-pit-pl
+      - investment-acronym-nasa-en
+    assertions:
+      - one named security with sizing routes to the security workflow
+      - multi-holding, broad scan and theme requests retain their own workflow boundaries
+      - requested top N preserved; ambiguous acronyms do not trigger investing
+      - no maturity change and no implicit canonical write

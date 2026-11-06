@@ -27,3 +27,34 @@ cases:
         - security-underwriting establishes an initial thesis before challenge
       must_not:
         - pretend a prior bullish thesis exists to attack
+
+  - id: challenge-rank-material-bear-cases
+    case: Rank the strongest supported downside mechanisms
+    input: "Stress-test my existing thesis with at most three materially plausible bear cases, ranked by impact and evidence. Trace each dated source through revenue, margins, FCF and valuation, state the horizon and what would disconfirm it."
+    expected:
+      should_trigger: true
+      must: ["ranked", "dated evidence", "causal mechanism", "revenue", "margins", "FCF", "valuation", "disconfirm"]
+      must_not: ["invent a third case", "short recommendation"]
+
+  - id: challenge-missing-evidence-unresolved
+    case: Missing evidence is not bearish evidence
+    input: "I cannot find a source for a rumored customer loss. Do not treat the rumor or missing source as proof; show the evidence gap and its thesis impact."
+    expected:
+      should_trigger: true
+      must: ["UNRESOLVED", "source gap", "no verified evidence"]
+      must_not: ["customer loss confirmed", "THESIS_DAMAGING without evidence"]
+
+  - id: challenge-separate-business-and-price-risk
+    case: Sound business can still be overpriced
+    input: "The company may execute well, but valuation assumes 30% growth. Separate business risk, valuation risk, priced-in expectations and timing without suggesting a trade."
+    expected:
+      should_trigger: true
+      must: ["business", "valuation", "priced-in", "timing", "no trading instruction"]
+
+  - id: challenge-fewer-than-three-supported-cases
+    case: Do not manufacture a third bear case
+    input: "I only have dated evidence for two material risks to the thesis. Rank those two and state that the evidence does not support a third."
+    expected:
+      should_trigger: true
+      must: ["two", "ranked", "evidence", "no third case"]
+      must_not: ["invent a third bear case", "fill a quota"]

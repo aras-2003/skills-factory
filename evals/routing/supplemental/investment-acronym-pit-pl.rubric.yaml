@@ -1,0 +1,11 @@
+id: investment-acronym-pit-pl
+mode: natural-routing
+expected_target: no-skill
+language: pl
+forbidden_selected_capabilities:
+  - investment-os-review
+  - investment-security-review
+assertions:
+  manual:
+    - Treat PIT as Polish personal income tax in context.
+    - Do not route to investment skills based on the token alone.

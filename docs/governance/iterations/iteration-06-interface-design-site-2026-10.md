@@ -1,6 +1,6 @@
 # Iteration 06 — interface-design Site acceptance
 
-- State: ACTIVE
+- State: ABORTED by owner direction on 2026-11-06; see [the immutable closeout record](iteration-06-closeout-2026-11-06.md). The historical evidence, failures, and original scope below are preserved.
 - Tracking Issue: [#483](https://github.com/aras-2003/skills-factory/issues/483)
 - Replaces acceptance work only; Iteration 05 remains ABORTED and unchanged.
 - Owner: Arkadiusz Kamrowski

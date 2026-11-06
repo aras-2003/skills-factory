@@ -1,0 +1,32 @@
+cases:
+  - id: investment-review-financial-quality-before-valuation
+    case: Run multi-period financial quality before valuation
+    input: "Review this named security over three to five fiscal years and comparable YTD, then value it only after source, period, unit and basis gates pass."
+    expected:
+      should_trigger: true
+      must: ["Financial Quality Audit", "3–5 fiscal years", "comparable", "block numeric valuation"]
+      must_not: ["canonical write without approval", "fill missing facts with zero"]
+
+  - id: investment-review-comparable-peer-screen
+    case: Peer table and valuation card use compatible evidence
+    input: "For this single issuer, compare same-industry, same-business-model peers with matching definitions and forecast horizons before the scenario card."
+    expected:
+      should_trigger: true
+      must: ["business model", "forecast horizon", "N/M", "valuation card"]
+      must_not: ["cross-sector rank", "PEG buy signal"]
+
+  - id: investment-review-ranked-thesis-challenges
+    case: Independent sourced countercase after underwriting
+    input: "Challenge the established thesis with the strongest materially plausible, ranked downside mechanisms and say what would disconfirm each."
+    expected:
+      should_trigger: true
+      must: ["up to three", "dated sources", "causal", "disconfirm"]
+      must_not: ["fabricated bear claim", "automatic sell"]
+
+  - id: investment-review-broad-screen-stays-outside-single-security
+    case: Broad candidate screening stays on the opportunity path
+    input: "Screen the top twenty broker-available stocks for research candidates; I do not have a named security yet."
+    expected:
+      should_trigger: false
+      must: ["market-opportunity-scan"]
+      must_not: ["single-security underwriting"]

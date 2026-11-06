@@ -1,0 +1,115 @@
+campaign: iteration-07-investing-quality-2026-11
+schema_version: '1.0'
+scope: investing_quality_iteration_07
+execution_channel: lab
+runtime_target: Cloud Next Lab
+runtime_status: NOT_RUN
+candidate_source_revision: 47c96cefb83d2ef2d4a38f751b1bd121bd064149
+source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
+runtime_source_revision_required: true
+release_approved: false
+historical_r20_immutable: true
+status_note: Local source candidate only. No candidate Lab publication, runtime execution,
+  release, production maturity change, canonical writes, portfolio mutation or trades.
+behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
+required_case_ids:
+- iter07-financial-quality-synthetic
+- iter07-peer-comparison
+- iter07-thesis-challenge
+- iter07-investing-domain-routing
+supplemental_routing_registry: evals/routing/supplemental-registry.yaml
+supplemental_routing_case_ids:
+- investment-security-sizing-natural-pl
+- investment-ambiguous-shares-pl
+- investment-top-two-screen-pl
+- investment-top-twenty-screen-en
+- investment-acronym-vat-pl
+- investment-acronym-pit-pl
+- investment-acronym-nasa-en
+routing_registry: evals/routing/registry.yaml
+routing_case_ids:
+- investment-security-natural-en
+- investment-security-sizing-natural-en
+- investment-opportunity-natural-pl
+- investment-theme-natural-en
+- investment-portfolio-natural-en
+- investment-portfolio-observation-natural-pl
+- investment-policy-natural-pl
+out_of_scope_behavior_paths:
+- skills/investing/security-underwriting/SKILL.md
+- skills/investing/security-underwriting/scripts/financial_quality.py
+- skills/investing/valuation-scenario-review/scripts/peer_comparison.py
+- skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py
+- skills/investing/valuation-scenario-review/SKILL.md
+- skills/investing/thesis-challenge/SKILL.md
+- workflows/investment-security-review/WORKFLOW.md
+- workflows/runtime-registry.yaml
+- docs/audits/investing-domain-audit-iteration-07-2026-11.md
+- docs/governance/iterations/iteration-07-investing-quality-2026-11.md
+- CATALOG.md
+- docs/catalog.json
+- scripts/eval/campaign.py
+test_modules:
+- skills/investing/security-underwriting/tests/test_financial_quality.py
+- skills/investing/valuation-scenario-review/tests/test_peer_comparison.py
+- skills/investing/fundamental-intelligence/test_engine.py
+- scripts/eval/tests/test_iteration_07_investing_quality_coverage.py
+- scripts/eval/tests/test_iteration02_workflow_hardening_release.py
+source_sha256:
+  CATALOG.md: 413be588ba692f6f797c4af5aac01958d8b6466d592758de4be423c62acf7fef
+  docs/audits/investing-domain-audit-iteration-07-2026-11.md: aba52de132399ccace0c51824f29f65516750f33e5dafb14f61c544c7365f848
+  docs/catalog.json: 98cf3ff245ae7a5f023a84c8bb286312129c11e51b4c99a9ab88442f0b43dafc
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: e6307d7b4964818bb0ec0dd4f3b31bdce14b91812082effe15668dd3bcc5115a
+  evals/campaigns/investment-quality-2026-10/campaign.yaml: 8697105ff61ccb98bf3418c2d2c042444411aa5b404af92b4dfb683d01ac1bbf
+  evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
+  evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: f45ab971daac4314b2324dd4ccd6ea751f19fd133aad3865733bc097e192fda6
+  evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
+  evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
+  evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
+  evals/routing/investment-policy-natural-pl.rubric.yaml: 67b4a521fd0f0c0fa36929f4f8fa168130432b72003ec80244b6320ea6d6aba1
+  evals/routing/investment-portfolio-natural-en.input.md: 138af61afcb62bfcf7ae4ef6c99f4fc743c772221e7847ad1902a5f7f021a109
+  evals/routing/investment-portfolio-natural-en.rubric.yaml: 6405da71b75bcec8cf5213ae3488100100ccb41eb405692aeef6ceda2d399321
+  evals/routing/investment-portfolio-observation-natural-pl.input.md: 71e0173140703427a72dfdb06b4cafdf88f06e9789b1d4f6161cf38066e67919
+  evals/routing/investment-portfolio-observation-natural-pl.rubric.yaml: dd759b2932df9f7ecb25d1f590ac25fb0e0131f130025cf25c4f8be341fbd8ae
+  evals/routing/investment-security-natural-en.input.md: cbfe8f0053f5d77d81cbc2e11a1934def3186e5ef4ef222f27b6d65f59bcb4d9
+  evals/routing/investment-security-natural-en.rubric.yaml: e33f22005b52f652e8e0dc327aab4e3732a66b1250f8349d8be7f078f0127e2f
+  evals/routing/investment-security-sizing-natural-en.input.md: 85080390a5d3a56c35c96f4e4beed2fdd4fc63a2b3d62d9c56f0a18c4c1a5968
+  evals/routing/investment-security-sizing-natural-en.rubric.yaml: e92f84d3c21e70ea7beece0540d113872d173c7bc876b83e3d7b3dfce9ea504d
+  evals/routing/investment-theme-natural-en.input.md: f001fa0332960b93494f792a329af98af5a558c061abcb0befdd8ba9e7725c25
+  evals/routing/investment-theme-natural-en.rubric.yaml: 56bd695bd9dc9edda2c1952e8aa96221b5504091db5a8ecb28123c191846ae5d
+  evals/routing/registry.yaml: 76253e2cd22b5ca62759d8b03743342d3ab657e0b06c4645dc7199f35a3804eb
+  evals/routing/supplemental-registry.yaml: 2083029c97bf0def0885fe9d38d3f60d3fe37891f1fe1407cd8c136ffe31e7b4
+  evals/routing/supplemental/investment-acronym-nasa-en.input.md: 70c94b0a987abbf24257a8178b71d3d0f9ce862b8ea00b01c850eb9f137ce62f
+  evals/routing/supplemental/investment-acronym-nasa-en.rubric.yaml: 2a78a7d67d9d463ed7249005e50ccdedb50766d5e75c55d4909ce9704d000727
+  evals/routing/supplemental/investment-acronym-pit-pl.input.md: 57db0651b7dc1b172c381adaf01c30334f043d6b718165946c88d24abbb59bb0
+  evals/routing/supplemental/investment-acronym-pit-pl.rubric.yaml: 9db481a7ad424199a9095998918fbda1786a8f707a06f51c94fa5440395b2306
+  evals/routing/supplemental/investment-acronym-vat-pl.input.md: e9860f92cec9ab76b55e92b2860e51e96118156da2f024235930f9f65d5235b1
+  evals/routing/supplemental/investment-acronym-vat-pl.rubric.yaml: 50d9d035399559910524063fd6c9e77b9525b2c5ecf055cbc0f7934bac3434c3
+  evals/routing/supplemental/investment-ambiguous-shares-pl.input.md: 9a6db9b8edfa02611af4d2d7d2be9e0671dedc722bb647a21ee7748395be1c95
+  evals/routing/supplemental/investment-ambiguous-shares-pl.rubric.yaml: adf0b1da5efe2b1c198fbf2d6735db9cd9a0a79a8ef23839acc878f13370485b
+  evals/routing/supplemental/investment-security-sizing-natural-pl.input.md: 34573b50b311887f331304000415e5db7f6013998c4da7c7edc945fc07566e05
+  evals/routing/supplemental/investment-security-sizing-natural-pl.rubric.yaml: 1380db5ed7e4352dd56d94c362d3609cb8dbb3888454d8802c7a050787f7051b
+  evals/routing/supplemental/investment-top-twenty-screen-en.input.md: 10faa88b736adcf569b09a7515a4b6809e7c88de36f5b9ec1585f77583641e49
+  evals/routing/supplemental/investment-top-twenty-screen-en.rubric.yaml: fa08f2834fa5104c172e3b30a8a0e7a003dba4aefde59b567ec6cca7893989c2
+  evals/routing/supplemental/investment-top-two-screen-pl.input.md: 7517ca4ddf83a15d188f1d560287934749f6c4038f81d82afd0d7f31d547fb2d
+  evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml: 0ec7e8bf45911ec2fbe7113417e8b1ebc5dd335b6cd6d0e8f3b4687506f8a8e5
+  release/production-readiness.yaml: d4df1becbdb44eaef293faaf50967a22f5e00e0316d3a8da75a130bb32562404
+  scripts/eval/campaign.py: 5a8601b3fce78c34fe46179690bd68efccef425f63cfecc79c3053719c604688
+  scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: eb0bded209b1666d3859d0f3029360127167b4cdb8c4848969836d8438d0489c
+  skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
+  skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
+  skills/investing/security-underwriting/SKILL.md: 6f668be91467b2703ce32d119e62b97fa69a2dec3f0473acf98828b2fbf56e4d
+  skills/investing/security-underwriting/scripts/financial_quality.py: 43543fc4ba0188ce91b9d686b92185ed93536a1b954a260e26b62804a31434c6
+  skills/investing/security-underwriting/tests/cases.yaml: 428beb68f4456a83c00f3d9987f3f2511e57f3f4fdfd773d8a5b882a059dbdd4
+  skills/investing/security-underwriting/tests/test_financial_quality.py: 1593f8f5c12ff29c2f5f5e79da4bacc94077e33e52bf35c5905621bb78f8c441
+  skills/investing/thesis-challenge/SKILL.md: 133b1bc881e58329975ecff02cf41bdc20872879746274d818077076309bc31c
+  skills/investing/thesis-challenge/tests/cases.yaml: 5ed7120ffe4aff4d9b92843010dcc15e252888905f5dbb0ce297bf6cd569e3e0
+  skills/investing/valuation-scenario-review/SKILL.md: 6dba46925b6c113e7b5b18489900c15f058a0a95904f3c9a92c4737b6ed7ecc4
+  skills/investing/valuation-scenario-review/scripts/peer_comparison.py: 7e8ae55ceb46db33410ee36e2a175323bbba4aea7e4bae66a7c42717482f1ab0
+  skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py: 85523e817a0775e26dbe7f6ad61211dcb47051f4c5b26de445943b0d640bed9c
+  skills/investing/valuation-scenario-review/tests/cases.yaml: ad7797d630537661425cecd84926d5e82ad52c5f9d435da257df1a793aa241d5
+  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: fe92f8de8dff20792be649b46a4abe1f3cd30d282f2a675450e64e95c72c34a8
+  workflows/investment-security-review/WORKFLOW.md: f14f59a46d8b1025c7993027a0bf0e7630de238977afbf3a082dc9417a63d96c
+  workflows/investment-security-review/tests/cases.yaml: c979b77522e75e245de970ef6bce6db7a172fab9b2240cca081cb8aa33722a9d
+  workflows/runtime-registry.yaml: 3ebffa2b45c902465505550a90c2e4e4ed4844b9a05156b741238cb70954d684

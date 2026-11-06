@@ -12,3 +12,21 @@ cases:
   - id: investment-ambiguous-shares-pl
     input: evals/routing/supplemental/investment-ambiguous-shares-pl.input.md
     rubric: evals/routing/supplemental/investment-ambiguous-shares-pl.rubric.yaml
+  - id: investment-top-two-screen-pl
+    input: evals/routing/supplemental/investment-top-two-screen-pl.input.md
+    rubric: evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml
+  - id: investment-top-twenty-screen-en
+    input: evals/routing/supplemental/investment-top-twenty-screen-en.input.md
+    rubric: evals/routing/supplemental/investment-top-twenty-screen-en.rubric.yaml
+  - id: investment-acronym-vat-pl
+    input: evals/routing/supplemental/investment-acronym-vat-pl.input.md
+    rubric: evals/routing/supplemental/investment-acronym-vat-pl.rubric.yaml
+  - id: investment-acronym-pit-pl
+    input: evals/routing/supplemental/investment-acronym-pit-pl.input.md
+    rubric: evals/routing/supplemental/investment-acronym-pit-pl.rubric.yaml
+  - id: investment-acronym-nasa-en
+    input: evals/routing/supplemental/investment-acronym-nasa-en.input.md
+    rubric: evals/routing/supplemental/investment-acronym-nasa-en.rubric.yaml
+  - id: investment-security-sizing-natural-pl
+    input: evals/routing/supplemental/investment-security-sizing-natural-pl.input.md
+    rubric: evals/routing/supplemental/investment-security-sizing-natural-pl.rubric.yaml

@@ -55,7 +55,9 @@ class DedicatedWorkflowVersionGateTests(unittest.TestCase):
     def test_wrong_workflow_version_revokes_exemption(self):
         path = self.root / "workflows/runtime-registry.yaml"
         s = path.read_text()
-        s = s.replace('version: "0.4.3"', 'version: "0.4.0"', 1)
+        campaign_path = self.root / CAMPAIGN_ROOT / "campaign.yaml"
+        expected_version = yaml.safe_load(campaign_path.read_text())["workflow_versions"]["investment-security-review"]
+        s = s.replace(f'version: "{expected_version}"', 'version: "0.4.0"', 1)
         path.write_text(s)
         self.assertEqual(set(), self.check())
 

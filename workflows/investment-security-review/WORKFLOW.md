@@ -29,18 +29,19 @@ The default is **analysis only**. A user request to research, analyze, review, s
    - dated material events aligned to major price/KPI moves;
    - observed move vs likely cause with confidence.
 4. Verify decision-critical metrics in primary-source context; use Firecrawl to retrieve/parse filings or IR pages when useful.
-5. Run the value-trap and cash-flow quality gate: reconcile CFO, capex, working capital, leases, advances, dilution, normalized FCF, leverage, maturities, coverage and cycle risks where applicable. Show PASS/WARN/BLOCK, reasons and invalidation triggers.
+5. Run the value-trap gate and Financial Quality Audit (#318): reconcile CFO, capex, working capital, leases, advances, dilution, normalized FCF, leverage, maturities, coverage and cycle risks where applicable, across three to five fiscal years and comparable current/prior YTD. Show PASS/WARN/BLOCK, per-value sources, reasons and invalidation triggers. Mark missing/conflicted facts unresolved; bank, insurer and ETF data need their own accounting path.
 6. Run the hard evidence-sanity gate: period, units, GAAP/non-GAAP, quarterly/annual, per-share/absolute, arithmetic and scale.
 7. If any critical metric remains UNVERIFIED/CONFLICTED, classify VERIFY/RESEARCH; block numeric valuation and sizing; persist the gap if possible and return.
 8. Only after both gates pass, build the bear/base/bull Valuation & Opportunity Card with an industry-fit method, price/currency, fair-value range, separately calculated margin of safety and upside, horizons, provenance and sensitivity. A BLOCK gate forbids an attractive rating and FCF-based valuation.
-9. Separate business-thesis strength, security attractiveness, valuation, catalyst/timing, portfolio fit and confidence. Include five-stage business lifecycle using the deterministic security-underwriting classifier only after verification; label affinity scores uncalibrated and surface missing metrics. Never interpret lifecycle as valuation or trade recommendation.
-10. Run thesis-challenge independently.
-11. Classify research state: REJECT / WATCH / RESEARCHED / THESIS SURVIVES / THESIS WEAKENED / INVALIDATED.
-12. If portfolio action is considered, parse policy semantics literally and run portfolio-state-review/position-sizing-review as needed.
-13. Determine persistence scope **after** analysis. Without explicit per-action approval or a verified standing write mandate for the exact canonical target and operation, do not write; return NOT_WRITTEN (including read-only, preview-only, unspecified, or unknown permissions).
-14. When and only when separately authorized, append research events/sources/signals via investment-record-store. A **new thesis version**, thesis activation or an owner lifecycle decision requires its own explicitly approved operation. Do not overwrite prior thesis history or reuse past test/production authorization.
-15. If an independently approved lifecycle decision was made, append only the decision-journal event within that approved scope.
-16. Report SAVED only with a real successful canonical WRITE receipt including target/time/id; otherwise WRITE_FAILED or NOT_WRITTEN. Research plugins, Data analytics and local files never count as canonical persistence.
+9. For Tactical Review peer comparison (#306), use only peers with matching sector, industry, business model, as-of, definitions, periods, bases, units, currency and forecast horizon. Show exclusions and N/M reasons; require three peers for a compact table and five for descriptive percentiles. Forward P/E / EPS CAGR PEG is descriptive only; PEG=1 is not a buy signal. Any optional plot must consume the same table snapshot and preserve source/date/filter provenance.
+10. Separate business-thesis strength, security attractiveness, valuation, catalyst/timing, portfolio fit and confidence. Include five-stage business lifecycle using the deterministic security-underwriting classifier only after verification; label affinity scores uncalibrated and surface missing metrics. Never interpret lifecycle as valuation or trade recommendation.
+11. Run thesis-challenge independently. Return up to three materially plausible countercases ranked by evidence and impact; trace sources through operating and valuation consequences. Missing evidence remains unresolved, not a fabricated bear case.
+12. Classify research state: REJECT / WATCH / RESEARCHED / THESIS SURVIVES / THESIS WEAKENED / INVALIDATED.
+13. If portfolio action is considered, parse policy semantics literally and run portfolio-state-review/position-sizing-review as needed.
+14. Determine persistence scope **after** analysis. Without explicit per-action approval or a verified standing write mandate for the exact canonical target and operation, do not write; return NOT_WRITTEN (including read-only, preview-only, unspecified, or unknown permissions).
+15. When and only when separately authorized, append research events/sources/signals via investment-record-store. A **new thesis version**, thesis activation or an owner lifecycle decision requires its own explicitly approved operation. Do not overwrite prior thesis history or reuse past test/production authorization.
+16. If an independently approved lifecycle decision was made, append only the decision-journal event within that approved scope.
+17. Report SAVED only with a real successful canonical WRITE receipt including target/time/id; otherwise WRITE_FAILED or NOT_WRITTEN. Research plugins, Data analytics and local files never count as canonical persistence.
 
 ## Decision rules
 - company quality, security attractiveness and portfolio fit are different questions;

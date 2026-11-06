@@ -1,0 +1,11 @@
+id: investment-acronym-nasa-en
+mode: natural-routing
+expected_target: no-skill
+language: en
+forbidden_selected_capabilities:
+  - investment-os-review
+  - investment-security-review
+assertions:
+  manual:
+    - Treat NASA as the space agency in the science question.
+    - Do not route to investment skills based on the token alone.

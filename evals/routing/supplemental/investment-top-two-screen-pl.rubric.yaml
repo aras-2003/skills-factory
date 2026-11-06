@@ -1,0 +1,12 @@
+id: investment-top-two-screen-pl
+mode: natural-routing
+expected_target: investment-os-review
+expected_status: routed
+assertions:
+  must:
+    - Route to investment-opportunity-hunter for an exactly-two candidate screen.
+    - Preserve the requested cohort size of two.
+    - Do not invoke full single-security underwriting before a candidate is selected.
+  must_not:
+    - Expand the request into a top-ten or top-twenty scan.
+    - Underwrite multiple securities as if one were already selected.

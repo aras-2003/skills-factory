@@ -670,6 +670,145 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
         return set()
 
 
+def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) -> set[str]:
+    """Exempt only the exact Iteration 07 investing candidate bound by its source campaign."""
+    path = root / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml"
+    expected_behavior = {
+        "skills/investing/security-underwriting/SKILL.md",
+        "skills/investing/security-underwriting/scripts/financial_quality.py",
+        "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
+        "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
+        "skills/investing/valuation-scenario-review/SKILL.md",
+        "skills/investing/thesis-challenge/SKILL.md",
+        "workflows/investment-security-review/WORKFLOW.md",
+        "workflows/runtime-registry.yaml",
+        "docs/audits/investing-domain-audit-iteration-07-2026-11.md",
+        "docs/governance/iterations/iteration-07-investing-quality-2026-11.md",
+        "CATALOG.md",
+        "docs/catalog.json",
+        "scripts/eval/campaign.py",
+    }
+    expected_modules = {
+        "skills/investing/security-underwriting/tests/test_financial_quality.py",
+        "skills/investing/valuation-scenario-review/tests/test_peer_comparison.py",
+        "skills/investing/fundamental-intelligence/test_engine.py",
+        "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
+        "scripts/eval/tests/test_iteration02_workflow_hardening_release.py",
+    }
+    expected_support = {
+        "skills/investing/fundamental-intelligence/README.md",
+        "skills/investing/security-underwriting/tests/cases.yaml",
+        "skills/investing/valuation-scenario-review/tests/cases.yaml",
+        "skills/investing/thesis-challenge/tests/cases.yaml",
+        "workflows/investment-security-review/tests/cases.yaml",
+        "release/production-readiness.yaml",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml",
+        "evals/campaigns/investment-quality-2026-10/campaign.yaml",
+        "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml",
+        "evals/routing/registry.yaml",
+        "evals/routing/supplemental-registry.yaml",
+        "evals/routing/investment-security-natural-en.input.md",
+        "evals/routing/investment-security-natural-en.rubric.yaml",
+        "evals/routing/investment-security-sizing-natural-en.input.md",
+        "evals/routing/investment-security-sizing-natural-en.rubric.yaml",
+        "evals/routing/investment-opportunity-natural-pl.input.md",
+        "evals/routing/investment-opportunity-natural-pl.rubric.yaml",
+        "evals/routing/investment-theme-natural-en.input.md",
+        "evals/routing/investment-theme-natural-en.rubric.yaml",
+        "evals/routing/investment-portfolio-natural-en.input.md",
+        "evals/routing/investment-portfolio-natural-en.rubric.yaml",
+        "evals/routing/investment-portfolio-observation-natural-pl.input.md",
+        "evals/routing/investment-portfolio-observation-natural-pl.rubric.yaml",
+        "evals/routing/investment-policy-natural-pl.input.md",
+        "evals/routing/investment-policy-natural-pl.rubric.yaml",
+        "evals/routing/supplemental/investment-ambiguous-shares-pl.input.md",
+        "evals/routing/supplemental/investment-ambiguous-shares-pl.rubric.yaml",
+        "evals/routing/supplemental/investment-top-two-screen-pl.input.md",
+        "evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml",
+        "evals/routing/supplemental/investment-top-twenty-screen-en.input.md",
+        "evals/routing/supplemental/investment-top-twenty-screen-en.rubric.yaml",
+        "evals/routing/supplemental/investment-acronym-vat-pl.input.md",
+        "evals/routing/supplemental/investment-acronym-vat-pl.rubric.yaml",
+        "evals/routing/supplemental/investment-acronym-pit-pl.input.md",
+        "evals/routing/supplemental/investment-acronym-pit-pl.rubric.yaml",
+        "evals/routing/supplemental/investment-acronym-nasa-en.input.md",
+        "evals/routing/supplemental/investment-acronym-nasa-en.rubric.yaml",
+        "evals/routing/supplemental/investment-security-sizing-natural-pl.input.md",
+        "evals/routing/supplemental/investment-security-sizing-natural-pl.rubric.yaml",
+    }
+    expected_base_routing = {
+        "investment-security-natural-en", "investment-security-sizing-natural-en",
+        "investment-opportunity-natural-pl", "investment-theme-natural-en",
+        "investment-portfolio-natural-en", "investment-portfolio-observation-natural-pl",
+        "investment-policy-natural-pl",
+    }
+    expected_cases = {
+        "iter07-financial-quality-synthetic",
+        "iter07-peer-comparison",
+        "iter07-thesis-challenge",
+        "iter07-investing-domain-routing",
+    }
+    try:
+        cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        hashes = cfg.get("source_sha256") or {}
+        modules = set(cfg.get("test_modules") or [])
+        if (
+            cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("historical_r20_immutable") is not True
+            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected_behavior
+            or modules != expected_modules
+            or set(cfg.get("required_case_ids") or []) != expected_cases
+            or set(hashes) != expected_behavior | expected_modules | expected_support
+        ):
+            return set()
+        for rel, digest in hashes.items():
+            file_path = root / rel
+            if not file_path.is_file() or hashlib.sha256(file_path.read_bytes()).hexdigest() != digest:
+                return set()
+        for rel in expected_behavior | expected_modules:
+            if not (root / rel).is_file():
+                return set()
+        cases_path = root / str(cfg.get("behavior_case_suite") or "")
+        cases_doc = yaml.safe_load(cases_path.read_text(encoding="utf-8")) or {}
+        grouped = {str(item.get("id")): item for item in cases_doc.get("cases") or []}
+        if set(grouped) != expected_cases:
+            return set()
+        for group in grouped.values():
+            defined_cases: set[str] = set()
+            for case_path in group.get("case_paths") or []:
+                if case_path not in hashes:
+                    return set()
+                behavior_cases = yaml.safe_load((root / case_path).read_text(encoding="utf-8")) or {}
+                defined_cases.update(str(item.get("id")) for item in behavior_cases.get("cases") or [])
+            if not set(group.get("required_cases") or []).issubset(defined_cases):
+                return set()
+        routing_group = grouped.get("iter07-investing-domain-routing", {})
+        declared_routing = set(cfg.get("routing_case_ids") or []) | set(cfg.get("supplemental_routing_case_ids") or [])
+        if set(routing_group.get("required_cases") or []) != declared_routing:
+            return set()
+        supplemental_path = root / str(cfg.get("supplemental_routing_registry") or "")
+        supplemental_doc = yaml.safe_load(supplemental_path.read_text(encoding="utf-8")) or {}
+        supplemental_ids = {str(item.get("id")) for item in supplemental_doc.get("cases") or []}
+        if not set(cfg.get("supplemental_routing_case_ids") or []).issubset(supplemental_ids):
+            return set()
+        base_path = root / str(cfg.get("routing_registry") or "")
+        base_doc = yaml.safe_load(base_path.read_text(encoding="utf-8")) or {}
+        base_ids = {str(item.get("id")) for item in base_doc.get("cases") or []}
+        if set(cfg.get("routing_case_ids") or []) != expected_base_routing or not expected_base_routing.issubset(base_ids):
+            return set()
+        for registry_doc in (supplemental_doc, base_doc):
+            for item in registry_doc.get("cases") or []:
+                if item.get("id") in set(cfg.get("supplemental_routing_case_ids") or []) | expected_base_routing:
+                    for key in ("input", "rubric"):
+                        if str(item.get(key) or "") not in hashes:
+                            return set()
+        return expected_behavior
+    except (OSError, ValueError, TypeError, AttributeError, yaml.YAMLError):
+        return set()
+
+
 def separately_validated_oaf_fallback_paths(root: Path = ROOT) -> set[str]:
     """Keep R20 immutable while a hash-bound Lab fallback candidate awaits runtime."""
     path = root / "evals/campaigns/oaf-health-check-fallback-2026-10/campaign.yaml"
@@ -1030,6 +1169,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_investment_lifecycle_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_quality_paths(ROOT))
+    separate_meta_targets.update(separately_validated_iteration07_investing_quality_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
     separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))

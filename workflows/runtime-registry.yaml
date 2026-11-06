@@ -573,10 +573,10 @@ workflows:
       natural investment requests.
     metadata:
       owner: arkadiusz-kamrowski
-      version: "0.4.3"
+      version: "0.4.4"
       maturity: production
       risk: high
-      last_reviewed: 2026-10-13
+      last_reviewed: 2026-11-06
       execution:
         default_model_class: strong
   - name: investment-portfolio-review
