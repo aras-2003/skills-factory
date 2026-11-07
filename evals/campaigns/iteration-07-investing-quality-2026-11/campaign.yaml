@@ -4,20 +4,21 @@ scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
 runtime_status: PARTIAL_BLOCKED
-candidate_source_revision: 05387fdaf645813520bd53c796b940a68216780c
+candidate_source_revision: 00371645d2ef1ab687ae989f908da05d8ceda68e
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
 runtime_source_revision_required: true
-runtime_source_revision: 05387fdaf645813520bd53c796b940a68216780c
-runtime_release_id: 1.38.467+05387fdaf645
+runtime_source_revision: 8e99512b9a5838dfe987d8cb800fe6e2bff7f099
+runtime_release_id: 1.38.468+00371645d2ef
 runtime_attestation: verified
 runtime_evidence: evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md
+runtime_canonical_source_revision: 00371645d2ef1ab687ae989f908da05d8ceda68e
 runtime_blockers:
-  - USER_SUPPLIED_CONTEXT routes to investment-security-review, but complete report workflow acceptance is not proven by routing and bounded host review alone
+  - The exact USER_SUPPLIED_CONTEXT route and skill loads are verified, but the complete integrated report workflow has not been executed on the exact runtime
   - CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime
   - AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases
 release_approved: false
 historical_r20_immutable: true
-status_note: "Merged candidate is attested on private Site v120. USER_SUPPLIED_CONTEXT routes to investment-security-review and a bounded host review was recorded; complete report workflow acceptance remains unproven. CANONICAL mode lacks investment-record-store. Issue #306 remains blocked on a source-backed comparable peer set. No release approval, maturity promotion, canonical writes, portfolio mutation or trades."
+status_note: "PR #591 merge 00371645d2ef1ab687ae989f908da05d8ceda68e is privately attested on Site v121; mirror 8e99512b9a5838dfe987d8cb800fe6e2bff7f099 embeds Lab 1.38.468. Exact USER_SUPPLIED_CONTEXT routing and skill loads were observed, but the integrated report was not executed in this probe. CANONICAL mode lacks investment-record-store. Issue #306 remains blocked on a source-backed comparable peer set. No release approval, maturity promotion, canonical writes, portfolio mutation or trades."
 behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
 required_case_ids:
 - iter07-financial-quality-synthetic
@@ -69,11 +70,11 @@ source_sha256:
   CATALOG.md: d86b022c49231594d93bb73831a7edd0843a496c3c18a4001017bcbd45c4cc83
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 388d4a83dc68831506a8b63328aba0059863be8a28a1c75aa9de19a2368f9c33
   docs/catalog.json: 6b65adbe424cf039df71ac287fb9edba10f015bc1e23dfec104ff7bb086c1474
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 150fe936a5b10e8a40bc13dabef2e988a60603e53fdca9a9621d75accbf3b9b2
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 84377dda4f76b4609207ef0875478e111931430a8213304c457f05b63353501b
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 051eb0170f26c97630142fb7719baa2225fe6cb36c558b80260e82fc84af24dc
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: ebfedb8ef351b6f3735182b08f2780bbc712a2fcb4e784aa07cb1f076435e9ff
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 4e850a4199fbec9d200796e9fe27398379ddae3409f78892154187860231a73f
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -105,9 +106,9 @@ source_sha256:
   evals/routing/supplemental/investment-top-two-screen-pl.input.md: 7517ca4ddf83a15d188f1d560287934749f6c4038f81d82afd0d7f31d547fb2d
   evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml: 0ec7e8bf45911ec2fbe7113417e8b1ebc5dd335b6cd6d0e8f3b4687506f8a8e5
   release/production-readiness.yaml: 35e797f3cc7eb0ae785ee9dfee8d5d360abf607ccf239eca8640147521a48593
-  scripts/eval/campaign.py: 3b9612f3e05c0fe7145cc0d2f284ec531c31ca1b64584d222976a70084799846
+  scripts/eval/campaign.py: 0d31bce67e053b886be1c1aeca0fcffb706d4fc31ff55da2d03cae2c2c8e71d0
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: ce2235fc22e0ecf880aa406c85641227400e16b563b1eec2d3c30d1bc8c6ffd5
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: c5f9f755bf811060541713d07db8cc571ef7f8014c4455335e16161bb307fbaf
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
   skills/investing/security-underwriting/SKILL.md: 6f668be91467b2703ce32d119e62b97fa69a2dec3f0473acf98828b2fbf56e4d

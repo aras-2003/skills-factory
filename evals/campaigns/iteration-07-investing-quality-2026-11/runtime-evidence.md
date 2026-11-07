@@ -1,5 +1,14 @@
 # Iteration 07 candidate runtime evidence — through 2026-11-07
 
+## Exact PR #591 Site v121 publication and runtime probe — 2026-11-07
+
+- PR #591 merged as canonical `main` commit `00371645d2ef1ab687ae989f908da05d8ceda68e`. Its Git tree is identical to the CI-tested PR head `3994de2a97044431a08e32cd370082d40433815c`; all four required PR workflows passed on that exact head.
+- The official Sites workflow generated Lab `1.38.468+00371645d2ef` (98 skills, 19 workflow entrypoints, 42 runtime evaluation inputs), synchronized 135 files and 57 allow-listed references, installed the frozen 641-package lockfile, and passed TypeScript, lint and Site build. The bundler reported a non-blocking chunk-size warning (>500 kB). It pushed Site mirror `8e99512b9a5838dfe987d8cb800fe6e2bff7f099`; the matching archive was privately deployed successfully as Site v121. The Site remains owner-only.
+- `runtime_info` reports `attestation_status=verified`, `source_revision=8e99512b9a5838dfe987d8cb800fe6e2bff7f099`, `canonical_source_revision=00371645d2ef1ab687ae989f908da05d8ceda68e`, Lab `1.38.468+00371645d2ef`, and `deployed_at=2026-11-07T22:18:14Z`.
+- `valuation-scenario-review` loaded from the exact Site at v0.3.2, content SHA-256 `67be8272fb2665a4885ef741ba2586476f0468eee966c7e6c7ae2be8f9aeab64`. Its runtime metadata states `supporting_code_execution=not_executed`; the helper remains a packaged reference and was not invoked by Site.
+- The campaign's exact explicit supplied-context case routed to `security-review` → `investment-security-review` from source `00371645d2ef1ab687ae989f908da05d8ceda68e`; receipt at `2026-11-07T22:23:11.723Z`, input SHA-256 `89455690dfe3d0c41ce06c563e262c7f9dfd24e4a2fdd43ddf02a553d71f2b4c`, output SHA-256 `ac8274da44800e014046d6dbef0cef46b4fa1ecf5c04688e74a84a22ee500279`. The child workflow and specialist instructions loaded; `workflow_executed=false` on the route receipt. A separate `render_line_chart` call returned a valid SVG for the cited AMD Q3 FY2025/Q3 FY2026 revenue comparison; it is a two-point KPI illustration, not the required 12–20 quarter history.
+- **Acceptance remains partial.** No complete integrated report was executed in this probe; the Site does not expose `investment-record-store`, and the campaign still lacks a verified, economically reviewed 3–5 direct-peer cohort for AMD and MU. Do not close #306 or promote maturity from these route, package-load, render or attestation receipts. No canonical read/write, portfolio mutation, trade or production-release approval occurred.
+
 ## Corrected route and USER_SUPPLIED_CONTEXT execution review — 2026-11-07
 
 - PR #590 is merged to GitHub main as `05387fdaf645813520bd53c796b940a68216780c`. The exact source is deployed privately to owner-only Skills Factory Cloud Next Site v120. Runtime attestation reports `verified`, Lab `1.38.467+05387fdaf645`, canonical source `05387fdaf645813520bd53c796b940a68216780c`, and deployed-at `2026-11-07T19:24:09Z`.

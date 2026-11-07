@@ -760,13 +760,14 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "05387fdaf645813520bd53c796b940a68216780c"
-            or cfg.get("runtime_source_revision") != cfg.get("candidate_source_revision")
-            or cfg.get("runtime_release_id") != "1.38.467+05387fdaf645"
+            or cfg.get("candidate_source_revision") != "00371645d2ef1ab687ae989f908da05d8ceda68e"
+            or cfg.get("runtime_canonical_source_revision") != cfg.get("candidate_source_revision")
+            or cfg.get("runtime_source_revision") != "8e99512b9a5838dfe987d8cb800fe6e2bff7f099"
+            or cfg.get("runtime_release_id") != "1.38.468+00371645d2ef"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "USER_SUPPLIED_CONTEXT routes to investment-security-review, but complete report workflow acceptance is not proven by routing and bounded host review alone",
+                "The exact USER_SUPPLIED_CONTEXT route and skill loads are verified, but the complete integrated report workflow has not been executed on the exact runtime",
                 "CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime",
                 "AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases",
             }
