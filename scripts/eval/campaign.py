@@ -768,7 +768,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or set(cfg.get("runtime_blockers") or []) != {
                 "USER_SUPPLIED_CONTEXT routes to investment-security-review, but complete report workflow acceptance is not proven by routing and bounded host review alone",
                 "CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime",
-                "AMD and MU lack a verified, same-snapshot 3–5 peer cohort with aligned business models and fiscal periods",
+                "AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True

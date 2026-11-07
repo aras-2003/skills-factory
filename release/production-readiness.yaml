@@ -567,14 +567,14 @@ components:
 
   - name: valuation-scenario-review
     kind: skill
-    version: "0.3.1"
+    version: "0.3.2"
     source: skills/investing/valuation-scenario-review/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact-source Iteration 07 Cloud Next Lab validation of peer comparison and valuation behavior is pending."
+    evidence_gap: "Candidate v0.3.2 has offline peer-comparison regression coverage; exact-source Cloud Next Lab validation is pending, and AMD/MU still lack complete real-source peer cohorts."
     limitation: "Lab candidate until exact-version runtime checks confirm method selection and arithmetic; no investment action is implied."
 
   - name: investment-os-review

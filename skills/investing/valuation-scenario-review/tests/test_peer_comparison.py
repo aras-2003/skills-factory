@@ -44,7 +44,8 @@ def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
     return IssuerSnapshot(ticker=ticker, sector="Technology", industry="Semiconductors",
                           business_model=model, as_of=as_of, metrics=metrics,
                           comparison_group=f"Technology/Semiconductors/{model}",
-                          inclusion_rationale="Synthetic fixture included by reviewed compute-product fit.")
+                          inclusion_rationale="Synthetic fixture included by reviewed compute-product fit.",
+                          peer_tier="DIRECT")
 
 
 class PeerComparisonTests(unittest.TestCase):
@@ -78,20 +79,24 @@ class PeerComparisonTests(unittest.TestCase):
             )
             return IssuerSnapshot(
                 ticker, sector, industry, model, as_of, {"ev_sales": sales_multiple},
-                comparison_group=f"Technology/Semiconductors/{model}",
-                inclusion_rationale="Diagnostic market-data candidate; model and fiscal-period differences remain explicit.",
+                comparison_group="Technology/Semiconductors/compute-processors",
+                inclusion_rationale="Diagnostic source candidate; review tier is explicit and period/model caveats remain visible.",
+                peer_tier="DIRECT" if ticker == "NVDA" else "ADJACENT",
             )
 
-        result = compare_peer_set(snapshot("AMD"), [snapshot(ticker) for ticker in ("MU", "MSFT", "NVDA", "AVGO", "MRVL")], as_of)
+        target = replace(snapshot("AMD"), comparison_group="Technology/Semiconductors/compute-processors")
+        result = compare_peer_set(target, [snapshot(ticker) for ticker in ("MU", "MSFT", "NVDA", "AVGO", "MRVL")], as_of)
         by_ticker = {row["ticker"]: row for row in result["peers"]}
         self.assertEqual(D("8.2"), snapshot("AVGO").metrics["ev_sales"].value)
         self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
-        self.assertEqual(0, result["included_peer_count"])
+        self.assertEqual(4, result["included_peer_count"])
+        self.assertEqual(1, result["direct_peer_count"])
         self.assertEqual("SECTOR_OR_INDUSTRY_MISMATCH", by_ticker["MSFT"]["reason"])
-        for ticker in ("MU", "NVDA", "AVGO", "MRVL"):
-            self.assertEqual("BUSINESS_MODEL_MISMATCH", by_ticker[ticker]["reason"])
-        self.assertEqual({}, by_ticker["AVGO"]["metrics"])
-        self.assertEqual([], result["plot"]["points"])
+        self.assertEqual("ADJACENT", by_ticker["MU"]["comparability_tier"])
+        self.assertEqual("DIRECT", by_ticker["NVDA"]["comparability_tier"])
+        self.assertEqual("ADJACENT", by_ticker["AVGO"]["comparability_tier"])
+        self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
+        self.assertNotIn("AVGO", [point["ticker"] for point in result["plot"]["points"]])
         self.assertFalse(result["ranked"])
         self.assertIsNone(result["recommendation"])
 
@@ -115,7 +120,7 @@ class PeerComparisonTests(unittest.TestCase):
         result = compare_peer_set(target, peers, AS_OF)
         row = next(x for x in result["peers"] if x["ticker"] == "MU-LIKE")
         self.assertEqual("EXCLUDED", row["eligibility"])
-        self.assertEqual("BUSINESS_MODEL_MISMATCH", row["reason"])
+        self.assertEqual("COMPARISON_GROUP_MISMATCH", row["reason"])
         self.assertTrue(row["ticker"].startswith("MU"))
         self.assertEqual(3, result["included_peer_count"])
 
@@ -124,6 +129,7 @@ class PeerComparisonTests(unittest.TestCase):
         adjacent = replace(
             issuer("ACCELERATOR", model="AI accelerator designer"),
             comparison_group=target.comparison_group,
+            peer_tier="ADJACENT",
             inclusion_rationale="Issuer filing confirms a fabless AI accelerator portfolio sold into the same data-center compute market; retain as adjacent segment reference, not a direct valuation peer.",
         )
         result = compare_peer_set(target, [issuer("P1"), issuer("P2"), adjacent], AS_OF)
@@ -149,6 +155,50 @@ class PeerComparisonTests(unittest.TestCase):
         self.assertEqual("EXCLUDED", row["eligibility"])
         self.assertEqual("MISSING_INCLUSION_RATIONALE", row["reason"])
         self.assertIsNotNone(row["exclusion_rationale"])
+
+    def test_explicit_reviewed_direct_peer_can_have_a_distinct_business_model_label(self):
+        target = issuer("AMD", model="fabless compute")
+        nvda = replace(issuer("NVDA", model="accelerated-compute platform"),
+            comparison_group=target.comparison_group, peer_tier="DIRECT",
+            inclusion_rationale="Issuer reports competing data-center accelerated-compute platforms; broader networking/software mix is disclosed as a valuation caveat.")
+        peers = [nvda, replace(issuer("INTC"), comparison_group=target.comparison_group),
+                 replace(issuer("QCOM"), comparison_group=target.comparison_group)]
+        result = compare_peer_set(target, peers, AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "NVDA")
+        self.assertEqual("INCLUDED", row["eligibility"])
+        self.assertEqual("DIRECT", row["comparability_tier"])
+        self.assertEqual("COMPARABLE", result["status"])
+
+    def test_missing_or_invalid_reviewer_tier_fails_closed(self):
+        target = issuer("AMD")
+        peer = replace(issuer("P1"), peer_tier="")
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("EXCLUDED", row["eligibility"])
+        self.assertEqual("INVALID_COMPARABILITY_TIER", row["reason"])
+
+    def test_reviewer_tier_is_bound_into_the_snapshot_identity(self):
+        target = issuer("AMD")
+        direct = issuer("PEER")
+        adjacent = replace(direct, peer_tier="ADJACENT")
+        direct_result = compare_peer_set(target, [direct, issuer("P2"), issuer("P3")], AS_OF)
+        adjacent_result = compare_peer_set(target, [adjacent, issuer("P2"), issuer("P3")], AS_OF)
+        self.assertNotEqual(direct_result["plot"]["snapshot_id"], adjacent_result["plot"]["snapshot_id"])
+        direct_peer = next(row for row in direct_result["peers"] if row["ticker"] == "PEER")
+        adjacent_peer = next(row for row in adjacent_result["peers"] if row["ticker"] == "PEER")
+        self.assertNotEqual(direct_peer["comparability_tier"], adjacent_peer["comparability_tier"])
+
+    def test_peer_count_alone_does_not_make_a_comparable_table(self):
+        target = issuer("AMD")
+        peers = []
+        for ticker in ("P1", "P2", "P3"):
+            peer = issuer(ticker)
+            metrics = {name: replace(value, period="FY2024") for name, value in peer.metrics.items()}
+            peers.append(replace(peer, metrics=metrics))
+        result = compare_peer_set(target, peers, AS_OF)
+        self.assertEqual(3, result["direct_peer_count"])
+        self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
+        self.assertEqual("NO_CORE_METRIC_HAS_THREE_COMPATIBLE_DIRECT_PEERS", result["comparability_reason"])
 
     def test_reviewed_alignment_group_allows_nearby_reporting_dates_and_local_currency_ratios(self):
         target = issuer("AMD", values={"revenue_growth": "0.443"})
@@ -199,7 +249,7 @@ class PeerComparisonTests(unittest.TestCase):
         result = compare_peer_set(target, peers, AS_OF)
         mu = next(row for row in result["peers"] if row["ticker"] == "MU")
         self.assertEqual("EXCLUDED", mu["eligibility"])
-        self.assertEqual("BUSINESS_MODEL_MISMATCH", mu["reason"])
+        self.assertEqual("COMPARISON_GROUP_MISMATCH", mu["reason"])
         self.assertTrue(result["plot"]["points"])
 
     def test_industry_mismatch_and_different_as_of_are_explicit(self):
