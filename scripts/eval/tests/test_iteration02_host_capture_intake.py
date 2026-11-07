@@ -12,7 +12,9 @@ from iteration02_host_capture_intake import ingest
 class CaptureIntakeTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
-        self.root=Path(self.tmp.name);self.pack=self.root/'pack';(self.pack/'desktop').mkdir(parents=True)
+        # Canonicalize the system temp alias while preserving symlink fixtures
+        # created beneath this root for the path-safety assertions below.
+        self.root=Path(self.tmp.name).resolve();self.pack=self.root/'pack';(self.pack/'desktop').mkdir(parents=True)
         self.case='I02-240-local-runner';prompt=b'Synthetic task.\n';self.digest=hashlib.sha256(prompt).hexdigest()
         (self.pack/'desktop'/f'{self.case}.input.md').write_bytes(prompt)
         identity={'source_revision':'a'*40,'release_id':'fixture','payload_content_sha256':'b'*64}

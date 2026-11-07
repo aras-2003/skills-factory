@@ -32,6 +32,8 @@ class PeerMetric:
     status: EvidenceState = EvidenceState.VERIFIED
     horizon: str = ""
     currency: str = "USD"
+    period_alignment_group: str = ""
+    basis_group: str = ""
 
 
 @dataclass(frozen=True)
@@ -43,6 +45,9 @@ class IssuerSnapshot:
     as_of: str
     metrics: Mapping[str, PeerMetric]
     cyclical: bool = False
+    comparison_group: str = ""
+    inclusion_rationale: str = ""
+    peer_tier: str = ""
 
 
 _MULTIPLE_METRICS = {"ev_sales", "ev_ebitda", "forward_pe", "price_sales", "price_to_sales", "ev_fcf"}
@@ -54,6 +59,7 @@ _MIN_TABLE_PEERS = 3
 _MIN_PERCENTILE_PEERS = 5
 _MAX_PEERS = 15
 _NON_RANKED_METRICS = {"ps_growth_heuristic"}
+_CORE_VALUATION_METRICS = {"ev_sales", "ev_ebitda", "forward_pe"}
 
 
 def _valid_date(value: str) -> bool:
@@ -110,10 +116,22 @@ def _metric_reason(metric: PeerMetric | None, name: str, as_of: str, *, compare_
         metric.name != compare_to.name
         or metric.unit != compare_to.unit
         or metric.definition != compare_to.definition
-        or metric.period != compare_to.period
-        or metric.basis != compare_to.basis
         or metric.horizon != compare_to.horizon
-        or metric.currency.upper() != compare_to.currency.upper()
+        or (
+            metric.period != compare_to.period
+            and not (
+                _nonblank(metric.period_alignment_group)
+                and metric.period_alignment_group == compare_to.period_alignment_group
+            )
+        )
+        or (
+            metric.basis != compare_to.basis
+            and not (_nonblank(metric.basis_group) and metric.basis_group == compare_to.basis_group)
+        )
+        or (
+            metric.currency.upper() != compare_to.currency.upper()
+            and metric.unit not in {"fraction", "multiple", "heuristic"}
+        )
     ):
         return "INCOMPATIBLE_DEFINITION_PERIOD_BASIS_OR_HORIZON"
     return None
@@ -123,19 +141,23 @@ def _fingerprint(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], rows: 
     material = {
         "target": target.ticker,
         "as_of": as_of,
-        "target_classification": (target.sector, target.industry, target.business_model, target.cyclical),
+        "target_classification": (target.sector, target.industry, target.business_model, target.cyclical,
+                                  target.comparison_group, target.inclusion_rationale, target.peer_tier),
         "target_metrics": {
             k: (str(v.value) if v.value is not None else None, v.unit, v.definition, v.period,
-                v.basis, v.horizon, v.published_at, v.source_url, v.currency, str(v.status))
+                v.basis, v.horizon, v.published_at, v.source_url, v.currency,
+                v.period_alignment_group, v.basis_group, str(v.status))
             for k, v in sorted(target.metrics.items())
         },
         "peer_classifications": {
             peer.ticker: {
-                "classification": (peer.sector, peer.industry, peer.business_model, peer.as_of, peer.cyclical),
+                "classification": (peer.sector, peer.industry, peer.business_model, peer.as_of, peer.cyclical,
+                                   peer.comparison_group, peer.inclusion_rationale, peer.peer_tier),
                 "metrics": {
                     key: (str(value.value) if value.value is not None else None, value.unit,
                           value.definition, value.period, value.basis, value.horizon,
-                          value.published_at, value.source_url, value.currency, str(value.status))
+                          value.published_at, value.source_url, value.currency,
+                          value.period_alignment_group, value.basis_group, str(value.status))
                     for key, value in sorted(peer.metrics.items())
                 },
             }
@@ -166,6 +188,7 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
         or not _nonblank(target.sector)
         or not _nonblank(target.industry)
         or not _nonblank(target.business_model)
+        or not _nonblank(target.comparison_group)
         or not isinstance(target.metrics, Mapping)
         or any(not isinstance(metric, PeerMetric) for metric in target.metrics.values())
         or not isinstance(peers, Sequence)
@@ -188,12 +211,33 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
             reason = "AS_OF_MISMATCH"
         elif peer.sector != target.sector or peer.industry != target.industry:
             reason = "SECTOR_OR_INDUSTRY_MISMATCH"
-        elif peer.business_model != target.business_model:
-            reason = "BUSINESS_MODEL_MISMATCH"
         elif not _nonblank(peer.ticker) or not _nonblank(peer.sector) or not _nonblank(peer.industry) or not _nonblank(peer.business_model):
             reason = "MISSING_PEER_IDENTITY"
-        row = {"ticker": peer.ticker, "eligibility": "INCLUDED" if reason is None else "EXCLUDED",
-               "reason": reason, "cycle_normalization_required": peer.cyclical, "metrics": {}}
+        elif peer.peer_tier not in {"DIRECT", "ADJACENT"}:
+            reason = "INVALID_COMPARABILITY_TIER"
+        elif not _nonblank(peer.comparison_group) or peer.comparison_group != target.comparison_group:
+            reason = "COMPARISON_GROUP_MISMATCH"
+        elif not _nonblank(peer.inclusion_rationale):
+            reason = "MISSING_INCLUSION_RATIONALE"
+        row = {
+            "ticker": peer.ticker,
+            "eligibility": "INCLUDED" if reason is None else "EXCLUDED",
+            "reason": reason,
+            "exclusion_rationale": {
+                "AS_OF_MISMATCH": "Peer snapshot date differs from target snapshot.",
+                "SECTOR_OR_INDUSTRY_MISMATCH": "Peer is outside the target sector or industry.",
+                "MISSING_PEER_IDENTITY": "Peer identity or business-model classification is missing.",
+                "INVALID_COMPARABILITY_TIER": "Reviewer must assign DIRECT or ADJACENT explicitly.",
+                "COMPARISON_GROUP_MISMATCH": "Peer is not assigned to the target's reviewed comparison group.",
+                "MISSING_INCLUSION_RATIONALE": "A reviewer must explain the economic basis for including this peer.",
+            }.get(reason),
+            "business_model": peer.business_model,
+            "comparison_group": peer.comparison_group,
+            "comparability_tier": peer.peer_tier if reason is None else "EXCLUDED",
+            "inclusion_rationale": peer.inclusion_rationale if reason is None else None,
+            "cycle_normalization_required": peer.cyclical,
+            "metrics": {},
+        }
         if reason is not None:
             rows.append(row)
             continue
@@ -219,6 +263,10 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                     "target_published_at": target_metric.published_at,
                     "peer_basis": peer_metric.basis if peer_metric else None,
                     "peer_period": peer_metric.period if peer_metric else None,
+                    "peer_period_alignment_group": peer_metric.period_alignment_group if peer_metric else None,
+                    "target_period_alignment_group": target_metric.period_alignment_group,
+                    "peer_basis_group": peer_metric.basis_group if peer_metric else None,
+                    "target_basis_group": target_metric.basis_group,
                     "peer_source_url": peer_metric.source_url if peer_metric else None,
                     "peer_published_at": peer_metric.published_at if peer_metric else None,
                 }
@@ -228,7 +276,11 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                     "status": "VERIFIED" if EvidenceState(peer_metric.status) == EvidenceState.VERIFIED and EvidenceState(target_metric.status) == EvidenceState.VERIFIED else "PROVISIONAL",
                     "reason": None, "definition": peer_metric.definition,
                     "period": peer_metric.period, "horizon": peer_metric.horizon, "basis": peer_metric.basis,
-                    "target_currency": target_metric.currency,
+                    "target_period": target_metric.period, "target_basis": target_metric.basis,
+                    "peer_period_alignment_group": peer_metric.period_alignment_group,
+                    "target_period_alignment_group": target_metric.period_alignment_group,
+                    "peer_basis_group": peer_metric.basis_group, "target_basis_group": target_metric.basis_group,
+                    "peer_currency": peer_metric.currency, "target_currency": target_metric.currency,
                     "target_value": str(target_metric.value),
                     "target_source_url": target_metric.source_url,
                     "target_published_at": target_metric.published_at,
@@ -244,6 +296,8 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
             ps_reasons.append("MISSING_TARGET_P_S_OR_REVENUE_GROWTH")
         if price_sales is None or peer_revenue_growth is None:
             ps_reasons.append("MISSING_PEER_P_S_OR_REVENUE_GROWTH")
+        if peer.peer_tier != "DIRECT":
+            ps_reasons.append("BUSINESS_MODEL_MISMATCH")
         if not ps_reasons:
             for metric, reference in ((target_price_sales, None), (target_revenue_growth, None),
                                       (price_sales, target_price_sales), (peer_revenue_growth, target_revenue_growth)):
@@ -274,9 +328,9 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
 
         forward_pe = peer.metrics.get("forward_pe")
         eps_growth = peer.metrics.get("eps_cagr")
-        growth_reason = _metric_reason(eps_growth, "eps_cagr", as_of,
+        growth_reason = "BUSINESS_MODEL_MISMATCH" if peer.peer_tier != "DIRECT" else _metric_reason(eps_growth, "eps_cagr", as_of,
                                        compare_to=target.metrics.get("eps_cagr")) if target.metrics.get("eps_cagr") else "MISSING_TARGET_GROWTH_DEFINITION"
-        pe_reason = _metric_reason(forward_pe, "forward_pe", as_of,
+        pe_reason = "BUSINESS_MODEL_MISMATCH" if peer.peer_tier != "DIRECT" else _metric_reason(forward_pe, "forward_pe", as_of,
                                    compare_to=target.metrics.get("forward_pe")) if target.metrics.get("forward_pe") else "MISSING_TARGET_FORWARD_PE_DEFINITION"
         target_growth = target.metrics.get("eps_cagr")
         if (growth_reason or pe_reason or eps_growth is None or forward_pe is None or target_growth is None
@@ -296,15 +350,16 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
         rows.append(row)
 
     included = [row for row in rows if row["eligibility"] == "INCLUDED"]
+    direct_included = [row for row in included if row["comparability_tier"] == "DIRECT"]
     summaries: dict[str, dict] = {}
-    all_names = sorted({name for row in included for name in row["metrics"] if name not in _NON_RANKED_METRICS})
+    all_names = sorted({name for row in direct_included for name in row["metrics"] if name not in _NON_RANKED_METRICS})
     for name in all_names:
-        values = [Decimal(row["metrics"][name]["value"]) for row in included
+        values = [Decimal(row["metrics"][name]["value"]) for row in direct_included
                   if row["metrics"].get(name, {}).get("status") in {"VERIFIED", "PROVISIONAL"}]
-        verified_count = sum(row["metrics"].get(name, {}).get("status") == "VERIFIED" for row in included)
-        provisional_count = sum(row["metrics"].get(name, {}).get("status") == "PROVISIONAL" for row in included)
+        verified_count = sum(row["metrics"].get(name, {}).get("status") == "VERIFIED" for row in direct_included)
+        provisional_count = sum(row["metrics"].get(name, {}).get("status") == "PROVISIONAL" for row in direct_included)
         summary = {"valid_peer_count": len(values), "unit": next(
-            (row["metrics"][name].get("unit") for row in included if name in row["metrics"]), None),
+            (row["metrics"][name].get("unit") for row in direct_included if name in row["metrics"]), None),
             "verified_peer_count": verified_count, "provisional_peer_count": provisional_count}
         if values:
             ordered = sorted(values)
@@ -332,7 +387,10 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                 summary["target_percentile"] = "N/M"
                 summary["target_percentile_reason"] = target_reason
         else:
-            summary["percentile_status"] = "N/M; at least five compatible peer values required"
+            summary["percentile_status"] = (
+                "N/M; descriptive percentiles require at least five compatible peers in the reviewed direct cohort"
+                if len(values) >= _MIN_PERCENTILE_PEERS else "N/M; at least five compatible peer values required"
+            )
         summaries[name] = summary
 
     snapshot_id = _fingerprint(target, peers, rows, as_of)
@@ -373,10 +431,23 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                 "cycle_normalization_required": peer.cyclical,
             })
 
+    core_metric_peer_counts = {
+        name: int(summaries.get(name, {}).get("valid_peer_count", 0))
+        for name in sorted(_CORE_VALUATION_METRICS)
+    }
+    has_minimum_compatible_metric = any(count >= _MIN_TABLE_PEERS for count in core_metric_peer_counts.values())
+    comparability_reason = (
+        "FEWER_THAN_THREE_DIRECT_PEERS" if len(direct_included) < _MIN_TABLE_PEERS
+        else "NO_CORE_METRIC_HAS_THREE_COMPATIBLE_DIRECT_PEERS" if not has_minimum_compatible_metric
+        else None
+    )
     return {
-        "status": "COMPARABLE" if len(included) >= _MIN_TABLE_PEERS else "INSUFFICIENT_COMPARABLE_PEERS",
+        "status": "COMPARABLE" if comparability_reason is None else "INSUFFICIENT_COMPARABLE_PEERS",
+        "comparability_reason": comparability_reason,
         "as_of": as_of, "target": target.ticker, "sector": target.sector, "industry": target.industry,
-        "business_model": target.business_model, "included_peer_count": len(included),
+        "business_model": target.business_model, "comparison_group": target.comparison_group,
+        "included_peer_count": len(included), "direct_peer_count": len(direct_included),
+        "core_metric_peer_counts": core_metric_peer_counts,
         "cycle_normalization_required": target.cyclical,
         "required_peer_range": "3–5 for a compact table; expand to 5–15 only when economically valid",
         "peers": rows, "metric_summaries": summaries,
