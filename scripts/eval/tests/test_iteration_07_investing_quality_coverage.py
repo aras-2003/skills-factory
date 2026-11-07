@@ -18,9 +18,11 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         expected = {
             "skills/investing/security-underwriting/SKILL.md",
             "skills/investing/security-underwriting/scripts/financial_quality.py",
+            "skills/investing/security-underwriting/scripts/value_trap_gate.py",
             "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
             "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
             "skills/investing/valuation-scenario-review/SKILL.md",
+            "skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py",
             "skills/investing/thesis-challenge/SKILL.md",
             "workflows/investment-security-review/WORKFLOW.md",
             "workflows/runtime-registry.yaml",
@@ -39,7 +41,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
         self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_source_revision"])
-        self.assertEqual("1.38.465+e29ea1668c88", cfg["runtime_release_id"])
+        self.assertEqual("1.38.467+05387fdaf645", cfg["runtime_release_id"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertTrue(cfg["runtime_blockers"])
         self.assertIs(cfg["release_approved"], False)

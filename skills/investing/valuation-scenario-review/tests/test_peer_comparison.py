@@ -42,7 +42,9 @@ def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
     values = values or {"ev_sales": "5", "ev_ebitda": "20", "forward_pe": "20", "eps_cagr": "0.20", "revenue_growth": "0.15", "fcf_yield": "0.02", "roic": "0.18"}
     metrics = {name: metric(name, value) for name, value in values.items()}
     return IssuerSnapshot(ticker=ticker, sector="Technology", industry="Semiconductors",
-                          business_model=model, as_of=as_of, metrics=metrics)
+                          business_model=model, as_of=as_of, metrics=metrics,
+                          comparison_group=f"Technology/Semiconductors/{model}",
+                          inclusion_rationale="Synthetic fixture included by reviewed compute-product fit.")
 
 
 class PeerComparisonTests(unittest.TestCase):
@@ -74,7 +76,11 @@ class PeerComparisonTests(unittest.TestCase):
                 period=period, basis="QDD consensus estimate; vendor-reported EV/Sales",
                 published_at=as_of, source_url=source_urls[ticker], currency="USD",
             )
-            return IssuerSnapshot(ticker, sector, industry, model, as_of, {"ev_sales": sales_multiple})
+            return IssuerSnapshot(
+                ticker, sector, industry, model, as_of, {"ev_sales": sales_multiple},
+                comparison_group=f"Technology/Semiconductors/{model}",
+                inclusion_rationale="Diagnostic market-data candidate; model and fiscal-period differences remain explicit.",
+            )
 
         result = compare_peer_set(snapshot("AMD"), [snapshot(ticker) for ticker in ("MU", "MSFT", "NVDA", "AVGO", "MRVL")], as_of)
         by_ticker = {row["ticker"]: row for row in result["peers"]}
@@ -112,6 +118,79 @@ class PeerComparisonTests(unittest.TestCase):
         self.assertEqual("BUSINESS_MODEL_MISMATCH", row["reason"])
         self.assertTrue(row["ticker"].startswith("MU"))
         self.assertEqual(3, result["included_peer_count"])
+
+    def test_reviewed_adjacent_business_model_can_join_table_without_peg_or_percentile(self):
+        target = issuer("AMD", model="fabless compute")
+        adjacent = replace(
+            issuer("ACCELERATOR", model="AI accelerator designer"),
+            comparison_group=target.comparison_group,
+            inclusion_rationale="Issuer filing confirms a fabless AI accelerator portfolio sold into the same data-center compute market; retain as adjacent segment reference, not a direct valuation peer.",
+        )
+        result = compare_peer_set(target, [issuer("P1"), issuer("P2"), adjacent], AS_OF)
+        row = next(x for x in result["peers"] if x["ticker"] == "ACCELERATOR")
+        self.assertEqual("INCLUDED", row["eligibility"])
+        self.assertEqual("ADJACENT", row["comparability_tier"])
+        self.assertIn("segment reference", row["inclusion_rationale"])
+        self.assertEqual("N/M", row["metrics"]["peg"]["value"])
+        self.assertEqual("BUSINESS_MODEL_MISMATCH", row["metrics"]["peg"]["reason"])
+        self.assertEqual("N/M", row["metrics"]["ps_growth_heuristic"]["value"])
+        # Adjacent observations remain visible in rows but never enter the
+        # direct-peer summary statistics.
+        self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
+        self.assertEqual(2, result["direct_peer_count"])
+        self.assertEqual(2, result["metric_summaries"]["ev_sales"]["valid_peer_count"])
+        self.assertFalse(result["ranked"])
+
+    def test_missing_rationale_fails_closed_for_direct_or_adjacent_peers(self):
+        target = issuer("AMD")
+        peer = replace(issuer("P1"), inclusion_rationale="")
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(x for x in result["peers"] if x["ticker"] == "P1")
+        self.assertEqual("EXCLUDED", row["eligibility"])
+        self.assertEqual("MISSING_INCLUSION_RATIONALE", row["reason"])
+        self.assertIsNotNone(row["exclusion_rationale"])
+
+    def test_reviewed_alignment_group_allows_nearby_reporting_dates_and_local_currency_ratios(self):
+        target = issuer("AMD", values={"revenue_growth": "0.443"})
+        target_metrics = dict(target.metrics)
+        target_metrics["revenue_growth"] = replace(
+            target_metrics["revenue_growth"], period="9M ended 2026-09-26", basis="US GAAP",
+            currency="USD", period_alignment_group="calendar-2026-9m",
+            basis_group="reported-consolidated-GAAP-growth",
+        )
+        target = replace(target, metrics=target_metrics)
+        peer = issuer("P1", values={"revenue_growth": "0.576"})
+        peer_metrics = dict(peer.metrics)
+        peer_metrics["revenue_growth"] = replace(
+            peer_metrics["revenue_growth"], period="9M ended 2026-09-30", basis="China GAAP",
+            currency="CNY", period_alignment_group="calendar-2026-9m",
+            basis_group="reported-consolidated-GAAP-growth",
+        )
+        peer = replace(peer, metrics=peer_metrics)
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        value = next(x for x in result["peers"] if x["ticker"] == "P1")["metrics"]["revenue_growth"]
+        self.assertEqual("VERIFIED", value["status"])
+        self.assertEqual("9M ended 2026-09-30", value["period"])
+        self.assertEqual("9M ended 2026-09-26", value["target_period"])
+        self.assertEqual("CNY", value["peer_currency"])
+        self.assertEqual("USD", value["target_currency"])
+
+    def test_reporting_period_and_basis_mismatches_without_reviewed_groups_are_nm(self):
+        target = issuer("AMD", values={"revenue_growth": "0.443"})
+        target_metrics = dict(target.metrics)
+        target_metrics["revenue_growth"] = replace(
+            target_metrics["revenue_growth"], period="9M ended 2026-09-26", basis="US GAAP", currency="USD"
+        )
+        target = replace(target, metrics=target_metrics)
+        peer = issuer("P1", values={"revenue_growth": "0.576"})
+        peer_metrics = dict(peer.metrics)
+        peer_metrics["revenue_growth"] = replace(
+            peer_metrics["revenue_growth"], period="9M ended 2026-09-30", basis="China GAAP", currency="CNY"
+        )
+        result = compare_peer_set(target, [replace(peer, metrics=peer_metrics), issuer("P2"), issuer("P3")], AS_OF)
+        value = next(x for x in result["peers"] if x["ticker"] == "P1")["metrics"]["revenue_growth"]
+        self.assertEqual("N/M", value["value"])
+        self.assertEqual("INCOMPATIBLE_DEFINITION_PERIOD_BASIS_OR_HORIZON", value["reason"])
 
     def test_compatible_synthetic_amd_mu_peers_and_distinct_model_flag(self):
         target = issuer("AMD", model="fabless compute")

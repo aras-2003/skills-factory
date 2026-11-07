@@ -676,9 +676,11 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
     expected_behavior = {
         "skills/investing/security-underwriting/SKILL.md",
         "skills/investing/security-underwriting/scripts/financial_quality.py",
+        "skills/investing/security-underwriting/scripts/value_trap_gate.py",
         "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
         "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
         "skills/investing/valuation-scenario-review/SKILL.md",
+        "skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py",
         "skills/investing/thesis-challenge/SKILL.md",
         "workflows/investment-security-review/WORKFLOW.md",
         "workflows/runtime-registry.yaml",
@@ -758,13 +760,13 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "e29ea1668c8826754584b165137c3cbd756713ab"
+            or cfg.get("candidate_source_revision") != "05387fdaf645813520bd53c796b940a68216780c"
             or cfg.get("runtime_source_revision") != cfg.get("candidate_source_revision")
-            or cfg.get("runtime_release_id") != "1.38.465+e29ea1668c88"
+            or cfg.get("runtime_release_id") != "1.38.467+05387fdaf645"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "explicit USER_SUPPLIED_CONTEXT single-security request routes to investment-attention-review instead of investment-security-review; local adapter fix is not yet published",
+                "USER_SUPPLIED_CONTEXT routes to investment-security-review, but complete report workflow acceptance is not proven by routing and bounded host review alone",
                 "CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime",
                 "AMD and MU lack a verified, same-snapshot 3–5 peer cohort with aligned business models and fiscal periods",
             }

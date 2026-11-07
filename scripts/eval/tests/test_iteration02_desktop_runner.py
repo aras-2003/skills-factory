@@ -22,7 +22,10 @@ class DesktopAdapterTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        # TemporaryDirectory may return a path under a symlinked system temp
+        # alias (for example /var -> /private/var on macOS). Pass the canonical
+        # root so the runner only rejects symlinks created inside the fixture.
+        self.root = Path(self.tmp.name).resolve()
         self.pack = self.root / "external"
         self.pack.mkdir()
         (self.pack / "desktop").mkdir()
