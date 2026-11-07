@@ -66,11 +66,11 @@ source_sha256:
   CATALOG.md: 413be588ba692f6f797c4af5aac01958d8b6466d592758de4be423c62acf7fef
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 0b27434e94854977432131bbf9c81ca3baccba6fc4e9f7aac3cdc2c0e12a2fe6
   docs/catalog.json: 98cf3ff245ae7a5f023a84c8bb286312129c11e51b4c99a9ab88442f0b43dafc
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: fd2d94828ce50ccbd874caa3ca85a5e74b3203984fbd7a128d031aab8665b304
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 8fd450ca68458f06704d2c31f209de3fdceae44fbb4ca84e795f5c5d8a94dec0
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 8697105ff61ccb98bf3418c2d2c042444411aa5b404af92b4dfb683d01ac1bbf
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: f45ab971daac4314b2324dd4ccd6ea751f19fd133aad3865733bc097e192fda6
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: f4f2644efc8f777d9ba66328b827605be3165fdf32ce83ca2eccc3d7433f17a7
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: a50b53c2225b7e9515944187cb1bc5c3aa7096443149edb291a5e93201646fbe
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -119,7 +119,7 @@ source_sha256:
   skills/investing/valuation-scenario-review/scripts/peer_comparison.py: 7e8ae55ceb46db33410ee36e2a175323bbba4aea7e4bae66a7c42717482f1ab0
   skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py: 85523e817a0775e26dbe7f6ad61211dcb47051f4c5b26de445943b0d640bed9c
   skills/investing/valuation-scenario-review/tests/cases.yaml: ad7797d630537661425cecd84926d5e82ad52c5f9d435da257df1a793aa241d5
-  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: fe92f8de8dff20792be649b46a4abe1f3cd30d282f2a675450e64e95c72c34a8
+  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: 6508f04907c6e218ac991477e6755e177a3bdb5a30efe15d010ac44eafa8ee03
   workflows/investment-security-review/WORKFLOW.md: f14f59a46d8b1025c7993027a0bf0e7630de238977afbf3a082dc9417a63d96c
   workflows/investment-security-review/tests/cases.yaml: c979b77522e75e245de970ef6bce6db7a172fab9b2240cca081cb8aa33722a9d
   workflows/runtime-registry.yaml: 3ebffa2b45c902465505550a90c2e4e4ed4844b9a05156b741238cb70954d684

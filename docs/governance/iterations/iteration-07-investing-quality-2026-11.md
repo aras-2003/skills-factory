@@ -41,7 +41,7 @@
 
 ### Iteration 07 local validation — 2026-11-06
 
-- Calculation regression suites: financial quality 18/18, peer comparison and same-snapshot plot 14/14, existing fundamental-intelligence 13/13.
+- Calculation regression suites: financial quality 18/18, peer comparison and same-snapshot plot 15/15 (including the corrected QDD source snapshot), existing fundamental-intelligence 13/13.
 - Campaign coverage and workflow-version gates: 12/12. Full evaluation suite: 308 tests passed, 2 skipped. Package tests: 102 passed; runtime MCP tests: 28 passed.
 - Repository validation: `validate_all.py`, investing architecture, routing fixtures, campaign definition and evidence isolation, source/capability/security contracts, readiness registry, and catalog determinism passed. Nonblocking legacy source-contract warnings remain recorded by the repository validator.
 - Domain, governance, output, unit-economics, readiness and release suites passed. Local promptfoo routing smoke passed 4/4. Lab, production, skills-only, remote and ChatGPT ZIP artifacts built and validated; the Lab artifact passed rubric-isolation checks. Repeated ZIP builds were byte-for-byte reproducible.

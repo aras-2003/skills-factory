@@ -46,6 +46,49 @@ def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
 
 
 class PeerComparisonTests(unittest.TestCase):
+    def test_real_qdd_fy2027_snapshot_keeps_adjacent_models_out_of_amd_cohort(self):
+        """Public consensus observations are not peer evidence without model and period fit."""
+        as_of = "2026-11-05"
+        source_urls = {
+            "AMD": "https://www.qddresearch.com/us/amd/",
+            "MU": "https://www.qddresearch.com/us/mu/",
+            "MSFT": "https://www.qddresearch.com/us/msft/",
+            "NVDA": "https://www.qddresearch.com/us/nvda/",
+            "AVGO": "https://www.qddresearch.com/us/avgo/",
+            "MRVL": "https://www.qddresearch.com/us/mrvl/",
+        }
+        observations = {
+            "AMD": ("fabless high-performance compute", "Technology", "Semiconductors", "6.8", "FY2027 ending 2027-12-31"),
+            "MU": ("integrated memory", "Technology", "Semiconductors", "2.6", "FY2027 ending 2027-08-31"),
+            "MSFT": ("cloud software services", "Technology", "Software", "10.2", "FY2027 ending 2027-06-30"),
+            "NVDA": ("accelerated compute platform", "Technology", "Semiconductors", "10.5", "FY2027 ending 2027-01-31"),
+            "AVGO": ("custom silicon and infrastructure software", "Technology", "Semiconductors", "8.2", "FY2027 ending 2027-10-31"),
+            "MRVL": ("data infrastructure semiconductors", "Technology", "Semiconductors", "9.8", "FY2027 ending 2027-01-31"),
+        }
+
+        def snapshot(ticker):
+            model, sector, industry, value, period = observations[ticker]
+            sales_multiple = PeerMetric(
+                name="ev_sales", value=D(value), unit="multiple",
+                definition="Enterprise value / QDD consensus mean estimated FY2027 sales",
+                period=period, basis="QDD consensus estimate; vendor-reported EV/Sales",
+                published_at=as_of, source_url=source_urls[ticker], currency="USD",
+            )
+            return IssuerSnapshot(ticker, sector, industry, model, as_of, {"ev_sales": sales_multiple})
+
+        result = compare_peer_set(snapshot("AMD"), [snapshot(ticker) for ticker in ("MU", "MSFT", "NVDA", "AVGO", "MRVL")], as_of)
+        by_ticker = {row["ticker"]: row for row in result["peers"]}
+        self.assertEqual(D("8.2"), snapshot("AVGO").metrics["ev_sales"].value)
+        self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
+        self.assertEqual(0, result["included_peer_count"])
+        self.assertEqual("SECTOR_OR_INDUSTRY_MISMATCH", by_ticker["MSFT"]["reason"])
+        for ticker in ("MU", "NVDA", "AVGO", "MRVL"):
+            self.assertEqual("BUSINESS_MODEL_MISMATCH", by_ticker[ticker]["reason"])
+        self.assertEqual({}, by_ticker["AVGO"]["metrics"])
+        self.assertEqual([], result["plot"]["points"])
+        self.assertFalse(result["ranked"])
+        self.assertIsNone(result["recommendation"])
+
     def test_three_comparable_peers_make_a_table_but_no_small_sample_percentile(self):
         target = issuer("AMD-LIKE")
         peers = [issuer("PEER-A", values={"ev_sales": "4", "ev_ebitda": "18", "forward_pe": "18", "eps_cagr": "0.18"}),
