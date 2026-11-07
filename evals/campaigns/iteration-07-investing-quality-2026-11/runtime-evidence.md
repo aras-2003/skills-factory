@@ -1,8 +1,20 @@
-# Iteration 07 candidate runtime evidence — 2026-11-06
+# Iteration 07 candidate runtime evidence — through 2026-11-07
+
+## Current exact-candidate route probe — 2026-11-07
+
+- GitHub main / merged PR #588: `e29ea1668c8826754584b165137c3cbd756713ab`.
+- Private owner-only Site: version 118, Site mirror commit `bfd42e8b809d64e5594b76b8a597deacc10c756f`.
+- Runtime: `verified`, Lab `1.38.465`, release `1.38.465+e29ea1668c88`, canonical source `e29ea1668c8826754584b165137c3cbd756713ab`.
+- The exact explicit `USER_SUPPLIED_CONTEXT` AMD review request routed to `investment-attention-review` instead of `investment-security-review`. The request asked to challenge the supplied thesis with public filings and explicitly excluded portfolio assessment; it did not ask whether a new event changed an existing thesis. The router classified the words “earnings” and “thesis” as an attention event.
+- `route_investment_request` receipt: routed only, `workflow_executed=false`, completed `2026-11-07T17:42:25.625Z`, input SHA-256 `89455690dfe3d0c41ce06c563e262c7f9dfd24e4a2fdd43ddf02a553d71f2b4c`, output SHA-256 `6ca7f6153f53dcb33eac001ca65c175a907a9cde94b3bcc39792bf38d13a12ce`.
+- The host loaded the returned `investment-attention-review` v0.2.2 at `2026-11-07T17:42:31.735Z` (input `daad0259088e89e4f00e1a2a93a033aa3131013738f0ee24216b9ba7f18f5ef2`, output `80f738657b82a737aae1aa2d18109546a613bf64dc8c1884570586c6cc91e6f6`). That child requires canonical context and could not satisfy this request. No integrated security review ran and no analysis was fabricated.
+- A local adapter fix now requires an explicit information-to-thesis relationship before the general news/earnings event rule wins. Contract regressions cover both this supplied-context security review and real earnings-against-thesis attention triage. Local adapter tests pass 37/37; full Python evaluation passes 308 tests with 1 skipped; repository validation, TypeScript, lint and Site build pass. The fix is not yet merged or deployed, so runtime acceptance remains pending.
+
+The receipts above are unsigned tool-call records. They identify execution and package provenance but do not certify semantic correctness.
 
 ## Identity and scope
 
-- Canonical source / merged PR #587: `854117b7128dcc88e5c46407b8bee71309af7357`.
+- Earlier baseline source / merged PR #587: `854117b7128dcc88e5c46407b8bee71309af7357`.
 - Cloud Next Site: `Skills Factory Cloud Next`, private owner-only audience preserved.
 - Site runtime: attestation `verified`; Lab `1.38.464`; release `1.38.464+854117b7128d`; canonical source `854117b7128dcc88e5c46407b8bee71309af7357`; deployed `2026-11-06T20:24:21Z`.
 - Runtime mode: `host_model_executes_loaded_instructions`. Python helpers are packaged but the runtime reports `supporting_code_execution=not_executed`; the figures below were calculated from reviewed inputs using the displayed formulas. No claim that a packaged Python helper ran on Site.
@@ -88,10 +100,10 @@ This is the intended safe behavior against false comparability but **does not sa
 
 ### Repository-only fallback candidate — 2026-11-07
 
-The pending PR #588 source candidate adds an explicit `USER_SUPPLIED_CONTEXT` mode to the investment-security-review workflow. It runs only when the user selects that mode and supplies the context; absent portfolio or policy data blocks portfolio fit and sizing, and the flow never claims a canonical read or attempts a write. The exact Site release recorded above remains source `854117b7128dcc88e5c46407b8bee71309af7357`, does not expose `investment-record-store`, and has not loaded or executed this source change. These source-level behavior cases do not constitute runtime acceptance.
+Merged PR #588 adds explicit `USER_SUPPLIED_CONTEXT` handling to the investment-security-review workflow. The mode requires user selection and supplied context; absent portfolio or policy data blocks portfolio fit and sizing, and the flow never claims a canonical read or attempts a write. The exact candidate is now on Site v118, but its supplied-context integration probe exposed a routing defect documented above. Source-level cases alone did not prove runtime acceptance.
 
-- Route smoke succeeded for one named issuer and selected `investment-security-review`; no specialist was invoked by the router.
-- Required `investment-record-store` capability is not present in the current Site runtime. The integrated workflow therefore correctly stops at `BLOCKED_CANONICAL_READ`; direct skill probes do not turn the integrated workflow into PASS.
+- The earlier baseline route smoke selected `investment-security-review`; the current exact-candidate request is misrouted to attention triage. Neither router call executes the child workflow.
+- The returned attention child requires `investment-record-store`, which is absent, so that misrouted invocation stopped at `BLOCKED_CANONICAL_READ`. This does not establish that the intended `USER_SUPPLIED_CONTEXT` security workflow succeeds or is blocked; it was never selected or executed. Direct skill probes do not turn the integrated workflow into PASS.
 - #318 has the source-backed calculations above plus passing synthetic regression suites, but the end-to-end integrated workflow is still blocked by the missing canonical-read tool; full security review requirements (history, lifecycle, renderer, debt coverage) were outside this probe.
 - #307 direct challenge behavior was exercised with two evidence-backed countercases and no fabricated third; the integrated workflow remains blocked at its required context read.
 - #306 remains **BLOCKED** on a real-source, compatible 3–5 peer cohort and complete runtime acceptance. Do not close it based on synthetic fixtures or N/M output alone.
