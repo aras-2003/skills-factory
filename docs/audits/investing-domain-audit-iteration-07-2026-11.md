@@ -2,8 +2,8 @@
 
 **Date:** 2026-11-06
 **Scope:** GitHub issues #231, #306, #307, #318. Coordination umbrella #322 is tracking-only.
-**Runtime evidence:** Skills Factory Cloud Next Lab `1.38.461`, verified source revision `25ec22b69df33c519f21182178ae8dfbbfebfeb7`.
-**State:** Source audit and local candidate review; runtime execution NOT_RUN; no maturity or release claim.
+**Runtime evidence:** Skills Factory Cloud Next Lab `1.38.464`, release `1.38.464+854117b7128d`, verified source revision `854117b7128dcc88e5c46407b8bee71309af7357`; receipts and observed limitations are in [the runtime evidence record](../../evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md).
+**State:** Source audit plus partial exact-candidate runtime review. Runtime tool calls ran, but the integrated workflow is blocked by a required capability gap; no maturity or release claim.
 
 ## Inventory and exact source versions
 
@@ -12,10 +12,10 @@ Versions below are read from repository source metadata at this audit's base rev
 | Component | Source version | Cloud Next inventory at pinned revision | Iteration 07 use |
 |---|---:|---:|---|
 | investment-os-review | 0.3.2 | 0.3.2 | Entry router; multi-position requests stay in portfolio review |
-| investment-security-review | 0.4.3 → 0.4.4 candidate | 0.4.3 | Single-security orchestration |
-| security-underwriting | 0.5.2 → 0.5.3 candidate | 0.5.2 | Financial fact gates and underwriting |
-| valuation-scenario-review | 0.3.0 → 0.3.1 candidate | 0.3.0 | Valuation, compatible peers, optional same-snapshot plot |
-| thesis-challenge | 0.1.1 → 0.1.2 candidate | 0.1.1 | Evidence-ranked downside challenge |
+| investment-security-review | 0.4.4 | 0.4.4 | Route selected it; exact workflow load confirms canonical-read gate; execution stopped because the required store tool is absent |
+| security-underwriting | 0.5.3 | 0.5.3 | Exact candidate loaded; AMD financial-quality probe in evidence record |
+| valuation-scenario-review | 0.3.1 | 0.3.1 | Exact candidate loaded; real-source peer helper probe returns insufficient peers offline |
+| thesis-challenge | 0.1.2 | 0.1.2 | Exact candidate loaded; direct two-countercase probe in evidence record |
 | investment-record-store | 1.0.2 | 1.0.2 | Canonical reads; writes remain separately authorized |
 | investment-portfolio-review | 0.5.1 | 0.5.1 | Multi-holding analysis boundary |
 | portfolio-state-review | 0.7.2 | 0.7.2 | Optional portfolio context |
@@ -37,9 +37,9 @@ Versions below are read from repository source metadata at this audit's base rev
 | financial-quality helper | packaged under security-underwriting `scripts/financial_quality.py` | candidate helper is not in current loaded runtime package | Caller-reviewed deterministic calculations, no source fetching |
 | peer comparison and plot helpers | packaged under valuation-scenario-review `scripts/peer_comparison.py` and `scripts/peer_growth_plot.py` | candidate helpers are not in current loaded runtime package | Same-snapshot comparison/plot; no recommendation |
 
-The runtime inventory reports `security-underwriting` 0.5.2 while local source is already 0.5.3, and likewise does not include the candidate revisions for valuation, challenge, and workflow. Therefore runtime behavior for every changed path remains NOT_RUN. Runtime skill loading alone is not behavioral evidence.
+The exact runtime now includes all four candidate versions. Runtime skill loading alone is not behavior evidence: the runtime receipts prove package identity, while semantic outcomes are described separately and their limits retained. The runtime reports no local Python execution capability. The routed integration workflow requires `investment-record-store`; that tool is not in the runtime capability list, so this exact release must stop at `BLOCKED_CANONICAL_READ`. A later source candidate adds an explicit `USER_SUPPLIED_CONTEXT` route, but it is not present in or behavior-tested on this exact Site release.
 
-Canonical history is read through `investment-record-store`; the single-security workflow forbids treating an inaccessible read as an empty history and keeps writes separately authorized. Filing discovery/parsing may use Firecrawl where available, but it is a retrieval aid, not verification. Connector availability and client-side receipts were not behaviorally exercised here; any missing store read, source retrieval or renderer remains BLOCKED/NOT_OBSERVABLE under the current workflow fallbacks.
+Canonical history is read through `investment-record-store`; the single-security workflow forbids treating an inaccessible read as an empty history and keeps writes separately authorized. The required store capability is absent in this exact runtime, so canonical-mode integrated security review is blocked before underwriting. A repository candidate now permits bounded analysis only when the user explicitly selects `USER_SUPPLIED_CONTEXT`, provides the context, and accepts that missing portfolio/policy context blocks fit and sizing. That candidate still requires exact-revision Site execution before it can resolve this runtime residual. Filing discovery/parsing may use Firecrawl where available, but it is a retrieval aid, not verification. Any missing store read, source retrieval or renderer remains BLOCKED/NOT_OBSERVABLE under the current workflow fallbacks.
 
 ## Route and request boundaries
 
@@ -64,4 +64,4 @@ Required audit coverage for the release campaign includes:
 
 The Iteration 07 source campaign is a new, hash-bound campaign. It must include focused helper tests and behavior case IDs for #306/#307/#318, plus unchanged routing boundary fixtures as regression controls. Historical October R20/R17/R18 result files remain immutable. Validation order: complete implementation and catalog/package generation first; then focused calculation tests, repository validation, campaign/hash validation, full CI-equivalent checks, and runtime only after the exact candidate is loaded in Lab.
 
-Open residuals at audit time: no verified real issuer fixture; no live market-data ingestion; no Cloud Next runtime exercise of candidate code; no release/production approval; no canonical write. These are reported as NOT_RUN/UNVERIFIED rather than inferred complete. Issues #423, #474, and #480 from aborted Iteration 06 remain open and are not accepted by this audit.
+Open residuals after candidate review: #306 has no verified real issuer 3–5 peer set with aligned business models and fiscal periods; the actual source-derived probe is `INSUFFICIENT_COMPARABLE_PEERS`. #307 and #318 direct skill behavior was probed, but the integrated workflow remains blocked on the exact Site release; the newly added source-candidate `USER_SUPPLIED_CONTEXT` path has not yet been run there. No live market-data ingestion, local Site code execution, release/production approval or canonical write occurred. These are recorded as partial/blocked, never inferred complete. Issues #423, #474, and #480 from aborted Iteration 06 remain open and are not accepted by this audit.

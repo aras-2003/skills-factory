@@ -1,9 +1,10 @@
 # Iteration 07 — investing quality, peer comparison and thesis challenge
 
-- State: ACTIVE after the owner-directed abort of Iteration 06 on 2026-11-06. The abort and unresolved carry-forward are recorded in [the closeout record](iteration-06-closeout-2026-11-06.md) and GitHub #483 (closed as `not_planned`, not accepted). Iteration 06's historical scope and results remain unchanged.
+- State: ACTIVE — merged implementation and private candidate runtime are verified; acceptance remains blocked on exact runtime and peer-set gaps below. Iteration 06 was owner-aborted; the abort and unresolved carry-forward are recorded in [the closeout record](iteration-06-closeout-2026-11-06.md) and GitHub #483 (closed as `not_planned`, not accepted). Iteration 06's historical scope and results remain unchanged.
 - Tracking issues: [#306](https://github.com/aras-2003/skills-factory/issues/306), [#307](https://github.com/aras-2003/skills-factory/issues/307), [#318](https://github.com/aras-2003/skills-factory/issues/318), [#231](https://github.com/aras-2003/skills-factory/issues/231); umbrella [#322](https://github.com/aras-2003/skills-factory/issues/322) remains coordination-only under its explicit scope exclusion.
 - Baseline GitHub main/source SHA: `25ec22b69df33c519f21182178ae8dfbbfebfeb7`.
-- Baseline Cloud Next Lab: `1.38.461`, source `25ec22b69df33c519f21182178ae8dfbbfebfeb7`; verified Site attestation observed 2026-11-06. This is the pre-change runtime and is not candidate evidence.
+- Merged candidate: PR #587 at `854117b7128dcc88e5c46407b8bee71309af7357`.
+- Exact Cloud Next Lab runtime: `1.38.464`, release `1.38.464+854117b7128d`, source `854117b7128dcc88e5c46407b8bee71309af7357`, attestation `verified`, deployed 2026-11-06. The owner explicitly authorized private publication of this exact PR revision for test runtime; the Site remained owner-only.
 - Owner: Arkadiusz Kamrowski.
 - Reviewer: Arkadiusz Kamrowski (self-review; not independent).
 
@@ -19,7 +20,7 @@
 ### Explicit exclusions
 
 - #322 is an umbrella explicitly marked planning-only, with no implementation or PR in that issue. Do not broaden this increment to #308/#309/#319/#320/#321 or #525/#526; reflect their dependencies only.
-- No new Investing skill, parallel data store, schema/migration, automated data ingestion, live portfolio read/write, trade, policy change, production promotion, Site deployment or publication.
+- No new Investing skill, parallel data store, schema/migration, automated data ingestion, live portfolio read/write, trade, policy change, production promotion or public publication. The owner separately authorized private test publication of the exact merged PR #587 revision; that authorization does not extend to another revision or production.
 - Preserve frozen R17/R18 and prior campaign results. Use a new versioned candidate campaign for this work.
 
 ## Acceptance and evidence plan
@@ -29,7 +30,7 @@
 3. #307: cases cover a strong plausible countercase, only two supported challenges, no evidence, absent baseline thesis, priced-in distinction, and downside-transmission trace. State must follow evidence; no fabricated bear case or transaction action.
 4. #231: exact source versions, available Cloud Next inventory, PL/EN and adjacent routing boundaries, one-security vs multi-position portfolio routing, calculations/missingness, freshness and write boundaries are documented with observed evidence and residuals.
 5. Offline: focused unit suites; new-candidate campaign validation and evaluator isolation; investing/source validators; full repository CI-equivalent validation and package integrity. Run all tests only after the full scoped development is complete, then fix failures in batches and rerun the complete impacted set.
-6. Runtime: candidate Site behavior requires an exact-source candidate Lab/Site identity and actual invocation receipts. Until such a candidate is available and explicitly published through the documented Sites workflow, runtime behavior remains NOT_RUN; no source-only or baseline-runtime PASS claim.
+6. Runtime: exact-source candidate Lab/Site identity and actual invocation receipts are now recorded in [runtime evidence](../../../evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md). Runtime info, skill loads and routing were observed on the exact source. The integrated one-security workflow stops at `BLOCKED_CANONICAL_READ` because its required `investment-record-store` tool is absent from Site; the deterministic Python helpers are packaged but not executable in this runtime. Do not upgrade these partial results into an end-to-end PASS.
 
 ## Candidate history
 
@@ -40,13 +41,15 @@
 
 ### Iteration 07 local validation — 2026-11-06
 
-- Calculation regression suites: financial quality 18/18, peer comparison and same-snapshot plot 14/14, existing fundamental-intelligence 13/13.
+- Calculation regression suites: financial quality 18/18, peer comparison and same-snapshot plot 15/15 (including the corrected QDD source snapshot), existing fundamental-intelligence 13/13.
 - Campaign coverage and workflow-version gates: 12/12. Full evaluation suite: 308 tests passed, 2 skipped. Package tests: 102 passed; runtime MCP tests: 28 passed.
 - Repository validation: `validate_all.py`, investing architecture, routing fixtures, campaign definition and evidence isolation, source/capability/security contracts, readiness registry, and catalog determinism passed. Nonblocking legacy source-contract warnings remain recorded by the repository validator.
 - Domain, governance, output, unit-economics, readiness and release suites passed. Local promptfoo routing smoke passed 4/4. Lab, production, skills-only, remote and ChatGPT ZIP artifacts built and validated; the Lab artifact passed rubric-isolation checks. Repeated ZIP builds were byte-for-byte reproducible.
-- Full candidate runtime execution is still **NOT_RUN**: the artifact was built locally, but no exact-source candidate Lab invocation receipt exists. Production readiness remains pending; no production release, Site publish, canonical write, maturity promotion or trade occurred.
-- Issue disposition: #231 source audit and regression suite are complete; #306 remains open pending dated real-issuer AMD/MU and distinct-model evidence plus candidate runtime execution. #307 source contract and tests are implemented but runtime behavior is unverified. #318 deterministic calculations pass synthetic fixtures; real source-backed financial facts and candidate runtime behavior remain unverified. #322 remains planning-only.
-- The Iteration 07 closure gate is not met until exact-candidate Lab behavior is exercised and the remaining issue-specific evidence is reviewed. Do not close #306, #307, or #318 on source-only evidence.
+- Full integrated candidate runtime execution remains **BLOCKED_CANONICAL_READ**: the exact-source Site invocation cannot continue because the required `investment-record-store` capability is absent. Production readiness remains pending; no production release, canonical write, maturity promotion or trade occurred.
+- Exact release attestation, package-load receipts, a route receipt, source-backed AMD calculations and a deterministic real-peer rejection probe are recorded in the campaign evidence file. The campaign state is `PARTIAL_BLOCKED`; the receipts are unsigned tool-call records, and Site did not execute the bundled Python helpers.
+- The repository candidate now has explicit `CANONICAL` and `USER_SUPPLIED_CONTEXT` workflow modes with separate behavior cases. The currently attested Site still runs the earlier source revision; the supplied-context path is not runtime-accepted until the exact candidate is published privately and tested.
+- Issue disposition: #231 source inventory is complete, but the exact Site runtime has an unresolved required-tool integration gap. #306 remains open: the actual source snapshot returns `INSUFFICIENT_COMPARABLE_PEERS`; the real 3–5 peer acceptance table is not available. #307 is closed in GitHub and direct thesis-challenge behavior was probed with two dated countercases, but the integrated workflow is blocked at canonical read. #318 is closed in GitHub; source-backed AMD FY/YTD facts and calculations were exercised directly, while the integrated workflow and full report remain blocked at canonical read. #322 remains coordination-only and out of scope.
+- The Iteration 07 closure gate is not met until the exact-revision Site run accepts the explicit user-supplied-context path (or the required canonical-read capability is present), and #306's real peer acceptance evidence is complete. Do not close #306 on synthetic fixtures, raw cross-model values or `N/M` output alone.
 
 ## Closure gate
 

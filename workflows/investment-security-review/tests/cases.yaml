@@ -1,4 +1,20 @@
 cases:
+  - id: investment-review-canonical-context-default
+    case: Missing canonical context must block unless the user selects the supplied-context route
+    input: "Review AMD. Assume the current runtime does not expose investment-record-store. No prior thesis, portfolio or policy context is attached and I have not requested supplied-context mode."
+    expected:
+      should_trigger: true
+      must: ["CANONICAL", "BLOCKED_CANONICAL_READ", "not an empty history", "no numeric sizing"]
+      must_not: ["USER_SUPPLIED_CONTEXT selected automatically", "assumed empty portfolio", "canonical write"]
+
+  - id: investment-review-explicit-user-supplied-context
+    case: Explicit supplied context permits bounded analysis without a canonical-store claim
+    input: "Use USER_SUPPLIED_CONTEXT only. Review AMD as of 2026-11-06 over a 3-year horizon. My baseline thesis is that AI accelerator growth can support higher earnings; challenge that exact thesis. I have no portfolio holdings or policy text to supply, so do not assess portfolio fit or size. Use public filings for factual verification and do not read or write a canonical store."
+    expected:
+      should_trigger: true
+      must: ["USER_SUPPLIED_CONTEXT", "user-supplied thesis", "independently verified facts", "portfolio fit and sizing not assessed", "NOT_WRITTEN"]
+      must_not: ["canonical READ receipt", "complete account history", "numeric sizing", "empty portfolio assumption"]
+
   - id: investment-review-financial-quality-before-valuation
     case: Run multi-period financial quality before valuation
     input: "Review this named security over three to five fiscal years and comparable YTD, then value it only after source, period, unit and basis gates pass."
