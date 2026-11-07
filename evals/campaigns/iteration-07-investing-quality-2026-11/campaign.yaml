@@ -72,7 +72,7 @@ source_sha256:
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 051eb0170f26c97630142fb7719baa2225fe6cb36c558b80260e82fc84af24dc
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 8025161f5e4ff0a0614683a7265dd5a76b1ae3fb36e6bb2ac5228881240c8ad0
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: eb1f974d5c016a1e7cd2567e285e12a5c0b02c5a5dc1f6f914e3bf44e412dd16
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
