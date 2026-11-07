@@ -767,8 +767,6 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "The exact USER_SUPPLIED_CONTEXT route and skill loads are verified, but the complete integrated report workflow has not been executed on the exact runtime",
-                "CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime",
                 "AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases",
             }
             or cfg.get("release_approved") is not False
