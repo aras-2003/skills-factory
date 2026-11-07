@@ -5,6 +5,7 @@
 - Baseline GitHub main/source SHA: `25ec22b69df33c519f21182178ae8dfbbfebfeb7`.
 - Merged candidate: PR #587 at `854117b7128dcc88e5c46407b8bee71309af7357`.
 - Exact Cloud Next Lab runtime: `1.38.464`, release `1.38.464+854117b7128d`, source `854117b7128dcc88e5c46407b8bee71309af7357`, attestation `verified`, deployed 2026-11-06. The owner explicitly authorized private publication of this exact PR revision for test runtime; the Site remained owner-only.
+- PR #588 merged as `e29ea1668c8826754584b165137c3cbd756713ab`; private Site v118 now attests to that canonical source and Lab `1.38.465`. Runtime testing found that the explicit AMD `USER_SUPPLIED_CONTEXT` request routed to attention triage rather than security review. A local adapter fix and contract regression are validated but not yet published.
 - Owner: Arkadiusz Kamrowski.
 - Reviewer: Arkadiusz Kamrowski (self-review; not independent).
 

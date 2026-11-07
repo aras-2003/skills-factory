@@ -305,6 +305,7 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Odtwórz decyzję inwestycyjną z 2021 r. z użyciem migawki as-of; nie uzupełniaj braków dzisiejszym portfelem.", "historical-decision-replay"],
     ["Oceń potwierdzone swingi, OPS/OPD i zanegowanie trendu na skorygowanych danych OHLCV.", "technical-structure"],
     ["Review ACN's valuation and earnings quality; do not analyze price swings.", "investment-security-review"],
+    ["Use USER_SUPPLIED_CONTEXT only. Review AMD as of 2026-11-06 over a 3-year horizon. My baseline thesis is that AI accelerator growth can support higher earnings; challenge that exact thesis. I have no portfolio holdings or policy text to supply, so do not assess portfolio fit or size. Use public filings for factual verification and do not read or write a canonical store.", "investment-security-review"],
     ["Pomóż ustalić limity ryzyka i politykę inwestycyjną", "investment-policy-design"],
     ["What does GPT mean?", "investment-os-review"], ["hello", "investment-os-review"],
   ];
@@ -554,6 +555,7 @@ test("main runtime delta: unrelated tasks and host child execution", () => {
     ["A company in my watchlist just reported earnings. Triage whether it changes my thesis and what deserves deeper research.", "investment-attention-review"],
     ["Spółka z mojej watchlisty opublikowała nowe wyniki. Oceń ich wpływ na tezę i powiedz, co wymaga dalszej analizy.", "investment-attention-review"],
     ["Check my thesis after earnings.", "investment-attention-review"],
+    ["Review new earnings evidence against my active thesis and state what deserves deeper research.", "investment-attention-review"],
     ["Sprawdź moją tezę po wynikach spółki.", "investment-attention-review"],
     ["Review my thesis about the company.", "investment-security-review"],
     ["Sprawdź moją tezę o spółce.", "investment-security-review"],

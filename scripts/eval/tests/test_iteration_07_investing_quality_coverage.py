@@ -39,7 +39,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
         self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_source_revision"])
-        self.assertEqual("1.38.464+854117b7128d", cfg["runtime_release_id"])
+        self.assertEqual("1.38.465+e29ea1668c88", cfg["runtime_release_id"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertTrue(cfg["runtime_blockers"])
         self.assertIs(cfg["release_approved"], False)

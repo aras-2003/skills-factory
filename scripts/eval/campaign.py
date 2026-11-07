@@ -758,13 +758,14 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "854117b7128dcc88e5c46407b8bee71309af7357"
+            or cfg.get("candidate_source_revision") != "e29ea1668c8826754584b165137c3cbd756713ab"
             or cfg.get("runtime_source_revision") != cfg.get("candidate_source_revision")
-            or cfg.get("runtime_release_id") != "1.38.464+854117b7128d"
+            or cfg.get("runtime_release_id") != "1.38.465+e29ea1668c88"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "investment-security-review stops at BLOCKED_CANONICAL_READ because investment-record-store is not exposed by the Site runtime",
+                "explicit USER_SUPPLIED_CONTEXT single-security request routes to investment-attention-review instead of investment-security-review; local adapter fix is not yet published",
+                "CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime",
                 "AMD and MU lack a verified, same-snapshot 3–5 peer cohort with aligned business models and fiscal periods",
             }
             or cfg.get("release_approved") is not False
