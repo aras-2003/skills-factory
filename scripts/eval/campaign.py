@@ -690,6 +690,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
     }
     expected_modules = {
         "skills/investing/security-underwriting/tests/test_financial_quality.py",
+        "skills/investing/security-underwriting/tests/test_real_issuer_source_probe.py",
         "skills/investing/valuation-scenario-review/tests/test_peer_comparison.py",
         "skills/investing/fundamental-intelligence/test_engine.py",
         "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
@@ -698,10 +699,12 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
     expected_support = {
         "skills/investing/fundamental-intelligence/README.md",
         "skills/investing/security-underwriting/tests/cases.yaml",
+        "skills/investing/security-underwriting/tests/fixtures/amd-source-probe-2026-11.json",
         "skills/investing/valuation-scenario-review/tests/cases.yaml",
         "skills/investing/thesis-challenge/tests/cases.yaml",
         "workflows/investment-security-review/tests/cases.yaml",
         "release/production-readiness.yaml",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md",
         "evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml",
         "evals/campaigns/investment-quality-2026-10/campaign.yaml",
         "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml",
@@ -754,7 +757,16 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         modules = set(cfg.get("test_modules") or [])
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
-            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
+            or cfg.get("candidate_source_revision") != "854117b7128dcc88e5c46407b8bee71309af7357"
+            or cfg.get("runtime_source_revision") != cfg.get("candidate_source_revision")
+            or cfg.get("runtime_release_id") != "1.38.464+854117b7128d"
+            or cfg.get("runtime_attestation") != "verified"
+            or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
+            or set(cfg.get("runtime_blockers") or []) != {
+                "investment-security-review stops at BLOCKED_CANONICAL_READ because investment-record-store is not exposed by the Site runtime",
+                "AMD and MU lack a verified, same-snapshot 3–5 peer cohort with aligned business models and fiscal periods",
+            }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
             or set(cfg.get("out_of_scope_behavior_paths") or []) != expected_behavior

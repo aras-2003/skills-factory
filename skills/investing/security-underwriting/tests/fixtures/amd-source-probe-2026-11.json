@@ -1,0 +1,90 @@
+{
+  "as_of": "2026-11-06",
+  "currency": "USD",
+  "unit": "currency_millions",
+  "basis": "GAAP continuing operations",
+  "sources": {
+    "annual": {
+      "url": "https://www.sec.gov/Archives/edgar/data/2488/000000248826000018/amd-20251227.htm",
+      "published_at": "2026-02-03",
+      "filing": "Form 10-K, FY ended 2025-12-27; includes FY2023–FY2025 statements"
+    },
+    "ytd": {
+      "url": "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm",
+      "published_at": "2026-11-03",
+      "filing": "Form 10-Q, nine months ended 2026-09-26, signed 2026-11-03"
+    }
+  },
+  "periods": [
+    {
+      "label": "FY2023", "fiscal_year": 2023, "period_type": "FY", "start": "2023-01-01", "end": "2023-12-30", "source": "annual",
+      "facts": {
+        "revenue": {"value": "22680", "definition": "GAAP net revenue"},
+        "operating_income": {"value": "401", "definition": "GAAP operating income"},
+        "net_income": {"value": "854", "definition": "GAAP income from continuing operations, net of tax"},
+        "cfo": {"value": "1667", "definition": "Net cash provided by operating activities of continuing operations"},
+        "capex": {"value": "546", "definition": "Cash purchases of property and equipment", "capex_sign": "spend_positive"},
+        "gross_profit": {"value": "10460", "definition": "GAAP gross profit after acquisition-related amortization"},
+        "stock_compensation": {"value": "1384", "definition": "Stock-based compensation expense before income taxes"}
+      }
+    },
+    {
+      "label": "FY2024", "fiscal_year": 2024, "period_type": "FY", "start": "2023-12-31", "end": "2024-12-28", "source": "annual",
+      "facts": {
+        "revenue": {"value": "25785", "definition": "GAAP net revenue"},
+        "operating_income": {"value": "1900", "definition": "GAAP operating income"},
+        "net_income": {"value": "1641", "definition": "GAAP income from continuing operations, net of tax"},
+        "cfo": {"value": "3041", "definition": "Net cash provided by operating activities of continuing operations"},
+        "capex": {"value": "636", "definition": "Cash purchases of property and equipment", "capex_sign": "spend_positive"},
+        "gross_profit": {"value": "12725", "definition": "GAAP gross profit after acquisition-related amortization"},
+        "stock_compensation": {"value": "1407", "definition": "Stock-based compensation expense before income taxes"}
+      }
+    },
+    {
+      "label": "FY2025", "fiscal_year": 2025, "period_type": "FY", "start": "2024-12-29", "end": "2025-12-27", "source": "annual",
+      "facts": {
+        "revenue": {"value": "34639", "definition": "GAAP net revenue"},
+        "operating_income": {"value": "3694", "definition": "GAAP operating income"},
+        "net_income": {"value": "4269", "definition": "GAAP income from continuing operations, net of tax"},
+        "cfo": {"value": "6493", "definition": "Net cash provided by operating activities of continuing operations"},
+        "capex": {"value": "974", "definition": "Cash purchases of property and equipment", "capex_sign": "spend_positive"},
+        "gross_profit": {"value": "17152", "definition": "GAAP gross profit after acquisition-related amortization"},
+        "stock_compensation": {"value": "1638", "definition": "Stock-based compensation expense before income taxes"}
+      }
+    },
+    {
+      "label": "YTD2025Q3", "fiscal_year": 2025, "period_type": "YTD", "fiscal_quarter": 3, "start": "2024-12-29", "end": "2025-09-27", "source": "ytd",
+      "facts": {
+        "revenue": {"value": "24369", "definition": "GAAP net revenue"},
+        "operating_income": {"value": "1942", "definition": "GAAP operating income"},
+        "net_income": {"value": "2649", "definition": "GAAP income from continuing operations, net of tax"},
+        "cfo": {"value": "4189", "definition": "Net cash provided by operating activities of continuing operations"},
+        "capex": {"value": "752", "definition": "Cash purchases of property and equipment", "capex_sign": "spend_positive"},
+        "gross_profit": {"value": "11575", "definition": "GAAP gross profit after acquisition-related amortization"},
+        "stock_compensation": {"value": "1152", "definition": "Stock-based compensation expense before income taxes"}
+      }
+    },
+    {
+      "label": "YTD2026Q3", "fiscal_year": 2026, "period_type": "YTD", "fiscal_quarter": 3, "start": "2025-12-28", "end": "2026-09-26", "source": "ytd",
+      "facts": {
+        "revenue": {"value": "35166", "definition": "GAAP net revenue"},
+        "operating_income": {"value": "6298", "definition": "GAAP operating income"},
+        "net_income": {"value": "6105", "definition": "GAAP income from continuing operations, net of tax"},
+        "cfo": {"value": "6523", "definition": "Net cash provided by operating activities of continuing operations"},
+        "capex": {"value": "1845", "definition": "Cash purchases of property and equipment", "capex_sign": "spend_positive"},
+        "gross_profit": {"value": "18829", "definition": "GAAP gross profit after acquisition-related amortization"},
+        "stock_compensation": {"value": "1513", "definition": "Stock-based compensation expense before income taxes"}
+      }
+    }
+  ],
+  "expected": {
+    "status": "VERIFIED",
+    "period_count_fy": 3,
+    "comparable_ytd": true,
+    "fcf_usd_millions": {"FY2023": "1121", "FY2024": "2405", "FY2025": "5519", "YTD2025Q3": "3437", "YTD2026Q3": "4678"},
+    "fcf_conversion_rounded_pct": {"FY2023": "131.3", "FY2024": "146.6", "FY2025": "129.3", "YTD2025Q3": "129.7", "YTD2026Q3": "76.6"},
+    "revenue_growth_yoy_rounded_pct": {"FY2024": "13.7", "FY2025": "34.3", "YTD2026Q3": "44.3"},
+    "fcf_growth_yoy_rounded_pct": {"FY2024": "114.5", "FY2025": "129.5", "YTD2026Q3": "36.1"},
+    "write_attempted": false
+  }
+}

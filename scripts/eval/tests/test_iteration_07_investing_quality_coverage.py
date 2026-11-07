@@ -32,12 +32,16 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         }
         self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
 
-    def test_behavior_suite_covers_four_issues_without_claiming_runtime_pass(self):
+    def test_behavior_suite_binds_partial_runtime_evidence_without_claiming_acceptance(self):
         cfg = yaml.safe_load((ROOT / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml").read_text())
         cases = yaml.safe_load((ROOT / cfg["behavior_case_suite"]).read_text())
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
-        self.assertEqual("NOT_RUN", cfg["runtime_status"])
+        self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
+        self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_source_revision"])
+        self.assertEqual("1.38.464+854117b7128d", cfg["runtime_release_id"])
+        self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
+        self.assertTrue(cfg["runtime_blockers"])
         self.assertIs(cfg["release_approved"], False)
         self.assertIs(cfg["historical_r20_immutable"], True)
 
