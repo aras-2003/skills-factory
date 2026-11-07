@@ -14,6 +14,29 @@ import yaml
 
 _SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 _REFERENCE_SUFFIXES = {".md", ".txt", ".yaml", ".yml", ".json", ".csv"}
+_INLINE_CODE = re.compile(r"`([^`\n]+)`")
+_SCRIPT_REFERENCE = re.compile(r"(?<![A-Za-z0-9_./-])([A-Za-z0-9_./-]+\.py)(?![A-Za-z0-9_./-])")
+
+
+def _declared_script_sources(skill_dir: Path, instructions: str) -> list[dict[str, str]]:
+    """Expose explicitly named packaged code as data; never execute it here."""
+    result = []
+    declared = {path for code in _INLINE_CODE.findall(instructions) for path in _SCRIPT_REFERENCE.findall(code)}
+    for relative in sorted(declared):
+        parts = relative.split("/")
+        # Only a root script or scripts/ child is eligible. Evaluation files,
+        # traversal and every symlink component stay outside the host surface.
+        if any(part in {"", ".", "..", "tests", "evals", "__pycache__"} for part in parts):
+            continue
+        if len(parts) > 1 and parts[0] != "scripts":
+            continue
+        path = skill_dir.joinpath(*parts)
+        if any(skill_dir.joinpath(*parts[:index]).is_symlink() for index in range(1, len(parts) + 1)):
+            continue
+        if not path.is_file() or not path.resolve().is_relative_to(skill_dir.resolve()):
+            continue
+        result.append({"path": relative, "content": path.read_text(encoding="utf-8")})
+    return result
 
 
 def packaged_release_identity() -> dict[str, Any]:
@@ -242,7 +265,8 @@ def load_skill(skill_name: str) -> dict[str, Any]:
         **{key: value for key, value in item.items() if key != "directory"},
         "execution_mode": "host_model_executes_loaded_instructions",
         "instructions": instructions,
-        "reference_files": references,
+        "reference_files": references + _declared_script_sources(skill_dir, instructions),
+        "supporting_code_execution": "not_executed; a host code runner is required to run supplied scripts",
         "content_sha256": item["content_sha256"],
         "source_revision": packaged_runtime_value("source_revision"),
     }

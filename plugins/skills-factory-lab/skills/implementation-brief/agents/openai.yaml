@@ -1,0 +1,5 @@
+interface:
+  display_name: Implementation Brief
+  short_description: Turn an approved interface concept into a build-ready…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'
