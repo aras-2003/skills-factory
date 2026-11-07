@@ -7,11 +7,17 @@ Evaluate one XTB security from thesis creation through falsification, valuation,
 Enter for one explicitly identified security needing integrated underwriting, valuation and challenge; do not choose it for mere ticker news, watchlist preview or broad theme mapping.
 The default is **analysis only**. A user request to research, analyze, review, screen, size or evaluate does NOT authorize writing to any canonical store. Missing canonical read is BLOCKED_CANONICAL_READ, not a fabricated empty history.
 
+## Context mode
+
+Use `CANONICAL` by default. Attempt the required `investment-record-store` read and stop with `BLOCKED_CANONICAL_READ` if the capability or read is unavailable. Never infer empty history, portfolio or policy state, and never switch modes silently.
+
+Use `USER_SUPPLIED_CONTEXT` only when the user explicitly requests that mode and supplies the context they want considered in the current request or attached material. Identify the mode in the report, distinguish user-supplied statements from independently verified facts, and do not claim a canonical read or a complete account history. A supplied thesis can be challenged only as that supplied baseline; if it is absent, return `INSUFFICIENT EVIDENCE` for thesis challenge. Missing portfolio or policy context blocks portfolio fit and sizing. This mode is analysis-only and never attempts a canonical write.
+
 ## Required skills
 - security-underwriting
 - valuation-scenario-review
 - thesis-challenge
-- investment-record-store
+- investment-record-store in `CANONICAL` mode only
 
 ## Optional skills
 - trend-theme-research
@@ -20,7 +26,7 @@ The default is **analysis only**. A user request to research, analyze, review, s
 - decision-journal-update
 
 ## Sequence
-1. Read prior research, thesis history, current portfolio and policy through investment-record-store; emit canonical READ receipt.
+1. Resolve context mode. In `CANONICAL`, read prior research, thesis history, current portfolio and policy through investment-record-store; emit its actual canonical READ receipt. In `USER_SUPPLIED_CONTEXT`, use only explicitly supplied context and record each missing section; do not invoke or imply investment-record-store.
 2. Use structured equity/ETF research plugins for context and consensus framing, then underwrite the security with an explicit horizon.
 3. Require explicit WHY THIS / WHY NOW and build historical context before current-state conclusions:
    - 5Y price history when available plus 1Y setup;
@@ -60,10 +66,11 @@ The default is **analysis only**. A user request to research, analyze, review, s
 - Keep the sequence analysis-only. A valuation card or cash-flow gate never authorizes a canonical write, portfolio action or trade.
 
 ## Output contract
-WHY THIS / WHY NOW | historical price/KPI/valuation context | material event timeline | observed moves vs likely causes + confidence | business thesis | value-trap gates and reasons | evidence-sanity status | verified/blocked metrics | Valuation & Opportunity Card or NOT_SCORED | priced-in expectations | separate quality/valuation/catalyst/portfolio fit/confidence | strongest countercase | thesis state | portfolio constraints | lifecycle/sizing state if permitted | exact evidence gaps | next trigger | canonical READ/WRITE receipts.
+Context mode and coverage | WHY THIS / WHY NOW | historical price/KPI/valuation context | material event timeline | observed moves vs likely causes + confidence | business thesis | value-trap gates and reasons | evidence-sanity status | verified/blocked metrics | Valuation & Opportunity Card or NOT_SCORED | priced-in expectations | separate quality/valuation/catalyst/portfolio fit/confidence | strongest countercase | thesis state | portfolio constraints | lifecycle/sizing state if permitted | exact evidence gaps | next trigger | canonical READ/WRITE receipts only when actually produced.
 
 ## Stop conditions
 Stop before sizing if policy/portfolio context is missing.
+In `CANONICAL`, stop at a missing or failed required store read. In `USER_SUPPLIED_CONTEXT`, continue only within the supplied evidence boundary; do not infer unavailable history, portfolio state or policy.
 Stop valuation and numeric sizing if critical evidence is unresolved.
 Do not write when the user requested advice only or canonical identity/authorization is unverified. A failed or inaccessible canonical read must not be treated as a verified empty store; explain the missing baseline and limit analysis.
 

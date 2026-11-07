@@ -6,6 +6,8 @@ cases:
       - skills/investing/security-underwriting/tests/cases.yaml
       - workflows/investment-security-review/tests/cases.yaml
     required_cases:
+      - investment-review-canonical-context-default
+      - investment-review-explicit-user-supplied-context
       - underwriting-financial-quality-periods
       - underwriting-financial-quality-unit-basis-conflict
       - underwriting-financial-quality-cyclical-peak
