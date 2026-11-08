@@ -787,7 +787,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
                 "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
-                "Issue #306 is incomplete: the MU 3–5 peer cohort and required broader comparable metric coverage remain unverified.",
+                "Issue #306 has a source-backed local MU cohort for three direct peers; exact-runtime acceptance and supported growth/forecast metrics remain unverified.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
