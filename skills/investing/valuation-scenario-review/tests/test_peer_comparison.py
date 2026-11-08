@@ -59,6 +59,132 @@ def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
 
 
 class PeerComparisonTests(unittest.TestCase):
+    def test_real_mu_ttm_snapshot_admits_three_memory_manufacturer_peers(self):
+        """Freeze a Nov 8 provider snapshot, using Nov 6 regular-session prices.
+
+        Valuation and TTM ratios are S&P Global Market Intelligence as surfaced
+        by StockAnalysis. Issuer filings support business-fit review and latest
+        reported periods. This is a descriptive cycle-sensitive screen, not a
+        recommendation or ranking. Forward P/E and growth remain explicitly N/M.
+        """
+        as_of = "2026-11-08"
+        stats = {
+            "MU": "https://stockanalysis.com/stocks/mu/statistics/",
+            "SKHYNIX": "https://stockanalysis.com/quote/krx/000660/statistics/",
+            "NANYA": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+            "KIOXIA": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+        }
+        filings = {
+            "MU": ("2026-10-09", "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"),
+            "SKHYNIX": ("2026-10-28", "https://news.skhynix.com/en/q3-2026-business-results/"),
+            "NANYA": ("2026-10-12", "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"),
+            "KIOXIA": ("2026-10-30", "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"),
+        }
+        figures = {
+            "MU": {"ev_sales": "5.35", "ev_ebitda": "6.55", "gross_margin": ".8072",
+                   "operating_margin": ".7459", "fcf_margin": ".4427", "roic": ".9342",
+                   "capital_intensity": None, "share_count_change": ".0160"},
+            "SKHYNIX": {"ev_sales": "2.70", "ev_ebitda": "3.36", "gross_margin": ".7738",
+                        "operating_margin": ".7450", "fcf_margin": ".4623", "roic": ".7705",
+                        "capital_intensity": None, "share_count_change": None},
+            "NANYA": {"ev_sales": "3.11", "ev_ebitda": "4.12", "gross_margin": ".7726",
+                      "operating_margin": ".7096", "fcf_margin": ".5771", "roic": "1.2481",
+                      "capital_intensity": None, "share_count_change": ".1084"},
+            "KIOXIA": {"ev_sales": "2.24", "ev_ebitda": "3.01", "gross_margin": ".7340",
+                       "operating_margin": ".6909", "fcf_margin": ".4397", "roic": "1.1610",
+                       "capital_intensity": None, "share_count_change": ".0242"},
+        }
+        # S&P Global TTM capex and revenue shown on the linked statistics pages,
+        # in each issuer's local currency and scale.
+        capex_revenue = {
+            "MU": (D("30.71"), D("133.19")),
+            "SKHYNIX": (D("42.86941"), D("269.34")),
+            "NANYA": (D("29.88"), D("295.38")),
+            "KIOXIA": (D("0.27323"), D("5.79")),
+        }
+        periods = {
+            "MU": "TTM through 2026-09-03",
+            "SKHYNIX": "TTM through 2026-09-30",
+            "NANYA": "TTM through 2026-09-30",
+            "KIOXIA": "TTM through 2026-09-30",
+        }
+        currencies = {"MU": "USD", "SKHYNIX": "KRW", "NANYA": "TWD", "KIOXIA": "JPY"}
+        peer_summaries = {
+            "SKHYNIX": "DRAM/HBM and NAND manufacturer; larger HBM mix and scale than MU.",
+            "NANYA": "DRAM-focused manufacturer; no comparable NAND scale and materially smaller customer/product mix.",
+            "KIOXIA": "NAND-focused memory and storage manufacturer; no DRAM product exposure and different JV/customer structure.",
+        }
+
+        def build(ticker):
+            values = figures[ticker]
+            metrics = {}
+            for name, value in values.items():
+                if name == "capital_intensity":
+                    capex, revenue = capex_revenue[ticker]
+                    value = (capex / revenue).quantize(D("0.0001"))
+                is_multiple = name in {"ev_sales", "ev_ebitda"}
+                metrics[name] = PeerMetric(
+                    name=name, value=D(value) if value is not None else None,
+                    unit="multiple" if is_multiple else "fraction",
+                    definition={"ev_sales": "provider-defined enterprise value / latest reported TTM revenue",
+                                "ev_ebitda": "provider-defined enterprise value / latest reported TTM EBITDA",
+                                "gross_margin": "provider-defined TTM gross profit / TTM revenue",
+                                "operating_margin": "provider-defined TTM operating income / TTM revenue",
+                                "fcf_margin": "provider-defined TTM free cash flow / TTM revenue",
+                                "roic": "provider-defined TTM return on invested capital",
+                                "capital_intensity": "TTM capital expenditures / TTM revenue",
+                                "share_count_change": "change in reported shares outstanding versus prior-year snapshot"}[name],
+                    period=periods[ticker], basis="S&P Global Market Intelligence provider metrics; as-reported issuer statements",
+                    published_at=as_of, source_url=stats[ticker], currency=currencies[ticker],
+                    period_alignment_group="latest issuer-reported TTM, 2026-09-03 through 2026-09-30",
+                    basis_group="S&P Global Market Intelligence TTM methodology; local reporting currency and as-reported accounting",
+                    supporting_source_urls=(filings[ticker][1],),
+                )
+            # The latest price is Nov 6. Statistics were last updated Nov 8.
+            # Forward P/E horizon and comparable revenue/FCF growth series are
+            # not evidenced in the frozen snapshot, so they are explicit N/M.
+            for name, unit, definition in (
+                ("forward_pe", "multiple", "forward P/E with explicit NTM/12M horizon"),
+                ("revenue_growth", "fraction", "reported TTM revenue growth versus prior-year TTM"),
+                ("fcf_growth", "fraction", "reported TTM free-cash-flow growth versus prior-year TTM"),
+            ):
+                metrics[name] = PeerMetric(name=name, value=None, unit=unit, definition=definition,
+                    period="N/M: compatible horizon/series not verified", basis="N/M", published_at=as_of,
+                    source_url=stats[ticker], currency=currencies[ticker])
+            fit = {}
+            if ticker != "MU":
+                peer_date, peer_url = filings[ticker]
+                alignments = {"value_chain_role": "MATCH", "revenue_profit_mix": "PARTIAL",
+                              "customer_base": "PARTIAL", "cyclicality": "MATCH", "capital_intensity": "PARTIAL"}
+                for dimension in FIT_DIMENSIONS:
+                    fit[dimension] = EconomicFitEvidence(
+                        alignment=alignments[dimension],
+                        target_summary="MU manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+                        peer_summary=peer_summaries[ticker],
+                        rationale="Memory manufacturing is a direct whole-company economic comparison; product scope, scale, customers and capex intensity remain material differences.",
+                        target_published_at=filings["MU"][0], target_source_url=filings["MU"][1],
+                        published_at=peer_date, source_url=peer_url,
+                    )
+            return IssuerSnapshot(
+                ticker=ticker, sector="Technology", industry="Semiconductors",
+                business_model="integrated memory manufacturer", as_of=as_of, metrics=metrics,
+                cyclical=True, comparison_group="Technology/Semiconductors/memory-manufacturing",
+                inclusion_rationale="Whole-company memory manufacturing economics; direct peer with documented product/customer/capital caveats.",
+                peer_tier="DIRECT" if ticker != "MU" else "DIRECT", economic_fit=fit,
+            )
+
+        result = compare_peer_set(build("MU"), [build("SKHYNIX"), build("NANYA"), build("KIOXIA")], as_of)
+        self.assertEqual("COMPARABLE", result["status"])
+        self.assertEqual(3, result["direct_peer_count"])
+        self.assertEqual({"ev_sales": 3, "ev_ebitda": 3, "forward_pe": 0}, result["core_metric_peer_counts"])
+        self.assertTrue(result["cycle_normalization_required"])
+        self.assertIsNone(result["recommendation"])
+        self.assertFalse(result["ranked"])
+        nanya = next(row for row in result["peers"] if row["ticker"] == "NANYA")
+        self.assertEqual("N/M", nanya["metrics"]["forward_pe"]["value"])
+        self.assertEqual("N/M", nanya["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("PARTIAL", nanya["economic_fit"]["revenue_profit_mix"]["alignment"])
+
     def test_real_amd_ttm_snapshot_admits_three_economically_reviewed_direct_peers(self):
         """Dated reported TTM revenue and whole-company fit support a small AMD cohort.
 
