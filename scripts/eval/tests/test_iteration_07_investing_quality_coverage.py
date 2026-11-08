@@ -40,7 +40,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual("8bcd44cffcc14d88f5486472a85029f1cc27eb6e", cfg["candidate_source_revision"])
+        self.assertEqual("dc14aaf09a318114b5eb21464239dfed7028b9e1", cfg["candidate_source_revision"])
         self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
         self.assertEqual("fff6f377c997af2b6ee4987ffb12e4464781cc15", cfg["runtime_canonical_source_revision"])
         self.assertEqual("d1cf3642042a8e4b73dd608dd12368490ea23faf", cfg["runtime_source_revision"])
