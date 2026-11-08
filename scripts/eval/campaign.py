@@ -776,17 +776,18 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "db0e97a37ad3e1918330b445a87113aa74323c74"
-            or cfg.get("candidate_source_revision_status") != "merged_main_exact_runtime_tested"
-            or cfg.get("runtime_canonical_source_revision") != "db0e97a37ad3e1918330b445a87113aa74323c74"
-            or cfg.get("runtime_source_revision") != "c16123b5094d68bdf243c020a839f5e0486e75e0"
-            or cfg.get("runtime_release_id") != "1.38.470+db0e97a37ad3"
-            or cfg.get("runtime_site_version") != 123
-            or cfg.get("runtime_deployment_id") != "appgdep_6af192331ec88191b61d909d62cde11a"
+            or cfg.get("candidate_source_revision") is not None
+            or cfg.get("candidate_source_revision_status") != "pending_local_changes"
+            or cfg.get("runtime_canonical_source_revision") != "fff6f377c997af2b6ee4987ffb12e4464781cc15"
+            or cfg.get("runtime_source_revision") != "d1cf3642042a8e4b73dd608dd12368490ea23faf"
+            or cfg.get("runtime_release_id") != "1.38.469+fff6f377c997"
+            or cfg.get("runtime_site_version") != 122
+            or cfg.get("runtime_deployment_id") != "appgdep_6af0fa876fa481919889f6d10716c1be"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "The Nov 8 MU provider snapshot is frozen in tests but its mutable source pages were not archived; live pages now differ for Nanya/Kioxia and report a changed SK hynix share count. Site probes used supplied values, and packaged helper code remains not_executed. Full #306 exact-source acceptance is not demonstrated.",
+                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
+                "Issue #306 is incomplete: the MU 3–5 peer cohort and required broader comparable metric coverage remain unverified.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
