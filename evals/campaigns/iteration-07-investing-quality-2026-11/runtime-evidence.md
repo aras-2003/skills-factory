@@ -7,6 +7,7 @@
 - The runtime route probe selected and loaded the investment-security-review workflow, but routing did not execute that workflow. Site reports bundled script execution as `not_executed`; therefore no runtime claim is made for the new peer metric source arrays or AMD TTM snapshot. The existing Site remains owner-only.
 - Local candidate `8a21252ace8f9aadc3146e03a73ab0ce551e5b09` builds Lab `1.38.470+8a21252ace8f` (`artifact_sha256` `fa7f77a71b174e871db33c6e0efb2ddf603ea0999ec0541e71b2420d531e96f9`); a second build verified the generated adapter bundle, catalog, references and source attestation match the candidate. These are local package receipts only, not Site runtime evidence.
 - No deployment of that candidate, release approval, maturity change, portfolio mutation, canonical write or trade occurred. Issue #306 now has a source-backed local MU cohort with three peers for two core multiples; it remains open pending exact-source runtime acceptance and unresolved supported growth/forecast metrics.
+- Candidate behavior commit: `8bcd44cffcc14d88f5486472a85029f1cc27eb6e`. The new cohort is frozen in the source regression and its evidence is hash-bound in the campaign. Full offline eval/package/repository test results are recorded in the current task; this commit has not been published or run in Site.
 
 ## Local MU cohort follow-up — 2026-11-09 (offline; not Site runtime evidence)
 
