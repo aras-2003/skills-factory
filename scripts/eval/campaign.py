@@ -659,9 +659,19 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
             }
         ):
             return set()
+        iteration07_paths = separately_validated_iteration07_investing_quality_paths(root)
+        iteration07_cfg_path = root / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml"
+        iteration07_hashes = {}
+        if iteration07_paths and iteration07_cfg_path.is_file():
+            iteration07_hashes = (yaml.safe_load(iteration07_cfg_path.read_text(encoding="utf-8")) or {}).get("source_sha256") or {}
         for rel in expected:
             path = root / rel
-            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
+            if not path.is_file():
+                return set()
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if digest != hashes[rel] and not (
+                rel in iteration07_paths and iteration07_hashes.get(rel) == digest
+            ):
                 return set()
         if not all((root / path).is_file() for path in test_modules):
             return set()
