@@ -5,7 +5,8 @@
 - Private owner-only Site v122 is attested to canonical Skills Factory source `fff6f377c997af2b6ee4987ffb12e4464781cc15`; the generated Site mirror is `d1cf3642042a8e4b73dd608dd12368490ea23faf`, Lab release `1.38.469+fff6f377c997`, deployment `appgdep_6af0fa876fa481919889f6d10716c1be`.
 - This is the exact source from merged PR #592. It is a deployed baseline for the local work described below, not evidence for unmerged v0.3.4 changes.
 - The runtime route probe selected and loaded the investment-security-review workflow, but routing did not execute that workflow. Site reports bundled script execution as `not_executed`; therefore no runtime claim is made for the new peer metric source arrays or AMD TTM snapshot. The existing Site remains owner-only.
-- Current local candidate SHA is pending commit. No deployment of that candidate, release approval, maturity change, portfolio mutation, canonical write or trade occurred.
+- Local candidate `8a21252ace8f9aadc3146e03a73ab0ce551e5b09` builds Lab `1.38.470+8a21252ace8f` (`artifact_sha256` `fa7f77a71b174e871db33c6e0efb2ddf603ea0999ec0541e71b2420d531e96f9`); a second build verified the generated adapter bundle, catalog, references and source attestation match the candidate. These are local package receipts only, not Site runtime evidence.
+- No deployment of that candidate, release approval, maturity change, portfolio mutation, canonical write or trade occurred. Issue #306 remains open because the source-compatible MU cohort and broader required metrics are absent.
 
 ## Exact Site v121 USER_SUPPLIED_CONTEXT execution — 2026-11-07
 

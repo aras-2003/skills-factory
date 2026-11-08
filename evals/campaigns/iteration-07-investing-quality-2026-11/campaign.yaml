@@ -4,8 +4,8 @@ scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
 runtime_status: PARTIAL_BLOCKED
-candidate_source_revision:
-candidate_source_revision_status: pending_local_changes
+candidate_source_revision: 8a21252ace8f9aadc3146e03a73ab0ce551e5b09
+candidate_source_revision_status: committed_local_pending_external
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
 runtime_source_revision_required: true
 runtime_source_revision: d1cf3642042a8e4b73dd608dd12368490ea23faf
@@ -20,7 +20,7 @@ runtime_blockers:
 - 'Issue #306 is incomplete: the MU 3–5 peer cohort and required broader comparable metric coverage remain unverified.'
 release_approved: false
 historical_r20_immutable: true
-status_note: 'Site v122 privately attests to canonical source fff6f377c997af2b6ee4987ffb12e4464781cc15 and embeds Lab 1.38.469. The latest runtime probe establishes routing and package availability, but does not execute the supplied-context workflow or helper code. Local v0.3.4 peer changes remain unpublished. Issue #306 remains open because the MU cohort and full comparable metric coverage are incomplete. CANONICAL mode remains unavailable because investment-record-store is not exposed. No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
+status_note: 'Local candidate 8a21252ace8f9aadc3146e03a73ab0ce551e5b09 builds Lab 1.38.470 and passes Cloud Next generated-bundle provenance verification. It is not published or runtime-tested. Site v122 still attests to canonical source fff6f377c997af2b6ee4987ffb12e4464781cc15 and embeds Lab 1.38.469; its route probe does not execute the supplied-context workflow or helper code. Issue #306 remains open because the MU cohort and full comparable metric coverage are incomplete. CANONICAL mode remains unavailable because investment-record-store is not exposed. No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
 behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
 required_case_ids:
 - iter07-financial-quality-synthetic
@@ -73,11 +73,11 @@ source_sha256:
   CATALOG.md: 0167c0eecb64337f60f85a35b82d29cbeb3ce53d624c2b7189473e7f6c69e7b5
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
   docs/catalog.json: 48a443ee5197f43d80ecdfeb465e6df1ba6ed4d73faeb513a96be17a2ec7063e
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 974f53623aa231c4d6fcecf9b50825e121e63a7a7a54aac42776a5f6ccaccd1f
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: c61cce8322555b719f2538bc2c2a9695571c32f9574d1e288697aeeef69c33b8
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 051eb0170f26c97630142fb7719baa2225fe6cb36c558b80260e82fc84af24dc
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: e0cbf78b30bdf15fba54fb76308ef69008322c1104667f8a515b0402e3193c93
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 1eb6ba935c9efe9900cf98a5d1a43e3fcce41b7e4ad83e0c2d30d7c7b45ea996
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -109,9 +109,9 @@ source_sha256:
   evals/routing/supplemental/investment-top-two-screen-pl.input.md: 7517ca4ddf83a15d188f1d560287934749f6c4038f81d82afd0d7f31d547fb2d
   evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml: 0ec7e8bf45911ec2fbe7113417e8b1ebc5dd335b6cd6d0e8f3b4687506f8a8e5
   release/production-readiness.yaml: 656e94d8e9e4205d09273ad8e21e6124dd0db43e8f3f14c45a6da827b6887fc4
-  scripts/eval/campaign.py: 17d6e0622794f8ccb36cdbc1e766b97633446436acdd2958335c0cbe8118da9b
+  scripts/eval/campaign.py: fa46e8539b9ab8df06a421461e171fd70f30edd94cb4288b7360f0073195787b
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 36999d5c8bd3de34507abbb7e6da18a42d89dc526de60d5317e61d27730d909e
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 51d36b8ccf57b3d78fdcbe8cc90e5aac9cdfe681e74f1d64ff00e9dd209ed0db
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
   skills/investing/security-underwriting/SKILL.md: 6f668be91467b2703ce32d119e62b97fa69a2dec3f0473acf98828b2fbf56e4d

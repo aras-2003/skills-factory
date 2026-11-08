@@ -74,6 +74,13 @@
 - The local peer suite passes 30/30. No live financial data is fetched by the regression. EV snapshots are secondary-source facts and TTM revenue is linked to dated issuer filings/results. `#306` remains open: the independent MU cohort and the broader requested comparable metrics are still unverified.
 - Current deployed runtime evidence is Site v122, mirror `d1cf3642042a8e4b73dd608dd12368490ea23faf`, canonical source `fff6f377c997af2b6ee4987ffb12e4464781cc15`, Lab `1.38.469`; this is the already-deployed PR #592 source, not the local v0.3.4 candidate. The helper remains `not_executed` on Site. Runtime evidence and source identity are recorded in the [campaign evidence](../../../evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md).
 
+### Local candidate validation — 2026-11-09, not published
+
+- Candidate commit: `8a21252ace8f9aadc3146e03a73ab0ce551e5b09`. The Lab artifact is `1.38.470+8a21252ace8f`; the generated adapter bundle, catalog, references and source attestation passed a repeat provenance check. The exact Site build inputs are therefore prepared locally, but the Site runtime does not contain this SHA.
+- Validation: campaign definition 42/42 core cases; full evaluation suite 308 passed, 1 skipped; package suite 102/102; valuation peer + financial-quality + real-issuer source-probe regressions 49/49; fundamental-intelligence 13/13; repository `validate_all.py` passed with the previously recorded nonblocking warnings; `git diff --check` passed. Campaign source hashes match their files.
+- The local Site CI chain could not start because `pnpm ... exec tsc` reports `tsc` is not installed in this checkout. Dependencies were not installed. Consequently Site typecheck, adapter contracts, source-sync tests, lint and Worker build remain unverified here; exact-SHA Site runtime execution is also pending.
+- Latest primary/secondary source review still cannot admit a sound MU cohort: the SK hynix ADR snapshot's market-cap/share-count fields do not reconcile with its SEC-stated 1:10 ADS ratio; Nanya's latest available valuation snapshot is later than the frozen Nov 5 peer as-of; and Samsung's consolidated memory/non-memory mix is materially broader. No derived values were fabricated to force three peers. #306 remains open; #322 remains coordination-only.
+
 ## Closure gate
 
 Close only after every included issue acceptance criterion has evidence on one exact candidate, failures are repaired and re-run, #231's audit plan is complete, and unresolved runtime criteria are either passed or explicitly recorded as still blocking Done. The umbrella remains open while out-of-scope program issues remain. Any runtime/publishing or merge action follows repository authorization and the current Sites runbook.
