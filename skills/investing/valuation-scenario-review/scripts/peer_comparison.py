@@ -1,7 +1,7 @@
 """Deterministic evidence checks for peer tables and forward-PEG eligibility."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from decimal import Decimal
 from enum import Enum
@@ -37,6 +37,20 @@ class PeerMetric:
 
 
 @dataclass(frozen=True)
+class EconomicFitEvidence:
+    """Source-backed reviewer comparison for one whole-company fit dimension."""
+
+    alignment: str
+    target_summary: str
+    peer_summary: str
+    rationale: str
+    target_published_at: str
+    target_source_url: str
+    published_at: str
+    source_url: str
+
+
+@dataclass(frozen=True)
 class IssuerSnapshot:
     ticker: str
     sector: str
@@ -48,6 +62,7 @@ class IssuerSnapshot:
     comparison_group: str = ""
     inclusion_rationale: str = ""
     peer_tier: str = ""
+    economic_fit: Mapping[str, EconomicFitEvidence] = field(default_factory=dict)
 
 
 _MULTIPLE_METRICS = {"ev_sales", "ev_ebitda", "forward_pe", "price_sales", "price_to_sales", "ev_fcf"}
@@ -60,6 +75,11 @@ _MIN_PERCENTILE_PEERS = 5
 _MAX_PEERS = 15
 _NON_RANKED_METRICS = {"ps_growth_heuristic"}
 _CORE_VALUATION_METRICS = {"ev_sales", "ev_ebitda", "forward_pe"}
+_MAX_DIRECT_FIT_EVIDENCE_AGE_DAYS = 400
+_DIRECT_FIT_DIMENSIONS = (
+    "value_chain_role", "revenue_profit_mix", "customer_base", "cyclicality", "capital_intensity",
+)
+_DIRECT_FIT_ALIGNMENTS = {"MATCH", "PARTIAL"}
 
 
 def _valid_date(value: str) -> bool:
@@ -70,12 +90,44 @@ def _valid_date(value: str) -> bool:
 
 
 def _valid_url(value: str) -> bool:
-    parsed = urlparse(value) if isinstance(value, str) else None
-    return bool(parsed and parsed.scheme == "https" and parsed.netloc)
+    try:
+        parsed = urlparse(value) if isinstance(value, str) else None
+        return bool(parsed and parsed.scheme == "https" and parsed.netloc)
+    except ValueError:
+        return False
 
 
 def _nonblank(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def _direct_fit_reason(evidence: object, as_of: str) -> str | None:
+    """Require dated, source-backed review of all whole-company fit dimensions."""
+    if not isinstance(evidence, Mapping) or set(evidence) != set(_DIRECT_FIT_DIMENSIONS):
+        return "INCOMPLETE_DIRECT_FIT_EVIDENCE"
+    for dimension in _DIRECT_FIT_DIMENSIONS:
+        item = evidence.get(dimension)
+        if not isinstance(item, EconomicFitEvidence):
+            return "INVALID_DIRECT_FIT_EVIDENCE"
+        if not isinstance(item.alignment, str) or item.alignment not in _DIRECT_FIT_ALIGNMENTS:
+            return "DIRECT_FIT_NOT_ESTABLISHED"
+        if not all(_nonblank(value) for value in (
+            item.target_summary, item.peer_summary, item.rationale,
+        )):
+            return "INCOMPLETE_DIRECT_FIT_EVIDENCE"
+        if (
+            not _valid_date(item.target_published_at) or item.target_published_at > as_of
+            or not _valid_date(item.published_at) or item.published_at > as_of
+        ):
+            return "INVALID_OR_LOOKAHEAD_DIRECT_FIT_SOURCE_DATE"
+        if any(
+            (date.fromisoformat(as_of) - date.fromisoformat(published_at)).days > _MAX_DIRECT_FIT_EVIDENCE_AGE_DAYS
+            for published_at in (item.target_published_at, item.published_at)
+        ):
+            return "STALE_DIRECT_FIT_EVIDENCE"
+        if not _valid_url(item.target_source_url) or not _valid_url(item.source_url):
+            return "INVALID_DIRECT_FIT_SOURCE_URL"
+    return None
 
 
 def _metric_reason(metric: PeerMetric | None, name: str, as_of: str, *, compare_to: PeerMetric | None = None) -> str | None:
@@ -153,6 +205,12 @@ def _fingerprint(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], rows: 
             peer.ticker: {
                 "classification": (peer.sector, peer.industry, peer.business_model, peer.as_of, peer.cyclical,
                                    peer.comparison_group, peer.inclusion_rationale, peer.peer_tier),
+                "economic_fit": {
+                    key: (value.alignment, value.target_summary, value.peer_summary, value.rationale,
+                          value.target_published_at, value.target_source_url, value.published_at, value.source_url)
+                    for key, value in sorted(peer.economic_fit.items(), key=lambda item: str(item[0]))
+                    if isinstance(value, EconomicFitEvidence)
+                } if isinstance(peer.economic_fit, Mapping) else str(peer.economic_fit),
                 "metrics": {
                     key: (str(value.value) if value.value is not None else None, value.unit,
                           value.definition, value.period, value.basis, value.horizon,
@@ -219,6 +277,8 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
             reason = "COMPARISON_GROUP_MISMATCH"
         elif not _nonblank(peer.inclusion_rationale):
             reason = "MISSING_INCLUSION_RATIONALE"
+        elif peer.peer_tier == "DIRECT":
+            reason = _direct_fit_reason(peer.economic_fit, as_of)
         row = {
             "ticker": peer.ticker,
             "eligibility": "INCLUDED" if reason is None else "EXCLUDED",
@@ -230,11 +290,31 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                 "INVALID_COMPARABILITY_TIER": "Reviewer must assign DIRECT or ADJACENT explicitly.",
                 "COMPARISON_GROUP_MISMATCH": "Peer is not assigned to the target's reviewed comparison group.",
                 "MISSING_INCLUSION_RATIONALE": "A reviewer must explain the economic basis for including this peer.",
+                "INCOMPLETE_DIRECT_FIT_EVIDENCE": "DIRECT tier requires source-backed notes for all five whole-company fit dimensions.",
+                "INVALID_DIRECT_FIT_EVIDENCE": "DIRECT tier evidence must use the supported economic-fit record format.",
+                "DIRECT_FIT_NOT_ESTABLISHED": "A mismatch or unknown fit dimension prevents a DIRECT tier.",
+                "INVALID_OR_LOOKAHEAD_DIRECT_FIT_SOURCE_DATE": "DIRECT tier sources must be valid and available by the comparison date.",
+                "STALE_DIRECT_FIT_EVIDENCE": "DIRECT tier fit evidence is older than 400 days at the comparison date.",
+                "INVALID_DIRECT_FIT_SOURCE_URL": "DIRECT tier evidence needs an HTTPS source URL.",
             }.get(reason),
             "business_model": peer.business_model,
             "comparison_group": peer.comparison_group,
             "comparability_tier": peer.peer_tier if reason is None else "EXCLUDED",
             "inclusion_rationale": peer.inclusion_rationale if reason is None else None,
+            "economic_fit": {
+                key: {
+                    "alignment": value.alignment,
+                    "target_summary": value.target_summary,
+                    "peer_summary": value.peer_summary,
+                    "rationale": value.rationale,
+                    "target_published_at": value.target_published_at,
+                    "target_source_url": value.target_source_url,
+                    "published_at": value.published_at,
+                    "source_url": value.source_url,
+                }
+                for key, value in sorted(peer.economic_fit.items(), key=lambda item: str(item[0]))
+                if isinstance(value, EconomicFitEvidence)
+            } if reason is None and isinstance(peer.economic_fit, Mapping) else {},
             "cycle_normalization_required": peer.cyclical,
             "metrics": {},
         }

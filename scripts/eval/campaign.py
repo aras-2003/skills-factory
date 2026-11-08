@@ -659,9 +659,19 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
             }
         ):
             return set()
+        iteration07_paths = separately_validated_iteration07_investing_quality_paths(root)
+        iteration07_cfg_path = root / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml"
+        iteration07_hashes = {}
+        if iteration07_paths and iteration07_cfg_path.is_file():
+            iteration07_hashes = (yaml.safe_load(iteration07_cfg_path.read_text(encoding="utf-8")) or {}).get("source_sha256") or {}
         for rel in expected:
             path = root / rel
-            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
+            if not path.is_file():
+                return set()
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if digest != hashes[rel] and not (
+                rel in iteration07_paths and iteration07_hashes.get(rel) == digest
+            ):
                 return set()
         if not all((root / path).is_file() for path in test_modules):
             return set()
@@ -760,14 +770,13 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "05387fdaf645813520bd53c796b940a68216780c"
-            or cfg.get("runtime_source_revision") != cfg.get("candidate_source_revision")
-            or cfg.get("runtime_release_id") != "1.38.467+05387fdaf645"
+            or cfg.get("candidate_source_revision") != "00371645d2ef1ab687ae989f908da05d8ceda68e"
+            or cfg.get("runtime_canonical_source_revision") != cfg.get("candidate_source_revision")
+            or cfg.get("runtime_source_revision") != "8e99512b9a5838dfe987d8cb800fe6e2bff7f099"
+            or cfg.get("runtime_release_id") != "1.38.468+00371645d2ef"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "USER_SUPPLIED_CONTEXT routes to investment-security-review, but complete report workflow acceptance is not proven by routing and bounded host review alone",
-                "CANONICAL mode remains blocked because investment-record-store is not exposed by the Site runtime",
                 "AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases",
             }
             or cfg.get("release_approved") is not False

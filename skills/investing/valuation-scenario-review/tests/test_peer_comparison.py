@@ -6,13 +6,14 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from peer_comparison import EvidenceState, IssuerSnapshot, PeerMetric, compare_peer_set
+from peer_comparison import EconomicFitEvidence, EvidenceState, IssuerSnapshot, PeerMetric, compare_peer_set
 from peer_growth_plot import render_peer_growth_plot
 from tempfile import TemporaryDirectory
 from pathlib import Path
 
 
 AS_OF = "2026-08-01"
+FIT_DIMENSIONS = ("value_chain_role", "revenue_profit_mix", "customer_base", "cyclicality", "capital_intensity")
 
 
 def metric(name, value, *, published="2026-07-01", definition=None, period=None,
@@ -41,11 +42,20 @@ def metric(name, value, *, published="2026-07-01", definition=None, period=None,
 def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
     values = values or {"ev_sales": "5", "ev_ebitda": "20", "forward_pe": "20", "eps_cagr": "0.20", "revenue_growth": "0.15", "fcf_yield": "0.02", "roic": "0.18"}
     metrics = {name: metric(name, value) for name, value in values.items()}
+    fit = {
+        dimension: EconomicFitEvidence(
+            alignment="MATCH", target_summary="synthetic target profile", peer_summary="synthetic peer profile",
+            rationale="Synthetic reviewer note for deterministic helper behavior coverage.",
+            target_published_at=as_of, target_source_url=f"https://issuer.example/TARGET/fit/{dimension}",
+            published_at=as_of, source_url=f"https://issuer.example/{ticker}/fit/{dimension}",
+        )
+        for dimension in FIT_DIMENSIONS
+    }
     return IssuerSnapshot(ticker=ticker, sector="Technology", industry="Semiconductors",
                           business_model=model, as_of=as_of, metrics=metrics,
                           comparison_group=f"Technology/Semiconductors/{model}",
                           inclusion_rationale="Synthetic fixture included by reviewed compute-product fit.",
-                          peer_tier="DIRECT")
+                          peer_tier="DIRECT", economic_fit=fit)
 
 
 class PeerComparisonTests(unittest.TestCase):
@@ -82,6 +92,18 @@ class PeerComparisonTests(unittest.TestCase):
                 comparison_group="Technology/Semiconductors/compute-processors",
                 inclusion_rationale="Diagnostic source candidate; review tier is explicit and period/model caveats remain visible.",
                 peer_tier="DIRECT" if ticker == "NVDA" else "ADJACENT",
+                economic_fit={
+                    dimension: EconomicFitEvidence(
+                        alignment="PARTIAL" if dimension in {"revenue_profit_mix", "customer_base"} else "MATCH",
+                        target_summary="AMD fabless processor design and sales",
+                        peer_summary="NVIDIA accelerated-compute platform, including data-center systems",
+                        rationale="The filings support value-chain overlap; the broader NVIDIA platform and customer/profit mix remain explicit caveats.",
+                        target_published_at="2026-11-03",
+                        target_source_url="https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm",
+                        published_at="2026-08-27",
+                        source_url="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+                    ) for dimension in FIT_DIMENSIONS
+                } if ticker == "NVDA" else {},
             )
 
         target = replace(snapshot("AMD"), comparison_group="Technology/Semiconductors/compute-processors")
@@ -155,6 +177,63 @@ class PeerComparisonTests(unittest.TestCase):
         self.assertEqual("EXCLUDED", row["eligibility"])
         self.assertEqual("MISSING_INCLUSION_RATIONALE", row["reason"])
         self.assertIsNotNone(row["exclusion_rationale"])
+
+    def test_direct_peer_requires_source_backed_fit_across_all_five_dimensions(self):
+        target = issuer("AMD")
+        peer = replace(issuer("P1"), economic_fit={})
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("EXCLUDED", row["eligibility"])
+        self.assertEqual("INCOMPLETE_DIRECT_FIT_EVIDENCE", row["reason"])
+        self.assertEqual(2, result["direct_peer_count"])
+
+    def test_direct_peer_with_unknown_or_mismatched_dimension_cannot_be_admitted(self):
+        target = issuer("AMD")
+        peer = issuer("P1")
+        evidence = dict(peer.economic_fit)
+        evidence["customer_base"] = replace(evidence["customer_base"], alignment="UNKNOWN")
+        peer = replace(peer, economic_fit=evidence)
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("DIRECT_FIT_NOT_ESTABLISHED", row["reason"])
+        self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
+
+    def test_partial_direct_fit_is_explicit_and_bound_into_snapshot(self):
+        target = issuer("AMD")
+        peer = issuer("P1")
+        evidence = dict(peer.economic_fit)
+        evidence["revenue_profit_mix"] = replace(
+            evidence["revenue_profit_mix"], alignment="PARTIAL",
+            rationale="The processor overlap is meaningful; data-center weighting differs and remains a valuation caveat.",
+        )
+        peer = replace(peer, economic_fit=evidence)
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("COMPARABLE", result["status"])
+        self.assertEqual("PARTIAL", row["economic_fit"]["revenue_profit_mix"]["alignment"])
+        self.assertNotEqual(result["plot"]["snapshot_id"], compare_peer_set(target, [issuer("P1"), issuer("P2"), issuer("P3")], AS_OF)["plot"]["snapshot_id"])
+
+    def test_direct_fit_rejects_future_or_invalid_source(self):
+        target = issuer("AMD")
+        peer = issuer("P1")
+        evidence = dict(peer.economic_fit)
+        evidence["cyclicality"] = replace(evidence["cyclicality"], published_at="2026-08-02")
+        peer = replace(peer, economic_fit=evidence)
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("INVALID_OR_LOOKAHEAD_DIRECT_FIT_SOURCE_DATE", row["reason"])
+
+    def test_direct_fit_rejects_stale_source(self):
+        target = issuer("AMD")
+        peer = issuer("P1")
+        evidence = dict(peer.economic_fit)
+        evidence["cyclicality"] = replace(
+            evidence["cyclicality"], target_published_at="2025-06-01", published_at="2025-06-01",
+        )
+        peer = replace(peer, economic_fit=evidence)
+        result = compare_peer_set(target, [peer, issuer("P2"), issuer("P3")], AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("STALE_DIRECT_FIT_EVIDENCE", row["reason"])
 
     def test_explicit_reviewed_direct_peer_can_have_a_distinct_business_model_label(self):
         target = issuer("AMD", model="fabless compute")

@@ -40,10 +40,18 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_source_revision"])
-        self.assertEqual("1.38.467+05387fdaf645", cfg["runtime_release_id"])
+        self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_canonical_source_revision"])
+        self.assertEqual("8e99512b9a5838dfe987d8cb800fe6e2bff7f099", cfg["runtime_source_revision"])
+        self.assertEqual("1.38.468+00371645d2ef", cfg["runtime_release_id"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
-        self.assertTrue(cfg["runtime_blockers"])
+        self.assertEqual(
+            ["AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases"],
+            cfg["runtime_blockers"],
+        )
+        runtime_evidence = (ROOT / cfg["runtime_evidence"]).read_text(encoding="utf-8")
+        self.assertIn("Exact Site v121 USER_SUPPLIED_CONTEXT execution", runtime_evidence)
+        self.assertIn("NOT_SCORED", runtime_evidence)
+        self.assertIn("client_display=NOT_OBSERVABLE", runtime_evidence)
         self.assertIs(cfg["release_approved"], False)
         self.assertIs(cfg["historical_r20_immutable"], True)
 
