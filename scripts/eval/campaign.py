@@ -700,6 +700,12 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "docs/catalog.json",
         "scripts/eval/campaign.py",
     }
+    expected_in_scope = {
+        "skills/investing/valuation-scenario-review/SKILL.md",
+        "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
+        "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
+    }
+    expected_out_of_scope = expected_behavior - expected_in_scope
     expected_modules = {
         "skills/investing/security-underwriting/tests/test_financial_quality.py",
         "skills/investing/security-underwriting/tests/test_real_issuer_source_probe.py",
@@ -770,18 +776,23 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "00371645d2ef1ab687ae989f908da05d8ceda68e"
-            or cfg.get("runtime_canonical_source_revision") != cfg.get("candidate_source_revision")
-            or cfg.get("runtime_source_revision") != "8e99512b9a5838dfe987d8cb800fe6e2bff7f099"
-            or cfg.get("runtime_release_id") != "1.38.468+00371645d2ef"
+            or cfg.get("candidate_source_revision") is not None
+            or cfg.get("candidate_source_revision_status") != "pending_local_changes"
+            or cfg.get("runtime_canonical_source_revision") != "fff6f377c997af2b6ee4987ffb12e4464781cc15"
+            or cfg.get("runtime_source_revision") != "d1cf3642042a8e4b73dd608dd12368490ea23faf"
+            or cfg.get("runtime_release_id") != "1.38.469+fff6f377c997"
+            or cfg.get("runtime_site_version") != 122
+            or cfg.get("runtime_deployment_id") != "appgdep_6af0fa876fa481919889f6d10716c1be"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases",
+                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
+                "Issue #306 is incomplete: the MU 3–5 peer cohort and required broader comparable metric coverage remain unverified.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
-            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected_behavior
+            or set(cfg.get("out_of_scope_behavior_paths") or []) != expected_out_of_scope
+            or set(cfg.get("in_scope_behavior_paths") or []) != expected_in_scope
             or modules != expected_modules
             or set(cfg.get("required_case_ids") or []) != expected_cases
             or set(hashes) != expected_behavior | expected_modules | expected_support

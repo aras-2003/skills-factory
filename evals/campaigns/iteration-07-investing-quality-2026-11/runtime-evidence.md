@@ -1,5 +1,12 @@
 # Iteration 07 candidate runtime evidence — through 2026-11-07
 
+## Current deployed baseline — 2026-11-08
+
+- Private owner-only Site v122 is attested to canonical Skills Factory source `fff6f377c997af2b6ee4987ffb12e4464781cc15`; the generated Site mirror is `d1cf3642042a8e4b73dd608dd12368490ea23faf`, Lab release `1.38.469+fff6f377c997`, deployment `appgdep_6af0fa876fa481919889f6d10716c1be`.
+- This is the exact source from merged PR #592. It is a deployed baseline for the local work described below, not evidence for unmerged v0.3.4 changes.
+- The runtime route probe selected and loaded the investment-security-review workflow, but routing did not execute that workflow. Site reports bundled script execution as `not_executed`; therefore no runtime claim is made for the new peer metric source arrays or AMD TTM snapshot. The existing Site remains owner-only.
+- Current local candidate SHA is pending commit. No deployment of that candidate, release approval, maturity change, portfolio mutation, canonical write or trade occurred.
+
 ## Exact Site v121 USER_SUPPLIED_CONTEXT execution — 2026-11-07
 
 - **Request:** `USER_SUPPLIED_CONTEXT: Challenge this supplied AMD thesis using public filings: continued AI/Data Center growth can sustain elevated market expectations. Do not assess portfolio fit or sizing.` The request supplied one thesis only; no portfolio, policy, horizon, price history, or consensus snapshot was supplied.

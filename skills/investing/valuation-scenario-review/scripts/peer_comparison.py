@@ -34,6 +34,7 @@ class PeerMetric:
     currency: str = "USD"
     period_alignment_group: str = ""
     basis_group: str = ""
+    supporting_source_urls: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -147,6 +148,11 @@ def _metric_reason(metric: PeerMetric | None, name: str, as_of: str, *, compare_
         return "LOOKAHEAD"
     if not _valid_url(metric.source_url):
         return "INVALID_SOURCE_URL"
+    if (
+        not isinstance(metric.supporting_source_urls, tuple)
+        or any(not _valid_url(url) for url in metric.supporting_source_urls)
+    ):
+        return "INVALID_SUPPORTING_SOURCE_URL"
     if not all(_nonblank(value) for value in (metric.name, metric.unit, metric.definition, metric.period, metric.basis, metric.currency)):
         return "INCOMPLETE_DEFINITION"
     if (name in _MULTIPLE_METRICS or metric.unit == "multiple") and (metric.unit != "multiple" or metric.value <= 0):
@@ -198,6 +204,7 @@ def _fingerprint(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], rows: 
         "target_metrics": {
             k: (str(v.value) if v.value is not None else None, v.unit, v.definition, v.period,
                 v.basis, v.horizon, v.published_at, v.source_url, v.currency,
+                v.supporting_source_urls,
                 v.period_alignment_group, v.basis_group, str(v.status))
             for k, v in sorted(target.metrics.items())
         },
@@ -215,6 +222,7 @@ def _fingerprint(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], rows: 
                     key: (str(value.value) if value.value is not None else None, value.unit,
                           value.definition, value.period, value.basis, value.horizon,
                           value.published_at, value.source_url, value.currency,
+                          value.supporting_source_urls,
                           value.period_alignment_group, value.basis_group, str(value.status))
                     for key, value in sorted(peer.metrics.items())
                 },
@@ -340,6 +348,7 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                     "horizon": target_metric.horizon, "basis": target_metric.basis,
                     "target_currency": target_metric.currency,
                     "target_source_url": target_metric.source_url,
+                    "target_supporting_source_urls": list(target_metric.supporting_source_urls),
                     "target_published_at": target_metric.published_at,
                     "peer_basis": peer_metric.basis if peer_metric else None,
                     "peer_period": peer_metric.period if peer_metric else None,
@@ -348,6 +357,7 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                     "peer_basis_group": peer_metric.basis_group if peer_metric else None,
                     "target_basis_group": target_metric.basis_group,
                     "peer_source_url": peer_metric.source_url if peer_metric else None,
+                    "peer_supporting_source_urls": list(peer_metric.supporting_source_urls) if peer_metric else [],
                     "peer_published_at": peer_metric.published_at if peer_metric else None,
                 }
             else:
@@ -363,8 +373,11 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                     "peer_currency": peer_metric.currency, "target_currency": target_metric.currency,
                     "target_value": str(target_metric.value),
                     "target_source_url": target_metric.source_url,
+                    "target_supporting_source_urls": list(target_metric.supporting_source_urls),
                     "target_published_at": target_metric.published_at,
-                    "source_url": peer_metric.source_url, "published_at": peer_metric.published_at,
+                    "source_url": peer_metric.source_url,
+                    "supporting_source_urls": list(peer_metric.supporting_source_urls),
+                    "published_at": peer_metric.published_at,
                 }
 
         price_sales = peer.metrics.get("price_sales") or peer.metrics.get("price_to_sales")
@@ -398,11 +411,15 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                 "status": ps_state, "reason": None,
                 "definition": "P/S divided by revenue growth expressed in percentage points; descriptive heuristic only",
                 "source_url": price_sales.source_url, "published_at": price_sales.published_at,
+                "supporting_source_urls": list(price_sales.supporting_source_urls),
                 "growth_source_url": peer_revenue_growth.source_url,
+                "growth_supporting_source_urls": list(peer_revenue_growth.supporting_source_urls),
                 "growth_published_at": peer_revenue_growth.published_at,
                 "target_p_s_source_url": target_price_sales.source_url,
+                "target_p_s_supporting_source_urls": list(target_price_sales.supporting_source_urls),
                 "target_p_s_published_at": target_price_sales.published_at,
                 "target_growth_source_url": target_revenue_growth.source_url,
+                "target_growth_supporting_source_urls": list(target_revenue_growth.supporting_source_urls),
                 "target_growth_published_at": target_revenue_growth.published_at,
                 "recommendation": None, "primary_rank": False}
 
@@ -487,7 +504,9 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                 "eps_growth_pct": str(target_growth.value * 100), "forward_pe": str(target_pe.value),
                 "peg": str(target_pe.value / (target_growth.value * Decimal("100"))),
                 "eps_growth_source_url": target_growth.source_url, "eps_growth_published_at": target_growth.published_at,
+                "eps_growth_supporting_source_urls": list(target_growth.supporting_source_urls),
                 "forward_pe_source_url": target_pe.source_url, "forward_pe_published_at": target_pe.published_at,
+                "forward_pe_supporting_source_urls": list(target_pe.supporting_source_urls),
                 "eps_growth_definition": target_growth.definition, "forward_pe_definition": target_pe.definition,
                 "horizon": target_growth.horizon,
                 "cycle_normalization_required": target.cyclical,
@@ -505,7 +524,9 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
                 "status": peg["status"],
                 "eps_growth_pct": str(Decimal(growth["value"]) * 100), "forward_pe": pe["value"], "peg": peg["value"],
                 "eps_growth_source_url": peer_growth.source_url, "eps_growth_published_at": peer_growth.published_at,
+                "eps_growth_supporting_source_urls": list(peer_growth.supporting_source_urls),
                 "forward_pe_source_url": peer_pe.source_url, "forward_pe_published_at": peer_pe.published_at,
+                "forward_pe_supporting_source_urls": list(peer_pe.supporting_source_urls),
                 "eps_growth_definition": peer_growth.definition, "forward_pe_definition": peer_pe.definition,
                 "horizon": peer_growth.horizon,
                 "cycle_normalization_required": peer.cyclical,

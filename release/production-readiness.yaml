@@ -567,14 +567,14 @@ components:
 
   - name: valuation-scenario-review
     kind: skill
-    version: "0.3.3"
+    version: "0.3.4"
     source: skills/investing/valuation-scenario-review/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Candidate v0.3.3 adds source-dated whole-company fit evidence to direct-peer admission; focused/full local validation and package provenance checks passed, while exact-source Cloud Next Lab retest is pending and real AMD/MU peer cohorts remain incomplete."
+    evidence_gap: "Candidate v0.3.4 preserves supporting source URLs for derived peer metrics and plots, and adds a source-dated AMD direct-peer snapshot. Exact-source Cloud Next Lab retest is pending; the real MU cohort and remaining #306 acceptance are incomplete."
     limitation: "Lab candidate until exact-version runtime checks confirm method selection and arithmetic; no investment action is implied."
 
   - name: investment-os-review

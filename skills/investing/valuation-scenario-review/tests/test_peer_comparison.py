@@ -59,6 +59,128 @@ def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
 
 
 class PeerComparisonTests(unittest.TestCase):
+    def test_real_amd_ttm_snapshot_admits_three_economically_reviewed_direct_peers(self):
+        """Dated reported TTM revenue and whole-company fit support a small AMD cohort.
+
+        EV is the Nov 5, 2026 QDD snapshot. Revenue is GAAP reported TTM, rebuilt
+        from company filings available by that date; periods end in Jul–Sep 2026
+        and are explicitly aligned as the latest reported TTM. The result is a
+        screen only, not a recommendation or rank.
+        """
+        as_of = "2026-11-05"
+        target_url = "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+        qdd = {
+            "AMD": "https://www.qddresearch.com/us/amd/",
+            "NVDA": "https://www.qddresearch.com/us/nvda/",
+            "INTC": "https://www.qddresearch.com/us/intc/",
+            "MRVL": "https://www.qddresearch.com/us/mrvl/",
+        }
+        filings = {
+            "AMD": ("2026-11-04", target_url),
+            "NVDA": ("2026-08-26", "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"),
+            "INTC": ("2026-10-30", "https://www.sec.gov/Archives/edgar/data/50863/000005086326000191/intc-20260926.htm"),
+            "MRVL": ("2026-08-28", "https://www.sec.gov/Archives/edgar/data/1835632/000183563226000025/mrvl-20260801.htm"),
+        }
+        # Latest reported TTM revenue (USD millions): annual FY2025 + current
+        # reported quarters − matching prior-year quarters, using issuer filings.
+        ttm_components = {
+            "AMD": (D("34639"), (D("10253"), D("11536"), D("13377")), (D("7438"), D("7685"), D("9246"))),
+            "NVDA": (D("215938"), (D("81615"), D("96221")), (D("44062"), D("46743"))),
+            "INTC": (D("52853"), (D("13577"), D("16128"), D("16500")), (D("12667"), D("12859"), D("13653"))),
+            "MRVL": (D("8195"), (D("2418"), D("2739")), (D("1895"), D("2006"))),
+        }
+        ttm_sales = {
+            ticker: annual + sum(current) - sum(prior)
+            for ticker, (annual, current, prior) in ttm_components.items()
+        }
+        self.assertEqual(
+            {"AMD": D("45436"), "NVDA": D("302969"), "INTC": D("59879"), "MRVL": D("9451")},
+            ttm_sales,
+        )
+        enterprise_value = {"AMD": D("651500"), "NVDA": D("4310000"), "INTC": D("290500"), "MRVL": D("118300")}
+        revenue_source_urls = {
+            "AMD": (target_url, qdd["AMD"]),
+            "NVDA": (filings["NVDA"][1], qdd["NVDA"]),
+            "INTC": (filings["INTC"][1], "https://www.sec.gov/Archives/edgar/data/50863/000005086326000188/q326earningsrelease.htm", qdd["INTC"]),
+            "MRVL": (filings["MRVL"][1], "https://investor.marvell.com/sec-filings/all-sec-filings/content/0001835632-26-000022/q227_8kx812026ex-991.htm", qdd["MRVL"]),
+        }
+        target_periods = {
+            "AMD": "TTM through 2026-09-26",
+            "NVDA": "TTM through 2026-07-26",
+            "INTC": "TTM through 2026-09-26",
+            "MRVL": "TTM through 2026-08-01",
+        }
+
+        def real_issuer(ticker, model, tier, rationale):
+            metric = PeerMetric(
+                name="ev_sales", value=enterprise_value[ticker] / ttm_sales[ticker], unit="multiple",
+                definition="Enterprise value as of 2026-11-05 / latest reported GAAP TTM revenue",
+                period=target_periods[ticker], basis="GAAP; USD millions; QDD enterprise value snapshot",
+                published_at=as_of, source_url=qdd[ticker], currency="USD",
+                period_alignment_group="latest reported TTM as of 2026-11-05",
+                basis_group="GAAP reported revenue and same-date enterprise value",
+                supporting_source_urls=revenue_source_urls[ticker],
+            )
+            fit = {}
+            if ticker != "AMD":
+                peer_date, peer_url = filings[ticker]
+                for dimension in FIT_DIMENSIONS:
+                    partial = dimension in {"revenue_profit_mix", "customer_base", "capital_intensity"}
+                    fit[dimension] = EconomicFitEvidence(
+                        alignment="PARTIAL" if partial else "MATCH",
+                        target_summary="AMD combines data-center CPUs/GPUs with client/gaming and embedded processors.",
+                        peer_summary={
+                            "NVDA": "Accelerated compute, networking, gaming GPUs and software platform.",
+                            "INTC": "Client and data-center CPU products plus integrated manufacturing and foundry.",
+                            "MRVL": "Data-infrastructure semiconductors, custom ASICs, interconnect and storage controllers.",
+                        }[ticker],
+                        rationale=rationale,
+                        target_published_at="2026-11-04", target_source_url=target_url,
+                        published_at=peer_date, source_url=peer_url,
+                    )
+            return IssuerSnapshot(
+                ticker=ticker, sector="Technology", industry="Semiconductors",
+                business_model=model, as_of=as_of, metrics={"ev_sales": metric}, cyclical=True,
+                comparison_group="Technology/Semiconductors/compute-and-data-infrastructure",
+                inclusion_rationale=rationale, peer_tier=tier, economic_fit=fit,
+            )
+
+        target = real_issuer(
+            "AMD", "fabless compute and AI semiconductors", "DIRECT",
+            "Target issuer for a dated same-industry compute and data-infrastructure screen.",
+        )
+        peers = [
+            real_issuer("NVDA", "accelerated compute platform", "DIRECT",
+                        "Direct product-market overlap in data-center accelerated compute and GPUs; platform, software, and profitability mix are material caveats."),
+            real_issuer("INTC", "integrated processor designer and manufacturer", "DIRECT",
+                        "Direct CPU competition across client and data-center markets; foundry ownership and capital intensity differ materially."),
+            real_issuer("MRVL", "data-infrastructure semiconductor designer", "DIRECT",
+                        "Custom silicon and data-center connectivity overlap with AMD infrastructure markets; whole-company product and customer mix differ."),
+        ]
+        result = compare_peer_set(target, peers, as_of)
+        self.assertEqual("COMPARABLE", result["status"])
+        self.assertEqual(3, result["direct_peer_count"])
+        self.assertEqual(3, result["core_metric_peer_counts"]["ev_sales"])
+        self.assertIsNone(result["recommendation"])
+        self.assertFalse(result["ranked"])
+        self.assertTrue(result["cycle_normalization_required"])
+        self.assertEqual(
+            str(D("651500") / D("45436")),
+            next(row for row in result["peers"] if row["ticker"] == "NVDA")["metrics"]["ev_sales"]["target_value"],
+        )
+        nvda_row = next(row for row in result["peers"] if row["ticker"] == "NVDA")
+        self.assertEqual([target_url, qdd["AMD"]], nvda_row["metrics"]["ev_sales"]["target_supporting_source_urls"])
+        self.assertEqual([filings["NVDA"][1], qdd["NVDA"]], nvda_row["metrics"]["ev_sales"]["supporting_source_urls"])
+
+    def test_invalid_supporting_metric_source_is_not_meaningful(self):
+        target = issuer("AMD")
+        peers = [issuer("P1"), issuer("P2"), issuer("P3")]
+        invalid_metric = replace(peers[0].metrics["ev_sales"], supporting_source_urls=("http://not-secure.example/source",))
+        peers[0] = replace(peers[0], metrics={**peers[0].metrics, "ev_sales": invalid_metric})
+        result = compare_peer_set(target, peers, AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("INVALID_SUPPORTING_SOURCE_URL", row["metrics"]["ev_sales"]["reason"])
+
     def test_real_qdd_fy2027_snapshot_keeps_adjacent_models_out_of_amd_cohort(self):
         """Public consensus observations are not peer evidence without model and period fit."""
         as_of = "2026-11-05"
@@ -447,7 +569,17 @@ class PeerComparisonTests(unittest.TestCase):
 
     def test_cycle_flag_survives_into_snapshot_and_plot_uses_same_data(self):
         target = replace(issuer("TARGET"), cyclical=True)
-        result = compare_peer_set(target, [issuer("P1"), issuer("P2"), issuer("P3")], AS_OF)
+        target_metrics = dict(target.metrics)
+        target_metrics["forward_pe"] = replace(
+            target_metrics["forward_pe"], supporting_source_urls=("https://issuer.example/target/price",)
+        )
+        target = replace(target, metrics=target_metrics)
+        peer = issuer("P1")
+        peer_metrics = dict(peer.metrics)
+        peer_metrics["forward_pe"] = replace(
+            peer_metrics["forward_pe"], supporting_source_urls=("https://issuer.example/p1/shares",)
+        )
+        result = compare_peer_set(target, [replace(peer, metrics=peer_metrics), issuer("P2"), issuer("P3")], AS_OF)
         self.assertTrue(result["cycle_normalization_required"])
         self.assertTrue(next(p for p in result["plot"]["points"] if p["ticker"] == "TARGET")["cycle_normalization_required"])
         with TemporaryDirectory() as tmp:
@@ -456,6 +588,8 @@ class PeerComparisonTests(unittest.TestCase):
             if rendered["status"] == "RENDERED_STATIC":
                 self.assertTrue(Path(rendered["path"]).is_file())
                 self.assertEqual(result["plot"]["snapshot_id"], rendered["snapshot_id"])
+                self.assertIn("https://issuer.example/target/price", rendered["source_urls"])
+                self.assertIn("https://issuer.example/p1/shares", rendered["source_urls"])
 
     def test_plot_blocks_when_table_has_no_compatible_peer_points(self):
         target = issuer("TARGET")
