@@ -664,6 +664,8 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
         iteration07_hashes = {}
         if iteration07_paths and iteration07_cfg_path.is_file():
             iteration07_hashes = (yaml.safe_load(iteration07_cfg_path.read_text(encoding="utf-8")) or {}).get("source_sha256") or {}
+        iteration08_cfg_path = root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml"
+        iteration08_hashes = (yaml.safe_load(iteration08_cfg_path.read_text(encoding="utf-8")) or {}).get("source_sha256") or {}
         for rel in expected:
             path = root / rel
             if not path.is_file():
@@ -671,9 +673,7 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             if digest != hashes[rel] and not (
                 rel in iteration07_paths and iteration07_hashes.get(rel) == digest
-            ) and not (
-                (yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}).get("source_sha256", {}).get(rel) == digest
-            ):
+            ) and iteration08_hashes.get(rel) != digest:
                 return set()
         if not all((root / path).is_file() for path in test_modules):
             return set()
@@ -705,7 +705,11 @@ def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROO
             for key in ("input", "rubric"):
                 support.add(str(Path(cases_path).parent / str(item.get(key) or "")))
         support.add("scripts/eval/campaign.py")
-        expected_hashes = behavior | support | {"release/production-readiness.yaml"}
+        expected_hashes = behavior | support | {
+            "release/production-readiness.yaml",
+            "CATALOG.md",
+            "docs/catalog.json",
+        }
         if (
             cfg.get("campaign") != "iteration-08-investing-monitoring-2026-11"
             or cfg.get("runtime_status") != "NOT_RUN"
@@ -874,15 +878,15 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or set(hashes) != expected_behavior | expected_modules | expected_support
         ):
             return set()
+        iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
+        iter08_hashes = iter08_cfg.get("source_sha256") or {}
         for rel, digest in hashes.items():
             file_path = root / rel
             if not file_path.is_file():
                 return set()
             actual_digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
             if actual_digest != digest:
-                iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
-                if (rel not in (iter08_cfg.get("source_sha256") or {})
-                        or (iter08_cfg.get("source_sha256") or {}).get(rel) != actual_digest):
+                if iter08_hashes.get(rel) != actual_digest:
                     return set()
         for rel in expected_behavior | expected_modules:
             if not (root / rel).is_file():
@@ -1170,6 +1174,8 @@ def separately_validated_systemic_risk_paths(root: Path = ROOT) -> set[str]:
             or set(actual) != set(required)
         ):
             return set()
+        iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
+        iter08_hashes = iter08_cfg.get("source_sha256") or {}
         for rel in expected:
             path = root / rel
             if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
@@ -1236,9 +1242,7 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
                 return set()
             actual_digest = hashlib.sha256(path.read_bytes()).hexdigest()
             if actual_digest != hashes[rel]:
-                iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
-                if (rel not in (iter08_cfg.get("source_sha256") or {})
-                        or (iter08_cfg.get("source_sha256") or {}).get(rel) != actual_digest):
+                if iter08_hashes.get(rel) != actual_digest:
                     return set()
         for name, rel in suites.items():
             suite_path = root / str(rel)

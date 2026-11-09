@@ -57,8 +57,10 @@ test_modules:
   - evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
   - scripts/eval/tests/test_runtime_campaign.py
 source_sha256:
-  adapters/skills-factory-cloud-next/src/cloud-tools.ts: "48599e4691cd4220a4a3e8c5754f28d64f41491596c44ae9a73de929395b68a6"
+  CATALOG.md: "568aa330ccfa3bdedbaa5e7065b86d30e2e589f4a85d7bad35993de7034ce8ae"
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: "1ec4cb42e0c6c1aa0569e2fbca8338d0375e1c48051f4c7aaf265fcca2ab9f67"
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: "9efe43384e992e09388d86631c6d5a8f33039c073deeb01b4420026d7f7f7d4b"
+  docs/catalog.json: "e35dbf84ecac2da2ff32316075fd791c2ba9ccf3a0bea227cda190fe1bba2cc4"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml: "c2c406b56460ae809a44db3d31cf3f47a3b761fe6c62a66d55e0184c60e08787"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml: "de76470d524da9a44c1466a42a23311dbecbf5147a5454f636505be1feec535c"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-01.input.md: "2abb912ff311c10c907672bffca35b3de8242b6a9494d86b9c73bf355cc464f0"
@@ -90,7 +92,7 @@ source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
   release/production-readiness.yaml: "cc6312e2a9a37e309bbc74f634e225dda55a97eda9f2c53ed83d6c0434db1af3"
-  scripts/eval/campaign.py: "354b09a13de73e2bd5b479e898bd7fd98f6067b8ccebeba23d28f3cae92139d3"
+  scripts/eval/campaign.py: "1fca8a584b6d1bf93f8ee76c9dca8d29894359e8cf07f2ccd277c04720168e15"
   scripts/eval/tests/test_runtime_campaign.py: "1ba56d69711eed9d9063f7da16b780eb07487a3bda03fc9ad7a9def887f51a75"
   skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"
   skills/investing/security-underwriting/tests/cases.yaml: "a9d2e7c23027d9feae8044036fe544eaa3845e7723cdf7961ae5bf817b2e8638"

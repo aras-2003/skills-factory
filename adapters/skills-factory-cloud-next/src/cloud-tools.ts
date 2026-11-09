@@ -194,7 +194,7 @@ export function routeInvestment(userRequest: string) {
     .replace(/\bbez\b[^.!?;:\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
   const methodologyAudit = /\b(?:audit|audyt\w*|review|inspect|evaluate|compare|sprawdz|przejrzyj|ocen|porownaj|zrob\w*|przeanalizuj)\b/.test(s)
-    && /\b(?:methodolog\w*|workflow|workflows|process|routing|router|skill architecture|investment os|investment system|metodyk\w*|proces\w*|przeplyw\w*|architektur\w*|system inwestycyjn\w*)\b/.test(s);
+    && /\b(?:methodolog\w*|workflow|workflows|process|skill architecture|investment os|investment system|metodyk\w*|proces\w*|przeplyw\w*|architektur\w*|system inwestycyjn\w*)\b/.test(s);
   const replayText = s.replace(/\bno\s+(?:portfolio|holdings?|trades?|policy|writes?)\b[^.!?;,\n]*/g, "");
   const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);
   const historicalContext = replayText.split(/[.!?;,:]/).some(clause =>
