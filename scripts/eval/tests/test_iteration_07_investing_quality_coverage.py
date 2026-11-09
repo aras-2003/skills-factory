@@ -50,7 +50,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(
             {
                 "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
-                "Issue #306 has a source-backed local MU cohort for three direct peers; exact-runtime acceptance and supported growth/forecast metrics remain unverified.",
+                "Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.",
             },
             set(cfg["runtime_blockers"]),
         )

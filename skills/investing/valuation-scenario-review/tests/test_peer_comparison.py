@@ -65,7 +65,8 @@ class PeerComparisonTests(unittest.TestCase):
         Valuation and TTM ratios are S&P Global Market Intelligence as surfaced
         by StockAnalysis. Issuer filings support business-fit review and latest
         reported periods. This is a descriptive cycle-sensitive screen, not a
-        recommendation or ranking. Forward P/E and growth remain explicitly N/M.
+        recommendation or ranking. Forward P/E remains N/M; growth is admitted
+        only where the provider has a compatible latest/prior twelve-month basis.
         """
         as_of = "2026-11-08"
         stats = {
@@ -109,6 +110,31 @@ class PeerComparisonTests(unittest.TestCase):
             "KIOXIA": "TTM through 2026-09-30",
         }
         currencies = {"MU": "USD", "SKHYNIX": "KRW", "NANYA": "TWD", "KIOXIA": "JPY"}
+        statement_urls = {
+            "MU": "https://stockanalysis.com/stocks/mu/financials/income-statement/",
+            "SKHYNIX": "https://stockanalysis.com/quote/krx/000660/financials/income-statement/",
+            "NANYA": "https://stockanalysis.com/quote/tpe/2408/financials/income-statement/",
+            "KIOXIA": "https://stockanalysis.com/quote/tyo/285A/financials/income-statement/",
+        }
+        cash_flow_urls = {
+            "MU": "https://stockanalysis.com/stocks/mu/financials/cash-flow-statement/",
+            "SKHYNIX": "https://stockanalysis.com/quote/krx/000660/financials/cash-flow-statement/",
+        }
+        provider_dates = {"MU": "2026-10-09", "SKHYNIX": "2026-10-28",
+                          "NANYA": "2026-10-12", "KIOXIA": "2026-10-30"}
+        revenue_growth = {"MU": "2.5633", "SKHYNIX": "2.2031",
+                          "NANYA": "5.8584", "KIOXIA": "2.6479"}
+        # Fractions: MU FY2026/FY2025 FCF; SK hynix TTM through Sep 2026 vs
+        # Sep 2025, reconstructed from four provider-reported quarters each.
+        fcf_growth = {"MU": str(D("58963") / D("1668") - D("1")),
+                      "SKHYNIX": str(D("124515827") / D("8013550") - D("1"))}
+        growth_periods = {
+            "MU": "FY2026 ended 2026-09-03 vs FY2025 ended 2025-08-28",
+            "SKHYNIX": "TTM through 2026-09-30 vs TTM through 2025-09-30",
+            "NANYA": "TTM through 2026-09-30 vs prior-year TTM",
+            "KIOXIA": "TTM through 2026-09-30 vs prior-year TTM",
+        }
+        growth_alignment = "latest twelve-month period YoY; current end dates 2026-09-03 through 2026-09-30"
         peer_summaries = {
             "SKHYNIX": "DRAM/HBM and NAND manufacturer; larger HBM mix and scale than MU.",
             "NANYA": "DRAM-focused manufacturer; no comparable NAND scale and materially smaller customer/product mix.",
@@ -140,17 +166,38 @@ class PeerComparisonTests(unittest.TestCase):
                     basis_group="S&P Global Market Intelligence TTM methodology; local reporting currency and as-reported accounting",
                     supporting_source_urls=(filings[ticker][1],),
                 )
-            # The latest price is Nov 6. Statistics were last updated Nov 8.
-            # Forward P/E horizon and comparable revenue/FCF growth series are
-            # not evidenced in the frozen snapshot, so they are explicit N/M.
-            for name, unit, definition in (
-                ("forward_pe", "multiple", "forward P/E with explicit NTM/12M horizon"),
-                ("revenue_growth", "fraction", "reported TTM revenue growth versus prior-year TTM"),
-                ("fcf_growth", "fraction", "reported TTM free-cash-flow growth versus prior-year TTM"),
+            # The latest price is Nov 6. Forward P/E remains N/M because the
+            # source does not give a comparable NTM/12M horizon. Revenue growth
+            # is the provider's latest TTM YoY. FCF growth is admitted only
+            # where a positive prior twelve-month FCF base is evidenced.
+            metrics["forward_pe"] = PeerMetric(
+                name="forward_pe", value=None, unit="multiple",
+                definition="forward P/E with explicit NTM/12M horizon",
+                period="N/M: source horizon not specified", basis="N/M", published_at=as_of,
+                source_url=stats[ticker], currency=currencies[ticker])
+            for name, values, source_map in (
+                ("revenue_growth", revenue_growth, statement_urls),
+                ("fcf_growth", fcf_growth, cash_flow_urls),
             ):
-                metrics[name] = PeerMetric(name=name, value=None, unit=unit, definition=definition,
-                    period="N/M: compatible horizon/series not verified", basis="N/M", published_at=as_of,
-                    source_url=stats[ticker], currency=currencies[ticker])
+                value = values.get(ticker)
+                period = growth_periods[ticker]
+                is_revenue = name == "revenue_growth"
+                if value is None and ticker == "NANYA" and name == "fcf_growth":
+                    period = "N/M: prior-year TTM FCF is negative; percentage growth is not meaningful"
+                elif value is None:
+                    period = "N/M: compatible prior TTM FCF series not verified"
+                metrics[name] = PeerMetric(
+                    name=name, value=D(value) if value is not None else None, unit="fraction",
+                    definition=("reported latest-TTM revenue growth versus prior-year TTM"
+                                if is_revenue else "reported FCF growth versus prior-year twelve-month period; FCF = operating cash flow less capital expenditures"),
+                    period=period,
+                    basis=("S&P Global Market Intelligence; provider-reported TTM growth" if is_revenue
+                           else "S&P Global Market Intelligence; FCF = operating cash flow less capital expenditures"),
+                    published_at=provider_dates[ticker],
+                    source_url=source_map.get(ticker, stats[ticker]), currency=currencies[ticker],
+                    period_alignment_group=growth_alignment,
+                    basis_group=("S&P Global provider-reported TTM YoY revenue growth" if is_revenue
+                                 else "reported cash from operations less capital expenditures, twelve-month YoY"))
             fit = {}
             if ticker != "MU":
                 peer_date, peer_url = filings[ticker]
@@ -181,8 +228,15 @@ class PeerComparisonTests(unittest.TestCase):
         self.assertIsNone(result["recommendation"])
         self.assertFalse(result["ranked"])
         nanya = next(row for row in result["peers"] if row["ticker"] == "NANYA")
+        hynix = next(row for row in result["peers"] if row["ticker"] == "SKHYNIX")
+        self.assertEqual("2.5633", hynix["metrics"]["revenue_growth"]["target_value"])
+        self.assertEqual("2.2031", hynix["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("5.8584", nanya["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("2.6479", next(row for row in result["peers"] if row["ticker"] == "KIOXIA")["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("14.53816061545756874294164259", hynix["metrics"]["fcf_growth"]["value"])
+        self.assertEqual("34.34952038369304556354916067", hynix["metrics"]["fcf_growth"]["target_value"])
         self.assertEqual("N/M", nanya["metrics"]["forward_pe"]["value"])
-        self.assertEqual("N/M", nanya["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("N/M", nanya["metrics"]["fcf_growth"]["value"])
         self.assertEqual("PARTIAL", nanya["economic_fit"]["revenue_profit_mix"]["alignment"])
 
     def test_real_amd_ttm_snapshot_admits_three_economically_reviewed_direct_peers(self):

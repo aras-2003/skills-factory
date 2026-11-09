@@ -34,7 +34,6 @@ test("sync mirrors only the clean, same-Site canonical source and preserves chec
   try {
     const monorepo = path.join(temporary, "skills-factory");
     const siteSource = path.join(monorepo, "sites", "skills-factory-site");
-    const adapterSource = path.join(monorepo, "adapters", "skills-factory-cloud-next");
     const target = path.join(temporary, "provider-site-checkout");
     initRepository(monorepo);
     writeFile(monorepo, "sites/skills-factory-site/.openai/hosting.json", JSON.stringify({ project_id: projectId }));
