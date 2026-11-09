@@ -7,3 +7,7 @@ This append-only status decision supplements the frozen [Iteration 07 record](it
 - **Disposition:** no Iteration 7 issue is accepted or closed by this abort. It does not imply release approval or production maturity.
 - **Carry-forward owner:** Arkadiusz Kamrowski. Target iteration is not assigned here; #306 is excluded from the frozen Iteration 8 commitment.
 - **Iteration 8 scope lock:** [`iteration-08-investing-monitoring-2026-11.md`](iteration-08-investing-monitoring-2026-11.md); frozen scope tree `0f32e76e7642cfe12f39a5034605eb2fa5fc8e26`, baseline main `0646cd0c4588b889070960c777e07829c3477b9e`.
+
+## Append-only correction — 2026-11-10
+
+The GitHub issue state was rechecked after this decision. #306 is closed as completed on 2026-11-09 via PR #600; the live issue records Site v126, source SHA `3bdeef677347d81b56fcbb5ba9e83722869a869c`, and the final closeout disposition. The “remains open” statement above reflected stale local issue state and is superseded by this correction. The owner-abort of Iteration 7 remains valid; #306 is completed prior-iteration work, not carry-forward into Iteration 8. No reopen was performed.

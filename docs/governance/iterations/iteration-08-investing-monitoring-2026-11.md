@@ -62,3 +62,7 @@ Campaign definition, prompt/rubric/input hashes, final changed-path impact map, 
 - Issue / Project / PR reconciliation: pending.
 - Owner proposal / reviewer acceptance / decision timestamp: pending.
 - Next iteration eligibility: no automatic start or production promotion.
+
+## Append-only issue-state correction — 2026-11-10
+
+The frozen scope and opening status above were prepared from stale local issue data and describe #306 as unresolved. The live GitHub issue is closed as completed on 2026-11-09 through PR #600, with final Site/source receipts recorded on the issue. Therefore #306 is not an Iteration 8 carry-forward and must not be reopened or counted as Iteration 8 scope without a new explicit owner decision. Iteration 8 remains limited to #308–#310.

@@ -1,0 +1,1 @@
+Przejrzyj metodologię i przepływ pracy Investment OS dla tickera AMD; chodzi o audyt procesu, nie analizę spółki. Użyj wyłącznie dostarczonych artefaktów workflow. Nie czytaj portfela ani nie zapisuj rekordów kanonicznych.

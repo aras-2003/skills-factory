@@ -1,0 +1,14 @@
+schema_version: "1.0"
+id: investment-methodology-audit-incidental-ticker-pl
+mode: natural-routing
+expected_target: investment-os-review
+language: pl
+competing_intents:
+  - investment-security-review
+required_tool_fragments:
+  - route_investment_request
+assertions:
+  manual:
+    - audyt procesu pozostaje właściwym przedmiotem mimo przypadkowej wzmianki o AMD
+    - nie uruchamia się analizy spółki ani odczytu/zapisu portfela
+    - wybór routingu nie jest przedstawiany jako wykonanie workflow

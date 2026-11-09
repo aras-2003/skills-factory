@@ -1,0 +1,54 @@
+campaign: iteration-08-investing-monitoring-2026-11
+schema_version: "1.0"
+scope: investing_monitoring_iteration_08
+execution_channel: cloud_next_site
+runtime_target: Skills Factory Cloud Next Site (owner-only)
+runtime_status: NOT_RUN
+candidate_source_revision: pending
+candidate_source_revision_status: not_merged
+source_base_revision: 40420bc28c85826c2f28cb9709c34c45f583b487
+runtime_source_revision_required: true
+runtime_source_revision: pending
+runtime_release_id: pending
+runtime_attestation: pending
+runtime_evidence: evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md
+runtime_canonical_source_revision: pending
+runtime_site_version: pending
+runtime_deployment_id: pending
+runtime_blockers:
+  - exact candidate has not been merged and deployed
+release_approved: false
+historical_r20_immutable: true
+status_note: >-
+  Scope is limited to GitHub issues #308, #309 and #310. #306 is already closed as completed through PR #600 and is not an Iteration 8 carry-forward. Offline validation and exact-Site runtime acceptance have not run. Site deployment is separately authorized by the owner but must use the exact merged candidate after implementation and CI.
+behavior_case_suite: evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
+required_case_ids:
+  - iter08-kpi-trigger-boundaries
+  - iter08-expectations-bridge
+  - iter08-methodology-router
+routing_registry: evals/routing/registry.yaml
+routing_case_ids:
+  - investment-methodology-audit-incidental-ticker-en
+  - investment-methodology-audit-incidental-ticker-pl
+  - investment-security-natural-en
+in_scope_behavior_paths:
+  - skills/investing/security-underwriting/SKILL.md
+  - skills/investing/security-underwriting/tests/cases.yaml
+  - skills/investing/thesis-monitor/SKILL.md
+  - skills/investing/thesis-monitor/tests/cases.yaml
+  - skills/investing/valuation-scenario-review/SKILL.md
+  - skills/investing/valuation-scenario-review/tests/cases.yaml
+  - workflows/investment-os-review/WORKFLOW.md
+  - workflows/investment-os-review/tests/cases.yaml
+  - adapters/skills-factory-cloud-next/src/cloud-tools.ts
+  - adapters/skills-factory-cloud-next/tests/contracts.test.ts
+test_modules:
+  - adapters/skills-factory-cloud-next/tests/contracts.test.ts
+  - skills/investing/security-underwriting/tests/cases.yaml
+  - skills/investing/thesis-monitor/tests/cases.yaml
+  - skills/investing/valuation-scenario-review/tests/cases.yaml
+  - workflows/investment-os-review/tests/cases.yaml
+  - evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
+  - evals/routing/registry.yaml
+  - evals/runtime-fixtures.yaml
+source_sha256: {}

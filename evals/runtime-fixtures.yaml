@@ -1,5 +1,14 @@
 schema_version: "2.0"
 targets:
+  investment-os-review:
+    - id: iter08-methodology-audit-ticker-en
+      mode: natural-routing
+      input: evals/routing/investment-methodology-audit-incidental-ticker-en.input.md
+      rubric: evals/routing/investment-methodology-audit-incidental-ticker-en.rubric.yaml
+    - id: iter08-methodology-audit-ticker-pl
+      mode: natural-routing
+      input: evals/routing/investment-methodology-audit-incidental-ticker-pl.input.md
+      rubric: evals/routing/investment-methodology-audit-incidental-ticker-pl.rubric.yaml
   skill-authoring:
     - id: authoring-essential-provider-unavailable
       mode: explicit

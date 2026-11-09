@@ -127,3 +127,10 @@ cases:
       should_trigger: true
       must: ["90 days", "source", "N/M"]
       must_not: ["stale revision as current consensus"]
+  - id: valuation-consensus-actual-guidance-bridge
+    case: Like-for-like dated bridge and independent operating evaluation
+    input: "For a synthetic issuer, bridge pre-event consensus, a timestamped revision, actual and guidance with source, period, definition and basis. Assess original operating assumptions independently from multiple change and stock return."
+    expected:
+      should_trigger: true
+      must: ["pre-event", "timestamp", "actual", "guidance", "like-for-like", "UNKNOWN", "OBSERVED", "INTERPRETATION"]
+      must_not: ["lookahead", "stock return alone proves thesis"]

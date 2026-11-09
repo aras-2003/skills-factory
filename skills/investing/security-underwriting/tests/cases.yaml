@@ -39,6 +39,20 @@ cases:
       should_trigger: true
       must: ["OBSERVED", "VERIFIED EVENT", "INTERPRETATION", "CONFIDENCE"]
       must_not: ["fell because capex without evidence"]
+  - id: underwriting-kpi-trigger-matrix
+    case: Material assumptions require predeclared, source-backed KPI triggers
+    input: "Build a thesis for a synthetic issuer with two critical assumptions. For each, define the KPI basis, verified baseline, source and timestamp, threshold or NOT_SET, rolling window, cadence, next check and MONITOR/REVIEW/ESCALATE action. Separate review triggers from approved kill criteria and do not authorize trades."
+    expected:
+      should_trigger: true
+      must: ["threshold", "NOT_SET", "rolling", "MONITOR", "REVIEW", "ESCALATE", "ACTIVE", "no automatic"]
+      must_not: ["auto-sell", "invent persistence"]
+  - id: underwriting-expectations-bridge-no-lookahead
+    case: Dated consensus actual and guidance bridge
+    input: "Evaluate a synthetic earnings event with a pre-event consensus snapshot, a later timestamped revision, reported actuals and company guidance. Align periods and accounting definitions, then replay the decision as of the pre-event timestamp without lookahead."
+    expected:
+      should_trigger: true
+      must: ["consensus", "actual", "guidance", "timestamp", "period", "as-of", "UNKNOWN", "OBSERVED", "INTERPRETATION"]
+      must_not: ["use future revision as decision input", "claim price move proves thesis failure"]
 
   - id: underwriting-history
     case: Full underwriting includes historical price and KPI trends

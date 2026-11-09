@@ -193,6 +193,8 @@ export function routeInvestment(userRequest: string) {
     // Polish exclusion lists commonly separate items with commas after "bez".
     .replace(/\bbez\b[^.!?;:\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
+  const methodologyAudit = /\b(?:audit|audyt\w*|review|inspect|evaluate|compare|sprawdz|przejrzyj|ocen|porownaj|zrob\w*|przeanalizuj)\b/.test(s)
+    && /\b(?:methodolog\w*|workflow|workflows|process|routing|router|skill architecture|investment os|investment system|metodyk\w*|proces\w*|przeplyw\w*|architektur\w*|system inwestycyjn\w*)\b/.test(s);
   const replayText = s.replace(/\bno\s+(?:portfolio|holdings?|trades?|policy|writes?)\b[^.!?;,\n]*/g, "");
   const explicitReplayIntent = /historical decision|decision replay|replay.*(decision|portfolio|rule)|walk.forward|out.of.sample|as.of snapshot|decision date|rebuild.{0,40}(thesis|portfolio|exposure)|odtworz.{0,30}(decyz|portfel|tez)/.test(replayText);
   const historicalContext = replayText.split(/[.!?;,:]/).some(clause =>
@@ -227,6 +229,7 @@ export function routeInvestment(userRequest: string) {
     && (!singleSecurityIntent || aggregateExposureIntent);
   let candidates: string[] = [], reason = "No unambiguous decision object matched.";
   if (explicit.length) { candidates = [...explicit]; reason = "Explicit workflow names in the request."; }
+  else if (methodologyAudit) { candidates = ["investment-os-review"]; reason = "The decision object is an Investment OS methodology or workflow audit; incidental tickers do not make it a single-security review."; }
   else if (policyDesignIntent) { candidates = [routes[6]]; reason = "The user explicitly asks to define or change investment rules or risk limits."; }
   else if (systemicRiskTriage && !replay && (!portfolio || /issuer exposure|cross.asset|credit|macro/.test(s))) { candidates = [routes[5]]; reason = "The decision object is systemic or cross-asset risk observation; historical vintage and missing portfolio evidence remain explicit."; }
   else if (replay) { candidates = [routes[7]]; reason = "The request reconstructs or evaluates a historical decision with as-of or out-of-sample constraints."; }
@@ -242,7 +245,7 @@ export function routeInvestment(userRequest: string) {
   else if (portfolio) { candidates = [routes[1]]; reason = "A portfolio-level review is the decision object."; }
   else if (theme) { candidates = [routes[4]]; reason = "Thematic or value-chain research."; }
   else if (policy) { candidates = [routes[6]]; reason = "Investment policy or limits are the decision object."; }
-  const investmentContext = explicit.length > 0 || replay || technicalStructure || systemicRiskTriage || singleSecurityIntent || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
+  const investmentContext = explicit.length > 0 || replay || technicalStructure || systemicRiskTriage || methodologyAudit || singleSecurityIntent || /investment|investing|portfolio|stock|security|securities|etf|fund|holdings|watchlist|inwestyc|portfel|spol|akcj|share|thesis|gross margin|marza brutto|research candidates/.test(s) || opportunity || theme || policy;
   const unrelatedGovernance = /security\.md|codeowners|report os.*production.ready/.test(s);
   const applicable = !editingOnly && !unrelatedGovernance && investmentContext;
   if (!applicable) { candidates = []; reason = editingOnly ? "request is limited to a non-investment editing task" : "no investment decision object was identified"; }

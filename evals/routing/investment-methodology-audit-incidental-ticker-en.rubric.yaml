@@ -1,0 +1,14 @@
+schema_version: "1.0"
+id: investment-methodology-audit-incidental-ticker-en
+mode: natural-routing
+expected_target: investment-os-review
+language: en
+competing_intents:
+  - investment-security-review
+required_tool_fragments:
+  - route_investment_request
+assertions:
+  manual:
+    - the process audit remains the decision object despite incidental MU mention
+    - no single-security underwriting or portfolio read/write is initiated
+    - route selection is not represented as child execution
