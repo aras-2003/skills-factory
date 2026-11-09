@@ -739,6 +739,16 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "workflows/investment-security-review/tests/cases.yaml",
         "release/production-readiness.yaml",
         "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-mu-2026-11-09-structured-extract.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-amd-compute-cohort-2026-11-09-web-capture.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-msft-adjacent-2026-11-09-web-capture.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-mu-memory-cohort-2026-11-09-web-capture.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-peer-cohort-full-metrics-2026-11-09.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-peer-cohort-valuation-fields-2026-11-09.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-peer-cohort-ttm-fields-2026-11-09.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/sec-reported-ytd-growth-2026-11-09.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/peer-comparability-amd-2026-11-09-input.json",
+        "evals/campaigns/iteration-07-investing-quality-2026-11/sources/peer-comparability-mu-2026-11-09-input.json",
         "runtime/contracts/mcp-tools-v1.json",
         "sites/skills-factory-site/README.md",
         "evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml",
@@ -793,7 +803,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         modules = set(cfg.get("test_modules") or [])
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
-            or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
+            or cfg.get("runtime_status") != "PASS"
             or cfg.get("candidate_source_revision") != "89c28bf70353b4568c7bc031e128a5f57a0fe24d"
             or cfg.get("candidate_source_revision_status") != "merged_to_main"
             or cfg.get("runtime_canonical_source_revision") != "89c28bf70353b4568c7bc031e128a5f57a0fe24d"
@@ -803,10 +813,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or cfg.get("runtime_deployment_id") != "appgdep_6af1c54254fc8191b505db26d904ea08"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
-            or set(cfg.get("runtime_blockers") or []) != {
-                "Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d. Its UI console exercised compare_peer_comparability with synthetic inputs, but this Codex tool inventory does not expose an MCP call for it; an exact MCP comparator receipt is NOT_RUN.",
-                "#306 remains open: the current AMD and MU snapshots lack an immutable source archive and complete comparable growth/forecast evidence; no full acceptance table or exact comparator-call receipt is available.",
-            }
+            or cfg.get("runtime_blockers") != []
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
             or set(cfg.get("out_of_scope_behavior_paths") or []) != expected_out_of_scope

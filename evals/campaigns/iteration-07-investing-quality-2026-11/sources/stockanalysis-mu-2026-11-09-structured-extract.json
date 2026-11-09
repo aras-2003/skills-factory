@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "capture_type": "structured_page_extract",
+  "source_body_archived": false,
+  "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+  "captured_at_utc": "2026-11-09T14:56:02Z",
+  "firecrawl_scrape_id": "01a1c0ce-8c89-70bd-8e74-5d2e5ebb3b6c",
+  "http_status": 200,
+  "page_title": "Micron Technology (MU) Statistics & Valuation",
+  "page_timezone": "America/New_York",
+  "displayed": {
+    "ticker": "MU",
+    "market_price_usd": 719.03,
+    "market_price_as_of": "2026-11-09 09:55 America/New_York",
+    "enterprise_value_usd_billions": 745.89,
+    "ttm_revenue_usd_billions": 133.19,
+    "ev_sales_reported": 5.35,
+    "ttm_ebitda_usd_billions": 108.84,
+    "ev_ebitda_reported": 6.55
+  },
+  "reconciliation": {
+    "ev_sales_from_displayed_ev_and_revenue": 5.6001952099,
+    "ev_ebitda_from_displayed_ev_and_ebitda": 6.8530871003,
+    "ev_sales_difference_from_reported": 0.2501952099,
+    "ev_ebitda_difference_from_reported": 0.3030871003,
+    "disposition": "CONFLICTED; do not use these displayed multiples as a coherent single-snapshot observation"
+  },
+  "source_notes": [
+    "This file preserves the structured extraction returned by Firecrawl, not the provider's original HTML response body.",
+    "The provider page is mutable and displayed a live market price during the session; this is not an archived 2026-11-06 close snapshot.",
+    "The displayed enterprise value and denominator fields do not reproduce the displayed multiples after direct division."
+  ]
+}

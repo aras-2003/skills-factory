@@ -1,6 +1,7 @@
 """Synthetic regression fixtures for comparable peer and PEG semantics."""
 from dataclasses import replace
 from decimal import Decimal as D
+import json
 from pathlib import Path
 import sys
 import unittest
@@ -360,6 +361,28 @@ class PeerComparisonTests(unittest.TestCase):
         result = compare_peer_set(target, peers, AS_OF)
         row = next(item for item in result["peers"] if item["ticker"] == "P1")
         self.assertEqual("INVALID_SUPPORTING_SOURCE_URL", row["metrics"]["ev_sales"]["reason"])
+
+    def test_conflicted_provider_multiple_is_n_m_and_not_counted(self):
+        capture_path = Path(__file__).resolve().parents[4] / "evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-mu-2026-11-09-structured-extract.json"
+        capture = json.loads(capture_path.read_text(encoding="utf-8"))
+        displayed = capture["displayed"]
+        calculated_ev_sales = D(str(displayed["enterprise_value_usd_billions"])) / D(str(displayed["ttm_revenue_usd_billions"]))
+        self.assertEqual("CONFLICTED", capture["reconciliation"]["disposition"].split(";")[0])
+        self.assertGreater(abs(calculated_ev_sales - D(str(displayed["ev_sales_reported"]))), D("0.2"))
+
+        target = issuer("AMD")
+        peers = [issuer("P1"), issuer("P2"), issuer("P3")]
+        conflicted = replace(
+            peers[0].metrics["ev_sales"], value=D(str(displayed["ev_sales_reported"])),
+            status=EvidenceState.CONFLICTED, source_url=capture["source_url"],
+            published_at="2026-11-09",
+        )
+        peers[0] = replace(peers[0], metrics={**peers[0].metrics, "ev_sales": conflicted})
+        result = compare_peer_set(target, peers, AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("N/M", row["metrics"]["ev_sales"]["value"])
+        self.assertEqual("CONFLICTED", row["metrics"]["ev_sales"]["reason"])
+        self.assertEqual(2, result["core_metric_peer_counts"]["ev_sales"])
 
     def test_real_qdd_fy2027_snapshot_keeps_adjacent_models_out_of_direct_amd_cohort(self):
         """Public consensus observations are not peer evidence without model and period fit."""

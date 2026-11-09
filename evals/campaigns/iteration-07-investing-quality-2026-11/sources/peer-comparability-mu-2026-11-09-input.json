@@ -1,0 +1,1720 @@
+{
+  "as_of": "2026-11-09",
+  "target": {
+    "ticker": "MU",
+    "sector": "Technology",
+    "industry": "Semiconductors",
+    "business_model": "integrated memory manufacturer (DRAM/HBM and NAND)",
+    "as_of": "2026-11-09",
+    "peer_tier": "TARGET",
+    "comparison_group": "Technology/Semiconductors/memory-manufacturing",
+    "cyclical": true,
+    "inclusion_rationale": "Target issuer for a dated, cycle-sensitive memory valuation and growth screen.",
+    "economic_fit": {},
+    "metrics": {
+      "ev_sales": {
+        "name": "ev_sales",
+        "value": "5.658683084315639",
+        "unit": "multiple",
+        "definition": "Recomputed enterprise value divided by captured latest-TTM revenue",
+        "period": "TTM through 2026-09-03",
+        "basis": "Provider-reported EV and TTM revenue; local reporting currency",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+        "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+        "status": "PROVISIONAL"
+      },
+      "ev_ebitda": {
+        "name": "ev_ebitda",
+        "value": "6.924660051451672",
+        "unit": "multiple",
+        "definition": "Recomputed enterprise value divided by captured latest-TTM EBITDA",
+        "period": "TTM through 2026-09-03",
+        "basis": "Provider-reported EV and TTM EBITDA; adjustments not independently reconciled",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+        "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+        "status": "PROVISIONAL"
+      },
+      "revenue_growth_3y": {
+        "name": "revenue_growth_3y",
+        "value": "0.3388",
+        "unit": "fraction",
+        "definition": "Provider field Revenue Growth Forecast (3Y); method/end date undisclosed",
+        "period": "3Y forecast; end date and CAGR convention not stated",
+        "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+        "horizon": "3Y",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [],
+        "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+        "basis_group": "Provider-reported forecast; calculation method undisclosed",
+        "status": "PROVISIONAL"
+      },
+      "eps_growth_3y": {
+        "name": "eps_growth_3y",
+        "value": "0.391",
+        "unit": "fraction",
+        "definition": "Provider field EPS Growth Forecast (3Y); method/end date undisclosed",
+        "period": "3Y forecast; end date and CAGR convention not stated",
+        "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+        "horizon": "3Y",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [],
+        "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+        "basis_group": "Provider-reported forecast; calculation method undisclosed",
+        "status": "PROVISIONAL"
+      },
+      "gross_margin": {
+        "name": "gross_margin",
+        "value": "0.8072",
+        "unit": "fraction",
+        "definition": "Provider-reported TTM gross margin",
+        "period": "TTM through 2026-09-03",
+        "basis": "Provider metric; calculation basis not independently reconciled",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "PROVISIONAL"
+      },
+      "operating_margin": {
+        "name": "operating_margin",
+        "value": "0.7459",
+        "unit": "fraction",
+        "definition": "Provider-reported TTM operating margin",
+        "period": "TTM through 2026-09-03",
+        "basis": "Provider metric; calculation basis not independently reconciled",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "PROVISIONAL"
+      },
+      "fcf_margin": {
+        "name": "fcf_margin",
+        "value": "0.4427",
+        "unit": "fraction",
+        "definition": "Provider-reported TTM free-cash-flow margin",
+        "period": "TTM through 2026-09-03",
+        "basis": "Provider-defined FCF; accounting adjustments not independently reconciled",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "PROVISIONAL"
+      },
+      "roic": {
+        "name": "roic",
+        "value": "0.9342",
+        "unit": "fraction",
+        "definition": "Provider-reported TTM return on invested capital",
+        "period": "TTM through 2026-09-03",
+        "basis": "Provider methodology; numerator and average-capital basis not independently reconciled",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "PROVISIONAL"
+      },
+      "capital_intensity": {
+        "name": "capital_intensity",
+        "value": "0.23057286583076808",
+        "unit": "fraction",
+        "definition": "TTM capital expenditures / TTM revenue",
+        "period": "TTM through 2026-09-03",
+        "basis": "Recomputed from rounded provider TTM capex and revenue",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "PROVISIONAL"
+      },
+      "share_count_change": {
+        "name": "share_count_change",
+        "value": "0.016",
+        "unit": "fraction",
+        "definition": "Reported shares outstanding change versus prior-year snapshot",
+        "period": "YoY to 2026-11-09",
+        "basis": "Provider share-count change; no issuer dilution reconciliation",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "PROVISIONAL"
+      },
+      "revenue_growth": {
+        "name": "revenue_growth",
+        "value": "2.5633",
+        "unit": "fraction",
+        "definition": "Provider-reported latest-TTM revenue growth versus prior-year TTM",
+        "period": "TTM through 2026-09-03 vs TTM through 2025-08-28",
+        "basis": "S&P Global / StockAnalysis latest-TTM YoY field",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://stockanalysis.com/stocks/mu/statistics/"
+        ],
+        "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+        "basis_group": "Provider-reported TTM YoY revenue growth",
+        "status": "PROVISIONAL"
+      },
+      "fcf_growth": {
+        "name": "fcf_growth",
+        "value": "34.34952038369305",
+        "unit": "fraction",
+        "definition": "FCF growth: current TTM FCF / prior-year TTM FCF − 1",
+        "period": "TTM through 2026-09-03 vs TTM through 2025-08-28",
+        "basis": "Cash from operations less capex; local currency; periods aligned by TTM",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/financials/cash-flow-statement/",
+        "supporting_source_urls": [
+          "https://stockanalysis.com/stocks/mu/statistics/",
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+        "basis_group": "Provider financial statements; FCF calculated as operating cash flow less capex",
+        "status": "PROVISIONAL"
+      },
+      "forward_pe": {
+        "name": "forward_pe",
+        "value": null,
+        "unit": "multiple",
+        "definition": "Forward P/E with explicit NTM/12M horizon",
+        "period": "N/M: provider forecast horizon unspecified",
+        "basis": "N/M: no definition-compatible forward estimate",
+        "horizon": "",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"
+        ],
+        "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+        "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+        "status": "UNVERIFIED"
+      },
+      "eps_revision_90d": {
+        "name": "eps_revision_90d",
+        "value": null,
+        "unit": "fraction",
+        "definition": "Consensus EPS estimate revision over the prior 90 days",
+        "period": "N/M: comparable dated consensus revision series not captured",
+        "basis": "N/M: forecast source and revision history unavailable in the captured source set",
+        "horizon": "90D",
+        "currency": "USD",
+        "published_at": "2026-11-09",
+        "source_url": "https://stockanalysis.com/stocks/mu/statistics/",
+        "supporting_source_urls": [],
+        "period_alignment_group": "N/M: dated 90-day analyst revision series unavailable",
+        "basis_group": "N/M: provider revision series not captured",
+        "status": "UNVERIFIED"
+      }
+    }
+  },
+  "peers": [
+    {
+      "ticker": "SKHYNIX",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "business_model": "memory manufacturer with DRAM/HBM and NAND",
+      "as_of": "2026-11-09",
+      "peer_tier": "DIRECT",
+      "comparison_group": "Technology/Semiconductors/memory-manufacturing",
+      "cyclical": true,
+      "inclusion_rationale": "Direct whole-company memory-manufacturing economics; larger HBM mix, product/customer and capex differences remain.",
+      "economic_fit": {
+        "value_chain_role": {
+          "alignment": "MATCH",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "SK hynix manufactures DRAM/HBM and NAND with larger HBM mix and scale than Micron.",
+          "rationale": "Direct whole-company memory-manufacturing economics; larger HBM mix, product/customer and capex differences remain.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-28",
+          "source_url": "https://news.skhynix.com/en/q3-2026-business-results/"
+        },
+        "revenue_profit_mix": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "SK hynix manufactures DRAM/HBM and NAND with larger HBM mix and scale than Micron.",
+          "rationale": "Direct whole-company memory-manufacturing economics; larger HBM mix, product/customer and capex differences remain.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-28",
+          "source_url": "https://news.skhynix.com/en/q3-2026-business-results/"
+        },
+        "customer_base": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "SK hynix manufactures DRAM/HBM and NAND with larger HBM mix and scale than Micron.",
+          "rationale": "Direct whole-company memory-manufacturing economics; larger HBM mix, product/customer and capex differences remain.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-28",
+          "source_url": "https://news.skhynix.com/en/q3-2026-business-results/"
+        },
+        "cyclicality": {
+          "alignment": "MATCH",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "SK hynix manufactures DRAM/HBM and NAND with larger HBM mix and scale than Micron.",
+          "rationale": "Direct whole-company memory-manufacturing economics; larger HBM mix, product/customer and capex differences remain.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-28",
+          "source_url": "https://news.skhynix.com/en/q3-2026-business-results/"
+        },
+        "capital_intensity": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "SK hynix manufactures DRAM/HBM and NAND with larger HBM mix and scale than Micron.",
+          "rationale": "Direct whole-company memory-manufacturing economics; larger HBM mix, product/customer and capex differences remain.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-28",
+          "source_url": "https://news.skhynix.com/en/q3-2026-business-results/"
+        }
+      },
+      "metrics": {
+        "ev_sales": {
+          "name": "ev_sales",
+          "value": "2.7078413900646026",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM revenue; local reporting currency",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "ev_ebitda": {
+          "name": "ev_ebitda",
+          "value": "3.3734042553191492",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM EBITDA",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM EBITDA; adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth_3y": {
+          "name": "revenue_growth_3y",
+          "value": "0.9072",
+          "unit": "fraction",
+          "definition": "Provider field Revenue Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "eps_growth_3y": {
+          "name": "eps_growth_3y",
+          "value": "1.1629",
+          "unit": "fraction",
+          "definition": "Provider field EPS Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "gross_margin": {
+          "name": "gross_margin",
+          "value": "0.7738",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM gross margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "operating_margin": {
+          "name": "operating_margin",
+          "value": "0.745",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM operating margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "fcf_margin": {
+          "name": "fcf_margin",
+          "value": "0.4623",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM free-cash-flow margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-defined FCF; accounting adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "roic": {
+          "name": "roic",
+          "value": "0.7705",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM return on invested capital",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider methodology; numerator and average-capital basis not independently reconciled",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "capital_intensity": {
+          "name": "capital_intensity",
+          "value": "0.1591646617657979",
+          "unit": "fraction",
+          "definition": "TTM capital expenditures / TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Recomputed from rounded provider TTM capex and revenue",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "share_count_change": {
+          "name": "share_count_change",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Reported shares outstanding change versus prior-year snapshot",
+          "period": "N/M: provider displays anomalous −40.58% YoY for SK hynix; withheld",
+          "basis": "Provider share-count change; no issuer dilution reconciliation",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "UNVERIFIED"
+        },
+        "revenue_growth": {
+          "name": "revenue_growth",
+          "value": "2.2031",
+          "unit": "fraction",
+          "definition": "Provider-reported latest-TTM revenue growth versus prior-year TTM",
+          "period": "TTM through 2026-09-30 vs TTM through 2025-09-30",
+          "basis": "S&P Global / StockAnalysis latest-TTM YoY field",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/quote/krx/000660/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider-reported TTM YoY revenue growth",
+          "status": "PROVISIONAL"
+        },
+        "fcf_growth": {
+          "name": "fcf_growth",
+          "value": "14.53816061545757",
+          "unit": "fraction",
+          "definition": "FCF growth: current TTM FCF / prior-year TTM FCF − 1",
+          "period": "TTM through 2026-09-30 vs TTM through 2025-09-30",
+          "basis": "Cash from operations less capex; local currency; periods aligned by TTM",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/financials/cash-flow-statement/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/quote/krx/000660/statistics/",
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider financial statements; FCF calculated as operating cash flow less capex",
+          "status": "PROVISIONAL"
+        },
+        "forward_pe": {
+          "name": "forward_pe",
+          "value": null,
+          "unit": "multiple",
+          "definition": "Forward P/E with explicit NTM/12M horizon",
+          "period": "N/M: provider forecast horizon unspecified",
+          "basis": "N/M: no definition-compatible forward estimate",
+          "horizon": "",
+          "currency": "KRW",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [
+            "https://news.skhynix.com/en/q3-2026-business-results/"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "UNVERIFIED"
+        },
+        "eps_revision_90d": {
+          "name": "eps_revision_90d",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Consensus EPS estimate revision over the prior 90 days",
+          "period": "N/M: comparable dated consensus revision series not captured",
+          "basis": "N/M: forecast source and revision history unavailable in the captured source set",
+          "horizon": "90D",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/krx/000660/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "N/M: dated 90-day analyst revision series unavailable",
+          "basis_group": "N/M: provider revision series not captured",
+          "status": "UNVERIFIED"
+        }
+      }
+    },
+    {
+      "ticker": "NANYA",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "business_model": "DRAM-focused memory manufacturer",
+      "as_of": "2026-11-09",
+      "peer_tier": "DIRECT",
+      "comparison_group": "Technology/Semiconductors/memory-manufacturing",
+      "cyclical": true,
+      "inclusion_rationale": "Direct DRAM manufacturing economics; narrower DRAM mix, scale and customers differ.",
+      "economic_fit": {
+        "value_chain_role": {
+          "alignment": "MATCH",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Nanya is a DRAM-focused manufacturer with materially smaller scale and no comparable NAND mix.",
+          "rationale": "Direct DRAM manufacturing economics; narrower DRAM mix, scale and customers differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-12",
+          "source_url": "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+        },
+        "revenue_profit_mix": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Nanya is a DRAM-focused manufacturer with materially smaller scale and no comparable NAND mix.",
+          "rationale": "Direct DRAM manufacturing economics; narrower DRAM mix, scale and customers differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-12",
+          "source_url": "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+        },
+        "customer_base": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Nanya is a DRAM-focused manufacturer with materially smaller scale and no comparable NAND mix.",
+          "rationale": "Direct DRAM manufacturing economics; narrower DRAM mix, scale and customers differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-12",
+          "source_url": "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+        },
+        "cyclicality": {
+          "alignment": "MATCH",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Nanya is a DRAM-focused manufacturer with materially smaller scale and no comparable NAND mix.",
+          "rationale": "Direct DRAM manufacturing economics; narrower DRAM mix, scale and customers differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-12",
+          "source_url": "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+        },
+        "capital_intensity": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Nanya is a DRAM-focused manufacturer with materially smaller scale and no comparable NAND mix.",
+          "rationale": "Direct DRAM manufacturing economics; narrower DRAM mix, scale and customers differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-12",
+          "source_url": "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+        }
+      },
+      "metrics": {
+        "ev_sales": {
+          "name": "ev_sales",
+          "value": "3.4193242602749003",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM revenue; local reporting currency",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "ev_ebitda": {
+          "name": "ev_ebitda",
+          "value": "4.569308722403185",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM EBITDA",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM EBITDA; adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth_3y": {
+          "name": "revenue_growth_3y",
+          "value": "1.284",
+          "unit": "fraction",
+          "definition": "Provider field Revenue Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "eps_growth_3y": {
+          "name": "eps_growth_3y",
+          "value": "3.1749",
+          "unit": "fraction",
+          "definition": "Provider field EPS Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "gross_margin": {
+          "name": "gross_margin",
+          "value": "0.7726",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM gross margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "operating_margin": {
+          "name": "operating_margin",
+          "value": "0.7096",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM operating margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "fcf_margin": {
+          "name": "fcf_margin",
+          "value": "0.5771",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM free-cash-flow margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-defined FCF; accounting adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "roic": {
+          "name": "roic",
+          "value": "1.2481",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM return on invested capital",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider methodology; numerator and average-capital basis not independently reconciled",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "capital_intensity": {
+          "name": "capital_intensity",
+          "value": "0.10115783059110299",
+          "unit": "fraction",
+          "definition": "TTM capital expenditures / TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Recomputed from rounded provider TTM capex and revenue",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "share_count_change": {
+          "name": "share_count_change",
+          "value": "0.1084",
+          "unit": "fraction",
+          "definition": "Reported shares outstanding change versus prior-year snapshot",
+          "period": "YoY to 2026-11-09",
+          "basis": "Provider share-count change; no issuer dilution reconciliation",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth": {
+          "name": "revenue_growth",
+          "value": "5.8584",
+          "unit": "fraction",
+          "definition": "Provider-reported latest-TTM revenue growth versus prior-year TTM",
+          "period": "TTM through 2026-09-30 vs prior-year TTM FCF was negative",
+          "basis": "S&P Global / StockAnalysis latest-TTM YoY field",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/quote/tpe/2408/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider-reported TTM YoY revenue growth",
+          "status": "PROVISIONAL"
+        },
+        "fcf_growth": {
+          "name": "fcf_growth",
+          "value": null,
+          "unit": "fraction",
+          "definition": "FCF growth: current TTM FCF / prior-year TTM FCF − 1",
+          "period": "TTM through 2026-09-30 vs prior-year TTM FCF was negative",
+          "basis": "Cash from operations less capex; local currency; periods aligned by TTM",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/quote/tpe/2408/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider financial statements; FCF calculated as operating cash flow less capex",
+          "status": "UNVERIFIED"
+        },
+        "forward_pe": {
+          "name": "forward_pe",
+          "value": null,
+          "unit": "multiple",
+          "definition": "Forward P/E with explicit NTM/12M horizon",
+          "period": "N/M: provider forecast horizon unspecified",
+          "basis": "N/M: no definition-compatible forward estimate",
+          "horizon": "",
+          "currency": "TWD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [
+            "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "UNVERIFIED"
+        },
+        "eps_revision_90d": {
+          "name": "eps_revision_90d",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Consensus EPS estimate revision over the prior 90 days",
+          "period": "N/M: comparable dated consensus revision series not captured",
+          "basis": "N/M: forecast source and revision history unavailable in the captured source set",
+          "horizon": "90D",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "N/M: dated 90-day analyst revision series unavailable",
+          "basis_group": "N/M: provider revision series not captured",
+          "status": "UNVERIFIED"
+        }
+      }
+    },
+    {
+      "ticker": "KIOXIA",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "business_model": "NAND-focused memory and storage manufacturer",
+      "as_of": "2026-11-09",
+      "peer_tier": "DIRECT",
+      "comparison_group": "Technology/Semiconductors/memory-manufacturing",
+      "cyclical": true,
+      "inclusion_rationale": "Direct semiconductor memory economics; NAND-only focus and JV/customer structure differ.",
+      "economic_fit": {
+        "value_chain_role": {
+          "alignment": "MATCH",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Kioxia is NAND-focused, with a different joint venture and customer structure.",
+          "rationale": "Direct semiconductor memory economics; NAND-only focus and JV/customer structure differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-30",
+          "source_url": "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+        },
+        "revenue_profit_mix": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Kioxia is NAND-focused, with a different joint venture and customer structure.",
+          "rationale": "Direct semiconductor memory economics; NAND-only focus and JV/customer structure differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-30",
+          "source_url": "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+        },
+        "customer_base": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Kioxia is NAND-focused, with a different joint venture and customer structure.",
+          "rationale": "Direct semiconductor memory economics; NAND-only focus and JV/customer structure differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-30",
+          "source_url": "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+        },
+        "cyclicality": {
+          "alignment": "MATCH",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Kioxia is NAND-focused, with a different joint venture and customer structure.",
+          "rationale": "Direct semiconductor memory economics; NAND-only focus and JV/customer structure differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-30",
+          "source_url": "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+        },
+        "capital_intensity": {
+          "alignment": "PARTIAL",
+          "target_summary": "Micron manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+          "peer_summary": "Kioxia is NAND-focused, with a different joint venture and customer structure.",
+          "rationale": "Direct semiconductor memory economics; NAND-only focus and JV/customer structure differ.",
+          "target_published_at": "2026-10-09",
+          "target_source_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "published_at": "2026-10-30",
+          "source_url": "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+        }
+      },
+      "metrics": {
+        "ev_sales": {
+          "name": "ev_sales",
+          "value": "2.1848013816925733",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM revenue; local reporting currency",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "ev_ebitda": {
+          "name": "ev_ebitda",
+          "value": "2.955607476635514",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM EBITDA",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM EBITDA; adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth_3y": {
+          "name": "revenue_growth_3y",
+          "value": "0.8887",
+          "unit": "fraction",
+          "definition": "Provider field Revenue Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "eps_growth_3y": {
+          "name": "eps_growth_3y",
+          "value": "1.5857",
+          "unit": "fraction",
+          "definition": "Provider field EPS Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "gross_margin": {
+          "name": "gross_margin",
+          "value": "0.734",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM gross margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "operating_margin": {
+          "name": "operating_margin",
+          "value": "0.6909",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM operating margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "fcf_margin": {
+          "name": "fcf_margin",
+          "value": "0.4397",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM free-cash-flow margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-defined FCF; accounting adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "roic": {
+          "name": "roic",
+          "value": "1.161",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM return on invested capital",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider methodology; numerator and average-capital basis not independently reconciled",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "capital_intensity": {
+          "name": "capital_intensity",
+          "value": "0.047189982728842825",
+          "unit": "fraction",
+          "definition": "TTM capital expenditures / TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Recomputed from rounded provider TTM capex and revenue",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "share_count_change": {
+          "name": "share_count_change",
+          "value": "0.0242",
+          "unit": "fraction",
+          "definition": "Reported shares outstanding change versus prior-year snapshot",
+          "period": "YoY to 2026-11-09",
+          "basis": "Provider share-count change; no issuer dilution reconciliation",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth": {
+          "name": "revenue_growth",
+          "value": "2.6479",
+          "unit": "fraction",
+          "definition": "Provider-reported latest-TTM revenue growth versus prior-year TTM",
+          "period": "TTM through 2026-09-30 vs compatible prior-year TTM FCF series not verified",
+          "basis": "S&P Global / StockAnalysis latest-TTM YoY field",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/quote/tyo/285A/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider-reported TTM YoY revenue growth",
+          "status": "PROVISIONAL"
+        },
+        "fcf_growth": {
+          "name": "fcf_growth",
+          "value": null,
+          "unit": "fraction",
+          "definition": "FCF growth: current TTM FCF / prior-year TTM FCF − 1",
+          "period": "TTM through 2026-09-30 vs compatible prior-year TTM FCF series not verified",
+          "basis": "Cash from operations less capex; local currency; periods aligned by TTM",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/quote/tyo/285A/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider financial statements; FCF calculated as operating cash flow less capex",
+          "status": "UNVERIFIED"
+        },
+        "forward_pe": {
+          "name": "forward_pe",
+          "value": null,
+          "unit": "multiple",
+          "definition": "Forward P/E with explicit NTM/12M horizon",
+          "period": "N/M: provider forecast horizon unspecified",
+          "basis": "N/M: no definition-compatible forward estimate",
+          "horizon": "",
+          "currency": "JPY",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [
+            "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "UNVERIFIED"
+        },
+        "eps_revision_90d": {
+          "name": "eps_revision_90d",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Consensus EPS estimate revision over the prior 90 days",
+          "period": "N/M: comparable dated consensus revision series not captured",
+          "basis": "N/M: forecast source and revision history unavailable in the captured source set",
+          "horizon": "90D",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "N/M: dated 90-day analyst revision series unavailable",
+          "basis_group": "N/M: provider revision series not captured",
+          "status": "UNVERIFIED"
+        }
+      }
+    },
+    {
+      "ticker": "AMD",
+      "sector": "Technology",
+      "industry": "Semiconductors",
+      "business_model": "fabless compute and AI semiconductors",
+      "as_of": "2026-11-09",
+      "peer_tier": "ADJACENT",
+      "comparison_group": "Technology/Semiconductors/compute-adjacent",
+      "cyclical": true,
+      "inclusion_rationale": "Adjacent compute semiconductor reference; excluded from memory direct-peer counts.",
+      "economic_fit": {},
+      "metrics": {
+        "ev_sales": {
+          "name": "ev_sales",
+          "value": "17.470950704225352",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM revenue",
+          "period": "TTM through 2026-09-26",
+          "basis": "Provider-reported EV and TTM revenue; local reporting currency",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "ev_ebitda": {
+          "name": "ev_ebitda",
+          "value": "71.26391382405744",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM EBITDA",
+          "period": "TTM through 2026-09-26",
+          "basis": "Provider-reported EV and TTM EBITDA; adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth_3y": {
+          "name": "revenue_growth_3y",
+          "value": "0.5731",
+          "unit": "fraction",
+          "definition": "Provider field Revenue Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "eps_growth_3y": {
+          "name": "eps_growth_3y",
+          "value": "0.8292",
+          "unit": "fraction",
+          "definition": "Provider field EPS Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "gross_margin": {
+          "name": "gross_margin",
+          "value": "0.56",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM gross margin",
+          "period": "TTM through 2026-09-26",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "operating_margin": {
+          "name": "operating_margin",
+          "value": "0.1782",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM operating margin",
+          "period": "TTM through 2026-09-26",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "fcf_margin": {
+          "name": "fcf_margin",
+          "value": "0.1553",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM free-cash-flow margin",
+          "period": "TTM through 2026-09-26",
+          "basis": "Provider-defined FCF; accounting adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "roic": {
+          "name": "roic",
+          "value": "0.1282",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM return on invested capital",
+          "period": "TTM through 2026-09-26",
+          "basis": "Provider methodology; numerator and average-capital basis not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "capital_intensity": {
+          "name": "capital_intensity",
+          "value": "0.045554577464788734",
+          "unit": "fraction",
+          "definition": "TTM capital expenditures / TTM revenue",
+          "period": "TTM through 2026-09-26",
+          "basis": "Recomputed from rounded provider TTM capex and revenue",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "share_count_change": {
+          "name": "share_count_change",
+          "value": "0.0136",
+          "unit": "fraction",
+          "definition": "Reported shares outstanding change versus prior-year snapshot",
+          "period": "YoY to 2026-11-09",
+          "basis": "Provider share-count change; no issuer dilution reconciliation",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth": {
+          "name": "revenue_growth",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Provider-reported latest-TTM revenue growth versus prior-year TTM",
+          "period": "TTM through 2026-09-26 vs N/M: same-snapshot adjacent growth series not captured",
+          "basis": "S&P Global / StockAnalysis latest-TTM YoY field",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/stocks/amd/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider-reported TTM YoY revenue growth",
+          "status": "UNVERIFIED"
+        },
+        "fcf_growth": {
+          "name": "fcf_growth",
+          "value": null,
+          "unit": "fraction",
+          "definition": "FCF growth: current TTM FCF / prior-year TTM FCF − 1",
+          "period": "TTM through 2026-09-26 vs N/M: same-snapshot adjacent growth series not captured",
+          "basis": "Cash from operations less capex; local currency; periods aligned by TTM",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/stocks/amd/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider financial statements; FCF calculated as operating cash flow less capex",
+          "status": "UNVERIFIED"
+        },
+        "forward_pe": {
+          "name": "forward_pe",
+          "value": null,
+          "unit": "multiple",
+          "definition": "Forward P/E with explicit NTM/12M horizon",
+          "period": "N/M: provider forecast horizon unspecified",
+          "basis": "N/M: no definition-compatible forward estimate",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [
+            "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "UNVERIFIED"
+        },
+        "eps_revision_90d": {
+          "name": "eps_revision_90d",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Consensus EPS estimate revision over the prior 90 days",
+          "period": "N/M: comparable dated consensus revision series not captured",
+          "basis": "N/M: forecast source and revision history unavailable in the captured source set",
+          "horizon": "90D",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/amd/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "N/M: dated 90-day analyst revision series unavailable",
+          "basis_group": "N/M: provider revision series not captured",
+          "status": "UNVERIFIED"
+        }
+      }
+    },
+    {
+      "ticker": "MSFT",
+      "sector": "Technology",
+      "industry": "Software and cloud computing",
+      "business_model": "cloud software and hyperscale cloud services",
+      "as_of": "2026-11-09",
+      "peer_tier": "ADJACENT",
+      "comparison_group": "Technology/Cloud-software/adjacent",
+      "cyclical": false,
+      "inclusion_rationale": "Adjacent cloud/software reference; excluded from semiconductor direct-peer counts.",
+      "economic_fit": {},
+      "metrics": {
+        "ev_sales": {
+          "name": "ev_sales",
+          "value": "11.805455332659836",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM revenue; local reporting currency",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "ev_ebitda": {
+          "name": "ev_ebitda",
+          "value": "19.884291895571007",
+          "unit": "multiple",
+          "definition": "Recomputed enterprise value divided by captured latest-TTM EBITDA",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-reported EV and TTM EBITDA; adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Latest issuer-reported TTM 2026-09-03 through 2026-09-30",
+          "basis_group": "EV / provider-defined TTM financial field; issuer reporting currency; rounded fields",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth_3y": {
+          "name": "revenue_growth_3y",
+          "value": "0.2075",
+          "unit": "fraction",
+          "definition": "Provider field Revenue Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "eps_growth_3y": {
+          "name": "eps_growth_3y",
+          "value": "0.2023",
+          "unit": "fraction",
+          "definition": "Provider field EPS Growth Forecast (3Y); method/end date undisclosed",
+          "period": "3Y forecast; end date and CAGR convention not stated",
+          "basis": "StockAnalysis / S&P Global provider forecast; calculation method undisclosed",
+          "horizon": "3Y",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "Provider-labelled 3Y forecast captured 2026-11-09",
+          "basis_group": "Provider-reported forecast; calculation method undisclosed",
+          "status": "PROVISIONAL"
+        },
+        "gross_margin": {
+          "name": "gross_margin",
+          "value": "0.6766",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM gross margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "operating_margin": {
+          "name": "operating_margin",
+          "value": "0.471",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM operating margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider metric; calculation basis not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "fcf_margin": {
+          "name": "fcf_margin",
+          "value": "0.1731",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM free-cash-flow margin",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider-defined FCF; accounting adjustments not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "roic": {
+          "name": "roic",
+          "value": "0.2535",
+          "unit": "fraction",
+          "definition": "Provider-reported TTM return on invested capital",
+          "period": "TTM through 2026-09-30",
+          "basis": "Provider methodology; numerator and average-capital basis not independently reconciled",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "capital_intensity": {
+          "name": "capital_intensity",
+          "value": "0.39232212440467595",
+          "unit": "fraction",
+          "definition": "TTM capital expenditures / TTM revenue",
+          "period": "TTM through 2026-09-30",
+          "basis": "Recomputed from rounded provider TTM capex and revenue",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "share_count_change": {
+          "name": "share_count_change",
+          "value": "-0.0021",
+          "unit": "fraction",
+          "definition": "Reported shares outstanding change versus prior-year snapshot",
+          "period": "YoY to 2026-11-09",
+          "basis": "Provider share-count change; no issuer dilution reconciliation",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "PROVISIONAL"
+        },
+        "revenue_growth": {
+          "name": "revenue_growth",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Provider-reported latest-TTM revenue growth versus prior-year TTM",
+          "period": "TTM through 2026-09-30 vs N/M: same-snapshot adjacent growth series not captured",
+          "basis": "S&P Global / StockAnalysis latest-TTM YoY field",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/stocks/msft/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider-reported TTM YoY revenue growth",
+          "status": "UNVERIFIED"
+        },
+        "fcf_growth": {
+          "name": "fcf_growth",
+          "value": null,
+          "unit": "fraction",
+          "definition": "FCF growth: current TTM FCF / prior-year TTM FCF − 1",
+          "period": "TTM through 2026-09-30 vs N/M: same-snapshot adjacent growth series not captured",
+          "basis": "Cash from operations less capex; local currency; periods aligned by TTM",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://stockanalysis.com/stocks/msft/statistics/"
+          ],
+          "period_alignment_group": "Latest TTM YoY; periods end 2026-09-03 to 2026-09-30",
+          "basis_group": "Provider financial statements; FCF calculated as operating cash flow less capex",
+          "status": "UNVERIFIED"
+        },
+        "forward_pe": {
+          "name": "forward_pe",
+          "value": null,
+          "unit": "multiple",
+          "definition": "Forward P/E with explicit NTM/12M horizon",
+          "period": "N/M: provider forecast horizon unspecified",
+          "basis": "N/M: no definition-compatible forward estimate",
+          "horizon": "",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [
+            "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast"
+          ],
+          "period_alignment_group": "Provider-defined TTM through 2026-09-03 to 2026-09-30",
+          "basis_group": "S&P Global / StockAnalysis provider-reported metrics; local currency; method caveats retained",
+          "status": "UNVERIFIED"
+        },
+        "eps_revision_90d": {
+          "name": "eps_revision_90d",
+          "value": null,
+          "unit": "fraction",
+          "definition": "Consensus EPS estimate revision over the prior 90 days",
+          "period": "N/M: comparable dated consensus revision series not captured",
+          "basis": "N/M: forecast source and revision history unavailable in the captured source set",
+          "horizon": "90D",
+          "currency": "USD",
+          "published_at": "2026-11-09",
+          "source_url": "https://stockanalysis.com/stocks/msft/statistics/",
+          "supporting_source_urls": [],
+          "period_alignment_group": "N/M: dated 90-day analyst revision series unavailable",
+          "basis_group": "N/M: provider revision series not captured",
+          "status": "UNVERIFIED"
+        }
+      }
+    }
+  ]
+}
