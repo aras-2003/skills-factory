@@ -1,12 +1,12 @@
 # Iteration 08 — Investing monitoring: KPI triggers and expectations
 
-- State: PLANNED; scope lock is committed before implementation. Start only after Iteration 7's owner abort is merged to `main`.
+- State: ACTIVE; Iteration 7's owner abort and this scope lock merged in PR #603 at `40420bc28c85826c2f28cb9709c34c45f583b487` before implementation.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #322 (coordination-only tracking); GitHub Project iteration `08 | Investing monitoring (provisional)`.
 - Previous terminal iteration: Iteration 7 owner-aborted on 2026-11-09; see [append-only abort decision](iteration-07-abort-2026-11-09.md). #306 remains unresolved and open.
 - Baseline main SHA: `0646cd0c4588b889070960c777e07829c3477b9e`.
 - Lock commit SHA: `0f32e76e7642cfe12f39a5034605eb2fa5fc8e26` (final frozen scope tree, including the append-only prior-iteration abort record; implementation starts after merge).
-- Started at / closed at (UTC): not started / pending.
+- Started at / closed at (UTC): 2026-11-09 22:55:13 / pending.
 - Scope lock reviewed by / at: Arkadiusz Kamrowski, 2026-11-09 (self-review).
 
 ## Frozen commitment
