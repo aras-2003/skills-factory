@@ -4,7 +4,7 @@ scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
 runtime_status: PARTIAL_BLOCKED
-candidate_source_revision: adc3ef772a32c96f836eadea42b188a868d88256
+candidate_source_revision: da0bafa2240c28211a6e4e4c4f0d816f06ef88ba
 candidate_source_revision_status: committed_local_pending_external
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
 runtime_source_revision_required: true
@@ -22,7 +22,7 @@ runtime_blockers:
   or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.'
 release_approved: false
 historical_r20_immutable: true
-status_note: 'Candidate implementation adc3ef772a32c96f836eadea42b188a868d88256 adds Python MCP parity, adjacent-model handling, and catalog/readiness fixes and passed Cloud Next contracts,
+status_note: 'Candidate implementation da0bafa2240c28211a6e4e4c4f0d816f06ef88ba adds Python MCP parity, adjacent-model handling, and catalog/readiness fixes and passed Cloud Next contracts,
   TypeScript, full ESLint, Site build, focused domain suites, 308 evaluation tests (1 skipped), package tests 102/102,
   and repository validation. A final Lab package will be generated from the documentation-complete source revision.
   Site v124 is verified at canonical source f6e24683e37648c7466718b3c2d767c2a157c25f and does not expose the new tool.
@@ -132,9 +132,9 @@ source_sha256:
   runtime/mcp/cloud_server.py: 8dca0e2a35c69e462bc70a43b07ac45cfc6da35cbfb375f2af71a971cac0b9dd
   runtime/mcp/server.py: 779cc23d6d0fddec7978803985a95edbb0bd98edfde7e92c28f7a0ee4533bd66
   runtime/mcp/tests/test_chart_contract.py: 525ef0915ec27f5e842f9c16a1435770565e5b78c3e90d48508acc61e7c3c74a
-  scripts/eval/campaign.py: 3a53c4e5b891e08a701ac4a5810fad78f46856a8e981f09989f329e03c36285a
+  scripts/eval/campaign.py: d4a48b93627882d6a290fa780462e5ac92a851d8708cf1ec9fc87dca4c765b83
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: e8a2502328334ac2d9ee6efee5d8ca2190ce1f563acf32815212146a0fa723e7
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: c22e63b4c7e4fdad3ad304be287d3bbc0d1223beeafddd53ef5062837d296f3b
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd

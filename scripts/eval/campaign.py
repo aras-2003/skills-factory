@@ -791,7 +791,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "adc3ef772a32c96f836eadea42b188a868d88256"
+            or cfg.get("candidate_source_revision") != "da0bafa2240c28211a6e4e4c4f0d816f06ef88ba"
             or cfg.get("candidate_source_revision_status") != "committed_local_pending_external"
             or cfg.get("runtime_canonical_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
             or cfg.get("runtime_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
