@@ -5,7 +5,7 @@
 - Tracking issue / native Project iteration: #322 (coordination-only tracking); GitHub Project iteration `08 | Investing monitoring (provisional)`.
 - Previous terminal iteration: Iteration 7 owner-aborted on 2026-11-09; see [append-only abort decision](iteration-07-abort-2026-11-09.md). #306 remains unresolved and open.
 - Baseline main SHA: `0646cd0c4588b889070960c777e07829c3477b9e`.
-- Lock commit SHA: `30d42cb6efa4088082362101ac1320f654255056` (scope and acceptance-matrix lock; owner-approved implementation start follows after merge).
+- Lock commit SHA: `0f32e76e7642cfe12f39a5034605eb2fa5fc8e26` (final frozen scope tree, including the append-only prior-iteration abort record; implementation starts after merge).
 - Started at / closed at (UTC): not started / pending.
 - Scope lock reviewed by / at: Arkadiusz Kamrowski, 2026-11-09 (self-review).
 
