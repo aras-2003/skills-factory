@@ -48,7 +48,16 @@ def gql(query, variables):
         ["gh", "api", "graphql", "--input", "-"],
         input=payload, text=True, capture_output=True, check=False, timeout=30)
     if result.returncode:
-        raise RuntimeError(f"GitHub CLI GraphQL request failed (exit {result.returncode})")
+        # Keep the failure actionable without echoing credentials or unbounded runner output.
+        detail = " ".join((result.stderr or "").split())
+        token = os.environ.get("GH_TOKEN")
+        if token:
+            detail = detail.replace(token, "[REDACTED]")
+        detail = re.sub(r"\b(?:gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,})\b",
+                        "[REDACTED]", detail)
+        detail = detail[:500]
+        suffix = f": {detail}" if detail else ""
+        raise RuntimeError(f"GitHub CLI GraphQL request failed (exit {result.returncode}){suffix}")
     data = json.loads(result.stdout)
     if data.get("errors"):
         raise RuntimeError("GitHub GraphQL error: " + json.dumps(data["errors"]))
