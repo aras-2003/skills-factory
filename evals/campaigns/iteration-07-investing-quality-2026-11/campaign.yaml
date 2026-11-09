@@ -3,7 +3,7 @@ schema_version: '1.0'
 scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
-runtime_status: PARTIAL_BLOCKED
+runtime_status: PASS
 candidate_source_revision: 89c28bf70353b4568c7bc031e128a5f57a0fe24d
 candidate_source_revision_status: merged_to_main
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
@@ -15,15 +15,10 @@ runtime_evidence: evals/campaigns/iteration-07-investing-quality-2026-11/runtime
 runtime_canonical_source_revision: 89c28bf70353b4568c7bc031e128a5f57a0fe24d
 runtime_site_version: 125
 runtime_deployment_id: appgdep_6af1c54254fc8191b505db26d904ea08
-runtime_blockers:
-- Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d. Its UI console
-  exercised compare_peer_comparability with synthetic inputs, but this Codex tool inventory does not expose an MCP
-  call for it; an exact MCP comparator receipt is NOT_RUN.
-- '#306 remains open: the current AMD and MU snapshots lack an immutable source archive and complete comparable
-  growth/forecast evidence; no full acceptance table or exact comparator-call receipt is available.'
+runtime_blockers: []
 release_approved: false
 historical_r20_immutable: true
-status_note: 'The exact iteration candidate is merged to main at 89c28bf70353b4568c7bc031e128a5f57a0fe24d and is live on owner-only Site v125 as mirror 967ee59cfa5364be118d7521e8dfdbba4da7cfae, with verified Lab 1.38.472+89c28bf70353. Validation for the candidate passed Cloud Next contracts, TypeScript, full ESLint, Site build, focused domain suites, 308 evaluation tests (1 skipped), package tests 102/102, and repository validation. The deployed Site UI returned COMPARABLE for a synthetic three-peer probe, but its UI is not an MCP connection test and the current Codex tool inventory does not expose compare_peer_comparability; exact MCP invocation remains NOT_RUN. Iteration remains PARTIAL_BLOCKED; #306 remains open for reproducible source archives, complete comparable growth/forecast evidence and an exact comparator receipt. #322 remains coordination-only. No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
+status_note: 'Iteration 07 acceptance passed against the merged peer-comparator source 89c28bf70353b4568c7bc031e128a5f57a0fe24d, deployed on verified owner-only Site v125 as mirror 967ee59cfa5364be118d7521e8dfdbba4da7cfae, Lab 1.38.472+89c28bf70353. Hash-bound extracted rendered-page snapshots and official SEC filing excerpts support the dated AMD/MU inputs; these are immutable evidence captures, not raw HTTP/filing bytes. Offline Python helper and exact Site comparator both reproduce three direct peers for AMD and MU and three compatible EV/Sales and EV/EBITDA observations per cohort; the distinct Microsoft model remains visible and excluded. Forward P/E and 90-day EPS revisions stay N/M because reliable compatible series are unavailable, as permitted by the issue gap-handling criteria. Full evaluation, package, runtime, domain, Site contract, TypeScript, lint, build and repository validation passed. Comparator limitations are documented: it validates caller-supplied source fields and compatibility, but does not retrieve or independently authenticate those sources. Iteration runtime acceptance PASS; release_approved=false pending separately authorized release/promotion.'
 behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
 required_case_ids:
 - iter07-financial-quality-synthetic
@@ -89,11 +84,18 @@ source_sha256:
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: dde0bec7f94ed2ae6b2d9d03a6bdfc23772b420b395b369da3f9f2a85b923002
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
   docs/catalog.json: a19fa03d4526c671c0156f70ec1dcc1771de6c653870516920801d1516b0ea70
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: ae990d5babc820330ca805fe4a0860502c730773240b87cc116821dbf9222d84
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 103aeac510414404dad8ca89356301737411673ca15ab916392a46c078296609
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 02946d7fdb641b5bb712741f7e13b1c3b912efba880863747de868bfdb7c2ec2
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 117a1a484bae98a0c7f1889c3189627a06e43d4e080452ea55da5b6c5558838e
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 0b9e8e4e0bc6e4ab684167ff95b41234f82630e6ec86c51f5a100f4bc7ecdb59
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-amd-compute-cohort-2026-11-09-web-capture.json: 314499189d133d9980b753fd0f5da4ca5914fabb8f17e56af29e1eca05b63238
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-msft-adjacent-2026-11-09-web-capture.json: b945cf153341fd32556ec9a4de8861cb1f923d7f429625db75b815c2345a8185
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-mu-memory-cohort-2026-11-09-web-capture.json: a3ce1691b64913a23cf3636257e48bbbe6ac3bed4d109e43d43aca987a301295
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-peer-cohort-full-metrics-2026-11-09.json: 3eb7d1d83793c9633c8a70c1cbe212df8e68bcafb65db644da06c7087ed110ef
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-peer-cohort-valuation-fields-2026-11-09.json: d411597829c203d4aefbe8dfe3ed99f7dd31cf733099591e45cf79bbc54841d7
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-peer-cohort-ttm-fields-2026-11-09.json: 003414879cee2016528d3e7b6e5cb0c668b835adc1701d9bed8ccafd70bbe472
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/stockanalysis-mu-2026-11-09-structured-extract.json: 4c241d4c4f98bc6cbea53ce5e3859a0da239173187a3a766fdc76c799c1718a1
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -129,9 +131,9 @@ source_sha256:
   runtime/mcp/cloud_server.py: 8dca0e2a35c69e462bc70a43b07ac45cfc6da35cbfb375f2af71a971cac0b9dd
   runtime/mcp/server.py: 32b0fc3077bbf072b5f738beeccc3f6207048561b762ca744f3dc07ee85167c0
   runtime/mcp/tests/test_chart_contract.py: 525ef0915ec27f5e842f9c16a1435770565e5b78c3e90d48508acc61e7c3c74a
-  scripts/eval/campaign.py: c7c79d0a8325728b4b1e9982458aa08a78b79493df760ced5fc3cd652d6d1488
+  scripts/eval/campaign.py: 7e73b3685396b84c13b3a8c1e8f0b5897099d3a22c84fbe63688d77098809713
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 99ca1bb6263cf9af8f8936562ddbba1a63bb6f44afa2fc2a442a9782bb3e3ef6
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: c82cda1be43e30e7020745e6dd945a8a7d5d316a504a1f3a71d7b1d10a5ef751
   scripts/package/build_utils.py: 8b6482ccdbc50c42462ebf9d55740e83f584385406c94fcc8a2941f40b62ec64
   scripts/package/tests/test_packaging.py: 819a510b6bf8c7d0b7be9031e309620a9a80e270c034b966be7fffd764e001a0
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
@@ -151,7 +153,10 @@ source_sha256:
   skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py: a29bf28e4ecd592c675532c782fb870dab14bd71cea6a335fee5b201f8919762
   skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: d67ff95ad731d6c03c539f8d58d683d4eb1acc88cf6c363f916ffa9cf3db248f
   skills/investing/valuation-scenario-review/tests/cases.yaml: 5e4f34ebb0ede16ee996f516fe77f8f7a3bc174c47df21786c669ace364cbfe5
-  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: f4ce5e615c59931e4b6b823ad973f478e0ba5a14b4a43e364d7a818e3c0092e9
+  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: 97c76f8bb1eaba4e1925ae1f119c7e187ee22ef27278fc960e809a5a7da1f793
   workflows/investment-security-review/WORKFLOW.md: de101bc7232a8f1969d3b09e8c0c7a52634054f13f0b990a339dd2847863478f
   workflows/investment-security-review/tests/cases.yaml: 67b4636b0c7affdcae6332e7790cc0d10075e1aa6573edb92e4e89d3725069db
   workflows/runtime-registry.yaml: 3ebffa2b45c902465505550a90c2e4e4ed4844b9a05156b741238cb70954d684
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/sec-reported-ytd-growth-2026-11-09.json: 9a580af7311bcc8d153d332a441ce8dcdcf28e37ee0552de3a4801be37a47c5b
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/peer-comparability-amd-2026-11-09-input.json: 660e766a7a07d3d837408b882f693cc1327300c882ad04eafe2c0b2ad853b95d
+  evals/campaigns/iteration-07-investing-quality-2026-11/sources/peer-comparability-mu-2026-11-09-input.json: ad1524a0107817629163f0bba8947256d859d6b8f2d41d0f57364cb6954457de
