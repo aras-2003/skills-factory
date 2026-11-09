@@ -40,22 +40,21 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual("4433f2821a94bdada53663da4bc8674a6e45c2e6", cfg["candidate_source_revision"])
-        self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
-        self.assertEqual("fff6f377c997af2b6ee4987ffb12e4464781cc15", cfg["runtime_canonical_source_revision"])
-        self.assertEqual("d1cf3642042a8e4b73dd608dd12368490ea23faf", cfg["runtime_source_revision"])
-        self.assertEqual("1.38.469+fff6f377c997", cfg["runtime_release_id"])
-        self.assertEqual(122, cfg["runtime_site_version"])
+        self.assertEqual("db0e97a37ad3e1918330b445a87113aa74323c74", cfg["candidate_source_revision"])
+        self.assertEqual("merged_main_exact_runtime_tested", cfg["candidate_source_revision_status"])
+        self.assertEqual("db0e97a37ad3e1918330b445a87113aa74323c74", cfg["runtime_canonical_source_revision"])
+        self.assertEqual("c16123b5094d68bdf243c020a839f5e0486e75e0", cfg["runtime_source_revision"])
+        self.assertEqual("1.38.470+db0e97a37ad3", cfg["runtime_release_id"])
+        self.assertEqual(123, cfg["runtime_site_version"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
             {
-                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
-                "Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.",
+                "The Nov 8 MU provider snapshot is frozen in tests but its mutable source pages were not archived; live pages now differ for Nanya/Kioxia and report a changed SK hynix share count. Site probes used supplied values, and packaged helper code remains not_executed. Full #306 exact-source acceptance is not demonstrated.",
             },
             set(cfg["runtime_blockers"]),
         )
         runtime_evidence = (ROOT / cfg["runtime_evidence"]).read_text(encoding="utf-8")
-        self.assertIn("Exact Site v121 USER_SUPPLIED_CONTEXT execution", runtime_evidence)
+        self.assertIn("Exact Site v123 MU supplied-context peer screen", runtime_evidence)
         self.assertIn("NOT_SCORED", runtime_evidence)
         self.assertIn("client_display=NOT_OBSERVABLE", runtime_evidence)
         self.assertIs(cfg["release_approved"], False)
