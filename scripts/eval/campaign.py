@@ -696,6 +696,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
         "runtime/mcp/server.py",
         "runtime/mcp/cloud_server.py",
+        "scripts/package/build_utils.py",
         "skills/investing/thesis-challenge/SKILL.md",
         "workflows/investment-security-review/WORKFLOW.md",
         "workflows/runtime-registry.yaml",
@@ -714,6 +715,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
         "runtime/mcp/server.py",
         "runtime/mcp/cloud_server.py",
+        "scripts/package/build_utils.py",
         "scripts/eval/campaign.py",
     }
     expected_out_of_scope = expected_behavior - expected_in_scope
@@ -726,6 +728,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "scripts/eval/tests/test_iteration02_workflow_hardening_release.py",
         "adapters/skills-factory-cloud-next/tests/contracts.test.ts",
         "runtime/mcp/tests/test_chart_contract.py",
+        "scripts/package/tests/test_packaging.py",
     }
     expected_support = {
         "skills/investing/fundamental-intelligence/README.md",
@@ -791,7 +794,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "da0bafa2240c28211a6e4e4c4f0d816f06ef88ba"
+            or cfg.get("candidate_source_revision") != "33030b842abb67f0d4a780e5b995ecf6b9c80748"
             or cfg.get("candidate_source_revision_status") != "committed_local_pending_external"
             or cfg.get("runtime_canonical_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
             or cfg.get("runtime_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"

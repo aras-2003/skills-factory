@@ -36,6 +36,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
             "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
             "runtime/mcp/server.py",
             "runtime/mcp/cloud_server.py",
+            "scripts/package/build_utils.py",
         }
         self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
 
@@ -45,7 +46,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual("da0bafa2240c28211a6e4e4c4f0d816f06ef88ba", cfg["candidate_source_revision"])
+        self.assertEqual("33030b842abb67f0d4a780e5b995ecf6b9c80748", cfg["candidate_source_revision"])
         self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
         self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_canonical_source_revision"])
         self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_source_revision"])
