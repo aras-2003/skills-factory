@@ -22,12 +22,12 @@ runtime_blockers:
   or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.'
 release_approved: false
 historical_r20_immutable: true
-status_note: 'Candidate source 41ab8051 adds compare_peer_comparability to the Cloud Next adapter and the valuation-scenario-review
-  runtime procedure. The package is local and has not yet passed validation or run on Site. Site v124 is verified
-  at canonical source f6e24683e37648c7466718b3c2d767c2a157c25f and does not expose the new tool. Iteration remains
-  PARTIAL_BLOCKED; #306 stays open for exact-source runtime acceptance and remaining comparable growth/forecast
-  evidence. #322 remains coordination-only. No release approval, maturity promotion, canonical writes, portfolio
-  mutation or trades.'
+status_note: 'Candidate implementation a4725004e953481158ab8d3ae14edc23688e76bc passed Cloud Next contracts, TypeScript,
+  lint, Site build, domain regressions, 308 evaluation tests (1 skipped), and repository validation. Final Lab packaging
+  will be generated from the documentation-complete source revision. Site v124 is verified at canonical source f6e24683e37648c7466718b3c2d767c2a157c25f
+  and does not expose the new tool. Iteration remains PARTIAL_BLOCKED; #306 stays open for exact-source runtime
+  acceptance, reproducible source snapshots and remaining growth/forecast evidence. #322 remains coordination-only.
+  No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
 behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
 required_case_ids:
 - iter07-financial-quality-synthetic
@@ -84,7 +84,7 @@ source_sha256:
   CATALOG.md: 0167c0eecb64337f60f85a35b82d29cbeb3ce53d624c2b7189473e7f6c69e7b5
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
   docs/catalog.json: 48a443ee5197f43d80ecdfeb465e6df1ba6ed4d73faeb513a96be17a2ec7063e
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 3a7c305d1528b9b70fa97a871a591eed4e37a1b7d781ce3e26388b6c8647ae46
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 6f08172c70f1db882cb0d87fbe93f87f0d75c6dfdeda8725f495c944427f0851
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 02946d7fdb641b5bb712741f7e13b1c3b912efba880863747de868bfdb7c2ec2
@@ -94,7 +94,7 @@ source_sha256:
   adapters/skills-factory-cloud-next/src/peer-comparability.ts: 7bc6192f31577b01f413b6e1aa96c034e1cd33bdb0e46d00691a0740310ce36e
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 9096a624f5c7f9f649b01e4ee710253753dd884057f6dad6e2064544661c43e0
   adapters/skills-factory-cloud-next/src/mcp-handler.ts: 3139bf3fb4c9d2c5351f4e1ab21adc6ddfe90e0b6bd38d56dd12d02a943c2398
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 6438442add120510e253c39e90f74f99eda4f7bc57116c7d7d5a14a229e8154d
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 8452ccc5b485ac0aebc415d6c9ec336b90d6434595cc1cacc35e28f71d74a03f
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
