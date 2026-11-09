@@ -11,6 +11,15 @@
 
 The deployment/archive attestation proves the embedded package identity and release. The Site's `runtime_info` and `list_skills` calls prove the live runtime responds. Neither substitutes for a comparator call or resolves #306's source evidence gate.
 
+## Search-index recovery and cross-provider reconciliation — 2026-11-09
+
+- Search-index content retrieved 2026-11-09 recovered a Yahoo Finance statistics snapshot for Kioxia (285A.T) explicitly as of 2026-11-06: enterprise value JPY 12.98T, TTM revenue JPY 5.79T, EV/Revenue 2.24x and EV/EBITDA 3.01x. The EV/Revenue arithmetic reconciles after rounding (`12.98 / 5.79 = 2.242`), and the values match the frozen Kioxia row. This is a recovered search-result extract from a mutable page, not an archived original response body. [Yahoo Finance Kioxia](https://finance.yahoo.com/quote/285A.T/)
+- Search-index content for StockAnalysis Nanya reported the Nov 6 close (TWD 343.50) and EV/Sales 3.11x / EV/EBITDA 4.12x, matching the frozen fixture. [StockAnalysis Nanya ratios](https://stockanalysis.com/quote/tpe/2408/financials/ratios/)
+- A Yahoo Finance Nanya result for the same as-of date reported EV TWD 990.37B and revenue TWD 295.38B, alongside EV/Revenue 5.49x / EV/EBITDA 8.30x. The reported EV/Revenue does not reconcile (`990.37 / 295.38 = 3.354`), so this record is conflicted and is not admitted into the fixture. [Yahoo Finance Nanya](https://finance.yahoo.com/quote/2408.TW/)
+- The Yahoo Finance SK hynix result reported Nov 6 EV KRW 731.70T and EV/Revenue 3.87x; the recorded provider TTM revenue of KRW 269.34T gives 2.717x, so the reported multiple does not reconcile. Yahoo's data is rejected for that row pending a source body with a compatible numerator, denominator and period. [Yahoo Finance SK hynix](https://finance.yahoo.com/quote/000660.KS/)
+- Yahoo's MU result was explicitly dated Nov 4, not Nov 6 or Nov 8, and reported EV/Revenue 5.57x / EV/EBITDA 6.86x; it cannot stand in for the frozen Nov 8 S&P Global/StockAnalysis values 5.35x / 6.55x. [Yahoo Finance MU](https://finance.yahoo.com/quote/MU/)
+- **Acceptance effect:** this recovers one matching Kioxia row and a search-indexed Nanya row, but it does not recover the raw Nov 8 StockAnalysis pages, reconcile the conflicting Yahoo Nanya/SK rows, or provide a single-provider immutable cohort. It is supplemental evidence only; #306 remains open and the exact Site comparator receipt remains `NOT_RUN`.
+
 ## Previous deployed baseline and local cohort — 2026-11-08
 
 ## Current deployed baseline — 2026-11-08
