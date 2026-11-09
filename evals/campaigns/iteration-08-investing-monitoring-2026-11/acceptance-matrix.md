@@ -31,3 +31,11 @@ Baseline source: `0646cd0c4588b889070960c777e07829c3477b9e`. Statuses below are 
 ## State correction
 
 The Iteration 7 abort record and initial Iteration 8 scope lock were written from stale local issue state and say #306 remained open. GitHub issue #306 is actually closed as completed on 2026-11-09 via PR #600; the closeout records Site v126 and source SHA `3bdeef677347d81b56fcbb5ba9e83722869a869c`. It is prior-iteration completed work, not an Iteration 8 carry-forward. Recheck source issue/project state at final reconciliation; this correction does not reopen #306 or change the frozen #308–310 commitment.
+
+## Preserved CI attempts
+
+- Attempt 1, PR #604 head `aac32ae1f384895e29e4ff8cd1b423967fca469f`: Site CI failed during source-bound Lab build and Domain integrity failed during source contract validation. Both identified stale runtime fixture ID/target metadata. Behavioral router and skill cases were skipped; no 308/309/310 behavior verdict was produced. Fix is in progress; this attempt remains recorded and is not replaced by a green rerun.
+
+## Preserved CI attempt detail
+
+- Attempt 1, PR #604 head `aac32ae1f384895e29e4ff8cd1b423967fca469f`: all four required workflows failed. Site CI and Domain integrity first failed on fixture `target`/ID metadata; Validate Skills also reported the central fixture-coverage assertion, readiness metadata drift, frozen R20/Iteration 7 hash drift, and a routing collision count change from 30 to 32; Evaluation CI failed on the same frozen-source drift. Behavioral evaluation did not run to a verdict. Corrective candidate restores the global routing/runtime registries, uses 14 Iteration 8-owned runtime cases, synchronizes readiness metadata and adds an exact hash-bound candidate handoff. The first attempt remains immutable and no pass is claimed.

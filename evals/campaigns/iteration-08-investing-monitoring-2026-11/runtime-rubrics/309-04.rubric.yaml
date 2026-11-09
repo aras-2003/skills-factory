@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 309-04
+target: thesis-monitor
+assertions:
+  manual:
+    - performs no canonical write without explicit authorization
+    - reports NOT_WRITTEN or BLOCKED_CANONICAL_READ when applicable
+    - does not invent a persistence receipt

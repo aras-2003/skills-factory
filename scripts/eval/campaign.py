@@ -671,12 +671,63 @@ def separately_validated_investment_quality_paths(root: Path = ROOT) -> set[str]
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             if digest != hashes[rel] and not (
                 rel in iteration07_paths and iteration07_hashes.get(rel) == digest
+            ) and not (
+                (yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}).get("source_sha256", {}).get(rel) == digest
             ):
                 return set()
         if not all((root / path).is_file() for path in test_modules):
             return set()
         return expected
     except (OSError, ValueError, TypeError, AttributeError, yaml.YAMLError):
+        return set()
+
+
+def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROOT) -> set[str]:
+    """Allow only the hash-bound Iteration 08 candidate outside frozen campaigns."""
+    rel = "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml"
+    behavior = {
+        "skills/investing/security-underwriting/SKILL.md",
+        "skills/investing/thesis-monitor/SKILL.md",
+        "skills/investing/valuation-scenario-review/SKILL.md",
+        "workflows/investment-os-review/WORKFLOW.md",
+        "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+    }
+    try:
+        cfg = yaml.safe_load((root / rel).read_text(encoding="utf-8")) or {}
+        hashes = cfg.get("source_sha256") or {}
+        cases_path = str(cfg.get("runtime_case_suite") or "")
+        cases_doc = yaml.safe_load((root / cases_path).read_text(encoding="utf-8")) or {}
+        cases = [item for item in cases_doc.get("cases", []) if isinstance(item, dict)]
+        case_ids = {str(item.get("id")) for item in cases}
+        required_ids = set(cfg.get("runtime_case_ids") or [])
+        support = set(cfg.get("test_modules") or []) | {cases_path}
+        for item in cases:
+            for key in ("input", "rubric"):
+                support.add(str(Path(cases_path).parent / str(item.get(key) or "")))
+        support.add("scripts/eval/campaign.py")
+        expected_hashes = behavior | support | {"release/production-readiness.yaml"}
+        if (
+            cfg.get("campaign") != "iteration-08-investing-monitoring-2026-11"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("historical_r20_immutable") is not True
+            or cfg.get("source_base_revision") != "40420bc28c85826c2f28cb9709c34c45f583b487"
+            or set(cfg.get("in_scope_behavior_paths") or []) != behavior
+            or set(hashes) != expected_hashes
+            or "scripts/eval/tests/test_runtime_campaign.py" not in cfg.get("test_modules", [])
+            or case_ids != required_ids
+            or cases_doc.get("schema_version") != "1.0"
+            or not all((root / item).is_file() for item in expected_hashes)
+        ):
+            return set()
+        for path, digest in hashes.items():
+            if hashlib.sha256((root / path).read_bytes()).hexdigest() != digest:
+                return set()
+        for item in cases:
+            if not item.get("target") or not item.get("input") or not item.get("rubric"):
+                return set()
+        return behavior
+    except (OSError, ValueError, TypeError, KeyError, AttributeError, yaml.YAMLError):
         return set()
 
 
@@ -825,8 +876,14 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             return set()
         for rel, digest in hashes.items():
             file_path = root / rel
-            if not file_path.is_file() or hashlib.sha256(file_path.read_bytes()).hexdigest() != digest:
+            if not file_path.is_file():
                 return set()
+            actual_digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
+            if actual_digest != digest:
+                iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
+                if (rel not in (iter08_cfg.get("source_sha256") or {})
+                        or (iter08_cfg.get("source_sha256") or {}).get(rel) != actual_digest):
+                    return set()
         for rel in expected_behavior | expected_modules:
             if not (root / rel).is_file():
                 return set()
@@ -1175,8 +1232,14 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             return set()
         for rel in expected:
             path = root / rel
-            if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != hashes[rel]:
+            if not path.is_file():
                 return set()
+            actual_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            if actual_digest != hashes[rel]:
+                iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
+                if (rel not in (iter08_cfg.get("source_sha256") or {})
+                        or (iter08_cfg.get("source_sha256") or {}).get(rel) != actual_digest):
+                    return set()
         for name, rel in suites.items():
             suite_path = root / str(rel)
             suite = yaml.safe_load(suite_path.read_text(encoding="utf-8")) or {}
@@ -1230,6 +1293,7 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_iteration02_workflow_paths(ROOT))
     separate_meta_targets.update(separately_validated_investment_quality_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration07_investing_quality_paths(ROOT))
+    separate_meta_targets.update(separately_validated_iteration08_investing_monitoring_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
     separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))

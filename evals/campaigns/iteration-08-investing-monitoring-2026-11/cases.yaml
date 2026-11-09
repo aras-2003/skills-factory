@@ -40,15 +40,18 @@ cases:
     case_paths:
       - workflows/investment-os-review/tests/cases.yaml
       - adapters/skills-factory-cloud-next/tests/contracts.test.ts
-      - evals/routing/registry.yaml
+      - evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml
     required_cases:
       - router-positive-methodology-audit-incidental-ticker-en
       - router-positive-methodology-audit-incidental-ticker-pl
       - router-positive-process-audit-polish-synonym
       - router-positive-security-review-neighbor
-      - investment-methodology-audit-incidental-ticker-en
-      - investment-methodology-audit-incidental-ticker-pl
-      - investment-security-natural-en
+      - 310-EN
+      - 310-PL
+      - 310-SEC
+      - 310-NOWRITE
+      - shared-portfolio
+      - shared-education
     assertions:
       - incidental ticker remains subordinate to explicit workflow/methodology audit intent
       - explicit single-security decision still routes to security review

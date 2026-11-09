@@ -518,15 +518,15 @@ components:
 
   - name: security-underwriting
     kind: skill
-    version: "0.5.3"
+    version: "0.6.0"
     source: skills/investing/security-underwriting/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Exact-source Iteration 07 Cloud Next Lab validation of financial-quality behavior is pending."
-    limitation: "Lab candidate until the exact gate is retested; do not treat unverified outputs as a current-version PASS."
+    evidence_gap: "Exact-source Iteration 08 Cloud Next Site validation of KPI triggers and expectations bridge is pending."
+    limitation: "Lab candidate until the exact Iteration 08 runtime gates pass; do not treat unverified outputs as a current-version PASS."
 
   - name: thesis-challenge
     kind: skill
@@ -542,7 +542,7 @@ components:
 
   - name: thesis-monitor
     kind: skill
-    version: "0.3.2"
+    version: "0.4.0"
     source: skills/investing/thesis-monitor/SKILL.md
     declared_maturity: production
     static_contract: present
@@ -567,15 +567,15 @@ components:
 
   - name: valuation-scenario-review
     kind: skill
-    version: "0.3.5"
+    version: "0.4.0"
     source: skills/investing/valuation-scenario-review/SKILL.md
     declared_maturity: production
     static_contract: present
     current_runtime_receipt: pending
     maturity_disposition: lab-candidate-pending-runtime-validation
     candidate_channel: lab
-    evidence_gap: "Candidate v0.3.5 adds an explicit structured peer table and retains source dates and URLs. Exact-source Cloud Next Lab retest is pending; historical source archives and remaining #306 acceptance are incomplete."
-    limitation: "Lab candidate until exact-version runtime checks confirm method selection and arithmetic; no investment action is implied."
+    evidence_gap: "Exact-source Iteration 08 Cloud Next Site validation of dated expectation bridges and no-lookahead handling is pending."
+    limitation: "Lab candidate until exact Iteration 08 runtime checks confirm dated inputs and evidence gates; no investment action is implied."
 
   - name: investment-os-review
     kind: workflow

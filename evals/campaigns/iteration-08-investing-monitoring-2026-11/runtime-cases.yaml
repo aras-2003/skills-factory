@@ -1,0 +1,58 @@
+schema_version: "1.0"
+cases:
+  - id: 308-01
+    target: security-underwriting
+    input: runtime-inputs/308-01.input.md
+    rubric: runtime-rubrics/308-01.rubric.yaml
+  - id: 308-02
+    target: thesis-monitor
+    input: runtime-inputs/308-02.input.md
+    rubric: runtime-rubrics/308-02.rubric.yaml
+  - id: 308-03
+    target: thesis-monitor
+    input: runtime-inputs/308-03.input.md
+    rubric: runtime-rubrics/308-03.rubric.yaml
+  - id: 308-04
+    target: thesis-monitor
+    input: runtime-inputs/308-04.input.md
+    rubric: runtime-rubrics/308-04.rubric.yaml
+  - id: 309-01
+    target: security-underwriting
+    input: runtime-inputs/309-01.input.md
+    rubric: runtime-rubrics/309-01.rubric.yaml
+  - id: 309-02
+    target: thesis-monitor
+    input: runtime-inputs/309-02.input.md
+    rubric: runtime-rubrics/309-02.rubric.yaml
+  - id: 309-03
+    target: valuation-scenario-review
+    input: runtime-inputs/309-03.input.md
+    rubric: runtime-rubrics/309-03.rubric.yaml
+  - id: 309-04
+    target: thesis-monitor
+    input: runtime-inputs/309-04.input.md
+    rubric: runtime-rubrics/309-04.rubric.yaml
+  - id: 310-EN
+    target: investment-os-review
+    input: runtime-inputs/310-EN.input.md
+    rubric: runtime-rubrics/310-EN.rubric.yaml
+  - id: 310-PL
+    target: investment-os-review
+    input: runtime-inputs/310-PL.input.md
+    rubric: runtime-rubrics/310-PL.rubric.yaml
+  - id: 310-SEC
+    target: investment-security-review
+    input: runtime-inputs/310-SEC.input.md
+    rubric: runtime-rubrics/310-SEC.rubric.yaml
+  - id: 310-NOWRITE
+    target: investment-os-review
+    input: runtime-inputs/310-NOWRITE.input.md
+    rubric: runtime-rubrics/310-NOWRITE.rubric.yaml
+  - id: shared-portfolio
+    target: investment-portfolio-review
+    input: runtime-inputs/shared-portfolio.input.md
+    rubric: runtime-rubrics/shared-portfolio.rubric.yaml
+  - id: shared-education
+    target: investment-os-review
+    input: runtime-inputs/shared-education.input.md
+    rubric: runtime-rubrics/shared-education.rubric.yaml

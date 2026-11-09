@@ -1,0 +1,9 @@
+schema_version: "1.0"
+id: 309-01
+target: security-underwriting
+assertions:
+  manual:
+    - separately dates consensus snapshot, revision, actual and guidance
+    - preserves sources, fiscal periods, metric definitions, basis and units
+    - flags non-like-for-like observations instead of silently combining them
+    - assesses operating assumptions separately from stock return

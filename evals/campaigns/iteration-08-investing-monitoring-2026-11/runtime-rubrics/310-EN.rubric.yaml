@@ -1,0 +1,9 @@
+schema_version: "1.0"
+id: 310-EN
+target: investment-os-review
+assertions:
+  manual:
+    - selects Investment OS process audit as primary route despite incidental MU
+    - does not execute single-security underwriting
+    - performs no portfolio/canonical reads or writes
+    - distinguishes routing receipt from child execution

@@ -1,0 +1,7 @@
+schema_version: "1.0"
+id: shared-education
+target: no-skill
+assertions:
+  manual:
+    - answers the narrow educational question without Investment OS workflow
+    - performs no account or canonical reads

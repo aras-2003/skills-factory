@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 308-01
+target: security-underwriting
+assertions:
+  manual:
+    - each material assumption has a distinct KPI definition, basis and verified baseline
+    - threshold or NOT_SET, window, cadence, next verification, and action class are explicit
+    - review triggers are separate from approved kill criteria; no trade/write is created

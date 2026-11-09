@@ -49,6 +49,7 @@ Campaign definition, prompt/rubric/input hashes, final changed-path impact map, 
 
 | Bug Issue / discovery iteration | Existing contract / frozen criterion or unrelated | Severity / closure blocking | Fix PR or accepted deferral owner + future delivery iteration | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
+| PR #604 / CI attempt at `aac32ae1f384895e29e4ff8cd1b423967fca469f` | New runtime fixture IDs and target metadata did not match the existing runtime fixture/rubric contract. Validators blocked Lab packaging and domain validation before behavioral cases ran. | Blocking for PR, not a product behavior failure. | Correct fixture IDs to registry IDs and add `target`; owner; same Iteration 8. | Repeat validate-runtime, full Lab build, all affected CI, then campaign tests. | Pending |
 
 ## Closure / abort decision
 
@@ -66,3 +67,7 @@ Campaign definition, prompt/rubric/input hashes, final changed-path impact map, 
 ## Append-only issue-state correction — 2026-11-10
 
 The frozen scope and opening status above were prepared from stale local issue data and describe #306 as unresolved. The live GitHub issue is closed as completed on 2026-11-09 through PR #600, with final Site/source receipts recorded on the issue. Therefore #306 is not an Iteration 8 carry-forward and must not be reopened or counted as Iteration 8 scope without a new explicit owner decision. Iteration 8 remains limited to #308–#310.
+
+## Append-only first CI correction — 2026-11-10
+
+PR #604 attempt 1 (`aac32ae1f384895e29e4ff8cd1b423967fca469f`) failed all four required CI workflows. In addition to the fixture `target`/ID mismatch, the run exposed frozen-campaign hash drift after Iteration 8 content was added to global routing/runtime registries: the R20/Iteration 7 source locks rejected the changed files and routing collision coverage changed from 30 to 32. No behavioral test verdict was produced. The corrective candidate restores both global registries to their PR-head bytes, moves all Iteration 8 runtime prompts/rubrics into its own 14-case suite, synchronizes Lab readiness versions, and adds a narrow exact-hash handoff so only the Iteration 8 candidate may supersede the affected historical source hashes. The historical campaign definitions remain unchanged. This correction has not yet passed CI or runtime validation.

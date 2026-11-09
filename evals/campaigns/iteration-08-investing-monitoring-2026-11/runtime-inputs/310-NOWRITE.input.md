@@ -1,0 +1,1 @@
+Review the Investment OS methodology using MU only as an incidental example. Do not read my portfolio or canonical records and do not write state. State the workflow selected and distinguish route selection from execution.

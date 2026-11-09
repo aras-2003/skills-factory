@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 308-03
+target: thesis-monitor
+assertions:
+  manual:
+    - reports the price return as observed
+    - does not infer business-thesis invalidation from price alone
+    - separates security attractiveness from business thesis and avoids trade instruction

@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 309-02
+target: thesis-monitor
+assertions:
+  manual:
+    - excludes revision and actual published after the as-of timestamp from decision-time inputs
+    - labels missing guidance UNKNOWN or N/M without imputation
+    - distinguishes later outcome labels from information available at decision time
