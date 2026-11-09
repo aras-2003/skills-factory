@@ -31,6 +31,9 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
             "CATALOG.md",
             "docs/catalog.json",
             "scripts/eval/campaign.py",
+            "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
+            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+            "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
         }
         self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
 
@@ -42,15 +45,15 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
         self.assertEqual("4433f2821a94bdada53663da4bc8674a6e45c2e6", cfg["candidate_source_revision"])
         self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
-        self.assertEqual("fff6f377c997af2b6ee4987ffb12e4464781cc15", cfg["runtime_canonical_source_revision"])
-        self.assertEqual("d1cf3642042a8e4b73dd608dd12368490ea23faf", cfg["runtime_source_revision"])
-        self.assertEqual("1.38.469+fff6f377c997", cfg["runtime_release_id"])
-        self.assertEqual(122, cfg["runtime_site_version"])
+        self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_canonical_source_revision"])
+        self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_source_revision"])
+        self.assertEqual("1.38.471+f6e24683e376", cfg["runtime_release_id"])
+        self.assertEqual(124, cfg["runtime_site_version"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
             {
-                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
-                "Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.",
+                "The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.",
+                "#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.",
             },
             set(cfg["runtime_blockers"]),
         )

@@ -31,6 +31,52 @@ test("Cloud Next facade matches the canonical cross-adapter MCP tool contract", 
   const actual = Object.fromEntries(TOOLS.map((tool) => [tool.name, [...((tool.inputSchema as { required?: string[] }).required ?? [])].sort()]));
   assert.deepEqual(actual, contract.tools);
 });
+test("peer comparability requires dated fit evidence and keeps incompatible metrics N/M", () => {
+  const dimensions = ["value_chain_role", "revenue_profit_mix", "customer_base", "cyclicality", "capital_intensity"];
+  const metric = (name: string, value: string, period = "TTM ending 2026-09-30") => ({
+    name, value, unit: name === "forward_pe" ? "multiple" : "multiple", definition: `${name} enterprise metric v1`, period,
+    basis: "reported", published_at: "2026-11-06", source_url: `https://example.com/${name}`, status: "PROVISIONAL", horizon: name === "forward_pe" ? "NTM" : "",
+    currency: "USD", period_alignment_group: "FY26-TTM", basis_group: "reported-v1", supporting_source_urls: [],
+  });
+  const fit = Object.fromEntries(dimensions.map((dimension) => [dimension, {
+    alignment: "MATCH", target_summary: "Target evidence", peer_summary: "Peer evidence", rationale: "Comparable product and economics",
+    target_published_at: "2026-11-06", target_source_url: "https://example.com/target", published_at: "2026-11-06", source_url: "https://example.com/peer",
+  }]));
+  const target = { ticker: "AMD", sector: "Semiconductors", industry: "Fabless", business_model: "Chip designer", as_of: "2026-11-06", cyclical: true, comparison_group: "fabless-accelerators", peer_tier: "TARGET", metrics: {
+    ev_sales: metric("ev_sales", "16.06"), ev_ebitda: metric("ev_ebitda", "65.50"), forward_pe: metric("forward_pe", "44"),
+  } };
+  const directPeer = (ticker: string) => ({ ticker, sector: "Semiconductors", industry: "Fabless", business_model: "Chip designer", as_of: "2026-11-06", cyclical: true,
+    comparison_group: "fabless-accelerators", peer_tier: "DIRECT", inclusion_rationale: "Same semiconductor value chain role", economic_fit: fit,
+    metrics: { ev_sales: metric("ev_sales", "14"), ev_ebitda: metric("ev_ebitda", "30"), forward_pe: { ...metric("forward_pe", "25", "FY2027"), horizon: "FY2027" } },
+  });
+  const peers = [directPeer("NVDA"), directPeer("INTC"), directPeer("MRVL"), {
+    ...directPeer("MSFT"), sector: "Software", industry: "Cloud", peer_tier: "ADJACENT", economic_fit: {}, comparison_group: "fabless-accelerators",
+  }, {
+    ...directPeer("STALE"), economic_fit: { ...fit, cyclicality: { ...fit.cyclicality, published_at: "2025-01-01" } },
+  }];
+  const input = { as_of: "2026-11-06", target, peers };
+  const result = callTool("compare_peer_comparability", input) as Record<string, any>;
+  assert.equal(result.status, "COMPARABLE");
+  assert.equal(result.direct_peer_count, 3);
+  assert.equal(result.included_peer_count, 4);
+  assert.equal(result.peers.find((peer: any) => peer.ticker === "NVDA").metrics.forward_pe.value, "N/M");
+  assert.equal(result.peers.find((peer: any) => peer.ticker === "MSFT").comparability_tier, "ADJACENT");
+  assert.equal(result.peers.find((peer: any) => peer.ticker === "STALE").exclusion_rationale, "STALE_DIRECT_FIT_EVIDENCE");
+  assert.equal(result.ranked, false);
+  assert.equal(result.recommendation, null);
+  assert.match(result.evidence_status_semantics, /source verification is not performed/);
+
+  const insufficient = callTool("compare_peer_comparability", { ...input, peers: peers.slice(0, 2) }) as Record<string, any>;
+  assert.equal(insufficient.status, "INSUFFICIENT_COMPARABLE_PEERS");
+  assert.equal(insufficient.comparability_reason, "FEWER_THAN_THREE_DIRECT_PEERS");
+  assert.throws(() => callTool("compare_peer_comparability", { ...input, peers: [directPeer("NVDA"), directPeer("NVDA"), directPeer("MRVL")] }));
+  assert.throws(() => callTool("compare_peer_comparability", { ...input, target: { ...target, ticker: "nvda" } }), /duplicate or target peer/);
+
+  const rpcResult = await handleMcp(rpc("tools/call", { name: "compare_peer_comparability", arguments: input }, { "oai-authenticated-user-id": "synthetic-test-user" }));
+  const payload = await rpcResult.json() as Record<string, any>;
+  assert.equal(payload.result.structuredContent.status, "COMPARABLE");
+  assert.equal(payload.result.structuredContent.tool_receipt.tool_name, "compare_peer_comparability");
+});
 test("opportunity score calculator is deterministic, evidence-gated and ranks only comparable rows", () => {
   const names = ["catalyst_timing", "estimate_revisions", "valuation_expectations", "price_setup", "scenario_asymmetry", "cycle_resilience"];
   const makeEvidence = (cycle: number, date = "2026-10-27") => Object.fromEntries(names.map((name) => [name, {

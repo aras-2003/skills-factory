@@ -7,6 +7,7 @@
     "load_skill": ["skill_name"],
     "route_investment_request": ["user_request"],
     "calculate_opportunity_scores": ["as_of", "rows"],
+    "compare_peer_comparability": ["as_of", "peers", "target"],
     "calculate_issuer_exposure": ["as_of", "base_currency", "fund_snapshots", "portfolio_id", "positions"],
     "render_bar_chart": ["expected_points", "horizontal", "labels", "title", "unit", "values"],
     "render_line_chart": ["expected_points_per_series", "expected_series", "expected_x_labels", "series_names", "series_values", "title", "unit", "x_labels"]

@@ -4,21 +4,20 @@ scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
 runtime_status: PARTIAL_BLOCKED
-candidate_source_revision: 4433f2821a94bdada53663da4bc8674a6e45c2e6
+candidate_source_revision: 6b1ba163b53d5ba9d2f2857400304768d64609b9
 candidate_source_revision_status: committed_local_pending_external
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
 runtime_source_revision_required: true
-runtime_source_revision: d1cf3642042a8e4b73dd608dd12368490ea23faf
-runtime_release_id: 1.38.469+fff6f377c997
+runtime_source_revision: f6e24683e37648c7466718b3c2d767c2a157c25f
+runtime_release_id: 1.38.471+f6e24683e376
 runtime_attestation: verified
 runtime_evidence: evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md
-runtime_canonical_source_revision: fff6f377c997af2b6ee4987ffb12e4464781cc15
-runtime_site_version: 122
-runtime_deployment_id: appgdep_6af0fa876fa481919889f6d10716c1be
+runtime_canonical_source_revision: f6e24683e37648c7466718b3c2d767c2a157c25f
+runtime_site_version: 124
+runtime_deployment_id: appgdep_6af1a96e42308191a66c3e35549d35b2
 runtime_blockers:
-- Candidate changes remain local and have no exact-source Cloud Next runtime execution.
-- 'Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime
-  acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.'
+- The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.
+- '#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.'
 release_approved: false
 historical_r20_immutable: true
 status_note: 'Local behavior candidate 4433f2821a94bdada53663da4bc8674a6e45c2e6 builds Lab 1.38.474+4433f2821a94;
@@ -57,7 +56,6 @@ out_of_scope_behavior_paths:
 - docs/audits/investing-domain-audit-iteration-07-2026-11.md
 - docs/catalog.json
 - docs/governance/iterations/iteration-07-investing-quality-2026-11.md
-- scripts/eval/campaign.py
 - skills/investing/security-underwriting/SKILL.md
 - skills/investing/security-underwriting/scripts/financial_quality.py
 - skills/investing/security-underwriting/scripts/value_trap_gate.py
@@ -67,6 +65,9 @@ out_of_scope_behavior_paths:
 - workflows/runtime-registry.yaml
 in_scope_behavior_paths:
 - skills/investing/valuation-scenario-review/SKILL.md
+- adapters/skills-factory-cloud-next/src/peer-comparability.ts
+- adapters/skills-factory-cloud-next/src/cloud-tools.ts
+- adapters/skills-factory-cloud-next/src/mcp-handler.ts
 - skills/investing/valuation-scenario-review/scripts/peer_comparison.py
 - skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py
 test_modules:
@@ -76,6 +77,7 @@ test_modules:
 - skills/investing/fundamental-intelligence/test_engine.py
 - scripts/eval/tests/test_iteration_07_investing_quality_coverage.py
 - scripts/eval/tests/test_iteration02_workflow_hardening_release.py
+- adapters/skills-factory-cloud-next/tests/contracts.test.ts
 source_sha256:
   CATALOG.md: 0167c0eecb64337f60f85a35b82d29cbeb3ce53d624c2b7189473e7f6c69e7b5
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
@@ -84,6 +86,12 @@ source_sha256:
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 051eb0170f26c97630142fb7719baa2225fe6cb36c558b80260e82fc84af24dc
+  runtime/contracts/mcp-tools-v1.json: pending
+  sites/skills-factory-site/README.md: pending
+  adapters/skills-factory-cloud-next/tests/contracts.test.ts: pending
+  adapters/skills-factory-cloud-next/src/peer-comparability.ts: pending
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: pending
+  adapters/skills-factory-cloud-next/src/mcp-handler.ts: pending
   evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 0261fe2b06cef435c270c5cb4da0d99edbd28f175e2e0b6aa1048daa639a7470
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f

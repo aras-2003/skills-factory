@@ -691,6 +691,9 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
         "skills/investing/valuation-scenario-review/SKILL.md",
         "skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py",
+        "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
+        "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+        "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
         "skills/investing/thesis-challenge/SKILL.md",
         "workflows/investment-security-review/WORKFLOW.md",
         "workflows/runtime-registry.yaml",
@@ -704,6 +707,9 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "skills/investing/valuation-scenario-review/SKILL.md",
         "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
         "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
+        "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
+        "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+        "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
     }
     expected_out_of_scope = expected_behavior - expected_in_scope
     expected_modules = {
@@ -713,6 +719,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "skills/investing/fundamental-intelligence/test_engine.py",
         "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
         "scripts/eval/tests/test_iteration02_workflow_hardening_release.py",
+        "adapters/skills-factory-cloud-next/tests/contracts.test.ts",
     }
     expected_support = {
         "skills/investing/fundamental-intelligence/README.md",
@@ -723,6 +730,8 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "workflows/investment-security-review/tests/cases.yaml",
         "release/production-readiness.yaml",
         "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md",
+        "runtime/contracts/mcp-tools-v1.json",
+        "sites/skills-factory-site/README.md",
         "evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml",
         "evals/campaigns/investment-quality-2026-10/campaign.yaml",
         "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml",
@@ -778,16 +787,16 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
             or cfg.get("candidate_source_revision") != "4433f2821a94bdada53663da4bc8674a6e45c2e6"
             or cfg.get("candidate_source_revision_status") != "committed_local_pending_external"
-            or cfg.get("runtime_canonical_source_revision") != "fff6f377c997af2b6ee4987ffb12e4464781cc15"
-            or cfg.get("runtime_source_revision") != "d1cf3642042a8e4b73dd608dd12368490ea23faf"
-            or cfg.get("runtime_release_id") != "1.38.469+fff6f377c997"
-            or cfg.get("runtime_site_version") != 122
-            or cfg.get("runtime_deployment_id") != "appgdep_6af0fa876fa481919889f6d10716c1be"
+            or cfg.get("runtime_canonical_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
+            or cfg.get("runtime_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
+            or cfg.get("runtime_release_id") != "1.38.471+f6e24683e376"
+            or cfg.get("runtime_site_version") != 124
+            or cfg.get("runtime_deployment_id") != "appgdep_6af1a96e42308191a66c3e35549d35b2"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
-                "Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.",
+                "The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.",
+                "#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
