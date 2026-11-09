@@ -15,6 +15,31 @@ import server
 
 
 class ChartContractTests(unittest.TestCase):
+    def test_python_peer_comparability_exposes_table_and_unsigned_receipt(self):
+        def issuer(ticker, tier="TARGET", industry="Semiconductors"):
+            return {
+                "ticker": ticker, "sector": "Technology", "industry": industry,
+                "business_model": "compute hardware" if tier != "ADJACENT" else "cloud software",
+                "as_of": "2026-11-08", "cyclical": False,
+                "comparison_group": "compute peers", "inclusion_rationale": "Synthetic contract fixture.",
+                "peer_tier": tier, "economic_fit": {},
+                "metrics": {"ev_sales": {
+                    "name": "ev_sales", "value": "5", "unit": "multiple", "definition": "EV / sales",
+                    "period": "TTM FY2025", "basis": "GAAP", "published_at": "2026-11-01",
+                    "source_url": "https://example.test/source", "status": "VERIFIED", "horizon": "",
+                    "currency": "USD", "period_alignment_group": "", "basis_group": "",
+                    "supporting_source_urls": [],
+                }},
+            }
+        result = server.compare_peer_comparability(
+            as_of="2026-11-08", target=issuer("AMD"),
+            peers=[issuer("MSFT", "ADJACENT", "Software")],
+        )
+        self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
+        self.assertEqual("ADJACENT", result["table"]["rows"][1]["comparability_tier"])
+        self.assertFalse(result["ranked"])
+        self.assertEqual("compare_peer_comparability", result["tool_receipt"]["tool_name"])
+
     def test_python_facade_matches_canonical_tool_contract(self):
         contract = json.loads((ROOT / "runtime/contracts/mcp-tools-v1.json").read_text())
         actual = {

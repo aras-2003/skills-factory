@@ -361,7 +361,7 @@ class PeerComparisonTests(unittest.TestCase):
         row = next(item for item in result["peers"] if item["ticker"] == "P1")
         self.assertEqual("INVALID_SUPPORTING_SOURCE_URL", row["metrics"]["ev_sales"]["reason"])
 
-    def test_real_qdd_fy2027_snapshot_keeps_adjacent_models_out_of_amd_cohort(self):
+    def test_real_qdd_fy2027_snapshot_keeps_adjacent_models_out_of_direct_amd_cohort(self):
         """Public consensus observations are not peer evidence without model and period fit."""
         as_of = "2026-11-05"
         source_urls = {
@@ -413,9 +413,10 @@ class PeerComparisonTests(unittest.TestCase):
         by_ticker = {row["ticker"]: row for row in result["peers"]}
         self.assertEqual(D("8.2"), snapshot("AVGO").metrics["ev_sales"].value)
         self.assertEqual("INSUFFICIENT_COMPARABLE_PEERS", result["status"])
-        self.assertEqual(4, result["included_peer_count"])
+        self.assertEqual(5, result["included_peer_count"])
         self.assertEqual(1, result["direct_peer_count"])
-        self.assertEqual("SECTOR_OR_INDUSTRY_MISMATCH", by_ticker["MSFT"]["reason"])
+        self.assertIsNone(by_ticker["MSFT"]["reason"])
+        self.assertEqual("ADJACENT", by_ticker["MSFT"]["comparability_tier"])
         self.assertEqual("ADJACENT", by_ticker["MU"]["comparability_tier"])
         self.assertEqual("DIRECT", by_ticker["NVDA"]["comparability_tier"])
         self.assertEqual("ADJACENT", by_ticker["AVGO"]["comparability_tier"])

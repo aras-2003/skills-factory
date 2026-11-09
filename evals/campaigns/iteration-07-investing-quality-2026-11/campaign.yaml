@@ -66,6 +66,8 @@ out_of_scope_behavior_paths:
 - workflows/investment-security-review/WORKFLOW.md
 - workflows/runtime-registry.yaml
 in_scope_behavior_paths:
+- runtime/mcp/server.py
+- runtime/mcp/cloud_server.py
 - scripts/eval/campaign.py
 - skills/investing/valuation-scenario-review/SKILL.md
 - adapters/skills-factory-cloud-next/src/peer-comparability.ts
@@ -74,6 +76,7 @@ in_scope_behavior_paths:
 - skills/investing/valuation-scenario-review/scripts/peer_comparison.py
 - skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py
 test_modules:
+- runtime/mcp/tests/test_chart_contract.py
 - skills/investing/security-underwriting/tests/test_financial_quality.py
 - skills/investing/security-underwriting/tests/test_real_issuer_source_probe.py
 - skills/investing/valuation-scenario-review/tests/test_peer_comparison.py
@@ -82,19 +85,17 @@ test_modules:
 - scripts/eval/tests/test_iteration02_workflow_hardening_release.py
 - adapters/skills-factory-cloud-next/tests/contracts.test.ts
 source_sha256:
-  CATALOG.md: 0167c0eecb64337f60f85a35b82d29cbeb3ce53d624c2b7189473e7f6c69e7b5
+  CATALOG.md: dec192aaa58af5ec58deb28ac9c23636678f774dc1c497634cba665a2dac0645
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
+  adapters/skills-factory-cloud-next/src/mcp-handler.ts: b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8
+  adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
+  adapters/skills-factory-cloud-next/tests/contracts.test.ts: dde0bec7f94ed2ae6b2d9d03a6bdfc23772b420b395b369da3f9f2a85b923002
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
-  docs/catalog.json: 48a443ee5197f43d80ecdfeb465e6df1ba6ed4d73faeb513a96be17a2ec7063e
+  docs/catalog.json: a19fa03d4526c671c0156f70ec1dcc1771de6c653870516920801d1516b0ea70
   docs/governance/iterations/iteration-07-investing-quality-2026-11.md: ce156fd7751262582e28b0f9ff6311adfcf3b95d703dac633cf7c1580367547a
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 02946d7fdb641b5bb712741f7e13b1c3b912efba880863747de868bfdb7c2ec2
-  runtime/contracts/mcp-tools-v1.json: ebbc8f1bf8457b4ba4f19e4cb90f536a322856ac473d10ddf9741c4db177b4f9
-  sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
-  adapters/skills-factory-cloud-next/tests/contracts.test.ts: dde0bec7f94ed2ae6b2d9d03a6bdfc23772b420b395b369da3f9f2a85b923002
-  adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
-  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
-  adapters/skills-factory-cloud-next/src/mcp-handler.ts: b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8
   evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 915f9f02f0b10c1e32585a081996a939ca19259760d2f1151c498063066bfefe
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
@@ -126,10 +127,15 @@ source_sha256:
   evals/routing/supplemental/investment-top-twenty-screen-en.rubric.yaml: fa08f2834fa5104c172e3b30a8a0e7a003dba4aefde59b567ec6cca7893989c2
   evals/routing/supplemental/investment-top-two-screen-pl.input.md: 7517ca4ddf83a15d188f1d560287934749f6c4038f81d82afd0d7f31d547fb2d
   evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml: 0ec7e8bf45911ec2fbe7113417e8b1ebc5dd335b6cd6d0e8f3b4687506f8a8e5
-  release/production-readiness.yaml: 656e94d8e9e4205d09273ad8e21e6124dd0db43e8f3f14c45a6da827b6887fc4
-  scripts/eval/campaign.py: 04be2637c00d9d41fbe4230636570c4b800874347e5b7e2ba0772cb88152f87e
+  release/production-readiness.yaml: 9b34df093c9aae57642cd8a8e361a4a8d9da4b804c442eef372cf05e897bce00
+  runtime/contracts/mcp-tools-v1.json: ebbc8f1bf8457b4ba4f19e4cb90f536a322856ac473d10ddf9741c4db177b4f9
+  runtime/mcp/cloud_server.py: 8dca0e2a35c69e462bc70a43b07ac45cfc6da35cbfb375f2af71a971cac0b9dd
+  runtime/mcp/server.py: b9d05a294618ebb2f20106bd10353ad71e31b7cd3b2c0cf3fc4b1718ea87acab
+  runtime/mcp/tests/test_chart_contract.py: 525ef0915ec27f5e842f9c16a1435770565e5b78c3e90d48508acc61e7c3c74a
+  scripts/eval/campaign.py: abdf48e6c4237b79a34189fb791e124d4ded021dd6993ef437066737f0e9ddcf
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: cb3ae626c1cb6c500c2927e0514f95e1d1b4ade431e025a22ac3a054cc2e0eb0
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: b9eee508d5552b244a3a493c66de4834a6f6994444332e3befa71d0198ccc532
+  sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
   skills/investing/security-underwriting/SKILL.md: 6f668be91467b2703ce32d119e62b97fa69a2dec3f0473acf98828b2fbf56e4d
@@ -142,11 +148,11 @@ source_sha256:
   skills/investing/thesis-challenge/SKILL.md: 133b1bc881e58329975ecff02cf41bdc20872879746274d818077076309bc31c
   skills/investing/thesis-challenge/tests/cases.yaml: 5ed7120ffe4aff4d9b92843010dcc15e252888905f5dbb0ce297bf6cd569e3e0
   skills/investing/valuation-scenario-review/SKILL.md: 89dd321ccd999749b32cfaa551a65d74f97529a5eef3c86a0e4e62cdfb08e0b4
-  skills/investing/valuation-scenario-review/scripts/peer_comparison.py: 03af45cd02ad6b07e256a037e69577baf29332aba190c2124c7f0147e8c123f0
+  skills/investing/valuation-scenario-review/scripts/peer_comparison.py: bfc702eed6a002f801db02209c76ac18114ea302da3badcbb7f623ead682eabf
   skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py: a29bf28e4ecd592c675532c782fb870dab14bd71cea6a335fee5b201f8919762
   skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: d67ff95ad731d6c03c539f8d58d683d4eb1acc88cf6c363f916ffa9cf3db248f
   skills/investing/valuation-scenario-review/tests/cases.yaml: 5e4f34ebb0ede16ee996f516fe77f8f7a3bc174c47df21786c669ace364cbfe5
-  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: 0be572d702e9a10e86bfacbd2d8b2a0f06eb56eabf5f12d2b95f6920b4bc269d
+  skills/investing/valuation-scenario-review/tests/test_peer_comparison.py: f4ce5e615c59931e4b6b823ad973f478e0ba5a14b4a43e364d7a818e3c0092e9
   workflows/investment-security-review/WORKFLOW.md: de101bc7232a8f1969d3b09e8c0c7a52634054f13f0b990a339dd2847863478f
   workflows/investment-security-review/tests/cases.yaml: 67b4636b0c7affdcae6332e7790cc0d10075e1aa6573edb92e4e89d3725069db
   workflows/runtime-registry.yaml: 3ebffa2b45c902465505550a90c2e4e4ed4844b9a05156b741238cb70954d684

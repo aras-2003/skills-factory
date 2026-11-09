@@ -34,6 +34,8 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
             "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
             "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
             "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+            "runtime/mcp/server.py",
+            "runtime/mcp/cloud_server.py",
         }
         self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
 

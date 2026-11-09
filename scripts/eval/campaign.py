@@ -694,6 +694,8 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
         "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
         "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+        "runtime/mcp/server.py",
+        "runtime/mcp/cloud_server.py",
         "skills/investing/thesis-challenge/SKILL.md",
         "workflows/investment-security-review/WORKFLOW.md",
         "workflows/runtime-registry.yaml",
@@ -710,6 +712,8 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
         "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
         "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+        "runtime/mcp/server.py",
+        "runtime/mcp/cloud_server.py",
         "scripts/eval/campaign.py",
     }
     expected_out_of_scope = expected_behavior - expected_in_scope
@@ -721,6 +725,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
         "scripts/eval/tests/test_iteration02_workflow_hardening_release.py",
         "adapters/skills-factory-cloud-next/tests/contracts.test.ts",
+        "runtime/mcp/tests/test_chart_contract.py",
     }
     expected_support = {
         "skills/investing/fundamental-intelligence/README.md",
