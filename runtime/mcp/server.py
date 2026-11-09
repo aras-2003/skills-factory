@@ -36,7 +36,12 @@ from observability import execute_tool, tool_span
 from opportunity_score import calculate_opportunity_scores as _calculate_opportunity_scores
 from issuer_exposure import calculate_issuer_exposure as _calculate_issuer_exposure
 
-_PEER_SCRIPT_DIRECTORY = Path(__file__).resolve().parents[2] / "skills/investing/valuation-scenario-review/scripts"
+_PEER_SCRIPT_RELATIVE_PATH = Path("skills/investing/valuation-scenario-review/scripts")
+_PEER_SCRIPT_DIRECTORY = next(
+    (base / _PEER_SCRIPT_RELATIVE_PATH for base in Path(__file__).resolve().parents[1:3]
+     if (base / _PEER_SCRIPT_RELATIVE_PATH).is_dir()),
+    Path(__file__).resolve().parents[2] / _PEER_SCRIPT_RELATIVE_PATH,
+)
 if str(_PEER_SCRIPT_DIRECTORY) not in sys.path:
     sys.path.insert(0, str(_PEER_SCRIPT_DIRECTORY))
 from peer_comparison import (  # noqa: E402
