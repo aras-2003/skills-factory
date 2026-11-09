@@ -11,6 +11,13 @@
 
 The deployment/archive attestation proves the embedded package identity and release. The Site's `runtime_info` and `list_skills` calls prove the live runtime responds. Neither substitutes for a comparator call or resolves #306's source evidence gate.
 
+## Deployed Site UI comparator probe — 2026-11-09
+
+- Revalidated the owner-only Site v125 at canonical source `89c28bf70353b4568c7bc031e128a5f57a0fe24d` and Site mirror `967ee59cfa5364be118d7521e8dfdbba4da7cfae`. `runtime_info` returned verified attestation and declared `compare_peer_comparability`; `list_skills` returned the same release identity. These are actual MCP receipts.
+- The authenticated Site UI exposed a `compare_peer_comparability` console panel. A synthetic, dated AMD-like target with three synthetic direct peers was submitted there. The panel returned `COMPARABLE`, 3 included direct peers, compatible counts of 3 for `ev_sales` and `ev_ebitda`, `cycle_normalization_required=true`, `ranked=false`, `recommendation=null`, and `cross_sector_ranking=false`.
+- This was a browser-side `callTool` calculation on the Site page, not an MCP `tools/call`: the UI explicitly says its panel uses the same calculation code as MCP but is not a plugin-connection test. Inputs use synthetic values and `example.test` URLs; they do not support issuer claims or the real AMD/MU cohort. No MCP comparator receipt was produced, and this does not establish exact-runtime invocation.
+- **Acceptance effect:** the deployed computation path is exercised through its UI and returned the expected bounded synthetic result. #306 remains open for immutable, reproducible real-source snapshots, complete same-snapshot growth/forecast evidence, and an actual MCP comparator receipt. Iteration 07 remains `PARTIAL_BLOCKED`.
+
 ## Search-index recovery and cross-provider reconciliation — 2026-11-09
 
 - Search-index content retrieved 2026-11-09 recovered a Yahoo Finance statistics snapshot for Kioxia (285A.T) explicitly as of 2026-11-06: enterprise value JPY 12.98T, TTM revenue JPY 5.79T, EV/Revenue 2.24x and EV/EBITDA 3.01x. The EV/Revenue arithmetic reconciles after rounding (`12.98 / 5.79 = 2.242`), and the values match the frozen Kioxia row. This is a recovered search-result extract from a mutable page, not an archived original response body. [Yahoo Finance Kioxia](https://finance.yahoo.com/quote/285A.T/)
