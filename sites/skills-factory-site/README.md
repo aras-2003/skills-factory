@@ -25,6 +25,6 @@ The generated directory `lib/skills-factory-adapter/` is ignored build output. I
 
 ## MCP contract
 
-The Cloud Next adapter exposes six stateless, read-only tools: `runtime_info`, `list_skills`, `load_skill`, `route_investment_request`, `render_bar_chart`, and `render_line_chart`. The host model executes loaded instructions. The MCP routes and renders explicit caller data; it does not fetch portfolio data, trade, infer missing chart values, or claim that the client rendered an SVG.
+The Cloud Next adapter exposes nine stateless, read-only tools: `runtime_info`, `list_skills`, `load_skill`, `route_investment_request`, `calculate_opportunity_scores`, `calculate_issuer_exposure`, `compare_peer_comparability`, `render_bar_chart`, and `render_line_chart`. The host model executes loaded instructions. The MCP routes, validates explicit caller-supplied evidence and renders explicit caller data; it does not retrieve or verify issuer data, fetch portfolio data, trade, infer missing chart values, or claim that the client rendered an SVG. Peer comparability requires dated source references and direct-fit evidence; missing or incompatible metrics remain N/M, and the tool never ranks issuers or recommends an investment.
 
 For source ownership and release boundaries, see [`docs/SITE-CANONICAL-SOURCE.md`](../../docs/SITE-CANONICAL-SOURCE.md). Use the official Sites workflow and native deployment tools to publish; do not edit the provider-managed source mirror as the canonical project source.

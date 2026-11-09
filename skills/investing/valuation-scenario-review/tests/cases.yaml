@@ -88,6 +88,14 @@ cases:
       must: ["business model", "forecast horizon", "N/M", "three", "five", "PEG=1", "heuristic"]
       must_not: ["cheap therefore buy", "cross-sector ranking"]
 
+  - id: valuation-peer-runtime-comparability-gate
+    case: Dated source evidence is gated by the Site tool
+    input: "Using the dated AMD, NVDA, INTC, MRVL and MSFT snapshot I supplied, validate direct peer comparability; keep MSFT adjacent, show N/M for the mismatched forward P/E horizon, and preserve the tool receipt."
+    expected:
+      should_trigger: true
+      must: ["compare_peer_comparability", "DIRECT", "ADJACENT", "N/M", "tool receipt"]
+      must_not: ["MSFT in direct-peer statistics", "ranked issuers", "source verification"]
+
   - id: valuation-peer-plot-same-snapshot
     case: Plot provenance must match comparison table
     input: "Plot peer forecast EPS growth against forward P/E from the exact same filtered, dated peer table, with source provenance and the PEG=1 line."

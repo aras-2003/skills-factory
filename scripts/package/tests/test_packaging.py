@@ -196,11 +196,17 @@ class PackagingTests(unittest.TestCase):
                     "list_skills",
                     "load_skill",
                     "route_investment_request",
+                    "calculate_opportunity_scores",
+                    "compare_peer_comparability",
+                    "calculate_issuer_exposure",
                     "render_bar_chart",
                     "render_line_chart",
                 ],
                 runtime["tools"],
             )
+            self.assertTrue((out / "mcp/opportunity_score.py").is_file())
+            self.assertTrue((out / "mcp/issuer_exposure.py").is_file())
+            self.assertTrue((out / "mcp/peer_comparison.py").is_file())
 
     def test_skills_only_profile_has_no_local_mcp_dependency(self) -> None:
         with tempfile.TemporaryDirectory(dir=(ROOT / ".tmp")) as td:

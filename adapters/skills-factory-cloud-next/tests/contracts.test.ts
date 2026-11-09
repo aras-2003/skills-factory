@@ -31,6 +31,61 @@ test("Cloud Next facade matches the canonical cross-adapter MCP tool contract", 
   const actual = Object.fromEntries(TOOLS.map((tool) => [tool.name, [...((tool.inputSchema as { required?: string[] }).required ?? [])].sort()]));
   assert.deepEqual(actual, contract.tools);
 });
+test("peer comparability requires dated fit evidence and keeps incompatible metrics N/M", async () => {
+  const dimensions = ["value_chain_role", "revenue_profit_mix", "customer_base", "cyclicality", "capital_intensity"];
+  const metric = (name: string, value: string, period = "TTM ending 2026-09-30") => ({
+    name, value, unit: name === "forward_pe" ? "multiple" : "multiple", definition: `${name} enterprise metric v1`, period,
+    basis: "reported", published_at: "2026-11-06", source_url: `https://example.com/${name}`, status: "PROVISIONAL", horizon: name === "forward_pe" ? "NTM" : "",
+    currency: "USD", period_alignment_group: "FY26-TTM", basis_group: "reported-v1", supporting_source_urls: [],
+  });
+  const fit = Object.fromEntries(dimensions.map((dimension) => [dimension, {
+    alignment: "MATCH", target_summary: "Target evidence", peer_summary: "Peer evidence", rationale: "Comparable product and economics",
+    target_published_at: "2026-11-06", target_source_url: "https://example.com/target", published_at: "2026-11-06", source_url: "https://example.com/peer",
+  }]));
+  const target = { ticker: "AMD", sector: "Semiconductors", industry: "Fabless", business_model: "Chip designer", as_of: "2026-11-06", cyclical: true, comparison_group: "fabless-accelerators", peer_tier: "TARGET", metrics: {
+    ev_sales: metric("ev_sales", "16.06"), ev_ebitda: metric("ev_ebitda", "65.50"), forward_pe: metric("forward_pe", "44"),
+  } };
+  const directPeer = (ticker: string) => ({ ticker, sector: "Semiconductors", industry: "Fabless", business_model: "Chip designer", as_of: "2026-11-06", cyclical: true,
+    comparison_group: "fabless-accelerators", peer_tier: "DIRECT", inclusion_rationale: "Same semiconductor value chain role", economic_fit: fit,
+    metrics: { ev_sales: metric("ev_sales", "14"), ev_ebitda: metric("ev_ebitda", "30"), forward_pe: { ...metric("forward_pe", "25", "FY2027"), horizon: "FY2027" } },
+  });
+  const peers = [directPeer("NVDA"), directPeer("INTC"), directPeer("MRVL"), {
+    ...directPeer("MSFT"), sector: "Software", industry: "Cloud", business_model: "cloud software subscriptions", peer_tier: "ADJACENT", economic_fit: {}, comparison_group: "fabless-accelerators",
+  }, {
+    ...directPeer("STALE"), economic_fit: { ...fit, cyclicality: { ...fit.cyclicality, published_at: "2025-01-01" } },
+  }];
+  const input = { as_of: "2026-11-06", target, peers };
+  const result = callTool("compare_peer_comparability", input) as Record<string, any>;
+  assert.equal(result.status, "COMPARABLE");
+  assert.equal(result.direct_peer_count, 3);
+  assert.equal(result.included_peer_count, 4);
+  assert.equal(result.peers.find((peer: any) => peer.ticker === "NVDA").metrics.forward_pe.value, "N/M");
+  assert.equal(result.peers.find((peer: any) => peer.ticker === "MSFT").comparability_tier, "ADJACENT");
+  assert.equal(result.peers.find((peer: any) => peer.ticker === "STALE").exclusion_rationale, "STALE_DIRECT_FIT_EVIDENCE");
+  assert.deepEqual(result.table.metric_names, ["ev_ebitda", "ev_sales", "forward_pe"]);
+  const tableByTicker = Object.fromEntries(result.table.rows.map((row: any) => [row.ticker, row]));
+  assert.equal(tableByTicker.AMD.metrics.ev_sales.value, "16.06");
+  assert.equal(tableByTicker.NVDA.metrics.ev_sales.value, "14");
+  assert.equal(tableByTicker.NVDA.metrics.forward_pe.value, "N/M");
+  assert.equal(tableByTicker.MSFT.comparability_tier, "ADJACENT");
+  assert.equal(tableByTicker.MSFT.business_model, "cloud software subscriptions");
+  assert.equal(tableByTicker.STALE.metrics.ev_sales.value, "N/M");
+  assert.equal(tableByTicker.STALE.metrics.ev_sales.reason, "STALE_DIRECT_FIT_EVIDENCE");
+  assert.equal(result.ranked, false);
+  assert.equal(result.recommendation, null);
+  assert.match(result.evidence_status_semantics, /source verification is not performed/);
+
+  const insufficient = callTool("compare_peer_comparability", { ...input, peers: peers.slice(0, 2) }) as Record<string, any>;
+  assert.equal(insufficient.status, "INSUFFICIENT_COMPARABLE_PEERS");
+  assert.equal(insufficient.comparability_reason, "FEWER_THAN_THREE_DIRECT_PEERS");
+  assert.throws(() => callTool("compare_peer_comparability", { ...input, peers: [directPeer("NVDA"), directPeer("NVDA"), directPeer("MRVL")] }));
+  assert.throws(() => callTool("compare_peer_comparability", { ...input, target: { ...target, ticker: "nvda" } }), /duplicate or target peer/);
+
+  const rpcResult = await handleMcp(rpc("tools/call", { name: "compare_peer_comparability", arguments: input }, { "oai-authenticated-user-id": "synthetic-test-user" }));
+  const payload = await rpcResult.json() as Record<string, any>;
+  assert.equal(payload.result.structuredContent.status, "COMPARABLE");
+  assert.equal(payload.result.structuredContent.tool_receipt.tool_name, "compare_peer_comparability");
+});
 test("opportunity score calculator is deterministic, evidence-gated and ranks only comparable rows", () => {
   const names = ["catalyst_timing", "estimate_revisions", "valuation_expectations", "price_setup", "scenario_asymmetry", "cycle_resilience"];
   const makeEvidence = (cycle: number, date = "2026-10-27") => Object.fromEntries(names.map((name) => [name, {
@@ -371,7 +426,7 @@ test("escape SVG injection and external resources", () => {
 });
 test("MCP initialize, discover parity tools, authenticate and call", async () => {
   const init = await (await handleMcp(rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } }))).json() as { result: { protocolVersion: string; serverInfo: { version: string }; instructions: string; capabilities: { resources?: unknown } } }; assert.equal(init.result.protocolVersion, "2025-06-18"); assert.equal(init.result.serverInfo.version, "site-mcp-v2"); assert.match(init.result.instructions, /call route_investment_request before analysis/); assert.match(init.result.instructions, /load_skill for the exact returned child_workflow/); assert.ok(init.result.capabilities.resources);
-  const list = await (await handleMcp(rpc("tools/list"))).json() as { result: { tools: Array<{ name: string; _meta?: { ui?: { resourceUri?: string }; "openai/outputTemplate"?: string } }> } }; assert.equal(list.result.tools.length, 8);
+  const list = await (await handleMcp(rpc("tools/list"))).json() as { result: { tools: Array<{ name: string; _meta?: { ui?: { resourceUri?: string }; "openai/outputTemplate"?: string } }> } }; assert.equal(list.result.tools.length, 9);
   const chartTools = list.result.tools.filter((tool) => tool.name.startsWith("render_")); assert.equal(chartTools.length, 2); assert.ok(chartTools.every((tool) => tool._meta?.ui?.resourceUri === "ui://skills-factory/charts/inline-v2.html" && tool._meta["openai/outputTemplate"] === tool._meta.ui.resourceUri));
   const resources = await (await handleMcp(rpc("resources/list"))).json() as { result: { resources: Array<{ uri: string; mimeType: string }> } }; assert.deepEqual(resources.result.resources, [{ uri: "ui://skills-factory/charts/inline-v2.html", name: "Interactive charts", description: "Self-contained HTML/CSS/SVG chart view for bar and line chart tools.", mimeType: "text/html;profile=mcp-app" }]);
   const ui = await (await handleMcp(rpc("resources/read", { uri: "ui://skills-factory/charts/inline-v2.html" }))).json() as { result: { contents: Array<{ mimeType: string; text: string; _meta?: { "openai/ui"?: { availableDisplayModes?: string[] } } }> } }; assert.equal(ui.result.contents[0].mimeType, "text/html;profile=mcp-app"); assert.match(ui.result.contents[0].text, /window\.openai\?\.toolOutput/); assert.match(ui.result.contents[0].text, /addEventListener\('click'/); assert.match(ui.result.contents[0].text, /<details class=\"table\">/); assert.doesNotMatch(ui.result.contents[0].text, /max-height:150px;overflow:auto/); assert.match(ui.result.contents[0].text, /requestDisplayMode\(\{mode:'inline'\}\)/); assert.deepEqual(ui.result.contents[0]._meta?.["openai/ui"]?.availableDisplayModes, ["inline"]); assert.doesNotMatch(JSON.stringify(ui.result.contents[0]), /fullscreen/);

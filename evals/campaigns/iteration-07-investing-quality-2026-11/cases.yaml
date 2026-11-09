@@ -30,6 +30,7 @@ cases:
       - valuation-peer-compatibility-and-peg
       - valuation-peer-plot-same-snapshot
       - valuation-peer-history-revisions-cycle
+      - valuation-peer-runtime-comparability-gate
       - valuation-ps-growth-optional
       - valuation-stale-consensus-revisions
     assertions:

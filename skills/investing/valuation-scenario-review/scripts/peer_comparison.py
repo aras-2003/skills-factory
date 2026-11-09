@@ -275,7 +275,7 @@ def compare_peer_set(target: IssuerSnapshot, peers: Sequence[IssuerSnapshot], as
         reason = None
         if peer.as_of != as_of:
             reason = "AS_OF_MISMATCH"
-        elif peer.sector != target.sector or peer.industry != target.industry:
+        elif peer.peer_tier == "DIRECT" and (peer.sector != target.sector or peer.industry != target.industry):
             reason = "SECTOR_OR_INDUSTRY_MISMATCH"
         elif not _nonblank(peer.ticker) or not _nonblank(peer.sector) or not _nonblank(peer.industry) or not _nonblank(peer.business_model):
             reason = "MISSING_PEER_IDENTITY"

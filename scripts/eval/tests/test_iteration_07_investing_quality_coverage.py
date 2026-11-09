@@ -31,6 +31,12 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
             "CATALOG.md",
             "docs/catalog.json",
             "scripts/eval/campaign.py",
+            "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
+            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+            "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+            "runtime/mcp/server.py",
+            "runtime/mcp/cloud_server.py",
+            "scripts/package/build_utils.py",
         }
         self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
 
@@ -40,21 +46,22 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual("db0e97a37ad3e1918330b445a87113aa74323c74", cfg["candidate_source_revision"])
-        self.assertEqual("merged_main_exact_runtime_tested", cfg["candidate_source_revision_status"])
-        self.assertEqual("db0e97a37ad3e1918330b445a87113aa74323c74", cfg["runtime_canonical_source_revision"])
-        self.assertEqual("c16123b5094d68bdf243c020a839f5e0486e75e0", cfg["runtime_source_revision"])
-        self.assertEqual("1.38.470+db0e97a37ad3", cfg["runtime_release_id"])
-        self.assertEqual(123, cfg["runtime_site_version"])
+        self.assertEqual("33030b842abb67f0d4a780e5b995ecf6b9c80748", cfg["candidate_source_revision"])
+        self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
+        self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_canonical_source_revision"])
+        self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_source_revision"])
+        self.assertEqual("1.38.471+f6e24683e376", cfg["runtime_release_id"])
+        self.assertEqual(124, cfg["runtime_site_version"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
             {
-                "The Nov 8 MU provider snapshot is frozen in tests but its mutable source pages were not archived; live pages now differ for Nanya/Kioxia and report a changed SK hynix share count. Site probes used supplied values, and packaged helper code remains not_executed. Full #306 exact-source acceptance is not demonstrated.",
+                "The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.",
+                "#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.",
             },
             set(cfg["runtime_blockers"]),
         )
         runtime_evidence = (ROOT / cfg["runtime_evidence"]).read_text(encoding="utf-8")
-        self.assertIn("Exact Site v123 MU supplied-context peer screen", runtime_evidence)
+        self.assertIn("Exact Site v121 USER_SUPPLIED_CONTEXT execution", runtime_evidence)
         self.assertIn("NOT_SCORED", runtime_evidence)
         self.assertIn("client_display=NOT_OBSERVABLE", runtime_evidence)
         self.assertIs(cfg["release_approved"], False)

@@ -691,6 +691,12 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
         "skills/investing/valuation-scenario-review/SKILL.md",
         "skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py",
+        "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
+        "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+        "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+        "runtime/mcp/server.py",
+        "runtime/mcp/cloud_server.py",
+        "scripts/package/build_utils.py",
         "skills/investing/thesis-challenge/SKILL.md",
         "workflows/investment-security-review/WORKFLOW.md",
         "workflows/runtime-registry.yaml",
@@ -704,6 +710,13 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "skills/investing/valuation-scenario-review/SKILL.md",
         "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
         "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
+        "adapters/skills-factory-cloud-next/src/peer-comparability.ts",
+        "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+        "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+        "runtime/mcp/server.py",
+        "runtime/mcp/cloud_server.py",
+        "scripts/package/build_utils.py",
+        "scripts/eval/campaign.py",
     }
     expected_out_of_scope = expected_behavior - expected_in_scope
     expected_modules = {
@@ -713,6 +726,9 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "skills/investing/fundamental-intelligence/test_engine.py",
         "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
         "scripts/eval/tests/test_iteration02_workflow_hardening_release.py",
+        "adapters/skills-factory-cloud-next/tests/contracts.test.ts",
+        "runtime/mcp/tests/test_chart_contract.py",
+        "scripts/package/tests/test_packaging.py",
     }
     expected_support = {
         "skills/investing/fundamental-intelligence/README.md",
@@ -723,6 +739,8 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         "workflows/investment-security-review/tests/cases.yaml",
         "release/production-readiness.yaml",
         "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md",
+        "runtime/contracts/mcp-tools-v1.json",
+        "sites/skills-factory-site/README.md",
         "evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml",
         "evals/campaigns/investment-quality-2026-10/campaign.yaml",
         "evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml",
@@ -776,17 +794,18 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "db0e97a37ad3e1918330b445a87113aa74323c74"
-            or cfg.get("candidate_source_revision_status") != "merged_main_exact_runtime_tested"
-            or cfg.get("runtime_canonical_source_revision") != "db0e97a37ad3e1918330b445a87113aa74323c74"
-            or cfg.get("runtime_source_revision") != "c16123b5094d68bdf243c020a839f5e0486e75e0"
-            or cfg.get("runtime_release_id") != "1.38.470+db0e97a37ad3"
-            or cfg.get("runtime_site_version") != 123
-            or cfg.get("runtime_deployment_id") != "appgdep_6af192331ec88191b61d909d62cde11a"
+            or cfg.get("candidate_source_revision") != "33030b842abb67f0d4a780e5b995ecf6b9c80748"
+            or cfg.get("candidate_source_revision_status") != "committed_local_pending_external"
+            or cfg.get("runtime_canonical_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
+            or cfg.get("runtime_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
+            or cfg.get("runtime_release_id") != "1.38.471+f6e24683e376"
+            or cfg.get("runtime_site_version") != 124
+            or cfg.get("runtime_deployment_id") != "appgdep_6af1a96e42308191a66c3e35549d35b2"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "The Nov 8 MU provider snapshot is frozen in tests but its mutable source pages were not archived; live pages now differ for Nanya/Kioxia and report a changed SK hynix share count. Site probes used supplied values, and packaged helper code remains not_executed. Full #306 exact-source acceptance is not demonstrated.",
+                "The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.",
+                "#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True

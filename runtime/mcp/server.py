@@ -11,8 +11,11 @@ import os
 import hashlib
 import json
 import re
+import sys
 from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
+from decimal import Decimal
+from pathlib import Path
 from typing import Any
 
 from chart_renderer import render_bar_chart as _render_bar_chart
@@ -32,6 +35,24 @@ from mcp.server.mcpserver.exceptions import ToolError
 from observability import execute_tool, tool_span
 from opportunity_score import calculate_opportunity_scores as _calculate_opportunity_scores
 from issuer_exposure import calculate_issuer_exposure as _calculate_issuer_exposure
+
+_PEER_SCRIPT_RELATIVE_PATH = Path("skills/investing/valuation-scenario-review/scripts")
+_PEER_SCRIPT_DIRECTORY = next(
+    (candidate for candidate in (
+        Path(__file__).resolve().parent,
+        *(base / _PEER_SCRIPT_RELATIVE_PATH for base in Path(__file__).resolve().parents[1:3]),
+    ) if (candidate / "peer_comparison.py").is_file()),
+    Path(__file__).resolve().parents[2] / _PEER_SCRIPT_RELATIVE_PATH,
+)
+if str(_PEER_SCRIPT_DIRECTORY) not in sys.path:
+    sys.path.insert(0, str(_PEER_SCRIPT_DIRECTORY))
+from peer_comparison import (  # noqa: E402
+    EconomicFitEvidence as _EconomicFitEvidence,
+    EvidenceState as _PeerEvidenceState,
+    IssuerSnapshot as _IssuerSnapshot,
+    PeerMetric as _PeerMetric,
+    compare_peer_set as _compare_peer_set,
+)
 
 SERVER_INSTRUCTIONS = """
 Skills Factory runtime contract.
@@ -249,7 +270,7 @@ def runtime_info(context: Context = None) -> dict[str, Any]:
             values["package_integrity_sha256"] = package_integrity["payload_content_sha256"]
         values["lab_release"] = installed or None
         values["software_release"] = ({k: installed[k] for k in ("version", "release_id", "source_revision")} if installed else None)
-        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "calculate_opportunity_scores", "calculate_issuer_exposure", "render_bar_chart", "render_line_chart"]
+        values["capabilities"] = ["runtime_info", "list_skills", "load_skill", "route_investment_request", "calculate_opportunity_scores", "compare_peer_comparability", "calculate_issuer_exposure", "render_bar_chart", "render_line_chart"]
         if (installed and package_integrity["status"] == "verified"
                 and values["channel"] == "lab"
                 and installed["source_revision"] == values["source_revision"]
@@ -352,6 +373,86 @@ def calculate_issuer_exposure(
         except (ValueError, TypeError, KeyError) as exc:
             raise ToolError("INVALID_ISSUER_EXPOSURE_INPUT") from exc
     return execute_tool("calculate_issuer_exposure", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
+
+
+@mcp.tool()
+def compare_peer_comparability(as_of: str, peers: list[dict[str, Any]], target: dict[str, Any], context: Context = None) -> dict[str, Any]:
+    """Compare caller-supplied issuer snapshots without ranking or advice."""
+    arguments = {"as_of": as_of, "peers": peers, "target": target}
+
+    def snapshot(value: Mapping[str, Any]) -> _IssuerSnapshot:
+        metrics = {
+            name: _PeerMetric(
+                name=item["name"], value=None if item["value"] is None else Decimal(item["value"]),
+                unit=item["unit"], definition=item["definition"], period=item["period"], basis=item["basis"],
+                published_at=item["published_at"], source_url=item["source_url"],
+                status=_PeerEvidenceState(item["status"]), horizon=item.get("horizon", ""),
+                currency=item["currency"], period_alignment_group=item.get("period_alignment_group", ""),
+                basis_group=item.get("basis_group", ""), supporting_source_urls=tuple(item.get("supporting_source_urls", [])),
+            ) for name, item in value["metrics"].items()
+        }
+        fit = {name: _EconomicFitEvidence(**item) for name, item in value.get("economic_fit", {}).items()}
+        return _IssuerSnapshot(
+            ticker=value["ticker"], sector=value["sector"], industry=value["industry"],
+            business_model=value["business_model"], as_of=value["as_of"], metrics=metrics,
+            cyclical=value.get("cyclical", False), comparison_group=value["comparison_group"],
+            inclusion_rationale=value.get("inclusion_rationale", ""), peer_tier=value.get("peer_tier", "TARGET"), economic_fit=fit,
+        )
+
+    def operation() -> dict[str, Any]:
+        try:
+            result = _compare_peer_set(snapshot(target), [snapshot(peer) for peer in peers], as_of)
+        except (ValueError, TypeError, KeyError) as exc:
+            raise ToolError("INVALID_PEER_COMPARABILITY_INPUT") from exc
+        if result.get("status") == "NOT_COMPARABLE":
+            raise ToolError("INVALID_PEER_COMPARABILITY_INPUT")
+        if "table" not in result:
+            metric_names = sorted(target["metrics"])
+            table_rows = [{
+                "ticker": target["ticker"], "business_model": target["business_model"],
+                "comparability_tier": "TARGET", "eligibility": "TARGET", "reason": None,
+                "metrics": {name: {
+                    "value": str(target["metrics"][name]["value"]), "unit": target["metrics"][name]["unit"],
+                    "status": target["metrics"][name]["status"], "reason": None,
+                } for name in metric_names},
+            }]
+            for peer in result.get("peers", []):
+                table_metrics = {}
+                for name in metric_names:
+                    details = peer["metrics"].get(name, {})
+                    table_metrics[name] = {
+                        "value": details.get("value", "N/M"), "unit": details.get("unit"),
+                        "status": details.get("status", "NOT_MEANINGFUL"), "reason": details.get("reason"),
+                        "definition": details.get("definition"), "period": details.get("period"),
+                        "basis": details.get("basis"),
+                        "currency": details.get("peer_currency", details.get("target_currency")),
+                        "horizon": details.get("horizon"),
+                        "published_at": details.get("published_at", details.get("peer_published_at")),
+                        "source_url": details.get("source_url", details.get("peer_source_url")),
+                        "supporting_source_urls": details.get("supporting_source_urls", details.get("peer_supporting_source_urls", [])),
+                    }
+                table_rows.append({
+                    "ticker": peer["ticker"], "business_model": peer["business_model"],
+                    "comparability_tier": peer["comparability_tier"], "eligibility": peer["eligibility"],
+                    "reason": peer["reason"], "metrics": table_metrics,
+                })
+            result["table"] = {"as_of": as_of, "metric_names": metric_names, "rows": table_rows}
+            result["evidence_status_semantics"] = "Caller-supplied status; source verification is not performed by this tool."
+            result["limitations"] = [
+                "Caller-supplied snapshots only; no source retrieval or verification.",
+                "N/M marks missing or incompatible metrics; no values are inferred.",
+                "Comparability checks only; no investment recommendation, ranking, valuation, or portfolio action.",
+            ]
+        # Keep the facade aligned with the cloud contract and omit helper-only
+        # PEG/P-S heuristics and summaries that are outside this tool's schema.
+        return {key: result[key] for key in (
+            "status", "comparability_reason", "as_of", "target", "sector", "industry", "business_model",
+            "comparison_group", "evidence_status_semantics", "included_peer_count", "direct_peer_count",
+            "core_metric_peer_counts", "cycle_normalization_required", "required_peer_range", "table", "peers",
+            "recommendation", "ranked", "cross_sector_ranking", "limitations",
+        )}
+
+    return execute_tool("compare_peer_comparability", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()
