@@ -54,6 +54,24 @@ class MappingTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.values("[ENG-03] review", "Project status: In Progress", ["status:blocked"])
 
+    def test_graphql_failure_preserves_safe_cli_diagnostic(self):
+        token = "ghp_" + "a" * 36
+        failure = type("Result", (), {"returncode": 1,
+                                      "stderr": f"HTTP 403: Resource not accessible; {token}\n"})()
+        with patch.dict(mod.os.environ, {"GH_TOKEN": token}), \
+             patch.object(mod.subprocess, "run", return_value=failure):
+            with self.assertRaisesRegex(RuntimeError, "HTTP 403: Resource not accessible") as caught:
+                mod.gql("query", {})
+        self.assertNotIn(token, str(caught.exception))
+        self.assertIn("[REDACTED]", str(caught.exception))
+
+    def test_graphql_failure_diagnostic_is_bounded(self):
+        failure = type("Result", (), {"returncode": 1, "stderr": "x" * 800})()
+        with patch.object(mod.subprocess, "run", return_value=failure):
+            with self.assertRaises(RuntimeError) as caught:
+                mod.gql("query", {})
+        self.assertLessEqual(len(str(caught.exception)), 560)
+
     def test_project_valid_stages(self):
         for stage in ("Discovery", "Validation", "In review"):
             with self.subTest(stage=stage):
