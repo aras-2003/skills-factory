@@ -776,18 +776,17 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "4433f2821a94bdada53663da4bc8674a6e45c2e6"
-            or cfg.get("candidate_source_revision_status") != "committed_local_pending_external"
-            or cfg.get("runtime_canonical_source_revision") != "fff6f377c997af2b6ee4987ffb12e4464781cc15"
-            or cfg.get("runtime_source_revision") != "d1cf3642042a8e4b73dd608dd12368490ea23faf"
-            or cfg.get("runtime_release_id") != "1.38.469+fff6f377c997"
-            or cfg.get("runtime_site_version") != 122
-            or cfg.get("runtime_deployment_id") != "appgdep_6af0fa876fa481919889f6d10716c1be"
+            or cfg.get("candidate_source_revision") != "db0e97a37ad3e1918330b445a87113aa74323c74"
+            or cfg.get("candidate_source_revision_status") != "merged_main_exact_runtime_tested"
+            or cfg.get("runtime_canonical_source_revision") != "db0e97a37ad3e1918330b445a87113aa74323c74"
+            or cfg.get("runtime_source_revision") != "c16123b5094d68bdf243c020a839f5e0486e75e0"
+            or cfg.get("runtime_release_id") != "1.38.470+db0e97a37ad3"
+            or cfg.get("runtime_site_version") != 123
+            or cfg.get("runtime_deployment_id") != "appgdep_6af192331ec88191b61d909d62cde11a"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
-                "Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.",
+                "Exact Site v123 test is bounded USER_SUPPLIED_CONTEXT; values were not independently re-extracted and packaged helper code remains not_executed. Full #306 acceptance across AMD, MU and a distinct business model is not demonstrated.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
