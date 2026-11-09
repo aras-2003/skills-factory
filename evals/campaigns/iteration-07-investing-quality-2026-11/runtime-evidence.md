@@ -1,4 +1,17 @@
-# Iteration 07 candidate runtime evidence — through 2026-11-07
+# Iteration 07 runtime evidence — through 2026-11-09
+
+## Current exact merge deployment — 2026-11-09
+
+- **GitHub source:** PR #595 is merged; canonical `main` is `89c28bf70353b4568c7bc031e128a5f57a0fe24d`.
+- **Private Site:** Skills Factory Cloud Next Site v125; owner-only custom allowlist; Site mirror commit `967ee59cfa5364be118d7521e8dfdbba4da7cfae`; deployment `appgdep_6af1c54254fc8191b505db26d904ea08` returned `succeeded`; live URL is `https://skills-factory-cloud-next.arek2003.chatgpt.site`.
+- **Runtime identity:** `runtime_info` completed at `2026-11-09T13:07:54.126Z`, returned `attestation_status=verified`, canonical source `89c28bf70353b4568c7bc031e128a5f57a0fe24d`, Site source `967ee59cfa5364be118d7521e8dfdbba4da7cfae`, Lab `1.38.472+89c28bf70353`, payload SHA-256 `2a8660794ae23289c3a9faf9303223b72a057a28650a333b004bb0cd513d2475`, catalog digest `f2a3757073d1b03f55175ddaebcf308b518e1e9ea29b5e982da37f5ab4517bce`, and artifact SHA-256 `1a4460d3645ad715070b2c2902e1e4edde75244fc685523e33a2eab22c0b35b6`. Its unsigned tool receipt has input SHA-256 `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a` and output SHA-256 `a7f77d442357c56e4d15b07d31ac1db571e5093d92ac6b96b5362367371143ee`.
+- **Catalog call:** `list_skills` completed at `2026-11-09T13:08:11.268Z`, returned the same Lab and canonical source, 98 skills, and a `SUCCESS` receipt (input SHA-256 `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a`; output SHA-256 `b5aa40f2430089663b3a148284a7786493f660d7fe9dd3ec75f2e3cfb3d0002b`).
+- **Comparator capability:** `runtime_info.capabilities` includes `compare_peer_comparability`. However, the tool surface supplied to this Codex session does not include a callable `compare_peer_comparability` entry. The tool was not invoked, so exact-runtime comparator execution is **NOT_RUN**. The Site deployment is verified; the missing call surface is a host discovery/registration limitation and is not evidence that the Site implementation failed.
+- **Issue disposition:** #231, #307 and #318 are closed; #306 remains open for archived, reproducible source snapshots, the complete same-snapshot AMD/MU/adjacent-model evidence and an actual comparator invocation receipt. #322 remains an out-of-scope coordination umbrella. Iteration 07 remains `PARTIAL_BLOCKED`; no release approval, maturity promotion, canonical writes, portfolio changes or trades occurred.
+
+The deployment/archive attestation proves the embedded package identity and release. The Site's `runtime_info` and `list_skills` calls prove the live runtime responds. Neither substitutes for a comparator call or resolves #306's source evidence gate.
+
+## Previous deployed baseline and local cohort — 2026-11-08
 
 ## Current deployed baseline — 2026-11-08
 
