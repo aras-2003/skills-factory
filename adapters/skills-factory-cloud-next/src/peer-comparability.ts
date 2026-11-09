@@ -3,7 +3,6 @@ import { z } from "zod";
 const nonempty = (max: number) => z.string().trim().min(1).max(max);
 const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 const httpsUrl = z.string().url().startsWith("https://");
-const fitDimension = z.enum(["value_chain_role", "revenue_profit_mix", "customer_base", "cyclicality", "capital_intensity"]);
 const fitSchema = z.object({
   alignment: z.enum(["MATCH", "PARTIAL", "UNKNOWN", "MISMATCH"]),
   target_summary: nonempty(500), peer_summary: nonempty(500), rationale: nonempty(1000),
