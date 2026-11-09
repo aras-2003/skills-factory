@@ -4,7 +4,7 @@ scope: investing_quality_iteration_07
 execution_channel: lab
 runtime_target: Cloud Next Lab
 runtime_status: PARTIAL_BLOCKED
-candidate_source_revision: a4725004e953481158ab8d3ae14edc23688e76bc
+candidate_source_revision: 7787b2825cbc0870cdc6d6516f2f1166adaff458
 candidate_source_revision_status: committed_local_pending_external
 source_base_revision: 25ec22b69df33c519f21182178ae8dfbbfebfeb7
 runtime_source_revision_required: true
@@ -22,11 +22,12 @@ runtime_blockers:
   or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.'
 release_approved: false
 historical_r20_immutable: true
-status_note: 'Candidate implementation a4725004e953481158ab8d3ae14edc23688e76bc passed Cloud Next contracts, TypeScript,
-  lint, Site build, domain regressions, 308 evaluation tests (1 skipped), and repository validation. Final Lab packaging
-  will be generated from the documentation-complete source revision. Site v124 is verified at canonical source f6e24683e37648c7466718b3c2d767c2a157c25f
-  and does not expose the new tool. Iteration remains PARTIAL_BLOCKED; #306 stays open for exact-source runtime
-  acceptance, reproducible source snapshots and remaining growth/forecast evidence. #322 remains coordination-only.
+status_note: 'Candidate implementation 7787b2825cbc0870cdc6d6516f2f1166adaff458 adds structured peer-table output and passed Cloud Next contracts,
+  TypeScript, full ESLint, Site build, focused domain suites, 308 evaluation tests (1 skipped), package tests 102/102,
+  and repository validation. A final Lab package will be generated from the documentation-complete source revision.
+  Site v124 is verified at canonical source f6e24683e37648c7466718b3c2d767c2a157c25f and does not expose the new tool.
+  Iteration remains PARTIAL_BLOCKED; #306 stays open for exact-source runtime acceptance, reproducible source snapshots
+  and remaining growth/forecast evidence. #322 remains coordination-only.
   No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
 behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
 required_case_ids:
@@ -84,7 +85,7 @@ source_sha256:
   CATALOG.md: 0167c0eecb64337f60f85a35b82d29cbeb3ce53d624c2b7189473e7f6c69e7b5
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
   docs/catalog.json: 48a443ee5197f43d80ecdfeb465e6df1ba6ed4d73faeb513a96be17a2ec7063e
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 8aa96397421b7c91a46366e5b8e890d445e9377e0e49f16820841c62236b515b
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: ce156fd7751262582e28b0f9ff6311adfcf3b95d703dac633cf7c1580367547a
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 02946d7fdb641b5bb712741f7e13b1c3b912efba880863747de868bfdb7c2ec2
@@ -94,7 +95,7 @@ source_sha256:
   adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
   adapters/skills-factory-cloud-next/src/mcp-handler.ts: b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 66d6f1f0f8b3363916470275072d73316d99d79aba2414af54541d17c0c740ba
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 915f9f02f0b10c1e32585a081996a939ca19259760d2f1151c498063066bfefe
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -126,9 +127,9 @@ source_sha256:
   evals/routing/supplemental/investment-top-two-screen-pl.input.md: 7517ca4ddf83a15d188f1d560287934749f6c4038f81d82afd0d7f31d547fb2d
   evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml: 0ec7e8bf45911ec2fbe7113417e8b1ebc5dd335b6cd6d0e8f3b4687506f8a8e5
   release/production-readiness.yaml: 656e94d8e9e4205d09273ad8e21e6124dd0db43e8f3f14c45a6da827b6887fc4
-  scripts/eval/campaign.py: b342b50fd2e741cecafee282b4b624ce19f12db69f04c658ed3a8e7048c51af9
+  scripts/eval/campaign.py: 04be2637c00d9d41fbe4230636570c4b800874347e5b7e2ba0772cb88152f87e
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 79709f2a9b43b2ab6edbd46e6c327abc23fd39db9ca84f6206914b1012d9cd94
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: cb3ae626c1cb6c500c2927e0514f95e1d1b4ade431e025a22ac3a054cc2e0eb0
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
   skills/investing/security-underwriting/SKILL.md: 6f668be91467b2703ce32d119e62b97fa69a2dec3f0473acf98828b2fbf56e4d
