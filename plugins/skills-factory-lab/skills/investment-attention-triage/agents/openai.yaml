@@ -1,5 +1,5 @@
 interface:
   display_name: Investment Attention Triage
-  short_description: Triage new market, company, industry and portfolio…
+  short_description: Use when new market, company, industry or portfolio…
   icon_small: ./assets/skills-factory-domain-icon.svg
   brand_color: '#9588F7'

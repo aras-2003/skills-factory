@@ -2,17 +2,18 @@
 name: investment-os-review
 description: Default Investment OS front door for natural investment requests. Use
   when the user asks in ordinary language to observe what changed in their portfolio,
-  review their portfolio risk/structure, assess a stock/security, find investment
-  opportunities, research themes, evaluate whether new market/company information
-  matters, or define portfolio policy/risk limits. Route first, then invoke the matching
-  specialist workflow; use the MCP routing preflight when available and do not answer
-  with generic investment commentary.
+  review their portfolio risk/structure, assess a stock/security, interpret supplied
+  adjusted OHLCV price structure, find investment opportunities, research themes,
+  evaluate whether new market/company information matters, or define portfolio policy/risk
+  limits. Route first, then load and follow the matching specialist workflow or skill;
+  use the MCP routing preflight when available and do not answer with generic investment
+  commentary.
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.3.1
+  version: 0.3.2
   maturity: production
   risk: high
-  last_reviewed: '2026-10-09'
+  last_reviewed: '2026-11-05'
 ---
 
 # Investment Os Review Runtime Entrypoint
