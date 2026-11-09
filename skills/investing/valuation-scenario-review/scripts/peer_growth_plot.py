@@ -42,5 +42,13 @@ def render_peer_growth_plot(comparison: dict, output_path: str | Path) -> dict:
     return {"status": "RENDERED_STATIC", "path": str(destination), "snapshot_id": plot["snapshot_id"],
             "as_of": plot["as_of"], "filter": plot["filter"],
             "source_count": len(points), "source_urls": sorted({
-                point[key] for point in points for key in ("eps_growth_source_url", "forward_pe_source_url")
+                source
+                for point in points
+                for source in (
+                    point.get("eps_growth_source_url"),
+                    point.get("forward_pe_source_url"),
+                    *(point.get("eps_growth_supporting_source_urls") or []),
+                    *(point.get("forward_pe_supporting_source_urls") or []),
+                )
+                if source
             })}

@@ -59,6 +59,308 @@ def issuer(ticker, *, model="fabless compute", as_of=AS_OF, values=None):
 
 
 class PeerComparisonTests(unittest.TestCase):
+    def test_real_mu_ttm_snapshot_admits_three_memory_manufacturer_peers(self):
+        """Freeze a Nov 8 provider snapshot, using Nov 6 regular-session prices.
+
+        Valuation and TTM ratios are S&P Global Market Intelligence as surfaced
+        by StockAnalysis. Issuer filings support business-fit review and latest
+        reported periods. This is a descriptive cycle-sensitive screen, not a
+        recommendation or ranking. Forward P/E remains N/M; growth is admitted
+        only where the provider has a compatible latest/prior twelve-month basis.
+        """
+        as_of = "2026-11-08"
+        stats = {
+            "MU": "https://stockanalysis.com/stocks/mu/statistics/",
+            "SKHYNIX": "https://stockanalysis.com/quote/krx/000660/statistics/",
+            "NANYA": "https://stockanalysis.com/quote/tpe/2408/statistics/",
+            "KIOXIA": "https://stockanalysis.com/quote/tyo/285A/statistics/",
+        }
+        filings = {
+            "MU": ("2026-10-09", "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm"),
+            "SKHYNIX": ("2026-10-28", "https://news.skhynix.com/en/q3-2026-business-results/"),
+            "NANYA": ("2026-10-12", "https://www.nanya.com/en/IR/16/Press%20Release?IRId=14188"),
+            "KIOXIA": ("2026-10-30", "https://ssl4.eir-parts.net/doc/285A/tdnet/2902678/00.pdf"),
+        }
+        figures = {
+            "MU": {"ev_sales": "5.35", "ev_ebitda": "6.55", "gross_margin": ".8072",
+                   "operating_margin": ".7459", "fcf_margin": ".4427", "roic": ".9342",
+                   "capital_intensity": None, "share_count_change": ".0160"},
+            "SKHYNIX": {"ev_sales": "2.70", "ev_ebitda": "3.36", "gross_margin": ".7738",
+                        "operating_margin": ".7450", "fcf_margin": ".4623", "roic": ".7705",
+                        "capital_intensity": None, "share_count_change": None},
+            "NANYA": {"ev_sales": "3.11", "ev_ebitda": "4.12", "gross_margin": ".7726",
+                      "operating_margin": ".7096", "fcf_margin": ".5771", "roic": "1.2481",
+                      "capital_intensity": None, "share_count_change": ".1084"},
+            "KIOXIA": {"ev_sales": "2.24", "ev_ebitda": "3.01", "gross_margin": ".7340",
+                       "operating_margin": ".6909", "fcf_margin": ".4397", "roic": "1.1610",
+                       "capital_intensity": None, "share_count_change": ".0242"},
+        }
+        # S&P Global TTM capex and revenue shown on the linked statistics pages,
+        # in each issuer's local currency and scale.
+        capex_revenue = {
+            "MU": (D("30.71"), D("133.19")),
+            "SKHYNIX": (D("42.86941"), D("269.34")),
+            "NANYA": (D("29.88"), D("295.38")),
+            "KIOXIA": (D("0.27323"), D("5.79")),
+        }
+        periods = {
+            "MU": "TTM through 2026-09-03",
+            "SKHYNIX": "TTM through 2026-09-30",
+            "NANYA": "TTM through 2026-09-30",
+            "KIOXIA": "TTM through 2026-09-30",
+        }
+        currencies = {"MU": "USD", "SKHYNIX": "KRW", "NANYA": "TWD", "KIOXIA": "JPY"}
+        statement_urls = {
+            "MU": "https://stockanalysis.com/stocks/mu/financials/income-statement/",
+            "SKHYNIX": "https://stockanalysis.com/quote/krx/000660/financials/income-statement/",
+            "NANYA": "https://stockanalysis.com/quote/tpe/2408/financials/income-statement/",
+            "KIOXIA": "https://stockanalysis.com/quote/tyo/285A/financials/income-statement/",
+        }
+        cash_flow_urls = {
+            "MU": "https://stockanalysis.com/stocks/mu/financials/cash-flow-statement/",
+            "SKHYNIX": "https://stockanalysis.com/quote/krx/000660/financials/cash-flow-statement/",
+        }
+        provider_dates = {"MU": "2026-10-09", "SKHYNIX": "2026-10-28",
+                          "NANYA": "2026-10-12", "KIOXIA": "2026-10-30"}
+        revenue_growth = {"MU": "2.5633", "SKHYNIX": "2.2031",
+                          "NANYA": "5.8584", "KIOXIA": "2.6479"}
+        # Fractions: MU FY2026/FY2025 FCF; SK hynix TTM through Sep 2026 vs
+        # Sep 2025, reconstructed from four provider-reported quarters each.
+        fcf_growth = {"MU": str(D("58963") / D("1668") - D("1")),
+                      "SKHYNIX": str(D("124515827") / D("8013550") - D("1"))}
+        growth_periods = {
+            "MU": "FY2026 ended 2026-09-03 vs FY2025 ended 2025-08-28",
+            "SKHYNIX": "TTM through 2026-09-30 vs TTM through 2025-09-30",
+            "NANYA": "TTM through 2026-09-30 vs prior-year TTM",
+            "KIOXIA": "TTM through 2026-09-30 vs prior-year TTM",
+        }
+        growth_alignment = "latest twelve-month period YoY; current end dates 2026-09-03 through 2026-09-30"
+        peer_summaries = {
+            "SKHYNIX": "DRAM/HBM and NAND manufacturer; larger HBM mix and scale than MU.",
+            "NANYA": "DRAM-focused manufacturer; no comparable NAND scale and materially smaller customer/product mix.",
+            "KIOXIA": "NAND-focused memory and storage manufacturer; no DRAM product exposure and different JV/customer structure.",
+        }
+
+        def build(ticker):
+            values = figures[ticker]
+            metrics = {}
+            for name, value in values.items():
+                if name == "capital_intensity":
+                    capex, revenue = capex_revenue[ticker]
+                    value = (capex / revenue).quantize(D("0.0001"))
+                is_multiple = name in {"ev_sales", "ev_ebitda"}
+                metrics[name] = PeerMetric(
+                    name=name, value=D(value) if value is not None else None,
+                    unit="multiple" if is_multiple else "fraction",
+                    definition={"ev_sales": "provider-defined enterprise value / latest reported TTM revenue",
+                                "ev_ebitda": "provider-defined enterprise value / latest reported TTM EBITDA",
+                                "gross_margin": "provider-defined TTM gross profit / TTM revenue",
+                                "operating_margin": "provider-defined TTM operating income / TTM revenue",
+                                "fcf_margin": "provider-defined TTM free cash flow / TTM revenue",
+                                "roic": "provider-defined TTM return on invested capital",
+                                "capital_intensity": "TTM capital expenditures / TTM revenue",
+                                "share_count_change": "change in reported shares outstanding versus prior-year snapshot"}[name],
+                    period=periods[ticker], basis="S&P Global Market Intelligence provider metrics; as-reported issuer statements",
+                    published_at=as_of, source_url=stats[ticker], currency=currencies[ticker],
+                    period_alignment_group="latest issuer-reported TTM, 2026-09-03 through 2026-09-30",
+                    basis_group="S&P Global Market Intelligence TTM methodology; local reporting currency and as-reported accounting",
+                    supporting_source_urls=(filings[ticker][1],),
+                )
+            # The latest price is Nov 6. Forward P/E remains N/M because the
+            # source does not give a comparable NTM/12M horizon. Revenue growth
+            # is the provider's latest TTM YoY. FCF growth is admitted only
+            # where a positive prior twelve-month FCF base is evidenced.
+            metrics["forward_pe"] = PeerMetric(
+                name="forward_pe", value=None, unit="multiple",
+                definition="forward P/E with explicit NTM/12M horizon",
+                period="N/M: source horizon not specified", basis="N/M", published_at=as_of,
+                source_url=stats[ticker], currency=currencies[ticker])
+            for name, values, source_map in (
+                ("revenue_growth", revenue_growth, statement_urls),
+                ("fcf_growth", fcf_growth, cash_flow_urls),
+            ):
+                value = values.get(ticker)
+                period = growth_periods[ticker]
+                is_revenue = name == "revenue_growth"
+                if value is None and ticker == "NANYA" and name == "fcf_growth":
+                    period = "N/M: prior-year TTM FCF is negative; percentage growth is not meaningful"
+                elif value is None:
+                    period = "N/M: compatible prior TTM FCF series not verified"
+                metrics[name] = PeerMetric(
+                    name=name, value=D(value) if value is not None else None, unit="fraction",
+                    definition=("reported latest-TTM revenue growth versus prior-year TTM"
+                                if is_revenue else "reported FCF growth versus prior-year twelve-month period; FCF = operating cash flow less capital expenditures"),
+                    period=period,
+                    basis=("S&P Global Market Intelligence; provider-reported TTM growth" if is_revenue
+                           else "S&P Global Market Intelligence; FCF = operating cash flow less capital expenditures"),
+                    published_at=provider_dates[ticker],
+                    source_url=source_map.get(ticker, stats[ticker]), currency=currencies[ticker],
+                    period_alignment_group=growth_alignment,
+                    basis_group=("S&P Global provider-reported TTM YoY revenue growth" if is_revenue
+                                 else "reported cash from operations less capital expenditures, twelve-month YoY"))
+            fit = {}
+            if ticker != "MU":
+                peer_date, peer_url = filings[ticker]
+                alignments = {"value_chain_role": "MATCH", "revenue_profit_mix": "PARTIAL",
+                              "customer_base": "PARTIAL", "cyclicality": "MATCH", "capital_intensity": "PARTIAL"}
+                for dimension in FIT_DIMENSIONS:
+                    fit[dimension] = EconomicFitEvidence(
+                        alignment=alignments[dimension],
+                        target_summary="MU manufactures DRAM/HBM and NAND memory products; memory revenue mix is disclosed in FY2026 Form 10-K.",
+                        peer_summary=peer_summaries[ticker],
+                        rationale="Memory manufacturing is a direct whole-company economic comparison; product scope, scale, customers and capex intensity remain material differences.",
+                        target_published_at=filings["MU"][0], target_source_url=filings["MU"][1],
+                        published_at=peer_date, source_url=peer_url,
+                    )
+            return IssuerSnapshot(
+                ticker=ticker, sector="Technology", industry="Semiconductors",
+                business_model="integrated memory manufacturer", as_of=as_of, metrics=metrics,
+                cyclical=True, comparison_group="Technology/Semiconductors/memory-manufacturing",
+                inclusion_rationale="Whole-company memory manufacturing economics; direct peer with documented product/customer/capital caveats.",
+                peer_tier="DIRECT" if ticker != "MU" else "DIRECT", economic_fit=fit,
+            )
+
+        result = compare_peer_set(build("MU"), [build("SKHYNIX"), build("NANYA"), build("KIOXIA")], as_of)
+        self.assertEqual("COMPARABLE", result["status"])
+        self.assertEqual(3, result["direct_peer_count"])
+        self.assertEqual({"ev_sales": 3, "ev_ebitda": 3, "forward_pe": 0}, result["core_metric_peer_counts"])
+        self.assertTrue(result["cycle_normalization_required"])
+        self.assertIsNone(result["recommendation"])
+        self.assertFalse(result["ranked"])
+        nanya = next(row for row in result["peers"] if row["ticker"] == "NANYA")
+        hynix = next(row for row in result["peers"] if row["ticker"] == "SKHYNIX")
+        self.assertEqual("2.5633", hynix["metrics"]["revenue_growth"]["target_value"])
+        self.assertEqual("2.2031", hynix["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("5.8584", nanya["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("2.6479", next(row for row in result["peers"] if row["ticker"] == "KIOXIA")["metrics"]["revenue_growth"]["value"])
+        self.assertEqual("14.53816061545756874294164259", hynix["metrics"]["fcf_growth"]["value"])
+        self.assertEqual("34.34952038369304556354916067", hynix["metrics"]["fcf_growth"]["target_value"])
+        self.assertEqual("N/M", nanya["metrics"]["forward_pe"]["value"])
+        self.assertEqual("N/M", nanya["metrics"]["fcf_growth"]["value"])
+        self.assertEqual("PARTIAL", nanya["economic_fit"]["revenue_profit_mix"]["alignment"])
+
+    def test_real_amd_ttm_snapshot_admits_three_economically_reviewed_direct_peers(self):
+        """Dated reported TTM revenue and whole-company fit support a small AMD cohort.
+
+        EV is the Nov 5, 2026 QDD snapshot. Revenue is GAAP reported TTM, rebuilt
+        from company filings available by that date; periods end in Jul–Sep 2026
+        and are explicitly aligned as the latest reported TTM. The result is a
+        screen only, not a recommendation or rank.
+        """
+        as_of = "2026-11-05"
+        target_url = "https://www.sec.gov/Archives/edgar/data/2488/000000248826000191/amd-20260926.htm"
+        qdd = {
+            "AMD": "https://www.qddresearch.com/us/amd/",
+            "NVDA": "https://www.qddresearch.com/us/nvda/",
+            "INTC": "https://www.qddresearch.com/us/intc/",
+            "MRVL": "https://www.qddresearch.com/us/mrvl/",
+        }
+        filings = {
+            "AMD": ("2026-11-04", target_url),
+            "NVDA": ("2026-08-26", "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"),
+            "INTC": ("2026-10-30", "https://www.sec.gov/Archives/edgar/data/50863/000005086326000191/intc-20260926.htm"),
+            "MRVL": ("2026-08-28", "https://www.sec.gov/Archives/edgar/data/1835632/000183563226000025/mrvl-20260801.htm"),
+        }
+        # Latest reported TTM revenue (USD millions): annual FY2025 + current
+        # reported quarters − matching prior-year quarters, using issuer filings.
+        ttm_components = {
+            "AMD": (D("34639"), (D("10253"), D("11536"), D("13377")), (D("7438"), D("7685"), D("9246"))),
+            "NVDA": (D("215938"), (D("81615"), D("96221")), (D("44062"), D("46743"))),
+            "INTC": (D("52853"), (D("13577"), D("16128"), D("16500")), (D("12667"), D("12859"), D("13653"))),
+            "MRVL": (D("8195"), (D("2418"), D("2739")), (D("1895"), D("2006"))),
+        }
+        ttm_sales = {
+            ticker: annual + sum(current) - sum(prior)
+            for ticker, (annual, current, prior) in ttm_components.items()
+        }
+        self.assertEqual(
+            {"AMD": D("45436"), "NVDA": D("302969"), "INTC": D("59879"), "MRVL": D("9451")},
+            ttm_sales,
+        )
+        enterprise_value = {"AMD": D("651500"), "NVDA": D("4310000"), "INTC": D("290500"), "MRVL": D("118300")}
+        revenue_source_urls = {
+            "AMD": (target_url, qdd["AMD"]),
+            "NVDA": (filings["NVDA"][1], qdd["NVDA"]),
+            "INTC": (filings["INTC"][1], "https://www.sec.gov/Archives/edgar/data/50863/000005086326000188/q326earningsrelease.htm", qdd["INTC"]),
+            "MRVL": (filings["MRVL"][1], "https://investor.marvell.com/sec-filings/all-sec-filings/content/0001835632-26-000022/q227_8kx812026ex-991.htm", qdd["MRVL"]),
+        }
+        target_periods = {
+            "AMD": "TTM through 2026-09-26",
+            "NVDA": "TTM through 2026-07-26",
+            "INTC": "TTM through 2026-09-26",
+            "MRVL": "TTM through 2026-08-01",
+        }
+
+        def real_issuer(ticker, model, tier, rationale):
+            metric = PeerMetric(
+                name="ev_sales", value=enterprise_value[ticker] / ttm_sales[ticker], unit="multiple",
+                definition="Enterprise value as of 2026-11-05 / latest reported GAAP TTM revenue",
+                period=target_periods[ticker], basis="GAAP; USD millions; QDD enterprise value snapshot",
+                published_at=as_of, source_url=qdd[ticker], currency="USD",
+                period_alignment_group="latest reported TTM as of 2026-11-05",
+                basis_group="GAAP reported revenue and same-date enterprise value",
+                supporting_source_urls=revenue_source_urls[ticker],
+            )
+            fit = {}
+            if ticker != "AMD":
+                peer_date, peer_url = filings[ticker]
+                for dimension in FIT_DIMENSIONS:
+                    partial = dimension in {"revenue_profit_mix", "customer_base", "capital_intensity"}
+                    fit[dimension] = EconomicFitEvidence(
+                        alignment="PARTIAL" if partial else "MATCH",
+                        target_summary="AMD combines data-center CPUs/GPUs with client/gaming and embedded processors.",
+                        peer_summary={
+                            "NVDA": "Accelerated compute, networking, gaming GPUs and software platform.",
+                            "INTC": "Client and data-center CPU products plus integrated manufacturing and foundry.",
+                            "MRVL": "Data-infrastructure semiconductors, custom ASICs, interconnect and storage controllers.",
+                        }[ticker],
+                        rationale=rationale,
+                        target_published_at="2026-11-04", target_source_url=target_url,
+                        published_at=peer_date, source_url=peer_url,
+                    )
+            return IssuerSnapshot(
+                ticker=ticker, sector="Technology", industry="Semiconductors",
+                business_model=model, as_of=as_of, metrics={"ev_sales": metric}, cyclical=True,
+                comparison_group="Technology/Semiconductors/compute-and-data-infrastructure",
+                inclusion_rationale=rationale, peer_tier=tier, economic_fit=fit,
+            )
+
+        target = real_issuer(
+            "AMD", "fabless compute and AI semiconductors", "DIRECT",
+            "Target issuer for a dated same-industry compute and data-infrastructure screen.",
+        )
+        peers = [
+            real_issuer("NVDA", "accelerated compute platform", "DIRECT",
+                        "Direct product-market overlap in data-center accelerated compute and GPUs; platform, software, and profitability mix are material caveats."),
+            real_issuer("INTC", "integrated processor designer and manufacturer", "DIRECT",
+                        "Direct CPU competition across client and data-center markets; foundry ownership and capital intensity differ materially."),
+            real_issuer("MRVL", "data-infrastructure semiconductor designer", "DIRECT",
+                        "Custom silicon and data-center connectivity overlap with AMD infrastructure markets; whole-company product and customer mix differ."),
+        ]
+        result = compare_peer_set(target, peers, as_of)
+        self.assertEqual("COMPARABLE", result["status"])
+        self.assertEqual(3, result["direct_peer_count"])
+        self.assertEqual(3, result["core_metric_peer_counts"]["ev_sales"])
+        self.assertIsNone(result["recommendation"])
+        self.assertFalse(result["ranked"])
+        self.assertTrue(result["cycle_normalization_required"])
+        self.assertEqual(
+            str(D("651500") / D("45436")),
+            next(row for row in result["peers"] if row["ticker"] == "NVDA")["metrics"]["ev_sales"]["target_value"],
+        )
+        nvda_row = next(row for row in result["peers"] if row["ticker"] == "NVDA")
+        self.assertEqual([target_url, qdd["AMD"]], nvda_row["metrics"]["ev_sales"]["target_supporting_source_urls"])
+        self.assertEqual([filings["NVDA"][1], qdd["NVDA"]], nvda_row["metrics"]["ev_sales"]["supporting_source_urls"])
+
+    def test_invalid_supporting_metric_source_is_not_meaningful(self):
+        target = issuer("AMD")
+        peers = [issuer("P1"), issuer("P2"), issuer("P3")]
+        invalid_metric = replace(peers[0].metrics["ev_sales"], supporting_source_urls=("http://not-secure.example/source",))
+        peers[0] = replace(peers[0], metrics={**peers[0].metrics, "ev_sales": invalid_metric})
+        result = compare_peer_set(target, peers, AS_OF)
+        row = next(item for item in result["peers"] if item["ticker"] == "P1")
+        self.assertEqual("INVALID_SUPPORTING_SOURCE_URL", row["metrics"]["ev_sales"]["reason"])
+
     def test_real_qdd_fy2027_snapshot_keeps_adjacent_models_out_of_amd_cohort(self):
         """Public consensus observations are not peer evidence without model and period fit."""
         as_of = "2026-11-05"
@@ -447,7 +749,17 @@ class PeerComparisonTests(unittest.TestCase):
 
     def test_cycle_flag_survives_into_snapshot_and_plot_uses_same_data(self):
         target = replace(issuer("TARGET"), cyclical=True)
-        result = compare_peer_set(target, [issuer("P1"), issuer("P2"), issuer("P3")], AS_OF)
+        target_metrics = dict(target.metrics)
+        target_metrics["forward_pe"] = replace(
+            target_metrics["forward_pe"], supporting_source_urls=("https://issuer.example/target/price",)
+        )
+        target = replace(target, metrics=target_metrics)
+        peer = issuer("P1")
+        peer_metrics = dict(peer.metrics)
+        peer_metrics["forward_pe"] = replace(
+            peer_metrics["forward_pe"], supporting_source_urls=("https://issuer.example/p1/shares",)
+        )
+        result = compare_peer_set(target, [replace(peer, metrics=peer_metrics), issuer("P2"), issuer("P3")], AS_OF)
         self.assertTrue(result["cycle_normalization_required"])
         self.assertTrue(next(p for p in result["plot"]["points"] if p["ticker"] == "TARGET")["cycle_normalization_required"])
         with TemporaryDirectory() as tmp:
@@ -456,6 +768,8 @@ class PeerComparisonTests(unittest.TestCase):
             if rendered["status"] == "RENDERED_STATIC":
                 self.assertTrue(Path(rendered["path"]).is_file())
                 self.assertEqual(result["plot"]["snapshot_id"], rendered["snapshot_id"])
+                self.assertIn("https://issuer.example/target/price", rendered["source_urls"])
+                self.assertIn("https://issuer.example/p1/shares", rendered["source_urls"])
 
     def test_plot_blocks_when_table_has_no_compatible_peer_points(self):
         target = issuer("TARGET")

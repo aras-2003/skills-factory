@@ -6,7 +6,7 @@ description: >
   Do not use as a standalone price-target generator.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.3.3"
+  version: "0.3.4"
   maturity: production
   risk: high
   last_reviewed: 2026-11-08
@@ -20,7 +20,7 @@ metadata:
 Make valuation assumptions visible and test sensitivity instead of producing false precision.
 
 ## Procedure
-1. Gate on verified, period-aligned inputs and record price, currency, diluted shares, as-of date, source and reporting period. Use only facts published on or before the selected as-of timestamp; a period-end date does not prove the information was available then. Exclude later publications from that valuation snapshot. Missing or conflicted critical inputs yield `NOT_SCORED`; never fill gaps with estimates.
+1. Gate on verified, period-aligned inputs and record price, currency, diluted shares, as-of date, source and reporting period. For a derived metric, retain the primary source and every supporting source needed to reproduce its numerator and denominator; a single URL is insufficient when inputs come from separate filings or providers. Use only facts published on or before the selected as-of timestamp; a period-end date does not prove the information was available then. Exclude later publications from that valuation snapshot. Missing or conflicted critical inputs yield `NOT_SCORED`; never fill gaps with estimates.
 2. Select a method appropriate to the business and cycle, and state why alternatives are weaker: normalized EPS/multiple for earnings businesses, NAV for asset developers, FFO/AFFO for REITs, residual income for financials, and normalized FCF/DCF for cash-generative businesses. For a highly levered issuer, show debt and debt-like claims in the equity bridge and test refinancing stress.
 3. Build bear/base/bull operating assumptions with an explicit horizon. Scenarios must differ in operating logic, not only the exit multiple.
 4. Separate earnings/cash-flow assumptions from terminal or exit assumptions. A tested arithmetic helper is packaged at `scripts/valuation_scenarios.py`; use it only when the active runtime can actually execute packaged scripts. Otherwise show formulas and calculations, and do not claim the helper ran. In either case, include units and the equity bridge; the helper calculates only from supplied inputs and does not choose assumptions.
@@ -44,7 +44,7 @@ Make valuation assumptions visible and test sensitivity instead of producing fal
 ## Output contract
 Valuation & Opportunity Card with input status and provenance; method and rejected alternatives; bear/base/bull table; fair value, margin of safety and upside; horizon; separate quality/valuation/catalyst/portfolio fit/confidence; sensitivity; implied expectations; major uncertainty; data gaps; next verification step. When critical inputs fail the gate, return `NOT_SCORED` and the missing evidence instead of a partial numeric card.
 
-When peer comparison is requested, include inclusion/exclusion rationale and the metric's dated period/basis/definition/source, FCF yield and quality/context fields when available, historical-multiple range and consensus revisions when reliable, and explicit N/M explanations for gaps. Label the peer screen as descriptive context separate from the valuation scenarios and any recommendation.
+When peer comparison is requested, include inclusion/exclusion rationale and each metric's dated period/basis/definition, primary source and supporting source URLs, FCF yield and quality/context fields when available, historical-multiple range and consensus revisions when reliable, and explicit N/M explanations for gaps. Label the peer screen as descriptive context separate from the valuation scenarios and any recommendation.
 
 ## Quality checks
 - [ ] Bear/base/bull differ in operating logic, not only multiple.

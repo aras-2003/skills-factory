@@ -40,13 +40,19 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_canonical_source_revision"])
-        self.assertEqual("8e99512b9a5838dfe987d8cb800fe6e2bff7f099", cfg["runtime_source_revision"])
-        self.assertEqual("1.38.468+00371645d2ef", cfg["runtime_release_id"])
+        self.assertEqual("4433f2821a94bdada53663da4bc8674a6e45c2e6", cfg["candidate_source_revision"])
+        self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
+        self.assertEqual("fff6f377c997af2b6ee4987ffb12e4464781cc15", cfg["runtime_canonical_source_revision"])
+        self.assertEqual("d1cf3642042a8e4b73dd608dd12368490ea23faf", cfg["runtime_source_revision"])
+        self.assertEqual("1.38.469+fff6f377c997", cfg["runtime_release_id"])
+        self.assertEqual(122, cfg["runtime_site_version"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
-            ["AMD and MU lack a verified, economically reviewed, same-snapshot 3–5 direct-peer cohort with compatible metric periods and bases"],
-            cfg["runtime_blockers"],
+            {
+                "Candidate changes remain local and have no exact-source Cloud Next runtime execution.",
+                "Issue #306 has a source-backed local MU cohort for three direct peers and latest-TTM revenue growth. Exact-runtime acceptance remains NOT_RUN; N/M FCF growth cases and unspecified forward P/E/consensus data remain explicit.",
+            },
+            set(cfg["runtime_blockers"]),
         )
         runtime_evidence = (ROOT / cfg["runtime_evidence"]).read_text(encoding="utf-8")
         self.assertIn("Exact Site v121 USER_SUPPLIED_CONTEXT execution", runtime_evidence)
