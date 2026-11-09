@@ -794,18 +794,18 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
         if (
             cfg.get("campaign") != "iteration-07-investing-quality-2026-11"
             or cfg.get("runtime_status") != "PARTIAL_BLOCKED"
-            or cfg.get("candidate_source_revision") != "33030b842abb67f0d4a780e5b995ecf6b9c80748"
-            or cfg.get("candidate_source_revision_status") != "committed_local_pending_external"
-            or cfg.get("runtime_canonical_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
-            or cfg.get("runtime_source_revision") != "f6e24683e37648c7466718b3c2d767c2a157c25f"
-            or cfg.get("runtime_release_id") != "1.38.471+f6e24683e376"
-            or cfg.get("runtime_site_version") != 124
-            or cfg.get("runtime_deployment_id") != "appgdep_6af1a96e42308191a66c3e35549d35b2"
+            or cfg.get("candidate_source_revision") != "89c28bf70353b4568c7bc031e128a5f57a0fe24d"
+            or cfg.get("candidate_source_revision_status") != "merged_to_main"
+            or cfg.get("runtime_canonical_source_revision") != "89c28bf70353b4568c7bc031e128a5f57a0fe24d"
+            or cfg.get("runtime_source_revision") != "967ee59cfa5364be118d7521e8dfdbba4da7cfae"
+            or cfg.get("runtime_release_id") != "1.38.472+89c28bf70353"
+            or cfg.get("runtime_site_version") != 125
+            or cfg.get("runtime_deployment_id") != "appgdep_6af1c54254fc8191b505db26d904ea08"
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.",
-                "#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.",
+                "Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d; runtime_info lists compare_peer_comparability, but the current Codex tool inventory does not expose its call, so an exact-runtime comparator receipt is NOT_RUN.",
+                "#306 remains open: the current AMD and MU snapshots lack an immutable source archive and complete comparable growth/forecast evidence; no full acceptance table or exact comparator-call receipt is available.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True

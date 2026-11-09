@@ -46,17 +46,17 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertEqual(set(cfg["required_case_ids"]), {item["id"] for item in cases["cases"]})
         self.assertEqual({231, 306, 307, 318}, {item["expected_issue"] for item in cases["cases"]})
         self.assertEqual("PARTIAL_BLOCKED", cfg["runtime_status"])
-        self.assertEqual("33030b842abb67f0d4a780e5b995ecf6b9c80748", cfg["candidate_source_revision"])
-        self.assertEqual("committed_local_pending_external", cfg["candidate_source_revision_status"])
-        self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_canonical_source_revision"])
-        self.assertEqual("f6e24683e37648c7466718b3c2d767c2a157c25f", cfg["runtime_source_revision"])
-        self.assertEqual("1.38.471+f6e24683e376", cfg["runtime_release_id"])
-        self.assertEqual(124, cfg["runtime_site_version"])
+        self.assertEqual("89c28bf70353b4568c7bc031e128a5f57a0fe24d", cfg["candidate_source_revision"])
+        self.assertEqual("merged_to_main", cfg["candidate_source_revision_status"])
+        self.assertEqual("89c28bf70353b4568c7bc031e128a5f57a0fe24d", cfg["runtime_canonical_source_revision"])
+        self.assertEqual("967ee59cfa5364be118d7521e8dfdbba4da7cfae", cfg["runtime_source_revision"])
+        self.assertEqual("1.38.472+89c28bf70353", cfg["runtime_release_id"])
+        self.assertEqual(125, cfg["runtime_site_version"])
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
             {
-                "The current owner-only Site v124 is verified at source f6e24683e37648c7466718b3c2d767c2a157c25f, but does not expose compare_peer_comparability; candidate tool behavior remains local and exact-runtime acceptance is NOT_RUN.",
-                "#306 remains open: local AMD and MU peer evidence does not establish the full exact-source runtime acceptance or all requested comparable growth/forecast fields; source snapshots include mutable secondary-provider pages.",
+                "Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d; runtime_info lists compare_peer_comparability, but the current Codex tool inventory does not expose its call, so an exact-runtime comparator receipt is NOT_RUN.",
+                "#306 remains open: the current AMD and MU snapshots lack an immutable source archive and complete comparable growth/forecast evidence; no full acceptance table or exact comparator-call receipt is available.",
             },
             set(cfg["runtime_blockers"]),
         )

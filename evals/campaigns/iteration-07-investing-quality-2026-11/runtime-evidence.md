@@ -1,4 +1,26 @@
-# Iteration 07 candidate runtime evidence — through 2026-11-07
+# Iteration 07 runtime evidence — through 2026-11-09
+
+## Current exact merge deployment — 2026-11-09
+
+- **GitHub source:** PR #595 is merged; canonical `main` is `89c28bf70353b4568c7bc031e128a5f57a0fe24d`.
+- **Private Site:** Skills Factory Cloud Next Site v125; owner-only custom allowlist; Site mirror commit `967ee59cfa5364be118d7521e8dfdbba4da7cfae`; deployment `appgdep_6af1c54254fc8191b505db26d904ea08` returned `succeeded`; live URL is `https://skills-factory-cloud-next.arek2003.chatgpt.site`.
+- **Runtime identity:** `runtime_info` completed at `2026-11-09T13:07:54.126Z`, returned `attestation_status=verified`, canonical source `89c28bf70353b4568c7bc031e128a5f57a0fe24d`, Site source `967ee59cfa5364be118d7521e8dfdbba4da7cfae`, Lab `1.38.472+89c28bf70353`, payload SHA-256 `2a8660794ae23289c3a9faf9303223b72a057a28650a333b004bb0cd513d2475`, catalog digest `f2a3757073d1b03f55175ddaebcf308b518e1e9ea29b5e982da37f5ab4517bce`, and artifact SHA-256 `1a4460d3645ad715070b2c2902e1e4edde75244fc685523e33a2eab22c0b35b6`. Its unsigned tool receipt has input SHA-256 `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a` and output SHA-256 `a7f77d442357c56e4d15b07d31ac1db571e5093d92ac6b96b5362367371143ee`.
+- **Catalog call:** `list_skills` completed at `2026-11-09T13:08:11.268Z`, returned the same Lab and canonical source, 98 skills, and a `SUCCESS` receipt (input SHA-256 `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a`; output SHA-256 `b5aa40f2430089663b3a148284a7786493f660d7fe9dd3ec75f2e3cfb3d0002b`).
+- **Comparator capability:** `runtime_info.capabilities` includes `compare_peer_comparability`. However, the tool surface supplied to this Codex session does not include a callable `compare_peer_comparability` entry. The tool was not invoked, so exact-runtime comparator execution is **NOT_RUN**. The Site deployment is verified; the missing call surface is a host discovery/registration limitation and is not evidence that the Site implementation failed.
+- **Issue disposition:** #231, #307 and #318 are closed; #306 remains open for archived, reproducible source snapshots, the complete same-snapshot AMD/MU/adjacent-model evidence and an actual comparator invocation receipt. #322 remains an out-of-scope coordination umbrella. Iteration 07 remains `PARTIAL_BLOCKED`; no release approval, maturity promotion, canonical writes, portfolio changes or trades occurred.
+
+The deployment/archive attestation proves the embedded package identity and release. The Site's `runtime_info` and `list_skills` calls prove the live runtime responds. Neither substitutes for a comparator call or resolves #306's source evidence gate.
+
+## Search-index recovery and cross-provider reconciliation — 2026-11-09
+
+- Search-index content retrieved 2026-11-09 recovered a Yahoo Finance statistics snapshot for Kioxia (285A.T) explicitly as of 2026-11-06: enterprise value JPY 12.98T, TTM revenue JPY 5.79T, EV/Revenue 2.24x and EV/EBITDA 3.01x. The EV/Revenue arithmetic reconciles after rounding (`12.98 / 5.79 = 2.242`), and the values match the frozen Kioxia row. This is a recovered search-result extract from a mutable page, not an archived original response body. [Yahoo Finance Kioxia](https://finance.yahoo.com/quote/285A.T/)
+- Search-index content for StockAnalysis Nanya reported the Nov 6 close (TWD 343.50) and EV/Sales 3.11x / EV/EBITDA 4.12x, matching the frozen fixture. [StockAnalysis Nanya ratios](https://stockanalysis.com/quote/tpe/2408/financials/ratios/)
+- A Yahoo Finance Nanya result for the same as-of date reported EV TWD 990.37B and revenue TWD 295.38B, alongside EV/Revenue 5.49x / EV/EBITDA 8.30x. The reported EV/Revenue does not reconcile (`990.37 / 295.38 = 3.354`), so this record is conflicted and is not admitted into the fixture. [Yahoo Finance Nanya](https://finance.yahoo.com/quote/2408.TW/)
+- The Yahoo Finance SK hynix result reported Nov 6 EV KRW 731.70T and EV/Revenue 3.87x; the recorded provider TTM revenue of KRW 269.34T gives 2.717x, so the reported multiple does not reconcile. Yahoo's data is rejected for that row pending a source body with a compatible numerator, denominator and period. [Yahoo Finance SK hynix](https://finance.yahoo.com/quote/000660.KS/)
+- Yahoo's MU result was explicitly dated Nov 4, not Nov 6 or Nov 8, and reported EV/Revenue 5.57x / EV/EBITDA 6.86x; it cannot stand in for the frozen Nov 8 S&P Global/StockAnalysis values 5.35x / 6.55x. [Yahoo Finance MU](https://finance.yahoo.com/quote/MU/)
+- **Acceptance effect:** this recovers one matching Kioxia row and a search-indexed Nanya row, but it does not recover the raw Nov 8 StockAnalysis pages, reconcile the conflicting Yahoo Nanya/SK rows, or provide a single-provider immutable cohort. It is supplemental evidence only; #306 remains open and the exact Site comparator receipt remains `NOT_RUN`.
+
+## Previous deployed baseline and local cohort — 2026-11-08
 
 ## Current deployed baseline — 2026-11-08
 
