@@ -1,0 +1,5 @@
+interface:
+  display_name: Accessibility Gate
+  short_description: Review interface implementation evidence for accessibility…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'
