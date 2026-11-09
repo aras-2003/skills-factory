@@ -245,7 +245,10 @@ def package_runtime_mcp(
     cloud_src = source_dir / "cloud_server.py"
     catalog_src = source_dir / "skill_catalog.py"
     observability_src = source_dir / "observability.py"
-    if not all(path.is_file() for path in (config_src, renderer_src, investment_src, server_src, cloud_src, catalog_src, observability_src)):
+    opportunity_score_src = source_dir / "opportunity_score.py"
+    issuer_exposure_src = source_dir / "issuer_exposure.py"
+    peer_comparison_src = root / "skills/investing/valuation-scenario-review/scripts/peer_comparison.py"
+    if not all(path.is_file() for path in (config_src, renderer_src, investment_src, server_src, cloud_src, catalog_src, observability_src, opportunity_score_src, issuer_exposure_src, peer_comparison_src)):
         raise ValueError("runtime MCP sources are incomplete")
 
     config = json.loads(config_src.read_text(encoding="utf-8"))
@@ -278,6 +281,9 @@ def package_runtime_mcp(
         shutil.copyfile(cloud_src, mcp_out / "cloud_server.py")
         shutil.copyfile(catalog_src, mcp_out / "skill_catalog.py")
         shutil.copyfile(observability_src, mcp_out / "observability.py")
+        shutil.copyfile(opportunity_score_src, mcp_out / "opportunity_score.py")
+        shutil.copyfile(issuer_exposure_src, mcp_out / "issuer_exposure.py")
+        shutil.copyfile(peer_comparison_src, mcp_out / "peer_comparison.py")
         write_json(stage / ".mcp.json", {"mcpServers": servers})
 
     tree_digest = (
@@ -294,6 +300,9 @@ def package_runtime_mcp(
             "list_skills",
             "load_skill",
             "route_investment_request",
+            "calculate_opportunity_scores",
+            "compare_peer_comparability",
+            "calculate_issuer_exposure",
             "render_bar_chart",
             "render_line_chart",
         ],

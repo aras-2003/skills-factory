@@ -66,6 +66,7 @@ out_of_scope_behavior_paths:
 - workflows/investment-security-review/WORKFLOW.md
 - workflows/runtime-registry.yaml
 in_scope_behavior_paths:
+- scripts/package/build_utils.py
 - runtime/mcp/server.py
 - runtime/mcp/cloud_server.py
 - scripts/eval/campaign.py
@@ -76,6 +77,7 @@ in_scope_behavior_paths:
 - skills/investing/valuation-scenario-review/scripts/peer_comparison.py
 - skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py
 test_modules:
+- scripts/package/tests/test_packaging.py
 - runtime/mcp/tests/test_chart_contract.py
 - skills/investing/security-underwriting/tests/test_financial_quality.py
 - skills/investing/security-underwriting/tests/test_real_issuer_source_probe.py
@@ -130,11 +132,13 @@ source_sha256:
   release/production-readiness.yaml: 9b34df093c9aae57642cd8a8e361a4a8d9da4b804c442eef372cf05e897bce00
   runtime/contracts/mcp-tools-v1.json: ebbc8f1bf8457b4ba4f19e4cb90f536a322856ac473d10ddf9741c4db177b4f9
   runtime/mcp/cloud_server.py: 8dca0e2a35c69e462bc70a43b07ac45cfc6da35cbfb375f2af71a971cac0b9dd
-  runtime/mcp/server.py: 779cc23d6d0fddec7978803985a95edbb0bd98edfde7e92c28f7a0ee4533bd66
+  runtime/mcp/server.py: 32b0fc3077bbf072b5f738beeccc3f6207048561b762ca744f3dc07ee85167c0
   runtime/mcp/tests/test_chart_contract.py: 525ef0915ec27f5e842f9c16a1435770565e5b78c3e90d48508acc61e7c3c74a
-  scripts/eval/campaign.py: d4a48b93627882d6a290fa780462e5ac92a851d8708cf1ec9fc87dca4c765b83
+  scripts/eval/campaign.py: 1ddc58d3ec05b76230d1a79ed83625c3b26dabcd18d51b72f6498762138ede3c
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: c22e63b4c7e4fdad3ad304be287d3bbc0d1223beeafddd53ef5062837d296f3b
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: a3aa453ae2404473f40f912fc4aa3b7a9581e1ff168d57ac547f94527c1291a1
+  scripts/package/build_utils.py: 8b6482ccdbc50c42462ebf9d55740e83f584385406c94fcc8a2941f40b62ec64
+  scripts/package/tests/test_packaging.py: 819a510b6bf8c7d0b7be9031e309620a9a80e270c034b966be7fffd764e001a0
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd

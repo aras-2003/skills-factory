@@ -38,8 +38,10 @@ from issuer_exposure import calculate_issuer_exposure as _calculate_issuer_expos
 
 _PEER_SCRIPT_RELATIVE_PATH = Path("skills/investing/valuation-scenario-review/scripts")
 _PEER_SCRIPT_DIRECTORY = next(
-    (base / _PEER_SCRIPT_RELATIVE_PATH for base in Path(__file__).resolve().parents[1:3]
-     if (base / _PEER_SCRIPT_RELATIVE_PATH).is_dir()),
+    (candidate for candidate in (
+        Path(__file__).resolve().parent,
+        *(base / _PEER_SCRIPT_RELATIVE_PATH for base in Path(__file__).resolve().parents[1:3]),
+    ) if (candidate / "peer_comparison.py").is_file()),
     Path(__file__).resolve().parents[2] / _PEER_SCRIPT_RELATIVE_PATH,
 )
 if str(_PEER_SCRIPT_DIRECTORY) not in sys.path:
