@@ -1,0 +1,5 @@
+interface:
+  display_name: Design Critique
+  short_description: Use when reviewing a supplied interface screenshot or visual…
+  icon_small: ./assets/skills-factory-domain-icon.svg
+  brand_color: '#A998FF'
