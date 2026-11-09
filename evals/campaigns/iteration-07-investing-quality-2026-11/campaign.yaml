@@ -16,14 +16,14 @@ runtime_canonical_source_revision: 89c28bf70353b4568c7bc031e128a5f57a0fe24d
 runtime_site_version: 125
 runtime_deployment_id: appgdep_6af1c54254fc8191b505db26d904ea08
 runtime_blockers:
-- Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d; runtime_info lists
-  compare_peer_comparability, but the current Codex tool inventory does not expose its call, so an exact-runtime
-  comparator receipt is NOT_RUN.
+- Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d. Its UI console
+  exercised compare_peer_comparability with synthetic inputs, but this Codex tool inventory does not expose an MCP
+  call for it; an exact MCP comparator receipt is NOT_RUN.
 - '#306 remains open: the current AMD and MU snapshots lack an immutable source archive and complete comparable
   growth/forecast evidence; no full acceptance table or exact comparator-call receipt is available.'
 release_approved: false
 historical_r20_immutable: true
-status_note: 'The exact iteration candidate is merged to main at 89c28bf70353b4568c7bc031e128a5f57a0fe24d and is live on owner-only Site v125 as mirror 967ee59cfa5364be118d7521e8dfdbba4da7cfae, with verified Lab 1.38.472+89c28bf70353. Validation for the candidate passed Cloud Next contracts, TypeScript, full ESLint, Site build, focused domain suites, 308 evaluation tests (1 skipped), package tests 102/102, and repository validation. Runtime_info declares compare_peer_comparability, but this Codex session does not expose its tool call, so the exact runtime invocation remains NOT_RUN. Iteration remains PARTIAL_BLOCKED; #306 remains open for reproducible source archives, complete comparable growth/forecast evidence and an exact comparator receipt. #322 remains coordination-only. No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
+status_note: 'The exact iteration candidate is merged to main at 89c28bf70353b4568c7bc031e128a5f57a0fe24d and is live on owner-only Site v125 as mirror 967ee59cfa5364be118d7521e8dfdbba4da7cfae, with verified Lab 1.38.472+89c28bf70353. Validation for the candidate passed Cloud Next contracts, TypeScript, full ESLint, Site build, focused domain suites, 308 evaluation tests (1 skipped), package tests 102/102, and repository validation. The deployed Site UI returned COMPARABLE for a synthetic three-peer probe, but its UI is not an MCP connection test and the current Codex tool inventory does not expose compare_peer_comparability; exact MCP invocation remains NOT_RUN. Iteration remains PARTIAL_BLOCKED; #306 remains open for reproducible source archives, complete comparable growth/forecast evidence and an exact comparator receipt. #322 remains coordination-only. No release approval, maturity promotion, canonical writes, portfolio mutation or trades.'
 behavior_case_suite: evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml
 required_case_ids:
 - iter07-financial-quality-synthetic
@@ -93,7 +93,7 @@ source_sha256:
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 02946d7fdb641b5bb712741f7e13b1c3b912efba880863747de868bfdb7c2ec2
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 7deff46cc997c50d2f82a92a9ee0e94a11060f54cb2d43521a3f2998a926f607
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 2aeb2c965ec6e8bb9d427a5e89ef5838b5f5a1c452d15952d6423fac9d6f8d94
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -129,9 +129,9 @@ source_sha256:
   runtime/mcp/cloud_server.py: 8dca0e2a35c69e462bc70a43b07ac45cfc6da35cbfb375f2af71a971cac0b9dd
   runtime/mcp/server.py: 32b0fc3077bbf072b5f738beeccc3f6207048561b762ca744f3dc07ee85167c0
   runtime/mcp/tests/test_chart_contract.py: 525ef0915ec27f5e842f9c16a1435770565e5b78c3e90d48508acc61e7c3c74a
-  scripts/eval/campaign.py: 7b6f2bbd61a00304dee0a240e6b66de8796c60fb3ef49353212fe01048297872
+  scripts/eval/campaign.py: c7c79d0a8325728b4b1e9982458aa08a78b79493df760ced5fc3cd652d6d1488
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
-  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 02da56f31c644852ce4f3f3fc32fa389396f20ab46dfd1a48a02aaada29f882b
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 99ca1bb6263cf9af8f8936562ddbba1a63bb6f44afa2fc2a442a9782bb3e3ef6
   scripts/package/build_utils.py: 8b6482ccdbc50c42462ebf9d55740e83f584385406c94fcc8a2941f40b62ec64
   scripts/package/tests/test_packaging.py: 819a510b6bf8c7d0b7be9031e309620a9a80e270c034b966be7fffd764e001a0
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed

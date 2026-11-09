@@ -55,7 +55,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
             {
-                "Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d; runtime_info lists compare_peer_comparability, but the current Codex tool inventory does not expose its call, so an exact-runtime comparator receipt is NOT_RUN.",
+                "Owner-only Site v125 is verified at canonical source 89c28bf70353b4568c7bc031e128a5f57a0fe24d. Its UI console exercised compare_peer_comparability with synthetic inputs, but this Codex tool inventory does not expose an MCP call for it; an exact MCP comparator receipt is NOT_RUN.",
                 "#306 remains open: the current AMD and MU snapshots lack an immutable source archive and complete comparable growth/forecast evidence; no full acceptance table or exact comparator-call receipt is available.",
             },
             set(cfg["runtime_blockers"]),
