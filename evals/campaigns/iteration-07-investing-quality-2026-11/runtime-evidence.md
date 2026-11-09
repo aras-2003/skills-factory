@@ -18,6 +18,12 @@ The deployment/archive attestation proves the embedded package identity and rele
 - This was a browser-side `callTool` calculation on the Site page, not an MCP `tools/call`: the UI explicitly says its panel uses the same calculation code as MCP but is not a plugin-connection test. Inputs use synthetic values and `example.test` URLs; they do not support issuer claims or the real AMD/MU cohort. No MCP comparator receipt was produced, and this does not establish exact-runtime invocation.
 - **Acceptance effect:** the deployed computation path is exercised through its UI and returned the expected bounded synthetic result. #306 remains open for immutable, reproducible real-source snapshots, complete same-snapshot growth/forecast evidence, and an actual MCP comparator receipt. Iteration 07 remains `PARTIAL_BLOCKED`.
 
+## Exact-source MCP recheck from the current Codex session — 2026-11-09
+
+- `list_skills` completed at `2026-11-09T14:09:19.255Z` against Site mirror source `967ee59cfa5364be118d7521e8dfdbba4da7cfae`; it returned Lab `1.38.472+89c28bf70353`, canonical source `89c28bf70353b4568c7bc031e128a5f57a0fe24d`, and 98 skills. Unsigned receipt: input SHA-256 `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a`, output SHA-256 `b5aa40f2430089663b3a148284a7786493f660d7fe9dd3ec75f2e3cfb3d0002b`.
+- `load_skill` completed at `2026-11-09T14:09:29.709Z` for `valuation-scenario-review` v0.3.5, with the same Site mirror source. Unsigned receipt: input SHA-256 `852741e448df6cfcd19556fd7de0cbcca74d3ab8168fb75915c295f5a62a61e2`, output SHA-256 `f02206ab6eedb108a7d676e410f976a7d8f4ee6951ba325b5c3b8a64ed11af6f`.
+- After the exact-source load, the current Codex tool inventory still exposed no callable `compare_peer_comparability` tool. These successful catalog and skill-load receipts verify deployment identity and instruction loading only; no comparator invocation was made. The runtime gate remains **NOT_RUN**, and #306 remains open.
+
 ## Search-index recovery and cross-provider reconciliation — 2026-11-09
 
 - Search-index content retrieved 2026-11-09 recovered a Yahoo Finance statistics snapshot for Kioxia (285A.T) explicitly as of 2026-11-06: enterprise value JPY 12.98T, TTM revenue JPY 5.79T, EV/Revenue 2.24x and EV/EBITDA 3.01x. The EV/Revenue arithmetic reconciles after rounding (`12.98 / 5.79 = 2.242`), and the values match the frozen Kioxia row. This is a recovered search-result extract from a mutable page, not an archived original response body. [Yahoo Finance Kioxia](https://finance.yahoo.com/quote/285A.T/)
