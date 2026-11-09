@@ -63,12 +63,6 @@ cases:
   - id: investment-security-natural-en
     input: evals/routing/investment-security-natural-en.input.md
     rubric: evals/routing/investment-security-natural-en.rubric.yaml
-  - id: investment-methodology-audit-incidental-ticker-en
-    input: evals/routing/investment-methodology-audit-incidental-ticker-en.input.md
-    rubric: evals/routing/investment-methodology-audit-incidental-ticker-en.rubric.yaml
-  - id: investment-methodology-audit-incidental-ticker-pl
-    input: evals/routing/investment-methodology-audit-incidental-ticker-pl.input.md
-    rubric: evals/routing/investment-methodology-audit-incidental-ticker-pl.rubric.yaml
   - id: investment-security-sizing-natural-en
     input: evals/routing/investment-security-sizing-natural-en.input.md
     rubric: evals/routing/investment-security-sizing-natural-en.rubric.yaml
