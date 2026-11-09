@@ -49,7 +49,7 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
         self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertEqual(
             {
-                "Exact Site v123 test is bounded USER_SUPPLIED_CONTEXT; values were not independently re-extracted and packaged helper code remains not_executed. Full #306 acceptance across AMD, MU and a distinct business model is not demonstrated.",
+                "The Nov 8 MU provider snapshot is frozen in tests but its mutable source pages were not archived; live pages now differ for Nanya/Kioxia and report a changed SK hynix share count. Site probes used supplied values, and packaged helper code remains not_executed. Full #306 exact-source acceptance is not demonstrated.",
             },
             set(cfg["runtime_blockers"]),
         )

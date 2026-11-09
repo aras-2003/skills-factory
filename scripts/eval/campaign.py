@@ -786,7 +786,7 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             or cfg.get("runtime_attestation") != "verified"
             or cfg.get("runtime_evidence") != "evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md"
             or set(cfg.get("runtime_blockers") or []) != {
-                "Exact Site v123 test is bounded USER_SUPPLIED_CONTEXT; values were not independently re-extracted and packaged helper code remains not_executed. Full #306 acceptance across AMD, MU and a distinct business model is not demonstrated.",
+                "The Nov 8 MU provider snapshot is frozen in tests but its mutable source pages were not archived; live pages now differ for Nanya/Kioxia and report a changed SK hynix share count. Site probes used supplied values, and packaged helper code remains not_executed. Full #306 exact-source acceptance is not demonstrated.",
             }
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
