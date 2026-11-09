@@ -3,7 +3,7 @@
 - State: PLANNED; scope lock is committed before implementation. Start only after Iteration 7's owner abort is merged to `main`.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #322 (coordination-only tracking); GitHub Project iteration `08 | Investing monitoring (provisional)`.
-- Previous terminal iteration: Iteration 7 owner-aborted on 2026-11-09; #306 remains unresolved and open.
+- Previous terminal iteration: Iteration 7 owner-aborted on 2026-11-09; see [append-only abort decision](iteration-07-abort-2026-11-09.md). #306 remains unresolved and open.
 - Baseline main SHA: `0646cd0c4588b889070960c777e07829c3477b9e`.
 - Lock commit SHA: `30d42cb6efa4088082362101ac1320f654255056` (scope and acceptance-matrix lock; owner-approved implementation start follows after merge).
 - Started at / closed at (UTC): not started / pending.
