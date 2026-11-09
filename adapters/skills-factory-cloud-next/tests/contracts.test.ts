@@ -50,7 +50,7 @@ test("peer comparability requires dated fit evidence and keeps incompatible metr
     metrics: { ev_sales: metric("ev_sales", "14"), ev_ebitda: metric("ev_ebitda", "30"), forward_pe: { ...metric("forward_pe", "25", "FY2027"), horizon: "FY2027" } },
   });
   const peers = [directPeer("NVDA"), directPeer("INTC"), directPeer("MRVL"), {
-    ...directPeer("MSFT"), sector: "Software", industry: "Cloud", peer_tier: "ADJACENT", economic_fit: {}, comparison_group: "fabless-accelerators",
+    ...directPeer("MSFT"), sector: "Software", industry: "Cloud", business_model: "cloud software subscriptions", peer_tier: "ADJACENT", economic_fit: {}, comparison_group: "fabless-accelerators",
   }, {
     ...directPeer("STALE"), economic_fit: { ...fit, cyclicality: { ...fit.cyclicality, published_at: "2025-01-01" } },
   }];
@@ -62,6 +62,15 @@ test("peer comparability requires dated fit evidence and keeps incompatible metr
   assert.equal(result.peers.find((peer: any) => peer.ticker === "NVDA").metrics.forward_pe.value, "N/M");
   assert.equal(result.peers.find((peer: any) => peer.ticker === "MSFT").comparability_tier, "ADJACENT");
   assert.equal(result.peers.find((peer: any) => peer.ticker === "STALE").exclusion_rationale, "STALE_DIRECT_FIT_EVIDENCE");
+  assert.deepEqual(result.table.metric_names, ["ev_ebitda", "ev_sales", "forward_pe"]);
+  const tableByTicker = Object.fromEntries(result.table.rows.map((row: any) => [row.ticker, row]));
+  assert.equal(tableByTicker.AMD.metrics.ev_sales.value, "16.06");
+  assert.equal(tableByTicker.NVDA.metrics.ev_sales.value, "14");
+  assert.equal(tableByTicker.NVDA.metrics.forward_pe.value, "N/M");
+  assert.equal(tableByTicker.MSFT.comparability_tier, "ADJACENT");
+  assert.equal(tableByTicker.MSFT.business_model, "cloud software subscriptions");
+  assert.equal(tableByTicker.STALE.metrics.ev_sales.value, "N/M");
+  assert.equal(tableByTicker.STALE.metrics.ev_sales.reason, "STALE_DIRECT_FIT_EVIDENCE");
   assert.equal(result.ranked, false);
   assert.equal(result.recommendation, null);
   assert.match(result.evidence_status_semantics, /source verification is not performed/);

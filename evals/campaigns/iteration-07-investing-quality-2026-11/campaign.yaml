@@ -84,17 +84,17 @@ source_sha256:
   CATALOG.md: 0167c0eecb64337f60f85a35b82d29cbeb3ce53d624c2b7189473e7f6c69e7b5
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
   docs/catalog.json: 48a443ee5197f43d80ecdfeb465e6df1ba6ed4d73faeb513a96be17a2ec7063e
-  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 6f08172c70f1db882cb0d87fbe93f87f0d75c6dfdeda8725f495c944427f0851
+  docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 8aa96397421b7c91a46366e5b8e890d445e9377e0e49f16820841c62236b515b
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
   evals/campaigns/iteration-07-investing-quality-2026-11/cases.yaml: 02946d7fdb641b5bb712741f7e13b1c3b912efba880863747de868bfdb7c2ec2
   runtime/contracts/mcp-tools-v1.json: ebbc8f1bf8457b4ba4f19e4cb90f536a322856ac473d10ddf9741c4db177b4f9
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
-  adapters/skills-factory-cloud-next/tests/contracts.test.ts: 988796517ab56365c425ab8abbaef7f9b99ff9860d029d76ae1f1135638a7464
-  adapters/skills-factory-cloud-next/src/peer-comparability.ts: 7bc6192f31577b01f413b6e1aa96c034e1cd33bdb0e46d00691a0740310ce36e
-  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 9096a624f5c7f9f649b01e4ee710253753dd884057f6dad6e2064544661c43e0
-  adapters/skills-factory-cloud-next/src/mcp-handler.ts: 3139bf3fb4c9d2c5351f4e1ab21adc6ddfe90e0b6bd38d56dd12d02a943c2398
-  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 8452ccc5b485ac0aebc415d6c9ec336b90d6434595cc1cacc35e28f71d74a03f
+  adapters/skills-factory-cloud-next/tests/contracts.test.ts: dde0bec7f94ed2ae6b2d9d03a6bdfc23772b420b395b369da3f9f2a85b923002
+  adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
+  adapters/skills-factory-cloud-next/src/mcp-handler.ts: b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8
+  evals/campaigns/iteration-07-investing-quality-2026-11/runtime-evidence.md: 66d6f1f0f8b3363916470275072d73316d99d79aba2414af54541d17c0c740ba
   evals/routing/investment-opportunity-natural-pl.input.md: d39b52ac84835af6b1f438ff10eb44789f8861c77ad3d1f5744b43867c61add6
   evals/routing/investment-opportunity-natural-pl.rubric.yaml: dd395eb2022a392c389b9f54055a1eb16867a9f1c423c27e4a9bb524c6d9f50f
   evals/routing/investment-policy-natural-pl.input.md: 1a9a4bdb24361132b16a6aa6a081353b0cc33bf8af69124f4fbb5be43c383718
@@ -140,7 +140,7 @@ source_sha256:
   skills/investing/security-underwriting/tests/test_real_issuer_source_probe.py: 16a68f10601dbc327350569b0f7e9c90f84307c2f41ee8eb21d596e12fb98950
   skills/investing/thesis-challenge/SKILL.md: 133b1bc881e58329975ecff02cf41bdc20872879746274d818077076309bc31c
   skills/investing/thesis-challenge/tests/cases.yaml: 5ed7120ffe4aff4d9b92843010dcc15e252888905f5dbb0ce297bf6cd569e3e0
-  skills/investing/valuation-scenario-review/SKILL.md: 1d56aefdd174abac0dd693a83984643c36be8a7fea59cf89931545fc9ea4364b
+  skills/investing/valuation-scenario-review/SKILL.md: 89dd321ccd999749b32cfaa551a65d74f97529a5eef3c86a0e4e62cdfb08e0b4
   skills/investing/valuation-scenario-review/scripts/peer_comparison.py: 03af45cd02ad6b07e256a037e69577baf29332aba190c2124c7f0147e8c123f0
   skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py: a29bf28e4ecd592c675532c782fb870dab14bd71cea6a335fee5b201f8919762
   skills/investing/valuation-scenario-review/scripts/valuation_scenarios.py: d67ff95ad731d6c03c539f8d58d683d4eb1acc88cf6c363f916ffa9cf3db248f

@@ -157,6 +157,40 @@ export function comparePeerComparability(input: PeerComparabilityInput) {
     return metric && ["VERIFIED", "PROVISIONAL"].includes(metric.status ?? "");
   }).length]));
   const reason = included.length < 3 ? "FEWER_THAN_THREE_DIRECT_PEERS" : !Object.values(counts).some((count) => count >= 3) ? "NO_CORE_METRIC_HAS_THREE_COMPATIBLE_DIRECT_PEERS" : null;
+  const metricNames = Object.keys(target.metrics).sort();
+  const tableRows = [
+    {
+      ticker: target.ticker, business_model: target.business_model, comparability_tier: "TARGET",
+      eligibility: "TARGET", reason: null,
+      metrics: Object.fromEntries(metricNames.map((name) => {
+        const metric = target.metrics[name];
+        const metricStatus = metricReason(metric, name, asOf);
+        return [name, {
+          value: metricStatus ? "N/M" : metric.value, unit: metric.unit,
+          status: metricStatus ? "NOT_MEANINGFUL" : metric.status,
+          reason: metricStatus, definition: metric.definition, period: metric.period,
+          basis: metric.basis, currency: metric.currency, horizon: metric.horizon,
+          published_at: metric.published_at, source_url: metric.source_url,
+          supporting_source_urls: metric.supporting_source_urls,
+        }];
+      })),
+    },
+    ...rows.map((row) => ({
+      ticker: row.ticker, business_model: row.business_model, comparability_tier: row.comparability_tier,
+      eligibility: row.eligibility, reason: row.exclusion_rationale,
+      metrics: Object.fromEntries(metricNames.map((name) => {
+        const details = (row.metrics as Record<string, Record<string, unknown>>)[name];
+        return [name, details ? {
+          value: details.value, unit: details.unit, status: details.status, reason: details.reason,
+          definition: details.definition, period: details.period, basis: details.basis,
+          currency: details.peer_currency ?? details.target_currency,
+          horizon: details.horizon, published_at: details.published_at ?? details.peer_published_at,
+          source_url: details.source_url ?? details.peer_source_url,
+          supporting_source_urls: details.supporting_source_urls ?? details.peer_supporting_source_urls,
+        } : { value: "N/M", status: "NOT_MEANINGFUL", reason: row.exclusion_rationale }];
+      })),
+    })),
+  ];
   return {
     status: reason ? "INSUFFICIENT_COMPARABLE_PEERS" : "COMPARABLE", comparability_reason: reason,
     as_of: asOf, target: target.ticker, sector: target.sector, industry: target.industry,
@@ -165,6 +199,7 @@ export function comparePeerComparability(input: PeerComparabilityInput) {
     included_peer_count: includedRows.length, direct_peer_count: included.length,
     core_metric_peer_counts: counts, cycle_normalization_required: target.cyclical,
     required_peer_range: "3–5 for a compact table; expand to 5–15 only when economically valid",
+    table: { as_of: asOf, metric_names: metricNames, rows: tableRows },
     peers: rows, recommendation: null, ranked: false, cross_sector_ranking: false,
     limitations: ["Caller-supplied snapshots only; no source retrieval or verification.", "N/M marks missing or incompatible metrics; no values are inferred.", "This tool provides comparability checks, not an investment recommendation, ranking, valuation, or portfolio action."],
   };
