@@ -1,0 +1,7 @@
+schema_version: "1.0"
+id: shared-portfolio
+target: investment-portfolio-review
+assertions:
+  manual:
+    - routes portfolio concentration and overlap to investment-portfolio-review
+    - preserves routing-only request and performs no reads or writes

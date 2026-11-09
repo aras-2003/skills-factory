@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 308-02
+target: thesis-monitor
+assertions:
+  manual:
+    - threshold crossing follows the declared MONITOR/REVIEW/ESCALATE path
+    - crossing does not itself invalidate the thesis, mutate canonical state, or authorize a trade
+    - claims remain tied to the verified ACTIVE baseline and evidence

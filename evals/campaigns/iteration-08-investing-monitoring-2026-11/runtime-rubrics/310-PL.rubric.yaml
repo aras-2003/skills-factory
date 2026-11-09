@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 310-PL
+target: investment-os-review
+assertions:
+  manual:
+    - wybiera audyt procesu Investment OS mimo przypadkowej wzmianki o AMD
+    - nie uruchamia analizy spółki ani odczytu/zapisu portfela
+    - odróżnia receipt routingu od wykonania workflow

@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 310-SEC
+target: investment-security-review
+assertions:
+  manual:
+    - routes the named security decision to investment-security-review
+    - does not select methodology audit when security analysis is the actual intent
+    - performs no canonical write

@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 310-NOWRITE
+target: investment-os-review
+assertions:
+  manual:
+    - selects the process audit front door and names it in the routing receipt
+    - makes no portfolio or canonical read and no write invocation
+    - does not claim child execution from route selection alone

@@ -1,0 +1,104 @@
+campaign: iteration-08-investing-monitoring-2026-11
+schema_version: "1.0"
+scope: investing_monitoring_iteration_08
+execution_channel: cloud_next_site
+runtime_target: Skills Factory Cloud Next Site (owner-only)
+runtime_status: NOT_RUN
+candidate_source_revision: pending
+candidate_source_revision_status: not_merged
+source_base_revision: 40420bc28c85826c2f28cb9709c34c45f583b487
+runtime_source_revision_required: true
+runtime_source_revision: pending
+runtime_release_id: pending
+runtime_attestation: pending
+runtime_evidence: evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md
+runtime_canonical_source_revision: pending
+runtime_site_version: pending
+runtime_deployment_id: pending
+runtime_blockers:
+  - exact candidate has not been merged and deployed
+release_approved: false
+historical_r20_immutable: true
+status_note: >-
+  Scope is limited to GitHub issues #308, #309 and #310. #306 is already closed as completed through PR #600 and is not an Iteration 8 carry-forward. Offline validation and exact-Site runtime acceptance have not run. Site deployment is separately authorized by the owner but must use the exact merged candidate after implementation and CI.
+behavior_case_suite: evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
+required_case_ids:
+  - iter08-kpi-trigger-boundaries
+  - iter08-expectations-bridge
+  - iter08-methodology-router
+runtime_case_suite: evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml
+runtime_case_ids:
+  - 308-01
+  - 308-02
+  - 308-03
+  - 308-04
+  - 309-01
+  - 309-02
+  - 309-03
+  - 309-04
+  - 310-EN
+  - 310-PL
+  - 310-SEC
+  - 310-NOWRITE
+  - shared-portfolio
+  - shared-education
+in_scope_behavior_paths:
+  - skills/investing/security-underwriting/SKILL.md
+  - skills/investing/thesis-monitor/SKILL.md
+  - skills/investing/valuation-scenario-review/SKILL.md
+  - workflows/investment-os-review/WORKFLOW.md
+  - adapters/skills-factory-cloud-next/src/cloud-tools.ts
+test_modules:
+  - adapters/skills-factory-cloud-next/tests/contracts.test.ts
+  - skills/investing/security-underwriting/tests/cases.yaml
+  - skills/investing/thesis-monitor/tests/cases.yaml
+  - skills/investing/valuation-scenario-review/tests/cases.yaml
+  - workflows/investment-os-review/tests/cases.yaml
+  - evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
+  - scripts/eval/tests/test_runtime_campaign.py
+source_sha256:
+  CATALOG.md: "568aa330ccfa3bdedbaa5e7065b86d30e2e589f4a85d7bad35993de7034ce8ae"
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: "1ec4cb42e0c6c1aa0569e2fbca8338d0375e1c48051f4c7aaf265fcca2ab9f67"
+  adapters/skills-factory-cloud-next/tests/contracts.test.ts: "9efe43384e992e09388d86631c6d5a8f33039c073deeb01b4420026d7f7f7d4b"
+  docs/catalog.json: "e35dbf84ecac2da2ff32316075fd791c2ba9ccf3a0bea227cda190fe1bba2cc4"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml: "c2c406b56460ae809a44db3d31cf3f47a3b761fe6c62a66d55e0184c60e08787"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml: "de76470d524da9a44c1466a42a23311dbecbf5147a5454f636505be1feec535c"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-01.input.md: "2abb912ff311c10c907672bffca35b3de8242b6a9494d86b9c73bf355cc464f0"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-02.input.md: "1c59d15f74405a34077a00d952275c723000118711988664d64c1ba83093299b"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-03.input.md: "03744a4f4a958c253700ea7bc911c525e6fe1fce0535a3211b350453b78cbe7a"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-04.input.md: "72afa89722af4bfcbd30cdc90bf90a075bf3cd618090a9ede0183da25c397a45"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/309-01.input.md: "4e5c09267ed117e484116296ad7520b1c982080eff215b30069e99b0d9249aed"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/309-02.input.md: "5efdd0cc2543af64ecb01809cf3d0efef5b9a2ae73db0e15ae144281d4a27bac"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/309-03.input.md: "aa8b229487f89f3088c72502cf65ca1761990fb29cffbb334a785b58ff3d6e79"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/309-04.input.md: "75e642eae6d0cc363374dadc42968058b650a7e6d425c9fc00f490e76f1174fe"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/310-EN.input.md: "b2e89a431811ccb884650339f5eb6ae225d27ea806f7f84a73bf198f4280c848"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/310-NOWRITE.input.md: "ce6ad1678e8cfa1ae7dc4a041dbb0aacfc89d5cfdfc4a06844f31b1fffa3938d"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/310-PL.input.md: "5d5bc2aba76fcc85833f3083a8670665c16b287fc326ba3b5d2b76beb0101fc0"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/310-SEC.input.md: "bddfaffac7c05ea02ba738673640484d3af204830cc0c1f30ad0a2f6b3e286b1"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/shared-education.input.md: "58dc6472b7e1a7ec1cca6bb8e220cafcb5466e3a5ed3054a66953469345553db"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/shared-portfolio.input.md: "f11d9e7df1fde5459cf188e7a69528686a3011ffafb87da393fc3f18370ed578"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/308-01.rubric.yaml: "94209325d7258577f5ec897bd0a47d2bb6119fab3044438228a6e05345545fb6"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/308-02.rubric.yaml: "eb40517e9dc00c87c537c392b0d803585cea0d5036bee3925607bf1281c03bdc"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/308-03.rubric.yaml: "9b74ec0550fa382e3bdeab98e7bc33cbc36a26dcbc6b5bd940661027384bb7a1"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/308-04.rubric.yaml: "401a413aa3a5cc7af4db174e51d6c440e4b8876556a4649ddbe83a3fdd7b4e9d"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/309-01.rubric.yaml: "0c3ee1cb4993ee7567bdb79788c121b9ad6c013057062ab3dcb5212d4a3041f3"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/309-02.rubric.yaml: "2d99a1d80f42163d6f50bbb67b72ad825a28501cc4ebe3a006c8e5d177191011"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/309-03.rubric.yaml: "1d48462bcef144a61935809bd60aacf39e963605f91163b6fb366b32d9cefbfa"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/309-04.rubric.yaml: "bed7466069dfbb2ab03f98d44a4a7878013fca0c6b79fe22481b4c54285c3e47"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/310-EN.rubric.yaml: "ddf9adf57c305a7a612f9fffe9eb86a78de7250b82c197fc18899aa48aa15469"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/310-NOWRITE.rubric.yaml: "27ef1d871c7469bfc7a19a502361d19d1e22df32d69dd7be94cf1316433a5a64"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/310-PL.rubric.yaml: "eff2d84ba4f96c21470f4fecd916615e88e391f38227b30bd8ecaf1644514a08"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/310-SEC.rubric.yaml: "08a121ebb1b669b2a6b3ddb22e04066ee98c3d69decdd37b8d6566ce43e527d1"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
+  release/production-readiness.yaml: "cc6312e2a9a37e309bbc74f634e225dda55a97eda9f2c53ed83d6c0434db1af3"
+  scripts/eval/campaign.py: "823f69c115bef8d5b621f0ae817b5bde279bbc14d4945d3f432616f4066ddbbe"
+  scripts/eval/tests/test_runtime_campaign.py: "1ba56d69711eed9d9063f7da16b780eb07487a3bda03fc9ad7a9def887f51a75"
+  skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"
+  skills/investing/security-underwriting/tests/cases.yaml: "a9d2e7c23027d9feae8044036fe544eaa3845e7723cdf7961ae5bf817b2e8638"
+  skills/investing/thesis-monitor/SKILL.md: "91f2e87c82a11847df7c5e0119b9000434845bba61bf443354365cd6d60dec25"
+  skills/investing/thesis-monitor/tests/cases.yaml: "9c995e954542e983f15aa70705d6431c5503a6b8865b369a40b0f584461eb6e4"
+  skills/investing/valuation-scenario-review/SKILL.md: "9110bad5daea5c95b37417c5a072badba3a5147eb050fff8d1e5cecdbeae6e97"
+  skills/investing/valuation-scenario-review/tests/cases.yaml: "730b72d27f71209edcca1e8885eeb5ac50a6a8e06ea8a3f9a946693ace480d1c"
+  workflows/investment-os-review/WORKFLOW.md: "1fcda42480b060baba283cb0509be76f302b3329398e3e2431f3584e1c242a2b"
+  workflows/investment-os-review/tests/cases.yaml: "21ec30813444f85b9813cb77406087fc8dae40a470be6c9c823d3ce647f0818c"

@@ -360,6 +360,8 @@ test("all seven source routing paths, PL/EN and unknown", () => {
     ["Odtwórz decyzję inwestycyjną z 2021 r. z użyciem migawki as-of; nie uzupełniaj braków dzisiejszym portfelem.", "historical-decision-replay"],
     ["Oceń potwierdzone swingi, OPS/OPD i zanegowanie trendu na skorygowanych danych OHLCV.", "technical-structure"],
     ["Review ACN's valuation and earnings quality; do not analyze price swings.", "investment-security-review"],
+    ["Audit the Investment OS workflow and methodology for MU; identify process gaps, not a company thesis.", "investment-os-review"],
+    ["Przejrzyj metodologię i przepływ pracy Investment OS dla tickera AMD; chodzi o audyt procesu, nie analizę spółki.", "investment-os-review"],
     ["Use USER_SUPPLIED_CONTEXT only. Review AMD as of 2026-11-06 over a 3-year horizon. My baseline thesis is that AI accelerator growth can support higher earnings; challenge that exact thesis. I have no portfolio holdings or policy text to supply, so do not assess portfolio fit or size. Use public filings for factual verification and do not read or write a canonical store.", "investment-security-review"],
     ["Pomóż ustalić limity ryzyka i politykę inwestycyjną", "investment-policy-design"],
     ["What does GPT mean?", "investment-os-review"], ["hello", "investment-os-review"],
@@ -391,6 +393,21 @@ test("ambiguous share ownership requests ask for clarification, while a direct s
     assert.equal(routeInvestment(request).child_workflow, "investment-security-review", request);
     assert.equal(routeInvestment(request).status, "routed", request);
   }
+});
+test("methodology audits with incidental tickers stay at the Investment OS front door", () => {
+  for (const request of [
+    "Audit the Investment OS workflow and methodology for MU; identify process gaps, not a company thesis.",
+    "Przejrzyj metodologię i przepływ pracy Investment OS dla tickera AMD; chodzi o audyt procesu, nie analizę spółki.",
+    "Zrób audyt procesu Investment OS na przykładzie tickera MU. Sprawdzam routing i workflow, nie tezę spółki.",
+  ]) {
+    const result = routeInvestment(request);
+    assert.equal(result.child_workflow, "investment-os-review", request);
+    assert.equal(result.status, "routed", request);
+    assert.equal(result.workflow_executed, false);
+    assert.equal(result.must_invoke_child_workflow, true);
+    assert.match(result.reason, /methodology or workflow audit/);
+  }
+  assert.equal(routeInvestment("Review MU's thesis, valuation and downside as a single security.").child_workflow, "investment-security-review");
 });
 test("ambiguous MCP calls tell the host to load the front door and clarify before analysis", async () => {
   const response = await (await handleMcp(rpc("tools/call", { name: "route_investment_request", arguments: { user_request: "investment-security-review and investment-portfolio-review" } }, { "oai-authenticated-user-id": "test-only" }))).json();

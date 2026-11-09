@@ -1,12 +1,12 @@
 # Iteration 08 — Investing monitoring: KPI triggers and expectations
 
-- State: PLANNED; scope lock is committed before implementation. Start only after Iteration 7's owner abort is merged to `main`.
+- State: ACTIVE; Iteration 7's owner abort and this scope lock merged in PR #603 at `40420bc28c85826c2f28cb9709c34c45f583b487` before implementation.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #322 (coordination-only tracking); GitHub Project iteration `08 | Investing monitoring (provisional)`.
 - Previous terminal iteration: Iteration 7 owner-aborted on 2026-11-09; see [append-only abort decision](iteration-07-abort-2026-11-09.md). #306 remains unresolved and open.
 - Baseline main SHA: `0646cd0c4588b889070960c777e07829c3477b9e`.
 - Lock commit SHA: `0f32e76e7642cfe12f39a5034605eb2fa5fc8e26` (final frozen scope tree, including the append-only prior-iteration abort record; implementation starts after merge).
-- Started at / closed at (UTC): not started / pending.
+- Started at / closed at (UTC): 2026-11-09 22:55:13 / pending.
 - Scope lock reviewed by / at: Arkadiusz Kamrowski, 2026-11-09 (self-review).
 
 ## Frozen commitment
@@ -49,6 +49,7 @@ Campaign definition, prompt/rubric/input hashes, final changed-path impact map, 
 
 | Bug Issue / discovery iteration | Existing contract / frozen criterion or unrelated | Severity / closure blocking | Fix PR or accepted deferral owner + future delivery iteration | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
+| PR #604 / CI attempt at `aac32ae1f384895e29e4ff8cd1b423967fca469f` | New runtime fixture IDs and target metadata did not match the existing runtime fixture/rubric contract. Validators blocked Lab packaging and domain validation before behavioral cases ran. | Blocking for PR, not a product behavior failure. | Correct fixture IDs to registry IDs and add `target`; owner; same Iteration 8. | Repeat validate-runtime, full Lab build, all affected CI, then campaign tests. | Pending |
 
 ## Closure / abort decision
 
@@ -62,3 +63,20 @@ Campaign definition, prompt/rubric/input hashes, final changed-path impact map, 
 - Issue / Project / PR reconciliation: pending.
 - Owner proposal / reviewer acceptance / decision timestamp: pending.
 - Next iteration eligibility: no automatic start or production promotion.
+
+## Append-only issue-state correction — 2026-11-10
+
+The frozen scope and opening status above were prepared from stale local issue data and describe #306 as unresolved. The live GitHub issue is closed as completed on 2026-11-09 through PR #600, with final Site/source receipts recorded on the issue. Therefore #306 is not an Iteration 8 carry-forward and must not be reopened or counted as Iteration 8 scope without a new explicit owner decision. Iteration 8 remains limited to #308–#310.
+
+## Append-only first CI correction — 2026-11-10
+
+PR #604 attempt 1 (`aac32ae1f384895e29e4ff8cd1b423967fca469f`) failed all four required CI workflows. In addition to the fixture `target`/ID mismatch, the run exposed frozen-campaign hash drift after Iteration 8 content was added to global routing/runtime registries: the R20/Iteration 7 source locks rejected the changed files and routing collision coverage changed from 30 to 32. No behavioral test verdict was produced. The corrective candidate restores both global registries to their PR-head bytes, moves all Iteration 8 runtime prompts/rubrics into its own 14-case suite, synchronizes Lab readiness versions, and adds a narrow exact-hash handoff so only the Iteration 8 candidate may supersede the affected historical source hashes. The historical campaign definitions remain unchanged. This correction has not yet passed CI or runtime validation.
+
+## Append-only second and third CI corrections — 2026-11-10
+
+- Attempt 2, PR #604 head `8b8302e752292d16792ae832aa724a9907dc4276`: restored the wrong baseline (the first PR head instead of `main`) for global routing/runtime registries. CI reported the two Iteration 8 fixture IDs in central coverage, missing relocated prompt paths, and a lifecycle fixture-count assertion (`0 != 2`). No candidate behavior verdict was produced.
+- Attempt 3, PR #604 head `5b2b66b70405ebda92a890b4b1f794d1de314591`: restoring the registries to `main` made Domain integrity and Evaluation CI pass, and the Lab build passed. Site contract tests caught a route regression where “Review my investment portfolio; routing only” selected the process-audit route. Validate Skills found generated catalog views stale for the three versioned skills. The next candidate narrows the methodology detector and updates the generated catalog views; neither change promotes maturity or approves a release.
+
+## Append-only fourth CI correction — 2026-11-10
+
+Attempt 4, PR #604 head `ce73e526cd2cbb1f08aca92509d7efe4bed87dfb`: Site CI passed, including Lab build and MCP contracts. Domain integrity, Evaluation CI and Validate Skills were blocked by a `NameError` in the strict unassigned-candidate hash handoff, which referenced the Iteration 8 manifest before loading it. No campaign behavior result is inferred from that test harness failure. The next candidate initializes the exact Iteration 8 source-hash map before checking legacy candidates; no historical source locks are relaxed.

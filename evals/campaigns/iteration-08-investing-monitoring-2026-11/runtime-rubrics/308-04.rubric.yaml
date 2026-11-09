@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 308-04
+target: thesis-monitor
+assertions:
+  manual:
+    - returns BLOCKED_THESIS_NOT_ACTIVE and says monitoring outcome did not run
+    - does not use DRAFT or provider summary as the active baseline
+    - does not invent persistence or invalidation criteria

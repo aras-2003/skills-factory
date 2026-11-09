@@ -1,0 +1,8 @@
+schema_version: "1.0"
+id: 309-03
+target: valuation-scenario-review
+assertions:
+  manual:
+    - labels price return OBSERVED and causality UNKNOWN or INTERPRETATION with evidence/confidence
+    - separates operating expectation change from valuation multiple change
+    - evaluates business attractiveness independently from share-price return

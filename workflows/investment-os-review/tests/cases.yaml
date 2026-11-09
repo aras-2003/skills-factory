@@ -37,6 +37,44 @@ cases:
         - choose investment-opportunity-hunter as primary child
         - keep screening distinct from valuation review of a named security
         - distinguish routing receipt from child workflow execution
+  - id: router-positive-methodology-audit-incidental-ticker-en
+    case: Investment OS methodology audit with incidental ticker
+    input: "Audit the Investment OS workflow and methodology for MU; identify process gaps, not a company thesis."
+    expected:
+      should_trigger: true
+      must:
+        - preserve process audit as the decision object
+        - route to the Investment OS front door
+        - avoid single-security underwriting and unnecessary portfolio reads/writes
+      must_not:
+        - route to investment-security-review solely because MU appears
+  - id: router-positive-methodology-audit-incidental-ticker-pl
+    case: Audyt metodologii Investment OS z przypadkowym tickerem
+    input: "Przejrzyj metodologię i przepływ pracy Investment OS dla tickera AMD; chodzi o audyt procesu, nie analizę spółki."
+    expected:
+      should_trigger: true
+      must:
+        - preserve process audit as the decision object
+        - avoid single-security underwriting and unnecessary account reads/writes
+      must_not:
+        - treat AMD as the security being evaluated
+  - id: router-positive-process-audit-polish-synonym
+    case: Polish audyt wording with incidental ticker
+    input: "Zrób audyt procesu Investment OS na przykładzie tickera MU. Sprawdzam routing i workflow, nie tezę spółki."
+    expected:
+      should_trigger: true
+      must:
+        - route to the Investment OS front door
+        - keep the process as the decision object
+        - avoid security underwriting and portfolio reads/writes
+  - id: router-positive-security-review-neighbor
+    case: Direct named-security decision remains a security review
+    input: "Review MU's thesis, valuation and downside as a single security."
+    expected:
+      should_trigger: true
+      must:
+        - choose investment-security-review as primary child
+        - distinguish routing from child execution
   - id: router-negative-generic-education
     case: General term definition outside personal investment workflow
     input: "Explain in two sentences what the price-to-earnings ratio means, without discussing any security or my holdings."

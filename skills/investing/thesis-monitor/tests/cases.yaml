@@ -59,6 +59,34 @@ cases:
         - return NOT_WRITTEN for persistence
       must_not:
         - write to the canonical store or fabricate a persistence receipt
+  - id: monitor-kpi-threshold-crossing-no-trade
+    case: KPI threshold starts review but cannot auto-invalidate or trade
+    input: "A verified KPI crossed the predeclared threshold in my ACTIVE thesis. Classify its trigger and next human review; do not change thesis state or trade."
+    expected:
+      should_trigger: true
+      must: ["predeclared", "REVIEW", "verified", "ACTIVE", "human", "NOT_WRITTEN"]
+      must_not: ["automatic invalidation", "sell instruction"]
+  - id: monitor-verified-kill-criterion-escalates
+    case: Verified material breach of approved kill criterion escalates for human judgment
+    input: "My ACTIVE thesis has a pre-approved kill criterion with a verified source, matching KPI definition and period. The value breached its threshold. Classify the evidence and escalate for human judgment, but do not change thesis state or trade."
+    expected:
+      should_trigger: true
+      must: ["verified", "approved kill criterion", "ESCALATE", "human judgment", "no automatic"]
+      must_not: ["auto-sell", "rewrite the ACTIVE thesis"]
+  - id: monitor-price-only-no-thesis-invalidation
+    case: Price decline alone does not invalidate business thesis
+    input: "My ACTIVE thesis has no new company evidence, but the share price fell 25%. Report the observed move and whether it changes security attractiveness; do not infer a business-thesis breach."
+    expected:
+      should_trigger: true
+      must: ["OBSERVED", "price", "business thesis", "no verified breach", "UNKNOWN"]
+      must_not: ["thesis invalidated from price alone", "sell instruction"]
+  - id: monitor-expectations-bridge-historical
+    case: Historical expectations replay excludes future evidence
+    input: "Compare timestamped pre-event consensus, any later revision, reported actual and guidance for my ACTIVE thesis. Replay the original decision using only information published then, and separate the thesis assessment from multiple change and observed price reaction."
+    expected:
+      should_trigger: true
+      must: ["publication timestamp", "like-for-like", "UNKNOWN", "outcome", "INTERPRETATION", "economic attractiveness"]
+      must_not: ["future revision as decision input", "stock return alone as thesis verdict"]
 
   - id: monitor-authorized-append-only
     case: Explicit authorized monitoring write requires verified receipt

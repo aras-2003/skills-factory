@@ -80,6 +80,25 @@ class RuntimeCampaignTests(unittest.TestCase):
                 path.write_text("fixture")
             self.assertEqual(set(), campaign.separately_validated_investment_quality_paths(root))
 
+    def test_iteration08_monitoring_candidate_is_isolated_and_hash_bound(self) -> None:
+        expected = {
+            "skills/investing/security-underwriting/SKILL.md",
+            "skills/investing/thesis-monitor/SKILL.md",
+            "skills/investing/valuation-scenario-review/SKILL.md",
+            "workflows/investment-os-review/WORKFLOW.md",
+            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+        }
+        self.assertEqual(
+            expected,
+            campaign.separately_validated_iteration08_investing_monitoring_paths(ROOT),
+        )
+        cfg = yaml.safe_load(
+            (ROOT / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text()
+        )
+        self.assertEqual("NOT_RUN", cfg["runtime_status"])
+        self.assertFalse(cfg["release_approved"])
+        self.assertTrue(cfg["historical_r20_immutable"])
+
     def test_campaign_resolves_exact_scope_and_isolation(self) -> None:
         self.assertEqual([], campaign.validate_campaign())
         cases = load_campaign_cases(ROOT, campaign.config()["campaign"])
