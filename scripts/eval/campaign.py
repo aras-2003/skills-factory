@@ -1236,6 +1236,8 @@ def separately_validated_unassigned_candidate_paths(root: Path = ROOT) -> set[st
             or not all((root / path).is_file() for path in modules)
         ):
             return set()
+        iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
+        iter08_hashes = iter08_cfg.get("source_sha256") or {}
         for rel in expected:
             path = root / rel
             if not path.is_file():

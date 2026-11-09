@@ -92,7 +92,7 @@ source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
   release/production-readiness.yaml: "cc6312e2a9a37e309bbc74f634e225dda55a97eda9f2c53ed83d6c0434db1af3"
-  scripts/eval/campaign.py: "1fca8a584b6d1bf93f8ee76c9dca8d29894359e8cf07f2ccd277c04720168e15"
+  scripts/eval/campaign.py: "823f69c115bef8d5b621f0ae817b5bde279bbc14d4945d3f432616f4066ddbbe"
   scripts/eval/tests/test_runtime_campaign.py: "1ba56d69711eed9d9063f7da16b780eb07487a3bda03fc9ad7a9def887f51a75"
   skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"
   skills/investing/security-underwriting/tests/cases.yaml: "a9d2e7c23027d9feae8044036fe544eaa3845e7723cdf7961ae5bf817b2e8638"

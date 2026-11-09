@@ -76,3 +76,7 @@ PR #604 attempt 1 (`aac32ae1f384895e29e4ff8cd1b423967fca469f`) failed all four r
 
 - Attempt 2, PR #604 head `8b8302e752292d16792ae832aa724a9907dc4276`: restored the wrong baseline (the first PR head instead of `main`) for global routing/runtime registries. CI reported the two Iteration 8 fixture IDs in central coverage, missing relocated prompt paths, and a lifecycle fixture-count assertion (`0 != 2`). No candidate behavior verdict was produced.
 - Attempt 3, PR #604 head `5b2b66b70405ebda92a890b4b1f794d1de314591`: restoring the registries to `main` made Domain integrity and Evaluation CI pass, and the Lab build passed. Site contract tests caught a route regression where “Review my investment portfolio; routing only” selected the process-audit route. Validate Skills found generated catalog views stale for the three versioned skills. The next candidate narrows the methodology detector and updates the generated catalog views; neither change promotes maturity or approves a release.
+
+## Append-only fourth CI correction — 2026-11-10
+
+Attempt 4, PR #604 head `ce73e526cd2cbb1f08aca92509d7efe4bed87dfb`: Site CI passed, including Lab build and MCP contracts. Domain integrity, Evaluation CI and Validate Skills were blocked by a `NameError` in the strict unassigned-candidate hash handoff, which referenced the Iteration 8 manifest before loading it. No campaign behavior result is inferred from that test harness failure. The next candidate initializes the exact Iteration 8 source-hash map before checking legacy candidates; no historical source locks are relaxed.
