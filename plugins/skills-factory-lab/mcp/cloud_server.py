@@ -8,6 +8,7 @@ from server import (
     render_bar_chart,
     render_line_chart,
     route_investment_request,
+    compare_peer_comparability,
 )
 
 
