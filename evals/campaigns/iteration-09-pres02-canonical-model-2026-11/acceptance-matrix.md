@@ -5,11 +5,11 @@ Baseline source: `cfcb1c9b6f0f5ee512d7cbc44da98740198f9898`. Candidate and data-
 | Row ID | Issue / criterion | Layer + case ID / definition | Required / N/A rationale | Candidate SHA + artifact digest | Surface/model/tools | Input/rubric hashes | Execution state | Verdict | Receipt/output/trace + run time | Reviewer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 608-A | #608 / build-vs-reuse audit | Repository audit; source inventory table | required | pending | source review | pending | NOT_RUN | none | pending | owner |
-| 608-B | #608 / versioned canonical model | DeckSpec/SlideSpec JSON Schema contract tests | required | pending | local Python + jsonschema | pending | NOT_RUN | none | pending | owner |
+| 608-B | #608 / versioned canonical model | Versioned schema for the existing artifact-contract DeckSpec/SlideSpec contract | required | pending | local Python + jsonschema | pending | NOT_RUN | none | pending | owner |
 | 608-C | #608 / deterministic validator | Positive, malformed, missing-field, reference and compatibility fixtures | required | pending | local Python + jsonschema | pending | NOT_RUN | none | pending | owner |
 | 608-D | #608 / example deck | Synthetic DeckSpec fixture validates | required | pending | local Python + jsonschema | pending | NOT_RUN | none | pending | owner |
 | 608-E | #608 / round-trip fidelity | Numeric values, units, source identities, notes and links preserved exactly | required | pending | local Python unit tests | pending | NOT_RUN | none | pending | owner |
-| 608-F | #608 / backward compatibility | Existing semantic slide model maps without silent data loss | required | pending | local Python unit tests | pending | NOT_RUN | none | pending | owner |
+| 608-F | #608 / backward compatibility | Existing artifact-contract and presentation-slide-authoring semantic models map without silent data loss | required | pending | local Python unit tests | pending | NOT_RUN | none | pending | owner |
 | 608-G | #608 / integration/regression | Existing Presentation and workflow contracts; Report Composer, Visual Output Design and unaffected probes | required | pending | local tests + GitHub CI | pending | NOT_RUN | none | pending | owner |
 | shared-report | iteration / evidence boundary | `report-composer`: no-unsolicited-artifact + evidence preservation | required | pending | contract suite | existing source case IDs | NOT_RUN | none | pending | owner |
 | shared-visual | iteration / evidence boundary | `visual-output-design`: no-fabrication + capability preflight | required | pending | contract suite | existing source case IDs | NOT_RUN | none | pending | owner |
