@@ -5,10 +5,11 @@ const candidates = ['/home/marp/.cli/node_modules', '/usr/local/lib/node_modules
 let puppeteer;
 for (const base of candidates) { try { puppeteer = require(require.resolve('puppeteer-core', { paths: [base] })); break; } catch {} }
 if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the renderer image');
-let stage = 'launch';
+let stage = 'launch'; let actualSlides = -1; let expectedSlideCount = -1;
 (async () => {
   const html = path.resolve(process.argv[2]); const output = path.resolve(process.argv[3]); const expectedSlides = Number(process.argv[4]);
   if (!Number.isInteger(expectedSlides) || expectedSlides < 1) throw new Error('Expected slide count is invalid');
+  expectedSlideCount = expectedSlides;
   const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   try {
     const page = await browser.newPage();
@@ -27,4 +28,4 @@ let stage = 'launch';
     const size = fs.statSync(output).size;
     if (!size) throw new Error('Chromium produced an empty PDF');
   } finally { await browser.close(); }
-})().catch(() => { console.error(`SF_PDF_RENDER_FAILED:${stage}`); process.exit(1); });
+})().catch(() => { console.error(`SF_PDF_RENDER_FAILED:${stage}:${actualSlides}:${expectedSlideCount}`); process.exit(1); });
