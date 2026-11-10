@@ -7,11 +7,14 @@ if [ "${1:-}" = sf-preflight ]; then
   node_version=$(node --version | sed 's/^v//')
   browser_version=''; if [ -x "$CHROME_PATH" ]; then browser_version=$($CHROME_PATH --version | sed 's/^[^ ]* //'); fi
   browser_sha256=''; if [ -n "$browser_version" ]; then browser_sha256=$(sha256sum "$CHROME_PATH" | cut -d' ' -f1); fi
+  weasyprint_version=''; weasyprint_package=''
+  if command -v weasyprint >/dev/null 2>&1; then weasyprint_version=$(weasyprint --version | sed 's/^WeasyPrint version //'); fi
+  if command -v dpkg-query >/dev/null 2>&1; then weasyprint_package=$(dpkg-query -W -f='${Version}' python3-weasyprint 2>/dev/null || true); fi
   lo_version=''
   lo_package=''
   if command -v dpkg-query >/dev/null 2>&1 && command -v libreoffice >/dev/null 2>&1; then lo_package=$(dpkg-query -W -f='${Version}' libreoffice-impress 2>/dev/null || true); fi
   if command -v libreoffice >/dev/null 2>&1; then lo_version=$(libreoffice --headless --version | sed 's/^LibreOffice //'); fi
-  printf '{"marp":"%s","node":"%s","browser":"%s","browser_path":"%s","browser_sha256":"%s","libreoffice":"%s","libreoffice_package":"%s","image":"ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42"}\n' "$marp_version" "$node_version" "$browser_version" "$CHROME_PATH" "$browser_sha256" "$lo_version" "$lo_package"
+  printf '{"marp":"%s","node":"%s","browser":"%s","browser_path":"%s","browser_sha256":"%s","libreoffice":"%s","libreoffice_package":"%s","weasyprint":"%s","weasyprint_package":"%s","image":"ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42"}\n' "$marp_version" "$node_version" "$browser_version" "$CHROME_PATH" "$browser_sha256" "$lo_version" "$lo_package" "$weasyprint_version" "$weasyprint_package"
   exit 0
 fi
 case "${1:-}" in
@@ -27,11 +30,10 @@ cd /work/input
 case "$mode" in
   html) node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html ;;
   pdf)
-    command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice is required for searchable PDF export' >&2; exit 30; }
-    node /home/marp/.cli/marp-cli.js deck.md --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-pdf-source.pptx || { echo SF_PDF_STAGE:pptx_generation >&2; exit 1; }
-    libreoffice --headless --convert-to pdf --outdir /work/output /work/output/deck-pdf-source.pptx || { echo SF_PDF_STAGE:libreoffice_conversion >&2; exit 1; }
-    mv /work/output/deck-pdf-source.pdf /work/output/deck.pdf
-    rm /work/output/deck-pdf-source.pptx ;;
+    command -v weasyprint >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: pinned WeasyPrint is required for PDF export' >&2; exit 30; }
+    node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-pdf-source.html || { echo SF_PDF_STAGE:html_generation >&2; exit 1; }
+    python3 /usr/local/bin/sf-render-pdf.py /work/output/deck-pdf-source.html /work/output/deck.pdf /work/input || { echo SF_PDF_STAGE:weasyprint_conversion >&2; exit 1; }
+    rm /work/output/deck-pdf-source.html ;;
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
     command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required' >&2; exit 30; }
