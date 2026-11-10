@@ -37,7 +37,7 @@ const args = [
   '/home/marp/.cli/marp-cli.js',
   '/work/input/deck.md',
   '--browser-timeout', '90',
-  '--pptx', '--pptx-editable', '--allow-local-files',
+  '--pptx', '--pptx-editable', '--allow-local-files', '--browser-protocol', 'cdp',
   '--output', '/work/output/base-editable.pptx',
 ];
 try {
