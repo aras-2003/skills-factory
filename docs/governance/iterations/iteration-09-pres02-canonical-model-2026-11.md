@@ -1,12 +1,12 @@
 # Iteration 09 — Canonical presentation model and reuse boundary (PRES-02)
 
-- State: PLANNED (scope locked; activation follows the lock commit; no implementation PR before this scope PR merges).
+- State: ACTIVE (activated after scope lock commit `153b7428839048871bff8d8d7c0ed7c4dc6c3f93`; no implementation PR preceded it).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #608 / NOT ASSIGNED OR VERIFIED (available GitHub connector cannot mutate/read the native Project Iteration field).
 - Previous terminal iteration / closure link: Iteration 08 CLOSED / ACCEPTED in PR #629 at `cfcb1c9b6f0f5ee512d7cbc44da98740198f9898`; Iteration 7 ABORTED, terminal.
 - Baseline main SHA: `cfcb1c9b6f0f5ee512d7cbc44da98740198f9898`.
-- Lock commit SHA: recorded in #608 after the scope commit merges.
-- Started at / closed at (UTC): after this scope PR merges / pending.
+- Lock commit SHA: `153b7428839048871bff8d8d7c0ed7c4dc6c3f93` (first complete record+matrix tree on this branch; preserve this as the immutable lock).
+- Started at / closed at (UTC): 2026-11-10 17:16:22 UTC / pending.
 - Scope lock reviewed by / at: Arkadiusz Kamrowski, self-review, 2026-11-10.
 
 ## Frozen commitment
