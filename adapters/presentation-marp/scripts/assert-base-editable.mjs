@@ -60,7 +60,6 @@ async function run(args) {
     const child = spawn('docker', args, { shell: false, stdio: ['ignore', 'ignore', 'pipe'] });
     let stderr = '';
     child.stderr.setEncoding('utf8');
-    child.stderr.setMaxListeners?.(2);
     child.stderr.on('data', chunk => { if (stderr.length < 65536) stderr += chunk.slice(0, 65536 - stderr.length); });
     child.on('error', () => reject(new Error('DOCKER_SPAWN_FAILED')));
     child.on('close', code => code === 0 ? resolve() : reject(new Error(classify(stderr))));
