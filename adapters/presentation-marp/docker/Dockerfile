@@ -3,9 +3,9 @@ USER root
 # Debian APT authenticates signed Release files; HTTP avoids requiring a CA bundle in the minimal upstream image.
 RUN set -eux; \
   rm -f /etc/apt/sources.list.d/*; \
-  printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/%s bookworm main\\n' "20261109T000000Z" > /etc/apt/sources.list; \
-  printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/%s bookworm-updates main\\n' "20261109T000000Z" >> /etc/apt/sources.list; \
-  printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/%s bookworm-security main\\n' "20261109T000000Z" >> /etc/apt/sources.list; \
+  printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/%s bookworm main\n' "20261109T000000Z" > /etc/apt/sources.list; \
+  printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/%s bookworm-updates main\n' "20261109T000000Z" >> /etc/apt/sources.list; \
+  printf 'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/%s bookworm-security main\n' "20261109T000000Z" >> /etc/apt/sources.list; \
   apt-get -o Acquire::Check-Valid-Until=false update; \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     libreoffice-impress=4:7.4.7-1+deb12u14 \
