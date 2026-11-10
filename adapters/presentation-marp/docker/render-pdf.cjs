@@ -32,7 +32,7 @@ let expectedSlides = -1;
     stage = 'fonts';
     await page.evaluate(() => document.fonts.ready.then(() => true));
     stage = 'print';
-    await page.pdf({ path: output, printBackground: true, preferCSSPageSize: true, waitForFonts: false, timeout: 0 });
+    await page.pdf({ path: output, printBackground: true, preferCSSPageSize: true, waitForFonts: false, tagged: false, outline: false, timeout: 0 });
     stage = 'output_check';
     const size = fs.statSync(output).size;
     if (!size) throw new Error('Chromium produced an empty PDF');
