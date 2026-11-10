@@ -10,7 +10,6 @@ if [ "${1:-}" = sf-preflight ]; then
   weasyprint_version=''; weasyprint_package=''
   if command -v weasyprint >/dev/null 2>&1; then weasyprint_version=$(weasyprint --version | sed 's/^WeasyPrint version //'); fi
   if command -v dpkg-query >/dev/null 2>&1; then weasyprint_package=$(dpkg-query -W -f='${Version}' weasyprint 2>/dev/null || true); fi
-  pptx_version=''; if command -v python3 >/dev/null 2>&1; then pptx_version=$(python3 -c 'import collections.abc, pptx; print(pptx.__version__)' 2>/dev/null || true); fi
   lo_version=''; lo_package=''
   if command -v dpkg-query >/dev/null 2>&1 && command -v libreoffice >/dev/null 2>&1; then lo_package=$(dpkg-query -W -f='${Version}' libreoffice-impress 2>/dev/null || true); fi
   if command -v libreoffice >/dev/null 2>&1; then lo_version=$(libreoffice --headless --version | sed 's/^LibreOffice //'); fi
@@ -36,7 +35,8 @@ case "$mode" in
     rm /work/output/deck-pdf-source.html ;;
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
-    command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required to reopen and validate editable output' >&2; exit 30; }
-    python3 /usr/local/bin/sf-render-editable-pptx.py /work/input/deck.json /work/output/deck-editable.pptx ;;
+    command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required for experimental editable PPTX' >&2; exit 30; }
+    [ -x \"$CHROME_PATH\" ] || { echo 'BLOCKED_MISSING_RUNTIME: Chromium is required for experimental editable PPTX' >&2; exit 30; }
+    node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable.pptx || { echo SF_EDITABLE_STAGE:marp_cli >&2; exit 1; } ;;
   *) echo 'invalid output mode' >&2; exit 2 ;;
 esac
