@@ -32,7 +32,7 @@ for index, item in enumerate(deck['slides'], 1):
     left = [body] if body else []
     left += ['• ' + c for c in claims]
     if item.get('data_refs'):
-        left += [f"{d['value']} {d.get('unit','')}  ·  {d['data_ref_id']}" for d in item['data_refs']]
+        left += [f"{d['value']} {d.get('unit','')}  ·  {d['data_ref_id']}  ·  {d.get('as_of','')}  ·  {', '.join(d.get('source_ids',[]))}" for d in item['data_refs']]
     if left:
         textbox(slide, '\n\n'.join(left), .85, 1.8, 5.1, 4.55, 18, MUTED)
     for exhibit in item.get('exhibits', []):
