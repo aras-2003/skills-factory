@@ -26,6 +26,7 @@ const args = [
   '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
+  '--workdir', '/work/input',
   '--user', '10001:10001', '--env', 'HOME=/tmp',
   '--env', 'CHROME_NO_SANDBOX=1',
   '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
@@ -36,7 +37,7 @@ const args = [
   '/home/marp/.cli/marp-cli.js',
   '/work/input/deck.md',
   '--browser-timeout', '90',
-  '--pptx', '--pptx-editable',
+  '--pptx', '--pptx-editable', '--allow-local-files',
   '--output', '/work/output/base-editable.pptx',
 ];
 try {
