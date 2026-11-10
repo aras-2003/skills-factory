@@ -1,4 +1,6 @@
-# Presentation OS — Semantic and Evidence Contract (draft)
+# Presentation OS — Semantic and Evidence Contract
+
+The machine-readable v1 contract is [canonical-deck-v1.schema.json](../../../docs/presentations/canonical-deck-v1.schema.json). The schema versions the semantic subset used for authoring and later provider adapters; this prose remains authoritative for workflow ownership, gates and receipts. A schema-valid deck is not evidence of rendering, export, editability or runtime success.
 
 All IDs are stable within a run. This is a **semantic model**, not a vendor API contract. Provider adapter translation occurs only after capability preflight.
 
@@ -21,6 +23,8 @@ This is a **Presentation OS adapter contract**, not a claim that Strategy's plan
 ## Storyline / Slide
 `deck_id, communicated_thesis, source_pack_refs[], source_decision_status?, governing_question, structure_choice, why_choice, audience_objections[], upstream_challenges[], creative_direction{creative_thesis,audience_feeling,design_system,visual_arc,signature_moment,motion_plan,tool_plan}, slides:[{id,section,role,action_title,claim_ids[],source_finding_ids[],source_option_ids[],reader_question,transition,visual_role,proof_required[],exhibit_specs[],speaker_notes?,source_line?,layout_id?,alternative_text?,output_state}]`.
 `action_title` is an evidence-anchored assertion on analytic slides; title/agenda/teaching slides may legitimately use labels/questions.
+
+Canonical v1 uses `schema_version: "1.0"`, stable `slide_id`, object-valued claims and data references, `exhibits`, `layout: {layout_id, tokens}`, `notes`, provenance and `desired_editability`. Unversioned legacy input must pass through `scripts/validate/presentation_model.py::normalize_legacy_deck`; it is never silently treated as canonical. The adapter keeps the complete original input at `extensions.legacy_source`, reports compatibility warnings, and does not infer requested editability from an observed renderer result. See `docs/presentations/RENDERER-REUSE-AUDIT.md` for field ownership and migration boundaries.
 
 ## Exhibit
 `exhibit_id, slide_id, visual_job, visual_type, supported_data, provenance, units, as_of, uncertainty, annotations, deterministic_renderer, asset_id?, alt_text, editability{EDITABLE_NATIVE|EDITABLE_PARTIAL|RASTER_ASSET|FLATTENED|UNKNOWN}, capability_status{AVAILABLE|UNAVAILABLE|UNKNOWN}, execution_status{NOT_ATTEMPTED|BLOCKED_NO_RENDERER|PAYLOAD_RENDERED|FAIL_RENDERER_INVOCATION}`.
