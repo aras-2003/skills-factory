@@ -26,7 +26,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
 
     def test_candidate_identity_and_explicit_opening_article(self):
         self.assertEqual("interface-design", self.metadata["name"])
-        self.assertEqual("0.1.17", self.metadata["metadata"]["version"])
+        self.assertEqual("0.1.18", self.metadata["metadata"]["version"])
         self.assertEqual("candidate", self.metadata["metadata"]["maturity"])
         self.assertIn(
             "I’ll use interface-design for the <screen or flow name>.", self.body

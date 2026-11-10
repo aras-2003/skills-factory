@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.17"
+  version: "0.1.18"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-11-05"
@@ -45,6 +45,10 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 ## Applicability gate
 
 First decide whether the current request asks for interface design. If it asks to implement/edit a working page or run its tests, do not apply this skill or ask design questions; hand off to the implementation workflow. If loaded explicitly for an isolated test, state briefly that it does not apply and stop. Do not echo the request or emit a design brief. If implementation is requested but its workflow is unavailable, name the missing repository or approved artifact.
+
+### Product-data and capability gate
+
+For an account or order screen, use only records, fields, status names, counts, dates, actions, and routes supplied by the user or an explicitly referenced product source. If those inputs are absent, do not create populated sample records, even when labeled illustrative, hypothetical, or conditional. Use neutral fields such as `[order ID]`, `[status from the approved product mapping]`, and `[next action from approved order rules]`. Do not invent a status-to-action table, CTA, support destination, tab, navigation item, or detail route. State that entry, exit, and destinations are unspecified. A dashboard request does not establish any of those product capabilities.
 
 ## Required-context gate
 

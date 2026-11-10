@@ -16,6 +16,8 @@ cases:
       must_not:
         - output implementation code
         - invent order data or product capabilities
+        - include populated illustrative records, identifiers, dates, item counts, or status values that the user did not provide
+        - invent a status-to-action mapping, CTA, navigation item, support destination, or detail route, even if labeled an example or conditional
         - add unprovided tracking, delivery estimates, payment or cancellation flows, returns, refunds, addresses, support destinations, settings, order statuses, or navigation
 
   - id: interface-design-explicit-placeholder-positive
