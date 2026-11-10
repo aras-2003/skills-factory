@@ -1,6 +1,6 @@
 # Presentation OS — Semantic and Evidence Contract
 
-The machine-readable v1 contract is [`canonical-deck-v1.schema.json`](canonical-deck-v1.schema.json). The schema versions the semantic subset used for authoring and later provider adapters; this prose remains authoritative for workflow ownership, gates and receipts. A schema-valid deck is not evidence of rendering, export, editability or runtime success.
+The machine-readable v1 contract is [canonical-deck-v1.schema.json](../../../docs/presentations/canonical-deck-v1.schema.json). The schema versions the semantic subset used for authoring and later provider adapters; this prose remains authoritative for workflow ownership, gates and receipts. A schema-valid deck is not evidence of rendering, export, editability or runtime success.
 
 All IDs are stable within a run. This is a **semantic model**, not a vendor API contract. Provider adapter translation occurs only after capability preflight.
 
