@@ -21,9 +21,9 @@ with zipfile.ZipFile(path) as zf:
     slide_texts = [s['action_title'] for s in expected['slides']]
     if len(slides) != len(expected['slides']): raise SystemExit('slide count mismatch')
     if mode == 'pptx_editable_experimental':
-        normalized_text = re.sub(r'\\s+', ' ', text)
+        normalized_text = re.sub(r'\s+', ' ', text)
         for title in slide_texts:
-            title_pattern = r'\\s*'.join(re.escape(word) for word in title.split())
+            title_pattern = r'\s*'.join(re.escape(word) for word in title.split())
             if not re.search(title_pattern, normalized_text): raise SystemExit('editable slide title missing from OOXML')
     if size is None or int(size.attrib['cx']) / int(size.attrib['cy']) < 1.77 or int(size.attrib['cx']) / int(size.attrib['cy']) > 1.78: raise SystemExit('slide size is not 16:9')
     if mode == 'pptx_flattened' and not all(count > 0 for count in image_slides): raise SystemExit('flattened PPTX must contain image-backed slide content')
