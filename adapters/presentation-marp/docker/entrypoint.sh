@@ -2,7 +2,8 @@
 set -eu
 mode=${2:-}
 if [ "${1:-}" = sf-preflight ]; then
-  marp_version=$(marp --version | sed -n 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/p' | head -n1)
+  marp_output=$(marp --version 2>&1)
+  marp_version=$(printf '%s' "$marp_output" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
   node_version=$(node --version | sed 's/^v//')
   browser_version=''; if [ -x "$CHROME_PATH" ]; then browser_version=$($CHROME_PATH --version | sed 's/^[^ ]* //'); fi
   browser_sha256=''; if [ -n "$browser_version" ]; then browser_sha256=$(sha256sum "$CHROME_PATH" | cut -d' ' -f1); fi
