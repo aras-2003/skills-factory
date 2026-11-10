@@ -1,7 +1,7 @@
 /* @theme sf-editorial */
 /* Bundled, single-source theme. The renderer never loads remote styles or fonts. */
 :root { --sf-ink: #17243a; --sf-muted: #52627a; --sf-accent: #176b87; --sf-paper: #f6f4ee; }
-section { box-sizing: border-box; width: 1280px; height: 720px; overflow: hidden; padding: 72px 86px 62px; background: var(--sf-paper); color: var(--sf-ink); font-family: "Aptos", "Liberation Sans", sans-serif; font-size: 28px; line-height: 1.35; }
+section { box-sizing: border-box; width: 1280px; height: 720px; padding: 72px 86px 62px; background: var(--sf-paper); color: var(--sf-ink); font-family: "Aptos", "Liberation Sans", sans-serif; font-size: 28px; line-height: 1.35; }
 h1 { max-width: 1040px; margin: 0 0 34px; color: var(--sf-ink); font-size: 52px; line-height: 1.08; letter-spacing: -.025em; }
 p { color: var(--sf-muted); }
 li { margin: 12px 0; }
