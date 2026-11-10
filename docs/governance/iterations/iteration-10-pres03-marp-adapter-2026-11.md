@@ -1,13 +1,13 @@
 # Iteration 10 — Marp CLI adapter and export fidelity (PRES-03)
 
-- State: SCOPE_LOCKED / pending activation; implementation PR is not started.
+- State: ACTIVE (activated in PR #633 after immutable scope lock commit a8f0dfaba01b1db8e91e20804762ec584836bba8; no implementation PR preceded activation).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review, not independent).
 - Tracking issue / native Project iteration: #609 / NOT ASSIGNED OR VERIFIED (connector cannot read or mutate native Iteration).
 - Parent acceptance: #283 remains open; this increment contributes the Marp/PPTX/export slice only and does not satisfy its native Figma Slides/client runtime criteria.
 - Previous terminal increment: Iteration 09 CLOSED / ACCEPTED, PR #632, merge 668973da197c8fb7ed9c3840ba884e0d150752a7.
 - Baseline main SHA: 668973da197c8fb7ed9c3840ba884e0d150752a7.
 - Lock commit SHA: a8f0dfaba01b1db8e91e20804762ec584836bba8 (record + matrix tree commit; immutable lock).
-- Started at / closed at (UTC): pending / pending.
+- Started at / closed at (UTC): 2026-11-10 18:07:54 UTC / pending.
 
 ## Frozen commitment
 
