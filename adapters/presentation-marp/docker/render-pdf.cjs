@@ -29,4 +29,4 @@ let stage = 'launch'; let actualSlides = -1; let expectedSlideCount = -1;
     const size = fs.statSync(output).size;
     if (!size) throw new Error('Chromium produced an empty PDF');
   } finally { await browser.close(); }
-})().catch(() => { console.error(`SF_PDF_RENDER_FAILED:${stage}:${actualSlides}:${expectedSlideCount}`); process.exit(1); });
+})().catch(error => { const name = error && typeof error.name === 'string' ? error.name.slice(0, 40) : 'Error'; const code = error && typeof error.code === 'string' ? error.code.slice(0, 40) : 'none'; const message = String(error && error.message || '').replace(/(?:file|https?):\/\/\S+/g, '[url]').replace(/\/[^\s]+/g, '[path]').replace(/[\r\n:]+/g, ' ').slice(0, 160); console.error(`SF_PDF_RENDER_FAILED:${stage}:${actualSlides}:${expectedSlideCount}:${name}:${code}:${message}`); process.exit(1); });
