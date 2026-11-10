@@ -17,7 +17,10 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     if (countFound !== count) throw new Error(`Expected ${count} rendered slides, got ${countFound}`);
     const records = [];
     const allText = await page.$$eval('section', nodes => nodes.map(node => node.innerText).join('\n').replace(/\s+/g, ' ').trim());
-    for (const required of ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12 percent','18 percent','src-synthetic','2026-Q1','2026-Q2']) if (!allText.toLowerCase().includes(required.toLowerCase())) throw new Error(`Rendered HTML is missing expected content: ${required}`);
+    const requiredText = ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12 percent','18 percent','src-synthetic','2026-Q1','2026-Q2'];
+    const missingText = requiredText.filter(required => !allText.toLowerCase().includes(required.toLowerCase()));
+    console.log(`HTML_CONTENT_CHECK:${JSON.stringify({ textLength: allText.length, missing: missingText })}`);
+    if (missingText.length) throw new Error(`Rendered HTML is missing expected content: ${missingText.join(', ')}`);
     for (let i=0; i<countFound; i++) {
       await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.display = n === index ? 'flex' : 'none'; }); }, i);
       const png = path.join(output, `html-slide-${String(i+1).padStart(2,'0')}.png`);
