@@ -80,7 +80,7 @@ class RuntimeCampaignTests(unittest.TestCase):
                 path.write_text("fixture")
             self.assertEqual(set(), campaign.separately_validated_investment_quality_paths(root))
 
-    def test_iteration08_monitoring_candidate_is_isolated_and_hash_bound(self) -> None:
+    def test_iteration08_monitoring_closeout_is_isolated_and_hash_bound(self) -> None:
         expected = {
             "skills/investing/security-underwriting/SKILL.md",
             "skills/investing/thesis-monitor/SKILL.md",
@@ -95,7 +95,13 @@ class RuntimeCampaignTests(unittest.TestCase):
         cfg = yaml.safe_load(
             (ROOT / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text()
         )
-        self.assertEqual("NOT_RUN", cfg["runtime_status"])
+        self.assertEqual("PASS", cfg["runtime_status"])
+        self.assertEqual("merged_to_main", cfg["candidate_source_revision_status"])
+        self.assertEqual(cfg["candidate_source_revision"], cfg["runtime_source_revision"])
+        self.assertEqual(cfg["runtime_source_revision"], cfg["runtime_canonical_source_revision"])
+        self.assertEqual("verified", cfg["runtime_attestation"])
+        self.assertEqual([], cfg["runtime_blockers"])
+        self.assertTrue((ROOT / cfg["runtime_evidence"]).is_file())
         self.assertFalse(cfg["release_approved"])
         self.assertTrue(cfg["historical_r20_immutable"])
 

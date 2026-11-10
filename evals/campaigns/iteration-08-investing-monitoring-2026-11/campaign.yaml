@@ -3,24 +3,23 @@ schema_version: "1.0"
 scope: investing_monitoring_iteration_08
 execution_channel: cloud_next_site
 runtime_target: Skills Factory Cloud Next Site (owner-only)
-runtime_status: NOT_RUN
-candidate_source_revision: pending
-candidate_source_revision_status: not_merged
+runtime_status: PASS
+candidate_source_revision: 03ef9f554c395db6a1cc482ef2c6434424a250e9
+candidate_source_revision_status: merged_to_main
 source_base_revision: 40420bc28c85826c2f28cb9709c34c45f583b487
 runtime_source_revision_required: true
-runtime_source_revision: pending
-runtime_release_id: pending
-runtime_attestation: pending
+runtime_source_revision: 03ef9f554c395db6a1cc482ef2c6434424a250e9
+runtime_release_id: 1.38.481+03ef9f554c39
+runtime_attestation: verified
 runtime_evidence: evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md
-runtime_canonical_source_revision: pending
-runtime_site_version: pending
-runtime_deployment_id: pending
-runtime_blockers:
-  - exact candidate has not been merged and deployed
+runtime_canonical_source_revision: 03ef9f554c395db6a1cc482ef2c6434424a250e9
+runtime_site_version: 128
+runtime_deployment_id: appgdep_6af264fdd71c8191bbeab7c895f9ed9f
+runtime_blockers: []
 release_approved: false
 historical_r20_immutable: true
 status_note: >-
-  Scope is limited to GitHub issues #308, #309 and #310. #306 is already closed as completed through PR #600 and is not an Iteration 8 carry-forward. Offline validation and exact-Site runtime acceptance have not run. Site deployment is separately authorized by the owner but must use the exact merged candidate after implementation and CI.
+  Iteration 8 runtime acceptance passed for #308, #309 and #310 on the exact merged source 03ef9f554c395db6a1cc482ef2c6434424a250e9, privately deployed to owner-only Site v128 with verified attestation and Lab 1.38.481+03ef9f554c39. All 14 runtime cases passed their paired rubrics; five critical route prompts have three successful exact-Site attempts each. See runtime-evidence.md and acceptance-matrix.md. Synthetic KPI/earnings fixtures validate behavior and no-lookahead controls only; real-world retrieval/authentication is not claimed. Release remains unapproved. #306 is already closed via PR #600 and is not an Iteration 8 carry-forward.
 behavior_case_suite: evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
 required_case_ids:
   - iter08-kpi-trigger-boundaries
@@ -57,6 +56,8 @@ test_modules:
   - evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
   - scripts/eval/tests/test_runtime_campaign.py
 source_sha256:
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/acceptance-matrix.md: "c3d976d8b6789b21b5c2ff0e35cccecde0054cffd25b6043cccd8f917af5d7e1"
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md: "42352f168c7eea4fdb7d53d160d4c194c624ea1f3fdd50e043e9799d0f224360"
   CATALOG.md: "568aa330ccfa3bdedbaa5e7065b86d30e2e589f4a85d7bad35993de7034ce8ae"
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: "622ac6fa557a8d98809d75cac6a188838ed9f6cc9bedd8382b13e640e079edd5"
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: "b6a39aa3eb75e60678e94b893a099e00c73796a49d005daeb771110a532f9a4e"
@@ -92,8 +93,8 @@ source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
   release/production-readiness.yaml: "cc6312e2a9a37e309bbc74f634e225dda55a97eda9f2c53ed83d6c0434db1af3"
-  scripts/eval/campaign.py: "823f69c115bef8d5b621f0ae817b5bde279bbc14d4945d3f432616f4066ddbbe"
-  scripts/eval/tests/test_runtime_campaign.py: "1ba56d69711eed9d9063f7da16b780eb07487a3bda03fc9ad7a9def887f51a75"
+  scripts/eval/campaign.py: "e21825c5218c0535caed56fb08e54f2e28d6bafc2732572a0793195f4839b2ed"
+  scripts/eval/tests/test_runtime_campaign.py: "86ddde382f20fb80b367e2417fa2ed9bc154ef97da4daf79ca474d32e6df9056"
   skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"
   skills/investing/security-underwriting/tests/cases.yaml: "a9d2e7c23027d9feae8044036fe544eaa3845e7723cdf7961ae5bf817b2e8638"
   skills/investing/thesis-monitor/SKILL.md: "91f2e87c82a11847df7c5e0119b9000434845bba61bf443354365cd6d60dec25"

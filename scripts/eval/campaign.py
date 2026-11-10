@@ -705,6 +705,10 @@ def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROO
             for key in ("input", "rubric"):
                 support.add(str(Path(cases_path).parent / str(item.get(key) or "")))
         support.add("scripts/eval/campaign.py")
+        acceptance_matrix = "evals/campaigns/iteration-08-investing-monitoring-2026-11/acceptance-matrix.md"
+        evidence_path = str(cfg.get("runtime_evidence") or "")
+        support.add(acceptance_matrix)
+        support.add(evidence_path)
         expected_hashes = behavior | support | {
             "release/production-readiness.yaml",
             "CATALOG.md",
@@ -712,7 +716,7 @@ def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROO
         }
         if (
             cfg.get("campaign") != "iteration-08-investing-monitoring-2026-11"
-            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("runtime_status") not in {"NOT_RUN", "PASS"}
             or cfg.get("release_approved") is not False
             or cfg.get("historical_r20_immutable") is not True
             or cfg.get("source_base_revision") != "40420bc28c85826c2f28cb9709c34c45f583b487"
@@ -726,6 +730,20 @@ def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROO
             return set()
         for path, digest in hashes.items():
             if hashlib.sha256((root / path).read_bytes()).hexdigest() != digest:
+                return set()
+        if cfg.get("runtime_status") == "PASS":
+            if (
+                cfg.get("candidate_source_revision_status") != "merged_to_main"
+                or cfg.get("candidate_source_revision") != cfg.get("runtime_source_revision")
+                or cfg.get("runtime_source_revision") != cfg.get("runtime_canonical_source_revision")
+                or cfg.get("runtime_attestation") != "verified"
+                or not str(cfg.get("runtime_release_id") or "").strip()
+                or not str(cfg.get("runtime_site_version") or "").strip()
+                or not str(cfg.get("runtime_deployment_id") or "").strip()
+                or cfg.get("runtime_blockers") != []
+                or not evidence_path
+                or not (root / evidence_path).is_file()
+            ):
                 return set()
         for item in cases:
             if not item.get("target") or not item.get("input") or not item.get("rubric"):
