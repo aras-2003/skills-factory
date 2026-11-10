@@ -16,7 +16,7 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     await page.goto(pathToFileURL(html).href, { waitUntil: 'networkidle0', timeout: 60000 });
     const count = await page.$$eval('section', nodes => nodes.length);
     if (count !== expectedSlides) throw new Error(`Expected ${expectedSlides} rendered slides, got ${count}`);
-    await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(() => document.fonts.ready.then(() => true));
     await page.pdf({ path: output, printBackground: true, preferCSSPageSize: true });
     const size = fs.statSync(output).size;
     if (!size) throw new Error('Chromium produced an empty PDF');
