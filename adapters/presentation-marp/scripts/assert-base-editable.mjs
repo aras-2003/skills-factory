@@ -41,9 +41,9 @@ const args = [
   '--output', '/work/output/base-editable.pptx',
 ];
 function classify(stderr) {
-  if (/Navigation timeout of \\d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
-  if (/Timed out after waiting \\d+ms/i.test(stderr)) return 'BROWSER_OPERATION_TIMEOUT';
-  if (/Protocol error \\(Page\\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
+  if (/Navigation timeout of \d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
+  if (/Timed out after waiting \d+ms/i.test(stderr)) return 'BROWSER_OPERATION_TIMEOUT';
+  if (/Protocol error \(Page\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
   if (/Failed to launch the browser process/i.test(stderr)) return 'BROWSER_LAUNCH_FAILED';
   if (/Target closed/i.test(stderr)) return 'BROWSER_TARGET_CLOSED';
   if (/No browser found/i.test(stderr)) return 'BROWSER_NOT_FOUND';
@@ -56,7 +56,7 @@ async function run(args) {
     child.stderr.setEncoding('utf8');
     child.stderr.on('data', chunk => { stderr += chunk; });
     child.on('error', () => reject(new Error('DOCKER_SPAWN_FAILED')));
-    child.on('close', code => code === 0 ? resolve() : reject(new Error(classify(stderr)));
+    child.on('close', code => code === 0 ? resolve() : reject(new Error(classify(stderr))));
   });
 }
 try {
