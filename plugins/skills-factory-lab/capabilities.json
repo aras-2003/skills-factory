@@ -706,7 +706,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "6b9f8afd071fe2bb3812358eb1d5f9da45807535fe2fb81ca17a8b21ecb11c72",
+      "content_sha256": "2af2bef13d37d2f75c71585852c3d734df41b3579eff1c9b6507fb89b15e59ec",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1681,7 +1681,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "b6e76471464882ab0f4a25e936b160cd8773715e279e6c6204486bebe3e7b743",
+      "content_sha256": "f59f9a9c50b4387bc0345166fe8270698865aa2726d5bbd90cd25bcc452f34b6",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -1695,7 +1695,7 @@
       "kind": "skill",
       "maturity": "production",
       "name": "security-underwriting",
-      "version": "0.5.3"
+      "version": "0.6.0"
     },
     {
       "capability_assessment": {
@@ -2020,7 +2020,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4a2c748ef5931e625d5bfda342fd297e883937bafd3ac275b63191fddbd7f38d",
+      "content_sha256": "367af600790b55c7d82a496fb986061dff4f74ef8b04310c80fd5f5a03672f39",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -2029,7 +2029,7 @@
       "kind": "skill",
       "maturity": "production",
       "name": "thesis-monitor",
-      "version": "0.3.2"
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -2110,7 +2110,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4b1205b67626e689ce009ae85d0bb5ba2c45faf61dc56208c5efabdc95d77532",
+      "content_sha256": "4ceaa89860d156b4bbc9fdce2ac13a474b2f9ee8d813d869777afcc5f022f0d6",
       "inventory": [
         "SKILL.md",
         "agents/openai.yaml",
@@ -2122,7 +2122,7 @@
       "kind": "skill",
       "maturity": "production",
       "name": "valuation-scenario-review",
-      "version": "0.3.5"
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -2349,5 +2349,5 @@
   ],
   "schema_version": "1.0",
   "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
-  "source_revision": "d43250f3982f9ea6ae7b5eb4112922135a7add05"
+  "source_revision": "03ef9f554c395db6a1cc482ef2c6434424a250e9"
 }
