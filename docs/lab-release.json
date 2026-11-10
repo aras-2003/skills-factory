@@ -458,11 +458,11 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "63c016a93a366464ea691404365382dbddd802c3f5f0a550f8f1deaa4d15d5e7",
+      "content_sha256": "eb990dfb4b1e11c6695a08aa0a746776bc11358f1de645d5a4453a48072eea56",
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.17"
+      "version": "0.1.21"
     },
     {
       "capability_assessment": {
@@ -543,7 +543,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "6b9f8afd071fe2bb3812358eb1d5f9da45807535fe2fb81ca17a8b21ecb11c72",
+      "content_sha256": "2af2bef13d37d2f75c71585852c3d734df41b3579eff1c9b6507fb89b15e59ec",
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-os-review",
@@ -1087,7 +1087,7 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "5decba87cd202c02cf29eb5a0df1ef5a03593a83f8587592949ca8488f72ead3",
+      "content_sha256": "4348027a4e392647683f18d8552d0e19e6e0f87b223453d1329ccc1effa06178",
       "kind": "workflow",
       "maturity": "draft",
       "name": "presentation-production",
@@ -1274,11 +1274,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "b6e76471464882ab0f4a25e936b160cd8773715e279e6c6204486bebe3e7b743",
+      "content_sha256": "f59f9a9c50b4387bc0345166fe8270698865aa2726d5bbd90cd25bcc452f34b6",
       "kind": "skill",
       "maturity": "production",
       "name": "security-underwriting",
-      "version": "0.5.3"
+      "version": "0.6.0"
     },
     {
       "capability_assessment": {
@@ -1529,11 +1529,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4a2c748ef5931e625d5bfda342fd297e883937bafd3ac275b63191fddbd7f38d",
+      "content_sha256": "367af600790b55c7d82a496fb986061dff4f74ef8b04310c80fd5f5a03672f39",
       "kind": "skill",
       "maturity": "production",
       "name": "thesis-monitor",
-      "version": "0.3.2"
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -1597,11 +1597,11 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4b1205b67626e689ce009ae85d0bb5ba2c45faf61dc56208c5efabdc95d77532",
+      "content_sha256": "4ceaa89860d156b4bbc9fdce2ac13a474b2f9ee8d813d869777afcc5f022f0d6",
       "kind": "skill",
       "maturity": "production",
       "name": "valuation-scenario-review",
-      "version": "0.3.5"
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -1673,9 +1673,9 @@
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "1dd657875c974905bd323bb262fe4891e9ec99ec4569dd6ce43eb3155678f56b",
-  "release_id": "1.38.477+d43250f3982f",
+  "payload_content_sha256": "04551c185097677d351142f781420270e0d167a1fa5c71f0ea2f4c703a6cf96d",
+  "release_id": "1.38.492+668973da197c",
   "schema_version": "1.0",
-  "source_revision": "d43250f3982f9ea6ae7b5eb4112922135a7add05",
-  "version": "1.38.477"
+  "source_revision": "668973da197c8fb7ed9c3840ba884e0d150752a7",
+  "version": "1.38.492"
 }
