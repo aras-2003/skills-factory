@@ -140,7 +140,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     await chmod(outDir, 0o777);
     await copyFile(themeFile, path.join(inDir, 'sf-editorial.css'));
     const renderName = `sf-marp-render-${randomUUID()}`;
-    const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
+    const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
     await run(docker, command, { timeout: TIMEOUT_MS, maxBytes: 16_384 }).catch(async error => { if (error.code === 'BLOCKED_TIMEOUT') await run(docker, ['kill', renderName], { timeout: 5_000, maxBytes: 1024 }).catch(() => {}); throw error; });
     const names = { html: 'deck.html', pdf: 'deck.pdf', pptx_flattened: 'deck.pptx', pptx_editable_experimental: 'deck-editable.pptx' };
     const file = path.join(outDir, names[mode]); const info = await stat(file).catch(() => null);
