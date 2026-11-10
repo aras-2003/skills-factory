@@ -19,7 +19,7 @@ Scope: Iteration 09 / #608 against the locked main revision. This is an inventor
 
 ## Canonical v1 decisions
 
-- `workflows/presentation-production/references/canonical-deck-v1.schema.json` versions the existing draft artifact contract. It does not replace the roles or create a vendor API schema.
+- `docs/presentations/canonical-deck-v1.schema.json` versions the existing draft artifact contract. It does not replace the roles or create a vendor API schema.
 - `SlideSpec.slide_id` is the stable slide identity. Legacy `id` is mapped explicitly.
 - `action_title` remains an evidence-supported claim where the slide is analytical; teaching, cover and agenda slides may use a question or label as already documented.
 - Claims are objects with stable IDs and epistemic status; data references preserve the submitted value, exact unit, source IDs and as-of context without numeric coercion.
