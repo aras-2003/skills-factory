@@ -6,7 +6,7 @@
 - Parent acceptance: #283 remains open; this increment contributes the Marp/PPTX/export slice only and does not satisfy its native Figma Slides/client runtime criteria.
 - Previous terminal increment: Iteration 09 CLOSED / ACCEPTED, PR #632, merge 668973da197c8fb7ed9c3840ba884e0d150752a7.
 - Baseline main SHA: 668973da197c8fb7ed9c3840ba884e0d150752a7.
-- Lock commit SHA: pending until the complete record + matrix tree exists; record update must retain that immutable lock SHA.
+- Lock commit SHA: a8f0dfaba01b1db8e91e20804762ec584836bba8 (record + matrix tree commit; immutable lock).
 - Started at / closed at (UTC): pending / pending.
 
 ## Frozen commitment
