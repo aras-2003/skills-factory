@@ -37,6 +37,12 @@ case "$mode" in
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
     command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required' >&2; exit 30; }
-    node /home/marp/.cli/marp-cli.js deck.md --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable.pptx ;;
+    command -v weasyprint >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: pinned WeasyPrint is required' >&2; exit 30; }
+    node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable-source.html || { echo SF_EDITABLE_STAGE:html_generation >&2; exit 1; }
+    python3 /usr/local/bin/sf-render-pdf.py /work/output/deck-editable-source.html /work/output/deck-editable-source.pdf /work/input || { echo SF_EDITABLE_STAGE:pdf_generation >&2; exit 1; }
+    libreoffice --headless --nolockcheck --nologo --norestore --nofirststartwizard -env:UserInstallation=file:///tmp/sf-lo-profile --infilter=impress_pdf_import --convert-to 'pptx:Impress Office Open XML:UTF8' --outdir /work/output /work/output/deck-editable-source.pdf || { echo SF_EDITABLE_STAGE:libreoffice_import >&2; exit 1; }
+    test -s /work/output/deck-editable-source.pptx || { echo SF_EDITABLE_STAGE:output_check >&2; exit 1; }
+    mv /work/output/deck-editable-source.pptx /work/output/deck-editable.pptx
+    rm /work/output/deck-editable-source.html /work/output/deck-editable-source.pdf ;;
   *) echo 'invalid output mode' >&2; exit 2 ;;
 esac
