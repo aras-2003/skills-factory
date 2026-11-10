@@ -9,7 +9,7 @@ const expectedSlides = Number(process.argv[4]);
 if (!Number.isInteger(expectedSlides) || expectedSlides < 1) throw new Error('Expected slide count is invalid');
 
 const htmlSource = fs.readFileSync(html, 'utf8');
-const actualSlides = (htmlSource.match(/<section\\b/gi) ?? []).length;
+const actualSlides = (htmlSource.match(/<section\b/gi) ?? []).length;
 if (actualSlides !== expectedSlides) throw new Error('Generated HTML slide count does not match DeckSpec');
 
 const child = spawn(process.env.CHROME_PATH, [
