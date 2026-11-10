@@ -82,7 +82,7 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
     if (slide.notes) lines.push('', `<!-- ${safeNote(slide.notes)} -->`);
     lines.push('', '---', '');
   }
-  return lines.join('\n');
+  return `${lines.join('\n')}\n`;
 }
 
 export async function collectAssets(deck, inputRoot, stage) {
