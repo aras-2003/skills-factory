@@ -14,7 +14,7 @@ let stage = 'launch'; let actualSlides = -1; let expectedSlideCount = -1;
   const htmlSource = fs.readFileSync(html, 'utf8');
   actualSlides = (htmlSource.match(/<section\b/gi) ?? []).length;
   if (actualSlides !== expectedSlides) throw new Error('Generated HTML slide count does not match DeckSpec');
-  const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
+  const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, protocolTimeout: 120_000, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
   try {
     const page = await browser.newPage();
     stage = 'navigation';
