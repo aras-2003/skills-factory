@@ -36,7 +36,11 @@ Planned tests:
 
 Development completes before the test/fix phase. The exact changed-path impact map, fixture hashes and validators are finalized after implementation and before tests. All execution states begin NOT_RUN and failures remain visible.
 
-## Scope clarification — 2026-11-10\n\nInspection found that `workflows/presentation-production/references/artifact-contract.md` already defines draft `Storyline / Slide`, `Exhibit`, `Claim / Evidence` and artifact/QA receipt structures. Therefore 608-A/B must formalize and version that existing contract with explicit compatibility mappings; a second parallel semantic model is out of scope. This clarification narrows implementation choices and does not relax or add acceptance criteria.\n\n## Candidate history (append only)
+## Scope clarification — 2026-11-10
+
+Inspection found that `workflows/presentation-production/references/artifact-contract.md` already defines draft `Storyline / Slide`, `Exhibit`, `Claim / Evidence` and artifact/QA receipt structures. Therefore 608-A/B must formalize and version that existing contract with explicit compatibility mappings; a second parallel semantic model is out of scope. This clarification narrows implementation choices and does not relax or add acceptance criteria.
+
+## Candidate history (append only)
 
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
