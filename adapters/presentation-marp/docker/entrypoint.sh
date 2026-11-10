@@ -9,7 +9,7 @@ if [ "${1:-}" = sf-preflight ]; then
   browser_sha256=''; if [ -n "$browser_version" ]; then browser_sha256=$(sha256sum "$CHROME_PATH" | cut -d' ' -f1); fi
   weasyprint_version=''; weasyprint_package=''
   if command -v weasyprint >/dev/null 2>&1; then weasyprint_version=$(weasyprint --version | sed 's/^WeasyPrint version //'); fi
-  if command -v dpkg-query >/dev/null 2>&1; then weasyprint_package=$(dpkg-query -W -f='${Version}' python3-weasyprint 2>/dev/null || true); fi
+  if command -v dpkg-query >/dev/null 2>&1; then weasyprint_package=$(dpkg-query -W -f='${Version}' weasyprint 2>/dev/null || true); fi
   lo_version=''
   lo_package=''
   if command -v dpkg-query >/dev/null 2>&1 && command -v libreoffice >/dev/null 2>&1; then lo_package=$(dpkg-query -W -f='${Version}' libreoffice-impress 2>/dev/null || true); fi
