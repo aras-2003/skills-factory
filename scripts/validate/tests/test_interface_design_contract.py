@@ -26,7 +26,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
 
     def test_candidate_identity_and_explicit_opening_article(self):
         self.assertEqual("interface-design", self.metadata["name"])
-        self.assertEqual("0.1.20", self.metadata["metadata"]["version"])
+        self.assertEqual("0.1.21", self.metadata["metadata"]["version"])
         self.assertEqual("candidate", self.metadata["metadata"]["maturity"])
         self.assertIn(
             "I’ll use interface-design for the <screen or flow name>.", self.body
@@ -49,6 +49,19 @@ class InterfaceDesignContractTests(unittest.TestCase):
                 )
                 self.assertTrue(opener.startswith("I’ll use interface-design for the "))
                 self.assertTrue(opener.endswith("."))
+
+    def test_accessibility_opener_preserves_role_based_billing_qualifier(self):
+        opener = next(
+            value.removeprefix("begin with the unformatted sentence ").strip('"')
+            for value in self.cases["interface-design-accessibility-edge"]["expected"]["must"]
+            if value.startswith("begin with the unformatted sentence ")
+        )
+        self.assertEqual(
+            "I’ll use interface-design for the desktop and mobile account page with role-based billing access.",
+            opener,
+        )
+        self.assertIn("Preserve any qualifier that materially defines", self.body)
+        self.assertIn("retain “with role-based billing access”", self.body)
 
     def test_derived_onboarding_label_includes_article_without_problem_text(self):
         opener = next(
