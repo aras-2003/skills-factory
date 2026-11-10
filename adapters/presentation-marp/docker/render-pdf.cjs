@@ -23,8 +23,6 @@ const child = spawn(process.env.CHROME_PATH, [
   pathToFileURL(html).href,
 ], { stdio: ['ignore', 'ignore', 'pipe'], env: { ...process.env, HOME: '/tmp' } });
 
-let stderr = '';
-child.stderr.on('data', chunk => { if (stderr.length < 4096) stderr += chunk.toString('utf8').slice(0, 4096 - stderr.length); });
 const timer = setTimeout(() => child.kill('SIGKILL'), 90_000);
 child.on('error', error => {
   clearTimeout(timer);
