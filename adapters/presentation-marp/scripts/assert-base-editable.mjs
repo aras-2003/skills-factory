@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, writeFile, stat, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, stat, rm, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -8,6 +8,7 @@ const input = path.join(root, 'input');
 const output = path.resolve(process.argv[2] ?? path.join(root, 'output'));
 await mkdir(input);
 await mkdir(output, { recursive: true });
+await chmod(output, 0o777);
 await writeFile(path.join(input, 'deck.md'), [
   '---',
   'marp: true',
