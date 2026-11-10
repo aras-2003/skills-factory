@@ -13,7 +13,7 @@ await mkdir(out, { recursive: true }); await chmod(out,0o777);
 function sha(b) { return createHash('sha256').update(b).digest('hex'); }
 function run(command,args) { return new Promise((resolve,reject)=>{const p=spawn(command,args,{stdio:'inherit',shell:false});p.on('error',reject);p.on('close',c=>c===0?resolve():reject(new Error(`${command} exited ${c}`)));});}
 function runCapture(command,args) { return new Promise((resolve,reject)=>{const p=spawn(command,args,{stdio:['ignore','pipe','inherit'],shell:false});let s='';p.stdout.on('data',b=>s+=b);p.on('error',reject);p.on('close',c=>c===0?resolve(s):reject(new Error(`${command} exited ${c}`)));});}
-for (const mode of modes) await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,mode),'--mode',mode]);
+for (const mode of modes) { console.log(`Rendering ${mode}`); await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,mode),'--mode',mode]); }
 await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,'html-repeat'),'--mode','html']);
 await run('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=256m','-v',`${path.join(out,'html-repeat')}:/evidence:ro`,'-v',`${out}:/output:rw`,image,'sf-inspect-html','/evidence/deck.html','/output/repeat-screenshots',String(count)]);
 const htmlReceipt = JSON.parse(await readFile(path.join(out,'html','receipt.json'),'utf8'));
