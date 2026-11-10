@@ -7,7 +7,7 @@ description: >
   implemented page, general report, data visualization or architecture diagram.
 metadata:
   owner: arkadiusz-kamrowski
-  version: "0.1.18"
+  version: "0.1.19"
   maturity: candidate
   risk: medium
   last_reviewed: "2026-11-05"
@@ -54,7 +54,11 @@ For an account or order screen, use only records, fields, status names, counts, 
 
 Before designing, check whether the current request or an explicitly referenced source gives all three inputs: (1) screen/flow goal, (2) intended user and primary task, and (3) target runtime/device. Never use narrated prior turns to fill any missing field.
 
-If all three inputs are missing, respond with this exact question and no other text: “For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?” Do not replace any clause with an inferred context. The question itself names this specialist; do not add an introduction or any other text.
+If all three inputs are missing, copy and return this plain-text line verbatim and alone, with no quotation marks, code formatting, introduction, translation, paraphrase, or other text:
+
+For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?
+
+Do not rewrite any word, clause, or punctuation, and do not replace any clause with inferred context. The question itself names this specialist.
 
 If only some inputs are missing, ask one concise question naming only those fields and identify the `interface-design` specialist in the question itself. When target runtime/device is missing, the question must directly ask whether the screen should target mobile, desktop, or a specific runtime; do not omit this question even when a mobile-first or desktop flow appeared only in narrated prior turns. Every missing field must be asked as something the user can answer, not merely described as unspecified. The question must be the whole response: no introduction, examples, suggestions, checklist, partial design or promise.
 
