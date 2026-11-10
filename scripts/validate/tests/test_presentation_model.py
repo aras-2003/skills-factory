@@ -15,7 +15,7 @@ from presentation_model import normalize_legacy_deck, validate_deck  # noqa: E40
 class PresentationModelTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.schema = load_json(ROOT / "workflows/presentation-production/references/canonical-deck-v1.schema.json")
+        cls.schema = load_json(ROOT / "docs/presentations/canonical-deck-v1.schema.json")
         cls.fixture = json.loads((ROOT / "docs/presentations/examples/canonical-deck-v1.json").read_text(encoding="utf-8"))
 
     def test_synthetic_fixture_is_valid(self) -> None:
