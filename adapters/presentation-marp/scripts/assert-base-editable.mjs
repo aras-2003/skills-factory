@@ -13,6 +13,7 @@ await writeFile(path.join(input, 'sf-editorial.css'), ["/* @theme sf-editorial *
 await writeFile(path.join(input, 'deck.md'), [
   '---',
   'marp: true',
+  'theme: sf-editorial',
   'size: 16:9',
   '---',
   '',
