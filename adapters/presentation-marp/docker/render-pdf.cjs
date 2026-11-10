@@ -31,7 +31,6 @@ let expectedSlides = -1;
     await page.goto(pathToFileURL(html).href, { waitUntil: 'networkidle0', timeout: 60_000 });
     stage = 'fonts';
     await page.evaluate(() => document.fonts.ready.then(() => true));
-    await page.emulateMediaType('screen');
     stage = 'print';
     await page.pdf({ path: output, printBackground: true, preferCSSPageSize: true, waitForFonts: false, timeout: 0 });
     stage = 'output_check';
