@@ -8,7 +8,7 @@ description: 'Design the information hierarchy, navigation, responsive layout, i
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.17
+  version: 0.1.19
   maturity: candidate
   risk: medium
   last_reviewed: '2026-11-05'
@@ -45,11 +45,19 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 First decide whether the current request asks for interface design. If it asks to implement/edit a working page or run its tests, do not apply this skill or ask design questions; hand off to the implementation workflow. If loaded explicitly for an isolated test, state briefly that it does not apply and stop. Do not echo the request or emit a design brief. If implementation is requested but its workflow is unavailable, name the missing repository or approved artifact.
 
+### Product-data and capability gate
+
+For an account or order screen, use only records, fields, status names, counts, dates, actions, and routes supplied by the user or an explicitly referenced product source. If those inputs are absent, do not create populated sample records, even when labeled illustrative, hypothetical, or conditional. Use neutral fields such as `[order ID]`, `[status from the approved product mapping]`, and `[next action from approved order rules]`. Do not invent a status-to-action table, CTA, support destination, tab, navigation item, or detail route. State that entry, exit, and destinations are unspecified. A dashboard request does not establish any of those product capabilities.
+
 ## Required-context gate
 
 Before designing, check whether the current request or an explicitly referenced source gives all three inputs: (1) screen/flow goal, (2) intended user and primary task, and (3) target runtime/device. Never use narrated prior turns to fill any missing field.
 
-If all three inputs are missing, respond with this exact question and no other text: “For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?” Do not replace any clause with an inferred context. The question itself names this specialist; do not add an introduction or any other text.
+If all three inputs are missing, copy and return this plain-text line verbatim and alone, with no quotation marks, code formatting, introduction, translation, paraphrase, or other text:
+
+For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?
+
+Do not rewrite any word, clause, or punctuation, and do not replace any clause with inferred context. The question itself names this specialist.
 
 If only some inputs are missing, ask one concise question naming only those fields and identify the `interface-design` specialist in the question itself. When target runtime/device is missing, the question must directly ask whether the screen should target mobile, desktop, or a specific runtime; do not omit this question even when a mobile-first or desktop flow appeared only in narrated prior turns. Every missing field must be asked as something the user can answer, not merely described as unspecified. The question must be the whole response: no introduction, examples, suggestions, checklist, partial design or promise.
 
