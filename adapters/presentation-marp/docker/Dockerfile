@@ -19,6 +19,6 @@ COPY docker/inspect-pdf.py /usr/local/bin/sf-inspect-pdf.py
 COPY docker/reopen-pptx.sh /usr/local/bin/sf-reopen-pptx.sh
 COPY docker/compare-images.py /usr/local/bin/sf-compare-images.py
 COPY docker/font-fallback.sh /usr/local/bin/sf-font-fallback.sh
-RUN chmod 0555 /usr/local/bin/sf-renderer /usr/local/bin/sf-render-pdf.cjs /usr/local/bin/sf-inspect-pptx /usr/local/bin/sf-inspect-html.cjs /usr/local/bin/sf-inspect-pdf.py /usr/local/bin/sf-reopen-pptx.sh /usr/local/bin/sf-compare-images.py /usr/local/bin/sf-font-fallback.sh
+RUN chmod 0555 /usr/local/bin/sf-renderer /usr/local/bin/sf-inspect-pptx /usr/local/bin/sf-inspect-html.cjs /usr/local/bin/sf-inspect-pdf.py /usr/local/bin/sf-reopen-pptx.sh /usr/local/bin/sf-compare-images.py /usr/local/bin/sf-font-fallback.sh
 ENV CHROME_PATH=/usr/local/bin/chrome
 ENTRYPOINT ["/usr/local/bin/sf-renderer"]
