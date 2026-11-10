@@ -23,7 +23,8 @@ const child = spawn(process.env.CHROME_PATH, [
   pathToFileURL(html).href,
 ], { stdio: ['ignore', 'ignore', 'pipe'], env: { ...process.env, HOME: '/tmp' } });
 
-const timer = setTimeout(() => child.kill('SIGKILL'), 90_000);
+let timedOut = false;
+const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, 90_000);
 child.on('error', error => {
   clearTimeout(timer);
   console.error(`SF_PDF_RENDER_FAILED:chrome_print:${actualSlides}:${expectedSlides}:${error.name || 'Error'}:${error.code || 'none'}`);
@@ -31,14 +32,22 @@ child.on('error', error => {
 });
 child.on('close', code => {
   clearTimeout(timer);
-  if (code !== 0) {
-    const size = fs.existsSync(output) ? fs.statSync(output).size : 0;
+  const size = fs.existsSync(output) ? fs.statSync(output).size : 0;
+  let completePdf = false;
+  if (size >= 8) {
+    const fd = fs.openSync(output, 'r');
+    try {
+      const start = Buffer.alloc(5); fs.readSync(fd, start, 0, 5, 0);
+      const tail = Buffer.alloc(Math.min(64, size)); fs.readSync(fd, tail, 0, tail.length, size - tail.length);
+      completePdf = start.toString('ascii') === '%PDF-' && tail.toString('ascii').trimEnd().endsWith('%%EOF');
+    } finally { fs.closeSync(fd); }
+  }
+  if (code !== 0 && !(timedOut && completePdf)) {
     console.error(`SF_PDF_RENDER_FAILED:chrome_print:${actualSlides}:${expectedSlides}:ExitError:${code}:bytes=${size}`);
     process.exit(1);
   }
-  const size = fs.statSync(output).size;
-  if (!size) {
-    console.error(`SF_PDF_RENDER_FAILED:chrome_print:${actualSlides}:${expectedSlides}:EmptyOutput`);
+  if (!completePdf) {
+    console.error(`SF_PDF_RENDER_FAILED:chrome_print:${actualSlides}:${expectedSlides}:IncompleteOutput:bytes=${size}`);
     process.exit(1);
   }
 });
