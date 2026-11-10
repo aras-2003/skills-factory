@@ -1,0 +1,79 @@
+name: Presentation Marp adapter
+
+on:
+  pull_request:
+    paths:
+      - 'adapters/presentation-marp/**'
+      - 'docs/presentations/**'
+      - 'scripts/validate/presentation_model.py'
+      - '.github/workflows/test-presentation-marp.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'adapters/presentation-marp/**'
+      - 'docs/presentations/**'
+      - 'scripts/validate/presentation_model.py'
+      - '.github/workflows/test-presentation-marp.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: presentation-marp-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+  SF_MARP_IMAGE: ghcr.io/skills-factory/presentation-marp:1.0.0
+  SF_MARP_BASE_IMAGE: skills-factory/marp-base:v4.5.1-no-libreoffice
+  SF_MARP_NO_BROWSER_IMAGE: skills-factory/marp-base:v4.5.1-no-browser
+
+jobs:
+  adapter-runtime:
+    name: Marp exports, reopen, security and fidelity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.SOURCE_REVISION }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.23.3
+      - uses: ./.github/actions/python-environment
+        with:
+          install-dev-dependencies: "true"
+      - name: Build pinned renderer and missing-LibreOffice fixture images
+        run: |
+          docker build --pull -f adapters/presentation-marp/docker/Dockerfile \
+            -t "$SF_MARP_IMAGE" adapters/presentation-marp
+          docker build --pull -f adapters/presentation-marp/docker/Dockerfile.no-libreoffice \
+            -t "$SF_MARP_BASE_IMAGE" adapters/presentation-marp
+          docker image inspect "$SF_MARP_IMAGE" --format '{{.Id}}'
+          docker image inspect "$SF_MARP_BASE_IMAGE" --format '{{.Id}}'
+          docker build --pull -f adapters/presentation-marp/docker/Dockerfile.no-browser \
+            -t "$SF_MARP_NO_BROWSER_IMAGE" adapters/presentation-marp
+          docker image inspect "$SF_MARP_NO_BROWSER_IMAGE" --format '{{.Id}}'
+      - name: Run adapter unit and input security tests
+        working-directory: adapters/presentation-marp
+        run: node --test
+      - name: Validate fixture with the canonical DeckSpec validator
+        run: python scripts/validate/presentation_model.py adapters/presentation-marp/fixtures/canonical-deck-v1.json
+      - name: Verify missing LibreOffice fails without mode downgrade
+        working-directory: adapters/presentation-marp
+        run: node scripts/assert-no-libreoffice.mjs
+      - name: Verify missing browser blocks browser-backed modes
+        working-directory: adapters/presentation-marp
+        run: node scripts/assert-missing-runtime.mjs
+      - name: Generate, reopen and inspect all output modes
+        run: node adapters/presentation-marp/scripts/integration.mjs .tmp/presentation-marp-evidence
+      - name: Verify exact source revision
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: sf-presentation-marp-${{ env.SOURCE_REVISION }}
+          path: .tmp/presentation-marp-evidence/
+          if-no-files-found: ignore
+          retention-days: 90
