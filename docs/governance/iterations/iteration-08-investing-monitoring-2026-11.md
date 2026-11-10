@@ -1,12 +1,12 @@
 # Iteration 08 — Investing monitoring: KPI triggers and expectations
 
-- State: ACTIVE; Iteration 7's owner abort and this scope lock merged in PR #603 at `40420bc28c85826c2f28cb9709c34c45f583b487` before implementation.
+- State: CLOSED / ACCEPTED. The original lock began in PR #603 at `40420bc28c85826c2f28cb9709c34c45f583b487`; exact-candidate acceptance and terminal disposition are recorded below. The initial scope, candidate and test history remain unchanged.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #322 (coordination-only tracking); GitHub Project iteration `08 | Investing monitoring (provisional)`.
 - Previous terminal iteration: Iteration 7 owner-aborted on 2026-11-09; see [append-only abort decision](iteration-07-abort-2026-11-09.md). #306 remains unresolved and open.
 - Baseline main SHA: `0646cd0c4588b889070960c777e07829c3477b9e`.
 - Lock commit SHA: `0f32e76e7642cfe12f39a5034605eb2fa5fc8e26` (final frozen scope tree, including the append-only prior-iteration abort record; implementation starts after merge).
-- Started at / closed at (UTC): 2026-11-09 22:55:13 / pending.
+- Started at / closed at (UTC): 2026-11-09 22:55:13 / 2026-11-10 00:47:01.
 - Scope lock reviewed by / at: Arkadiusz Kamrowski, 2026-11-09 (self-review).
 
 ## Frozen commitment
@@ -53,16 +53,16 @@ Campaign definition, prompt/rubric/input hashes, final changed-path impact map, 
 
 ## Closure / abort decision
 
-- Outcome: PENDING.
-- Final candidate / matrix and immutable evidence links: pending.
-- Committed Issues accepted / unresolved: #308, #309, #310 pending; #306 is prior-iteration carry-forward and excluded from this commitment.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: all NOT_RUN before test phase.
-- Shared regression verdict: pending.
-- Non-blocking findings and accepted impact: pending.
-- Scope compared with lock commit: pending.
-- Issue / Project / PR reconciliation: pending.
-- Owner proposal / reviewer acceptance / decision timestamp: pending.
-- Next iteration eligibility: no automatic start or production promotion.
+- Outcome: CLOSED / ACCEPTED for the frozen Iteration 08 scope #308–#310.
+- Final candidate / matrix and immutable evidence links: exact behavior candidate `03ef9f554c395db6a1cc482ef2c6434424a250e9`; [acceptance matrix](../../../evals/campaigns/iteration-08-investing-monitoring-2026-11/acceptance-matrix.md); [runtime evidence](../../../evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md); final evidence PR #606 merged at `4ec40476f92ffa28ddb9ca223ed007a9b79b927a`.
+- Committed Issues accepted / unresolved: #308, #309 and #310 accepted and closed completed; #306 was already completed in Iteration 7 and excluded from this commitment.
+- Required rows: all required acceptance/shared rows PASS; runtime campaign records 14 configured outcomes and 15 exact-Site route receipts across five critical triples. Synthetic fixtures validate behavior/no-lookahead only; real-world source retrieval/authenticity is not claimed. No writes, trades or production promotion are claimed.
+- Shared regression verdict: PASS on the exact accepted candidate; the shared portfolio-route negation regression was fixed in PR #605 and its exact Site receipt is in the runtime evidence.
+- Non-blocking findings and accepted impact: release/promotion remains unapproved; this is a deliberate release gate, not an accepted production claim.
+- Scope compared with lock commit: unchanged; only append-only corrections clarified #306's actual state and documented final evidence.
+- Issue / Project / PR reconciliation: #308–#310 closed after exact Site v128 acceptance; PRs #604, #605 and #606 merged; native Project Iteration field is not verifiable through the available connector.
+- Owner proposal / reviewer acceptance / decision timestamp: owner/reviewer Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review, not independent); accepted 2026-11-10 00:47:01 UTC.
+- Next iteration eligibility: prior slot released; next work still requires its own committed scope lock. Production promotion remains a separate decision.
 
 ## Append-only issue-state correction — 2026-11-10
 
