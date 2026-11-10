@@ -36,7 +36,7 @@ case "$mode" in
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
     command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required for experimental editable PPTX' >&2; exit 30; }
-    [ -x \"$CHROME_PATH\" ] || { echo 'BLOCKED_MISSING_RUNTIME: Chromium is required for experimental editable PPTX' >&2; exit 30; }
+    [ -x "$CHROME_PATH" ] || { echo 'BLOCKED_MISSING_RUNTIME: Chromium is required for experimental editable PPTX' >&2; exit 30; }
     node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable.pptx || { echo SF_EDITABLE_STAGE:marp_cli >&2; exit 1; } ;;
   *) echo 'invalid output mode' >&2; exit 2 ;;
 esac
