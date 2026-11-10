@@ -23,6 +23,8 @@ test('generated markdown escapes active syntax and uses a staged chart asset', (
   assert.ok(markdown.includes('# \\!\\[click\\]\\(https://example\\.invalid\\)'));
   assert.doesNotMatch(markdown, /<script>/i);
   assert.match(markdown,/\.\/fixed\.svg/);
+  assert.ok(markdown.endsWith('\\n'), 'Markdown ends with a newline so the final slide is complete');
+  assert.equal((markdown.match(/^---$/gm) ?? []).length, 1, 'single-slide Markdown has only its frontmatter delimiter');
   assert.doesNotMatch(markdown.match(/<!-- ([\s\S]*?) -->/)?.[1] ?? '', /--/);
 });
 
