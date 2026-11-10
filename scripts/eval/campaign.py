@@ -254,7 +254,7 @@ def separately_validated_interactive_report_exhibit_paths(root: Path = ROOT) -> 
 
 
 def separately_validated_interface_design_paths(root: Path = ROOT) -> set[str]:
-    """Keep interface-design isolated from frozen R20 while its Site retest is active."""
+    """Keep the separately validated interface-design candidate out of frozen R20."""
     replacement = root / "evals/campaigns/iteration-06-interface-design-site-2026-10/campaign.yaml"
     if replacement.is_file():
         try:
@@ -273,7 +273,7 @@ def separately_validated_interface_design_paths(root: Path = ROOT) -> set[str]:
             required = list(map(str, candidate.get("required_case_ids") or []))
             if (
                 cfg.get("campaign") != "iteration-06-interface-design-site-2026-10"
-                or cfg.get("state") != "ACTIVE"
+                or cfg.get("state") not in {"ACTIVE", "COMPLETE"}
                 or cfg.get("execution_surface") != "site-ordinary-chat"
                 or cfg.get("out_of_scope_behavior_paths") != [expected_path]
                 or candidate.get("name") != "interface-design"

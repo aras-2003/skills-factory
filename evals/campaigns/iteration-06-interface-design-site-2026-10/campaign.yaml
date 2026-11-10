@@ -1,6 +1,6 @@
 schema_version: "1.0"
 campaign: iteration-06-interface-design-site-2026-10
-state: ACTIVE
+state: COMPLETE
 execution_surface: site-ordinary-chat
 test_cases: skills/web-design/interface-design/tests/cases.yaml
 out_of_scope_behavior_paths:

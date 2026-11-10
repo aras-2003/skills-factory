@@ -55,8 +55,8 @@ test_modules:
   - workflows/investment-os-review/tests/cases.yaml
   - evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
   - scripts/eval/tests/test_runtime_campaign.py
-# Catalog-only refresh for interface-design v0.1.21 (2026-11-10); historical
-# Iteration 08 candidate/runtime revisions and behavioral evidence are unchanged.
+# Iteration 06 completion-state isolation update (2026-11-10); Iteration 08
+# candidate/runtime revisions and behavioral evidence remain unchanged.
 source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/acceptance-matrix.md: "c3d976d8b6789b21b5c2ff0e35cccecde0054cffd25b6043cccd8f917af5d7e1"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md: "42352f168c7eea4fdb7d53d160d4c194c624ea1f3fdd50e043e9799d0f224360"
@@ -95,8 +95,8 @@ source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
   release/production-readiness.yaml: "cc6312e2a9a37e309bbc74f634e225dda55a97eda9f2c53ed83d6c0434db1af3"
-  scripts/eval/campaign.py: "e21825c5218c0535caed56fb08e54f2e28d6bafc2732572a0793195f4839b2ed"
-  scripts/eval/tests/test_runtime_campaign.py: "86ddde382f20fb80b367e2417fa2ed9bc154ef97da4daf79ca474d32e6df9056"
+  scripts/eval/campaign.py: "0bd1765f786b0d789d4c6040f29a84dd15df6ca6cdd0030b147d1d1ce177a4b4"
+  scripts/eval/tests/test_runtime_campaign.py: "dd5a7d1493eaf041281daaef437bf19dd26975bc8485e7e5b1fbd15028e05c4a"
   skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"
   skills/investing/security-underwriting/tests/cases.yaml: "a9d2e7c23027d9feae8044036fe544eaa3845e7723cdf7961ae5bf817b2e8638"
   skills/investing/thesis-monitor/SKILL.md: "91f2e87c82a11847df7c5e0119b9000434845bba61bf443354365cd6d60dec25"
