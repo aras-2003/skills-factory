@@ -40,6 +40,14 @@ class PresentationModelTests(unittest.TestCase):
         self.assertIn("Duplicate ID", messages)
         self.assertIn("references missing data_ref_id", messages)
 
+    def test_rejects_missing_required_fields_and_wrong_schema_version(self) -> None:
+        broken = json.loads(json.dumps(self.fixture))
+        broken["schema_version"] = "2.0"
+        del broken["slides"][0]["notes"]
+        messages = "\n".join(issue.message for issue in validate_deck(broken, self.schema))
+        self.assertIn("schema_version", messages)
+        self.assertIn("notes", messages)
+
     def test_rejects_unknown_source_when_catalog_exists(self) -> None:
         broken = json.loads(json.dumps(self.fixture))
         broken["slides"][0]["data_refs"][0]["source_ids"] = ["missing-source"]
@@ -49,7 +57,9 @@ class PresentationModelTests(unittest.TestCase):
         legacy = {
             "deck_id": "legacy", "slides": [{"id": "s1", "role": "insight", "headline": "A claim",
                 "claim_ids": ["c1"], "speaker_notes": "Preserve this", "editability": "EDITABLE_NATIVE",
-                "layout_id": "two-column", "custom_field": {"kept": True}}],
+                "layout_id": "two-column", "custom_field": {"kept": True},
+                "exhibit_specs": [{"id": "e1", "type": "bar", "alt_text": "Legacy description",
+                                   "renderer_execution_status": "PAYLOAD_RENDERED", "focal_point": "bar-labels"}]}],
         }
         normalized, warnings = normalize_legacy_deck(legacy)
         slide = normalized["slides"][0]
@@ -60,6 +70,12 @@ class PresentationModelTests(unittest.TestCase):
         self.assertEqual(legacy, normalized["extensions"]["legacy_source"])
         self.assertEqual(legacy["slides"][0], slide["extensions"]["legacy_source"])
         self.assertTrue(any("editability" in warning for warning in warnings))
+        exhibit = slide["exhibits"][0]
+        self.assertEqual("bar", exhibit["visual_type"])
+        self.assertEqual("Legacy description", exhibit["alternative_text"])
+        self.assertEqual("PAYLOAD_RENDERED", exhibit["execution_status"])
+        self.assertEqual("bar-labels", exhibit["extensions"]["legacy_fields"]["focal_point"])
+        self.assertIn("custom_field", slide["extensions"]["legacy_extra_fields"])
         self.assertEqual([], validate_deck(normalized, self.schema))
 
 
