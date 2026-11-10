@@ -80,3 +80,16 @@ PR #604 attempt 1 (`aac32ae1f384895e29e4ff8cd1b423967fca469f`) failed all four r
 ## Append-only fourth CI correction — 2026-11-10
 
 Attempt 4, PR #604 head `ce73e526cd2cbb1f08aca92509d7efe4bed87dfb`: Site CI passed, including Lab build and MCP contracts. Domain integrity, Evaluation CI and Validate Skills were blocked by a `NameError` in the strict unassigned-candidate hash handoff, which referenced the Iteration 8 manifest before loading it. No campaign behavior result is inferred from that test harness failure. The next candidate initializes the exact Iteration 8 source-hash map before checking legacy candidates; no historical source locks are relaxed.
+
+
+## Append-only closure reconciliation — 2026-11-10
+
+The original opening header and pending closure block above were never reconciled after the final acceptance PR; they are superseded by this evidence-based terminal decision. Iteration 08 is **CLOSED / ACCEPTED** for its frozen scope #308–#310.
+
+- Exact behavior candidate: `03ef9f554c395db6a1cc482ef2c6434424a250e9`, privately deployed and attested on owner-only Site v128 (Lab `1.38.481+03ef9f554c39`), deployment `appgdep_6af264fdd71c8191bbeab7c895f9ed9f`.
+- The acceptance matrix records every required criterion PASS. Runtime evidence preserves all 14 configured outcomes and 15 route receipts across five critical triples; synthetic KPI/earnings fixtures test behavior and no-lookahead only, not live source retrieval/authenticity. No write, trade, or production promotion is claimed.
+- Final evidence PR #606 merged as `4ec40476f92ffa28ddb9ca223ed007a9b79b927a`; all 14 check runs on its exact head passed. Issues #308, #309, and #310 were closed completed at 2026-11-10 00:46 UTC.
+- Later main changes through `3339fd72121c897b9b3f4ba848eaf718786794cc` updated the interface-design skill and campaign/hash bookkeeping; they did not change the frozen Investment OS behavior paths listed above. The connected Site now attests this exact current main revision at v132.
+- Owner/reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent). Decision timestamp: 2026-11-10. The prior iteration slot is released. Production approval remains separate and false.
+
+This append-only correction supersedes the stale initial status and pending closure fields; it does not alter the frozen scope, candidate, or historical attempts.
