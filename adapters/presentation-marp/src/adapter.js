@@ -80,7 +80,7 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
       else if (exhibit.visual_type === 'table') lines.push(`- ${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}: ${safeText(exhibit.supported_data.join(', '))}`);
     }
     if (slide.notes) lines.push('', `<!-- ${safeNote(slide.notes)} -->`);
-    lines.push('', '---', '');
+    if (slide !== deck.slides.at(-1)) lines.push('', '---', '');
   }
   return lines.join('\n');
 }
