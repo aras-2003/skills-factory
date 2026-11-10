@@ -29,7 +29,7 @@ const args = [
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input',
   '--user', '10001:10001', '--env', 'HOME=/tmp',
-  '--env', 'CHROME_NO_SANDBOX=1',
+  '--env', 'CHROME_NO_SANDBOX=1', '--env', 'PUPPETEER_HEADLESS_MODE=shell',
   '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
   '-v', input + ':/work/input:ro',
   '-v', output + ':/work/output:rw',
