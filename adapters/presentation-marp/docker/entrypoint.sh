@@ -3,7 +3,7 @@ set -eu
 mode=${2:-}
 if [ "${1:-}" = sf-preflight ]; then
   marp_output=$(node /home/marp/.cli/marp-cli.js --version 2>&1)
-  marp_version=$(printf '%s' "$marp_output" | grep -Eo '[0-9]+\\.[0-9]+\\.[0-9]+' | head -n1 || true)
+  marp_version=$(printf '%s' "$marp_output" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
   node_version=$(node --version | sed 's/^v//')
   browser_version=''; if [ -x "$CHROME_PATH" ]; then browser_version=$($CHROME_PATH --version | sed 's/^[^ ]* //'); fi
   browser_sha256=''; if [ -n "$browser_version" ]; then browser_sha256=$(sha256sum "$CHROME_PATH" | cut -d' ' -f1); fi
@@ -14,7 +14,7 @@ if [ "${1:-}" = sf-preflight ]; then
   lo_version=''; lo_package=''
   if command -v dpkg-query >/dev/null 2>&1 && command -v libreoffice >/dev/null 2>&1; then lo_package=$(dpkg-query -W -f='${Version}' libreoffice-impress 2>/dev/null || true); fi
   if command -v libreoffice >/dev/null 2>&1; then lo_version=$(libreoffice --headless --version | sed 's/^LibreOffice //'); fi
-  printf '{"marp":"%s","node":"%s","browser":"%s","browser_path":"%s","browser_sha256":"%s","libreoffice":"%s","libreoffice_package":"%s","weasyprint":"%s","weasyprint_package":"%s","python_pptx":"%s","image":"ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42"}\\n' "$marp_version" "$node_version" "$browser_version" "$CHROME_PATH" "$browser_sha256" "$lo_version" "$lo_package" "$weasyprint_version" "$weasyprint_package" "$pptx_version"
+  printf '{"marp":"%s","node":"%s","browser":"%s","browser_path":"%s","browser_sha256":"%s","libreoffice":"%s","libreoffice_package":"%s","weasyprint":"%s","weasyprint_package":"%s","python_pptx":"%s","image":"ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42"}\n' "$marp_version" "$node_version" "$browser_version" "$CHROME_PATH" "$browser_sha256" "$lo_version" "$lo_package" "$weasyprint_version" "$weasyprint_package" "$pptx_version"
   exit 0
 fi
 case "${1:-}" in
