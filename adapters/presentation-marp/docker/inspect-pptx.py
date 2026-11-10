@@ -15,7 +15,7 @@ with zipfile.ZipFile(path) as zf:
     shapes = []
     image_slides = []
     for n in slides:
-        root = ET.fromstring(zf.read(n)); shapes.append(len(root.findall('.//p:sp', ns))); image_slides.append(len(root.findall('.//p:pic', ns)))
+        root = ET.fromstring(zf.read(n)); shapes.append(len(root.findall('.//p:sp', ns))); image_slides.append(len(root.findall('.//p:pic', ns)) + len(root.findall('.//p:bg//a:blip', ns)))
     text = '\n'.join(''.join(ET.fromstring(zf.read(n)).itertext()) for n in slides)
     expected = json.loads(Path('/work/input/deck.json').read_text())
     slide_texts = [s['action_title'] for s in expected['slides']]
@@ -26,7 +26,7 @@ with zipfile.ZipFile(path) as zf:
     if size is None or int(size.attrib['cx']) / int(size.attrib['cy']) < 1.77 or int(size.attrib['cx']) / int(size.attrib['cy']) > 1.78: raise SystemExit('slide size is not 16:9')
     if mode == 'pptx_flattened' and not all(count > 0 for count in image_slides): raise SystemExit('flattened PPTX must contain image-backed slide content')
     if mode == 'pptx_editable_experimental' and not all(count > 0 for count in shapes): raise SystemExit('editable PPTX contains no native shapes')
-    report = {'mode':mode,'slide_count':len(slides),'width_emu':int(size.attrib['cx']),'height_emu':int(size.attrib['cy']),'native_shapes_by_slide':shapes,'images_by_slide':image_slides,'notes_slide_count':len(notes),'notes_text':[]}
+    report = {'mode':mode,'slide_count':len(slides),'width_emu':int(size.attrib['cx']),'height_emu':int(size.attrib['cy']),'native_shapes_by_slide':shapes,'image_shapes_and_backgrounds_by_slide':image_slides,'notes_slide_count':len(notes),'notes_text':[]}
     for n in notes:
         report['notes_text'].append(''.join(ET.fromstring(zf.read(n)).itertext()))
     if mode == 'pptx_flattened' and len(notes) != len(slides): raise SystemExit('flattened PPTX presenter notes missing')
