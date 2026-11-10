@@ -43,8 +43,8 @@ const args = [
   '--output', '/work/output/base-editable.pptx',
 ];
 function classify(stderr) {
-  if (/Page\\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_OPERATION';
-  if (/Page\\.navigate/i.test(stderr)) return 'NAVIGATION_OPERATION';
+  if (/Page\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_OPERATION';
+  if (/Page\.navigate/i.test(stderr)) return 'NAVIGATION_OPERATION';
   if (/waitForNetworkIdle/i.test(stderr)) return 'NETWORK_IDLE_OPERATION';
   if (/setContent/i.test(stderr)) return 'CONTENT_SETUP_OPERATION';
   if (/Navigation timeout of \d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
