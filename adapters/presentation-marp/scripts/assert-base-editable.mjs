@@ -9,6 +9,7 @@ const output = path.resolve(process.argv[2] ?? path.join(root, 'output'));
 await mkdir(input);
 await mkdir(output, { recursive: true });
 await chmod(output, 0o777);
+await writeFile(path.join(input, 'sf-editorial.css'), ["/* @theme sf-editorial */","section {","  box-sizing: border-box;","  width: 1280px;","  height: 720px;","  padding: 72px 86px 62px;","  background: #f6f4ee;","  color: #17243a;","  font-family: \"Liberation Sans\", sans-serif;","  font-size: 28px;","  line-height: 1.35;","}","h1 {","  max-width: 1040px;","  margin: 0 0 34px;","  color: #17243a;","  font-size: 52px;","  line-height: 1.08;","}","p, small { color: #52627a; }","li { margin: 12px 0; }","strong { color: #176b87; }","small { font-size: .7em; }",".marpit img { max-width: 100%; max-height: 300px; }"].join('\n'));
 await writeFile(path.join(input, 'deck.md'), [
   '---',
   'marp: true',
@@ -35,7 +36,7 @@ const args = [
   '--entrypoint', 'node',
   image,
   '/home/marp/.cli/marp-cli.js',
-  '/work/input/deck.md',
+  '/work/input/deck.md', '--theme-set', './sf-editorial.css',
   '--browser-timeout', '90',
   '--pptx', '--pptx-editable', '--allow-local-files', '--browser-protocol', 'cdp',
   '--output', '/work/output/base-editable.pptx',
