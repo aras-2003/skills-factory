@@ -12,7 +12,7 @@ from jsonschema import Draft202012Validator
 from common import ValidationIssue, load_json, repo_root_from
 
 
-SCHEMA_RELATIVE = Path("workflows/presentation-production/references/canonical-deck-v1.schema.json")
+SCHEMA_RELATIVE = Path("docs/presentations/canonical-deck-v1.schema.json")
 EXAMPLE_RELATIVE = Path("docs/presentations/examples/canonical-deck-v1.json")
 
 
