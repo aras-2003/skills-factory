@@ -140,7 +140,6 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     const md = renderDeck(deck, themeFile, assetMap); await writeFile(path.join(inDir, 'deck.md'), md);
     await writeFile(path.join(inDir, 'deck.json'), raw);
     await chmod(outDir, 0o777);
-    if (mode === 'pdf') for (const asset of assets) await copyFile(path.join(inDir, asset.file), path.join(outDir, asset.file));
     await copyFile(themeFile, path.join(inDir, 'sf-editorial.css'));
     const renderName = `sf-marp-render-${randomUUID()}`;
     const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
