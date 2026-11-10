@@ -55,15 +55,15 @@ test_modules:
   - workflows/investment-os-review/tests/cases.yaml
   - evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
   - scripts/eval/tests/test_runtime_campaign.py
-# Catalog-only refresh for interface-design v0.1.19 (2026-11-10); historical
+# Catalog-only refresh for interface-design v0.1.20 (2026-11-10); historical
 # Iteration 08 candidate/runtime revisions and behavioral evidence are unchanged.
 source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/acceptance-matrix.md: "c3d976d8b6789b21b5c2ff0e35cccecde0054cffd25b6043cccd8f917af5d7e1"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md: "42352f168c7eea4fdb7d53d160d4c194c624ea1f3fdd50e043e9799d0f224360"
-  CATALOG.md: "56f38ed297fa81a89e97093a70eac5669e49190f235abe30331d2a3923d72347"
+  CATALOG.md: "fadcf7833ce70964f5349d1cae0e6a8f20ebfd30fd690639f8c8d5498365074d"
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: "622ac6fa557a8d98809d75cac6a188838ed9f6cc9bedd8382b13e640e079edd5"
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: "b6a39aa3eb75e60678e94b893a099e00c73796a49d005daeb771110a532f9a4e"
-  docs/catalog.json: "3f22504c99512592d379aaa53813feb674b2cf04b82aad844147e7c4a309c944"
+  docs/catalog.json: "687c0979aaddf5961ce638e736ce57f9242bb5b24eab2d3604bd2209df871765"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml: "c2c406b56460ae809a44db3d31cf3f47a3b761fe6c62a66d55e0184c60e08787"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml: "de76470d524da9a44c1466a42a23311dbecbf5147a5454f636505be1feec535c"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-01.input.md: "e7b8e6bd02ba5472bed7dd966624aa2d8cce22692434e2361c74db6480efb648"
