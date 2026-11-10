@@ -40,18 +40,42 @@ const args = [
   '--pptx', '--pptx-editable', '--allow-local-files', '--browser-protocol', 'cdp',
   '--output', '/work/output/base-editable.pptx',
 ];
-try {
-  await new Promise((resolve, reject) => {
-    const child = spawn('docker', args, { shell: false, stdio: 'inherit' });
-    child.on('error', reject);
-    child.on('close', code => code === 0 ? resolve() : reject(new Error('Marp base smoke test failed')));
+function classify(stderr) {
+  if (/Navigation timeout of \\d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
+  if (/Timed out after waiting \\d+ms/i.test(stderr)) return 'BROWSER_OPERATION_TIMEOUT';
+  if (/Protocol error \\(Page\\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
+  if (/Failed to launch the browser process/i.test(stderr)) return 'BROWSER_LAUNCH_FAILED';
+  if (/Target closed/i.test(stderr)) return 'BROWSER_TARGET_CLOSED';
+  if (/No browser found/i.test(stderr)) return 'BROWSER_NOT_FOUND';
+  return 'UNKNOWN_RENDER_FAILURE';
+}
+async function run(args) {
+  return await new Promise((resolve, reject) => {
+    const child = spawn('docker', args, { shell: false, stdio: ['ignore', 'ignore', 'pipe'] });
+    let stderr = '';
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', chunk => { stderr += chunk; });
+    child.on('error', () => reject(new Error('DOCKER_SPAWN_FAILED')));
+    child.on('close', code => code === 0 ? resolve() : reject(new Error(classify(stderr)));
   });
+}
+try {
+  await run(args);
   const outputInfo = await stat(path.join(output, 'base-editable.pptx'));
-  if (!outputInfo.isFile() || outputInfo.size === 0) throw new Error('Marp produced an empty editable PPTX');
+  if (!outputInfo.isFile() || outputInfo.size === 0) throw new Error('EMPTY_OUTPUT');
   console.log(JSON.stringify({ state: 'PASS', output: 'base-editable.pptx', size_bytes: outputInfo.size }));
-} catch {
-  console.error(JSON.stringify({ state: 'FAIL', classification: 'BASE_MARP_EDITABLE_RUNTIME_FAILED' }));
-  process.exitCode = 1;
+} catch (primaryError) {
+  const fallbackArgs = args.filter(arg => arg !== '--allow-local-files').map(arg => arg === 'base-editable.pptx' ? 'base-editable-no-local.pptx' : arg);
+  try {
+    await run(fallbackArgs);
+    const fallbackInfo = await stat(path.join(output, 'base-editable-no-local.pptx'));
+    if (!fallbackInfo.isFile() || fallbackInfo.size === 0) throw new Error('EMPTY_OUTPUT');
+    console.log(JSON.stringify({ state: 'FAIL', classification: String(primaryError.message), no_local_files: 'PASS' }));
+    process.exitCode = 1;
+  } catch (fallbackError) {
+    console.error(JSON.stringify({ state: 'FAIL', allow_local_files: String(primaryError.message), no_local_files: String(fallbackError.message) }));
+    process.exitCode = 1;
+  }
 } finally {
   await rm(root, { recursive: true, force: true });
 }
