@@ -15,7 +15,6 @@ RUN set -eux; \
 COPY docker/entrypoint.sh /usr/local/bin/sf-renderer
 COPY docker/inspect-pptx.py /usr/local/bin/sf-inspect-pptx
 COPY docker/inspect-html.cjs /usr/local/bin/sf-inspect-html.cjs
-COPY docker/render-pdf.cjs /usr/local/bin/sf-render-pdf.cjs
 COPY docker/inspect-pdf.py /usr/local/bin/sf-inspect-pdf.py
 COPY docker/reopen-pptx.sh /usr/local/bin/sf-reopen-pptx.sh
 COPY docker/compare-images.py /usr/local/bin/sf-compare-images.py
