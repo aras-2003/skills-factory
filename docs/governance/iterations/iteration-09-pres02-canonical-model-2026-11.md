@@ -1,12 +1,12 @@
 # Iteration 09 — Canonical presentation model and reuse boundary (PRES-02)
 
-- State: ACTIVE (activated after scope lock commit `153b7428839048871bff8d8d7c0ed7c4dc6c3f93`; no implementation PR preceded it).
+- State: CLOSED / ACCEPTED (closeout PR #632; source implementation merged in PR #631).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #608 / NOT ASSIGNED OR VERIFIED (available GitHub connector cannot mutate/read the native Project Iteration field).
 - Previous terminal iteration / closure link: Iteration 08 CLOSED / ACCEPTED in PR #629 at `cfcb1c9b6f0f5ee512d7cbc44da98740198f9898`; Iteration 7 ABORTED, terminal.
 - Baseline main SHA: `cfcb1c9b6f0f5ee512d7cbc44da98740198f9898`.
 - Lock commit SHA: `153b7428839048871bff8d8d7c0ed7c4dc6c3f93` (first complete record+matrix tree on this branch; preserve this as the immutable lock).
-- Started at / closed at (UTC): 2026-11-10 17:16:22 UTC / pending.
+- Started at / closed at (UTC): 2026-11-10 17:16:22 UTC / 2026-11-10 17:58 UTC.
 - Scope lock reviewed by / at: Arkadiusz Kamrowski, self-review, 2026-11-10.
 
 ## Frozen commitment
@@ -44,7 +44,7 @@ Inspection found that `workflows/presentation-production/references/artifact-con
 
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
-| C1 | pending | not applicable to schema-only scope | NOT_RUN | NOT_REQUIRED for this scope; see test plan | none |
+| C1 | `7a63b2131ff4a197de8183cb596d4a6b3fa28a30` (merged in PR #631 as `3b36750c7eef25e9208c05bc07d9f7b818e28cd1`) | not applicable to schema-only scope | PASS — Validate skills, Domain integrity, Site CI and Evaluation CI | NOT_REQUIRED for this scope; see test plan | none |
 
 ## Regression selection and counts
 
@@ -63,14 +63,14 @@ Inspection found that `workflows/presentation-production/references/artifact-con
 
 ## Closure / abort decision
 
-- Outcome: PENDING.
-- Final candidate / matrix and immutable evidence links: pending.
-- Committed Issues accepted / unresolved: #608 pending; parent #283 remains open until its later runtime/export acceptance.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: all NOT_RUN before implementation.
-- Shared regression verdict: pending.
-- Non-blocking findings and accepted impact: pending.
-- Scope compared with lock commit: pending.
-- Issue / Project / PR reconciliation: pending; native Project Iteration assignment is unverified.
-- Owner proposal / reviewer acceptance / decision timestamp: pending; self-review must be explicit.
-- If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: N/A.
-- Next iteration eligibility: no automatic start or promotion; close this increment before the next one.
+- Outcome: ACCEPTED.
+- Final candidate / matrix and immutable evidence links: candidate source `7a63b2131ff4a197de8183cb596d4a6b3fa28a30`; final PR head `ec4cdfe5472946247eaf85bc6db6d14a286d1162`; merge result `3b36750c7eef25e9208c05bc07d9f7b818e28cd1`; acceptance matrix in this directory.
+- Committed Issues accepted / unresolved: #608 accepted and closed by PR #631; parent #283 remains open for native Figma Slides creation, rendered inspection, export/round-trip, runtime/client proof and release review.
+- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: 11 PASS / 0 FAIL / 0 NOT_RUN / 0 BLOCKED / 0 REVIEW_REQUIRED / 1 reviewed N/A.
+- Shared regression verdict: PASS; Report Composer, Visual Output Design and unchanged-domain probe checks passed under Validate skills / Evaluation CI.
+- Non-blocking findings and accepted impact: local behavioral tests could not run because the workspace lacked PyYAML/jsonschema and PyPI DNS was unavailable; exact-revision GitHub workflows executed and passed the repository validators and test suites. Local Python syntax, JSON syntax and diff checks passed. Site/runtime was reviewed N/A because the change is offline-only.
+- Scope compared to lock commit: unchanged. One initial validation failure showed the schema under `workflows/` was detected as a behavior change against the immutable R20 source pin. It was moved to `docs/presentations/`, references were updated, and all required workflows passed on the corrected revision.
+- Issue / Project / PR reconciliation: PR #631 merged; GitHub Issue #608 closed as completed. Native Project Iteration assignment remains unverified because the connected API cannot inspect/update that field.
+- Owner proposal / reviewer acceptance / decision timestamp: owner accepted after self-review on 2026-11-10 17:58 UTC; reviewer is not independent.
+- If ABORTED: N/A.
+- Next iteration eligibility: #608 is terminal; the next bounded increment may start after this closeout is merged. #283 remains open and is not accepted by this source-contract slice.
