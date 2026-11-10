@@ -2,7 +2,7 @@
 set -eu
 mode=${2:-}
 if [ "${1:-}" = sf-preflight ]; then
-  marp_output=$(marp --version 2>&1)
+  marp_output=$(node /home/marp/.cli/marp-cli.js --version 2>&1)
   marp_version=$(printf '%s' "$marp_output" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
   node_version=$(node --version | sed 's/^v//')
   browser_version=''; if [ -x "$CHROME_PATH" ]; then browser_version=$($CHROME_PATH --version | sed 's/^[^ ]* //'); fi
@@ -25,11 +25,11 @@ esac
 if [ "${1:-}" != sf-render ] || [ -z "$mode" ]; then echo 'invalid renderer command' >&2; exit 2; fi
 cd /work/input
 case "$mode" in
-  html) marp deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html ;;
-  pdf) marp deck.md --pdf --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pdf ;;
-  pptx_flattened) marp deck.md --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
+  html) node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html ;;
+  pdf) node /home/marp/.cli/marp-cli.js deck.md --pdf --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pdf ;;
+  pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
     command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required' >&2; exit 30; }
-    marp deck.md --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable.pptx ;;
+    node /home/marp/.cli/marp-cli.js deck.md --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable.pptx ;;
   *) echo 'invalid output mode' >&2; exit 2 ;;
 esac
