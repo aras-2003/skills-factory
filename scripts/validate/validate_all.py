@@ -18,6 +18,7 @@ def main() -> int:
         here / "validate_catalog.py",
         here / "validate_investing.py",
         here / "validate_runtime.py",
+        here / "presentation_model.py",
     ]
     results = [run(script) for script in scripts]
     return 1 if any(results) else 0

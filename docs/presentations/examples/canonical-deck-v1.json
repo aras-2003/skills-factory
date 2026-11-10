@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "deck_id": "synthetic-revenue-bridge",
+  "communicated_thesis": "The supplied revenue figure increased over the stated period.",
+  "source_pack_refs": ["synthetic:brief-001"],
+  "governing_question": "What changed in the supplied example?",
+  "structure_choice": "claim-proof-implication",
+  "why_choice": "A single dated value supports one concise comparison.",
+  "creative_direction": {
+    "design_system": "synthetic-neutral-v1",
+    "visual_arc": ["metric", "interpretation"]
+  },
+  "sources": [
+    {
+      "source_id": "synthetic:revenue-source",
+      "source_locator": "fixture://revenue/2026-10",
+      "source_as_of": "2026-10-31",
+      "retrieval_at": "2026-11-10T00:00:00Z",
+      "license_rights": "synthetic test fixture"
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "s-revenue",
+      "section": "Evidence",
+      "role": "insight",
+      "action_title": "Supplied revenue reached 1,234,567.89 EUR in October",
+      "body": "This synthetic value exists only to test model fidelity.",
+      "claims": [
+        {
+          "claim_id": "claim-revenue-october",
+          "statement": "The fixture reports 1,234,567.89 EUR for October.",
+          "epistemic_status": "USER_PROVIDED",
+          "source_ids": ["synthetic:revenue-source"],
+          "units": "EUR",
+          "source_as_of": "2026-10-31"
+        }
+      ],
+      "data_refs": [
+        {
+          "data_ref_id": "data-revenue-october",
+          "value": 1234567.89,
+          "unit": "EUR",
+          "source_ids": ["synthetic:revenue-source"],
+          "as_of": "2026-10-31",
+          "denominator": "one month"
+        }
+      ],
+      "exhibits": [
+        {
+          "exhibit_id": "exhibit-revenue-october",
+          "slide_id": "s-revenue",
+          "visual_job": "show the supplied magnitude",
+          "visual_type": "single-value-callout",
+          "supported_data": ["data-revenue-october"],
+          "provenance": {"source_ids": ["synthetic:revenue-source"]},
+          "units": "EUR",
+          "as_of": "2026-10-31",
+          "uncertainty": "Synthetic example; not company data.",
+          "annotations": ["Synthetic fixture"],
+          "alternative_text": "A single callout showing 1,234,567.89 EUR.",
+          "editability": "EDITABLE_NATIVE",
+          "capability_status": "AVAILABLE",
+          "execution_status": "NOT_ATTEMPTED"
+        }
+      ],
+      "layout": {
+        "layout_id": "single-metric-proof",
+        "tokens": {"grid": "12-column", "accent": "evidence", "font_scale": 1.25}
+      },
+      "notes": "Keep the synthetic-data caveat when reusing this fixture.",
+      "provenance": {
+        "source_ids": ["synthetic:revenue-source"],
+        "source_pack_refs": ["synthetic:brief-001"],
+        "as_of": "2026-10-31"
+      },
+      "desired_editability": "NATIVE_REQUIRED",
+      "reader_question": "What value did the fixture provide?",
+      "transition": "Move from the data point to its interpretation.",
+      "visual_role": "evidence",
+      "proof_required": ["source and unit remain attached"],
+      "alternative_text": "Synthetic revenue example with a dated EUR value.",
+      "output_state": "SPECIFIED"
+    }
+  ]
+}
