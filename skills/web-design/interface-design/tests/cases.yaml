@@ -87,6 +87,7 @@ cases:
         - infer that the current request refers to the earlier onboarding flow without an explicit reference
         - use earlier turns in this chat to supply any missing screen, user/task or target-runtime input
         - invent a product or screen context from an unrelated chat, saved memory, or ambient history
+        - add reasoning, summary, acknowledgment, or any other text before or after the exact clarification question
 
   - id: interface-design-accessibility-edge
     case: unavailable-data-and-permission-state

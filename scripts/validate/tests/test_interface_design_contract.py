@@ -26,7 +26,7 @@ class InterfaceDesignContractTests(unittest.TestCase):
 
     def test_candidate_identity_and_explicit_opening_article(self):
         self.assertEqual("interface-design", self.metadata["name"])
-        self.assertEqual("0.1.19", self.metadata["metadata"]["version"])
+        self.assertEqual("0.1.20", self.metadata["metadata"]["version"])
         self.assertEqual("candidate", self.metadata["metadata"]["maturity"])
         self.assertIn(
             "I’ll use interface-design for the <screen or flow name>.", self.body
@@ -72,9 +72,13 @@ class InterfaceDesignContractTests(unittest.TestCase):
             "who will use it and what task should they complete, and should it "
             "target mobile, desktop, or a specific runtime?"
         )
-        self.assertIn("copy and return this plain-text line verbatim and alone", self.body)
+        self.assertIn("this one plain-text line, copied verbatim", self.body)
         self.assertIn(f"\n{exact_question}\n", self.body)
-        self.assertIn("no quotation marks, code formatting, introduction, translation, paraphrase", self.body)
+        self.assertIn("no quotation marks, code formatting, introduction, reasoning, summary", self.body)
+        self.assertIn("translation, paraphrase, or other text", self.body)
+        self.assertIn("Quoted-current-message priority", self.body)
+        self.assertIn("Do not acknowledge, summarize, or use any screen", self.body)
+        self.assertIn("Do not write anything before or after the question", self.body)
 
 
 if __name__ == "__main__":
