@@ -30,7 +30,7 @@ const args = [
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input',
   '--user', '10001:10001', '--env', 'HOME=/tmp',
-  '--env', 'CHROME_NO_SANDBOX=1', '--env', 'PUPPETEER_HEADLESS_MODE=shell',
+  '--env', 'CHROME_NO_SANDBOX=1', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'DEBUG=marp-cli:browser,puppeteer:protocol',
   '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
   '-v', input + ':/work/input:ro',
   '-v', output + ':/work/output:rw',
@@ -43,6 +43,10 @@ const args = [
   '--output', '/work/output/base-editable.pptx',
 ];
 function classify(stderr) {
+  if (/Page\\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_OPERATION';
+  if (/Page\\.navigate/i.test(stderr)) return 'NAVIGATION_OPERATION';
+  if (/waitForNetworkIdle/i.test(stderr)) return 'NETWORK_IDLE_OPERATION';
+  if (/setContent/i.test(stderr)) return 'CONTENT_SETUP_OPERATION';
   if (/Navigation timeout of \d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
   if (/Timed out after waiting \d+ms/i.test(stderr)) return 'BROWSER_OPERATION_TIMEOUT';
   if (/Protocol error \(Page\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
@@ -56,7 +60,8 @@ async function run(args) {
     const child = spawn('docker', args, { shell: false, stdio: ['ignore', 'ignore', 'pipe'] });
     let stderr = '';
     child.stderr.setEncoding('utf8');
-    child.stderr.on('data', chunk => { stderr += chunk; });
+    child.stderr.setMaxListeners?.(2);
+    child.stderr.on('data', chunk => { if (stderr.length < 65536) stderr += chunk.slice(0, 65536 - stderr.length); });
     child.on('error', () => reject(new Error('DOCKER_SPAWN_FAILED')));
     child.on('close', code => code === 0 ? resolve() : reject(new Error(classify(stderr))));
   });
