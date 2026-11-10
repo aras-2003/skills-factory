@@ -1,6 +1,7 @@
 FROM ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
 USER root
 RUN set -eux; \
+  rm -f /etc/apt/sources.list.d/*; \
   printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/%s bookworm main\n' "20261109T000000Z" > /etc/apt/sources.list; \
   printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/%s bookworm-updates main\n' "20261109T000000Z" >> /etc/apt/sources.list; \
   printf 'deb [check-valid-until=no] https://snapshot.debian.org/archive/debian-security/%s bookworm-security main\n' "20261109T000000Z" >> /etc/apt/sources.list; \
