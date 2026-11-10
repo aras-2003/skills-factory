@@ -115,12 +115,16 @@ def normalize_legacy_deck(legacy: dict[str, Any]) -> tuple[dict[str, Any], list[
                 "visual_type": raw_exhibit.get("visual_type", raw_exhibit.get("type", "unspecified")),
                 "supported_data": copy.deepcopy(supported_data),
             }
-            for field in ("visual_job", "units", "as_of", "uncertainty", "annotations", "deterministic_renderer", "asset_id", "alternative_text", "editability", "capability_status", "execution_status"):
+            for field in ("visual_job", "units", "as_of", "uncertainty", "annotations", "deterministic_renderer", "asset_id", "editability", "capability_status"):
                 if field in raw_exhibit:
                     known_exhibit[field] = copy.deepcopy(raw_exhibit[field])
+            if "alternative_text" in raw_exhibit or "alt_text" in raw_exhibit:
+                known_exhibit["alternative_text"] = copy.deepcopy(raw_exhibit.get("alternative_text", raw_exhibit.get("alt_text")))
+            if "execution_status" in raw_exhibit or "renderer_execution_status" in raw_exhibit:
+                known_exhibit["execution_status"] = copy.deepcopy(raw_exhibit.get("execution_status", raw_exhibit.get("renderer_execution_status")))
             if isinstance(raw_exhibit.get("provenance"), dict):
                 known_exhibit["provenance"] = copy.deepcopy(raw_exhibit["provenance"])
-            known_fields = {"exhibit_id", "id", "slide_id", "visual_type", "type", "supported_data", "visual_job", "units", "as_of", "uncertainty", "annotations", "deterministic_renderer", "asset_id", "alternative_text", "editability", "capability_status", "execution_status", "provenance"}
+            known_fields = {"exhibit_id", "id", "slide_id", "visual_type", "type", "supported_data", "visual_job", "units", "as_of", "uncertainty", "annotations", "deterministic_renderer", "asset_id", "alternative_text", "alt_text", "editability", "editability_expected", "capability_status", "execution_status", "renderer_execution_status", "provenance"}
             extra = {key: copy.deepcopy(value) for key, value in raw_exhibit.items() if key not in known_fields}
             if extra:
                 known_exhibit["extensions"] = {"legacy_fields": extra}
@@ -157,6 +161,16 @@ def normalize_legacy_deck(legacy: dict[str, Any]) -> tuple[dict[str, Any], list[
             warnings.append(f"{slide['slide_id']}: legacy reference IDs preserved; claim objects/data references were not inferred")
         if "editability" in old or "editability_expected" in old:
             warnings.append(f"{slide['slide_id']}: legacy editability preserved only in legacy_source; desired_editability left UNKNOWN")
+        known_slide_fields = {
+            "slide_id", "id", "section", "role", "action_title", "headline", "body", "claims", "claim_ids", "data_refs",
+            "source_ids", "source_finding_ids", "source_option_ids", "exhibits", "exhibit_specs", "layout", "layout_id", "notes",
+            "speaker_notes", "provenance", "desired_editability", "editability", "editability_expected", "reader_question", "transition",
+            "visual_role", "proof_required", "source_line", "alternative_text", "output_state",
+        }
+        extra_slide_fields = {key: copy.deepcopy(value) for key, value in old.items() if key not in known_slide_fields}
+        if extra_slide_fields:
+            slide["extensions"]["legacy_extra_fields"] = extra_slide_fields
+            warnings.append(f"{slide['slide_id']}: unsupported legacy slide fields preserved: {', '.join(sorted(extra_slide_fields))}")
         normalized_slides.append(slide)
     normalized["slides"] = normalized_slides
     root_extensions = copy.deepcopy(legacy.get("extensions", {})) if isinstance(legacy.get("extensions", {}), dict) else {}
