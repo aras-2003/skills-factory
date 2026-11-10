@@ -2,6 +2,7 @@
 """Create conservative native/editable PPTX from canonical DeckSpec v1."""
 import json, sys
 from pathlib import Path
+import collections.abc
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
