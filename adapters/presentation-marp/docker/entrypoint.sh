@@ -26,7 +26,12 @@ if [ "${1:-}" != sf-render ] || [ -z "$mode" ]; then echo 'invalid renderer comm
 cd /work/input
 case "$mode" in
   html) node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html ;;
-  pdf) node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html || { echo SF_PDF_STAGE:html_generation >&2; exit 1; }; slide_count=$(node -p "require('./deck.json').slides.length") || { echo SF_PDF_STAGE:slide_count >&2; exit 1; }; node /usr/local/bin/sf-render-pdf.cjs /work/output/deck.html /work/output/deck.pdf "$slide_count" ;;
+  pdf)
+    command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice is required for searchable PDF export' >&2; exit 30; }
+    node /home/marp/.cli/marp-cli.js deck.md --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-pdf-source.pptx || { echo SF_PDF_STAGE:pptx_generation >&2; exit 1; }
+    libreoffice --headless --convert-to pdf --outdir /work/output /work/output/deck-pdf-source.pptx || { echo SF_PDF_STAGE:libreoffice_conversion >&2; exit 1; }
+    mv /work/output/deck-pdf-source.pdf /work/output/deck.pdf
+    rm /work/output/deck-pdf-source.pptx ;;
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
     command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required' >&2; exit 30; }
