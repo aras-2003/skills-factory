@@ -46,12 +46,11 @@ export async function preflight(mode, { docker = 'docker', image = IMAGE } = {})
   let runtime;
   try { runtime = JSON.parse(checks.stdout); } catch { throw new AdapterError('RUNTIME_IDENTITY_INVALID', 'Pinned renderer returned an invalid runtime identity.'); }
   if (runtime.marp !== '4.5.1' || runtime.node !== '26.8.1') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', `Expected Marp 4.5.1 and Node 26.8.1; received Marp ${String(runtime.marp)} and Node ${String(runtime.node)}.`);
-  if (mode === 'pptx_flattened' && (!runtime.browser || !runtime.browser_sha256)) throw new AdapterError('BLOCKED_MISSING_RUNTIME', `The ${mode} mode requires the pinned Chromium browser runtime.`);
-  if (mode === 'pptx_flattened' && runtime.browser_path !== '/usr/local/bin/chrome') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'Pinned Chromium executable path does not match the locked runtime.');
+  if (['pptx_flattened', 'pptx_editable_experimental'].includes(mode) && (!runtime.browser || !runtime.browser_sha256)) throw new AdapterError('BLOCKED_MISSING_RUNTIME', `The ${mode} mode requires the pinned Chromium browser runtime.`);
+  if (['pptx_flattened', 'pptx_editable_experimental'].includes(mode) && runtime.browser_path !== '/usr/local/bin/chrome') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'Pinned Chromium executable path does not match the locked runtime.');
   if (mode === 'pdf' && !runtime.weasyprint) throw new AdapterError('BLOCKED_MISSING_RUNTIME', 'PDF export requires the pinned WeasyPrint runtime; no fallback was produced.');
   if (mode === 'pdf' && (runtime.weasyprint !== '57.2' || runtime.weasyprint_package !== '57.2-1')) throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'PDF export requires the locked WeasyPrint 57.2 runtime.');
   if (mode === 'pptx_editable_experimental' && !runtime.libreoffice) throw new AdapterError('BLOCKED_MISSING_RUNTIME', 'Experimental editable PPTX requires LibreOffice Impress to verify the generated file; no fallback was produced.');
-  if (mode === 'pptx_editable_experimental' && runtime.python_pptx !== '0.6.21') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'Experimental editable PPTX requires the locked python-pptx 0.6.21 runtime.');
   if (mode === 'pptx_editable_experimental' && (!runtime.libreoffice.startsWith('7.4.7') || runtime.libreoffice_package !== '4:7.4.7-1+deb12u14')) throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'Experimental editable PPTX requires the locked LibreOffice 7.4.7 runtime.');
   runtime.adapter_image_id = imageInfo.stdout.trim();
   return runtime;
