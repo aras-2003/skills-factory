@@ -11,7 +11,7 @@ RUN set -eux; \
     libreoffice-impress=4:7.4.7-1+deb12u14 \
     poppler-utils imagemagick fontconfig fonts-liberation tesseract-ocr=5.3.0-2 tesseract-ocr-eng=1:4.1.0-2 python3=3.11.2-1+b1 python3-pip python3-lxml python3-pil ca-certificates weasyprint=57.2-1; \
   python3 -m pip install --break-system-packages --no-deps --no-cache-dir python-pptx==0.6.21; \
-  python3 -c 'import pptx; assert pptx.__version__ == "0.6.21"'; \
+  python3 -c 'import collections.abc, pptx; assert pptx.__version__ == "0.6.21"'; \
   rm -rf /var/lib/apt/lists/*; \
   fc-cache -f
 COPY docker/entrypoint.sh /usr/local/bin/sf-renderer
