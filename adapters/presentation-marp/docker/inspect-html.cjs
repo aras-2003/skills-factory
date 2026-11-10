@@ -1,0 +1,30 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const candidates = ['/home/marp/.cli/node_modules', '/usr/local/lib/node_modules', '/usr/lib/node_modules'];
+let puppeteer;
+for (const base of candidates) { try { puppeteer = require(require.resolve('puppeteer-core', { paths: [base] })); break; } catch {} }
+if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the renderer image');
+(async () => {
+  const html = path.resolve(process.argv[2]); const output = path.resolve(process.argv[3]); const count = Number(process.argv[4]);
+  fs.mkdirSync(output, { recursive: true });
+  const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: ['--no-sandbox','--disable-dev-shm-usage'] });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
+    await page.setRequestInterception(true);
+    page.on('request', request => { const url = request.url(); if (url.startsWith('file:') || url.startsWith('data:')) request.continue(); else request.abort(); });
+    await page.goto(`file://${html}`, { waitUntil: 'networkidle0', timeout: 30000 });
+    const countFound = await page.$$eval('section', nodes => nodes.length);
+    if (countFound !== count) throw new Error(`Expected ${count} rendered slides, got ${countFound}`);
+    const records = [];
+    const allText = await page.$$eval('section', nodes => nodes.map(node => node.innerText).join('\n'));
+    for (const required of ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12 percent','18 percent','src-synthetic','2026-Q1','2026-Q2']) if (!allText.toLowerCase().includes(required.toLowerCase())) throw new Error(`Rendered HTML is missing expected content: ${required}`);
+    for (let i=0; i<countFound; i++) {
+      await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.display = n === index ? 'flex' : 'none'; }); }, i);
+      const png = path.join(output, `html-slide-${String(i+1).padStart(2,'0')}.png`);
+      await page.screenshot({ path: png, fullPage: false });
+      const box = await page.$$eval('section', (nodes,index) => ({ width: nodes[index].offsetWidth, height: nodes[index].offsetHeight }), i);
+      records.push({ slide: i+1, screenshot: path.basename(png), ...box });
+    }
+    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText}, null, 2)+'\n');
+  } finally { await browser.close(); }
+})();
