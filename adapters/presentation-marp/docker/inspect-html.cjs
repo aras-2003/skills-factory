@@ -16,7 +16,7 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     const countFound = await page.$$eval('section', nodes => nodes.length);
     if (countFound !== count) throw new Error(`Expected ${count} rendered slides, got ${countFound}`);
     const records = [];
-    const allText = await page.$$eval('section', nodes => nodes.map(node => node.innerText).join('\n').replace(/\\s+/g, ' ').trim());
+    const allText = await page.$$eval('section', nodes => nodes.map(node => node.innerText).join('\n').replace(/\s+/g, ' ').trim());
     for (const required of ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12 percent','18 percent','src-synthetic','2026-Q1','2026-Q2']) if (!allText.toLowerCase().includes(required.toLowerCase())) throw new Error(`Rendered HTML is missing expected content: ${required}`);
     for (let i=0; i<countFound; i++) {
       await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.display = n === index ? 'flex' : 'none'; }); }, i);
