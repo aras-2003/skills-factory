@@ -26,8 +26,8 @@ if [ "${1:-}" != sf-render ] || [ -z "$mode" ]; then echo 'invalid renderer comm
 cd /work/input
 case "$mode" in
   html) node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html ;;
-  pdf) node /home/marp/.cli/marp-cli.js deck.md --pdf --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pdf ;;
-  pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
+  pdf) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pdf --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pdf ;;
+  pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
     command -v libreoffice >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: LibreOffice Impress is required' >&2; exit 30; }
     node /home/marp/.cli/marp-cli.js deck.md --pptx --pptx-editable --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-editable.pptx ;;
