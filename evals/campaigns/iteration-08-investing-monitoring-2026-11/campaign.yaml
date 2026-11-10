@@ -58,8 +58,8 @@ test_modules:
   - scripts/eval/tests/test_runtime_campaign.py
 source_sha256:
   CATALOG.md: "568aa330ccfa3bdedbaa5e7065b86d30e2e589f4a85d7bad35993de7034ce8ae"
-  adapters/skills-factory-cloud-next/src/cloud-tools.ts: "1ec4cb42e0c6c1aa0569e2fbca8338d0375e1c48051f4c7aaf265fcca2ab9f67"
-  adapters/skills-factory-cloud-next/tests/contracts.test.ts: "9efe43384e992e09388d86631c6d5a8f33039c073deeb01b4420026d7f7f7d4b"
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: "622ac6fa557a8d98809d75cac6a188838ed9f6cc9bedd8382b13e640e079edd5"
+  adapters/skills-factory-cloud-next/tests/contracts.test.ts: "b6a39aa3eb75e60678e94b893a099e00c73796a49d005daeb771110a532f9a4e"
   docs/catalog.json: "e35dbf84ecac2da2ff32316075fd791c2ba9ccf3a0bea227cda190fe1bba2cc4"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml: "c2c406b56460ae809a44db3d31cf3f47a3b761fe6c62a66d55e0184c60e08787"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml: "de76470d524da9a44c1466a42a23311dbecbf5147a5454f636505be1feec535c"
