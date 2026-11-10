@@ -21,8 +21,10 @@ with zipfile.ZipFile(path) as zf:
     slide_texts = [s['action_title'] for s in expected['slides']]
     if len(slides) != len(expected['slides']): raise SystemExit('slide count mismatch')
     if mode == 'pptx_editable_experimental':
+        normalized_text = re.sub(r'\\s+', ' ', text)
         for title in slide_texts:
-            if title not in text: raise SystemExit('editable slide title missing from OOXML')
+            title_pattern = r'\\s*'.join(re.escape(word) for word in title.split())
+            if not re.search(title_pattern, normalized_text): raise SystemExit('editable slide title missing from OOXML')
     if size is None or int(size.attrib['cx']) / int(size.attrib['cy']) < 1.77 or int(size.attrib['cx']) / int(size.attrib['cy']) > 1.78: raise SystemExit('slide size is not 16:9')
     if mode == 'pptx_flattened' and not all(count > 0 for count in image_slides): raise SystemExit('flattened PPTX must contain image-backed slide content')
     if mode == 'pptx_editable_experimental' and not all(count > 0 for count in shapes): raise SystemExit('editable PPTX contains no native shapes')
@@ -38,5 +40,5 @@ with zipfile.ZipFile(path) as zf:
     if mode == 'pptx_editable_experimental':
         for slide in expected['slides']:
             for datum in slide.get('data_refs', []):
-                if str(datum.get('value')) not in text or (datum.get('unit') and datum['unit'] not in text): raise SystemExit(f"editable slide missing data or units: {datum['data_ref_id']}")
+                if str(datum.get('value')) not in normalized_text or (datum.get('unit') and datum['unit'] not in normalized_text): raise SystemExit(f"editable slide missing data or units: {datum['data_ref_id']}")
     print(json.dumps(report, indent=2))
