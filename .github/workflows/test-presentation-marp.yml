@@ -66,6 +66,8 @@ jobs:
       - name: Verify missing browser blocks browser-backed modes
         working-directory: adapters/presentation-marp
         run: node scripts/assert-missing-runtime.mjs
+      - name: Verify base Marp editable runtime
+        run: node adapters/presentation-marp/scripts/assert-base-editable.mjs .tmp/presentation-marp-evidence/base-editable
       - name: Isolate editable export from fixture complexity
         run: node adapters/presentation-marp/scripts/assert-minimal-editable.mjs .tmp/presentation-marp-evidence/minimal-editable
       - name: Generate, reopen and inspect all output modes
