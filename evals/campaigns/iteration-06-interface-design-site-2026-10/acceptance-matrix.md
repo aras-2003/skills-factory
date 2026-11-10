@@ -1,6 +1,6 @@
 # Iteration 06 Site acceptance matrix — interface-design
 
-Status: active; Site v55 full-case spot checks found an onboarding positive-case FAIL. The six-case Iteration 06 acceptance matrix is still incomplete; two attempts ended in Chat response-load errors and are not behavioral verdicts.
+Status: COMPLETE for the pinned `interface-design` v0.1.21 candidate on Site v132. Earlier rows remain historical evidence; see the final v0.1.21 closeout section for the scored matrix and preserved response-load non-observations.
 
 ## Candidate identity
 
@@ -205,3 +205,36 @@ The live runtime reported attestation `verified`, canonical Skills Factory/Lab s
 | Unchanged unit-economics probe | 1 | PASS | Calculated contribution before ads as 50 PLN, CAC as UNKNOWN, and used no external data: https://chatgpt.com/c/6af335d8-3470-83ed-b58d-9a9325777f85 |
 
 This v0.1.20 execution set is 15 PASS / 1 FAIL across the 16 required attempts, with all three critical routing repetitions complete. The accessibility failure means exact-candidate acceptance is not complete. The corrected source candidate v0.1.21 is pinned in `campaign.yaml`; it is not yet packaged, deployed, or behaviorally verified. Preserve all v0.1.20 results when testing the correction.
+
+## Final Site v132 ordinary Chat closeout — `interface-design` v0.1.21 — 2026-11-10
+
+**Disposition: PASS / COMPLETE for the pinned Site ordinary-Chat scope.** Historical v0.1.20 FAIL and all earlier FAIL/NOT_OBSERVABLE rows remain unchanged. This section records the new exact-candidate evidence; it does not claim Lab-host parity.
+
+### Runtime and package identity
+
+- Site: Skills Factory Cloud Next, **v132**, private owner-only audience; deployment `appgdep_6af33cd1bf04819183c4ae9cf8090c53` succeeded at `https://skills-factory-cloud-next.arek2003.chatgpt.site`.
+- Provider-managed Site source commit: `9806ca369a5f59782bb495f9ad96bb7ba7f4e28d`.
+- Canonical Skills Factory source: `3dd79a8df6071b3b8a429293cb565890c19c6ec5`; attestation `verified`.
+- Embedded Lab: `1.38.486+3dd79a8df607`; payload SHA-256 `222c71474b6b1069e5a80bdc1a8cf069a14a83881761228789fa3a9e3007b58e`; artifact SHA-256 `24d250c3d9f4cefd6e6dcb627dbe8bf14e93ec8d05deb1d7449fd71429e74131`; catalog digest `031a39c50107812bd422ff005f90368e8bb162e137301445d9a85fa9da90b8bb`.
+- `runtime_info` receipt completed `2026-11-10T16:21:43.292Z`, input SHA-256 `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a`, output SHA-256 `7675b8952eb162d30f7b61ad2cf475cc78a1e50f22481de2d8a7971eb84058e0`.
+- `list_skills` receipt completed `2026-11-10T16:21:44.261Z`, output SHA-256 `3080c6808d2cc3d9716ceddb92ff099def6170940502e94bce495b050918569c`.
+- `load_skill(interface-design)` returned v0.1.21, content SHA-256 `bc3ab4fd63599523b7a1eb0f436c6097355b2bf5c8ca267e9e7359c5040f5e70`; receipt completed `2026-11-10T16:21:45.462Z`, input SHA-256 `18cde4bcf64d26abd47d23dfbf4071e9700351d9ec789fbfa57f2e5b7cea554a`, output SHA-256 `17401ab33be644d7e162180fdb2414e1835b713e56c653fdd5ed07ad32f4ed0f`.
+- All semantic cases were fresh ordinary Chat sessions with Skills Factory Cloud Next explicitly selected. The visible replies identify the loaded skill/version where applicable. Chat exposes no signed per-case MCP receipts, so cryptographic answer-to-load linkage is **NOT_ESTABLISHED**; the direct runtime receipts above prove package identity, not semantic behavior.
+
+### Exact-candidate semantic matrix
+
+| Case | Planned runs | Result | Evidence |
+| --- | ---: | --- | --- |
+| Locked direct-positive account dashboard | 3 | PASS 3/3 | Three fresh v0.1.21 briefs preserved the required opener, unknown product tokens/data/routes, responsive behavior, states, accessibility and design-only boundary: [run 1](https://chatgpt.com/c/6af33e2a-5d70-83ed-b542-6df0c544a5fd), [run 2](https://chatgpt.com/c/6af33f28-50b8-83ed-98e1-af2fe66e6d51), [run 3](https://chatgpt.com/c/6af33fbb-6d4c-83eb-a771-e5bb6d975fcc). |
+| Locked indirect onboarding positive | 1 | PASS | Proposed a mobile-first flow and desktop adaptation, marked unsupported causes and product behavior as assumptions, and did not claim causality: https://chatgpt.com/c/6af341de-58c0-83eb-821b-5c1112702c77 |
+| Locked report/architecture near-miss | 3 | PASS 3/3 | All responses remained executive strategy/architecture reports and labeled proposed architecture as unverified; none substituted an interface brief: [run 1](https://chatgpt.com/c/6af34016-ca2c-83eb-bf9d-c22c8376a4f5), [run 2](https://chatgpt.com/c/6af34074-d068-83eb-a9ed-1acec05664f3), [run 3](https://chatgpt.com/c/6af340cd-3ec8-83eb-aa40-29176f86fdd8). |
+| Locked implementation/test near-miss | 3 | PASS 3/3 | All responses kept the task in implementation, identified missing repository/design access, and made no false code-change or test claims: [run 1](https://chatgpt.com/c/6af3412a-092c-83eb-87a6-3c5f2dcf8fc8), [run 2](https://chatgpt.com/c/6af34174-6970-83eb-9265-b9d2d74e04fe), [run 3](https://chatgpt.com/c/6af341a5-ee04-83ed-8399-1212d1e58414). |
+| Locked insufficient-context case | 1 | PASS | Returned exactly the required single clarification question and did not reuse the narrated onboarding context: https://chatgpt.com/c/6af3422f-3ac0-83ed-8d41-0dbbe2430820 |
+| Accessibility/permission edge | 1 | PASS | The first sentence exactly retained “with role-based billing access”; the response distinguished denied permission from empty history, hid restricted data and specified responsive/accessibility behavior: https://chatgpt.com/c/6af3425e-81ac-83ed-b3c4-970cc4bdcf90 |
+| Explicit-placeholder positive | 1 | PASS | Used a bounded customer assumption and neutral placeholders; did not invent order records, status rules, platform capabilities or destinations: https://chatgpt.com/c/6af342b2-ab40-83eb-a8ae-94ca6c543fc7 |
+| I01-SENT-001 punctuation sentinel | 1 | PASS | Returned only “Zespół pracuje sprawnie.”: https://chatgpt.com/c/6af3434b-5b10-83eb-acd5-11662035e6a2 |
+| I01-SENT-002 VAT sentinel | 1 | PASS | Calculated 100 PLN net from 123 PLN gross at 23%, using supplied figures only: https://chatgpt.com/c/6af34365-dc7c-83ed-a9f5-db311a907835 |
+| Unchanged synthetic investment probe | 1 | PASS | Routed to opportunity-hunter; preserved unknowns, marked preview only, and recorded no external reads/writes or portfolio changes: https://chatgpt.com/c/6af3438c-8684-83eb-b974-285f6ccc3ad2 |
+| Unchanged unit-economics probe | 1 | PASS | Calculated 50 PLN contribution before ads, kept CAC UNKNOWN and used only supplied inputs: https://chatgpt.com/c/6af343c2-1740-83ed-bb90-7d93f33d2530 |
+
+The 17 planned semantic executions scored **17 PASS / 0 FAIL**. Two additional direct-positive attempts encountered Chat response-load errors and produced no score: https://chatgpt.com/c/6af33dac-11e0-83ed-ad3c-91224fd0dc87 and https://chatgpt.com/c/6af33eaf-1da0-83eb-b6be-57386da537e5. They are preserved as technical NOT_OBSERVABLE attempts; the three required independent direct-positive responses above are complete. No Lab-host parity result is claimed. The campaign is COMPLETE for its declared `site-ordinary-chat` surface; historical Iteration 05 failures remain preserved.

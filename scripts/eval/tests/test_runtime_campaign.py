@@ -140,6 +140,24 @@ class RuntimeCampaignTests(unittest.TestCase):
         fixtures = yaml.safe_load((ROOT / "evals/runtime-fixtures.yaml").read_text(encoding="utf-8"))
         self.assertNotIn("interface-design", fixtures["targets"])
 
+    def test_completed_interface_design_campaign_remains_isolated_from_frozen_r20(self) -> None:
+        relative = Path("evals/campaigns/iteration-06-interface-design-site-2026-10/campaign.yaml")
+        path = "skills/web-design/interface-design/SKILL.md"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            (temp_root / relative).parent.mkdir(parents=True)
+            config = yaml.safe_load((ROOT / relative).read_text(encoding="utf-8"))
+            config["state"] = "COMPLETE"
+            (temp_root / relative).write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
+            for source in (
+                Path(path),
+                Path("skills/web-design/interface-design/tests/cases.yaml"),
+            ):
+                destination = temp_root / source
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / source, destination)
+            self.assertEqual({path}, campaign.separately_validated_interface_design_paths(temp_root))
+
     def test_design_critique_candidate_isolated_from_frozen_r20(self) -> None:
         path = "skills/web-design/design-critique/SKILL.md"
         self.assertEqual({path}, campaign.separately_validated_design_critique_paths(ROOT))
