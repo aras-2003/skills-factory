@@ -189,7 +189,7 @@ const routes = ["investment-portfolio-observation", "investment-portfolio-review
 export function routeInvestment(userRequest: string) {
   const editingOnly = /^(?:fix|correct|proofread|edit)\s+(?:(?:only|just)\s+)?(?:the\s+)?(?:punctuation|grammar|spelling)\b/i.test(userRequest.trim());
   const s = userRequest.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l")
-    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;,:\n]*/g, "")
+    .replace(/\b(?:do not|don't|not|without|nie)\b[^.!?;:\n]*/g, "")
     // Polish exclusion lists commonly separate items with commas after "bez".
     .replace(/\bbez\b[^.!?;:\n]*/g, "");
   const explicit = routes.filter(r => s.includes(r));
