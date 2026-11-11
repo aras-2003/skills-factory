@@ -38,7 +38,7 @@ const args = [
   image,
   '/home/marp/.cli/marp-cli.js',
   '/work/input/deck.md', '--theme-set', './sf-editorial.css',
-  ...(process.env.SF_MARP_BROWSER === 'firefox' ? ['--browser', 'firefox', '--browser-path', '/usr/bin/firefox-esr'] : []),
+  ...(process.env.SF_MARP_BROWSER === 'firefox' ? ['--browser', 'firefox', '--browser-path', '/opt/firefox/firefox/firefox'] : []),
   '--browser-timeout', '90',
   '--pptx', '--pptx-editable', '--allow-local-files', '--browser-protocol', process.env.SF_MARP_BROWSER_PROTOCOL ?? 'cdp',
   '--output', '/work/output/base-editable.pptx',
