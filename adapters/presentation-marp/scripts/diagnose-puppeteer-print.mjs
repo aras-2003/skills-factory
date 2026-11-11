@@ -34,7 +34,7 @@ const classify = message => {
   try {
     browser = await puppeteer.launch({
       executablePath: '/usr/local/bin/chrome',
-      headless: true,
+      headless: process.env.PUPPETEER_HEADLESS_MODE === 'shell' ? 'shell' : true,
       args: ['--no-sandbox'],
       timeout: 30000,
     });
@@ -72,7 +72,7 @@ const args = [
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input', '--user', '10001:10001',
-  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config',
+  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'PUPPETEER_HEADLESS_MODE=shell',
   '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', 'node', image, '/work/input/probe.cjs',
