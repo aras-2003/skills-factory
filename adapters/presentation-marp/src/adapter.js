@@ -55,9 +55,10 @@ function themeById(id) {
   if (!theme) throw new AdapterError('UNKNOWN_THEME','Select a theme ID from the bundled registry.');
   return theme;
 }
-function buildThemeCss(theme) {
+export function buildThemeCss(theme) {
   const t=theme.tokens;
-  const css=readFileSync(path.join(HERE,'../themes/layouts.css'),'utf8');
+  const layoutFile=theme.id==='sf-marp-editable-safe'?'layouts-editable-safe.css':'layouts.css';
+  const css=readFileSync(path.join(HERE,'../themes',layoutFile),'utf8');
   const values={canvas:t.canvas,ink:t.ink,muted:t.muted,accent:t.accent,rule:t.rule,'font-display':t.font_display,'font-body':t.font_body,'font-label':t.font_label,'grid-width':t.grid_width,'space-unit':t.space_unit};
   const vars=Object.entries(values).map(([key,value])=>'  --sf-'+key+': '+value+';').join('\n');
   const enhancement=theme.css_complexity==='progressive'
