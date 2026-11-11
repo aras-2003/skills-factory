@@ -80,9 +80,9 @@ try {
   await run();
   const file = await stat(path.join(output, 'base-marp.pdf'));
   if (!file.isFile() || file.size === 0) throw new Error('EMPTY_OUTPUT');
-  console.log(JSON.stringify({ state: 'PASS', output: 'base-marp.pdf', size_bytes: file.size }));
+  const report = { state: 'PASS', output: 'base-marp.pdf', size_bytes: file.size };\n  await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');\n  console.log(JSON.stringify(report));
 } catch (error) {
-  console.error(JSON.stringify({ state: 'FAIL', classification: String(error.message) }));
+  const report = { state: 'FAIL', classification: String(error.message) };\n  await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');\n  console.error(JSON.stringify(report));
   process.exitCode = 1;
 } finally {
   await rm(root, { recursive: true, force: true });
