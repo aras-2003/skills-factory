@@ -47,12 +47,29 @@ const classify = message => {
     stage = 'animation_frame';
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => resolve())));
     stage = 'print_to_pdf';
-    const pdf = await page.pdf({
-      printBackground: true,
-      preferCSSPageSize: true,
-      width: '1280px',
-      height: '720px',
-    });
+    let pdf;
+    if (process.env.SF_PDF_TRANSFER_MODE === 'base64') {
+      const client = await page.createCDPSession();
+      try {
+        const response = await client.send('Page.printToPDF', {
+          transferMode: 'ReturnAsBase64',
+          printBackground: true,
+          preferCSSPageSize: true,
+          paperWidth: 1280 / 96,
+          paperHeight: 720 / 96,
+        });
+        pdf = Buffer.from(response.data, 'base64');
+      } finally {
+        await client.detach();
+      }
+    } else {
+      pdf = await page.pdf({
+        printBackground: true,
+        preferCSSPageSize: true,
+        width: '1280px',
+        height: '720px',
+      });
+    }
     stage = 'write_pdf';
     fs.writeFileSync('/work/output/puppeteer-probe.pdf', pdf);
     process.stdout.write(JSON.stringify({ state: 'PASS' }));
@@ -75,7 +92,7 @@ const args = [
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input', '--user', '10001:10001',
-  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'XDG_CONFIG_HOME=/tmp/.chromium-config', '--env', 'XDG_CACHE_HOME=/tmp/.chromium-cache', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
+  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'XDG_CONFIG_HOME=/tmp/.chromium-config', '--env', 'XDG_CACHE_HOME=/tmp/.chromium-cache', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'SF_PDF_TRANSFER_MODE=' + (process.env.SF_PDF_TRANSFER_MODE === 'base64' ? 'base64' : 'stream'), '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
   '--tmpfs', tempMount,
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', 'node', image, '/work/input/probe.cjs',
