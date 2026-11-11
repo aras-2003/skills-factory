@@ -55,6 +55,7 @@ jobs:
           docker build --pull -f adapters/presentation-marp/docker/Dockerfile.no-browser \
             -t "$SF_MARP_NO_BROWSER_IMAGE" adapters/presentation-marp
           docker image inspect "$SF_MARP_NO_BROWSER_IMAGE" --format '{{.Id}}'
+          docker pull --quiet ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
       - name: Run adapter unit and input security tests
         working-directory: adapters/presentation-marp
         run: node --test
@@ -66,6 +67,14 @@ jobs:
       - name: Verify missing browser blocks browser-backed modes
         working-directory: adapters/presentation-marp
         run: node scripts/assert-missing-runtime.mjs
+      - name: Diagnose Marp PDF path in custom renderer
+        continue-on-error: true
+        run: node adapters/presentation-marp/scripts/diagnose-marp-pdf.mjs .tmp/presentation-marp-evidence/pdf-diagnostic-custom
+      - name: Diagnose Marp PDF path in upstream image
+        continue-on-error: true
+        env:
+          SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
+        run: node adapters/presentation-marp/scripts/diagnose-marp-pdf.mjs .tmp/presentation-marp-evidence/pdf-diagnostic-upstream
       - name: Verify base Marp editable runtime
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs .tmp/presentation-marp-evidence/base-editable
       - name: Isolate editable export from fixture complexity
