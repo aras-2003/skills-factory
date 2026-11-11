@@ -29,7 +29,7 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     if (controlsHidden < 1) throw new Error('HTML_PRESENTATION_CONTROLS_NOT_FOUND');
     const slides = await page.$$('section');
     for (let i=0; i<countFound; i++) {
-      await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.display = n === index ? 'flex' : 'none'; }); }, i);
+      await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.visibility = n === index ? 'visible' : 'hidden'; }); }, i);
       const slide = slides[i];
       const box = await slide.boundingBox();
       if (!box || Math.abs(box.width - 1280) > 1 || Math.abs(box.height - 720) > 1) {
