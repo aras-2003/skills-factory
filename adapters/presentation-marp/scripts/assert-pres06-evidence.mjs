@@ -1,0 +1,55 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFile, stat } from 'node:fs/promises';
+import path from 'node:path';
+
+const fixture=path.resolve(process.argv[2]); const output=path.resolve(process.argv[3]);
+if (!process.argv[2] || !process.argv[3]) throw new Error('Usage: node scripts/assert-pres06-evidence.mjs fixture.json evidence-dir');
+const deck=JSON.parse(await readFile(fixture,'utf8')); const digest=value=>createHash('sha256').update(value).digest('hex');
+const fixtureHash=digest(await readFile(fixture)); const modes=['html','pdf','pptx_flattened','pptx_editable_experimental'];
+const tableSlide=deck.slides.find(slide=>slide.exhibits.some(exhibit=>exhibit.visual_type==='table'));
+const table=tableSlide.exhibits.find(exhibit=>exhibit.visual_type==='table');
+const expectedRows=table.supported_data.map(id=>{const datum=tableSlide.data_refs.find(ref=>ref.data_ref_id===id);return {data_ref_id:id,value:datum.value,unit:datum.unit??null,as_of:datum.as_of??null,denominator:datum.denominator??null,source_ids:datum.source_ids??[]};});
+const chartSlide=deck.slides.find(slide=>slide.exhibits.some(exhibit=>exhibit.visual_type==='bar_chart'));
+const chart=chartSlide.exhibits.find(exhibit=>exhibit.visual_type==='bar_chart');
+const expectedPoints=chart.supported_data.map(id=>{const datum=chartSlide.data_refs.find(ref=>ref.data_ref_id===id);return {data_ref_id:id,value:datum.value,label:String(datum.label??id),unit:datum.unit??chart.units??'',as_of:datum.as_of??chart.as_of??null,denominator:datum.denominator??null,source_ids:datum.source_ids??[]};});
+const expectedProvenance=[{source_id:'src-pres06-synthetic',license_rights:'Original synthetic content; CC0-1.0',as_of:'2026-11-10',confidentiality:'PUBLIC'}];
+const diagramSlide=deck.slides.find(slide=>slide.exhibits.some(exhibit=>exhibit.visual_type==='architecture_diagram'));
+const diagramExhibit=diagramSlide.exhibits.find(exhibit=>exhibit.visual_type==='architecture_diagram');
+let sharedDiagramHash=null; let sharedChartHash=null;
+for (const mode of modes) {
+  const dir=path.join(output,mode); const receipt=JSON.parse(await readFile(path.join(dir,'receipt.json'),'utf8'));
+  assert.equal(receipt.requested_mode,mode); assert.equal(receipt.input_sha256,fixtureHash); assert.deepEqual(receipt.slide_ids,deck.slides.map(slide=>slide.slide_id));
+  assert.equal(receipt.security.network,'disabled'); assert.equal(receipt.security.external_asset_fetch,false);
+  const manifest=receipt.assets.find(asset=>asset.id==='synthetic-mark');
+  assert.ok(manifest); assert.equal(manifest.source_id,'src-pres06-synthetic'); assert.equal(manifest.license_rights,'CC0-1.0 synthetic fixture');
+  assert.equal(manifest.confidentiality,'PUBLIC'); assert.equal(manifest.owner,'Skills Factory'); assert.ok(manifest.alternative_text); assert.ok(manifest.as_of);
+  assert.equal(manifest.fallback_used,mode==='pptx_editable_experimental');
+  for(const file of [manifest.file,manifest.source_file,manifest.fallback.file]) assert.ok((await stat(path.join(dir,file))).isFile());
+  assert.equal(digest(await readFile(path.join(dir,manifest.source_file))),manifest.source_sha256);
+  assert.equal(digest(await readFile(path.join(dir,manifest.fallback.file))),manifest.fallback.sha256);
+  const svgAsset=receipt.assets.find(asset=>asset.generated==='deterministic-data-chart'); assert.ok(svgAsset);
+  assert.deepEqual(svgAsset.data,expectedPoints); assert.deepEqual(svgAsset.confidentiality,['PUBLIC']); assert.deepEqual(svgAsset.source_provenance,expectedProvenance); assert.equal(svgAsset.owner,'Skills Factory presentation-marp adapter'); assert.ok(svgAsset.alternative_text); assert.deepEqual(svgAsset.license_rights,[{source_id:'src-pres06-synthetic',license_rights:'Original synthetic content; CC0-1.0'}]);
+  assert.equal(digest(await readFile(path.join(dir,svgAsset.file))),svgAsset.sha256);
+  const chartSvg=await readFile(path.join(dir,svgAsset.file),'utf8');
+  for(const point of expectedPoints) { assert.ok(chartSvg.includes(String(point.value))); assert.ok(chartSvg.includes(point.unit)); assert.ok(chartSvg.includes(point.label)); }
+  if(sharedChartHash===null) sharedChartHash=svgAsset.sha256; else assert.equal(svgAsset.sha256,sharedChartHash);
+  const tableResult=receipt.derived_exhibits.find(item=>item.exhibit_id===table.exhibit_id); assert.ok(tableResult);
+  assert.deepEqual(tableResult.data,expectedRows); assert.deepEqual(tableResult.confidentiality,['PUBLIC']); assert.deepEqual(tableResult.source_provenance,expectedProvenance); assert.equal(tableResult.owner,'Skills Factory presentation-marp adapter'); assert.ok(tableResult.alternative_text); assert.deepEqual(tableResult.license_rights,[{source_id:'src-pres06-synthetic',license_rights:'Original synthetic content; CC0-1.0'}]);
+  const diagramResult=receipt.derived_exhibits.find(item=>item.exhibit_id===diagramExhibit.exhibit_id); assert.ok(diagramResult);
+  const diagramSource=receipt.diagram_sources.find(item=>item.exhibit_id===diagramExhibit.exhibit_id); assert.ok(diagramSource); assert.deepEqual(diagramSource.source_provenance,expectedProvenance); assert.equal(diagramSource.owner,'Skills Factory presentation-marp adapter'); assert.deepEqual(diagramSource.license_rights,[{source_id:'src-pres06-synthetic',license_rights:'Original synthetic content; CC0-1.0'}]); assert.ok(diagramSource.as_of.includes('2026-11-10'));
+  assert.equal(diagramResult.diagram_source_sha256,diagramSource.sha256); assert.deepEqual(JSON.parse(await readFile(path.join(dir,diagramSource.file),'utf8')),diagramExhibit.extensions.presentation_marp.diagram);
+  assert.equal(digest(await readFile(path.join(dir,diagramSource.file))),diagramSource.sha256);
+  const diagramAsset=receipt.assets.find(asset=>asset.generated==='deterministic-architecture-diagram'); assert.ok(diagramAsset); assert.deepEqual(diagramAsset.source_provenance,expectedProvenance); assert.equal(diagramAsset.owner,'Skills Factory presentation-marp adapter'); assert.ok(diagramAsset.alternative_text);
+  assert.equal(digest(await readFile(path.join(dir,diagramAsset.file))),diagramAsset.sha256);
+  const svg=await readFile(path.join(dir,diagramAsset.file),'utf8'); assert.match(svg,/<svg\b/); assert.doesNotMatch(svg,/<script\b|<foreignObject\b|\bon\w+\s*=|(?:href|src)\s*=|url\s*\(/i);
+  for(const node of diagramExhibit.extensions.presentation_marp.diagram.nodes) assert.ok(svg.includes(node.label));
+  if(sharedDiagramHash===null) sharedDiagramHash=diagramSource.sha256; else assert.equal(diagramSource.sha256,sharedDiagramHash);
+  const outputBytes=await readFile(path.join(dir,receipt.output)); assert.equal(digest(outputBytes),receipt.output_sha256);
+}
+const html=await readFile(path.join(output,'html','deck.html'),'utf8');
+for(const text of ['Synthetic quarterly growth','12','18','2026-Q1','2026-Q2','synthetic baseline','src-pres06-synthetic','Data reference','Table values match']) assert.ok(html.includes(text),`HTML missing ${text}`);
+const first=JSON.parse(await readFile(path.join(output,'html','receipt.json'),'utf8'));
+const repeated=JSON.parse(await readFile(path.join(output,'html-repeat','receipt.json'),'utf8'));
+assert.equal(first.output_sha256,repeated.output_sha256);
+console.log(JSON.stringify({state:'PASS',fixture_sha256:fixtureHash,modes,diagram_source_sha256:sharedDiagramHash,chart_svg_sha256:sharedChartHash,fallback_mode:'pptx_editable_experimental',source_classification:'PUBLIC'}));

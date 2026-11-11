@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, symlink, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { AdapterError, MODES, LAYOUTS, validateDeck, renderDeck, resolveLayout, validateThemeRegistry, contrastRatio, buildThemeCss, collectAssets, preflight, run, render } from '../src/adapter.js';
+import { AdapterError, MODES, LAYOUTS, validateDeck, renderDeck, renderDiagramSvg, renderBarChartSvg, resolveLayout, validateThemeRegistry, contrastRatio, buildThemeCss, collectAssets, preflight, run, render } from '../src/adapter.js';
 
-const deck = { schema_version:'1.0', slides:[{slide_id:'s1',action_title:'Quarterly view',claims:[],data_refs:[{data_ref_id:'q1',value:12,unit:'percent',source_ids:['synth']}],exhibits:[{exhibit_id:'e1',visual_type:'bar_chart',supported_data:['q1']}],layout:{layout_id:'data',tokens:{}},notes:'Never close --> comment',provenance:{},desired_editability:'PREFERRED'}] };
+const deck = { schema_version:'1.0', slides:[{slide_id:'s1',action_title:'Quarterly view',claims:[],data_refs:[{data_ref_id:'q1',value:12,unit:'percent',source_ids:['synth']}],exhibits:[{exhibit_id:'e1',visual_type:'bar_chart',supported_data:['q1'],alternative_text:'Synthetic quarterly chart'}],layout:{layout_id:'data',tokens:{}},notes:'Never close --> comment',provenance:{},desired_editability:'PREFERRED'}] };
 
 test('requires four explicit, non-interchangeable output modes', () => {
   assert.deepEqual([...MODES].sort(), ['html','pdf','pptx_editable_experimental','pptx_flattened'].sort());
@@ -14,7 +14,35 @@ test('requires four explicit, non-interchangeable output modes', () => {
 test('DeckSpec input has unique slide identifiers and supported exhibits', () => {
   validateDeck(deck);
   assert.throws(() => validateDeck({...deck,slides:[deck.slides[0],deck.slides[0]]}), e => e.code === 'INVALID_DECK');
-  assert.throws(() => validateDeck({...deck,slides:[{...deck.slides[0],exhibits:[{visual_type:'custom_html'}]}]}), e => e.code === 'UNSUPPORTED_EXHIBIT');
+  assert.throws(() => validateDeck({...deck,slides:[{...deck.slides[0],exhibits:[{exhibit_id:'bad',visual_type:'custom_html',supported_data:[]}]}]}), e => e.code === 'UNSUPPORTED_EXHIBIT');
+});
+
+test('architecture diagrams validate bounded graph structure and render deterministic passive SVG', () => {
+  const model={title:'Synthetic flow',nodes:[{id:'source',label:'Source'},{id:'model',label:'Canonical model'},{id:'output',label:'Output'}],edges:[{from:'source',to:'model',label:'validated'},{from:'model',to:'output'}]};
+  const tokens={canvas:'#ffffff',ink:'#17243a',muted:'#52627a',accent:'#176b87',rule:'#94a3b8'};
+  assert.equal(renderDiagramSvg(model,tokens),renderDiagramSvg(structuredClone(model),tokens));
+  assert.match(renderDiagramSvg(model,tokens),/<svg[^>]+viewBox="0 0 1000 360"/);
+  assert.match(renderDiagramSvg(model,tokens),/Canonical model/);
+  assert.throws(()=>renderDiagramSvg({...model,edges:[{from:'missing',to:'model'}]},tokens),e=>e.code==='INVALID_DIAGRAM');
+  assert.throws(()=>renderDiagramSvg({...model,nodes:[...model.nodes,...Array.from({length:10},(_,i)=>({id:`n${i}`,label:'node'}))]},tokens),e=>e.code==='INVALID_DIAGRAM');
+  const hostile={...model,nodes:[{id:'n',label:'<script>alert(1)</script>'}],edges:[]};
+  assert.doesNotMatch(renderDiagramSvg(hostile,tokens),/<script>/i);
+  assert.match(renderDiagramSvg(hostile,tokens),/&lt;script&gt;/);
+});
+
+test('generated data charts reject invalid values and escape labels while retaining exact values', () => {
+  const tokens={canvas:'#ffffff',ink:'#17243a',muted:'#52627a',accent:'#176b87',rule:'#94a3b8'};
+  const points=[{label:'Q1',value:12,unit:'percent'},{label:'Q2',value:18,unit:'percent'}];
+  assert.equal(renderBarChartSvg(points,tokens),renderBarChartSvg(structuredClone(points),tokens));
+  assert.match(renderBarChartSvg(points,tokens),/>18 percent</);
+  assert.throws(()=>renderBarChartSvg([{label:'bad',value:Infinity}],tokens),e=>e.code==='INVALID_CHART_DATA');
+});
+
+test('table exhibit renders visible rows directly from canonical data refs with provenance', () => {
+  const value=structuredClone(deck); value.slides[0].exhibits=[{exhibit_id:'t1',visual_type:'table',supported_data:['q1'],alternative_text:'Synthetic data table'}];
+  const markdown=renderDeck(value,'sf-editorial.css');
+  assert.match(markdown, /\| Data reference \| Value \| Unit \| As of \| Denominator \| Source IDs \|/);
+  assert.match(markdown, /\| q1 \| 12 \| percent \|\s*\|\s*\| synth \|/);
 });
 
 test('generated markdown escapes active syntax and uses a staged chart asset', () => {
@@ -35,8 +63,12 @@ test('non allowlisted output mode stops before runtime access', async () => {
 test('asset paths reject traversal, remote URLs, and symlinks', async t => {
   const root=await mkdtemp(path.join(tmpdir(),'marp-test-')); const stage=path.join(root,'stage'); await mkdir(stage);
   t.after(async()=>rm(root,{recursive:true,force:true}));
-  const hostile={...deck,extensions:{presentation_marp:{assets:[{asset_id:'x',path:'../escape.png'}]}}};
+  const asset={asset_id:'x',path:'../escape.png',source_id:'synth',license_rights:'Synthetic fixture rights',as_of:'2026-11-10',alternative_text:'Synthetic asset',owner:'Skills Factory',confidentiality:'PUBLIC'};
+  const hostile={...deck,sources:[{source_id:'synth'}],extensions:{presentation_marp:{assets:[asset]}}};
   await assert.rejects(collectAssets(hostile,root,stage),e=>e.code==='BLOCKED_ASSET_PATH');
+  await writeFile(path.join(root,'same.svg'),'<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="#fff"/></svg>');
+  const duplicate={...hostile,extensions:{presentation_marp:{assets:[{...asset,path:'same.svg'},{...asset,path:'same.svg'}]}}};
+  await assert.rejects(collectAssets(duplicate,root,stage),e=>e.code==='INVALID_ASSET_MANIFEST');
   hostile.extensions.presentation_marp.assets[0].path='https://example.invalid/x.png';
   await assert.rejects(collectAssets(hostile,root,stage),e=>e.code==='BLOCKED_ASSET_PATH');
   await writeFile(path.join(root,'real.png'),Buffer.from([1,2,3])); await symlink('real.png',path.join(root,'alias.png'));
@@ -50,10 +82,31 @@ test('asset paths reject traversal, remote URLs, and symlinks', async t => {
 test('restricted SVG allowlist blocks scripts and external references', async t => {
   const root=await mkdtemp(path.join(tmpdir(),'marp-test-')); const stage=path.join(root,'stage'); await mkdir(stage); t.after(async()=>rm(root,{recursive:true,force:true}));
   const svg='<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="#fff"/></svg>';
-  await writeFile(path.join(root,'safe.svg'),svg); const value={...deck,extensions:{presentation_marp:{assets:[{asset_id:'safe',path:'safe.svg'}]}}};
-  assert.equal((await collectAssets(value,root,stage)).length,1);
+  const asset={asset_id:'safe',path:'safe.svg',source_id:'synth',license_rights:'Synthetic fixture rights',as_of:'2026-11-10',alternative_text:'Synthetic safe vector',owner:'Skills Factory',confidentiality:'PUBLIC'};
+  await writeFile(path.join(root,'safe.svg'),svg); const value={...deck,sources:[{source_id:'synth'}],extensions:{presentation_marp:{assets:[asset]}}};
+  const safe=await collectAssets(value,root,stage); assert.equal(safe.length,1); assert.equal(safe[0].license_rights,'Synthetic fixture rights');
   await writeFile(path.join(root,'bad.svg'),'<svg><image href="https://example.invalid/x"/></svg>'); value.extensions.presentation_marp.assets[0].path='bad.svg';
   await assert.rejects(collectAssets(value,root,stage),e=>e.code==='BLOCKED_UNSAFE_SVG');
+});
+
+test('asset manifests require provenance, rights, ownership, confidentiality and a declared editable raster fallback', async t => {
+  const root=await mkdtemp(path.join(tmpdir(),'marp-asset-fallback-')); const stage=path.join(root,'stage'); await mkdir(stage); t.after(async()=>rm(root,{recursive:true,force:true}));
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="#fff"/></svg>';
+  await writeFile(path.join(root,'safe.svg'),svg); await writeFile(path.join(root,'fallback.png'),Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/pZ8AAAAASUVORK5CYII=','base64'));
+  const asset={asset_id:'safe',path:'safe.svg',source_id:'synth',license_rights:'CC0-1.0 synthetic fixture',as_of:'2026-11-10',alternative_text:'Synthetic vector card',owner:'Skills Factory',confidentiality:'PUBLIC',raster_fallback_path:'fallback.png'};
+  const value={...deck,sources:[{source_id:'synth'}],extensions:{presentation_marp:{assets:[asset]}}};
+  const editable=await collectAssets(value,root,stage,'pptx_editable_experimental'); assert.equal(editable[0].fallback_used,true); assert.match(editable[0].file,/\.png$/); assert.match(editable[0].source_file,/\.svg$/);
+  const missing={...value,extensions:{presentation_marp:{assets:[{...asset,license_rights:'unknown'}]}}};
+  await assert.rejects(collectAssets(missing,root,stage),e=>e.code==='INVALID_ASSET_MANIFEST');
+  const noOwner={...value,extensions:{presentation_marp:{assets:[Object.fromEntries(Object.entries(asset).filter(([key])=>key!=='owner'))]}}};
+  await assert.rejects(collectAssets(noOwner,root,stage),e=>e.code==='INVALID_ASSET_MANIFEST');
+  const noFallback={...value,extensions:{presentation_marp:{assets:[Object.fromEntries(Object.entries(asset).filter(([key])=>key!=='raster_fallback_path'))]}}};
+  await assert.rejects(collectAssets(noFallback,root,stage,'pptx_editable_experimental'),e=>e.code==='BLOCKED_SVG_FALLBACK');
+  const remoteFallback={...value,extensions:{presentation_marp:{assets:[{...asset,raster_fallback_path:'https://example.invalid/fallback.png'}]}}};
+  await assert.rejects(collectAssets(remoteFallback,root,stage,'pptx_editable_experimental'),e=>e.code==='BLOCKED_ASSET_PATH');
+  const unsafe={...value,extensions:{presentation_marp:{assets:[{...asset,path:'unsafe.svg'}]}}};
+  await writeFile(path.join(root,'unsafe.svg'),'<svg><script>alert(1)</script></svg>');
+  await assert.rejects(collectAssets(unsafe,root,stage,'pptx_editable_experimental'),e=>e.code==='BLOCKED_UNSAFE_SVG');
 });
 
 test('renderer subprocess limits timeout and captured output', async t => {
