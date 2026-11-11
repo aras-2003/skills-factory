@@ -69,17 +69,17 @@ try {
   await run(args);
   const outputInfo = await stat(path.join(output, 'base-editable.pptx'));
   if (!outputInfo.isFile() || outputInfo.size === 0) throw new Error('EMPTY_OUTPUT');
-  console.log(JSON.stringify({ state: 'PASS', output: 'base-editable.pptx', size_bytes: outputInfo.size }));
+  const report = { state: 'PASS', output: 'base-editable.pptx', size_bytes: outputInfo.size };\n  await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');\n  console.log(JSON.stringify(report));
 } catch (primaryError) {
   const fallbackArgs = args.filter(arg => arg !== '--allow-local-files').map(arg => arg === 'base-editable.pptx' ? 'base-editable-no-local.pptx' : arg);
   try {
     await run(fallbackArgs);
     const fallbackInfo = await stat(path.join(output, 'base-editable-no-local.pptx'));
     if (!fallbackInfo.isFile() || fallbackInfo.size === 0) throw new Error('EMPTY_OUTPUT');
-    console.log(JSON.stringify({ state: 'FAIL', classification: String(primaryError.message), no_local_files: 'PASS' }));
+    const report = { state: 'FAIL', classification: String(primaryError.message), no_local_files: 'PASS' };\n    await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');\n    console.log(JSON.stringify(report));
     process.exitCode = 1;
   } catch (fallbackError) {
-    console.error(JSON.stringify({ state: 'FAIL', allow_local_files: String(primaryError.message), no_local_files: String(fallbackError.message) }));
+    const report = { state: 'FAIL', allow_local_files: String(primaryError.message), no_local_files: String(fallbackError.message) };\n    await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');\n    console.error(JSON.stringify(report));
     process.exitCode = 1;
   }
 } finally {
