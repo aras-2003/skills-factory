@@ -1,0 +1,6 @@
+FROM ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
+USER root
+COPY docker/entrypoint.sh /usr/local/bin/sf-renderer
+RUN chmod 0555 /usr/local/bin/sf-renderer
+ENV CHROME_PATH=/not-installed/chrome
+ENTRYPOINT ["/usr/local/bin/sf-renderer"]
