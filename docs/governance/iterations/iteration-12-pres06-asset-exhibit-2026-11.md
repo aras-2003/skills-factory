@@ -1,12 +1,12 @@
 # Iteration 12 — deterministic exhibit and asset pipeline (PRES-06)
 
-- State: ACTIVE (scope-lock PR #640 merged at `d2cec8e23c27d6380df4074b13aa3ae5ca594839`).
+- State: ACCEPTED; closeout record is in PR #643. Scope-lock PR #640 merged at `d2cec8e23c27d6380df4074b13aa3ae5ca594839`; implementation PR #642 merged at `7013fe254a967182ccda3ec380b1539b5a8688a7`.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #612 / not assigned or verified by the connected GitHub API.
 - Previous terminal iteration: Iteration 11 CLOSED / ACCEPTED, PR #639 merge `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`.
 - Baseline main SHA: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`.
 - Lock commit SHA: `d2cec8e23c27d6380df4074b13aa3ae5ca594839` (recorded in #612).
-- Started at / closed at (UTC): 2026-11-11 20:08 UTC / pending.
+- Started at / closeout prepared (UTC): 2026-11-11 20:08 UTC / 2026-11-11 23:13 UTC; issue closure follows merge of PR #643.
 - Scope lock reviewed by / at: owner self-review / 2026-11-11 20:08 UTC; not independent.
 
 ## Frozen commitment
@@ -36,10 +36,10 @@ Cloud Next, Lab install, native authoring and production deployment are N/A for 
 - Changed contracts / direct consumers: isolated adapter exhibit validation and rendering; local asset collection; output receipts; canonical model validator is consumed but its v1 contract is not changed.
 - Included cases: diagram source/hash, chart data/provenance parity, table values, asset metadata and safety, explicit fallback, deterministic repeats, HTML/PDF/flattened PPTX/experimental editable PPTX, LibreOffice reopen and output comparison.
 - Fixed sentinels / rotating probes: #609 and #610; report-composer and visual-output-design unchanged-domain checks.
-- Last full runtime baseline: Iteration 11 candidate/main checks. This increment has no runtime-surface acceptance; use the same pinned renderer and validate the complete adapter workflow.
+- Last full runtime baseline: exact-main SHA `7013fe254a967182ccda3ec380b1539b5a8688a7` (Iteration 12). PR #642 run 43114904393 and exact-main run 43116579244 passed the complete pinned renderer workflow, including the mixed fixture.
 - Planned scenarios / executions: see matrix rows; retain separate run IDs for repeat builds.
 - Critical stochastic scenarios: none; all generation in scope must be deterministic.
-- PR CI / final-main checks: Validate skills, Domain integrity, evaluation and packaging safety, Marp adapter; exact-main Site build/Pages workflow evidence retained. No runtime deployment.
+- PR CI / final-main checks: PR runtime run 43114904393 passed. Exact-main workflows for SHA `7013fe254a967182ccda3ec380b1539b5a8688a7` all passed: Validate skills 43116579265; Domain integrity 43116579225; Lab packaging 43116579352; Marp adapter 43116579244; Pages 43116578936. Main artifact digest: `sha256:83b7027307def756142c28c6ae55a998b85c235c7a4c0045a35018a302540a72`. No Cloud Next runtime deployment.
 
 ## Defect intake and clarifications
 
@@ -49,14 +49,14 @@ Cloud Next, Lab install, native authoring and production deployment are N/A for 
 
 ## Closure / abort decision
 
-- Outcome: PENDING (CLOSED or ABORTED only after decision).
-- Final candidate / matrix and immutable evidence links: pending.
-- Committed Issues accepted / unresolved: #612 pending; #283 remains open and out of scope.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: all NOT_RUN at lock.
-- Shared regression verdict: pending.
-- Non-blocking findings and accepted impact: pending.
-- Scope compared with lock commit: pending.
-- Issue / Project / PR reconciliation: update #612 with lock SHA and PR; native Project iteration remains unverified.
-- Owner proposal / reviewer acceptance / decision timestamp: pending; owner self-review, not independent.
+- Outcome: ACCEPTED (all required rows PASS; closeout record and issue reconciliation are in PR #643).
+- Final implementation candidate: main SHA `7013fe254a967182ccda3ec380b1539b5a8688a7`; matrix: `evals/campaigns/iteration-12-pres06-asset-exhibit-2026-11/acceptance-matrix.md`; immutable CI artifacts linked in the matrix.
+- Committed Issues accepted / unresolved: #612 accepted; issue closure follows PR #643; #283 remains open and out of scope.
+- Required rows: 10 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED, 0 REVIEW_REQUIRED; 1 reviewed N/A (Cloud Next runtime).
+- Shared regression verdict: PASS; two unchanged-domain probes passed.
+- Non-blocking findings and accepted impact: no runtime registration, Cloud Next, Lab install or production deployment in this adapter-only scope; parent #283 remains separate.
+- Scope compared with lock commit: no deviation; existing isolated Marp adapter only, no new dependency, no canonical DeckSpec break.
+- Issue / Project / PR reconciliation: PR #642 merged; update #612 with lock SHA, merge SHA and PR #643 before closing; native Project iteration remains unverified.
+- Owner proposal / reviewer acceptance / decision timestamp: accepted by owner self-review on 2026-11-11 UTC; independent review not performed. Closeout PR #643 is the reviewable evidence update.
 - If ABORTED: reason, partial evidence and unresolved-criterion mapping: pending.
 - Next iteration eligibility: no automatic start, runtime promotion, or production promotion.
