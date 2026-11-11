@@ -41,7 +41,7 @@ for (const mode of ['pptx_flattened','pptx_editable_experimental']) {
   await run('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=512m','-v',`${path.join(out,mode)}:/input:ro`,'-v',`${reopenDir}:/output:rw`,image,'sf-reopen-pptx',`/input/${name}`,`/output/${mode}`,String(count),mode]);
   const pdfCheck=path.join(out,`${mode}-reopen-check`); await mkdir(pdfCheck,{recursive:true}); await chmod(pdfCheck,0o777);
   activeStage = `${mode}_reopened_pdf_inspection`; const inspect=await runCapture('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=512m','-v',`${path.join(reopenDir,mode)}:/reopened:ro`,'-v',`${pdfCheck}:/verify:rw`,image,'sf-inspect-pdf','/reopened/'+name.replace(/\.pptx$/i,'.pdf'),String(count),'/verify/screenshots','visual-only']);
-  const pngs=(await readdir(path.join(reopenDir,mode))).filter(n=>/^html-slide-\\d+\\.png$/.test(n)).sort(); if(pngs.length!==count) throw new Error(`LibreOffice reopen count ${pngs.length} != ${count}`);
+  const pngs=(await readdir(path.join(reopenDir,mode))).filter(n=>n.endsWith('.png')).sort(); if(pngs.length!==count) throw new Error(`LibreOffice reopen count ${pngs.length} != ${count}`);
   activeStage = `${mode}_visual_compare`; const cmp=await runCapture('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=256m','-v',`${path.join(out,'screenshots')}:/reference:ro`,'-v',`${path.join(reopenDir,mode)}:/reopened:ro`,'-v',`${out}:/evidence:rw`,image,'sf-compare-images','/reference',`/reopened`,`/evidence/${mode}-visual-comparison.json`,'0.20']);
   await writeFile(path.join(reopenDir,mode,'reopen-inspection.json'),inspect); await writeFile(path.join(out,`${mode}-visual-comparison.stdout.json`),cmp);
 }
@@ -53,7 +53,7 @@ const repeatReceipt=JSON.parse(await readFile(path.join(out,'html-repeat','recei
 const first=JSON.parse(await readFile(path.join(out,'html','receipt.json'),'utf8'));
 if (first.input_sha256 !== repeatReceipt.input_sha256) throw new Error('Repeat render used a different input');
 if (JSON.stringify(htmlReceipt.slide_ids) !== JSON.stringify(deck.slides.map(s=>s.slide_id))) throw new Error('HTML render slide IDs/order differ from the canonical source');
-const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>n.endsWith('.png')).sort();
+const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>/^html-slide-\\d+\\.png$/.test(n)).sort();
 if (shotNames.length !== count) throw new Error(`Expected ${count} HTML screenshots, found ${shotNames.length}`);
 for (const n of shotNames) {
   const a=await readFile(path.join(shotDir,n)); const b=await readFile(path.join(out,'repeat-screenshots',n));
