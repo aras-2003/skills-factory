@@ -29,28 +29,17 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     if (controlsHidden < 1) throw new Error('HTML_PRESENTATION_CONTROLS_NOT_FOUND');
     const slides = await page.$$('section');
     for (let i=0; i<countFound; i++) {
-      await page.evaluate(index => {
-        document.querySelectorAll('section').forEach((section, n) => {
-          const active = n === index;
-          const slide = section.closest('svg[data-marpit-svg]');
-          if (!slide) throw new Error('HTML_SLIDE_CONTAINER_MISSING');
-          // Marp lazily sets non-active slide SVGs to display:none; inline visibility alone cannot reveal them for deterministic capture.
-          slide.style.display = active ? 'block' : 'none';
-          slide.style.contentVisibility = active ? 'visible' : 'hidden';
-          slide.style.visibility = active ? 'visible' : 'hidden';
-          slide.style.opacity = active ? '1' : '0';
-          slide.style.pointerEvents = active ? 'auto' : 'none';
-          slide.style.zIndex = active ? '1' : '0';
-          section.style.visibility = active ? 'visible' : 'hidden';
-        });
-      }, i);
+      if (i > 0) {
+        await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(250);
+      }
       const slide = slides[i];
       const box = await slide.boundingBox();
       if (!box || Math.abs(box.width - 1280) > 1 || Math.abs(box.height - 720) > 1) {
         throw new Error('HTML_SLIDE_BOUNDS_INVALID');
       }
       const png = path.join(output, `html-slide-${String(i+1).padStart(2,'0')}.png`);
-      await slide.screenshot({ path: png });
+      await page.screenshot({ path: png });
       records.push({ slide: i+1, screenshot: path.basename(png), width: Math.round(box.width), height: Math.round(box.height) });
     }
     await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
