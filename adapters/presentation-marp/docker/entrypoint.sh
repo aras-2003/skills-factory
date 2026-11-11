@@ -31,7 +31,7 @@ case "$mode" in
   pdf)
     command -v weasyprint >/dev/null 2>&1 || { echo 'BLOCKED_MISSING_RUNTIME: pinned WeasyPrint is required for PDF export' >&2; exit 30; }
     node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-pdf-source.html || { echo SF_PDF_STAGE:html_generation >&2; exit 1; }
-    python3 /usr/local/bin/sf-render-pdf.py /work/output/deck-pdf-source.html /work/output/deck.pdf /work/input || { echo SF_PDF_STAGE:weasyprint_conversion >&2; exit 1; }
+    node /usr/local/bin/sf-render-pdf.cjs /work/output/deck-pdf-source.html /work/output/deck.pdf /work/input || { echo SF_PDF_STAGE:browser_pdf_conversion >&2; exit 1; }
     rm /work/output/deck-pdf-source.html ;;
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
   pptx_editable_experimental)
