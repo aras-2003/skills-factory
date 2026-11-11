@@ -114,7 +114,7 @@ async function main() {
   await mkdir(reopened,{recursive:true}); await chmod(reopened,0o777);
   const reopenedSlides=path.join(reopened,'pptx_editable_experimental');
   await mkdir(reopenedSlides,{recursive:true}); await chmod(reopenedSlides,0o777);
-  await run('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=512m','-v',safePptx+':/input:ro','-v',reopened+':/output:rw',image,'sf-reopen-pptx','/input/deck-editable.pptx','/output/pptx_editable_experimental','7','pptx_editable_experimental'],'editable_safe_reopen');
+  await run('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=512m','-v',safePptx+':/input:ro','-v',fixture+':/work/input/deck.json:ro','-v',reopened+':/output:rw',image,'sf-reopen-pptx','/input/deck-editable.pptx','/output/pptx_editable_experimental','7','pptx_editable_experimental','/work/input/deck.json'],'editable_safe_reopen');
   const reopenedPngs=(await readdir(reopenedSlides)).filter(name=>name.endsWith('.png')).sort();
   if(reopenedPngs.length!==deck.slides.length) throw new Error('THEME_EDITABLE_SAFE_REOPEN_FAILED');
 
