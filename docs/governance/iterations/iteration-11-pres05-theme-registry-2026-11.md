@@ -6,7 +6,7 @@
 - Parent #283 remains open; this increment contributes reusable Marp themes/layouts only and does not satisfy native Figma Slides, client runtime, or full delivery acceptance.
 - Previous terminal increment: Iteration 10 CLOSED / ACCEPTED in PR #636, merge `2ebd353277c5c2551ca345ee89cc9fab711c3d41`.
 - Baseline main SHA: `2ebd353277c5c2551ca345ee89cc9fab711c3d41`.
-- Final main SHA: `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079`.
+- Implementation main SHA (PR #638 merge; exact code revision used for post-merge regression): `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079`. PR #639 contains only this closeout record and acceptance matrix.
 - Scope lock tree commit: `bd5746eab94c40315698cf64c62a95af4ab36f24` (record + matrix in one tree, PR #637).
 - Started at / closed at (UTC): 2026-11-11 18:35 UTC / 2026-11-11 19:41 UTC.
 
