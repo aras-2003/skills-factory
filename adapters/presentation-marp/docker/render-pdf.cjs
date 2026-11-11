@@ -20,6 +20,7 @@ const fail = (stage, classification) => {
       !destination) fail('input_check', 'PDF_INPUT_INVALID');
 
   let browser;
+  const copiedAssets = [];
   let stage = 'launch';
   try {
     browser = await puppeteer.launch({
@@ -33,9 +34,17 @@ const fail = (stage, classification) => {
     stage = 'page_setup';
     const page = await browser.newPage();
     const html = fs.readFileSync(source, 'utf8');
-    const base = '<base href="' + pathToFileURL(assetRoot + path.sep).href + '">';
+    const outputRoot = path.dirname(source);
+    const assetNames = new Set([...html.matchAll(/(?:src|href)=["'](?:\.\/)?([a-f0-9]{64}\.(?:svg|png|jpe?g|webp))["']/gi)].map(match => match[1]));
+    for (const name of assetNames) {
+      const from = path.join(assetRoot, name);
+      const to = path.join(outputRoot, name);
+      if (!fs.existsSync(from) || !fs.statSync(from).isFile()) fail('asset_check', 'PDF_ASSET_MISSING');
+      if (!fs.existsSync(to)) { fs.copyFileSync(from, to); copiedAssets.push(to); }
+    }
+    const base = '<base href="' + pathToFileURL(outputRoot + path.sep).href + '">';
     const document = html.replace(/<head\b([^>]*)>/i, '<head$1>' + base);
-    const renderSource = path.join(path.dirname(source), 'deck-browser-pdf.html');
+    const renderSource = path.join(outputRoot, 'deck-browser-pdf.html');
     fs.writeFileSync(renderSource, document);
     stage = 'navigation';
     await page.goto(pathToFileURL(renderSource).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -59,5 +68,6 @@ const fail = (stage, classification) => {
   } finally {
     await browser?.close().catch(() => {});
     try { fs.rmSync(path.join(path.dirname(source), 'deck-browser-pdf.html'), { force: true }); } catch {}
+    for (const asset of copiedAssets) { try { fs.rmSync(asset, { force: true }); } catch {} }
   }
 })();
