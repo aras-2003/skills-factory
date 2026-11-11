@@ -21,8 +21,8 @@ const classify = message => {
   if (message.includes('Page.navigate')) return 'NAVIGATION_OPERATION';
   if (message.includes('waitForNetworkIdle')) return 'NETWORK_IDLE_OPERATION';
   if (message.includes('setContent')) return 'CONTENT_SETUP_OPERATION';
-  if (/Navigation timeout of \\d+ ms exceeded/i.test(message)) return 'NAVIGATION_TIMEOUT';
-  if (/Timed out after waiting \\d+ms/i.test(message)) return 'BROWSER_OPERATION_TIMEOUT';
+  if (/Navigation timeout of \d+ ms exceeded/i.test(message)) return 'NAVIGATION_TIMEOUT';
+  if (/Timed out after waiting \d+ms/i.test(message)) return 'BROWSER_OPERATION_TIMEOUT';
   if (/crashpad|database is required/i.test(message)) return 'CHROME_CRASHPAD_FAILURE';
   if (/Failed to launch the browser process/i.test(message)) return 'BROWSER_LAUNCH_FAILURE';
   if (/Target closed/i.test(message)) return 'BROWSER_TARGET_CLOSED';
