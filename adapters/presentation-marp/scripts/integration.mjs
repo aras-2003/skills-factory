@@ -13,6 +13,11 @@ process.on('unhandledRejection', error => {
   console.error(JSON.stringify({ state: 'FAIL', stage: activeStage, classification }));
   process.exit(1);
 });
+process.on('uncaughtException', error => {
+  const classification = safeFailureClasses.has(String(error?.message ?? '')) ? error.message : 'VALIDATION_FAILED';
+  console.error(JSON.stringify({ state: 'FAIL', stage: activeStage, classification }));
+  process.exit(1);
+});
 const modes = ['html','pdf','pptx_flattened','pptx_editable_experimental'];
 const fixture = path.join(root, 'fixtures/canonical-deck-v1.json');
 const deck = JSON.parse(await readFile(fixture, 'utf8')); const count = deck.slides.length;
