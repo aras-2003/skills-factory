@@ -14,7 +14,7 @@ if [ "${1:-}" = sf-preflight ]; then
   lo_version=''; lo_package=''
   if command -v dpkg-query >/dev/null 2>&1 && command -v libreoffice >/dev/null 2>&1; then lo_package=$(dpkg-query -W -f='${Version}' libreoffice-impress 2>/dev/null || true); fi
   if command -v libreoffice >/dev/null 2>&1; then lo_version=$(libreoffice --headless --version | sed 's/^LibreOffice //'); fi
-  printf '{"marp":"%s","node":"%s","browser":"%s","browser_path":"%s","browser_sha256":"%s","libreoffice":"%s","libreoffice_package":"%s","weasyprint":"%s","weasyprint_package":"%s","image":"ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42"}\n' "$marp_version" "$node_version" "$browser_version" "$CHROME_PATH" "$browser_sha256" "$lo_version" "$lo_package" "$weasyprint_version" "$weasyprint_package"
+  printf '{"marp":"%s","node":"%s","browser":"%s","browser_path":"%s","browser_sha256":"%s","libreoffice":"%s","libreoffice_package":"%s","weasyprint":"%s","weasyprint_package":"%s","font_package":"%s","image":"ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42"}\n' "$marp_version" "$node_version" "$browser_version" "$CHROME_PATH" "$browser_sha256" "$lo_version" "$lo_package" "$weasyprint_version" "$weasyprint_package" "$font_package"
   exit 0
 fi
 case "${1:-}" in
