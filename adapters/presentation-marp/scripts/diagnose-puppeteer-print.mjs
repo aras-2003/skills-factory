@@ -16,6 +16,7 @@ const fs = require('node:fs');
 const requireMarp = createRequire('/home/marp/.cli/package.json');
 const puppeteer = requireMarp('puppeteer-core');
 const classify = message => {
+  if (/^FIREFOX_[A-Z_]+$/.test(message)) return message;
   if (message.includes('Protocol error (Page.printToPDF')) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
   if (message.includes('Page.printToPDF')) return 'PRINT_TO_PDF_OPERATION';
   if (message.includes('Page.navigate')) return 'NAVIGATION_OPERATION';
@@ -33,6 +34,24 @@ const classify = message => {
   let stage = 'launch';
   try {
     const useFirefox = process.env.SF_PUPPETEER_BROWSER === 'firefox';
+    if (useFirefox) {
+      stage = 'firefox_preflight';
+      const smoke = require('node:child_process').spawnSync('/usr/bin/firefox-esr', [
+        '--headless', '--screenshot=/work/output/firefox-smoke.png', 'file:///work/input/probe.html',
+      ], { encoding: 'utf8', timeout: 30000, maxBuffer: 65536, env: { ...process.env, MOZ_HEADLESS: '1' } });
+      if (smoke.error?.code === 'ETIMEDOUT') throw new Error('FIREFOX_STARTUP_TIMEOUT');
+      if (smoke.status !== 0) {
+        const stderr = String(smoke.stderr || '');
+        const category = /shared librar|cannot open shared object/i.test(stderr) ? 'FIREFOX_MISSING_LIBRARY'
+          : /sandbox|user namespace|operation not permitted|\bEPERM\b/i.test(stderr) ? 'FIREFOX_SANDBOX_RESTRICTION'
+          : /no display|DISPLAY|gtk.*display/i.test(stderr) ? 'FIREFOX_HEADLESS_DISPLAY_FAILURE'
+          : /segmentation fault|signal 11/i.test(stderr) ? 'FIREFOX_PROCESS_CRASH'
+          : 'FIREFOX_STARTUP_FAILURE';
+        throw new Error(category);
+      }
+      if (!fs.existsSync('/work/output/firefox-smoke.png')) throw new Error('FIREFOX_SMOKE_OUTPUT_MISSING');
+    }
+    stage = 'launch';
     browser = await puppeteer.launch({
       browser: useFirefox ? 'firefox' : 'chrome',
       protocol: useFirefox ? 'webDriverBiDi' : 'cdp',
