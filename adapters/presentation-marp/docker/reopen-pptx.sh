@@ -15,12 +15,14 @@ ratio=$(awk '/^Page size:/ { printf "%.6f", $3/$5 }' "$out/pdfinfo.txt")
 awk -v r="$ratio" 'BEGIN { exit !(r > 1.77 && r < 1.78) }' || { echo "reopened page size not 16:9: $ratio" >&2; exit 1; }
 pdftoppm -png -r 96 "$pdf" "$out/reopened-slide" >/dev/null 2>&1
 for image in "$out"/reopened-slide-*.png; do tesseract "$image" "${image%.png}" --psm 6 >/dev/null 2>&1; done
-python3 - "$out" "$mode" <<'PY_OCR'
+python3 - "$out" "$mode" "${6:-}" <<'PY_OCR'
 import json, re, sys
 from pathlib import Path
-out=Path(sys.argv[1]); mode=sys.argv[2]; files=sorted(out.glob('reopened-slide-*.txt'))
+out=Path(sys.argv[1]); mode=sys.argv[2]; deck_path=Path(sys.argv[3]) if len(sys.argv)>3 and sys.argv[3] else None; files=sorted(out.glob('reopened-slide-*.txt'))
 expected=[['Three slides, one source model'],['Synthetic quarterly growth','12','18','percent','src-synthetic'],['Preserve meaning across modes']]
-if len(files)!=3: raise SystemExit(f'OCR image count {len(files)} != 3')
+if deck_path:
+ deck=json.loads(deck_path.read_text()); expected=[[slide['action_title']] for slide in deck['slides']]
+if len(files)!=len(expected): raise SystemExit(f'OCR image count {len(files)} != {len(expected)}')
 records=[]
 for index,file in enumerate(files):
  text=file.read_text().lower(); normalized=re.sub(r'[^a-z0-9]+',' ',text)
