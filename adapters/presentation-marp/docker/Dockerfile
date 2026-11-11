@@ -9,7 +9,7 @@ RUN set -eux; \
   apt-get -o Acquire::Check-Valid-Until=false update; \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     libreoffice-impress=4:7.4.7-1+deb12u14 firefox-esr=153.6.0esr-1~deb12u2 \
-    poppler-utils imagemagick fontconfig fonts-liberation tesseract-ocr=5.3.0-2 tesseract-ocr-eng=1:4.1.0-2 python3=3.11.2-1+b1 weasyprint=57.2-1; \
+    poppler-utils imagemagick fontconfig fonts-liberation tesseract-ocr=5.3.0-2 tesseract-ocr-eng=1:4.1.0-2 python3=3.11.2-1+b1; \
   rm -rf /var/lib/apt/lists/*; \
   fc-cache -f; \
   set +x; \
