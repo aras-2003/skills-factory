@@ -11,6 +11,11 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
+    // Marp uses the View Transition API to animate slide changes. Capturing
+    // during that transition can produce a black frame even when the next
+    // slide is valid. Disable only the viewer transition hook for stable
+    // inspection screenshots; the rendered deck itself is left untouched.
+    await page.evaluateOnNewDocument(() => { document.startViewTransition = undefined; });
     await page.setRequestInterception(true);
     page.on('request', request => { const url = request.url(); if (url.startsWith('file:') || url.startsWith('data:')) request.continue(); else request.abort(); });
     await page.goto(`file://${html}`, { waitUntil: 'networkidle0', timeout: 30000 });
@@ -28,10 +33,16 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     });
     if (controlsHidden < 1) throw new Error('HTML_PRESENTATION_CONTROLS_NOT_FOUND');
     const slides = await page.$$('section');
+    const waitForActiveSlide = async index => page.waitForFunction(i => {
+      const active = document.querySelector('svg.bespoke-marp-slide.bespoke-marp-active');
+      return active?.querySelector('section')?.id === String(i + 1);
+    }, {}, index);
+    await waitForActiveSlide(0);
     for (let i=0; i<countFound; i++) {
       if (i > 0) {
         await page.keyboard.press('ArrowRight');
-        await new Promise(resolve => setTimeout(resolve, 250));
+        await waitForActiveSlide(i);
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       }
       const slide = slides[i];
       const box = await slide.boundingBox();
