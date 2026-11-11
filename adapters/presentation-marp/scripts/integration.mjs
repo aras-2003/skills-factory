@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.resolve(process.argv[2] ?? path.join(root, '.tmp/evidence'));
 const image = process.env.SF_MARP_IMAGE ?? 'ghcr.io/skills-factory/presentation-marp:1.0.0';
-const safeFailureClasses = new Set(['VISUAL_REFERENCE_MISSING','VISUAL_REOPENED_SLIDE_MISSING','VISUAL_METRIC_UNAVAILABLE','VISUAL_DRIFT_OVER_THRESHOLD','PDF_TEXT_ASSERTION_FAILED']);
+const safeFailureClasses = new Set(['VISUAL_REFERENCE_MISSING','VISUAL_REOPENED_SLIDE_MISSING','VISUAL_METRIC_UNAVAILABLE','VISUAL_DRIFT_OVER_THRESHOLD','PDF_TEXT_ASSERTION_FAILED','HTML_SLIDE_COUNT_MISMATCH','HTML_CONTENT_MISSING','HTML_SLIDE_CONTAINER_MISSING','HTML_SLIDE_BOUNDS_INVALID','HTML_PRESENTATION_CONTROLS_NOT_FOUND','HTML_MOBILE_LAYOUT_INVALID','HTML_INSPECTION_FAILED']);
 let activeStage = 'initialization';
 process.on('unhandledRejection', error => {
   const classification = safeFailureClasses.has(String(error?.message ?? '')) ? error.message : 'VALIDATION_FAILED';
@@ -23,7 +23,25 @@ const fixture = path.join(root, 'fixtures/canonical-deck-v1.json');
 const deck = JSON.parse(await readFile(fixture, 'utf8')); const count = deck.slides.length;
 await mkdir(out, { recursive: true }); await chmod(out,0o777);
 function sha(b) { return createHash('sha256').update(b).digest('hex'); }
-function run(command,args) { return new Promise((resolve,reject)=>{const p=spawn(command,args,{stdio:['ignore','ignore','pipe'],shell:false});p.on('error',()=>reject(new Error('INTEGRATION_SUBPROCESS_FAILED')));p.on('close',c=>c===0?resolve():reject(new Error('INTEGRATION_SUBPROCESS_FAILED')));});}
+function run(command,args) {
+  return new Promise((resolve,reject)=>{
+    const p=spawn(command,args,{stdio:['ignore','ignore','pipe'],shell:false});
+    let stderr='';
+    p.stderr.on('data',chunk=>{if(stderr.length<4096)stderr+=chunk.toString('utf8').slice(0,4096-stderr.length);});
+    p.on('error',()=>reject(new Error('INTEGRATION_SUBPROCESS_FAILED')));
+    p.on('close',code=>{
+      if(code===0)return resolve();
+      const classification=stderr.includes('HTML_MOBILE_LAYOUT_INVALID')?'HTML_MOBILE_LAYOUT_INVALID'
+        :stderr.includes('HTML_SLIDE_BOUNDS_INVALID')?'HTML_SLIDE_BOUNDS_INVALID'
+        :stderr.includes('HTML_SLIDE_CONTAINER_MISSING')?'HTML_SLIDE_CONTAINER_MISSING'
+        :stderr.includes('HTML_PRESENTATION_CONTROLS_NOT_FOUND')?'HTML_PRESENTATION_CONTROLS_NOT_FOUND'
+        :stderr.includes('Rendered HTML is missing expected content')?'HTML_CONTENT_MISSING'
+        :stderr.includes('Expected ')&&stderr.includes(' rendered slides, got ')?'HTML_SLIDE_COUNT_MISMATCH'
+        :stderr.includes('HTML_')?'HTML_INSPECTION_FAILED':'INTEGRATION_SUBPROCESS_FAILED';
+      reject(new Error(classification));
+    });
+  });
+}
 function runCapture(command,args) { return new Promise((resolve,reject)=>{const p=spawn(command,args,{stdio:['ignore','pipe','pipe'],shell:false});let s='',e='';p.stdout.on('data',b=>s+=b);p.stderr.on('data',b=>{if(e.length<4096)e+=b.toString('utf8').slice(0,4096-e.length)});p.on('error',()=>reject(new Error('INTEGRATION_SUBPROCESS_FAILED')));p.on('close',c=>{if(c===0)return resolve(s);const match=e.match(/\b(VISUAL_REFERENCE_MISSING|VISUAL_REOPENED_SLIDE_MISSING|VISUAL_METRIC_UNAVAILABLE|VISUAL_DRIFT_OVER_THRESHOLD|PDF_TEXT_ASSERTION_FAILED)\b/);reject(new Error(match?.[1]??'INTEGRATION_SUBPROCESS_FAILED'));});});}
 for (const mode of modes) { activeStage = `${mode}_render`; console.log(`Rendering ${mode}`); await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,mode),'--mode',mode]); }
 activeStage='html_repeat_render'; await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,'html-repeat'),'--mode','html']);
@@ -53,7 +71,7 @@ const repeatReceipt=JSON.parse(await readFile(path.join(out,'html-repeat','recei
 const first=JSON.parse(await readFile(path.join(out,'html','receipt.json'),'utf8'));
 if (first.input_sha256 !== repeatReceipt.input_sha256) throw new Error('Repeat render used a different input');
 if (JSON.stringify(htmlReceipt.slide_ids) !== JSON.stringify(deck.slides.map(s=>s.slide_id))) throw new Error('HTML render slide IDs/order differ from the canonical source');
-const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>n.endsWith('.png')).sort();
+const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>/^html-slide-\d+\.png$/.test(n)).sort();
 if (shotNames.length !== count) throw new Error(`Expected ${count} HTML screenshots, found ${shotNames.length}`);
 for (const n of shotNames) {
   const a=await readFile(path.join(shotDir,n)); const b=await readFile(path.join(out,'repeat-screenshots',n));

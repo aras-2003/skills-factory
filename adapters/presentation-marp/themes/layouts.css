@@ -1,0 +1,61 @@
+/* Shared Presentation OS layout grammar v1; tokens are injected from registry.json. */
+section {
+  box-sizing: border-box;
+  width: 1280px;
+  height: 720px;
+  padding: 72px 86px 62px;
+  background-color: var(--sf-canvas);
+  color: var(--sf-ink);
+  font-family: var(--sf-font-body);
+  font-size: 28px;
+  line-height: 1.35;
+}
+section > * { max-width: var(--sf-grid-width); }
+h1 {
+  max-width: var(--sf-grid-width);
+  margin: 0 0 34px;
+  color: var(--sf-ink);
+  font-family: var(--sf-font-display);
+  font-size: 52px;
+  line-height: 1.08;
+}
+p, small { color: var(--sf-muted); }
+li { margin: 12px 0; }
+strong { color: var(--sf-accent); }
+small { font-size: .7em; }
+.marpit img { max-width: 100%; max-height: 300px; }
+section.sf-layout-title h1 { max-width: 940px; font-size: 62px; }
+section.sf-layout-title > p { max-width: 860px; font-size: 30px; }
+section.sf-layout-insight-chart > p { max-width: 920px; }
+section.sf-layout-insight-chart .marpit img { display: block; margin: 20px auto 0; }
+section.sf-layout-comparison ul, section.sf-layout-comparison ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 36px;
+  padding-left: 28px;
+}
+section.sf-layout-process ol, section.sf-layout-process ul {
+  counter-reset: sf-process;
+  list-style-position: inside;
+}
+section.sf-layout-process li { border-left: 4px solid var(--sf-accent); padding: 10px 18px; }
+section.sf-layout-roadmap ol, section.sf-layout-roadmap ul {
+  border-left: 2px solid var(--sf-rule);
+  margin-left: 12px;
+  padding-left: 30px;
+}
+section.sf-layout-roadmap li { padding: 6px 12px; }
+section.sf-layout-architecture ul, section.sf-layout-architecture ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  padding: 0;
+  list-style: none;
+}
+section.sf-layout-architecture li { border: 1px solid var(--sf-rule); border-top: 4px solid var(--sf-accent); padding: 16px; }
+section.sf-layout-summary h1 { border-bottom: 3px solid var(--sf-accent); padding-bottom: 18px; }
+@media screen and (max-width: 600px) {
+  section.sf-layout-comparison ul, section.sf-layout-architecture ul {
+    grid-template-columns: 1fr;
+  }
+}
