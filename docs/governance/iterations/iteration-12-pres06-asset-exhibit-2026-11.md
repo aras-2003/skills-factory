@@ -1,12 +1,12 @@
 # Iteration 12 — deterministic exhibit and asset pipeline (PRES-06)
 
-- State: ACCEPTED; closeout record is in PR #643. Scope-lock PR #640 merged at `d2cec8e23c27d6380df4074b13aa3ae5ca594839`; implementation PR #642 merged at `7013fe254a967182ccda3ec380b1539b5a8688a7`.
+- State: CLOSED / ACCEPTED (scope-lock PR #640, implementation PR #642, and evidence PR #643 merged).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
-- Tracking Issue / native Project iteration: #612 / not assigned or verified by the connected GitHub API.
+- Tracking Issue / native Project iteration: #612 / No Iteration (verified in Project 1; left unassigned).
 - Previous terminal iteration: Iteration 11 CLOSED / ACCEPTED, PR #639 merge `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`.
 - Baseline main SHA: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`.
 - Lock commit SHA: `d2cec8e23c27d6380df4074b13aa3ae5ca594839` (recorded in #612).
-- Started at / closeout prepared (UTC): 2026-11-11 20:08 UTC / 2026-11-11 23:13 UTC; issue closure follows merge of PR #643.
+- Started at / closed at (UTC): 2026-11-11 20:08 UTC / 2026-11-11 23:25 UTC.
 - Scope lock reviewed by / at: owner self-review / 2026-11-11 20:08 UTC; not independent.
 
 ## Frozen commitment
@@ -51,12 +51,12 @@ Cloud Next, Lab install, native authoring and production deployment are N/A for 
 
 - Outcome: ACCEPTED (all required rows PASS; closeout record and issue reconciliation are in PR #643).
 - Final implementation candidate: main SHA `7013fe254a967182ccda3ec380b1539b5a8688a7`; matrix: `evals/campaigns/iteration-12-pres06-asset-exhibit-2026-11/acceptance-matrix.md`; immutable CI artifacts linked in the matrix.
-- Committed Issues accepted / unresolved: #612 accepted; issue closure follows PR #643; #283 remains open and out of scope.
+- Committed Issues accepted / unresolved: #612 closed as completed; #283 remains open and out of scope.
 - Required rows: 10 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED, 0 REVIEW_REQUIRED; 1 reviewed N/A (Cloud Next runtime).
 - Shared regression verdict: PASS; two unchanged-domain probes passed.
 - Non-blocking findings and accepted impact: no runtime registration, Cloud Next, Lab install or production deployment in this adapter-only scope; parent #283 remains separate.
 - Scope compared with lock commit: no deviation; existing isolated Marp adapter only, no new dependency, no canonical DeckSpec break.
-- Issue / Project / PR reconciliation: PR #642 merged; update #612 with lock SHA, merge SHA and PR #643 before closing; native Project iteration remains unverified.
-- Owner proposal / reviewer acceptance / decision timestamp: accepted by owner self-review on 2026-11-11 UTC; independent review not performed. Closeout PR #643 is the reviewable evidence update.
+- Issue / Project / PR reconciliation: PR #642 and #643 merged; #612 closed as completed; Project status is Done, Iteration remains No Iteration (verified in UI; no assignment made); native iteration remains unassigned.
+- Owner proposal / reviewer acceptance / decision timestamp: accepted by owner self-review on 2026-11-11 23:25 UTC; independent review not performed.
 - If ABORTED: reason, partial evidence and unresolved-criterion mapping: pending.
-- Next iteration eligibility: no automatic start, runtime promotion, or production promotion.
+- Next iteration eligibility: Iteration 12 is terminal; a new scoped iteration may begin after this closure record is merged. No runtime or production promotion is implied.
