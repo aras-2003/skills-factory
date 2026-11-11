@@ -9,11 +9,9 @@ RUN set -eux; \
   apt-get -o Acquire::Check-Valid-Until=false update; \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     libreoffice-impress=4:7.4.7-1+deb12u14 \
-    poppler-utils imagemagick fontconfig fonts-liberation libdbus-glib-1-2 tesseract-ocr=5.3.0-2 tesseract-ocr-eng=1:4.1.0-2 python3=3.11.2-1+b1 weasyprint=57.2-1; \
+    poppler-utils imagemagick fontconfig fonts-liberation tesseract-ocr=5.3.0-2 tesseract-ocr-eng=1:4.1.0-2 python3=3.11.2-1+b1 weasyprint=57.2-1; \
   rm -rf /var/lib/apt/lists/*; \
-  fc-cache -f; \
-  node /home/marp/.cli/node_modules/@puppeteer/browsers/lib/cjs/main-cli.js install firefox@stable_150.0.2 --path /opt/puppeteer-browsers; \
-  test -x /opt/puppeteer-browsers/firefox/linux-stable_150.0.2/firefox/firefox
+  fc-cache -f
 COPY docker/entrypoint.sh /usr/local/bin/sf-renderer
 COPY docker/inspect-pptx.py /usr/local/bin/sf-inspect-pptx
 COPY docker/inspect-html.cjs /usr/local/bin/sf-inspect-html.cjs
@@ -23,5 +21,5 @@ COPY docker/reopen-pptx.sh /usr/local/bin/sf-reopen-pptx.sh
 COPY docker/compare-images.py /usr/local/bin/sf-compare-images.py
 COPY docker/font-fallback.sh /usr/local/bin/sf-font-fallback.sh
 RUN chmod 0555 /usr/local/bin/sf-renderer /usr/local/bin/sf-inspect-pptx /usr/local/bin/sf-inspect-html.cjs /usr/local/bin/sf-inspect-pdf.py /usr/local/bin/sf-render-pdf.py /usr/local/bin/sf-reopen-pptx.sh /usr/local/bin/sf-compare-images.py /usr/local/bin/sf-font-fallback.sh
-ENV CHROME_PATH=/usr/local/bin/chrome FIREFOX_PATH=/opt/puppeteer-browsers/firefox/linux-stable_150.0.2/firefox/firefox CHROME_CONFIG_HOME=/tmp/marp-config XDG_CONFIG_HOME=/tmp/.chromium-config XDG_CACHE_HOME=/tmp/.chromium-cache
+ENV CHROME_PATH=/usr/local/bin/chrome CHROME_CONFIG_HOME=/tmp/marp-config XDG_CONFIG_HOME=/tmp/.chromium-config XDG_CACHE_HOME=/tmp/.chromium-cache
 ENTRYPOINT ["/usr/local/bin/sf-renderer"]
