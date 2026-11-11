@@ -114,14 +114,19 @@ export function validateDeck(deck) {
   for (const slide of deck.slides) {
     if (!slide || typeof slide.slide_id !== 'string' || ids.has(slide.slide_id) || typeof slide.action_title !== 'string') throw new AdapterError('INVALID_DECK', 'Slide IDs must be unique and every slide needs an action title.');
     ids.add(slide.slide_id);
+    if (!slide.layout || typeof slide.layout.layout_id !== 'string') throw new AdapterError('INVALID_DECK','Every slide requires a semantic layout ID.');
+    resolveLayout(slide.layout.layout_id);
     for (const ex of slide.exhibits ?? []) if (!['bar_chart', 'table', 'image'].includes(ex.visual_type)) throw new AdapterError('UNSUPPORTED_EXHIBIT', `Unsupported exhibit type: ${safeText(ex.visual_type)}.`);
   }
 }
 
 export function renderDeck(deck, themePath, assetMap = new Map()) {
   const lines = ['---', 'marp: true', 'size: 16:9', 'paginate: true', `theme: ${path.basename(themePath, '.css')}`, '---', ''];
+  const themeId=path.basename(themePath,'.css');
+  const selectedTheme=themeById(themeId);
   for (const slide of deck.slides) {
-    lines.push(`# ${safeText(slide.action_title)}`, '');
+    const layout=resolveLayout(slide.layout.layout_id);
+    lines.push('<!-- _class: sf-theme-'+selectedTheme.id+' sf-layout-'+layout+' -->', '', `# ${safeText(slide.action_title)}`, '');
     if (slide.body) lines.push(safeText(slide.body), '');
     for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
     for (const datum of slide.data_refs ?? []) {
@@ -168,6 +173,8 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
   if (raw.length > MAX_INPUT) throw new AdapterError('BLOCKED_INPUT_LIMIT', 'DeckSpec exceeds the 5 MiB input limit.');
   let deck; try { deck = JSON.parse(raw.toString('utf8')); } catch { throw new AdapterError('INVALID_JSON', 'DeckSpec is not valid JSON.'); }
   validateDeck(deck);
+  const themeDefinition=themeById(theme);
+  if (mode==='pptx_editable_experimental' && !themeDefinition.editable_safe) throw new AdapterError('BLOCKED_THEME_UNSUPPORTED','Selected theme CSS is not verified for editable PPTX; choose a bundled editable-safe theme explicitly. No theme fallback was applied.');
   const repoRoot = path.resolve(HERE, '../../..');
   try { await run(process.env.PYTHON ?? 'python3', [path.join(repoRoot, 'scripts/validate/presentation_model.py'), input], { timeout: 15_000, maxBytes: 16_384 }); }
   catch (error) { if (error.code === 'RENDER_FAILED') throw new AdapterError('INVALID_DECK', 'Canonical DeckSpec schema or semantic validation failed; raw diagnostics were omitted to protect source content.', { exitCode: error.details.exitCode }); throw error; }
@@ -175,8 +182,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
   const root = await mkdtemp(path.join(tmpdir(), 'sf-marp-')); const inDir = path.join(root, 'input'); const outDir = path.join(root, 'output');
   try {
     await mkdir(inDir); await mkdir(outDir);
-    const themeFile = path.join(HERE, '..', 'themes', `${theme}.css`); const themeInfo = await stat(themeFile).catch(() => null);
-    if (theme !== 'sf-editorial' || !themeInfo?.isFile()) throw new AdapterError('UNKNOWN_THEME', 'Only the bundled sf-editorial theme is available.');
+    const themeFile = path.join(inDir, `${theme}.css`);
     const assets = await collectAssets(deck, path.dirname(path.resolve(input)), inDir);
     for (const slide of deck.slides) for (const ex of slide.exhibits ?? []) if (ex.visual_type === 'bar_chart') {
       const dataMap = new Map((slide.data_refs ?? []).map(ref => [ref.data_ref_id, ref]));
@@ -191,7 +197,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     const md = renderDeck(deck, themeFile, assetMap); await writeFile(path.join(inDir, 'deck.md'), md);
     await writeFile(path.join(inDir, 'deck.json'), raw);
     await chmod(outDir, 0o777);
-    await copyFile(themeFile, path.join(inDir, 'sf-editorial.css'));
+    await writeFile(themeFile, buildThemeCss(themeDefinition));
     const renderName = `sf-marp-render-${randomUUID()}`;
     const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
     await run(docker, command, { timeout: TIMEOUT_MS, maxBytes: 16_384, diagnostic: mode === 'pptx_editable_experimental' && process.env.CI === 'true' && sha256(raw) === '84d20f2411e8e8f7a2d2949f5429c142a61fc7a6ba6d96dc20c388a21054ec69' }).catch(async error => { if (error.code === 'BLOCKED_TIMEOUT') await run(docker, ['kill', renderName], { timeout: 5_000, maxBytes: 1024 }).catch(() => {}); throw error; });
