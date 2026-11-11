@@ -55,7 +55,7 @@ const classify = message => {
     browser = await puppeteer.launch({
       browser: useFirefox ? 'firefox' : 'chrome',
       protocol: useFirefox ? 'webDriverBiDi' : 'cdp',
-      executablePath: useFirefox ? process.env.SF_FIREFOX_PATH : '/usr/local/bin/chrome',
+      executablePath: useFirefox ? process.env.SF_FIREFOX_PATH : (process.env.CHROME_PATH ?? '/usr/local/bin/chrome'),
       headless: useFirefox || process.env.PUPPETEER_HEADLESS_MODE !== 'shell' ? true : 'shell',
       args: useFirefox || process.env.SF_CHROME_SANDBOX === '1' ? [] : ['--no-sandbox'],
       timeout: 30000,
