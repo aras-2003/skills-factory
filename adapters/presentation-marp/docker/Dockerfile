@@ -13,7 +13,7 @@ RUN set -eux; \
   rm -rf /var/lib/apt/lists/*; \
   fc-cache -f; \
   set +x; \
-  headless_shell=$(find /usr/local/bin/pw-browsers -type f -executable \\( -name headless_shell -o -name chrome-headless-shell \\) -print -quit 2>/dev/null); \
+  headless_shell=$(find /usr/local/bin/pw-browsers -type f -executable \( -name headless_shell -o -name chrome-headless-shell \) -print -quit 2>/dev/null); \
   if [ -z "$headless_shell" ]; then echo HEADLESS_SHELL_MISSING; exit 1; fi; \
   if ! ln -s "$headless_shell" /usr/local/bin/chrome-headless-shell >/dev/null 2>&1; then echo HEADLESS_SHELL_LINK_FAILED; exit 1; fi; \
   test -x /usr/local/bin/chrome-headless-shell; \
