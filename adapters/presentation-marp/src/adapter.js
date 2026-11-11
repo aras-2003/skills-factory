@@ -100,6 +100,7 @@ export async function preflight(mode, { docker = 'docker', image = IMAGE } = {})
   let runtime;
   try { runtime = JSON.parse(checks.stdout); } catch { throw new AdapterError('RUNTIME_IDENTITY_INVALID', 'Pinned renderer returned an invalid runtime identity.'); }
   if (runtime.marp !== '4.5.1' || runtime.node !== '26.8.1') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', `Expected Marp 4.5.1 and Node 26.8.1; received Marp ${String(runtime.marp)} and Node ${String(runtime.node)}.`);
+  if (runtime.font_package !== '1:1.07.4-11') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'The pinned Debian fonts-liberation package is required for licensed theme rendering.');
   if (['pdf', 'pptx_flattened', 'pptx_editable_experimental'].includes(mode) && (!runtime.browser || !runtime.browser_sha256)) throw new AdapterError('BLOCKED_MISSING_RUNTIME', `The ${mode} mode requires the pinned Chromium browser runtime.`);
   if (mode === 'pptx_editable_experimental' && !runtime.libreoffice) throw new AdapterError('BLOCKED_MISSING_RUNTIME', 'Experimental editable PPTX requires LibreOffice Impress to verify the generated file; no fallback was produced.');
   if (mode === 'pptx_editable_experimental' && (!runtime.libreoffice.startsWith('7.4.7') || runtime.libreoffice_package !== '4:7.4.7-1+deb12u14')) throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'Experimental editable PPTX requires the locked LibreOffice 7.4.7 runtime.');
