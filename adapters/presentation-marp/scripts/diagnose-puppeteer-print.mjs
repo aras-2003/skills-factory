@@ -35,7 +35,7 @@ const classify = message => {
     browser = await puppeteer.launch({
       executablePath: '/usr/local/bin/chrome',
       headless: process.env.PUPPETEER_HEADLESS_MODE === 'shell' ? 'shell' : true,
-      args: browserArgs,
+      args: process.env.SF_CHROME_SANDBOX === '1' ? [] : ['--no-sandbox'],
       timeout: 30000,
     });
     stage = 'new_page';
@@ -68,7 +68,6 @@ const image = process.env.SF_MARP_IMAGE ?? 'ghcr.io/skills-factory/presentation-
 const tempMount = process.env.SF_CHROME_TMPFS_EXEC === '1'
   ? '/tmp:rw,nosuid,size=512m'
   : '/tmp:rw,noexec,nosuid,size=512m';
-const browserArgs = process.env.SF_CHROME_SANDBOX === '1' ? [] : ['--no-sandbox'];
 const name = 'sf-puppeteer-print-' + randomUUID();
 const args = [
   'run', '--name', name, '--rm', '--network', 'none', '--read-only',
@@ -76,7 +75,7 @@ const args = [
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input', '--user', '10001:10001',
-  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'PUPPETEER_HEADLESS_MODE=shell',
+  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
   '--tmpfs', tempMount,
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', 'node', image, '/work/input/probe.cjs',
