@@ -13,7 +13,7 @@ RUN set -eux; \
   rm -rf /var/lib/apt/lists/*; \
   fc-cache -f; \
   set +x; \
-  if ! curl -fsSL --retry 3 --output /tmp/firefox-150.0.2.tar.xz https://download.cdn.mozilla.net/pub/firefox/releases/150.0.2/linux-x86_64/en-US/firefox-150.0.2.tar.xz >/dev/null 2>&1; then echo FIREFOX_DOWNLOAD_FAILED; exit 1; fi; \
+  if ! curl -fsSL --retry 3 --output /tmp/firefox-150.0.2.tar.xz https://releases.mozilla.org/pub/firefox/releases/150.0.2/linux-x86_64/en-US/firefox-150.0.2.tar.xz >/dev/null 2>&1; then echo FIREFOX_DOWNLOAD_FAILED; exit 1; fi; \
   firefox_hash=$(sha256sum /tmp/firefox-150.0.2.tar.xz | cut -d' ' -f1); \
   if [ "$firefox_hash" != b0cda724cf29ce6775bbf28cdc032fc81225fd02f46ffec897f3768df5872241 ]; then echo FIREFOX_CHECKSUM_MISMATCH; exit 1; fi; \
   mkdir -p /opt/firefox; \
