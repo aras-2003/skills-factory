@@ -29,7 +29,19 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     if (controlsHidden < 1) throw new Error('HTML_PRESENTATION_CONTROLS_NOT_FOUND');
     const slides = await page.$$('section');
     for (let i=0; i<countFound; i++) {
-      await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.visibility = n === index ? 'visible' : 'hidden'; }); }, i);
+      await page.evaluate(index => {
+        document.querySelectorAll('section').forEach((section, n) => {
+          const active = n === index;
+          const slide = section.closest('svg[data-marpit-svg]');
+          if (!slide) throw new Error('HTML_SLIDE_CONTAINER_MISSING');
+          slide.style.contentVisibility = active ? 'visible' : 'hidden';
+          slide.style.visibility = active ? 'visible' : 'hidden';
+          slide.style.opacity = active ? '1' : '0';
+          slide.style.pointerEvents = active ? 'auto' : 'none';
+          slide.style.zIndex = active ? '1' : '0';
+          section.style.visibility = active ? 'visible' : 'hidden';
+        });
+      }, i);
       const slide = slides[i];
       const box = await slide.boundingBox();
       if (!box || Math.abs(box.width - 1280) > 1 || Math.abs(box.height - 720) > 1) {
