@@ -22,10 +22,10 @@ COPY docker/entrypoint.sh /usr/local/bin/sf-renderer
 COPY docker/inspect-pptx.py /usr/local/bin/sf-inspect-pptx
 COPY docker/inspect-html.cjs /usr/local/bin/sf-inspect-html.cjs
 COPY docker/inspect-pdf.py /usr/local/bin/sf-inspect-pdf.py
-COPY docker/render-pdf.py /usr/local/bin/sf-render-pdf.py
+COPY docker/render-pdf.cjs /usr/local/bin/sf-render-pdf.cjs
 COPY docker/reopen-pptx.sh /usr/local/bin/sf-reopen-pptx.sh
 COPY docker/compare-images.py /usr/local/bin/sf-compare-images.py
 COPY docker/font-fallback.sh /usr/local/bin/sf-font-fallback.sh
-RUN chmod 0555 /usr/local/bin/sf-renderer /usr/local/bin/sf-inspect-pptx /usr/local/bin/sf-inspect-html.cjs /usr/local/bin/sf-inspect-pdf.py /usr/local/bin/sf-render-pdf.py /usr/local/bin/sf-reopen-pptx.sh /usr/local/bin/sf-compare-images.py /usr/local/bin/sf-font-fallback.sh
+RUN chmod 0555 /usr/local/bin/sf-renderer /usr/local/bin/sf-inspect-pptx /usr/local/bin/sf-inspect-html.cjs /usr/local/bin/sf-inspect-pdf.py /usr/local/bin/sf-render-pdf.cjs /usr/local/bin/sf-reopen-pptx.sh /usr/local/bin/sf-compare-images.py /usr/local/bin/sf-font-fallback.sh
 ENV CHROME_PATH=/usr/local/bin/chrome-headless-shell FIREFOX_PATH=/usr/bin/firefox-esr PUPPETEER_HEADLESS_MODE=old CHROME_CONFIG_HOME=/tmp/marp-config XDG_CONFIG_HOME=/tmp/.chromium-config XDG_CACHE_HOME=/tmp/.chromium-cache
 ENTRYPOINT ["/usr/local/bin/sf-renderer"]
