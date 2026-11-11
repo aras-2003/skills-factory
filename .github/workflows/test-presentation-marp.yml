@@ -70,6 +70,11 @@ jobs:
       - name: Diagnose Puppeteer PDF path in custom renderer
         continue-on-error: true
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-custom
+      - name: Probe base64 PDF response on synthetic HTML
+        continue-on-error: true
+        env:
+          SF_PDF_TRANSFER_MODE: base64
+        run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-base64
       - name: Diagnose Puppeteer PDF path in upstream image
         continue-on-error: true
         env:
