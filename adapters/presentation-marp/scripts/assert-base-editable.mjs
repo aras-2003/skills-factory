@@ -29,7 +29,7 @@ const args = [
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input',
-  '--user', '10001:10001', '--env', 'HOME=/tmp',
+  '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config',
   '--env', 'CHROME_NO_SANDBOX=1', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'DEBUG=marp-cli:browser,puppeteer:protocol',
   '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
   '-v', input + ':/work/input:ro',
