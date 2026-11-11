@@ -67,6 +67,9 @@ jobs:
       - name: Verify missing browser blocks browser-backed modes
         working-directory: adapters/presentation-marp
         run: node scripts/assert-missing-runtime.mjs
+      - name: Probe Chromium CLI print-to-PDF with blank synthetic HTML
+        continue-on-error: true
+        run: node adapters/presentation-marp/scripts/diagnose-chrome-cli-print.mjs presentation-marp-evidence/chrome-cli-print
       - name: Diagnose Puppeteer PDF path in custom renderer
         continue-on-error: true
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-custom
