@@ -17,7 +17,7 @@ if [ "${1:-}" = sf-preflight ]; then
   exit 0
 fi
 case "${1:-}" in
-  sf-inspect-html) exec node /usr/local/bin/sf-inspect-html.cjs "$2" "$3" "$4" ;;
+  sf-inspect-html) exec node /usr/local/bin/sf-inspect-html.cjs "$2" "$3" "$4" "${5:-}" ;;
   sf-inspect-pptx) exec python3 /usr/local/bin/sf-inspect-pptx "$2" "$3" ;;
   sf-inspect-pdf) exec python3 /usr/local/bin/sf-inspect-pdf.py "$2" "$3" "$4" "${5:-text}" ;;
   sf-reopen-pptx) exec /usr/local/bin/sf-reopen-pptx.sh "$@" ;;
