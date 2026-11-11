@@ -31,7 +31,7 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     for (let i=0; i<countFound; i++) {
       if (i > 0) {
         await page.keyboard.press('ArrowRight');
-        await page.waitForTimeout(250);
+        await new Promise(resolve => setTimeout(resolve, 250));
       }
       const slide = slides[i];
       const box = await slide.boundingBox();
