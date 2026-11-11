@@ -59,6 +59,6 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     }, countFound - 1);
     if (mobile.width > 391 || mobile.height > 845 || mobile.left < -1 || mobile.left + mobile.width > 391 || Math.abs(mobile.ratio - 16 / 9) > 0.02) throw new Error('HTML_MOBILE_LAYOUT_INVALID');
     await page.screenshot({ path: path.join(output, 'html-responsive-mobile.png') });
-    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText,controls_hidden:controlsHidden,mobile}, null, 2)+'\\n');
+    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText,controls_hidden:controlsHidden,mobile}, null, 2)+'\n');
   } finally { await browser.close(); }
 })();
