@@ -13,7 +13,11 @@ if abs(ratio-16/9)>.01: raise SystemExit(f'PDF page is not 16:9: {w}x{h}')
 text=''
 if mode == 'text':
     text=subprocess.run(['pdftotext','-layout',str(pdf),'-'],check=True,text=True,capture_output=True).stdout
-    normalized_text=re.sub(r'\s+', ' ', text).strip()
+    # pdftotext may insert a line break after a hyphen when a token wraps at
+    # the page renderer's line width. Remove only that whitespace so the
+    # original hyphenated date/source IDs remain exact.
+    unwrapped_text=re.sub(r'(?<=-)[ \t]*\r?\n[ \t]*', '', text)
+    normalized_text=re.sub(r'\s+', ' ', unwrapped_text).strip()
     if deck_path:
         deck=json.loads(deck_path.read_text())
         required={f'title:{slide["slide_id"]}':slide['action_title'] for slide in deck.get('slides',[])}
