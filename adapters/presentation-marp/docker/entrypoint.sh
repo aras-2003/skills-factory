@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 mode=${2:-}
+theme_file="./${SF_MARP_THEME:-sf-editorial}.css"
 if [ "${1:-}" = sf-preflight ]; then
   marp_output=$(node /home/marp/.cli/marp-cli.js --version 2>&1)
   marp_version=$(printf '%s' "$marp_output" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
@@ -27,10 +28,10 @@ esac
 if [ "${1:-}" != sf-render ] || [ -z "$mode" ]; then echo 'invalid renderer command' >&2; exit 2; fi
 cd /work/input
 case "$mode" in
-  html) node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --output /work/output/deck.html ;;
+  html) [ -f "$theme_file" ] || { echo 'BLOCKED_THEME_MISSING: selected bundled theme is unavailable' >&2; exit 31; }; node /home/marp/.cli/marp-cli.js deck.md --theme-set "$theme_file" --output /work/output/deck.html ;;
   pdf)
     [ -x "$CHROME_PATH" ] || { echo 'BLOCKED_MISSING_RUNTIME: pinned Chromium is required for PDF export' >&2; exit 30; }
-    node /home/marp/.cli/marp-cli.js deck.md --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck-pdf-source.html || { echo SF_PDF_STAGE:html_generation >&2; exit 1; }
+    node /home/marp/.cli/marp-cli.js deck.md --theme-set "$theme_file" --allow-local-files --output /work/output/deck-pdf-source.html || { echo SF_PDF_STAGE:html_generation >&2; exit 1; }
     node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pdf --theme-set ./sf-editorial.css --allow-local-files --browser-protocol cdp --output /work/output/deck.pdf || { echo SF_PDF_STAGE:browser_pdf_conversion >&2; exit 1; }
     rm /work/output/deck-pdf-source.html ;;
   pptx_flattened) node /home/marp/.cli/marp-cli.js deck.md --browser-timeout 90 --pptx --theme-set ./sf-editorial.css --allow-local-files --output /work/output/deck.pptx ;;
