@@ -130,6 +130,8 @@ jobs:
         run: node adapters/presentation-marp/scripts/assert-minimal-editable.mjs presentation-marp-evidence/minimal-editable
       - name: Generate, reopen and inspect all output modes
         run: node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence
+      - name: Run theme, layout, responsive and editable-safe regression
+        run: node adapters/presentation-marp/scripts/theme-regression.mjs presentation-marp-evidence/theme-regression
       - name: Verify exact source revision
         run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
