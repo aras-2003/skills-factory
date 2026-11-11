@@ -1,6 +1,6 @@
 # Iteration 12 — PRES-06 acceptance matrix
 
-Baseline main: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`. Fixed scope: #612 only. All acceptance rows begin NOT_RUN; scope lock is not implementation or runtime evidence.
+Baseline main: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`; scope-lock merge: `d2cec8e23c27d6380df4074b13aa3ae5ca594839`. Fixed scope: #612 only. All acceptance rows begin NOT_RUN; scope lock is not implementation or runtime evidence.
 
 | Row ID | Issue / criterion | Layer + case ID / definition | Required / N/A rationale | Candidate SHA + artifact digest | Surface / model / tools | Input / rubric hashes | Execution state | Verdict | Receipt / output / trace + runtime | Reviewer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
