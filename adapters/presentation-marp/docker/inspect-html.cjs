@@ -5,7 +5,7 @@ let puppeteer;
 for (const base of candidates) { try { puppeteer = require(require.resolve('puppeteer-core', { paths: [base] })); break; } catch {} }
 if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the renderer image');
 (async () => {
-  const html = path.resolve(process.argv[2]); const output = path.resolve(process.argv[3]); const count = Number(process.argv[4]);
+  const html = path.resolve(process.argv[2]); const output = path.resolve(process.argv[3]); const count = Number(process.argv[4]); const expectedDeck = process.argv[5] ? JSON.parse(fs.readFileSync(path.resolve(process.argv[5]), 'utf8')) : null;
   fs.mkdirSync(output, { recursive: true });
   const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: ['--no-sandbox','--disable-dev-shm-usage'] });
   try {
@@ -18,7 +18,7 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     if (countFound !== count) throw new Error(`Expected ${count} rendered slides, got ${countFound}`);
     const records = [];
     const allText = await page.$$eval('section', nodes => nodes.map(node => node.textContent).join('\n').replace(/\s+/g, ' ').trim());
-    const requiredText = ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12 percent','18 percent','src-synthetic','2026-Q1','2026-Q2'];
+    const requiredText = expectedDeck ? expectedDeck.slides.map(slide => slide.action_title) : ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12 percent','18 percent','src-synthetic','2026-Q1','2026-Q2'];
     const missingText = requiredText.filter(required => !allText.toLowerCase().includes(required.toLowerCase()));
     console.log(`HTML_CONTENT_CHECK:${JSON.stringify({ textLength: allText.length, missing: missingText })}`);
     if (missingText.length) throw new Error(`Rendered HTML is missing expected content: ${missingText.join(', ')}`);
@@ -51,6 +51,14 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
       await slide.screenshot({ path: png });
       records.push({ slide: i+1, screenshot: path.basename(png), width: Math.round(box.width), height: Math.round(box.height) });
     }
-    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText,controls_hidden:controlsHidden}, null, 2)+'\n');
+    await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
+    const mobile = await page.evaluate(index => {
+      const section = document.querySelectorAll('section')[index];
+      const rect = section.closest('svg[data-marpit-svg]').getBoundingClientRect();
+      return { viewport: { width: innerWidth, height: innerHeight }, left: rect.left, top: rect.top, width: rect.width, height: rect.height, ratio: rect.width / rect.height };
+    }, countFound - 1);
+    if (mobile.width > 391 || mobile.height > 845 || mobile.left < -1 || mobile.left + mobile.width > 391 || Math.abs(mobile.ratio - 16 / 9) > 0.02) throw new Error('HTML_MOBILE_LAYOUT_INVALID');
+    await page.screenshot({ path: path.join(output, 'html-responsive-mobile.png') });
+    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText,controls_hidden:controlsHidden,mobile}, null, 2)+'\n');
   } finally { await browser.close(); }
 })();

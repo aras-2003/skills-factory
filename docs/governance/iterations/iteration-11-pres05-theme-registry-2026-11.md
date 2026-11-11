@@ -1,13 +1,13 @@
 # Iteration 11 — Presentation theme registry and layout grammar (PRES-05)
 
-- State: PLANNED (scope lock; becomes ACTIVE only when this exact record+matrix tree merges after Iteration 10 closure).
+- State: ACTIVE (scope lock PR #637 merged at `23c6d29736ca59fbe71728ce7262b50aead9073c`; candidate development starts from this exact post-lock baseline).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #611 / NOT ASSIGNED OR VERIFIED (connected GitHub API cannot read or mutate native Iteration).
 - Parent #283 remains open; this increment contributes reusable Marp themes/layouts only and does not satisfy native Figma Slides, client runtime, or full delivery acceptance.
 - Previous terminal increment: Iteration 10 CLOSED / ACCEPTED in PR #636, merge `2ebd353277c5c2551ca345ee89cc9fab711c3d41`.
 - Baseline main SHA: `2ebd353277c5c2551ca345ee89cc9fab711c3d41`.
-- Scope lock tree commit: recorded after the record and matrix land together on this branch.
-- Started at / closed at (UTC): pending / pending.
+- Scope lock tree commit: `bd5746eab94c40315698cf64c62a95af4ab36f24` (record + matrix in one tree, PR #637).
+- Started at / closed at (UTC): 2026-11-11 18:35 UTC / pending.
 
 ## Frozen commitment
 

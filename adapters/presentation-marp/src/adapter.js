@@ -5,6 +5,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chmod } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const IMAGE = 'ghcr.io/skills-factory/presentation-marp:1.0.0';
@@ -14,6 +15,9 @@ const MAX_ASSETS = 50;
 const MAX_ASSET_TOTAL = 10 * 1024 * 1024;
 const MAX_OUTPUT = 100 * 1024 * 1024;
 const TIMEOUT_MS = 120_000;
+const THEME_REGISTRY = JSON.parse(readFileSync(path.join(HERE, '../themes/registry.json'), 'utf8'));
+const LAYOUT_ALIASES = Object.freeze({ title:'title', 'insight-chart':'insight-chart', data:'insight-chart', comparison:'comparison', process:'process', roadmap:'roadmap', architecture:'architecture', summary:'summary', conclusion:'summary' });
+export const LAYOUTS = new Set(['title','insight-chart','comparison','process','roadmap','architecture','summary']);
 
 export class AdapterError extends Error {
   constructor(code, message, details = {}) { super(message); this.name = 'AdapterError'; this.code = code; this.details = details; }
@@ -21,6 +25,48 @@ export class AdapterError extends Error {
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const safeText = (value) => String(value ?? '').replace(/[\r\n]+/g, ' ').trim().replace(/([\\`*_{}\[\]()#+.!|~-])/g, '\\$1').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const safeNote = (value) => String(value ?? '').replace(/--/g, '—').replace(/\r?\n/g, ' ');
+
+function linearChannel(value) { const c=parseInt(value,16)/255; return c<=0.04045?c/12.92:((c+0.055)/1.055)**2.4; }
+function luminance(hex) { const rgb=hex.slice(1).match(/../g).map(linearChannel); return 0.2126*rgb[0]+0.7152*rgb[1]+0.0722*rgb[2]; }
+export function contrastRatio(foreground, background) { const values=[luminance(foreground),luminance(background)].sort((a,b)=>b-a); return (values[0]+0.05)/(values[1]+0.05); }
+export function validateThemeRegistry(registry=THEME_REGISTRY) {
+  if (registry?.schema_version!==1 || !Array.isArray(registry.themes) || registry.themes.length<4) throw new AdapterError('INVALID_THEME_REGISTRY','Theme registry must contain at least four versioned themes.');
+  const ids=new Set();
+  for (const theme of registry.themes) {
+    if (!theme || !/^sf-[a-z0-9-]+$/.test(theme.id) || ids.has(theme.id) || !/^\d+\.\d+\.\d+$/.test(theme.version)) throw new AdapterError('INVALID_THEME_REGISTRY','Theme IDs must be unique and theme versions must use semantic versioning.');
+    ids.add(theme.id);
+    const t=theme.tokens;
+    if (!t || ['canvas','ink','muted','accent','rule'].some(key=>!/^#[0-9a-f]{6}$/i.test(t[key]??''))) throw new AdapterError('INVALID_THEME_REGISTRY','Every theme requires valid semantic color tokens.');
+    if (contrastRatio(t.ink,t.canvas)<4.5 || contrastRatio(t.muted,t.canvas)<4.5 || contrastRatio(t.accent,t.canvas)<4.5) throw new AdapterError('THEME_CONTRAST_FAILED','Theme text and emphasis colors must meet 4.5:1 contrast.');
+    for (const key of ['font_display','font_body','font_label']) if (typeof t[key]!=='string' || /[;{}<>]/.test(t[key])) throw new AdapterError('INVALID_THEME_REGISTRY','Font token contains unsupported CSS syntax.');
+    if (!['safe','minimal','progressive'].includes(theme.css_complexity) || typeof theme.editable_safe!=='boolean') throw new AdapterError('INVALID_THEME_REGISTRY','Theme CSS capability metadata is incomplete.');
+    if (theme.css_complexity==='progressive' && theme.editable_safe) throw new AdapterError('INVALID_THEME_REGISTRY','Progressive CSS themes cannot claim editable-safe support.');
+  }
+  return true;
+}
+validateThemeRegistry();
+export function resolveLayout(layoutId) {
+  const layout=LAYOUT_ALIASES[layoutId];
+  if (!layout || !LAYOUTS.has(layout)) throw new AdapterError('UNSUPPORTED_LAYOUT','Unsupported semantic slide layout: '+safeText(layoutId)+'.');
+  return layout;
+}
+function themeById(id) {
+  const theme=THEME_REGISTRY.themes.find(item=>item.id===id);
+  if (!theme) throw new AdapterError('UNKNOWN_THEME','Select a theme ID from the bundled registry.');
+  return theme;
+}
+export function buildThemeCss(theme) {
+  const t=theme.tokens;
+  const layoutFile=theme.id==='sf-marp-editable-safe'?'layouts-editable-safe.css':'layouts.css';
+  const css=readFileSync(path.join(HERE,'../themes',layoutFile),'utf8');
+  const values={canvas:t.canvas,ink:t.ink,muted:t.muted,accent:t.accent,rule:t.rule,'font-display':t.font_display,'font-body':t.font_body,'font-label':t.font_label,'grid-width':t.grid_width,'space-unit':t.space_unit};
+  const vars=Object.entries(values).map(([key,value])=>'  --sf-'+key+': '+value+';').join('\n');
+  const enhancement=theme.css_complexity==='progressive'
+    ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\n'
+    : '';
+  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement;
+}
+
 
 function safeRendererDiagnostic(output) {
   const normalized = output.replace(/\u001b\[[0-9;]*m/g, '').replace(/\[\s*ERROR\s*\]/g, '[ERROR]').replace(/\[\s*WARN\s*\]/g, '[WARN]');
@@ -54,6 +100,7 @@ export async function preflight(mode, { docker = 'docker', image = IMAGE } = {})
   let runtime;
   try { runtime = JSON.parse(checks.stdout); } catch { throw new AdapterError('RUNTIME_IDENTITY_INVALID', 'Pinned renderer returned an invalid runtime identity.'); }
   if (runtime.marp !== '4.5.1' || runtime.node !== '26.8.1') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', `Expected Marp 4.5.1 and Node 26.8.1; received Marp ${String(runtime.marp)} and Node ${String(runtime.node)}.`);
+  if (runtime.font_package !== '1:1.07.4-11') throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'The pinned Debian fonts-liberation package is required for licensed theme rendering.');
   if (['pdf', 'pptx_flattened', 'pptx_editable_experimental'].includes(mode) && (!runtime.browser || !runtime.browser_sha256)) throw new AdapterError('BLOCKED_MISSING_RUNTIME', `The ${mode} mode requires the pinned Chromium browser runtime.`);
   if (mode === 'pptx_editable_experimental' && !runtime.libreoffice) throw new AdapterError('BLOCKED_MISSING_RUNTIME', 'Experimental editable PPTX requires LibreOffice Impress to verify the generated file; no fallback was produced.');
   if (mode === 'pptx_editable_experimental' && (!runtime.libreoffice.startsWith('7.4.7') || runtime.libreoffice_package !== '4:7.4.7-1+deb12u14')) throw new AdapterError('RUNTIME_IDENTITY_MISMATCH', 'Experimental editable PPTX requires the locked LibreOffice 7.4.7 runtime.');
@@ -69,14 +116,19 @@ export function validateDeck(deck) {
   for (const slide of deck.slides) {
     if (!slide || typeof slide.slide_id !== 'string' || ids.has(slide.slide_id) || typeof slide.action_title !== 'string') throw new AdapterError('INVALID_DECK', 'Slide IDs must be unique and every slide needs an action title.');
     ids.add(slide.slide_id);
+    if (!slide.layout || typeof slide.layout.layout_id !== 'string') throw new AdapterError('INVALID_DECK','Every slide requires a semantic layout ID.');
+    resolveLayout(slide.layout.layout_id);
     for (const ex of slide.exhibits ?? []) if (!['bar_chart', 'table', 'image'].includes(ex.visual_type)) throw new AdapterError('UNSUPPORTED_EXHIBIT', `Unsupported exhibit type: ${safeText(ex.visual_type)}.`);
   }
 }
 
 export function renderDeck(deck, themePath, assetMap = new Map()) {
   const lines = ['---', 'marp: true', 'size: 16:9', 'paginate: true', `theme: ${path.basename(themePath, '.css')}`, '---', ''];
+  const themeId=path.basename(themePath,'.css');
+  const selectedTheme=themeById(themeId);
   for (const slide of deck.slides) {
-    lines.push(`# ${safeText(slide.action_title)}`, '');
+    const layout=resolveLayout(slide.layout.layout_id);
+    lines.push('<!-- _class: sf-theme-'+selectedTheme.id+' sf-layout-'+layout+' -->', '', `# ${safeText(slide.action_title)}`, '');
     if (slide.body) lines.push(safeText(slide.body), '');
     for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
     for (const datum of slide.data_refs ?? []) {
@@ -123,6 +175,8 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
   if (raw.length > MAX_INPUT) throw new AdapterError('BLOCKED_INPUT_LIMIT', 'DeckSpec exceeds the 5 MiB input limit.');
   let deck; try { deck = JSON.parse(raw.toString('utf8')); } catch { throw new AdapterError('INVALID_JSON', 'DeckSpec is not valid JSON.'); }
   validateDeck(deck);
+  const themeDefinition=themeById(theme);
+  if (mode==='pptx_editable_experimental' && !themeDefinition.editable_safe) throw new AdapterError('BLOCKED_THEME_UNSUPPORTED','Selected theme CSS is not verified for editable PPTX; choose a bundled editable-safe theme explicitly. No theme fallback was applied.');
   const repoRoot = path.resolve(HERE, '../../..');
   try { await run(process.env.PYTHON ?? 'python3', [path.join(repoRoot, 'scripts/validate/presentation_model.py'), input], { timeout: 15_000, maxBytes: 16_384 }); }
   catch (error) { if (error.code === 'RENDER_FAILED') throw new AdapterError('INVALID_DECK', 'Canonical DeckSpec schema or semantic validation failed; raw diagnostics were omitted to protect source content.', { exitCode: error.details.exitCode }); throw error; }
@@ -130,25 +184,24 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
   const root = await mkdtemp(path.join(tmpdir(), 'sf-marp-')); const inDir = path.join(root, 'input'); const outDir = path.join(root, 'output');
   try {
     await mkdir(inDir); await mkdir(outDir);
-    const themeFile = path.join(HERE, '..', 'themes', `${theme}.css`); const themeInfo = await stat(themeFile).catch(() => null);
-    if (theme !== 'sf-editorial' || !themeInfo?.isFile()) throw new AdapterError('UNKNOWN_THEME', 'Only the bundled sf-editorial theme is available.');
+    const themeFile = path.join(inDir, `${theme}.css`);
     const assets = await collectAssets(deck, path.dirname(path.resolve(input)), inDir);
     for (const slide of deck.slides) for (const ex of slide.exhibits ?? []) if (ex.visual_type === 'bar_chart') {
       const dataMap = new Map((slide.data_refs ?? []).map(ref => [ref.data_ref_id, ref]));
       const chartId = `${slide.slide_id}:${ex.exhibit_id}`; const points = ex.supported_data.map(id => { const ref = dataMap.get(id); if (!ref || typeof ref.value !== 'number' || !Number.isFinite(ref.value)) throw new AdapterError('INVALID_CHART_DATA', `Chart ${safeText(ex.exhibit_id)} requires finite numeric data references.`); return { id, value: ref.value, label: String(id), unit: ref.unit ?? ex.units ?? '' }; });
       if (!points.length) throw new AdapterError('INVALID_CHART_DATA', `Chart ${safeText(ex.exhibit_id)} has no data points.`);
       if (points.length > 8) throw new AdapterError('BLOCKED_CHART_SIZE', 'Bar charts are limited to eight points.'); const max = Math.max(1, ...points.map(p => Math.abs(p.value))); const segment = 780 / points.length, barWidth = Math.min(112, segment * 0.55); const xml = v => String(v).replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&apos;'}[c]));
-      const shapes = points.map((p,i) => { const h=Math.max(2,Math.round(Math.abs(p.value)/max*125)), x=60+i*segment+(segment-barWidth)/2, y=p.value>=0?200-h:200, labelY=p.value>=0?Math.max(42,y-14):Math.min(370,y+h+28); return `<g><rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="8" fill="#176b87"/><text x="${x+barWidth/2}" y="${labelY}" text-anchor="middle" font-size="22" fill="#17243a">${xml(p.value)} ${xml(p.unit)}</text><text x="${x+barWidth/2}" y="354" text-anchor="middle" font-size="21" fill="#52627a">${xml(p.label)}</text></g>`; }).join('');
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400"><rect width="900" height="400" fill="#f6f4ee"/><path d="M60 200H840" stroke="#94a3b8" stroke-width="2"/>${shapes}</svg>`;
+      const shapes = points.map((p,i) => { const h=Math.max(2,Math.round(Math.abs(p.value)/max*125)), x=60+i*segment+(segment-barWidth)/2, y=p.value>=0?200-h:200, labelY=p.value>=0?Math.max(42,y-14):Math.min(370,y+h+28); return `<g><rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="8" fill="${themeDefinition.tokens.accent}"/><text x="${x+barWidth/2}" y="${labelY}" text-anchor="middle" font-size="22" fill="${themeDefinition.tokens.ink}">${xml(p.value)} ${xml(p.unit)}</text><text x="${x+barWidth/2}" y="354" text-anchor="middle" font-size="21" fill="${themeDefinition.tokens.muted}">${xml(p.label)}</text></g>`; }).join('');
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400"><rect width="900" height="400" fill="${themeDefinition.tokens.canvas}"/><path d="M60 200H840" stroke="${themeDefinition.tokens.rule}" stroke-width="2"/>${shapes}</svg>`;
       const bytes = Buffer.from(svg); const file = `${sha256(bytes)}.svg`; await writeFile(path.join(inDir,file),bytes,{flag:'wx'}); assets.push({id:chartId,file,sha256:sha256(bytes),generated:'deterministic-data-chart'});
     }
     const assetMap = new Map(assets.map(a => [a.id, `./${a.file}`]));
     const md = renderDeck(deck, themeFile, assetMap); await writeFile(path.join(inDir, 'deck.md'), md);
     await writeFile(path.join(inDir, 'deck.json'), raw);
     await chmod(outDir, 0o777);
-    await copyFile(themeFile, path.join(inDir, 'sf-editorial.css'));
+    await writeFile(themeFile, buildThemeCss(themeDefinition));
     const renderName = `sf-marp-render-${randomUUID()}`;
-    const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
+    const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--env', `SF_MARP_THEME=${theme}`, '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
     await run(docker, command, { timeout: TIMEOUT_MS, maxBytes: 16_384, diagnostic: mode === 'pptx_editable_experimental' && process.env.CI === 'true' && sha256(raw) === '84d20f2411e8e8f7a2d2949f5429c142a61fc7a6ba6d96dc20c388a21054ec69' }).catch(async error => { if (error.code === 'BLOCKED_TIMEOUT') await run(docker, ['kill', renderName], { timeout: 5_000, maxBytes: 1024 }).catch(() => {}); throw error; });
     const names = { html: 'deck.html', pdf: 'deck.pdf', pptx_flattened: 'deck.pptx', pptx_editable_experimental: 'deck-editable.pptx' };
     const file = path.join(outDir, names[mode]); const info = await stat(file).catch(() => null);
@@ -156,7 +209,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     if (info.size > MAX_OUTPUT) throw new AdapterError('BLOCKED_OUTPUT_LIMIT', 'Rendered artifact exceeds the 100 MiB limit.');
     await mkdir(outputDir, { recursive: true }); const dest = path.join(outputDir, names[mode]); await copyFile(file, dest);
     if (mode === 'html') for (const asset of assets) await copyFile(path.join(inDir, asset.file), path.join(outputDir, asset.file));
-    const result = { schema_version: 1, requested_mode: mode, output: names[mode], output_sha256: sha256(await readFile(dest)), input_sha256: sha256(raw), image, runtime, assets, slide_count: deck.slides.length, slide_ids: deck.slides.map(slide => slide.slide_id), security: { network: 'disabled', input_read_only: true, timeout_ms: TIMEOUT_MS, max_input_bytes: MAX_INPUT, max_output_bytes: MAX_OUTPUT } };
+    const result = { schema_version: 1, requested_mode: mode, theme: { id: themeDefinition.id, version: themeDefinition.version, registry_version: THEME_REGISTRY.theme_registry_version }, layouts: deck.slides.map(slide=>({ slide_id: slide.slide_id, layout_id: resolveLayout(slide.layout.layout_id) })), output: names[mode], output_sha256: sha256(await readFile(dest)), input_sha256: sha256(raw), image, runtime, assets, slide_count: deck.slides.length, slide_ids: deck.slides.map(slide => slide.slide_id), security: { network: 'disabled', input_read_only: true, timeout_ms: TIMEOUT_MS, max_input_bytes: MAX_INPUT, max_output_bytes: MAX_OUTPUT } };
     await writeFile(path.join(outputDir, 'receipt.json'), `${JSON.stringify(result, null, 2)}\n`);
     return result;
   } finally { await rm(root, { recursive: true, force: true }); }
