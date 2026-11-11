@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "theme_registry_version": "1.0.0",
+  "token_contract": "Presentation OS CreativeDirection semantic roles v1",
+  "font_policy": {
+    "embedded_fonts": false,
+    "redistribution": "No font files are bundled or redistributed by themes.",
+    "selection": "Use declared system font stack; record the actual resolved face with fc-match.",
+    "fallback": "If the declared face is missing, use the system sans-serif/serif fallback and include the observed fallback in the renderer receipt."
+  },
+  "themes": [
+    {
+      "id": "sf-editorial",
+      "version": "1.0.0",
+      "family": "editorial",
+      "editable_safe": true,
+      "css_complexity": "safe",
+      "tokens": {
+        "canvas": "#f6f4ee",
+        "ink": "#17243a",
+        "muted": "#52627a",
+        "accent": "#176b87",
+        "rule": "#94a3b8",
+        "font_display": "Liberation Sans, sans-serif",
+        "font_body": "Liberation Sans, sans-serif",
+        "font_label": "Liberation Serif, serif",
+        "grid_width": "1108px",
+        "space_unit": "8px"
+      }
+    },
+    {
+      "id": "sf-corporate",
+      "version": "1.0.0",
+      "family": "corporate",
+      "editable_safe": true,
+      "css_complexity": "safe",
+      "tokens": {
+        "canvas": "#ffffff",
+        "ink": "#122033",
+        "muted": "#48576b",
+        "accent": "#075985",
+        "rule": "#94a3b8",
+        "font_display": "Liberation Sans, sans-serif",
+        "font_body": "Liberation Sans, sans-serif",
+        "font_label": "Liberation Sans, sans-serif",
+        "grid_width": "1108px",
+        "space_unit": "8px"
+      }
+    },
+    {
+      "id": "sf-executive",
+      "version": "1.0.0",
+      "family": "executive",
+      "editable_safe": true,
+      "css_complexity": "safe",
+      "tokens": {
+        "canvas": "#fbf7ef",
+        "ink": "#20263a",
+        "muted": "#4b5669",
+        "accent": "#8a3b12",
+        "rule": "#a39a88",
+        "font_display": "Liberation Serif, serif",
+        "font_body": "Liberation Sans, sans-serif",
+        "font_label": "Liberation Sans, sans-serif",
+        "grid_width": "1108px",
+        "space_unit": "8px"
+      }
+    },
+    {
+      "id": "sf-technology",
+      "version": "1.0.0",
+      "family": "technology",
+      "editable_safe": false,
+      "css_complexity": "progressive",
+      "tokens": {
+        "canvas": "#111827",
+        "ink": "#f9fafb",
+        "muted": "#bdc8d7",
+        "accent": "#67e8f9",
+        "rule": "#64748b",
+        "font_display": "Liberation Sans, sans-serif",
+        "font_body": "Liberation Sans, sans-serif",
+        "font_label": "Liberation Mono, monospace",
+        "grid_width": "1108px",
+        "space_unit": "8px"
+      }
+    },
+    {
+      "id": "sf-education",
+      "version": "1.0.0",
+      "family": "education",
+      "editable_safe": true,
+      "css_complexity": "safe",
+      "tokens": {
+        "canvas": "#f7fbfa",
+        "ink": "#17362f",
+        "muted": "#47645b",
+        "accent": "#146c5a",
+        "rule": "#91aaa1",
+        "font_display": "Liberation Sans, sans-serif",
+        "font_body": "Liberation Sans, sans-serif",
+        "font_label": "Liberation Sans, sans-serif",
+        "grid_width": "1108px",
+        "space_unit": "8px"
+      }
+    },
+    {
+      "id": "sf-marp-editable-safe",
+      "version": "1.0.0",
+      "family": "editorial-safe",
+      "editable_safe": true,
+      "css_complexity": "minimal",
+      "tokens": {
+        "canvas": "#f6f4ee",
+        "ink": "#17243a",
+        "muted": "#52627a",
+        "accent": "#176b87",
+        "rule": "#94a3b8",
+        "font_display": "Liberation Sans, sans-serif",
+        "font_body": "Liberation Sans, sans-serif",
+        "font_label": "Liberation Sans, sans-serif",
+        "grid_width": "1108px",
+        "space_unit": "8px"
+      }
+    }
+  ]
+}
