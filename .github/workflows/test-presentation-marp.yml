@@ -84,6 +84,7 @@ jobs:
         continue-on-error: true
         env:
           SF_PUPPETEER_BROWSER: firefox
+          SF_CHROME_TMPFS_EXEC: "1"
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-firefox
       - name: Diagnose Puppeteer PDF path in upstream image
         continue-on-error: true
@@ -118,6 +119,7 @@ jobs:
         env:
           SF_MARP_BROWSER: firefox
           SF_MARP_BROWSER_PROTOCOL: webdriver-bidi
+          SF_MARP_TMPFS_EXEC: "1"
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/firefox-editable
       - name: Verify base Marp editable runtime
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/base-editable
