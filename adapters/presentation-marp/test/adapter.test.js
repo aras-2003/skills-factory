@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, symlink, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { AdapterError, MODES, LAYOUTS, validateDeck, renderDeck, resolveLayout, validateThemeRegistry, contrastRatio, collectAssets, preflight, run, render } from '../src/adapter.js';
+import { AdapterError, MODES, LAYOUTS, validateDeck, renderDeck, resolveLayout, validateThemeRegistry, contrastRatio, buildThemeCss, collectAssets, preflight, run, render } from '../src/adapter.js';
 
 const deck = { schema_version:'1.0', slides:[{slide_id:'s1',action_title:'Quarterly view',claims:[],data_refs:[{data_ref_id:'q1',value:12,unit:'percent',source_ids:['synth']}],exhibits:[{exhibit_id:'e1',visual_type:'bar_chart',supported_data:['q1']}],layout:{layout_id:'data',tokens:{}},notes:'Never close --> comment',provenance:{},desired_editability:'PREFERRED'}] };
 
@@ -89,6 +89,14 @@ test('theme and layout class are explicit in generated Markdown', () => {
   const markdown = renderDeck(deck, 'sf-education.css', new Map([['s1:e1','./fixed.svg']]));
   assert.match(markdown, /theme: sf-education/);
   assert.match(markdown, /_class: sf-theme-sf-education sf-layout-insight-chart/);
+});
+
+test('editable-safe CSS avoids advanced grid and media features while progressive theme opts in', () => {
+  const tokens = { canvas:'#f6f4ee', ink:'#17243a', muted:'#52627a', accent:'#176b87', rule:'#94a3b8', font_display:'Liberation Sans, sans-serif', font_body:'Liberation Sans, sans-serif', font_label:'Liberation Serif, serif', grid_width:'1108px', space_unit:'8px' };
+  const safe = buildThemeCss({ id:'sf-marp-editable-safe', tokens, css_complexity:'minimal' });
+  assert.doesNotMatch(safe, /grid-template|@media|linear-gradient/);
+  const progressive = buildThemeCss({ id:'sf-technology', tokens, css_complexity:'progressive' });
+  assert.match(progressive, /linear-gradient/);
 });
 
 test('progressive CSS is blocked for editable export without silently changing theme', async t => {
