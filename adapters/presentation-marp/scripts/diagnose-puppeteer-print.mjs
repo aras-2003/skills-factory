@@ -75,7 +75,7 @@ const args = [
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input', '--user', '10001:10001',
-  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
+  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'XDG_CONFIG_HOME=/tmp/.chromium-config', '--env', 'XDG_CACHE_HOME=/tmp/.chromium-cache', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
   '--tmpfs', tempMount,
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', 'node', image, '/work/input/probe.cjs',
