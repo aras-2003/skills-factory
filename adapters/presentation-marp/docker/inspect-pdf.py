@@ -13,8 +13,9 @@ text=''
 if mode == 'text':
     text=subprocess.run(['pdftotext','-layout',str(pdf),'-'],check=True,text=True,capture_output=True).stdout
     normalized_text=re.sub(r'\s+', ' ', text).strip()
-    for required in ['Three slides, one source model','Synthetic quarterly growth','Preserve meaning across modes','12','18','percent','src-synthetic']:
-        if required.lower() not in normalized_text.lower(): raise SystemExit(f'PDF text extraction missing expected content: {required}')
+    required = {'opening_title':'Three slides, one source model','evidence_title':'Synthetic quarterly growth','closing_title':'Preserve meaning across modes','first_value':'12','second_value':'18','unit':'percent','source_id':'src-synthetic'}
+    missing = [key for key, value in required.items() if value.lower() not in normalized_text.lower()]
+    if missing: raise SystemExit('PDF_TEXT_ASSERTION_FAILED: ' + ','.join(missing))
 subprocess.run(['pdftoppm','-png','-r','96',str(pdf),str(out/'reopened-slide')],check=True,capture_output=True)
 report={'pages':pages,'width_points':w,'height_points':h,'ratio':ratio,'reopened_by':'poppler-pdftoppm','content_extraction':'pdftotext' if mode=='text' else 'OCR in reopened presentation evidence'}
 if mode=='text': report['extracted_text']=text
