@@ -62,7 +62,7 @@ export function buildThemeCss(theme) {
   const values={canvas:t.canvas,ink:t.ink,muted:t.muted,accent:t.accent,rule:t.rule,'font-display':t.font_display,'font-body':t.font_body,'font-label':t.font_label,'grid-width':t.grid_width,'space-unit':t.space_unit};
   const vars=Object.entries(values).map(([key,value])=>'  --sf-'+key+': '+value+';').join('\n');
   const enhancement=theme.css_complexity==='progressive'
-    ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\nsection.sf-theme-'+theme.id+' .sf-code-label { font-family: var(--sf-font-label); }\n'
+    ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\n'
     : '';
   return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement;
 }
