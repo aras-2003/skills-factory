@@ -1,13 +1,14 @@
 # Iteration 11 — Presentation theme registry and layout grammar (PRES-05)
 
-- State: ACTIVE (scope lock PR #637 merged at `23c6d29736ca59fbe71728ce7262b50aead9073c`; candidate development starts from this exact post-lock baseline).
+- State: CLOSED / ACCEPTED (PR #638 merged; final closeout record/matrix in PR #639).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #611 / NOT ASSIGNED OR VERIFIED (connected GitHub API cannot read or mutate native Iteration).
 - Parent #283 remains open; this increment contributes reusable Marp themes/layouts only and does not satisfy native Figma Slides, client runtime, or full delivery acceptance.
 - Previous terminal increment: Iteration 10 CLOSED / ACCEPTED in PR #636, merge `2ebd353277c5c2551ca345ee89cc9fab711c3d41`.
 - Baseline main SHA: `2ebd353277c5c2551ca345ee89cc9fab711c3d41`.
+- Final main SHA: `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079`.
 - Scope lock tree commit: `bd5746eab94c40315698cf64c62a95af4ab36f24` (record + matrix in one tree, PR #637).
-- Started at / closed at (UTC): 2026-11-11 18:35 UTC / pending.
+- Started at / closed at (UTC): 2026-11-11 18:35 UTC / 2026-11-11 19:41 UTC.
 
 ## Frozen commitment
 
@@ -27,7 +28,7 @@ An unmerged branch, `iter10/pres05-theme-layout-registry`, contains an earlier u
 
 ## Test and acceptance plan
 
-All acceptance states begin NOT_RUN. Tests run after the full candidate development is frozen. Every verdict binds to the exact main candidate and retained artifact.
+All acceptance states began NOT_RUN. Tests ran after the full candidate development was frozen. Final verdicts bind to candidate SHA `cd87ceb608f7b7fe599e0cc6757e5aa414f3a1b9` and final main SHA `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079` with retained CI artifacts.
 
 - 611-A: registry contract contains 4+ distinct visual styles and the editable-safe variant; stable IDs/versions, tokens, typography, grid, 16:9 intent, CSS complexity and editability metadata validate.
 - 611-B: registry exposes at least 6 required semantic layout patterns, with alias compatibility and rejection of unknown layouts.
@@ -47,6 +48,18 @@ Required surfaces: deterministic local/CI renderer and LibreOffice reopen. Site 
 - Fixed sentinels: #609 all-mode output/reopen/security/fail-closed path; #610 routing and editability manifest contract; canonical DeckSpec validator.
 - Rotating unchanged-domain probes: `report-composer` no-unsolicited-artifact and evidence-preservation; `visual-output-design` no-fabrication and capability-preflight.
 - Expand coverage if theme changes touch adapter security, input parsing, canonical schema, packaging, or another renderer; do not reduce a failing required case.
+
+
+## Accepted closeout
+
+- Implementation PR #638 merged as `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079`; linked issue #611 closed after every required matrix row passed.
+- PR-head CI run #230 passed on candidate `cd87ceb608f7b7fe599e0cc6757e5aa414f3a1b9`. Artifact ID `13886837971`; digest `sha256:7339e4fdf1d8162a3004cc608efd248ccb611708db95e9501b009c5be3333169`.
+- Exact-main CI passed on `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079`: Validate skills run #1247, Domain integrity run #1247, Marp adapter run #231, Lab/source-bound Site build run #188, and GitHub Pages deployment run #314.
+- Main Marp artifact ID `13887962875`; digest `sha256:6961511952bb4c07855ddb58bc9e3b713f613d9bc7b7216a1cbbcb40c2e5a72e`.
+- User-supplied artifact exposed black screenshots for lazily hidden Marp slides. The inspector now reveals the selected SVG before capture and checks the slide surface (not the letterboxed viewport-sized SVG) on mobile. CI confirmed base HTML/PDF/PPTX integration and theme regression pass. The user artifact was historical input; all accepted PASS evidence comes from post-lock runs.
+- The gallery has seven slides. Its LibreOffice-reopen OCR check now accepts a supplied DeckSpec and verifies all seven expected titles instead of assuming the three-slide base fixture.
+- #611 is closed. Parent #283 remains open for separate Figma/client runtime acceptance; no Cloud Next plugin runtime or production plugin promotion is claimed. Existing GitHub Pages deployment passed as part of the repository's push workflow.
+- Reviewer: owner self-review; not independent. No remaining required FAIL, NOT_RUN, BLOCKED or REVIEW_REQUIRED rows.
 
 ## Closure rules
 
