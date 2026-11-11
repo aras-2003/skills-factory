@@ -53,15 +53,15 @@ const args = [
   '--output', '/work/output/base-marp.pdf',
 ];
 function classify(stderr) {
-  if (/Protocol error \\(Page\\.printToPDF\\)/i.test(stderr)) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
-  if (/Page\\.printToPDF/i.test(stderr)) return 'PRINT_TO_PDF_OPERATION';
-  if (/Page\\.navigate/i.test(stderr)) return 'NAVIGATION_OPERATION';
-  if (/waitForNetworkIdle/i.test(stderr)) return 'NETWORK_IDLE_OPERATION';
-  if (/setContent/i.test(stderr)) return 'CONTENT_SETUP_OPERATION';
-  if (/Navigation timeout of \\d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
-  if (/Timed out after waiting \\d+ms/i.test(stderr)) return 'BROWSER_OPERATION_TIMEOUT';
-  if (/Failed to launch the browser process/i.test(stderr)) return 'BROWSER_LAUNCH_FAILED';
-  if (/Target closed/i.test(stderr)) return 'BROWSER_TARGET_CLOSED';
+  if (stderr.includes('Protocol error (Page.printToPDF')) return 'PRINT_TO_PDF_PROTOCOL_ERROR';
+  if (stderr.includes('Page.printToPDF')) return 'PRINT_TO_PDF_OPERATION';
+  if (stderr.includes('Page.navigate')) return 'NAVIGATION_OPERATION';
+  if (stderr.includes('waitForNetworkIdle')) return 'NETWORK_IDLE_OPERATION';
+  if (stderr.includes('setContent')) return 'CONTENT_SETUP_OPERATION';
+  if (/Navigation timeout of \d+ ms exceeded/i.test(stderr)) return 'NAVIGATION_TIMEOUT';
+  if (/Timed out after waiting \d+ms/i.test(stderr)) return 'BROWSER_OPERATION_TIMEOUT';
+  if (stderr.includes('Failed to launch the browser process')) return 'BROWSER_LAUNCH_FAILED';
+  if (stderr.includes('Target closed')) return 'BROWSER_TARGET_CLOSED';
   return 'UNKNOWN_RENDER_FAILURE';
 }
 async function run() {
