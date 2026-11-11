@@ -24,7 +24,7 @@ fi
 case "${1:-}" in
   sf-inspect-html) exec node /usr/local/bin/sf-inspect-html.cjs "$2" "$3" "$4" "${5:-}" ;;
   sf-inspect-pptx) exec python3 /usr/local/bin/sf-inspect-pptx "$2" "$3" ;;
-  sf-inspect-pdf) exec python3 /usr/local/bin/sf-inspect-pdf.py "$2" "$3" "$4" "${5:-text}" ;;
+  sf-inspect-pdf) exec python3 /usr/local/bin/sf-inspect-pdf.py "$2" "$3" "$4" "${5:-text}" "${6:-}" ;;
   sf-reopen-pptx) exec /usr/local/bin/sf-reopen-pptx.sh "$@" ;;
   sf-compare-images) exec python3 /usr/local/bin/sf-compare-images.py "$2" "$3" "$4" "$5" ;;
   sf-font-fallback) exec /usr/local/bin/sf-font-fallback.sh "$@" ;;
