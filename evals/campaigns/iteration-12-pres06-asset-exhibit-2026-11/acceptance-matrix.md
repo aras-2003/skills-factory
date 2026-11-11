@@ -1,6 +1,6 @@
-# Iteration 12 — PRES-06 acceptance matrix
+| 612-I1 | #612 / exact main | Final implementation main Validate, Domain, evaluation, Marp and source-bound Site/Pages checks pass; retain artifact identity | required | 7013fe254a967182ccda3ec380b1539b5a8688a7 / sha256:83b7027307def756142c28c6ae55a998b85c235c7a4c0045a35018a302540a72 | GitHub Actions main | exact main SHA 7013fe254a967182ccda3ec380b1539b5a8688a7 | PASS | PASS | Validate 43116579265; Domain 43116579225; Lab packaging 43116579352; Marp 43116579244; Pages 43116578936 — all successful for exact main SHA | owner self-review (not independent) |
 
-Baseline main: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`; scope-lock merge: `d2cec8e23c27d6380df4074b13aa3ae5ca594839`. Fixed scope: #612 only. All acceptance rows begin NOT_RUN; scope lock is not implementation or runtime evidence.
+Baseline main: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`; scope-lock merge: `d2cec8e23c27d6380df4074b13aa3ae5ca594839`. Fixed scope: #612 only. Implementation PR #642 merged as `7013fe254a967182ccda3ec380b1539b5a8688a7`. All required acceptance rows passed on PR CI and exact main; Cloud Next remains reviewed N/A.
 
 | Row ID | Issue / criterion | Layer + case ID / definition | Required / N/A rationale | Candidate SHA + artifact digest | Surface / model / tools | Input / rubric hashes | Execution state | Verdict | Receipt / output / trace + runtime | Reviewer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -16,15 +16,15 @@ Baseline main: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`; scope-lock merge: `d2
 | 612-I1 | #612 / exact main | Final implementation main Validate, Domain, evaluation, Marp and source-bound Site/Pages checks pass; retain artifact identity | required | pending | GitHub Actions | exact main SHA | NOT_RUN | none | pending | owner |
 | runtime-site | #612 / Cloud Next runtime | No skill/runtime registration or Cloud Next contract changes in this adapter-only scope; parent #283 acceptance is separate | reviewed N/A | N/A | Cloud Next / Lab | N/A | reviewed | N/A | explicit scope boundary | owner |
 
-Completeness review: all fixed criteria are mapped; each required case has a retained receipt; repeated attempts use unique run IDs; any unsupported renderer/fallback behavior is explicit; no required failure is relaxed or hidden. Parent #283 remains open and cannot be closed by this matrix.
+Evidence: [PR runtime run 43114904393](https://github.com/aras-2003/skills-factory/actions/runs/43114904393) and [exact-main runtime run 43116579244](https://github.com/aras-2003/skills-factory/actions/runs/43116579244). The exact-main artifact bundle digest is `sha256:83b7027307def756142c28c6ae55a998b85c235c7a4c0045a35018a302540a72`; it contains the per-mode receipts, reopen outputs, screenshots and comparison reports. The mixed fixture hash is `056ff518a412c50a62431e1c56a24628654f33c11b76d0a0e0bb802bc35759f5`; diagram source hash is `3099b5e773dce2949a209c13a1d19d0068038cf00e92f062017d915eb65babfe`; generated chart SVG hash is `fcc795cceb7f7287089ef9db65f1743c4fa355229a7987f44b312cad94e85a70`; SVG and PNG fixture asset hashes are recorded in row 612-A1; rubric hash is `68937c96a1ea265d49014a97366bb73e3578e32cfa218f36f78d36d833e0b08f`. Completeness review: every fixed criterion is mapped and PASS; repeated attempts retain unique run IDs; fallback and unsupported behavior are explicit; no required failure was relaxed or hidden. Parent #283 remains open and outside this iteration.
 
 ## Inventory and execution totals
 
 | Layer / surface | Required distinct scenarios | Planned executions / repetitions | Executed PASS | Executed FAIL | NOT_RUN / BLOCKED / REVIEW_REQUIRED | Reviewed N/A | Evidence compatibility |
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
-| Manifest and local asset safety | 2 | at least once per candidate | 0 | 0 | 2 | 0 | pending |
-| Diagram/chart/table semantics | 3 | deterministic repeat for generated assets | 0 | 0 | 3 | 0 | pending |
-| Output, fallback, reopen and fidelity | 2 | all four modes; repeated deterministic build | 0 | 0 | 2 | 0 | pending |
-| Privacy / network isolation | 1 | once per candidate | 0 | 0 | 1 | 0 | pending |
-| Regression and exact-main CI | 2 | PR + exact main | 0 | 0 | 2 | 0 | pending |
+| Manifest and local asset safety | 2 | PR + exact main | 2 | 0 | 0 | 0 | compatible |
+| Diagram/chart/table semantics | 3 | PR + exact main; deterministic repeat | 3 | 0 | 0 | 0 | compatible |
+| Output, fallback, reopen and fidelity | 2 | all four modes; PR + exact main | 2 | 0 | 0 | 0 | compatible |
+| Privacy / network isolation | 1 | PR + exact main | 1 | 0 | 0 | 0 | compatible |
+| Regression and exact-main CI | 2 | PR + exact main | 2 | 0 | 0 | 0 | compatible |
 | Cloud Next runtime | 0 | 0 | 0 | 0 | 0 | 1 | reviewed N/A |
