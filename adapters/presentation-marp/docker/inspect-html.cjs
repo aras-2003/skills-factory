@@ -56,7 +56,8 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     const mobile = await page.evaluate(index => {
       const section = document.querySelectorAll('section')[index];
-      const rect = section.closest('svg[data-marpit-svg]').getBoundingClientRect();
+      // Measure the 16:9 slide surface inside the viewport-sized SVG, not the SVG's letterboxed outer box.
+      const rect = section.getBoundingClientRect();
       return { viewport: { width: innerWidth, height: innerHeight }, left: rect.left, top: rect.top, width: rect.width, height: rect.height, ratio: rect.width / rect.height };
     }, countFound - 1);
     if (mobile.width > 391 || mobile.height > 845 || mobile.left < -1 || mobile.left + mobile.width > 391 || Math.abs(mobile.ratio - 16 / 9) > 0.02) throw new Error('HTML_MOBILE_LAYOUT_INVALID');
