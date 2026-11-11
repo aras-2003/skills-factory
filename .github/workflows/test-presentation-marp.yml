@@ -75,6 +75,11 @@ jobs:
         env:
           SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-upstream
+      - name: Compare Puppeteer PDF with executable temporary mount (synthetic only)
+        continue-on-error: true
+        env:
+          SF_CHROME_TMPFS_EXEC: "1"
+        run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-tmpfs-exec
       - name: Diagnose Marp PDF path in custom renderer
         continue-on-error: true
         run: node adapters/presentation-marp/scripts/diagnose-marp-pdf.mjs presentation-marp-evidence/pdf-diagnostic-custom
