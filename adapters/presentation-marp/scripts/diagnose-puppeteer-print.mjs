@@ -65,6 +65,9 @@ const classify = message => {
 })();`;
 await writeFile(path.join(input, 'probe.cjs'), probe);
 const image = process.env.SF_MARP_IMAGE ?? 'ghcr.io/skills-factory/presentation-marp:1.0.0';
+const tempMount = process.env.SF_CHROME_TMPFS_EXEC === '1'
+  ? '/tmp:rw,nosuid,size=512m'
+  : '/tmp:rw,noexec,nosuid,size=512m';
 const name = 'sf-puppeteer-print-' + randomUUID();
 const args = [
   'run', '--name', name, '--rm', '--network', 'none', '--read-only',
@@ -73,7 +76,7 @@ const args = [
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input', '--user', '10001:10001',
   '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'PUPPETEER_HEADLESS_MODE=shell',
-  '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
+  '--tmpfs', tempMount,
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', 'node', image, '/work/input/probe.cjs',
 ];
