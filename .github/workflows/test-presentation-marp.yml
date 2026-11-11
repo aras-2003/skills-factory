@@ -80,6 +80,11 @@ jobs:
         env:
           SF_CHROME_TMPFS_EXEC: "1"
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-tmpfs-exec
+      - name: Compare Puppeteer PDF with Chrome sandbox enabled (synthetic only)
+        continue-on-error: true
+        env:
+          SF_CHROME_SANDBOX: "1"
+        run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-sandbox
       - name: Diagnose Marp PDF path in custom renderer
         continue-on-error: true
         run: node adapters/presentation-marp/scripts/diagnose-marp-pdf.mjs presentation-marp-evidence/pdf-diagnostic-custom
