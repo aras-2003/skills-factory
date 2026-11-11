@@ -75,6 +75,11 @@ jobs:
         env:
           SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
         run: node adapters/presentation-marp/scripts/diagnose-marp-pdf.mjs .tmp/presentation-marp-evidence/pdf-diagnostic-upstream
+      - name: Diagnose editable Marp path in upstream image
+        continue-on-error: true
+        env:
+          SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
+        run: node adapters/presentation-marp/scripts/assert-base-editable.mjs .tmp/presentation-marp-evidence/upstream-editable
       - name: Verify base Marp editable runtime
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs .tmp/presentation-marp-evidence/base-editable
       - name: Isolate editable export from fixture complexity
