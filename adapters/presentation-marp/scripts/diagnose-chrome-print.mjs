@@ -24,6 +24,7 @@ const args = [
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', '/usr/local/bin/chrome', image,
   '--no-sandbox', '--headless', '--disable-gpu',
+  '--user-data-dir=/tmp/marp-config/chrome-user-data',
   '--print-to-pdf=/work/output/chrome-probe.pdf',
   'file:///work/input/probe.html',
 ];
