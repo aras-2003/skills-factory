@@ -80,6 +80,11 @@ jobs:
         env:
           SF_PUPPETEER_HEADLESS_MODE: chrome
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-headless-chrome
+      - name: Probe Firefox WebDriver BiDi PDF on synthetic HTML
+        continue-on-error: true
+        env:
+          SF_PUPPETEER_BROWSER: firefox
+        run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-firefox
       - name: Diagnose Puppeteer PDF path in upstream image
         continue-on-error: true
         env:
@@ -108,6 +113,12 @@ jobs:
         env:
           SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/upstream-editable
+      - name: Probe editable Marp export with Firefox WebDriver BiDi
+        continue-on-error: true
+        env:
+          SF_MARP_BROWSER: firefox
+          SF_MARP_BROWSER_PROTOCOL: webdriver-bidi
+        run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/firefox-editable
       - name: Verify base Marp editable runtime
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/base-editable
       - name: Isolate editable export from fixture complexity
