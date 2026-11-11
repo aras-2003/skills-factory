@@ -31,7 +31,7 @@ const args = [
   '--workdir', '/work/input',
   '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'XDG_CONFIG_HOME=/tmp/.chromium-config', '--env', 'XDG_CACHE_HOME=/tmp/.chromium-cache',
   '--env', 'CHROME_NO_SANDBOX=1', '--env', 'PUPPETEER_HEADLESS_MODE=shell', '--env', 'DEBUG=marp-cli:browser,puppeteer:protocol',
-  '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m',
+  '--tmpfs', process.env.SF_MARP_TMPFS_EXEC === '1' ? '/tmp:rw,nosuid,size=512m' : '/tmp:rw,noexec,nosuid,size=512m',
   '-v', input + ':/work/input:ro',
   '-v', output + ':/work/output:rw',
   '--entrypoint', 'node',
