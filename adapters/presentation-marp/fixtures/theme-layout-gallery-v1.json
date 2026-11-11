@@ -1,0 +1,292 @@
+{
+  "schema_version": "1.0",
+  "deck_id": "synthetic-theme-layout-gallery-v1",
+  "communicated_thesis": "Each semantic layout preserves the same synthetic slide content across bundled themes.",
+  "sources": [
+    {
+      "source_id": "src-theme-synthetic",
+      "source_locator": "Synthetic theme gallery fixture",
+      "source_as_of": "2026-11-11",
+      "retrieval_at": "2026-11-11T00:00:00Z",
+      "license_rights": "Original synthetic content",
+      "confidentiality": "PUBLIC"
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "layout-title",
+      "role": "opening",
+      "action_title": "One system, six visual grammars",
+      "body": "A theme applies shared Presentation OS roles to an appropriate slide layout.",
+      "claims": [],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "title",
+        "tokens": {}
+      },
+      "notes": "Synthetic gallery example.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "layout-insight-chart",
+      "role": "evidence",
+      "action_title": "The synthetic metric improves across two periods",
+      "body": "Illustrative values only; no real-world source.",
+      "claims": [],
+      "data_refs": [
+        {
+          "data_ref_id": "q1",
+          "value": 12,
+          "unit": "percent",
+          "source_ids": [
+            "src-theme-synthetic"
+          ],
+          "as_of": "2026-Q1",
+          "denominator": "synthetic baseline"
+        },
+        {
+          "data_ref_id": "q2",
+          "value": 18,
+          "unit": "percent",
+          "source_ids": [
+            "src-theme-synthetic"
+          ],
+          "as_of": "2026-Q2",
+          "denominator": "synthetic baseline"
+        }
+      ],
+      "exhibits": [
+        {
+          "exhibit_id": "quarterly-chart",
+          "slide_id": "layout-insight-chart",
+          "visual_job": "Show synthetic change across periods",
+          "visual_type": "bar_chart",
+          "supported_data": [
+            "q1",
+            "q2"
+          ],
+          "provenance": {
+            "source_ids": [
+              "src-theme-synthetic"
+            ]
+          },
+          "units": "percent",
+          "as_of": "2026-Q2",
+          "alternative_text": "Two-bar chart of synthetic quarterly percentages",
+          "editability": "RASTER_ASSET",
+          "capability_status": "AVAILABLE",
+          "execution_status": "NOT_ATTEMPTED"
+        }
+      ],
+      "layout": {
+        "layout_id": "insight-chart",
+        "tokens": {}
+      },
+      "notes": "The numbers are synthetic.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "layout-comparison",
+      "role": "comparison",
+      "action_title": "Compare two supported synthetic options",
+      "body": "Equal evidence and visual weight make the trade-off legible.",
+      "claims": [
+        {
+          "claim_id": "option-a",
+          "statement": "Option A favors speed.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "option-b",
+          "statement": "Option B favors flexibility.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "comparison",
+        "tokens": {}
+      },
+      "notes": "Synthetic claims.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "layout-process",
+      "role": "process",
+      "action_title": "A three-step process preserves evidence",
+      "body": "Sequence is conveyed with a readable numbered list.",
+      "claims": [
+        {
+          "claim_id": "step-1",
+          "statement": "Inspect the source.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "step-2",
+          "statement": "Choose a semantic layout.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "step-3",
+          "statement": "Reopen and verify the output.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "process",
+        "tokens": {}
+      },
+      "notes": "Synthetic steps.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "layout-roadmap",
+      "role": "roadmap",
+      "action_title": "The delivery path has visible checkpoints",
+      "body": "Illustrative phases; no dates or commitments are implied.",
+      "claims": [
+        {
+          "claim_id": "phase-1",
+          "statement": "Source and story",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "phase-2",
+          "statement": "Design and author",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "phase-3",
+          "statement": "Review and verify",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "roadmap",
+        "tokens": {}
+      },
+      "notes": "Synthetic phases.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "layout-architecture",
+      "role": "architecture",
+      "action_title": "The semantic model separates three responsibilities",
+      "body": "Source, layout and renderer each retain a distinct role.",
+      "claims": [
+        {
+          "claim_id": "source",
+          "statement": "Canonical source",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "layout",
+          "statement": "Semantic layout",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        },
+        {
+          "claim_id": "renderer",
+          "statement": "Verified renderer",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-theme-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "architecture",
+        "tokens": {}
+      },
+      "notes": "Synthetic system.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "layout-summary",
+      "role": "summary",
+      "action_title": "Verify the real artifact before calling it ready",
+      "body": "A route is complete only when requested outputs have evidence.",
+      "claims": [],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "summary",
+        "tokens": {}
+      },
+      "notes": "Synthetic close.",
+      "provenance": {
+        "source_ids": [
+          "src-theme-synthetic"
+        ]
+      },
+      "desired_editability": "PREFERRED"
+    }
+  ]
+}
