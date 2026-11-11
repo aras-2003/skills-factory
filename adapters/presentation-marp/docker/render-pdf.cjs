@@ -35,8 +35,10 @@ const fail = (stage, classification) => {
     const html = fs.readFileSync(source, 'utf8');
     const base = '<base href="' + pathToFileURL(assetRoot + path.sep).href + '">';
     const document = html.replace(/<head\b([^>]*)>/i, '<head$1>' + base);
+    const renderSource = path.join(path.dirname(source), 'deck-browser-pdf.html');
+    fs.writeFileSync(renderSource, document);
     stage = 'navigation';
-    await page.setContent(document, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.goto(pathToFileURL(renderSource).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
     stage = 'render';
     await page.waitForNetworkIdle({ timeout: 30000 });
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => resolve())));
@@ -56,5 +58,6 @@ const fail = (stage, classification) => {
       : 'BROWSER_PDF_RENDER_FAILURE');
   } finally {
     await browser?.close().catch(() => {});
+    try { fs.rmSync(path.join(path.dirname(source), 'deck-browser-pdf.html'), { force: true }); } catch {}
   }
 })();
