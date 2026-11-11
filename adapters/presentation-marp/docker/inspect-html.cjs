@@ -11,6 +11,11 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
+    // Marp uses the View Transition API to animate slide changes. Capturing
+    // during that transition can produce a black frame even when the next
+    // slide is valid. Disable only the viewer transition hook for stable
+    // inspection screenshots; the rendered deck itself is left untouched.
+    await page.evaluateOnNewDocument(() => { document.startViewTransition = undefined; });
     await page.setRequestInterception(true);
     page.on('request', request => { const url = request.url(); if (url.startsWith('file:') || url.startsWith('data:')) request.continue(); else request.abort(); });
     await page.goto(`file://${html}`, { waitUntil: 'networkidle0', timeout: 30000 });
@@ -28,29 +33,24 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     });
     if (controlsHidden < 1) throw new Error('HTML_PRESENTATION_CONTROLS_NOT_FOUND');
     const slides = await page.$$('section');
+    const waitForActiveSlide = async index => page.waitForFunction(i => {
+      const active = document.querySelector('svg.bespoke-marp-slide.bespoke-marp-active');
+      return active?.querySelector('section')?.id === String(i + 1);
+    }, {}, index);
+    await waitForActiveSlide(0);
     for (let i=0; i<countFound; i++) {
-      await page.evaluate(index => {
-        document.querySelectorAll('section').forEach((section, n) => {
-          const active = n === index;
-          const slide = section.closest('svg[data-marpit-svg]');
-          if (!slide) throw new Error('HTML_SLIDE_CONTAINER_MISSING');
-          // Marp lazily sets non-active slide SVGs to display:none; inline visibility alone cannot reveal them for deterministic capture.
-          slide.style.display = active ? 'block' : 'none';
-          slide.style.contentVisibility = active ? 'visible' : 'hidden';
-          slide.style.visibility = active ? 'visible' : 'hidden';
-          slide.style.opacity = active ? '1' : '0';
-          slide.style.pointerEvents = active ? 'auto' : 'none';
-          slide.style.zIndex = active ? '1' : '0';
-          section.style.visibility = active ? 'visible' : 'hidden';
-        });
-      }, i);
+      if (i > 0) {
+        await page.keyboard.press('ArrowRight');
+        await waitForActiveSlide(i);
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      }
       const slide = slides[i];
       const box = await slide.boundingBox();
       if (!box || Math.abs(box.width - 1280) > 1 || Math.abs(box.height - 720) > 1) {
         throw new Error('HTML_SLIDE_BOUNDS_INVALID');
       }
       const png = path.join(output, `html-slide-${String(i+1).padStart(2,'0')}.png`);
-      await slide.screenshot({ path: png });
+      await page.screenshot({ path: png });
       records.push({ slide: i+1, screenshot: path.basename(png), width: Math.round(box.width), height: Math.round(box.height) });
     }
     await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });

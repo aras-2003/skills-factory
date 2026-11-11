@@ -32,7 +32,7 @@ jobs:
   adapter-runtime:
     name: Marp exports, reopen, security and fidelity
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -132,6 +132,18 @@ jobs:
         run: node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence
       - name: Run theme, layout, responsive and editable-safe regression
         run: node adapters/presentation-marp/scripts/theme-regression.mjs presentation-marp-evidence/theme-regression
+      - name: Run report-composer and visual-output-design unchanged-domain probes
+        run: >-
+          python -m unittest
+          scripts.validate.tests.test_integrated_reporting.IntegratedReportingTests.test_external_artifact_is_opt_in_not_fallback
+          scripts.validate.tests.test_integrated_reporting.IntegratedReportingTests.test_required_visuals_fail_closed_without_renderer
+      - name: Validate mixed diagram, chart, table and SVG fallback fixture
+        env:
+          SF_MARP_FIXTURE: adapters/presentation-marp/fixtures/pres06-mixed.json
+        run: |
+          python scripts/validate/presentation_model.py adapters/presentation-marp/fixtures/pres06-mixed.json
+          node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence/pres06-mixed
+          node adapters/presentation-marp/scripts/assert-pres06-evidence.mjs adapters/presentation-marp/fixtures/pres06-mixed.json presentation-marp-evidence/pres06-mixed
       - name: Verify exact source revision
         run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
