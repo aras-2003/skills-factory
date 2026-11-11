@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, writeFile, stat, rm, chmod } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, stat, rm, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -27,12 +27,14 @@ const args = [
   '--print-to-pdf=/work/output/chrome-probe.pdf',
   'file:///work/input/probe.html',
 ];
-function classify(stderr, timedOut) {
-  if (timedOut) return 'CHROME_PRINT_TIMEOUT';
+function classify(stderr, timedOut, pdfValid) {
   if (/crashpad|database is required/i.test(stderr)) return 'CHROME_CRASHPAD_FAILURE';
   if (/printing failed|failed to print/i.test(stderr)) return 'CHROME_PRINT_FAILURE';
   if (/failed to launch|executable not found/i.test(stderr)) return 'CHROME_LAUNCH_FAILURE';
   if (/target closed/i.test(stderr)) return 'CHROME_TARGET_CLOSED';
+  if (timedOut && pdfValid) return 'CHROME_HUNG_AFTER_VALID_PDF';
+  if (timedOut) return 'CHROME_PRINT_TIMEOUT';
+  if (pdfValid) return 'CHROME_EXITED_AFTER_VALID_PDF';
   return 'UNKNOWN_CHROME_FAILURE';
 }
 async function run() {
@@ -55,21 +57,22 @@ async function run() {
       clearTimeout(timer);
       resolve({ code: 127, category: 'DOCKER_SPAWN_FAILED' });
     });
-    child.on('close', code => {
+    child.on('close', async code => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
-      resolve({ code, category: classify(stderr, timedOut) });
-    });
+      const bytes = await readFile(path.join(output, 'chrome-probe.pdf')).catch(() => null);
+      const pdfValid = Boolean(bytes && bytes.subarray(0, 5).toString() === '%PDF-');
+      resolve({ code, timedOut, pdfValid, category: classify(stderr, timedOut, pdfValid) });
+    });;
   });
 }
 try {
   const result = await run();
-  const file = await stat(path.join(output, 'chrome-probe.pdf')).catch(() => null);
-  if (result.code === 0 && file?.isFile() && file.size > 0) {
-    console.log(JSON.stringify({ state: 'PASS', output: 'chrome-probe.pdf', size_bytes: file.size }));
+  if (result.code === 0 && result.pdfValid) {
+    console.log(JSON.stringify({ state: 'PASS', output: 'chrome-probe.pdf', pdf_valid: true, process_exit: 0 }));
   } else {
-    console.log(JSON.stringify({ state: 'FAIL', classification: result.category }));
+    console.log(JSON.stringify({ state: 'FAIL', classification: result.category, pdf_valid: result.pdfValid }));
     process.exitCode = 1;
   }
 } finally {
