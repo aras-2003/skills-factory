@@ -54,12 +54,6 @@ section.sf-layout-architecture ul, section.sf-layout-architecture ol {
 }
 section.sf-layout-architecture li { border: 1px solid var(--sf-rule); border-top: 4px solid var(--sf-accent); padding: 16px; }
 section.sf-layout-summary h1 { border-bottom: 3px solid var(--sf-accent); padding-bottom: 18px; }
-section.sf-theme-sf-technology.sf-layout-title {
-  background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%);
-}
-section.sf-theme-sf-technology .sf-code-label {
-  font-family: var(--sf-font-label);
-}
 @media screen and (max-width: 600px) {
   section.sf-layout-comparison ul, section.sf-layout-architecture ul {
     grid-template-columns: 1fr;
