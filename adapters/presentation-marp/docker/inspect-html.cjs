@@ -34,6 +34,8 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
           const active = n === index;
           const slide = section.closest('svg[data-marpit-svg]');
           if (!slide) throw new Error('HTML_SLIDE_CONTAINER_MISSING');
+          // Marp lazily sets non-active slide SVGs to display:none; inline visibility alone cannot reveal them for deterministic capture.
+          slide.style.display = active ? 'block' : 'none';
           slide.style.contentVisibility = active ? 'visible' : 'hidden';
           slide.style.visibility = active ? 'visible' : 'hidden';
           slide.style.opacity = active ? '1' : '0';
