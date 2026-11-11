@@ -71,6 +71,20 @@ async function main() {
   activeStage='editable_safe_export';
   const safeTheme='sf-marp-editable-safe';
   const safeHtml=path.join(output,'html',safeTheme,'first');
+  const safeHtmlRepeat=path.join(output,'html',safeTheme,'repeat');
+  await render(safeTheme,'html',safeHtml);
+  await render(safeTheme,'html',safeHtmlRepeat);
+  const safeHtmlShots=path.join(output,'screenshots',safeTheme,'first');
+  const safeHtmlRepeatShots=path.join(output,'screenshots',safeTheme,'repeat');
+  activeStage='theme_html_screenshot';
+  await inspectHtml(safeHtml,safeHtmlShots);
+  await inspectHtml(safeHtmlRepeat,safeHtmlRepeatShots);
+  const safeHtmlReport=JSON.parse(await readFile(path.join(safeHtmlShots,'html-reopen.json'),'utf8'));
+  for(const slide of safeHtmlReport.slides) {
+    const a=await readFile(path.join(safeHtmlShots,slide.screenshot));
+    const b=await readFile(path.join(safeHtmlRepeatShots,slide.screenshot));
+    if(sha(a)!==sha(b)) throw new Error('THEME_SCREENSHOT_NONDETERMINISTIC');
+  }
   const safePptx=path.join(output,'editable-safe');
   await render(safeTheme,'pptx_editable_experimental',safePptx);
   const inspectionDir=path.join(output,'editable-safe-inspection');
