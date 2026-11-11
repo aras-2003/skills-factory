@@ -30,6 +30,7 @@ const classify = message => {
 };
 (async () => {
   let browser;
+  let stage = 'launch';
   try {
     browser = await puppeteer.launch({
       executablePath: '/usr/local/bin/chrome',
@@ -37,20 +38,26 @@ const classify = message => {
       args: ['--no-sandbox'],
       timeout: 30000,
     });
+    stage = 'new_page';
     const page = await browser.newPage();
+    stage = 'navigation';
     await page.goto('file:///work/input/probe.html', { waitUntil: 'domcontentloaded' });
+    stage = 'network_idle';
     await page.waitForNetworkIdle({ timeout: 30000 });
+    stage = 'animation_frame';
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => resolve())));
+    stage = 'print_to_pdf';
     const pdf = await page.pdf({
       printBackground: true,
       preferCSSPageSize: true,
       width: '1280px',
       height: '720px',
     });
+    stage = 'write_pdf';
     fs.writeFileSync('/work/output/puppeteer-probe.pdf', pdf);
     process.stdout.write(JSON.stringify({ state: 'PASS' }));
   } catch (error) {
-    process.stdout.write(JSON.stringify({ state: 'FAIL', classification: classify(String(error?.message ?? '')) }));
+    process.stdout.write(JSON.stringify({ state: 'FAIL', stage, classification: classify(String(error?.message ?? '')) }));
     process.exitCode = 1;
   } finally {
     await browser?.close().catch(() => {});
@@ -107,7 +114,7 @@ async function run() {
       for (const line of stdout.split(/\r?\n/).reverse()) {
         try { report = JSON.parse(line); break; } catch {}
       }
-      resolve({ code, timedOut, category: report?.classification ?? classifyOuter(stderr, timedOut) });
+      resolve({ code, timedOut, stage: report?.stage ?? null, category: report?.classification ?? classifyOuter(stderr, timedOut) });
     });
   });
 }
@@ -117,7 +124,7 @@ try {
   const pdfValid = Boolean(bytes && bytes.subarray(0, 5).toString() === '%PDF-');
   const report = result.code === 0 && pdfValid
     ? { state: 'PASS', output: 'puppeteer-probe.pdf', pdf_valid: true }
-    : { state: 'FAIL', classification: result.category, pdf_valid: pdfValid };
+    : { state: 'FAIL', stage: result.stage, classification: result.category, pdf_valid: pdfValid };
   await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
   if (report.state === 'FAIL') process.exitCode = 1;
