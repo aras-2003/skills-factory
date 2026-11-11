@@ -75,6 +75,11 @@ jobs:
         env:
           SF_PDF_TRANSFER_MODE: base64
         run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-base64
+      - name: Probe full Chrome headless PDF on synthetic HTML
+        continue-on-error: true
+        env:
+          SF_PUPPETEER_HEADLESS_MODE: chrome
+        run: node adapters/presentation-marp/scripts/diagnose-puppeteer-print.mjs presentation-marp-evidence/puppeteer-print-headless-chrome
       - name: Diagnose Puppeteer PDF path in upstream image
         continue-on-error: true
         env:
