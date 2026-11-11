@@ -36,7 +36,7 @@ const classify = message => {
     const useFirefox = process.env.SF_PUPPETEER_BROWSER === 'firefox';
     if (useFirefox) {
       stage = 'firefox_preflight';
-      const smoke = require('node:child_process').spawnSync('/usr/bin/firefox-esr', [
+      const smoke = require('node:child_process').spawnSync(process.env.SF_FIREFOX_PATH, [
         '--headless', '--screenshot=/work/output/firefox-smoke.png', 'file:///work/input/probe.html',
       ], { encoding: 'utf8', timeout: 30000, maxBuffer: 65536, env: { ...process.env, MOZ_HEADLESS: '1' } });
       if (smoke.error?.code === 'ETIMEDOUT') throw new Error('FIREFOX_STARTUP_TIMEOUT');
@@ -55,7 +55,7 @@ const classify = message => {
     browser = await puppeteer.launch({
       browser: useFirefox ? 'firefox' : 'chrome',
       protocol: useFirefox ? 'webDriverBiDi' : 'cdp',
-      executablePath: useFirefox ? '/usr/bin/firefox-esr' : '/usr/local/bin/chrome',
+      executablePath: useFirefox ? process.env.SF_FIREFOX_PATH : '/usr/local/bin/chrome',
       headless: useFirefox || process.env.PUPPETEER_HEADLESS_MODE !== 'shell' ? true : 'shell',
       args: useFirefox || process.env.SF_CHROME_SANDBOX === '1' ? [] : ['--no-sandbox'],
       timeout: 30000,
@@ -114,7 +114,7 @@ const args = [
   '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m',
   '--cpus', '2', '--ulimit', 'fsize=104857600:104857600',
   '--workdir', '/work/input', '--user', '10001:10001',
-  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'XDG_CONFIG_HOME=/tmp/.chromium-config', '--env', 'XDG_CACHE_HOME=/tmp/.chromium-cache', '--env', 'PUPPETEER_HEADLESS_MODE=' + (process.env.SF_PUPPETEER_HEADLESS_MODE === 'chrome' ? 'chrome' : 'shell'), '--env', 'SF_PUPPETEER_BROWSER=' + (process.env.SF_PUPPETEER_BROWSER === 'firefox' ? 'firefox' : 'chrome'), '--env', 'SF_PDF_TRANSFER_MODE=' + (process.env.SF_PDF_TRANSFER_MODE === 'base64' && process.env.SF_PUPPETEER_BROWSER !== 'firefox' ? 'base64' : 'stream'), '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
+  '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'XDG_CONFIG_HOME=/tmp/.chromium-config', '--env', 'XDG_CACHE_HOME=/tmp/.chromium-cache', '--env', 'PUPPETEER_HEADLESS_MODE=' + (process.env.SF_PUPPETEER_HEADLESS_MODE === 'chrome' ? 'chrome' : 'shell'), '--env', 'SF_PUPPETEER_BROWSER=' + (process.env.SF_PUPPETEER_BROWSER === 'firefox' ? 'firefox' : 'chrome'), '--env', 'SF_FIREFOX_PATH=/opt/firefox/firefox/firefox', '--env', 'SF_PDF_TRANSFER_MODE=' + (process.env.SF_PDF_TRANSFER_MODE === 'base64' && process.env.SF_PUPPETEER_BROWSER !== 'firefox' ? 'base64' : 'stream'), '--env', 'SF_CHROME_SANDBOX=' + (process.env.SF_CHROME_SANDBOX === '1' ? '1' : '0'),
   '--tmpfs', tempMount,
   '-v', input + ':/work/input:ro', '-v', output + ':/work/output:rw',
   '--entrypoint', 'node', image, '/work/input/probe.cjs',
