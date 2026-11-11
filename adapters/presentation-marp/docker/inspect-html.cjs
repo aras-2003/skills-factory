@@ -22,6 +22,11 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     const missingText = requiredText.filter(required => !allText.toLowerCase().includes(required.toLowerCase()));
     console.log(`HTML_CONTENT_CHECK:${JSON.stringify({ textLength: allText.length, missing: missingText })}`);
     if (missingText.length) throw new Error(`Rendered HTML is missing expected content: ${missingText.join(', ')}`);
+    const controlsHidden = await page.$$eval('.bespoke-marp-osc', nodes => {
+      nodes.forEach(node => { node.style.display = 'none'; });
+      return nodes.length;
+    });
+    if (controlsHidden < 1) throw new Error('HTML_PRESENTATION_CONTROLS_NOT_FOUND');
     const slides = await page.$$('section');
     for (let i=0; i<countFound; i++) {
       await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.display = n === index ? 'flex' : 'none'; }); }, i);
@@ -34,6 +39,6 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
       await slide.screenshot({ path: png });
       records.push({ slide: i+1, screenshot: path.basename(png), width: Math.round(box.width), height: Math.round(box.height) });
     }
-    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText}, null, 2)+'\n');
+    fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText,controls_hidden:controlsHidden}, null, 2)+'\n');
   } finally { await browser.close(); }
 })();
