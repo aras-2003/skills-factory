@@ -67,6 +67,14 @@ jobs:
       - name: Verify missing browser blocks browser-backed modes
         working-directory: adapters/presentation-marp
         run: node scripts/assert-missing-runtime.mjs
+      - name: Diagnose native Chromium print in custom renderer
+        continue-on-error: true
+        run: node adapters/presentation-marp/scripts/diagnose-chrome-print.mjs .tmp/presentation-marp-evidence/chrome-print-custom
+      - name: Diagnose native Chromium print in upstream image
+        continue-on-error: true
+        env:
+          SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
+        run: node adapters/presentation-marp/scripts/diagnose-chrome-print.mjs .tmp/presentation-marp-evidence/chrome-print-upstream
       - name: Diagnose Marp PDF path in custom renderer
         continue-on-error: true
         run: node adapters/presentation-marp/scripts/diagnose-marp-pdf.mjs .tmp/presentation-marp-evidence/pdf-diagnostic-custom
