@@ -1,7 +1,10 @@
 #!/bin/sh
 set -eu
 mode=${2:-}
-theme_file="./${SF_MARP_THEME:-sf-editorial}.css"
+theme_id=${SF_MARP_THEME:-sf-editorial}
+case "$theme_id" in sf-*) ;; *) echo 'INVALID_THEME_ID' >&2; exit 31 ;; esac
+case "$theme_id" in *[!a-z0-9-]*|'') echo 'INVALID_THEME_ID' >&2; exit 31 ;; esac
+theme_file="./$theme_id.css"
 if [ "${1:-}" = sf-preflight ]; then
   marp_output=$(node /home/marp/.cli/marp-cli.js --version 2>&1)
   marp_version=$(printf '%s' "$marp_output" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || true)
