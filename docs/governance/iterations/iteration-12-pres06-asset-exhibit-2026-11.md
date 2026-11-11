@@ -52,7 +52,7 @@ Cloud Next, Lab install, native authoring and production deployment are N/A for 
 - Outcome: ACCEPTED (all required rows PASS; closeout record and issue reconciliation are in PR #643).
 - Final implementation candidate: main SHA `7013fe254a967182ccda3ec380b1539b5a8688a7`; matrix: `evals/campaigns/iteration-12-pres06-asset-exhibit-2026-11/acceptance-matrix.md`; immutable CI artifacts linked in the matrix.
 - Committed Issues accepted / unresolved: #612 accepted; issue closure follows PR #643; #283 remains open and out of scope.
-- Required rows: 9 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED, 0 REVIEW_REQUIRED; 1 reviewed N/A (Cloud Next runtime).
+- Required rows: 10 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED, 0 REVIEW_REQUIRED; 1 reviewed N/A (Cloud Next runtime).
 - Shared regression verdict: PASS; two unchanged-domain probes passed.
 - Non-blocking findings and accepted impact: no runtime registration, Cloud Next, Lab install or production deployment in this adapter-only scope; parent #283 remains separate.
 - Scope compared with lock commit: no deviation; existing isolated Marp adapter only, no new dependency, no canonical DeckSpec break.
