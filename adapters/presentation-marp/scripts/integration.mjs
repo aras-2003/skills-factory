@@ -53,7 +53,7 @@ const repeatReceipt=JSON.parse(await readFile(path.join(out,'html-repeat','recei
 const first=JSON.parse(await readFile(path.join(out,'html','receipt.json'),'utf8'));
 if (first.input_sha256 !== repeatReceipt.input_sha256) throw new Error('Repeat render used a different input');
 if (JSON.stringify(htmlReceipt.slide_ids) !== JSON.stringify(deck.slides.map(s=>s.slide_id))) throw new Error('HTML render slide IDs/order differ from the canonical source');
-const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>/^html-slide-\\d+\\.png$/.test(n)).sort();
+const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>/^html-slide-\d+\.png$/.test(n)).sort();
 if (shotNames.length !== count) throw new Error(`Expected ${count} HTML screenshots, found ${shotNames.length}`);
 for (const n of shotNames) {
   const a=await readFile(path.join(shotDir,n)); const b=await readFile(path.join(out,'repeat-screenshots',n));
