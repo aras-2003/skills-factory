@@ -31,7 +31,16 @@ if mode == 'text':
         required = {'opening_title':'Three slides, one source model','evidence_title':'Synthetic quarterly growth','closing_title':'Preserve meaning across modes','first_value':'12','second_value':'18','unit':'percent','source_id':'src-synthetic'}
     missing = [key for key, value in required.items() if re.sub(r'\s+',' ',value).lower() not in normalized_text.lower()]
     if missing:
-        kinds=set('TITLE' if key.startswith('title:') else 'DATA' if key.startswith('data_ref:') else 'PROVENANCE' for key in missing)
+        kinds=set(
+            'TITLE' if key.startswith('title:') else
+            'VALUE' if key.startswith('data_ref:') else
+            'UNIT' if key.startswith('unit:') else
+            'AS_OF' if key.startswith('as_of:') else
+            'DENOMINATOR' if key.startswith('denominator:') else
+            'SOURCE_ID' if key.startswith('source:') else
+            'PROVENANCE'
+            for key in missing
+        )
         classification=f'PDF_{next(iter(kinds))}_MISSING' if len(kinds)==1 else 'PDF_CONTENT_INCOMPLETE'
         raise SystemExit(classification)
 subprocess.run(['pdftoppm','-png','-r','96',str(pdf),str(out/'reopened-slide')],check=True,capture_output=True)
