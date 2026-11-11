@@ -5,6 +5,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chmod } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const IMAGE = 'ghcr.io/skills-factory/presentation-marp:1.0.0';
@@ -14,6 +15,9 @@ const MAX_ASSETS = 50;
 const MAX_ASSET_TOTAL = 10 * 1024 * 1024;
 const MAX_OUTPUT = 100 * 1024 * 1024;
 const TIMEOUT_MS = 120_000;
+const THEME_REGISTRY = JSON.parse(readFileSync(path.join(HERE, '../themes/registry.json'), 'utf8'));
+const LAYOUT_ALIASES = Object.freeze({ title:'title', 'insight-chart':'insight-chart', data:'insight-chart', comparison:'comparison', process:'process', roadmap:'roadmap', architecture:'architecture', summary:'summary', conclusion:'summary' });
+export const LAYOUTS = new Set(['title','insight-chart','comparison','process','roadmap','architecture','summary']);
 
 export class AdapterError extends Error {
   constructor(code, message, details = {}) { super(message); this.name = 'AdapterError'; this.code = code; this.details = details; }
@@ -21,6 +25,47 @@ export class AdapterError extends Error {
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const safeText = (value) => String(value ?? '').replace(/[\r\n]+/g, ' ').trim().replace(/([\\`*_{}\[\]()#+.!|~-])/g, '\\$1').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const safeNote = (value) => String(value ?? '').replace(/--/g, '—').replace(/\r?\n/g, ' ');
+
+function linearChannel(value) { const c=parseInt(value,16)/255; return c<=0.04045?c/12.92:((c+0.055)/1.055)**2.4; }
+function luminance(hex) { const rgb=hex.slice(1).match(/../g).map(linearChannel); return 0.2126*rgb[0]+0.7152*rgb[1]+0.0722*rgb[2]; }
+export function contrastRatio(foreground, background) { const values=[luminance(foreground),luminance(background)].sort((a,b)=>b-a); return (values[0]+0.05)/(values[1]+0.05); }
+export function validateThemeRegistry(registry=THEME_REGISTRY) {
+  if (registry?.schema_version!==1 || !Array.isArray(registry.themes) || registry.themes.length<4) throw new AdapterError('INVALID_THEME_REGISTRY','Theme registry must contain at least four versioned themes.');
+  const ids=new Set();
+  for (const theme of registry.themes) {
+    if (!theme || !/^sf-[a-z0-9-]+$/.test(theme.id) || ids.has(theme.id) || !/^\d+\.\d+\.\d+$/.test(theme.version)) throw new AdapterError('INVALID_THEME_REGISTRY','Theme IDs must be unique and theme versions must use semantic versioning.');
+    ids.add(theme.id);
+    const t=theme.tokens;
+    if (!t || ['canvas','ink','muted','accent','rule'].some(key=>!/^#[0-9a-f]{6}$/i.test(t[key]??''))) throw new AdapterError('INVALID_THEME_REGISTRY','Every theme requires valid semantic color tokens.');
+    if (contrastRatio(t.ink,t.canvas)<4.5 || contrastRatio(t.muted,t.canvas)<4.5 || contrastRatio(t.accent,t.canvas)<4.5) throw new AdapterError('THEME_CONTRAST_FAILED','Theme text and emphasis colors must meet 4.5:1 contrast.');
+    for (const key of ['font_display','font_body','font_label']) if (typeof t[key]!=='string' || /[;{}<>]/.test(t[key])) throw new AdapterError('INVALID_THEME_REGISTRY','Font token contains unsupported CSS syntax.');
+    if (!['safe','minimal','progressive'].includes(theme.css_complexity) || typeof theme.editable_safe!=='boolean') throw new AdapterError('INVALID_THEME_REGISTRY','Theme CSS capability metadata is incomplete.');
+    if (theme.css_complexity==='progressive' && theme.editable_safe) throw new AdapterError('INVALID_THEME_REGISTRY','Progressive CSS themes cannot claim editable-safe support.');
+  }
+  return true;
+}
+validateThemeRegistry();
+export function resolveLayout(layoutId) {
+  const layout=LAYOUT_ALIASES[layoutId];
+  if (!layout || !LAYOUTS.has(layout)) throw new AdapterError('UNSUPPORTED_LAYOUT','Unsupported semantic slide layout: '+safeText(layoutId)+'.');
+  return layout;
+}
+function themeById(id) {
+  const theme=THEME_REGISTRY.themes.find(item=>item.id===id);
+  if (!theme) throw new AdapterError('UNKNOWN_THEME','Select a theme ID from the bundled registry.');
+  return theme;
+}
+function buildThemeCss(theme) {
+  const t=theme.tokens;
+  const css=readFileSync(path.join(HERE,'../themes/layouts.css'),'utf8');
+  const values={canvas:t.canvas,ink:t.ink,muted:t.muted,accent:t.accent,rule:t.rule,'font-display':t.font_display,'font-body':t.font_body,'font-label':t.font_label,'grid-width':t.grid_width,'space-unit':t.space_unit};
+  const vars=Object.entries(values).map(([key,value])=>'  --sf-'+key+': '+value+';').join('\n');
+  const enhancement=theme.css_complexity==='progressive'
+    ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\nsection.sf-theme-'+theme.id+' .sf-code-label { font-family: var(--sf-font-label); }\n'
+    : '';
+  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement;
+}
+
 
 function safeRendererDiagnostic(output) {
   const normalized = output.replace(/\u001b\[[0-9;]*m/g, '').replace(/\[\s*ERROR\s*\]/g, '[ERROR]').replace(/\[\s*WARN\s*\]/g, '[WARN]');
