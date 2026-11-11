@@ -9,7 +9,8 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
   fs.mkdirSync(output, { recursive: true });
   const browser = await puppeteer.launch({ executablePath: process.env.CHROME_PATH, headless: true, args: ['--no-sandbox','--disable-dev-shm-usage'] });
   try {
-    const page = await browser.newPage({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1 });
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 1 });
     await page.setRequestInterception(true);
     page.on('request', request => { const url = request.url(); if (url.startsWith('file:') || url.startsWith('data:')) request.continue(); else request.abort(); });
     await page.goto(`file://${html}`, { waitUntil: 'networkidle0', timeout: 30000 });
@@ -21,12 +22,17 @@ if (!puppeteer) throw new Error('Pinned puppeteer-core was not found in the rend
     const missingText = requiredText.filter(required => !allText.toLowerCase().includes(required.toLowerCase()));
     console.log(`HTML_CONTENT_CHECK:${JSON.stringify({ textLength: allText.length, missing: missingText })}`);
     if (missingText.length) throw new Error(`Rendered HTML is missing expected content: ${missingText.join(', ')}`);
+    const slides = await page.$$('section');
     for (let i=0; i<countFound; i++) {
       await page.evaluate(index => { document.querySelectorAll('section').forEach((s, n) => { s.style.display = n === index ? 'flex' : 'none'; }); }, i);
+      const slide = slides[i];
+      const box = await slide.boundingBox();
+      if (!box || Math.abs(box.width - 1280) > 1 || Math.abs(box.height - 720) > 1) {
+        throw new Error('HTML_SLIDE_BOUNDS_INVALID');
+      }
       const png = path.join(output, `html-slide-${String(i+1).padStart(2,'0')}.png`);
-      await page.screenshot({ path: png, fullPage: false });
-      const box = await page.$$eval('section', (nodes,index) => ({ width: nodes[index].offsetWidth, height: nodes[index].offsetHeight }), i);
-      records.push({ slide: i+1, screenshot: path.basename(png), ...box });
+      await slide.screenshot({ path: png });
+      records.push({ slide: i+1, screenshot: path.basename(png), width: Math.round(box.width), height: Math.round(box.height) });
     }
     fs.writeFileSync(path.join(output, 'html-reopen.json'), JSON.stringify({slides:records,text:allText}, null, 2)+'\n');
   } finally { await browser.close(); }
