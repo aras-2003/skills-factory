@@ -245,7 +245,8 @@ cases:
         - "preserve existing evidence, rights and actual renderer preflight requirements"
       must_not:
         - "invent a selector execution receipt or stop all presentation production solely for an optional catalog"
-\n  - id: pres-e2e-27
+
+  - id: pres-e2e-27
     case: interactive-report-format
     input: "Build an interactive report with filters for our product metrics; do not create slides."
     expected:
