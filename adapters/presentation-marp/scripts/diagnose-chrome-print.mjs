@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, writeFile, readFile, stat, rm, chmod } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, rm, chmod } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -64,7 +64,7 @@ async function run() {
       const bytes = await readFile(path.join(output, 'chrome-probe.pdf')).catch(() => null);
       const pdfValid = Boolean(bytes && bytes.subarray(0, 5).toString() === '%PDF-');
       resolve({ code, timedOut, pdfValid, category: classify(stderr, timedOut, pdfValid) });
-    });;
+    });
   });
 }
 try {
