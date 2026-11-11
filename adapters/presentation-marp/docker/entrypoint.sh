@@ -11,6 +11,7 @@ if [ "${1:-}" = sf-preflight ]; then
   weasyprint_version=''; weasyprint_package=''
   if command -v weasyprint >/dev/null 2>&1; then weasyprint_version=$(weasyprint --version | sed 's/^WeasyPrint version //'); fi
   if command -v dpkg-query >/dev/null 2>&1; then weasyprint_package=$(dpkg-query -W -f='${Version}' weasyprint 2>/dev/null || true); fi
+  font_package=''; if command -v dpkg-query >/dev/null 2>&1; then font_package=$(dpkg-query -W -f='${Version}' fonts-liberation 2>/dev/null || true); fi
   lo_version=''; lo_package=''
   if command -v dpkg-query >/dev/null 2>&1 && command -v libreoffice >/dev/null 2>&1; then lo_package=$(dpkg-query -W -f='${Version}' libreoffice-impress 2>/dev/null || true); fi
   if command -v libreoffice >/dev/null 2>&1; then lo_version=$(libreoffice --headless --version | sed 's/^LibreOffice //'); fi
