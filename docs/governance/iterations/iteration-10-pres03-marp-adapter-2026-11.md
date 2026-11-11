@@ -1,13 +1,13 @@
 # Iteration 10 — Marp CLI adapter and export fidelity (PRES-03)
 
-- State: ACTIVE (activated in PR #633 after immutable scope lock commit a8f0dfaba01b1db8e91e20804762ec584836bba8; no implementation PR preceded activation).
+- State: CLOSED / ACCEPTED (owner closeout after exact-main validation; see appended evidence ledger). The original ACTIVE scope lock remains immutable.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review, not independent).
 - Tracking issue / native Project iteration: #609 / NOT ASSIGNED OR VERIFIED (connector cannot read or mutate native Iteration).
 - Parent acceptance: #283 remains open; this increment contributes the Marp/PPTX/export slice only and does not satisfy its native Figma Slides/client runtime criteria.
 - Previous terminal increment: Iteration 09 CLOSED / ACCEPTED, PR #632, merge 668973da197c8fb7ed9c3840ba884e0d150752a7.
 - Baseline main SHA: 668973da197c8fb7ed9c3840ba884e0d150752a7.
 - Lock commit SHA: a8f0dfaba01b1db8e91e20804762ec584836bba8 (record + matrix tree commit; immutable lock).
-- Started at / closed at (UTC): 2026-11-10 18:07:54 UTC / pending.
+- Started at / closed at (UTC): 2026-11-10 18:07:54 UTC / 2026-11-11 17:47 UTC.
 
 ## Frozen commitment
 
@@ -42,3 +42,31 @@ All development is completed before the test/fix phase. Acceptance matrix record
 - #283 parent proof remains incomplete until native Figma Slides, rendered inspection, export/round-trip and client/runtime evidence are independently observed.
 
 All execution states begin NOT_RUN. Only opened files and content inspection count as export receipts; successful process exit or file existence alone is insufficient. No PR code implementation may start before this scope-lock PR merges.
+
+
+## Closeout evidence — 2026-11-11 (append-only)
+
+Final implementation candidate: `ee95deec75a7020007c99cffbc09975d846a51a3` (current main after #609 and #610). The #610 changes are outside this frozen #609 scope; they did not alter the Marp adapter files. The Marp adapter workflow was rerun on the exact integrated main SHA to verify the combined tree.
+
+- PR #634 merged at `56f26c63dd551b90675c1c7882018174d5ce45e4`; adapter workflow passed on PR head, including output generation/reopen, sandbox, runtime-failure, fidelity and security steps.
+- Exact-main Marp adapter run [#223](https://github.com/aras-2003/skills-factory/actions/runs/43070251831) succeeded on `ee95deec75a7020007c99cffbc09975d846a51a3`. Its retained artifact is [sf-presentation-marp-ee95deec75a7020007c99cffbc09975d846a51a3](https://github.com/aras-2003/skills-factory/actions/runs/43070251831), artifact ID `13878926304`, digest `sha256:5069ac0764368e60b8d395cb35b52019bc58996ea9a12b7d4dbe5b28985a8db6`, expiry 2027-02-09.
+- On the same main SHA, Validate skills #1232, Domain integrity #1232, Site CI #620, Lab packaging #185 and Pages build #311 all completed successfully.
+- The exact-main Marp job passed: adapter unit/input-security tests; canonical DeckSpec validation; missing-LibreOffice and missing-browser fail-closed checks; synthetic PDF diagnostics; generation, reopen and inspection of HTML, PDF, flattened PPTX and experimental editable PPTX; and exact source revision verification.
+- The older user-provided ZIP showed black HTML captures from a pre-fix run. It is retained as defect evidence only. The capture fix is in PR #634; the exact-main workflow above regenerated and retained current captures. The old ZIP is not counted as candidate acceptance evidence.
+
+### Final matrix disposition
+
+| Row | Final verdict | Evidence |
+| --- | --- | --- |
+| 609-A | PASS | Isolated adapter and canonical DeckSpec reuse documented in PR #634. |
+| 609-B | PASS | Pinned runtime identity recorded in exact-main receipts. |
+| 609-C | PASS | Adapter input/security tests passed on exact main. |
+| 609-D | PASS | Four modes generated, reopened and inspected in exact-main run #223. |
+| 609-E | PASS | 16:9/content checks and repeated render determinism passed. |
+| 609-F | PASS | Per-slide screenshots, raster comparison and font fallback evidence retained in artifact. |
+| 609-G | PASS | Flattened images/notes and experimental editable-object inspection passed; note loss is recorded as a limitation. |
+| 609-H | PASS | Missing browser/LibreOffice scenarios failed closed without fallback. |
+| 609-I | PASS | Exact-main adapter, Validate skills, Domain integrity and Site CI passed. |
+| runtime-site | reviewed N/A | No Site registration, package promotion or runtime change is in the locked scope. |
+
+Closeout reconciliation: #609 is closed; #283 remains open for its separate native Figma Slides/client runtime, rendering and full delivery criteria. No production or Lab maturity claim is made by this increment. Owner and reviewer are the same person; this is an explicit self-review, not independent approval. No unresolved critical/major blocker remains against the frozen #609 acceptance.
