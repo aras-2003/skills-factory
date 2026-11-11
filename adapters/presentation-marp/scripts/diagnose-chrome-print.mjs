@@ -70,12 +70,12 @@ async function run() {
 }
 try {
   const result = await run();
-  if (result.code === 0 && result.pdfValid) {
-    console.log(JSON.stringify({ state: 'PASS', output: 'chrome-probe.pdf', pdf_valid: true, process_exit: 0 }));
-  } else {
-    console.log(JSON.stringify({ state: 'FAIL', classification: result.category, pdf_valid: result.pdfValid }));
-    process.exitCode = 1;
-  }
+  const report = result.code === 0 && result.pdfValid
+    ? { state: 'PASS', output: 'chrome-probe.pdf', pdf_valid: true, process_exit: 0 }
+    : { state: 'FAIL', classification: result.category, pdf_valid: result.pdfValid };
+  await writeFile(path.join(output, 'result.json'), JSON.stringify(report, null, 2) + '\n');
+  console.log(JSON.stringify(report));
+  if (report.state === 'FAIL') process.exitCode = 1;
 } finally {
   await rm(root, { recursive: true, force: true });
 }
