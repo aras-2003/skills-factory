@@ -1,6 +1,6 @@
 # Iteration 11 — PRES-05 acceptance matrix
 
-Baseline: `2ebd353277c5c2551ca345ee89cc9fab711c3d41`. Final main: `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079` (PR #638 merged). Scope is #611 only.
+Baseline: `2ebd353277c5c2551ca345ee89cc9fab711c3d41`. Implementation main SHA (PR #638 merge, exact-code regression target): `48924fe5fc3ccd0e1f56574b08ccfcf08eb6c079`. Scope is #611 only.
 
 | Row | Criterion | Required evidence | Candidate SHA / dependency lock | Runner / tools | Fixture/input hashes | State | Verdict | Output / receipt | Reviewer |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
