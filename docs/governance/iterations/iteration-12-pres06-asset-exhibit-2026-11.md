@@ -1,13 +1,13 @@
 # Iteration 12 — deterministic exhibit and asset pipeline (PRES-06)
 
-- State: PLANNED; becomes ACTIVE only after this scope-lock PR merges.
+- State: ACTIVE (scope-lock PR #640 merged at `d2cec8e23c27d6380df4074b13aa3ae5ca594839`).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #612 / not assigned or verified by the connected GitHub API.
 - Previous terminal iteration: Iteration 11 CLOSED / ACCEPTED, PR #639 merge `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`.
 - Baseline main SHA: `a8c7159fea9be63f57aa0ddb8c2e1ffed99ac334`.
-- Lock commit SHA: record in #612 after the scope-lock PR merges.
-- Started at / closed at (UTC): pending / pending.
-- Scope lock reviewed by / at: owner self-review / pending merge.
+- Lock commit SHA: `d2cec8e23c27d6380df4074b13aa3ae5ca594839` (recorded in #612).
+- Started at / closed at (UTC): 2026-11-11 20:08 UTC / pending.
+- Scope lock reviewed by / at: owner self-review / 2026-11-11 20:08 UTC; not independent.
 
 ## Frozen commitment
 
