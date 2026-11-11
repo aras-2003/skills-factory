@@ -245,3 +245,62 @@ cases:
         - "preserve existing evidence, rights and actual renderer preflight requirements"
       must_not:
         - "invent a selector execution receipt or stop all presentation production solely for an optional catalog"
+\n  - id: pres-e2e-27
+    case: interactive-report-format
+    input: "Build an interactive report with filters for our product metrics; do not create slides."
+    expected:
+      should_trigger: false
+      must:
+        - "route the interactive report to a web/report renderer"
+        - "keep presentation profile and delivery format as separate decisions"
+      must_not:
+        - "create a Marp deck or claim slide interactivity"
+  - id: pres-e2e-28
+    case: native-editable-pptx-required
+    input: "Export this approved deck to PPTX with native editable charts and text; only the Marp flattened exporter is available."
+    expected:
+      should_trigger: true
+      must:
+        - "prefer a verified native-editable route"
+        - "return BLOCKED_CAPABILITY if it is unavailable"
+      must_not:
+        - "silently use Marp flattened PPTX"
+  - id: pres-e2e-29
+    case: explicit-experimental-marp-editable
+    input: "I explicitly opt into experimental Marp editable PPTX; verify the browser and LibreOffice Impress route and report its caveats."
+    expected:
+      should_trigger: true
+      must:
+        - "use the distinct marp_editable_pptx_libreoffice capability only after preflight"
+        - "record observed object coverage, fidelity findings and presenter-notes loss"
+      must_not:
+        - "describe the experimental route as native PPTX or silently substitute it"
+  - id: pres-e2e-30
+    case: missing-editable-runtime
+    input: "Create an editable PPTX through the experimental Marp route, but LibreOffice is unavailable."
+    expected:
+      should_trigger: true
+      must:
+        - "return BLOCKED_CAPABILITY and record the missing preflight"
+      must_not:
+        - "fall back to flattened slides"
+  - id: pres-e2e-31
+    case: route-manifest-required
+    input: "Route this teaching deck to HTML and report exactly which renderer produced it."
+    expected:
+      should_trigger: true
+      must:
+        - "emit FormatRouteManifest with renderer, version, object coverage, caveats and receipts"
+        - "set route_status to RENDERED only after output exists"
+      must_not:
+        - "claim VERIFIED without reopen and inspection receipts"
+  - id: pres-e2e-32
+    case: profile-does-not-select-format
+    input: "Create an executive presentation, but leave the delivery format undecided."
+    expected:
+      should_trigger: true
+      must:
+        - "use the executive profile to shape story and density"
+        - "keep requested format unresolved until user intent or capability establishes it"
+      must_not:
+        - "infer Marp, PPTX, Figma or Canva from the executive profile alone"
