@@ -27,6 +27,31 @@ export class AdapterError extends Error {
 }
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const safeText = (value) => String(value ?? '').replace(/[\u0000-\u001f\u007f]+/g, ' ').trim().replace(/([\\`*_{}\[\]()#+.!|~-])/g, '\\$1').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+function safeMarkdownText(value) {
+  const text = String(value ?? '').replace(/[\u0000-\u001f\u007f]+/g, ' ');
+  const urlPattern = /https:\/\/[^\s<>"']+/g;
+  const escapeChunk = chunk => {
+    if (!chunk.trim()) return chunk;
+    const leading = chunk.match(/^\s*/)?.[0] ?? '';
+    const trailing = chunk.match(/\s*$/)?.[0] ?? '';
+    return leading + safeText(chunk.slice(leading.length, chunk.length - trailing.length)) + trailing;
+  };
+  let output = '', cursor = 0;
+  for (const match of text.matchAll(urlPattern)) {
+    output += escapeChunk(text.slice(cursor, match.index));
+    const candidate = match[0];
+    try {
+      const parsed = new URL(candidate);
+      if (parsed.protocol === 'https:' && !parsed.username && !parsed.password) {
+        output += `[${safeText(candidate)}](<${parsed.href}>)`;
+      } else output += escapeChunk(candidate);
+    } catch {
+      output += escapeChunk(candidate);
+    }
+    cursor = match.index + candidate.length;
+  }
+  return output + escapeChunk(text.slice(cursor));
+}
 const safeNote = (value) => String(value ?? '').replace(/--/g, '—').replace(/\r?\n/g, ' ');
 const xmlText = value => String(value ?? '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&apos;'}[ch]));
 const canonicalJson = value => {
@@ -176,7 +201,12 @@ export function renderDiagramSvg(diagram, tokens) {
     const toOffset=Math.min((nodeWidth/2)/Math.max(Math.abs(ux),0.0001),(nodeHeight/2)/Math.max(Math.abs(uy),0.0001));
     const x1=from.cx+ux*fromOffset, y1=from.cy+uy*fromOffset, x2=to.cx-ux*toOffset, y2=to.cy-uy*toOffset;
     const px=-uy, py=ux, bx=x2-ux*12, by=y2-uy*12; const arrow=`${x2},${y2} ${bx+px*6},${by+py*6} ${bx-px*6},${by-py*6}`;
-    const mx=(x1+x2)/2, my=(y1+y2)/2-8;
+    const mx=(x1+x2)/2;
+    // Horizontal edge labels sit above the node boxes. Centering them on the
+    // connector made labels overlap the boxes when the gap was narrower than
+    // the label text (for example, on three-column diagrams).
+    const horizontal = Math.abs(y2 - y1) < 0.001;
+    const my = horizontal ? Math.min(y1, y2) - nodeHeight / 2 - 8 : (y1 + y2) / 2 - 8;
     return `<g><line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke="${tokens.rule}" stroke-width="3"/><polygon points="${arrow}" fill="${tokens.rule}"/>${edge.label ? `<text x="${mx}" y="${my}" text-anchor="middle" font-size="16" fill="${tokens.muted}">${xmlText(edge.label)}</text>` : ''}</g>`;
   }).join('');
   const nodes = diagram.nodes.map(node => {
@@ -218,7 +248,7 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
   for (const slide of deck.slides) {
     const layout=resolveLayout(slide.layout.layout_id);
     lines.push('<!-- _class: sf-theme-'+selectedTheme.id+' sf-layout-'+layout+' -->', '', `# ${safeText(slide.action_title)}`, '');
-    if (slide.body) lines.push(safeText(slide.body), '');
+    if (slide.body) lines.push(safeMarkdownText(slide.body), '');
     for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
     const tableDataRefs = new Set((slide.exhibits ?? []).filter(exhibit => exhibit.visual_type === 'table').flatMap(exhibit => exhibit.supported_data ?? []));
     for (const datum of slide.data_refs ?? []) {

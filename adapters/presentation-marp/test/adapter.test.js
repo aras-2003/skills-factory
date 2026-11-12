@@ -21,8 +21,11 @@ test('architecture diagrams validate bounded graph structure and render determin
   const model={title:'Synthetic flow',nodes:[{id:'source',label:'Source'},{id:'model',label:'Canonical model'},{id:'output',label:'Output'}],edges:[{from:'source',to:'model',label:'validated'},{from:'model',to:'output'}]};
   const tokens={canvas:'#ffffff',ink:'#17243a',muted:'#52627a',accent:'#176b87',rule:'#94a3b8'};
   assert.equal(renderDiagramSvg(model,tokens),renderDiagramSvg(structuredClone(model),tokens));
-  assert.match(renderDiagramSvg(model,tokens),/<svg[^>]+viewBox="0 0 1000 360"/);
-  assert.match(renderDiagramSvg(model,tokens),/Canonical model/);
+  const svg=renderDiagramSvg(model,tokens);
+  assert.match(svg,/<svg[^>]+viewBox="0 0 1000 360"/);
+  assert.match(svg,/Canonical model/);
+  const horizontalLabelY=Number(svg.match(/<text x="[^"]+" y="([^"]+)" text-anchor="middle" font-size="16"/)?.[1]);
+  assert.ok(horizontalLabelY < 40, 'horizontal connector labels must render above the node boxes');
   assert.throws(()=>renderDiagramSvg({...model,edges:[{from:'missing',to:'model'}]},tokens),e=>e.code==='INVALID_DIAGRAM');
   assert.throws(()=>renderDiagramSvg({...model,nodes:[...model.nodes,...Array.from({length:10},(_,i)=>({id:`n${i}`,label:'node'}))]},tokens),e=>e.code==='INVALID_DIAGRAM');
   const hostile={...model,nodes:[{id:'n',label:'<script>alert(1)</script>'}],edges:[]};
@@ -55,6 +58,13 @@ test('generated markdown escapes active syntax and uses a staged chart asset', (
   assert.ok(markdown.endsWith('\n'), 'Markdown ends with a newline so the final slide is complete');
   assert.equal((markdown.match(/^---$/gm) ?? []).length, 2, 'single-slide Markdown has only its frontmatter delimiter');
   assert.doesNotMatch(markdown.match(/<!-- ([\s\S]*?) -->/)?.[1] ?? '', /--/);
+});
+
+test('body URLs retain a complete HTTPS hyperlink after Markdown escaping', () => {
+  const value=structuredClone(deck);
+  value.slides[0].body='Synthetic source: https://example.org/pres07/reference';
+  const markdown=renderDeck(value,'sf-editorial.css',new Map([['s1:e1','./fixed.svg']]));
+  assert.match(markdown, /\[https:\/\/example\\\.org\/pres07\/reference\]\(<https:\/\/example\.org\/pres07\/reference>\)/);
 });
 
 test('table exhibits render covered data references once without duplicate bullet rows', () => {
