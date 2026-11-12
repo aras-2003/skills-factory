@@ -51,8 +51,10 @@ for i,slide in enumerate(deck['slides'],1):
   for j,label in enumerate(labels):
    x=1.2+j*6.4; rect(p,f'Diagram node {j+1}',x,5.0,4.7,1.25,'#d8e5ed'); frame(p,f'Diagram label {j+1}',x+0.1,5.15,4.5,0.95,label)
   edge_lines=[f"{edge['from']} → {edge['to']}: {edge.get('label','')}" for edge in model.get('edges',[])]
-  frame(p,'Diagram relationships',1.1,7.0,25.0,1.4,'\n'.join(edge_lines))
-  frame(p,'Diagram alternative text',1.1,8.6,25.0,1.2,diagram.get('alternative_text',''))
+  # Three 14pt relationship lines exceed 1.4cm in LibreOffice; reserve the
+  # full block and a visible gap before the alternative-text frame.
+  frame(p,'Diagram relationships',1.1,7.0,25.0,2.0,'\n'.join(edge_lines))
+  frame(p,'Diagram alternative text',1.1,10.0,25.0,1.5,diagram.get('alternative_text',''))
  else:
   facts=[c['statement'] for c in slide.get('claims',[])]
   for d in slide.get('data_refs',[]): facts.append(f"{d['data_ref_id']}: {d.get('value','')} {d.get('unit','')} — {d.get('as_of','')} — {d.get('denominator','')} — source {','.join(d.get('source_ids',[]))}")
