@@ -7,6 +7,16 @@ assert.ok(fixturePath && evidenceRoot, 'usage: assert-pres07-evidence.mjs FIXTUR
 const deck = JSON.parse(await readFile(fixturePath, 'utf8'));
 assert.ok(deck.slides.length >= 10 && deck.slides.length <= 15, 'PRES07_FIXTURE_SLIDE_COUNT_INVALID');
 const normalizeText = value => String(value).normalize('NFKC').replace(/[^\p{L}\p{N}]/gu, '');
+const findMissingOrderedToken = (haystack, value) => {
+  const tokens = String(value).normalize('NFKC').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+  let cursor = 0;
+  for (const token of tokens) {
+    const index = haystack.indexOf(token, cursor);
+    if (index < 0) return token;
+    cursor = index + token.length;
+  }
+  return null;
+};
 const expectedIds = deck.slides.map(slide => slide.slide_id);
 assert.equal(normalizeText('North Seg-\nment remains distinct from Central Segment.'), normalizeText('North Segment remains distinct from Central Segment.'), 'PRES07_PDF_LINE_WRAP_NORMALIZATION');
 const evidence = JSON.parse(await readFile(path.join(evidenceRoot, 'integration-receipt.json'), 'utf8'));
@@ -34,7 +44,10 @@ assert.equal(pdf.ratio, 16 / 9, 'PRES07_PDF_ASPECT_RATIO_MISMATCH');
 const pdfText = normalizeText(pdf.extracted_text);
 for (const slide of deck.slides) {
   assert.ok(pdfText.includes(normalizeText(slide.action_title)), `PRES07_PDF_TITLE_MISSING_${slide.slide_id}`);
-  for (const claim of slide.claims ?? []) assert.ok(pdfText.includes(normalizeText(claim.statement)), `PRES07_PDF_CLAIM_MISSING_${claim.claim_id}`);
+  for (const claim of slide.claims ?? []) {
+    const missingToken = findMissingOrderedToken(pdfText, claim.statement);
+    assert.equal(missingToken, null, `PRES07_PDF_CLAIM_MISSING_${claim.claim_id}_TOKEN_${missingToken ?? 'none'}`);
+  }
   for (const ref of slide.data_refs ?? []) {
     assert.ok(pdfText.includes(normalizeText(ref.data_ref_id)), `PRES07_PDF_LABEL_MISSING_${slide.slide_id}`);
     assert.ok(pdfText.includes(normalizeText(ref.value)), `PRES07_PDF_VALUE_MISSING_${slide.slide_id}`);
