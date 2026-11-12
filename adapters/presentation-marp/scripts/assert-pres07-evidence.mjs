@@ -6,7 +6,7 @@ const [fixturePath, evidenceRoot] = process.argv.slice(2);
 assert.ok(fixturePath && evidenceRoot, 'usage: assert-pres07-evidence.mjs FIXTURE EVIDENCE_DIR');
 const deck = JSON.parse(await readFile(fixturePath, 'utf8'));
 assert.ok(deck.slides.length >= 10 && deck.slides.length <= 15, 'PRES07_FIXTURE_SLIDE_COUNT_INVALID');
-const normalizeText = value => String(value).normalize('NFKC').replace(/[^\p{L}\p{N}]/gu, '');
+const normalizeText = value => String(value).normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 const findMissingOrderedToken = (haystack, value) => {
   const tokens = String(value).normalize('NFKC').toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
   let cursor = 0;
