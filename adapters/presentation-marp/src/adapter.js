@@ -220,7 +220,9 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
     lines.push('<!-- _class: sf-theme-'+selectedTheme.id+' sf-layout-'+layout+' -->', '', `# ${safeText(slide.action_title)}`, '');
     if (slide.body) lines.push(safeText(slide.body), '');
     for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
+    const tableDataRefs = new Set((slide.exhibits ?? []).filter(exhibit => exhibit.visual_type === 'table').flatMap(exhibit => exhibit.supported_data ?? []));
     for (const datum of slide.data_refs ?? []) {
+      if (tableDataRefs.has(datum.data_ref_id)) continue;
       const provenance = [datum.unit, datum.as_of, datum.denominator, datum.source_ids?.join(', ')].filter(Boolean).map(safeText).join(' · ');
       lines.push(`- **${safeText(datum.data_ref_id)}:** ${safeText(datum.value)}${datum.unit ? ` ${safeText(datum.unit)}` : ''}${provenance ? ` <small>(${provenance})</small>` : ''}`);
     }

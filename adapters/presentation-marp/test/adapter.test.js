@@ -56,6 +56,13 @@ test('generated markdown escapes active syntax and uses a staged chart asset', (
   assert.doesNotMatch(markdown.match(/<!-- ([\s\S]*?) -->/)?.[1] ?? '', /--/);
 });
 
+test('table exhibits render covered data references once without duplicate bullet rows', () => {
+  const slide={...deck.slides[0],body:'Source facts',exhibits:[{exhibit_id:'table',visual_type:'table',supported_data:['q1'],alternative_text:'Synthetic source table'}]};
+  const markdown=renderDeck({...deck,slides:[slide]},'sf-editorial.css');
+  assert.doesNotMatch(markdown,/- \*\*q1:\*\* 12 percent/);
+  assert.match(markdown,/\| q1 \| 12 \| percent \|/);
+});
+
 test('non allowlisted output mode stops before runtime access', async () => {
   await assert.rejects(preflight('pptx'), e => e instanceof AdapterError && e.code === 'INVALID_MODE');
 });
