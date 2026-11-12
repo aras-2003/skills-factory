@@ -116,14 +116,14 @@ jobs:
         continue-on-error: true
         env:
           SF_MARP_IMAGE: ghcr.io/marp-team/marp-cli:v4.5.1@sha256:3cf660df7b9737f875e57f7169dff0b08d1d3ab604ea2d655ab761102942fa42
-        run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/upstream-editable
+        run: timeout --signal=TERM --kill-after=10s 180s node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/upstream-editable
       - name: Probe editable Marp export with Firefox WebDriver BiDi
         continue-on-error: true
         env:
           SF_MARP_BROWSER: firefox
           SF_MARP_BROWSER_PROTOCOL: webdriver-bidi
           SF_MARP_TMPFS_EXEC: "1"
-        run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/firefox-editable
+        run: timeout --signal=TERM --kill-after=10s 180s node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/firefox-editable
       - name: Verify base Marp editable runtime
         run: node adapters/presentation-marp/scripts/assert-base-editable.mjs presentation-marp-evidence/base-editable
       - name: Isolate editable export from fixture complexity
