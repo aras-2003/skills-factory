@@ -32,6 +32,8 @@ const html = await readFile(path.join(evidenceRoot, 'html', 'deck.html'), 'utf8'
 for (const slide of deck.slides) {
   assert.ok(html.includes(slide.action_title), `PRES07_HTML_TITLE_MISSING_${slide.slide_id}`);
   for (const claim of slide.claims ?? []) assert.ok(html.includes(claim.statement), `PRES07_HTML_CLAIM_MISSING_${claim.claim_id}`);
+  const bodyUrls = String(slide.body ?? '').match(/https:\/\/[^\s<>"']+/g) ?? [];
+  for (const url of bodyUrls) assert.ok(html.includes(`href="${url}"`) && html.includes(`>${url}</a>`), `PRES07_HTML_HYPERLINK_INCOMPLETE_${slide.slide_id}`);
   for (const ref of slide.data_refs ?? []) {
     assert.ok(html.includes(String(ref.data_ref_id)), `PRES07_HTML_LABEL_MISSING_${slide.slide_id}`);
     assert.ok(html.includes(String(ref.value)), `PRES07_HTML_VALUE_MISSING_${slide.slide_id}`);

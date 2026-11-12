@@ -8,6 +8,8 @@ node src/adapter.js render --input fixtures/canonical-deck-v1.json --output-dir 
 
 Supported modes are `html`, `pdf`, `pptx_flattened`, and `pptx_editable_experimental`. Standard Marp PPTX is image backed and supports presenter notes. Experimental editable output runs Marp CLI's `--pptx --pptx-editable` path with pinned Chromium and LibreOffice Impress, then reopens the PPTX in Impress. Fidelity can be lower and presenter notes are not supported. Its title slide uses a smaller title size and the full slide grid width to keep text inside Marp's fixed-height editable text shape; HTML, PDF and flattened PPTX retain the theme's normal title styling. There is no fallback between modes.
 
+Body text preserves complete HTTPS references as explicit links while escaping other Markdown syntax. Bar charts keep category labels and values inside a compact chart viewport; shared as-of, denominator and source metadata is emitted once as a compact source line instead of duplicating every chart value as a bullet. Generated horizontal diagram-edge labels render above their connected nodes so they remain readable when nodes have narrow spacing.
+
 ## Runtime and security
 
 The renderer image starts from Marp CLI 4.5.1 pinned by OCI digest. Debian packages come from snapshot `20261109T000000Z`; WeasyPrint is pinned to Debian `57.2-1`, LibreOffice Impress to `4:7.4.7-1+deb12u14`, Tesseract to `5.3.0-2`, and Python to `3.11.2-1+b1`. The runner uses Node `22.23.3`; the OCI image pins its internal Node to `26.8.1` and fixes Chromium by digest. Preflight records exact Marp and Node versions, Chromium path/version/binary SHA-256, WeasyPrint and LibreOffice versions/package versions, and Docker image ID. It refuses a missing or mismatched runtime for the requested mode.
