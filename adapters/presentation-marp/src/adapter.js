@@ -64,7 +64,7 @@ function themeById(id) {
   if (!theme) throw new AdapterError('UNKNOWN_THEME','Select a theme ID from the bundled registry.');
   return theme;
 }
-export function buildThemeCss(theme) {
+export function buildThemeCss(theme, { mode } = {}) {
   const t=theme.tokens;
   const layoutFile=theme.id==='sf-marp-editable-safe'?'layouts-editable-safe.css':'layouts.css';
   const css=readFileSync(path.join(HERE,'../themes',layoutFile),'utf8');
@@ -73,7 +73,10 @@ export function buildThemeCss(theme) {
   const enhancement=theme.css_complexity==='progressive'
     ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\n'
     : '';
-  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement;
+  const editableTitleFit=mode==='pptx_editable_experimental'
+    ? '\n/* Keep editable title text inside Marp’s fixed-height PPTX text shape. */\nsection.sf-layout-title h1 { max-width: var(--sf-grid-width); font-size: 52px; }\n'
+    : '';
+  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement+editableTitleFit;
 }
 
 
@@ -217,7 +220,9 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
     lines.push('<!-- _class: sf-theme-'+selectedTheme.id+' sf-layout-'+layout+' -->', '', `# ${safeText(slide.action_title)}`, '');
     if (slide.body) lines.push(safeText(slide.body), '');
     for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
+    const tableDataRefs = new Set((slide.exhibits ?? []).filter(exhibit => exhibit.visual_type === 'table').flatMap(exhibit => exhibit.supported_data ?? []));
     for (const datum of slide.data_refs ?? []) {
+      if (tableDataRefs.has(datum.data_ref_id)) continue;
       const provenance = [datum.unit, datum.as_of, datum.denominator, datum.source_ids?.join(', ')].filter(Boolean).map(safeText).join(' · ');
       lines.push(`- **${safeText(datum.data_ref_id)}:** ${safeText(datum.value)}${datum.unit ? ` ${safeText(datum.unit)}` : ''}${provenance ? ` <small>(${provenance})</small>` : ''}`);
     }
@@ -229,8 +234,11 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
       } else if (exhibit.visual_type === 'table') {
         const data = new Map((slide.data_refs ?? []).map(ref => [ref.data_ref_id, ref]));
         const rows = exhibit.supported_data.map(id => data.get(id));
-        lines.push(`**${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}**`, '', '| Data reference | Value | Unit | As of | Denominator | Source IDs |', '| --- | ---: | --- | --- | --- | --- |');
-        for (const row of rows) lines.push(`| ${safeText(row.data_ref_id)} | ${safeText(row.value)} | ${safeText(row.unit ?? '')} | ${safeText(row.as_of ?? '')} | ${safeText(row.denominator ?? '')} | ${safeText((row.source_ids ?? []).join(', '))} |`);
+        lines.push(`**${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}**`, '', '| Data reference | Value | Unit | Provenance |', '| --- | ---: | --- | --- |');
+        for (const row of rows) {
+          const provenance = [row.as_of, row.denominator, (row.source_ids ?? []).join(', ')].filter(Boolean).map(safeText).join(' · ');
+          lines.push(`| ${safeText(row.data_ref_id)} | ${safeText(row.value)} | ${safeText(row.unit ?? '')} | ${provenance} |`);
+        }
         lines.push('');
       }
     }
@@ -362,7 +370,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     const md = renderDeck(deck, themeFile, assetMap); await writeFile(path.join(inDir, 'deck.md'), md);
     await writeFile(path.join(inDir, 'deck.json'), raw);
     await chmod(outDir, 0o777);
-    await writeFile(themeFile, buildThemeCss(themeDefinition));
+    await writeFile(themeFile, buildThemeCss(themeDefinition, { mode }));
     runtime = await preflight(mode, { docker, image });
     const renderName = `sf-marp-render-${randomUUID()}`;
     const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--env', `SF_MARP_THEME=${theme}`, '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];

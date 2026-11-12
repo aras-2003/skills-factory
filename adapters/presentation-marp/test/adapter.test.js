@@ -40,9 +40,10 @@ test('generated data charts reject invalid values and escape labels while retain
 
 test('table exhibit renders visible rows directly from canonical data refs with provenance', () => {
   const value=structuredClone(deck); value.slides[0].exhibits=[{exhibit_id:'t1',visual_type:'table',supported_data:['q1'],alternative_text:'Synthetic data table'}];
+  value.slides[0].data_refs[0].as_of='2026-Q4'; value.slides[0].data_refs[0].denominator='sample n=100';
   const markdown=renderDeck(value,'sf-editorial.css');
-  assert.match(markdown, /\| Data reference \| Value \| Unit \| As of \| Denominator \| Source IDs \|/);
-  assert.match(markdown, /\| q1 \| 12 \| percent \|\s*\|\s*\| synth \|/);
+  assert.match(markdown, /\| Data reference \| Value \| Unit \| Provenance \|/);
+  assert.match(markdown, /\| q1 \| 12 \| percent \| 2026\\-Q4 · sample n=100 · synth \|/);
 });
 
 test('generated markdown escapes active syntax and uses a staged chart asset', () => {
@@ -54,6 +55,13 @@ test('generated markdown escapes active syntax and uses a staged chart asset', (
   assert.ok(markdown.endsWith('\n'), 'Markdown ends with a newline so the final slide is complete');
   assert.equal((markdown.match(/^---$/gm) ?? []).length, 2, 'single-slide Markdown has only its frontmatter delimiter');
   assert.doesNotMatch(markdown.match(/<!-- ([\s\S]*?) -->/)?.[1] ?? '', /--/);
+});
+
+test('table exhibits render covered data references once without duplicate bullet rows', () => {
+  const slide={...deck.slides[0],body:'Source facts',exhibits:[{exhibit_id:'table',visual_type:'table',supported_data:['q1'],alternative_text:'Synthetic source table'}]};
+  const markdown=renderDeck({...deck,slides:[slide]},'sf-editorial.css');
+  assert.doesNotMatch(markdown,/- \*\*q1:\*\* 12 percent/);
+  assert.match(markdown,/\| q1 \| 12 \| percent \|/);
 });
 
 test('non allowlisted output mode stops before runtime access', async () => {
@@ -150,6 +158,15 @@ test('editable-safe CSS avoids advanced grid and media features while progressiv
   assert.doesNotMatch(safe, /grid-template|@media|linear-gradient/);
   const progressive = buildThemeCss({ id:'sf-technology', tokens, css_complexity:'progressive' });
   assert.match(progressive, /linear-gradient/);
+});
+
+test('editable PPTX uses a title fit rule without changing HTML theme CSS', () => {
+  const tokens = { canvas:'#f6f4ee', ink:'#17243a', muted:'#52627a', accent:'#176b87', rule:'#94a3b8', font_display:'Liberation Sans, sans-serif', font_body:'Liberation Sans, sans-serif', font_label:'Liberation Serif, serif', grid_width:'1108px', space_unit:'8px' };
+  const theme = { id:'sf-editorial', tokens, css_complexity:'safe' };
+  const html = buildThemeCss(theme, { mode:'html' });
+  const editable = buildThemeCss(theme, { mode:'pptx_editable_experimental' });
+  assert.doesNotMatch(html, /Keep editable title text/);
+  assert.match(editable, /section\.sf-layout-title h1 \{ max-width: var\(--sf-grid-width\); font-size: 52px; \}/);
 });
 
 test('progressive CSS is blocked for editable export without silently changing theme', async t => {

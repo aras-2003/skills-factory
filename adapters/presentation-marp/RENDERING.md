@@ -6,7 +6,7 @@ This adapter consumes canonical DeckSpec v1 and emits Marp CLI 4.5.1 output. It 
 node src/adapter.js render --input fixtures/canonical-deck-v1.json --output-dir .tmp/render --mode html
 ```
 
-Supported modes are `html`, `pdf`, `pptx_flattened`, and `pptx_editable_experimental`. Standard Marp PPTX is image backed and supports presenter notes. Experimental editable output runs Marp CLI's `--pptx --pptx-editable` path with pinned Chromium and LibreOffice Impress, then reopens the PPTX in Impress. Fidelity can be lower and presenter notes are not supported. There is no fallback between modes.
+Supported modes are `html`, `pdf`, `pptx_flattened`, and `pptx_editable_experimental`. Standard Marp PPTX is image backed and supports presenter notes. Experimental editable output runs Marp CLI's `--pptx --pptx-editable` path with pinned Chromium and LibreOffice Impress, then reopens the PPTX in Impress. Fidelity can be lower and presenter notes are not supported. Its title slide uses a smaller title size and the full slide grid width to keep text inside Marp's fixed-height editable text shape; HTML, PDF and flattened PPTX retain the theme's normal title styling. There is no fallback between modes.
 
 ## Runtime and security
 
@@ -23,7 +23,7 @@ Local asset manifest paths must be normalized relative paths to regular files wi
 The adapter supports three exhibit contracts without changing canonical DeckSpec v1:
 
 - `bar_chart` references only finite numeric `data_refs`; the adapter emits a deterministic local SVG and receipts retain each exact value, unit, date, denominator, source ID and confidentiality classification.
-- `table` renders a visible Markdown table from the same referenced `data_refs`; callers do not repeat values in exhibit markup.
+- `table` renders a compact four-column Markdown table from the same referenced `data_refs`; provenance keeps the exact period, denominator and source IDs together. Callers do not repeat values in exhibit markup, and table-covered references are omitted from the separate bullet list.
 - `architecture_diagram` keeps a bounded declarative graph under `exhibit.extensions.presentation_marp.diagram` (1–12 nodes, up to 20 directed edges). Stable JSON source files and deterministic passive SVGs are emitted separately and hashed.
 
 For an authored manifest SVG that needs raster form for the experimental editable mode, the author may declare `raster_fallback_path` to a local PNG/JPEG/WebP. The source SVG is still validated and retained, the fallback bytes are validated, and the receipt states which file was selected. The fallback is used only for `pptx_editable_experimental`; it never changes the requested output mode. Missing fallback blocks that authored SVG in editable mode. Generated data charts and diagrams stay data-derived SVGs; a renderer failure blocks the requested mode instead of swapping in a different format. HTML, PDF and flattened PPTX use the original safe SVG. No remote assets, image-generation provider or customer content is used.
