@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.resolve(process.argv[2] ?? path.join(root, '.tmp/evidence'));
 const image = process.env.SF_MARP_IMAGE ?? 'ghcr.io/skills-factory/presentation-marp:1.0.0';
-const safeFailureClasses = new Set(['VISUAL_REFERENCE_MISSING','VISUAL_REOPENED_SLIDE_MISSING','VISUAL_METRIC_UNAVAILABLE','VISUAL_DRIFT_OVER_THRESHOLD','PDF_TEXT_ASSERTION_FAILED','PDF_TITLE_MISSING','PDF_VALUE_MISSING','PDF_UNIT_MISSING','PDF_AS_OF_MISSING','PDF_DENOMINATOR_MISSING','PDF_SOURCE_ID_MISSING','PDF_PROVENANCE_MISSING','PDF_CONTENT_INCOMPLETE','HTML_SLIDE_COUNT_MISMATCH','HTML_CONTENT_MISSING','HTML_SLIDE_CONTAINER_MISSING','HTML_SLIDE_BOUNDS_INVALID','HTML_PRESENTATION_CONTROLS_NOT_FOUND','HTML_MOBILE_LAYOUT_INVALID','HTML_INSPECTION_FAILED']);
+const safeFailureClasses = new Set(['VISUAL_REFERENCE_MISSING','VISUAL_REOPENED_SLIDE_MISSING','VISUAL_METRIC_UNAVAILABLE','VISUAL_DRIFT_OVER_THRESHOLD','PDF_TEXT_ASSERTION_FAILED','PDF_TITLE_MISSING','PDF_VALUE_MISSING','PDF_UNIT_MISSING','PDF_AS_OF_MISSING','PDF_DENOMINATOR_MISSING','PDF_SOURCE_ID_MISSING','PDF_PROVENANCE_MISSING','PDF_CONTENT_INCOMPLETE','HTML_SLIDE_COUNT_MISMATCH','HTML_CONTENT_MISSING','HTML_SLIDE_CONTAINER_MISSING','HTML_SLIDE_BOUNDS_INVALID','HTML_PRESENTATION_CONTROLS_NOT_FOUND','HTML_MOBILE_LAYOUT_INVALID','HTML_INSPECTION_FAILED','PPTX_REOPEN_DATA_MISSING','PPTX_REOPEN_OCR_CONTENT_MISSING','PPTX_REOPEN_COUNT_MISMATCH','PPTX_REOPEN_GEOMETRY_INVALID','PPTX_REOPEN_CONVERSION_FAILED']);
 let activeStage = 'initialization';
 process.on('unhandledRejection', error => {
   const classification = safeFailureClasses.has(String(error?.message ?? '')) ? error.message : 'VALIDATION_FAILED';
@@ -37,6 +37,11 @@ function run(command,args) {
         :stderr.includes('HTML_PRESENTATION_CONTROLS_NOT_FOUND')?'HTML_PRESENTATION_CONTROLS_NOT_FOUND'
         :stderr.includes('Rendered HTML is missing expected content')?'HTML_CONTENT_MISSING'
         :stderr.includes('Expected ')&&stderr.includes(' rendered slides, got ')?'HTML_SLIDE_COUNT_MISMATCH'
+        :stderr.includes('OCR content check failed')?'PPTX_REOPEN_OCR_CONTENT_MISSING'
+        :stderr.includes('reopened PPTX text missing data evidence')?'PPTX_REOPEN_DATA_MISSING'
+        :stderr.includes('reopened page count')?'PPTX_REOPEN_COUNT_MISMATCH'
+        :stderr.includes('reopened page size not 16:9')?'PPTX_REOPEN_GEOMETRY_INVALID'
+        :stderr.includes('LibreOffice did not reopen the PPTX')?'PPTX_REOPEN_CONVERSION_FAILED'
         :stderr.includes('HTML_')?'HTML_INSPECTION_FAILED':'INTEGRATION_SUBPROCESS_FAILED';
       reject(new Error(classification));
     });
