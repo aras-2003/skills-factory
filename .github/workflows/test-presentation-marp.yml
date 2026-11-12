@@ -150,6 +150,7 @@ jobs:
         run: |
           python scripts/validate/presentation_model.py "$SF_MARP_FIXTURE"
           node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence/pres07-cross-format
+          node adapters/presentation-marp/scripts/assert-pres07-complex-css.mjs presentation-marp-evidence/pres07-cross-format/complex-css/receipt.json
           native_dir=presentation-marp-evidence/pres07-cross-format/native-baseline
           mkdir -p "$native_dir"
           python adapters/presentation-marp/scripts/generate-pres07-native-baseline.py "$SF_MARP_FIXTURE" "$native_dir" > "$native_dir/generation.json"
