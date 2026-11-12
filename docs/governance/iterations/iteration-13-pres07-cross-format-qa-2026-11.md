@@ -1,11 +1,11 @@
 # Iteration 13 — cross-format presentation QA (PRES-07)
 
-- State: ACTIVE after this scope-lock PR merges; no implementation PR may precede the lock.
+- State: ACTIVE; implementation slice #646 is merged, but closure gates remain pending manual/editability evidence, per-slide visual review, and completion of all 23 matrix rows.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #613 / assign the current native Project iteration separately after lock; do not infer from the issue.
 - Previous terminal iteration: Iteration 12 CLOSED / ACCEPTED, tracking issue #612; closeout PR #644, merge SHA `56a28aff02897de103f2e7b6b9825caa6222a19a`.
 - Baseline main SHA: `56a28aff02897de103f2e7b6b9825caa6222a19a`.
-- Lock commit SHA: this scope-lock PR merge SHA; write it to #613 after merge.
+- Lock commit SHA: `0ced426fc15833a39694632a30cd3dbe0485a09d`.
 - Started at / closed at (UTC): 2026-11-11 23:42 UTC / pending.
 - Scope lock reviewed by / at: owner self-review / 2026-11-11 23:42 UTC; not independent.
 
@@ -40,6 +40,7 @@ See `evals/campaigns/iteration-13-pres07-cross-format-qa-2026-11/acceptance-matr
 
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
+| C1 implementation slice | PR head `906b4805d861c1c1b5da60cab5b63fcbb2d7a1de`; exact main merge `3c3f9c14c37bde744002c15de4e767f87fe27174` | N/A; no skill/runtime release in this export-QA scope | PR: Marp 43205228628, Validate 43205228700, Domain 43205228634 all PASS; exact main: Marp 43207105745, Validate 43207106024, Domain 43207105558 all PASS; Pages deployment 43207104377 success | LibreOffice 7.4.7.2; 12-slide native baseline reopened; 12 slides/notes, 1 external link; manual edit NOT_RUN | No scope change; acceptance remains pending |
 | C0 baseline | `56a28aff02897de103f2e7b6b9825caa6222a19a` | N/A | Validate skills, Domain integrity, Lab packaging and Pages completed successfully; see runs 43120872583, 43120872357, 43120872430, 43120871697 | N/A for export-QA baseline | None |
 
 ## Regression selection and counts
@@ -56,18 +57,19 @@ See `evals/campaigns/iteration-13-pres07-cross-format-qa-2026-11/acceptance-matr
 
 | Bug Issue / discovery iteration | Existing contract / frozen criterion or unrelated | Severity / closure blocking | Fix PR or accepted deferral owner + future delivery iteration | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
+| PDF claim matcher case normalization produced false missing-claim reports for capitalized words | 613-A3-content-pdf; assertion reliability defect, fixed and verified | P2; assertion false negative; resolved by PR #646 and verified on exact main | PR #646 / exact main `3c3f9c14c37bde744002c15de4e767f87fe27174` | A3-content-pdf on PR and main | owner self-review |
 | None at lock; prior 3-slide ZIP is pre-fix historical evidence, not a candidate verdict | Existing screenshot transition defect was addressed in Iteration 12; attachment is not reused as current acceptance evidence | No open defect inferred | N/A | N/A | Owner |
 
 ## Closure / abort decision
 
-- Outcome: PENDING.
-- Final candidate / matrix and immutable evidence links: pending.
+- Outcome: PENDING; Iteration 13 remains ACTIVE.
+- Candidate / immutable evidence: PR #646 merged at `3c3f9c14c37bde744002c15de4e767f87fe27174`; exact-main artifact is [run 43207105745](https://github.com/aras-2003/skills-factory/actions/runs/43207105745) (artifact ID 13940391644, SHA-256 `bea445d8ad345e2644bcffb4f89d8122e59ad23bd6a20f3fbfbbd758da1e23c2`).
 - Committed Issues accepted / unresolved: #613 pending; #283 remains open and out of scope.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: all planned rows start NOT_RUN.
-- Shared regression verdict: pending.
-- Non-blocking findings and accepted impact: pending.
-- Scope compared with lock commit: pending.
-- Issue / Project / PR reconciliation: pending.
-- Owner proposal / reviewer acceptance / decision timestamp: pending.
-- If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: pending.
+- Matrix totals: 30 PASS executions, 0 FAIL, 12 REVIEW_REQUIRED, 3 NOT_RUN, 0 reviewed N/A; see the updated matrix.
+- Shared regression verdict: selected routing/security and report/visual probes PASS on PR and exact main.
+- Remaining closure gates: A3 PPTX coverage review; A4 per-slide visual review; A5 manual desktop text/shape edit, save/reopen and before/after evidence; A6 exact repeat-build comparison; A7 dedicated complex-CSS case.
+- Scope compared with lock commit: unchanged.
+- Issue / Project / PR reconciliation: #646 merged; #613 stays open/ACTIVE. No later iteration is started.
+- Owner proposal / reviewer acceptance / decision timestamp: owner self-review only; acceptance decision pending.
+- If ABORTED: not applicable.
 - Next iteration eligibility: Iteration 13 must be terminal before PRES-08 #614 or any later iteration starts.
