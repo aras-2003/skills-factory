@@ -1,3 +1,5 @@
+> **Current candidate status (2026-11-12):** The detailed rows and totals below refer to an earlier candidate and are superseded for PR #651 head `c0cf0d45c7b290a0297380a0f8ab327b58c3d162`. For c0, the exact artifact SHA-256 is `03c1453f71b3966c71e069923d97e169e2518355f4b611e16f494a8ff8af732f`; the four required GitHub workflows passed and the exact artifact was reviewed across HTML, PDF, flattened PPTX and experimental editable PPTX. A disposable c0 editable-PPTX copy passed a text-edit/save/reopen check. The exact-candidate shape-move check remains **NOT_RUN**, so #613 is not eligible for closure. Do not use the historical rows or totals below as c0 acceptance evidence; replace them with candidate-specific records before closing the issue.
+
 # Iteration 13 acceptance matrix
 
 Candidate source starts at main `56a28aff02897de103f2e7b6b9825caa6222a19a`. This is a scope-locked plan; a green CI run does not satisfy manual PowerPoint edit or runtime inspection. The attached 3-slide artifact is pre-lock historical evidence and is not counted.
