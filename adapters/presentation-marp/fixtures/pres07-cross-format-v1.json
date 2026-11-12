@@ -1,0 +1,565 @@
+{
+  "schema_version": "1.0",
+  "deck_id": "synthetic-pres07-cross-format-v1",
+  "communicated_thesis": "One synthetic DeckSpec is checked for content, visual fidelity and editability across five outputs.",
+  "sources": [
+    {
+      "source_id": "src-pres07-synthetic",
+      "source_locator": "Synthetic PRES-07 fixture; generated for cross-format QA",
+      "source_as_of": "2026-11-11",
+      "retrieval_at": "2026-11-11T00:00:00Z",
+      "license_rights": "Original synthetic content; CC0-1.0",
+      "confidentiality": "PUBLIC"
+    }
+  ],
+  "slides": [
+    {
+      "slide_id": "qa-01",
+      "role": "opening",
+      "action_title": "One source, five output formats",
+      "body": "A synthetic 12-slide reference deck for mechanical export QA.",
+      "claims": [
+        {
+          "claim_id": "qa-c01",
+          "statement": "All values in this reference deck are invented for testing.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "title",
+        "tokens": {}
+      },
+      "notes": "Opening note: no customer or production data is present.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-02",
+      "role": "thesis",
+      "action_title": "Separate fidelity from editability",
+      "body": "The same canonical source is rendered and inspected in each output format.",
+      "claims": [
+        {
+          "claim_id": "qa-c02",
+          "statement": "A file opening successfully does not prove visual or content fidelity.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "summary",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-02.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-03",
+      "role": "evidence",
+      "action_title": "Preserve every synthetic category",
+      "body": "Four categories sum to the synthetic cohort; Other is an explicit source category.",
+      "claims": [
+        {
+          "claim_id": "qa-c03",
+          "statement": "The four source categories sum to 100 percent of the synthetic sample.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [
+        {
+          "data_ref_id": "North Segment",
+          "value": 43,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        },
+        {
+          "data_ref_id": "Central Segment",
+          "value": 32,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        },
+        {
+          "data_ref_id": "South Segment",
+          "value": 18,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        },
+        {
+          "data_ref_id": "Other",
+          "value": 7,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        }
+      ],
+      "exhibits": [
+        {
+          "exhibit_id": "qa-chart",
+          "slide_id": "qa-03",
+          "visual_job": "Synthetic share by source category",
+          "visual_type": "bar_chart",
+          "supported_data": [
+            "North Segment",
+            "Central Segment",
+            "South Segment",
+            "Other"
+          ],
+          "provenance": {
+            "source_ids": [
+              "src-pres07-synthetic"
+            ],
+            "as_of": "2026-Q4"
+          },
+          "units": "percent",
+          "as_of": "2026-Q4",
+          "alternative_text": "Bar chart: North Segment 43 percent, Central Segment 32 percent, South Segment 18 percent, Other 7 percent.",
+          "editability": "EDITABLE_NATIVE",
+          "capability_status": "AVAILABLE",
+          "execution_status": "NOT_ATTEMPTED"
+        }
+      ],
+      "layout": {
+        "layout_id": "insight-chart",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-03.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-04",
+      "role": "evidence",
+      "action_title": "Keep categories in the data table",
+      "body": "The table uses the same source references as the chart; no category is recoded.",
+      "claims": [],
+      "data_refs": [
+        {
+          "data_ref_id": "North Segment",
+          "value": 43,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        },
+        {
+          "data_ref_id": "Central Segment",
+          "value": 32,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        },
+        {
+          "data_ref_id": "South Segment",
+          "value": 18,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        },
+        {
+          "data_ref_id": "Other",
+          "value": 7,
+          "unit": "percent",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ],
+          "as_of": "2026-Q4",
+          "denominator": "synthetic sample n=100"
+        }
+      ],
+      "exhibits": [
+        {
+          "exhibit_id": "qa-table",
+          "slide_id": "qa-04",
+          "visual_job": "Data-derived synthetic category table",
+          "visual_type": "table",
+          "supported_data": [
+            "North Segment",
+            "Central Segment",
+            "South Segment",
+            "Other"
+          ],
+          "provenance": {
+            "source_ids": [
+              "src-pres07-synthetic"
+            ],
+            "as_of": "2026-Q4"
+          },
+          "alternative_text": "Table of four synthetic categories, exact percentages, period, denominator and source.",
+          "editability": "EDITABLE_NATIVE",
+          "capability_status": "AVAILABLE",
+          "execution_status": "NOT_ATTEMPTED"
+        }
+      ],
+      "layout": {
+        "layout_id": "insight-chart",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-04.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-05",
+      "role": "architecture",
+      "action_title": "Trace the export path",
+      "body": "Each stage preserves the canonical source identity and writes a receipt.",
+      "claims": [],
+      "data_refs": [],
+      "exhibits": [
+        {
+          "exhibit_id": "qa-diagram",
+          "slide_id": "qa-05",
+          "visual_job": "Show the evidence path through five formats",
+          "visual_type": "architecture_diagram",
+          "supported_data": [],
+          "provenance": {
+            "source_ids": [
+              "src-pres07-synthetic"
+            ],
+            "as_of": "2026-Q4"
+          },
+          "alternative_text": "Flow diagram: DeckSpec to renderer to five output formats to independent inspection.",
+          "editability": "EDITABLE_NATIVE",
+          "capability_status": "AVAILABLE",
+          "execution_status": "NOT_ATTEMPTED",
+          "extensions": {
+            "presentation_marp": {
+              "diagram": {
+                "title": "Cross-format inspection path",
+                "nodes": [
+                  {
+                    "id": "source",
+                    "label": "Canonical DeckSpec"
+                  },
+                  {
+                    "id": "render",
+                    "label": "Pinned renderer"
+                  },
+                  {
+                    "id": "inspect",
+                    "label": "Independent inspection"
+                  },
+                  {
+                    "id": "evidence",
+                    "label": "Receipts and verdicts"
+                  }
+                ],
+                "edges": [
+                  {
+                    "from": "source",
+                    "to": "render",
+                    "label": "same input"
+                  },
+                  {
+                    "from": "render",
+                    "to": "inspect",
+                    "label": "five outputs"
+                  },
+                  {
+                    "from": "inspect",
+                    "to": "evidence",
+                    "label": "record results"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "layout": {
+        "layout_id": "architecture",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-05.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-06",
+      "role": "comparison",
+      "action_title": "Compare the source categories distinctly",
+      "body": "The labels below are source facts; they are not interchangeable buckets.",
+      "claims": [
+        {
+          "claim_id": "qa-c06a",
+          "statement": "North Segment remains distinct from Central Segment.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        },
+        {
+          "claim_id": "qa-c06b",
+          "statement": "South Segment remains distinct from Other.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "comparison",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-06.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-07",
+      "role": "process",
+      "action_title": "Inspect outputs in a fixed order",
+      "body": "Render, reopen, extract, compare, inspect native objects, and record limitations.",
+      "claims": [
+        {
+          "claim_id": "qa-c07",
+          "statement": "A CLI exit code alone cannot establish an editable PASS.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "process",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-07.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-08",
+      "role": "roadmap",
+      "action_title": "Use explicit quality checkpoints",
+      "body": "Content, visual fidelity, editability and runtime inspection receive separate verdicts.",
+      "claims": [
+        {
+          "claim_id": "qa-c08",
+          "statement": "Unexecuted checks remain NOT_RUN or BLOCKED.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "roadmap",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-08.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-09",
+      "role": "training",
+      "action_title": "Practice the review decision",
+      "body": "Question: which output is flattened, and which objects can be selected and changed?",
+      "claims": [
+        {
+          "claim_id": "qa-c09",
+          "statement": "The answer must be supported by opening and modifying actual PowerPoint objects.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "summary",
+        "tokens": {}
+      },
+      "notes": "Training note: verify actual selectable objects, not a mode label.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-10",
+      "role": "provenance",
+      "action_title": "Keep the source and link visible",
+      "body": "All references are synthetic. Review the source locator before reusing any content. https://example.org/pres07/synthetic-reference",
+      "claims": [
+        {
+          "claim_id": "qa-c10",
+          "statement": "The reference URL is a synthetic link target and must survive as a readable hyperlink.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "summary",
+        "tokens": {}
+      },
+      "notes": "Link target: https://example.org/pres07/synthetic-reference",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-11",
+      "role": "typography",
+      "action_title": "Wrapped labels remain readable",
+      "body": "A long, descriptive title and a sentence with a deliberate line break exercise text wrapping without real data.",
+      "claims": [
+        {
+          "claim_id": "qa-c11",
+          "statement": "Typography remains readable when long labels wrap across lines.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "summary",
+        "tokens": {}
+      },
+      "notes": "Synthetic note for qa-11.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "qa-12",
+      "role": "closing",
+      "action_title": "Report evidence by format",
+      "body": "The final record names each output, its limitations and the exact candidate tested.",
+      "claims": [
+        {
+          "claim_id": "qa-c12",
+          "statement": "A flattened Marp PPTX never receives an editable PASS.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        },
+        {
+          "claim_id": "qa-c12b",
+          "statement": "A manual PowerPoint edit is reported separately from CI.",
+          "epistemic_status": "CANONICAL",
+          "source_ids": [
+            "src-pres07-synthetic"
+          ]
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "conclusion",
+        "tokens": {}
+      },
+      "notes": "Closing note: CI output does not constitute a manual PowerPoint edit.",
+      "provenance": {
+        "source_ids": [
+          "src-pres07-synthetic"
+        ],
+        "as_of": "2026-Q4"
+      },
+      "desired_editability": "PREFERRED"
+    }
+  ]
+}

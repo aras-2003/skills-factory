@@ -144,6 +144,13 @@ jobs:
           python scripts/validate/presentation_model.py adapters/presentation-marp/fixtures/pres06-mixed.json
           node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence/pres06-mixed
           node adapters/presentation-marp/scripts/assert-pres06-evidence.mjs adapters/presentation-marp/fixtures/pres06-mixed.json presentation-marp-evidence/pres06-mixed
+      - name: Validate PRES-07 reference fixture and cross-format outputs
+        env:
+          SF_MARP_FIXTURE: adapters/presentation-marp/fixtures/pres07-cross-format-v1.json
+        run: |
+          python scripts/validate/presentation_model.py "$SF_MARP_FIXTURE"
+          node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence/pres07-cross-format
+          node adapters/presentation-marp/scripts/assert-pres07-evidence.mjs "$SF_MARP_FIXTURE" presentation-marp-evidence/pres07-cross-format
       - name: Verify exact source revision
         run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
