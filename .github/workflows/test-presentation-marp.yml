@@ -150,6 +150,24 @@ jobs:
         run: |
           python scripts/validate/presentation_model.py "$SF_MARP_FIXTURE"
           node adapters/presentation-marp/scripts/integration.mjs presentation-marp-evidence/pres07-cross-format
+          native_dir=presentation-marp-evidence/pres07-cross-format/native-baseline
+          mkdir -p "$native_dir"
+          python adapters/presentation-marp/scripts/generate-pres07-native-baseline.py "$SF_MARP_FIXTURE" "$native_dir" > "$native_dir/generation.json"
+          docker run --rm --network none \
+            -v "$PWD/$native_dir:/work/output" \
+            -v "$PWD/$SF_MARP_FIXTURE:/work/input/deck.json:ro" \
+            --entrypoint /usr/bin/libreoffice "$SF_MARP_IMAGE" \
+            --headless -env:UserInstallation=file:///tmp/lo-pres07-native \
+            --convert-to pptx --outdir /work/output /work/output/native-baseline.odp
+          docker run --rm --network none \
+            -v "$PWD/$native_dir:/work/output" \
+            -v "$PWD/$SF_MARP_FIXTURE:/work/input/deck.json:ro" \
+            "$SF_MARP_IMAGE" sf-inspect-pptx /work/output/native-baseline.pptx pptx_native_baseline > "$native_dir/inspection.json"
+          docker run --rm --network none \
+            -v "$PWD/$native_dir:/work/output" \
+            -v "$PWD/$SF_MARP_FIXTURE:/work/input/deck.json:ro" \
+            "$SF_MARP_IMAGE" sf-reopen-pptx /work/output/native-baseline.pptx /work/output/reopened 12 pptx_native_baseline /work/input/deck.json > "$native_dir/reopen.json"
+          node adapters/presentation-marp/scripts/assert-pres07-native-baseline.mjs "$SF_MARP_FIXTURE" "$native_dir"
           node adapters/presentation-marp/scripts/assert-pres07-evidence.mjs "$SF_MARP_FIXTURE" presentation-marp-evidence/pres07-cross-format
       - name: Verify exact source revision
         run: test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"

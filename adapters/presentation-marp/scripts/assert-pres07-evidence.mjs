@@ -45,6 +45,10 @@ assert.equal(flat.slide_count, deck.slides.length, 'PRES07_FLAT_PPTX_SLIDE_COUNT
 assert.ok(flat.native_shapes_by_slide.every(count => count === 0), 'PRES07_FLATTENED_PPTX_HAS_NATIVE_OBJECTS');
 assert.ok(flat.image_shapes_and_backgrounds_by_slide.every(count => count > 0), 'PRES07_FLATTENED_PPTX_IMAGE_MISSING');
 assert.equal(flat.notes_slide_count, deck.slides.length, 'PRES07_FLAT_PPTX_NOTES_MISSING');
+const native = JSON.parse(await readFile(path.join(evidenceRoot, 'native-baseline', 'native-baseline-receipt.json'), 'utf8'));
+assert.equal(native.fixture_sha256, evidence.fixture_sha256, 'PRES07_NATIVE_BASELINE_INPUT_HASH_MISMATCH');
+assert.ok(/^[a-f0-9]{64}$/.test(native.pptx_sha256), 'PRES07_NATIVE_BASELINE_HASH_INVALID');
+assert.equal(native.manual_edit_status, 'NOT_RUN', 'PRES07_MANUAL_EDIT_STATUS_MUST_REMAIN_EXPLICIT');
 const editable = JSON.parse(await readFile(path.join(evidenceRoot, 'pptx_editable_experimental-inspection.json'), 'utf8'));
 assert.equal(editable.slide_count, deck.slides.length, 'PRES07_EDITABLE_PPTX_SLIDE_COUNT_MISMATCH');
 assert.ok(editable.native_shapes_by_slide.every(count => count > 0), 'PRES07_EDITABLE_PPTX_NATIVE_OBJECTS_MISSING');
@@ -55,4 +59,4 @@ for (const name of shots) {
   const file = await stat(path.join(evidenceRoot, 'screenshots', name));
   assert.ok(file.size > 10_000, `PRES07_SCREENSHOT_SUSPICIOUSLY_SMALL_${name}`);
 }
-console.log(JSON.stringify({ state: 'PASS', fixture_slides: deck.slides.length, html_pdf_content: 'PASS', flattened_objects: 'NON_EDITABLE', experimental_editable_objects: 'PRESENT; manual PowerPoint edit NOT asserted', screenshots: shots.length }));
+console.log(JSON.stringify({ state: 'PASS', fixture_slides: deck.slides.length, html_pdf_content: 'PASS', flattened_objects: 'NON_EDITABLE', experimental_editable_objects: 'PRESENT; manual PowerPoint edit NOT asserted', native_editable_baseline: 'PASS; manual edit NOT_RUN', screenshots: shots.length }));
