@@ -1,18 +1,16 @@
 # PRES-07 editable-object manual receipt
 
-- **Candidate tree:** Skills Factory main `a271ec42fdb9533e6e9f3cecd4b22982b5902f4d`; identical tree to PR candidate `9e022e29e3a7c5b641c2a16e3dce61e9ba59b1a3` (`58bab57cee49f4e0b9fcc25ff86e97481d792638`).
-- **Input:** synthetic 12-slide `deck-editable.pptx`, SHA-256 `e43c551de106b28e7e3db6a00bcde1aea708af24b5a26e7641af095f3edf3d0d`.
-- **Application:** desktop LibreOffice Impress on macOS. The installed desktop version was not independently recorded; the pinned CI runtime is LibreOffice 7.4.7.2.
-- **Result:** PASS for selecting and saving an actual text-bearing PPTX object and an independent diagram shape, then reopening the edited PPTX and observing its changed geometry.
+- **Candidate:** PR #651 head `c0cf0d45c7b290a0297380a0f8ab327b58c3d162`.
+- **Artifact:** `sf-presentation-marp-c0cf0d45c7b290a0297380a0f8ab327b58c3d162`, SHA-256 `03c1453f71b3966c71e069923d97e169e2518355f4b611e16f494a8ff8af732f`.
+- **Input:** generated experimental editable deck, SHA-256 `c087a16784ad16c4999c45b928e733b103168e04fa95e6aaa4a57df58b5201fc`.
+- **Application:** LibreOffice Impress 26.8.2.2 (`9dea406ab7695df6325b11b0e19fdca8db4b7276)); CI runtime is LibreOffice 7.4.7.2.
+- **Result:** Partial. A real title text edit was saved and persisted after reopening. A shape move has **not** been verified on this exact candidate; the older b584 receipt is not transferable to c0.
 
-## Before and after
-
-| Object | Before | Action | After save and reopen |
+| Object | Before | Action | After reopening |
 | --- | --- | --- | --- |
-| Slide 1 title text box (`Shape 4`) | x=2.28 cm, y=1.88 cm | Moved right once | x=2.38 cm, y=1.88 cm; size 20.80 × 1.54 cm |
-| Slide 5 diagram node rectangle (`Shape 15`, “Canonical DeckSpec”) | x=4.13 cm, y=7.09 cm | Moved right twice | x=4.33 cm, y=7.09 cm; size 6.35 × 2.43 cm |
+| Slide 1 title text box | Original fixture title | Replaced with `Editable title verified` in a disposable copy | New title visible on slide 1 and in the accessibility tree |
+| Slide 5 diagram object | Original position | Not completed on c0 | No geometry-change claim |
 
-- **Edited shape-test copy:** `deck-editable-manual-A5.pptx`, SHA-256 `98076a7bf3fd6986a4efefc9dbeb705c9f262f68853c0aa19b6955ee20d3b38d` (retained in the local QA artifact folder).
-- **Edited text-test copy:** `deck-editable-manual-test.pptx`, SHA-256 `c75d12fc35094b1f744bda549bc66bef7d6e12017031dc33642ab01886daaf32` (retained in the local QA artifact folder); slide 1 title changed to “Editable title verified”, saved and reopened with the new title visible.
-- Both edited copies are disposable QA outputs; the canonical generated PPTX remains unchanged. LibreOffice asked to preserve the PowerPoint 2007–365 format and the files were saved as `.pptx`.
-- Before/after UI states and the reopened object geometry were observed in the Codex computer-use session. No screenshot file was exported from that session.
+- **Edited disposable copy:** `deck-editable-manual-c0cf0d45.pptx`, SHA-256 `82cc5ba15dc384b79b67766a6b51ce10e717d70db41898f3d4a4440e5dbce488`.
+- The canonical generated PPTX was left unchanged. The text edit was observed after saving and reopening the copy in Impress. No screenshot was exported from the UI session.
+- **Acceptance:** exact-candidate shape-move gate remains NOT_RUN; this receipt does not close issue #613.
