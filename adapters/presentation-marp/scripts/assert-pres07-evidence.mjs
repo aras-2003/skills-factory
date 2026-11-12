@@ -6,6 +6,7 @@ const [fixturePath, evidenceRoot] = process.argv.slice(2);
 assert.ok(fixturePath && evidenceRoot, 'usage: assert-pres07-evidence.mjs FIXTURE EVIDENCE_DIR');
 const deck = JSON.parse(await readFile(fixturePath, 'utf8'));
 assert.ok(deck.slides.length >= 10 && deck.slides.length <= 15, 'PRES07_FIXTURE_SLIDE_COUNT_INVALID');
+const normalizeText = value => String(value).normalize('NFKC').replace(/\\s+/g, ' ').trim();
 const expectedIds = deck.slides.map(slide => slide.slide_id);
 const evidence = JSON.parse(await readFile(path.join(evidenceRoot, 'integration-receipt.json'), 'utf8'));
 assert.equal(evidence.slide_count, deck.slides.length, 'PRES07_RECEIPT_SLIDE_COUNT_MISMATCH');
@@ -29,13 +30,14 @@ for (const slide of deck.slides) {
 const pdf = JSON.parse(await readFile(path.join(evidenceRoot, 'pdf-inspection.json'), 'utf8'));
 assert.equal(pdf.pages, deck.slides.length, 'PRES07_PDF_PAGE_COUNT_MISMATCH');
 assert.equal(pdf.ratio, 16 / 9, 'PRES07_PDF_ASPECT_RATIO_MISMATCH');
+const pdfText = normalizeText(pdf.extracted_text);
 for (const slide of deck.slides) {
-  assert.ok(pdf.extracted_text.includes(slide.action_title), `PRES07_PDF_TITLE_MISSING_${slide.slide_id}`);
-  for (const claim of slide.claims ?? []) assert.ok(pdf.extracted_text.includes(claim.statement), `PRES07_PDF_CLAIM_MISSING_${claim.claim_id}`);
+  assert.ok(pdfText.includes(normalizeText(slide.action_title)), `PRES07_PDF_TITLE_MISSING_${slide.slide_id}`);
+  for (const claim of slide.claims ?? []) assert.ok(pdfText.includes(normalizeText(claim.statement)), `PRES07_PDF_CLAIM_MISSING_${claim.claim_id}`);
   for (const ref of slide.data_refs ?? []) {
-    assert.ok(pdf.extracted_text.includes(String(ref.data_ref_id)), `PRES07_PDF_LABEL_MISSING_${slide.slide_id}`);
-    assert.ok(pdf.extracted_text.includes(String(ref.value)), `PRES07_PDF_VALUE_MISSING_${slide.slide_id}`);
-    assert.ok(pdf.extracted_text.includes(ref.unit), `PRES07_PDF_UNIT_MISSING_${slide.slide_id}`);
+    assert.ok(pdfText.includes(normalizeText(ref.data_ref_id)), `PRES07_PDF_LABEL_MISSING_${slide.slide_id}`);
+    assert.ok(pdfText.includes(normalizeText(ref.value)), `PRES07_PDF_VALUE_MISSING_${slide.slide_id}`);
+    assert.ok(pdfText.includes(normalizeText(ref.unit)), `PRES07_PDF_UNIT_MISSING_${slide.slide_id}`);
   }
 }
 const flat = JSON.parse(await readFile(path.join(evidenceRoot, 'pptx_flattened-inspection.json'), 'utf8'));
