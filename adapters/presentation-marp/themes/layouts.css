@@ -28,6 +28,12 @@ section.sf-layout-title h1 { max-width: 940px; font-size: 62px; }
 section.sf-layout-title > p { max-width: 860px; font-size: 30px; }
 section.sf-layout-insight-chart > p { max-width: 920px; }
 section.sf-layout-insight-chart .marpit img { display: block; margin: 20px auto 0; }
+section.sf-layout-insight-chart table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 20px; line-height: 1.2; }
+section.sf-layout-insight-chart th, section.sf-layout-insight-chart td { padding: 6px 8px; border-bottom: 1px solid var(--sf-rule); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+section.sf-layout-insight-chart th:nth-child(1), section.sf-layout-insight-chart td:nth-child(1) { width: 24%; }
+section.sf-layout-insight-chart th:nth-child(2), section.sf-layout-insight-chart td:nth-child(2) { width: 12%; text-align: right; }
+section.sf-layout-insight-chart th:nth-child(3), section.sf-layout-insight-chart td:nth-child(3) { width: 12%; }
+section.sf-layout-insight-chart th:nth-child(4), section.sf-layout-insight-chart td:nth-child(4) { width: 52%; }
 section.sf-layout-comparison ul, section.sf-layout-comparison ol {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

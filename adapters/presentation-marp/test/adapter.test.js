@@ -40,9 +40,10 @@ test('generated data charts reject invalid values and escape labels while retain
 
 test('table exhibit renders visible rows directly from canonical data refs with provenance', () => {
   const value=structuredClone(deck); value.slides[0].exhibits=[{exhibit_id:'t1',visual_type:'table',supported_data:['q1'],alternative_text:'Synthetic data table'}];
+  value.slides[0].data_refs[0].as_of='2026-Q4'; value.slides[0].data_refs[0].denominator='sample n=100';
   const markdown=renderDeck(value,'sf-editorial.css');
-  assert.match(markdown, /\| Data reference \| Value \| Unit \| As of \| Denominator \| Source IDs \|/);
-  assert.match(markdown, /\| q1 \| 12 \| percent \|\s*\|\s*\| synth \|/);
+  assert.match(markdown, /\| Data reference \| Value \| Unit \| Provenance \|/);
+  assert.match(markdown, /\| q1 \| 12 \| percent \| 2026\\-Q4 · sample n=100 · synth \|/);
 });
 
 test('generated markdown escapes active syntax and uses a staged chart asset', () => {

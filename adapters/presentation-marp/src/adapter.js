@@ -234,8 +234,11 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
       } else if (exhibit.visual_type === 'table') {
         const data = new Map((slide.data_refs ?? []).map(ref => [ref.data_ref_id, ref]));
         const rows = exhibit.supported_data.map(id => data.get(id));
-        lines.push(`**${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}**`, '', '| Data reference | Value | Unit | As of | Denominator | Source IDs |', '| --- | ---: | --- | --- | --- | --- |');
-        for (const row of rows) lines.push(`| ${safeText(row.data_ref_id)} | ${safeText(row.value)} | ${safeText(row.unit ?? '')} | ${safeText(row.as_of ?? '')} | ${safeText(row.denominator ?? '')} | ${safeText((row.source_ids ?? []).join(', '))} |`);
+        lines.push(`**${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}**`, '', '| Data reference | Value | Unit | Provenance |', '| --- | ---: | --- | --- |');
+        for (const row of rows) {
+          const provenance = [row.as_of, row.denominator, (row.source_ids ?? []).join(', ')].filter(Boolean).map(safeText).join(' · ');
+          lines.push(`| ${safeText(row.data_ref_id)} | ${safeText(row.value)} | ${safeText(row.unit ?? '')} | ${provenance} |`);
+        }
         lines.push('');
       }
     }
