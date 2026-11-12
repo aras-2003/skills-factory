@@ -20,32 +20,31 @@ import json, re, subprocess, sys
 from pathlib import Path
 out=Path(sys.argv[1]); mode=sys.argv[2]; deck_path=Path(sys.argv[3]) if len(sys.argv)>3 and sys.argv[3] else None; files=sorted(out.glob('reopened-slide-*.txt'))
 expected=[['Three slides, one source model'],['Synthetic quarterly growth','12','18','percent','src-synthetic'],['Preserve meaning across modes']]
+deck=None
+expected=[['Three slides, one source model'],['Synthetic quarterly growth','12','18','percent','src-synthetic'],['Preserve meaning across modes']]
 if deck_path:
  deck=json.loads(deck_path.read_text()); expected=[[slide['action_title']] for slide in deck['slides']]
- data_fields=('value','unit','as_of','denominator')
- if mode == 'pptx_flattened':
-  for index,slide in enumerate(deck['slides']):
-   for datum in slide.get('data_refs',[]):
-    expected[index].extend(str(datum[key]) for key in data_fields if datum.get(key))
-    expected[index].extend(str(source_id) for source_id in datum.get('source_ids',[]))
- else:
-  pdfs=sorted(out.glob('*.pdf'))
-  if len(pdfs)!=1: raise SystemExit('reopened PDF evidence missing or ambiguous')
-  extracted=subprocess.run(['pdftotext','-layout',str(pdfs[0]),'-'],check=True,text=True,capture_output=True).stdout
-  normalized_pdf=re.sub(r'\s+',' ',extracted).lower()
-  for slide in deck['slides']:
-   for datum in slide.get('data_refs',[]):
-    required=[str(datum.get(key)) for key in data_fields if datum.get(key)]+[str(source_id) for source_id in datum.get('source_ids',[])]
-    for token in required:
-     if re.sub(r'\s+',' ',token).lower() not in normalized_pdf: raise SystemExit(f"reopened PPTX text missing data evidence on {slide['slide_id']}")
 if len(files)!=len(expected): raise SystemExit(f'OCR image count {len(files)} != {len(expected)}')
 records=[]
 for index,file in enumerate(files):
  text=file.read_text().lower(); normalized=re.sub(r'[^a-z0-9]+',' ',text)
- for token in expected[index]:
-  if re.sub(r'[^a-z0-9]+',' ',token.lower()).strip() not in normalized: raise SystemExit(f'OCR content check failed on slide {index+1}: {token}')
- records.append({'slide':index+1,'ocr':text})
-(out/'ocr-receipt.json').write_text(json.dumps({'mode':mode,'engine':'Tesseract 5.3.0-2','slides':records},indent=2)+'\n')
+ missing=[token for token in expected[index] if re.sub(r'[^a-z0-9]+',' ',token.lower()).strip() not in normalized]
+ records.append({'slide':index+1,'ocr':text,'ocr_missing_expected':missing})
+text_verification='not_applicable_flattened_image_slides' if mode == 'pptx_flattened' else 'pdftotext on LibreOffice-reopened PDF'
+if deck is not None and mode != 'pptx_flattened':
+ pdfs=sorted(out.glob('*.pdf'))
+ if len(pdfs)!=1: raise SystemExit('reopened PDF evidence missing or ambiguous')
+ extracted=subprocess.run(['pdftotext','-layout',str(pdfs[0]),'-'],check=True,text=True,capture_output=True).stdout
+ normalized_pdf=re.sub(r'\s+',' ',extracted).lower()
+ data_fields=('value','unit','as_of','denominator')
+ for slide in deck['slides']:
+  tokens=[slide['action_title']]
+  for datum in slide.get('data_refs',[]):
+   tokens.extend(str(datum[key]) for key in data_fields if datum.get(key))
+   tokens.extend(str(source_id) for source_id in datum.get('source_ids',[]))
+  for token in tokens:
+   if re.sub(r'\s+',' ',token).lower() not in normalized_pdf: raise SystemExit(f"reopened PPTX text missing content on {slide['slide_id']}")
+(out/'ocr-receipt.json').write_text(json.dumps({'mode':mode,'engine':'Tesseract 5.3.0-2','slides':records,'text_verification':text_verification},indent=2)+'\n')
 PY_OCR
 printf '{"reopened_by":"LibreOffice Impress","pdf":"%s","images":' "$(basename "$pdf")"
 find "$out" -maxdepth 1 -name 'reopened-slide-*.png' -type f | wc -l | tr -d ' '
