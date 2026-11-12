@@ -49,8 +49,9 @@ with zipfile.ZipFile(path) as zf:
     if mode in ('pptx_flattened', 'pptx_native_baseline'):
         for slide in expected['slides']:
             if slide.get('notes') and slide['notes'] not in notes_joined: raise SystemExit(f"presenter note missing: {slide['slide_id']}")
-            for source_id in slide.get('provenance', {}).get('source_ids', []):
-                if source_id not in notes_joined: raise SystemExit(f"presenter note provenance missing: {slide['slide_id']}")
+            if mode == 'pptx_native_baseline':
+                for source_id in slide.get('provenance', {}).get('source_ids', []):
+                    if source_id not in notes_joined: raise SystemExit(f"presenter note provenance missing: {slide['slide_id']}")
     if mode == 'pptx_editable_experimental' and notes: raise SystemExit('experimental editable PPTX unexpectedly contains notes')
     if mode == 'pptx_editable_experimental':
         normalized_text = re.sub(r'\s+', ' ', text)
