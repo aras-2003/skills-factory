@@ -41,7 +41,7 @@ for (const slide of deck.slides) {
 const pdf = JSON.parse(await readFile(path.join(evidenceRoot, 'pdf-inspection.json'), 'utf8'));
 assert.equal(pdf.pages, deck.slides.length, 'PRES07_PDF_PAGE_COUNT_MISMATCH');
 assert.equal(pdf.ratio, 16 / 9, 'PRES07_PDF_ASPECT_RATIO_MISMATCH');
-const pdfPages = pdf.extracted_text.split('\\f').map(normalizeText);
+const pdfPages = pdf.extracted_text.split('\f').map(normalizeText);
 while (pdfPages.at(-1) === '') pdfPages.pop();
 assert.equal(pdfPages.length, deck.slides.length, 'PRES07_PDF_EXTRACTED_PAGE_COUNT_MISMATCH');
 for (const [slideIndex, slide] of deck.slides.entries()) {
