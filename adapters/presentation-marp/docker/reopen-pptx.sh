@@ -30,7 +30,8 @@ for index,file in enumerate(files):
  text=file.read_text().lower(); normalized=re.sub(r'[^a-z0-9]+',' ',text)
  missing=[token for token in expected[index] if re.sub(r'[^a-z0-9]+',' ',token.lower()).strip() not in normalized]
  records.append({'slide':index+1,'ocr':text,'ocr_missing_expected':missing})
-if deck is not None:
+text_verification='not_applicable_flattened_image_slides' if mode == 'pptx_flattened' else 'pdftotext on LibreOffice-reopened PDF'
+if deck is not None and mode != 'pptx_flattened':
  pdfs=sorted(out.glob('*.pdf'))
  if len(pdfs)!=1: raise SystemExit('reopened PDF evidence missing or ambiguous')
  extracted=subprocess.run(['pdftotext','-layout',str(pdfs[0]),'-'],check=True,text=True,capture_output=True).stdout
@@ -43,7 +44,7 @@ if deck is not None:
    tokens.extend(str(source_id) for source_id in datum.get('source_ids',[]))
   for token in tokens:
    if re.sub(r'\s+',' ',token).lower() not in normalized_pdf: raise SystemExit(f"reopened PPTX text missing content on {slide['slide_id']}")
-(out/'ocr-receipt.json').write_text(json.dumps({'mode':mode,'engine':'Tesseract 5.3.0-2','slides':records,'text_verification':'pdftotext on LibreOffice-reopened PDF'},indent=2)+'\n')
+(out/'ocr-receipt.json').write_text(json.dumps({'mode':mode,'engine':'Tesseract 5.3.0-2','slides':records,'text_verification':text_verification},indent=2)+'\n')
 PY_OCR
 printf '{"reopened_by":"LibreOffice Impress","pdf":"%s","images":' "$(basename "$pdf")"
 find "$out" -maxdepth 1 -name 'reopened-slide-*.png' -type f | wc -l | tr -d ' '
