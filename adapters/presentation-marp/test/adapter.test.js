@@ -38,9 +38,9 @@ test('generated data charts reject invalid values and escape labels while retain
   const points=[{label:'Q1',value:12,unit:'percent'},{label:'Q2',value:18,unit:'percent'}];
   assert.equal(renderBarChartSvg(points,tokens),renderBarChartSvg(structuredClone(points),tokens));
   assert.match(renderBarChartSvg(points,tokens),/>18 percent</);
-  assert.match(renderBarChartSvg(points,tokens),/<svg[^>]+height="310" viewBox="0 0 900 310"/);
+  assert.match(renderBarChartSvg(points,tokens),/<svg[^>]+height="190" viewBox="0 0 900 190"/);
   assert.match(renderBarChartSvg(points,tokens),/Central|Q2/);
-  assert.match(renderBarChartSvg(points,tokens),/ y="278" text-anchor="middle" font-size="20"/);
+  assert.match(renderBarChartSvg(points,tokens),/ y="165" text-anchor="middle" font-size="20"/);
   assert.throws(()=>renderBarChartSvg([{label:'bad',value:Infinity}],tokens),e=>e.code==='INVALID_CHART_DATA');
 });
 
@@ -83,7 +83,7 @@ test('bar-chart data is not duplicated as overflowing bullets and keeps visible 
   value.slides[0].data_refs[0].denominator='synthetic sample n=100';
   const markdown=renderDeck(value,'sf-editorial.css',new Map([['s1:e1','./fixed.svg']]));
   assert.doesNotMatch(markdown,/- \*\*q1:\*\* 12 percent/);
-  assert.match(markdown,/<small>Source for q1: 2026\\-Q4 · synthetic sample n=100 · synth<\/small>/);
+  assert.match(markdown,/<small>Source: 2026\\-Q4 · synthetic sample n=100 · synth<\/small>/);
 });
 
 test('non allowlisted output mode stops before runtime access', async () => {
