@@ -6,7 +6,7 @@ This adapter consumes canonical DeckSpec v1 and emits Marp CLI 4.5.1 output. It 
 node src/adapter.js render --input fixtures/canonical-deck-v1.json --output-dir .tmp/render --mode html
 ```
 
-Supported modes are `html`, `pdf`, `pptx_flattened`, and `pptx_editable_experimental`. Standard Marp PPTX is image backed and supports presenter notes. Experimental editable output runs Marp CLI's `--pptx --pptx-editable` path with pinned Chromium and LibreOffice Impress, then reopens the PPTX in Impress. Fidelity can be lower and presenter notes are not supported. There is no fallback between modes.
+Supported modes are `html`, `pdf`, `pptx_flattened`, and `pptx_editable_experimental`. Standard Marp PPTX is image backed and supports presenter notes. Experimental editable output runs Marp CLI's `--pptx --pptx-editable` path with pinned Chromium and LibreOffice Impress, then reopens the PPTX in Impress. Fidelity can be lower and presenter notes are not supported. Its title slide uses a smaller title size and the full slide grid width to keep text inside Marp's fixed-height editable text shape; HTML, PDF and flattened PPTX retain the theme's normal title styling. There is no fallback between modes.
 
 ## Runtime and security
 

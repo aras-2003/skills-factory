@@ -152,6 +152,15 @@ test('editable-safe CSS avoids advanced grid and media features while progressiv
   assert.match(progressive, /linear-gradient/);
 });
 
+test('editable PPTX uses a title fit rule without changing HTML theme CSS', () => {
+  const tokens = { canvas:'#f6f4ee', ink:'#17243a', muted:'#52627a', accent:'#176b87', rule:'#94a3b8', font_display:'Liberation Sans, sans-serif', font_body:'Liberation Sans, sans-serif', font_label:'Liberation Serif, serif', grid_width:'1108px', space_unit:'8px' };
+  const theme = { id:'sf-editorial', tokens, css_complexity:'safe' };
+  const html = buildThemeCss(theme, { mode:'html' });
+  const editable = buildThemeCss(theme, { mode:'pptx_editable_experimental' });
+  assert.doesNotMatch(html, /Keep editable title text/);
+  assert.match(editable, /section\.sf-layout-title h1 \{ max-width: var\(--sf-grid-width\); font-size: 52px; \}/);
+});
+
 test('progressive CSS is blocked for editable export without silently changing theme', async t => {
   const root = await mkdtemp(path.join(tmpdir(),'marp-theme-test-'));
   t.after(async()=>rm(root,{recursive:true,force:true}));

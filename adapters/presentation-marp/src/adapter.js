@@ -64,7 +64,7 @@ function themeById(id) {
   if (!theme) throw new AdapterError('UNKNOWN_THEME','Select a theme ID from the bundled registry.');
   return theme;
 }
-export function buildThemeCss(theme) {
+export function buildThemeCss(theme, { mode } = {}) {
   const t=theme.tokens;
   const layoutFile=theme.id==='sf-marp-editable-safe'?'layouts-editable-safe.css':'layouts.css';
   const css=readFileSync(path.join(HERE,'../themes',layoutFile),'utf8');
@@ -73,7 +73,10 @@ export function buildThemeCss(theme) {
   const enhancement=theme.css_complexity==='progressive'
     ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\n'
     : '';
-  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement;
+  const editableTitleFit=mode==='pptx_editable_experimental'
+    ? '\n/* Keep editable title text inside Marp’s fixed-height PPTX text shape. */\nsection.sf-layout-title h1 { max-width: var(--sf-grid-width); font-size: 52px; }\n'
+    : '';
+  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement+editableTitleFit;
 }
 
 
@@ -362,7 +365,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     const md = renderDeck(deck, themeFile, assetMap); await writeFile(path.join(inDir, 'deck.md'), md);
     await writeFile(path.join(inDir, 'deck.json'), raw);
     await chmod(outDir, 0o777);
-    await writeFile(themeFile, buildThemeCss(themeDefinition));
+    await writeFile(themeFile, buildThemeCss(themeDefinition, { mode }));
     runtime = await preflight(mode, { docker, image });
     const renderName = `sf-marp-render-${randomUUID()}`;
     const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--env', `SF_MARP_THEME=${theme}`, '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
