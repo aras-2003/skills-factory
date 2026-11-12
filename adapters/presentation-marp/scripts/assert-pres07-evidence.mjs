@@ -8,6 +8,7 @@ const deck = JSON.parse(await readFile(fixturePath, 'utf8'));
 assert.ok(deck.slides.length >= 10 && deck.slides.length <= 15, 'PRES07_FIXTURE_SLIDE_COUNT_INVALID');
 const normalizeText = value => String(value).normalize('NFKC').replace(/\s+/g, ' ').trim();
 const expectedIds = deck.slides.map(slide => slide.slide_id);
+assert.equal(normalizeText('North Seg-\\nment remains distinct from Central Segment.'), normalizeText('North Segment remains distinct from Central Segment.'), 'PRES07_PDF_LINE_WRAP_NORMALIZATION');
 const evidence = JSON.parse(await readFile(path.join(evidenceRoot, 'integration-receipt.json'), 'utf8'));
 assert.equal(evidence.slide_count, deck.slides.length, 'PRES07_RECEIPT_SLIDE_COUNT_MISMATCH');
 assert.deepEqual(evidence.slide_ids, expectedIds, 'PRES07_RECEIPT_SLIDE_ORDER_MISMATCH');
