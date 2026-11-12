@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 10735)
+Total output lines: 395
+
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdtemp, mkdir, readFile, realpath, rm, stat, writeFile, copyFile, lstat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -64,7 +67,7 @@ function themeById(id) {
   if (!theme) throw new AdapterError('UNKNOWN_THEME','Select a theme ID from the bundled registry.');
   return theme;
 }
-export function buildThemeCss(theme) {
+export function buildThemeCss(theme, { mode } = {}) {
   const t=theme.tokens;
   const layoutFile=theme.id==='sf-marp-editable-safe'?'layouts-editable-safe.css':'layouts.css';
   const css=readFileSync(path.join(HERE,'../themes',layoutFile),'utf8');
@@ -73,7 +76,10 @@ export function buildThemeCss(theme) {
   const enhancement=theme.css_complexity==='progressive'
     ? '\nsection.sf-theme-'+theme.id+'.sf-layout-title { background-image: linear-gradient(135deg, var(--sf-canvas) 0%, #172554 100%); }\n'
     : '';
-  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement;
+  const editableTitleFit=mode==='pptx_editable_experimental'
+    ? '\n/* Keep editable title text inside Marp’s fixed-height PPTX text shape. */\nsection.sf-layout-title h1 { max-width: var(--sf-grid-width); font-size: 52px; }\n'
+    : '';
+  return '/* @theme '+theme.id+' */\n:root {\n'+vars+'\n}\n'+css+enhancement+editableTitleFit;
 }
 
 
@@ -132,163 +138,7 @@ export function validateDiagram(diagram) {
   }
   const edgeKeys = new Set();
   for (const edge of diagram.edges) {
-    if (!edge || Object.keys(edge).some(key=>!['from','to','label'].includes(key)) || !ids.has(edge.from) || !ids.has(edge.to) || edge.from === edge.to || (edge.label !== undefined && (typeof edge.label !== 'string' || edge.label.length > 60 || /[\u0000-\u001f\u007f]/.test(edge.label)))) {
-      throw new AdapterError('INVALID_DIAGRAM', 'Diagram edges must connect distinct declared nodes and have optional labels up to 60 characters.');
-    }
-    const key = `${edge.from}\u0000${edge.to}`;
-    if (edgeKeys.has(key)) throw new AdapterError('INVALID_DIAGRAM', 'Duplicate directed diagram edges are not allowed.');
-    edgeKeys.add(key);
-  }
-  return true;
-}
-
-export function renderBarChartSvg(points, tokens, title = 'Data chart') {
-  if (!Array.isArray(points) || points.length === 0 || points.length > 8 || points.some(point => !point || typeof point.value !== 'number' || !Number.isFinite(point.value) || typeof point.label !== 'string')) {
-    throw new AdapterError('INVALID_CHART_DATA', 'Charts require 1-8 labeled finite numeric values.');
-  }
-  const max = Math.max(1, ...points.map(point => Math.abs(point.value))); const segment = 780 / points.length; const barWidth = Math.min(112, segment * 0.55);
-  const shapes = points.map((point,index) => {
-    const h=Math.max(2,Math.round(Math.abs(point.value)/max*125)); const x=60+index*segment+(segment-barWidth)/2; const y=point.value>=0?200-h:200; const labelY=point.value>=0?Math.max(42,y-14):Math.min(370,y+h+28);
-    return `<g><rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="8" fill="${tokens.accent}"/><text x="${x+barWidth/2}" y="${labelY}" text-anchor="middle" font-size="22" fill="${tokens.ink}">${xmlText(point.value)} ${xmlText(point.unit ?? '')}</text><text x="${x+barWidth/2}" y="354" text-anchor="middle" font-size="21" fill="${tokens.muted}">${xmlText(point.label)}</text></g>`;
-  }).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400"><title>${xmlText(title)}</title><rect width="900" height="400" fill="${tokens.canvas}"/><path d="M60 200H840" stroke="${tokens.rule}" stroke-width="2"/>${shapes}</svg>`;
-}
-
-export function renderDiagramSvg(diagram, tokens) {
-  validateDiagram(diagram);
-  const columns = Math.min(3, diagram.nodes.length); const rows = Math.ceil(diagram.nodes.length / columns);
-  const width = 1000, height = Math.max(360, rows * 180 + 80), nodeWidth = 240, nodeHeight = 92;
-  const positions = new Map();
-  diagram.nodes.forEach((node, index) => {
-    const row = Math.floor(index / columns), col = index % columns;
-    const gapX = columns === 1 ? 0 : (width - columns * nodeWidth) / (columns + 1);
-    const x = columns === 1 ? (width - nodeWidth) / 2 : gapX + col * (nodeWidth + gapX);
-    const y = 40 + row * 180;
-    positions.set(node.id, { x, y, cx: x + nodeWidth / 2, cy: y + nodeHeight / 2 });
-  });
-  const edges = diagram.edges.map(edge => {
-    const from = positions.get(edge.from), to = positions.get(edge.to);
-    const dx=to.cx-from.cx, dy=to.cy-from.cy, distance=Math.hypot(dx,dy), ux=dx/distance, uy=dy/distance;
-    const fromOffset=Math.min((nodeWidth/2)/Math.max(Math.abs(ux),0.0001),(nodeHeight/2)/Math.max(Math.abs(uy),0.0001));
-    const toOffset=Math.min((nodeWidth/2)/Math.max(Math.abs(ux),0.0001),(nodeHeight/2)/Math.max(Math.abs(uy),0.0001));
-    const x1=from.cx+ux*fromOffset, y1=from.cy+uy*fromOffset, x2=to.cx-ux*toOffset, y2=to.cy-uy*toOffset;
-    const px=-uy, py=ux, bx=x2-ux*12, by=y2-uy*12; const arrow=`${x2},${y2} ${bx+px*6},${by+py*6} ${bx-px*6},${by-py*6}`;
-    const mx=(x1+x2)/2, my=(y1+y2)/2-8;
-    return `<g><line x1="${x1}" y1="${y1}" x2="${bx}" y2="${by}" stroke="${tokens.rule}" stroke-width="3"/><polygon points="${arrow}" fill="${tokens.rule}"/>${edge.label ? `<text x="${mx}" y="${my}" text-anchor="middle" font-size="16" fill="${tokens.muted}">${xmlText(edge.label)}</text>` : ''}</g>`;
-  }).join('');
-  const nodes = diagram.nodes.map(node => {
-    const p = positions.get(node.id);
-    return `<g><rect x="${p.x}" y="${p.y}" width="${nodeWidth}" height="${nodeHeight}" rx="12" fill="${tokens.canvas}" stroke="${tokens.accent}" stroke-width="3"/><text x="${p.cx}" y="${p.cy + 7}" text-anchor="middle" font-size="20" fill="${tokens.ink}">${xmlText(node.label)}</text></g>`;
-  }).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img"><title>${xmlText(diagram.title ?? 'Architecture diagram')}</title>${edges}${nodes}</svg>`;
-}
-
-export function validateDeck(deck) {
-  if (!deck || deck.schema_version !== '1.0' || !Array.isArray(deck.slides) || deck.slides.length === 0) throw new AdapterError('INVALID_DECK', 'Input must be a canonical DeckSpec v1 with at least one slide.');
-  if (deck.slides.length > 50) throw new AdapterError('BLOCKED_DECK_SIZE', 'Deck exceeds the 50 slide limit.');
-  const ids = new Set();
-  for (const slide of deck.slides) {
-    if (!slide || typeof slide.slide_id !== 'string' || ids.has(slide.slide_id) || typeof slide.action_title !== 'string') throw new AdapterError('INVALID_DECK', 'Slide IDs must be unique and every slide needs an action title.');
-    ids.add(slide.slide_id);
-    if (!slide.layout || typeof slide.layout.layout_id !== 'string') throw new AdapterError('INVALID_DECK','Every slide requires a semantic layout ID.');
-    resolveLayout(slide.layout.layout_id);
-    const exhibitIds = new Set(); const dataIds = new Set((slide.data_refs ?? []).map(ref => ref?.data_ref_id).filter(Boolean));
-    if (dataIds.size !== (slide.data_refs ?? []).length) throw new AdapterError('INVALID_DECK', `Slide ${safeText(slide.slide_id)} contains duplicate or missing data reference IDs.`);
-    for (const ex of slide.exhibits ?? []) {
-      if (!ex || typeof ex.exhibit_id !== 'string' || exhibitIds.has(ex.exhibit_id)) throw new AdapterError('INVALID_DECK', 'Exhibit IDs must be present and unique within each slide.');
-      exhibitIds.add(ex.exhibit_id);
-      if (!['bar_chart', 'table', 'image', 'architecture_diagram'].includes(ex.visual_type)) throw new AdapterError('UNSUPPORTED_EXHIBIT', `Unsupported exhibit type: ${safeText(ex.visual_type)}.`);
-      if (!Array.isArray(ex.supported_data) || new Set(ex.supported_data).size !== ex.supported_data.length || ex.supported_data.some(id => !dataIds.has(id))) throw new AdapterError('INVALID_EXHIBIT_DATA', `Exhibit ${safeText(ex.exhibit_id)} must reference unique data IDs declared on its slide.`);
-      if (['bar_chart', 'table'].includes(ex.visual_type) && ex.supported_data.length === 0) throw new AdapterError('INVALID_EXHIBIT_DATA', `${safeText(ex.visual_type)} exhibits require at least one data reference.`);
-      if (!(ex.alternative_text ?? '').trim()) throw new AdapterError('INVALID_EXHIBIT_ALT', `Exhibit ${safeText(ex.exhibit_id)} requires alternative text.`);
-      if (ex.visual_type === 'image' && (typeof ex.asset_id !== 'string' || !ex.asset_id.trim())) throw new AdapterError('INVALID_ASSET_REFERENCE', `Image exhibit ${safeText(ex.exhibit_id)} requires asset_id.`);
-      if (ex.visual_type === 'bar_chart') for (const refId of ex.supported_data) { const datum=(slide.data_refs ?? []).find(ref=>ref.data_ref_id===refId); if (!datum || typeof datum.value !== 'number' || !Number.isFinite(datum.value)) throw new AdapterError('INVALID_CHART_DATA', `Chart ${safeText(ex.exhibit_id)} requires finite numeric data references.`); }
-      if (ex.visual_type === 'architecture_diagram') validateDiagram(ex.extensions?.presentation_marp?.diagram);
-    }
-  }
-}
-
-export function renderDeck(deck, themePath, assetMap = new Map()) {
-  const lines = ['---', 'marp: true', 'size: 16:9', 'paginate: true', `theme: ${path.basename(themePath, '.css')}`, '---', ''];
-  const themeId=path.basename(themePath,'.css');
-  const selectedTheme=themeById(themeId);
-  for (const slide of deck.slides) {
-    const layout=resolveLayout(slide.layout.layout_id);
-    lines.push('<!-- _class: sf-theme-'+selectedTheme.id+' sf-layout-'+layout+' -->', '', `# ${safeText(slide.action_title)}`, '');
-    if (slide.body) lines.push(safeText(slide.body), '');
-    for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
-    for (const datum of slide.data_refs ?? []) {
-      const provenance = [datum.unit, datum.as_of, datum.denominator, datum.source_ids?.join(', ')].filter(Boolean).map(safeText).join(' · ');
-      lines.push(`- **${safeText(datum.data_ref_id)}:** ${safeText(datum.value)}${datum.unit ? ` ${safeText(datum.unit)}` : ''}${provenance ? ` <small>(${provenance})</small>` : ''}`);
-    }
-    for (const exhibit of slide.exhibits ?? []) {
-      if (['image', 'bar_chart', 'architecture_diagram'].includes(exhibit.visual_type)) {
-        const asset = assetMap.get(exhibit.asset_id || `${slide.slide_id}:${exhibit.exhibit_id}`);
-        if (!asset) throw new AdapterError('BLOCKED_ASSET_REFERENCE', `No locally staged asset matches ${safeText(exhibit.asset_id || exhibit.exhibit_id)}.`);
-        lines.push(`![${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}](${asset})`);
-      } else if (exhibit.visual_type === 'table') {
-        const data = new Map((slide.data_refs ?? []).map(ref => [ref.data_ref_id, ref]));
-        const rows = exhibit.supported_data.map(id => data.get(id));
-        lines.push(`**${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}**`, '', '| Data reference | Value | Unit | As of | Denominator | Source IDs |', '| --- | ---: | --- | --- | --- | --- |');
-        for (const row of rows) lines.push(`| ${safeText(row.data_ref_id)} | ${safeText(row.value)} | ${safeText(row.unit ?? '')} | ${safeText(row.as_of ?? '')} | ${safeText(row.denominator ?? '')} | ${safeText((row.source_ids ?? []).join(', '))} |`);
-        lines.push('');
-      }
-    }
-    if (slide.notes) lines.push('', `<!-- ${safeNote(slide.notes)} -->`);
-    if (slide !== deck.slides.at(-1)) lines.push('', '---', '');
-  }
-  return `${lines.join('\n')}\n`;
-}
-
-export async function collectAssets(deck, inputRoot, stage, mode = 'html') {
-  const manifest = deck.extensions?.presentation_marp?.assets ?? [];
-  if (!Array.isArray(manifest)) throw new AdapterError('INVALID_ASSET_MANIFEST', 'Local assets must use an array manifest.');
-  if (manifest.length > MAX_ASSETS) throw new AdapterError('BLOCKED_ASSET_SIZE', 'Asset manifest exceeds the 50 asset limit.');
-  const records = []; const declaredIds=new Set(); let totalBytes = 0;
-  const knownSources = new Set((deck.sources ?? []).map(source => source?.source_id).filter(Boolean));
-  const root = await realpath(inputRoot);
-  const readLocal = async (rel, description) => {
-    if (typeof rel !== 'string' || path.isAbsolute(rel) || rel.includes('\\') || rel.split('/').some(p => !p || p === '.' || p === '..') || /^([a-z]+:|\/\/)/i.test(rel)) throw new AdapterError('BLOCKED_ASSET_PATH', 'Only normalized relative local asset paths are allowed.');
-    const candidate = path.join(inputRoot, rel); const meta = await lstat(candidate);
-    if (meta.isSymbolicLink() || !meta.isFile()) throw new AdapterError('BLOCKED_ASSET_PATH', 'Assets must be regular files; symlinks are blocked.');
-    const resolved = await realpath(candidate);
-    if (!resolved.startsWith(`${root}${path.sep}`)) throw new AdapterError('BLOCKED_ASSET_PATH', 'Asset path escapes the input root.');
-    const bytes = await readFile(resolved);
-    if (bytes.length > 2 * 1024 * 1024) throw new AdapterError('BLOCKED_ASSET_SIZE', `${description} exceeds the 2 MiB limit.`);
-    return { bytes, ext: path.extname(rel).toLowerCase() };
-  };
-  const validateSvg = bytes => {
-    const svg = bytes.toString('utf8');
-    const tags = [...svg.matchAll(/<\/?([A-Za-z][\w:-]*)/g)].map(m => m[1].toLowerCase());
-    const attrs = [...svg.matchAll(/\s([A-Za-z_:][\w:.-]*)\s*=/g)].map(m => m[1].toLowerCase());
-    if (!/^\s*<svg\b/i.test(svg) || !/<\/svg\s*>\s*$/i.test(svg) || /<!DOCTYPE|<!ENTITY|<script\b|<foreignObject\b|\bon\w+\s*=|(?:href|src)\s*=|url\s*\(|<\?/i.test(svg) || tags.some(t => !['svg','g','rect','circle','ellipse','path','line','polyline','polygon','text','tspan','title','desc'].includes(t)) || attrs.some(a => !['xmlns','viewbox','width','height','x','y','x1','x2','y1','y2','cx','cy','r','rx','ry','d','points','fill','stroke','stroke-width','font-size','font-family','text-anchor','transform','opacity','role','aria-label'].includes(a))) {
-      throw new AdapterError('BLOCKED_UNSAFE_SVG', 'SVG uses content outside the passive shape and text allowlist.');
-    }
-  };
-  const validateRaster = (bytes, ext) => {
-    const valid = ext === '.png' ? bytes.length >= 24 && bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])) && bytes.toString('ascii',12,16) === 'IHDR' && bytes.readUInt32BE(16) > 0 && bytes.readUInt32BE(20) > 0
-      : ['.jpg','.jpeg'].includes(ext) ? bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff
-      : ext === '.webp' ? bytes.length >= 12 && bytes.toString('ascii',0,4) === 'RIFF' && bytes.toString('ascii',8,12) === 'WEBP'
-      : false;
-    if (!valid) throw new AdapterError('INVALID_RASTER_ASSET', `Raster asset bytes do not match the declared ${ext} format.`);
-  };
-  const stageBytes = async (fileName, bytes) => writeFile(path.join(stage, fileName), bytes, { flag: 'wx' }).catch(error => { if (error.code !== 'EEXIST') throw error; });
-  for (const item of manifest) {
-    if (!item || typeof item.asset_id !== 'string' || !item.asset_id.trim() || typeof item.path !== 'string') throw new AdapterError('INVALID_ASSET_MANIFEST', 'Asset manifest entries require asset_id and path.');
-    if (declaredIds.has(item.asset_id)) throw new AdapterError('INVALID_ASSET_MANIFEST', `Duplicate local asset id: ${safeText(item.asset_id)}.`);
-    declaredIds.add(item.asset_id);
-    for (const key of ['source_id','license_rights','as_of','alternative_text','owner','confidentiality']) {
-      if (typeof item[key] !== 'string' || !item[key].trim() || ['unknown','unspecified','unlicensed','n/a'].includes(item[key].trim().toLowerCase())) throw new AdapterError('INVALID_ASSET_MANIFEST', `Asset ${safeText(item.asset_id)} requires explicit ${key} metadata.`);
-    }
-    if (!knownSources.has(item.source_id)) throw new AdapterError('INVALID_ASSET_MANIFEST', `Asset ${safeText(item.asset_id)} references a source_id absent from deck.sources.`);
-    if (!ASSET_CONFIDENTIALITY.has(item.confidentiality)) throw new AdapterError('INVALID_ASSET_MANIFEST', `Asset ${safeText(item.asset_id)} has an unsupported confidentiality classification.`);
-    const source = await readLocal(item.path, 'Asset');
-    if (!['.png','.jpg','.jpeg','.webp','.svg'].includes(source.ext)) throw new AdapterError('BLOCKED_ASSET_TYPE', 'Only PNG, JPEG, WebP and restricted SVG assets are supported.');
-    if (source.ext === '.svg') validateSvg(source.bytes);
-    else validateRaster(source.bytes,source.ext);
-    totalBytes += source.bytes.length;
-    const sourceFile = `${sha256(source.bytes)}${source.ext}`;
-    await stageBytes(sourceFile,source.bytes);
+    if (!edge || Object.keys(edge).some(key=>!['from','to','label'].includes(key)) || !ids.has(edge.from) || !ids.has(edge.to) || edge.from ===…3735 tokens truncated… stageBytes(sourceFile,source.bytes);
     let selected = { bytes: source.bytes, ext: source.ext, file: sourceFile, fallback_used: false };
     let fallback = null;
     if (item.raster_fallback_path !== undefined) {
@@ -362,7 +212,7 @@ export async function render({ input, outputDir, mode, theme = 'sf-editorial', d
     const md = renderDeck(deck, themeFile, assetMap); await writeFile(path.join(inDir, 'deck.md'), md);
     await writeFile(path.join(inDir, 'deck.json'), raw);
     await chmod(outDir, 0o777);
-    await writeFile(themeFile, buildThemeCss(themeDefinition));
+    await writeFile(themeFile, buildThemeCss(themeDefinition, { mode }));
     runtime = await preflight(mode, { docker, image });
     const renderName = `sf-marp-render-${randomUUID()}`;
     const command = ['run', '--name', renderName, '--rm', '--network', 'none', '--read-only', '--env', `SF_MARP_THEME=${theme}`, '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--pids-limit', '128', '--memory', '2g', '--shm-size', '256m', '--cpus', '2', '--ulimit', 'fsize=104857600:104857600', '--user', '10001:10001', '--env', 'HOME=/tmp', '--env', 'CHROME_CONFIG_HOME=/tmp/marp-config', '--env', 'CHROME_NO_SANDBOX=1', '--tmpfs', '/tmp:rw,noexec,nosuid,size=512m', '-v', `${inDir}:/work/input:ro`, '-v', `${outDir}:/work/output:rw`, image, 'sf-render', mode];
