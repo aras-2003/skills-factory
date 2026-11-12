@@ -70,6 +70,14 @@ const editable = JSON.parse(await readFile(path.join(evidenceRoot, 'pptx_editabl
 assert.equal(editable.slide_count, deck.slides.length, 'PRES07_EDITABLE_PPTX_SLIDE_COUNT_MISMATCH');
 assert.ok(editable.native_shapes_by_slide.every(count => count > 0), 'PRES07_EDITABLE_PPTX_NATIVE_OBJECTS_MISSING');
 assert.equal(editable.notes_slide_count, 0, 'PRES07_EDITABLE_PPTX_NOTES_LIMITATION_CHANGED');
+const complexCss = JSON.parse(await readFile(path.join(evidenceRoot, 'complex-css', 'receipt.json'), 'utf8'));
+assert.equal(complexCss.fixture_sha256, evidence.fixture_sha256, 'PRES07_COMPLEX_CSS_FIXTURE_HASH_MISMATCH');
+assert.equal(complexCss.requested_mode, 'pptx_editable_experimental', 'PRES07_COMPLEX_CSS_MODE_MISMATCH');
+assert.equal(complexCss.css_complexity, 'progressive', 'PRES07_COMPLEX_CSS_CLASSIFICATION_MISMATCH');
+assert.equal(complexCss.verdict, 'BLOCKED_AS_DESIGNED', 'PRES07_COMPLEX_CSS_NOT_EXPLICITLY_BLOCKED');
+assert.equal(complexCss.observed_code, 'BLOCKED_THEME_UNSUPPORTED', 'PRES07_COMPLEX_CSS_FAILURE_CLASS_MISMATCH');
+assert.equal(complexCss.silent_downgrade, false, 'PRES07_COMPLEX_CSS_SILENT_DOWNGRADE');
+assert.equal(complexCss.output_created, false, 'PRES07_COMPLEX_CSS_OUTPUT_CREATED');
 const shots = (await readdir(path.join(evidenceRoot, 'screenshots'))).filter(name => /^html-slide-\d+\.png$/.test(name));
 assert.equal(shots.length, deck.slides.length, 'PRES07_HTML_SCREENSHOT_COUNT_MISMATCH');
 for (const name of shots) {

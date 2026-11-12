@@ -75,7 +75,12 @@ await writeFile(path.join(out,'pdf-reopen-inspection.json'),pdfCheck); await wri
 const repeatReceipt=JSON.parse(await readFile(path.join(out,'html-repeat','receipt.json'),'utf8'));
 const first=JSON.parse(await readFile(path.join(out,'html','receipt.json'),'utf8'));
 if (first.input_sha256 !== repeatReceipt.input_sha256) throw new Error('Repeat render used a different input');
+if (first.output_sha256 !== repeatReceipt.output_sha256) throw new Error('Repeated HTML render output bytes differ');
 if (JSON.stringify(htmlReceipt.slide_ids) !== JSON.stringify(deck.slides.map(s=>s.slide_id))) throw new Error('HTML render slide IDs/order differ from the canonical source');
+if (JSON.stringify(repeatReceipt.slide_ids) !== JSON.stringify(deck.slides.map(s=>s.slide_id))) throw new Error('Repeated HTML render slide IDs/order differ from the canonical source');
+const firstHtml = await readFile(path.join(out,'html','deck.html'));
+const repeatHtml = await readFile(path.join(out,'html-repeat','deck.html'));
+if (sha(firstHtml) !== first.output_sha256 || sha(repeatHtml) !== repeatReceipt.output_sha256 || sha(firstHtml) !== sha(repeatHtml)) throw new Error('Repeated HTML render output hash mismatch');
 const shotDir=path.join(out,'screenshots'); const shotNames=(await readdir(shotDir)).filter(n=>/^html-slide-\d+\.png$/.test(n)).sort();
 if (shotNames.length !== count) throw new Error(`Expected ${count} HTML screenshots, found ${shotNames.length}`);
 for (const n of shotNames) {
