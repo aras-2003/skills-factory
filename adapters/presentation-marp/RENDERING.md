@@ -8,7 +8,7 @@ node src/adapter.js render --input fixtures/canonical-deck-v1.json --output-dir 
 
 Supported modes are `html`, `pdf`, `pptx_flattened`, and `pptx_editable_experimental`. Standard Marp PPTX is image backed and supports presenter notes. Experimental editable output runs Marp CLI's `--pptx --pptx-editable` path with pinned Chromium and LibreOffice Impress, then reopens the PPTX in Impress. Fidelity can be lower and presenter notes are not supported. Its title slide uses a smaller title size and the full slide grid width to keep text inside Marp's fixed-height editable text shape; HTML, PDF and flattened PPTX retain the theme's normal title styling. There is no fallback between modes.
 
-Body text preserves complete HTTPS references as explicit links while escaping other Markdown syntax. Generated horizontal diagram-edge labels render above their connected nodes so they remain readable when nodes have narrow spacing.
+Body text preserves complete HTTPS references as explicit links while escaping other Markdown syntax. Bar charts keep category labels and values inside a compact chart viewport; shared as-of, denominator and source metadata is emitted once as a compact source line instead of duplicating every chart value as a bullet. Generated horizontal diagram-edge labels render above their connected nodes so they remain readable when nodes have narrow spacing.
 
 ## Runtime and security
 

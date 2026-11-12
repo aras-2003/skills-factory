@@ -176,10 +176,10 @@ export function renderBarChartSvg(points, tokens, title = 'Data chart') {
   }
   const max = Math.max(1, ...points.map(point => Math.abs(point.value))); const segment = 780 / points.length; const barWidth = Math.min(112, segment * 0.55);
   const shapes = points.map((point,index) => {
-    const h=Math.max(2,Math.round(Math.abs(point.value)/max*125)); const x=60+index*segment+(segment-barWidth)/2; const y=point.value>=0?200-h:200; const labelY=point.value>=0?Math.max(42,y-14):Math.min(370,y+h+28);
-    return `<g><rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="8" fill="${tokens.accent}"/><text x="${x+barWidth/2}" y="${labelY}" text-anchor="middle" font-size="22" fill="${tokens.ink}">${xmlText(point.value)} ${xmlText(point.unit ?? '')}</text><text x="${x+barWidth/2}" y="354" text-anchor="middle" font-size="21" fill="${tokens.muted}">${xmlText(point.label)}</text></g>`;
+    const baseline=128, h=Math.max(2,Math.round(Math.abs(point.value)/max*78)); const x=60+index*segment+(segment-barWidth)/2; const y=point.value>=0?baseline-h:baseline; const labelY=point.value>=0?Math.max(30,y-12):Math.min(246,y+h+26);
+    return `<g><rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="8" fill="${tokens.accent}"/><text x="${x+barWidth/2}" y="${labelY}" text-anchor="middle" font-size="22" fill="${tokens.ink}">${xmlText(point.value)} ${xmlText(point.unit ?? '')}</text><text x="${x+barWidth/2}" y="278" text-anchor="middle" font-size="20" fill="${tokens.muted}">${xmlText(point.label)}</text></g>`;
   }).join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400"><title>${xmlText(title)}</title><rect width="900" height="400" fill="${tokens.canvas}"/><path d="M60 200H840" stroke="${tokens.rule}" stroke-width="2"/>${shapes}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="310" viewBox="0 0 900 310"><title>${xmlText(title)}</title><rect width="900" height="310" fill="${tokens.canvas}"/><path d="M60 128H840" stroke="${tokens.rule}" stroke-width="2"/>${shapes}</svg>`;
 }
 
 export function renderDiagramSvg(diagram, tokens) {
@@ -251,8 +251,9 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
     if (slide.body) lines.push(safeMarkdownText(slide.body), '');
     for (const claim of slide.claims ?? []) if (claim.statement) lines.push(`- ${safeText(claim.statement)}`);
     const tableDataRefs = new Set((slide.exhibits ?? []).filter(exhibit => exhibit.visual_type === 'table').flatMap(exhibit => exhibit.supported_data ?? []));
+    const chartDataRefs = new Set((slide.exhibits ?? []).filter(exhibit => exhibit.visual_type === 'bar_chart').flatMap(exhibit => exhibit.supported_data ?? []));
     for (const datum of slide.data_refs ?? []) {
-      if (tableDataRefs.has(datum.data_ref_id)) continue;
+      if (tableDataRefs.has(datum.data_ref_id) || chartDataRefs.has(datum.data_ref_id)) continue;
       const provenance = [datum.unit, datum.as_of, datum.denominator, datum.source_ids?.join(', ')].filter(Boolean).map(safeText).join(' · ');
       lines.push(`- **${safeText(datum.data_ref_id)}:** ${safeText(datum.value)}${datum.unit ? ` ${safeText(datum.unit)}` : ''}${provenance ? ` <small>(${provenance})</small>` : ''}`);
     }
@@ -261,6 +262,19 @@ export function renderDeck(deck, themePath, assetMap = new Map()) {
         const asset = assetMap.get(exhibit.asset_id || `${slide.slide_id}:${exhibit.exhibit_id}`);
         if (!asset) throw new AdapterError('BLOCKED_ASSET_REFERENCE', `No locally staged asset matches ${safeText(exhibit.asset_id || exhibit.exhibit_id)}.`);
         lines.push(`![${safeText(exhibit.alternative_text || exhibit.visual_job || exhibit.exhibit_id)}](${asset})`);
+        if (exhibit.visual_type === 'bar_chart') {
+          const refs = exhibit.supported_data.map(id => (slide.data_refs ?? []).find(datum => datum.data_ref_id === id)).filter(Boolean);
+          const groups = new Map();
+          for (const ref of refs) {
+            const metadata = [ref.as_of, ref.denominator, ref.source_ids?.join(', ')].filter(Boolean);
+            if (!metadata.length) continue;
+            const key = metadata.join(' · ');
+            groups.set(key, [...(groups.get(key) ?? []), ref.data_ref_id]);
+          }
+          for (const [metadata, labels] of groups) {
+            lines.push(`<small>Source for ${labels.map(safeText).join(', ')}: ${safeText(metadata)}</small>`);
+          }
+        }
       } else if (exhibit.visual_type === 'table') {
         const data = new Map((slide.data_refs ?? []).map(ref => [ref.data_ref_id, ref]));
         const rows = exhibit.supported_data.map(id => data.get(id));
