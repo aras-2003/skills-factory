@@ -1,12 +1,12 @@
 # Iteration 13 — cross-format presentation QA (PRES-07)
 
-- State: ACTIVE; implementation slice #646 is merged, but closure gates remain pending manual/editability evidence, per-slide visual review, and completion of all 23 matrix rows.
+- State: CLOSED / ACCEPTED. Implementation PR #651 and evidence PR #652 are merged; all 23 acceptance rows pass.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
-- Tracking Issue / native Project iteration: #613 / assign the current native Project iteration separately after lock; do not infer from the issue.
+- Tracking Issue / native Project iteration: #613 / No Iteration (left unassigned and verified in Project 1).
 - Previous terminal iteration: Iteration 12 CLOSED / ACCEPTED, tracking issue #612; closeout PR #644, merge SHA `56a28aff02897de103f2e7b6b9825caa6222a19a`.
 - Baseline main SHA: `56a28aff02897de103f2e7b6b9825caa6222a19a`.
 - Lock commit SHA: `0ced426fc15833a39694632a30cd3dbe0485a09d`.
-- Started at / closed at (UTC): 2026-11-11 23:42 UTC / pending.
+- Started at / closed at (UTC): 2026-11-11 23:42 UTC / 2026-11-12 17:30:20 UTC.
 - Scope lock reviewed by / at: owner self-review / 2026-11-11 23:42 UTC; not independent.
 
 ## Frozen commitment
@@ -41,7 +41,7 @@ See `evals/campaigns/iteration-13-pres07-cross-format-qa-2026-11/acceptance-matr
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
 | C1 implementation slice | PR head `906b4805d861c1c1b5da60cab5b63fcbb2d7a1de`; exact main merge `3c3f9c14c37bde744002c15de4e767f87fe27174` | N/A; no skill/runtime release in this export-QA scope | PR: Marp 43205228628, Validate 43205228700, Domain 43205228634 all PASS; exact main: Marp 43207105745, Validate 43207106024, Domain 43207105558 all PASS; Pages deployment 43207104377 success | LibreOffice 7.4.7.2; 12-slide native baseline reopened; 12 slides/notes, 1 external link; manual edit NOT_RUN | No scope change; acceptance remains pending |
-| C0 baseline | `56a28aff02897de103f2e7b6b9825caa6222a19a` | N/A | Validate skills, Domain integrity, Lab packaging and Pages completed successfully; see runs 43120872583, 43120872357, 43120872430, 43120871697 | N/A for export-QA baseline | None |
+| C2 final candidate | Code source `c0cf0d45c7b290a0297380a0f8ab327b58c3d162`; PR evidence head `c90fc740a5b0b90e361da15f385af16a474d429e`; exact main merge `ae8dd753ed8980aa9dd6b188fd4cb1d3feaf27db` | N/A; export-only adapter is not a Lab/Site skill release | PR: Marp 43264411439, Evaluation 43264411452, Domain 43264411507, Validate 43264411582 all PASS. Main: Marp 43266682366, Validate 43266682789, Domain 43266682046, Lab package 43266682296, Pages 43266681611 all PASS. PR artifact SHA-256 `2efec49979e5ae4a974a3e5a4ecdfbf27520c044a0ba0b3fbfeaef61eab1b8f5`; main artifact SHA-256 `de00e9de2d1221dcce1363933aeeb306ffe9682bf29dfa0576fff2c316173fd5`. | LibreOffice Impress 26.8.2.2; on the exact c0 editable artifact, a title edit and a shape move persisted after save/close/reopen. No Cloud Next runtime is in scope. | Supersedes earlier acceptance candidate; 23 rows and 45/45 executions pass; manual evidence remains bound to c0 code artifact |
 
 ## Regression selection and counts
 
@@ -58,18 +58,18 @@ See `evals/campaigns/iteration-13-pres07-cross-format-qa-2026-11/acceptance-matr
 | Bug Issue / discovery iteration | Existing contract / frozen criterion or unrelated | Severity / closure blocking | Fix PR or accepted deferral owner + future delivery iteration | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
 | PDF claim matcher case normalization produced false missing-claim reports for capitalized words | 613-A3-content-pdf; assertion reliability defect, fixed and verified | P2; assertion false negative; resolved by PR #646 and verified on exact main | PR #646 / exact main `3c3f9c14c37bde744002c15de4e767f87fe27174` | A3-content-pdf on PR and main | owner self-review |
-| None at lock; prior 3-slide ZIP is pre-fix historical evidence, not a candidate verdict | Existing screenshot transition defect was addressed in Iteration 12; attachment is not reused as current acceptance evidence | No open defect inferred | N/A | N/A | Owner |
+| Supplied 28c7 ZIP is a 12-slide earlier-source artifact, not evidence for c0 | It is not used as a current candidate result | No open defect inferred | N/A | N/A | Owner |
 
 ## Closure / abort decision
 
-- Outcome: PENDING; Iteration 13 remains ACTIVE.
-- Candidate / immutable evidence: PR #646 merged at `3c3f9c14c37bde744002c15de4e767f87fe27174`; exact-main artifact is [run 43207105745](https://github.com/aras-2003/skills-factory/actions/runs/43207105745) (artifact ID 13940391644, SHA-256 `bea445d8ad345e2644bcffb4f89d8122e59ad23bd6a20f3fbfbbd758da1e23c2`).
-- Committed Issues accepted / unresolved: #613 pending; #283 remains open and out of scope.
-- Matrix totals: 30 PASS executions, 0 FAIL, 12 REVIEW_REQUIRED, 3 NOT_RUN, 0 reviewed N/A; see the updated matrix.
-- Shared regression verdict: selected routing/security and report/visual probes PASS on PR and exact main.
-- Remaining closure gates: A3 PPTX coverage review; A4 per-slide visual review; A5 manual desktop text/shape edit, save/reopen and before/after evidence; A6 exact repeat-build comparison; A7 dedicated complex-CSS case.
-- Scope compared with lock commit: unchanged.
-- Issue / Project / PR reconciliation: #646 merged; #613 stays open/ACTIVE. No later iteration is started.
-- Owner proposal / reviewer acceptance / decision timestamp: owner self-review only; acceptance decision pending.
+- Outcome: CLOSED / ACCEPTED.
+- Candidate / immutable evidence: implementation PR [#651](https://github.com/aras-2003/skills-factory/pull/651), squash merge `ae8dd753ed8980aa9dd6b188fd4cb1d3feaf27db`; evidence closeout PR [#652](https://github.com/aras-2003/skills-factory/pull/652), squash merge `6835333e7d4f2099c95b9426830caef7099da91c`. Final matrix is [here](https://github.com/aras-2003/skills-factory/blob/main/evals/campaigns/iteration-13-pres07-cross-format-qa-2026-11/acceptance-matrix.md); manual object edit receipt is [here](https://github.com/aras-2003/skills-factory/blob/main/evals/campaigns/iteration-13-pres07-cross-format-qa-2026-11/manual-edit-receipt.md).
+- Exact-main acceptance: Marp [43266682366](https://github.com/aras-2003/skills-factory/actions/runs/43266682366), Validate Skills [43266682789](https://github.com/aras-2003/skills-factory/actions/runs/43266682789), Domain Integrity [43266682046](https://github.com/aras-2003/skills-factory/actions/runs/43266682046), Lab package [43266682296](https://github.com/aras-2003/skills-factory/actions/runs/43266682296), and Pages [43266681611](https://github.com/aras-2003/skills-factory/actions/runs/43266681611) all passed on `ae8dd753`. Final main Marp artifact ID 13965669539, ZIP SHA-256 `de00e9de2d1221dcce1363933aeeb306ffe9682bf29dfa0576fff2c316173fd5`.
+- Committed Issue #613 is closed. #283 remains open and out of scope.
+- Matrix totals: 45 PASS executions, 0 FAIL, 0 NOT_RUN, 0 BLOCKED/REVIEW_REQUIRED, 0 reviewed N/A; all 23 criteria pass. Manual Impress receipt confirms editable text and shape geometry persist after save, close, and reopen on the exact c0 code artifact.
+- Shared regression verdict: routing, security, report-composer, visual-output-design, evaluation, and packaging checks pass on the PR and exact main candidate.
+- Scope compared with lock commit: unchanged. Cloud Next/Lab runtime is not applicable to this export-QA-only iteration; no product Site deployment or plugin release is claimed.
+- Issue / Project / PR reconciliation: #613 closed; PRs #651 and #652 merged; Project 1 filters the item out of `-status:Done`, consistent with completion.
+- Owner / reviewer / decision: Arkadiusz Kamrowski / Arkadiusz Kamrowski; self-review, not independent; accepted 2026-11-12 17:30:20 UTC.
 - If ABORTED: not applicable.
-- Next iteration eligibility: Iteration 13 must be terminal before PRES-08 #614 or any later iteration starts.
+- Next iteration eligibility: PRES-08 #614 may enter scope lock now that Iteration 13 is terminal; this record contains no #614 implementation scope.
