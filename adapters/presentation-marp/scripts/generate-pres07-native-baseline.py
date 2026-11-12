@@ -65,7 +65,6 @@ for i,slide in enumerate(deck['slides'],1):
   anchor=SubElement(lp,NS%D['text']+'a',{'{%s}type'%D['xlink']:'simple','{%s}href'%D['xlink']:urls[0]})
   anchor.text='Open synthetic source reference'
  if slide.get('notes'):
-  frame(p,'Notes and provenance',1.0,12.0,25.0,1.2,slide['notes']+'\nSources: '+', '.join(slide.get('provenance',{}).get('source_ids',[])))
   notes=SubElement(p,NS%D['presentation']+'notes')
   SubElement(notes,NS%D['draw']+'page-thumbnail',{NS%D['draw']+'page-number':str(i),NS%D['draw']+'style-name':'fr1'})
   frame(notes,'Speaker notes',2.0,2.0,24.0,5.0,slide['notes']+'\nSources: '+', '.join(slide.get('provenance',{}).get('source_ids',[])))

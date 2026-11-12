@@ -19,6 +19,7 @@ process.on('uncaughtException', error => {
   process.exit(1);
 });
 const modes = ['html','pdf','pptx_flattened','pptx_editable_experimental'];
+const renderTimings = {};
 const fixture = path.resolve(process.env.SF_MARP_FIXTURE ?? path.join(root, 'fixtures/canonical-deck-v1.json'));
 const deck = JSON.parse(await readFile(fixture, 'utf8')); const count = deck.slides.length;
 await mkdir(out, { recursive: true }); await chmod(out,0o777);
@@ -48,8 +49,29 @@ function run(command,args) {
   });
 }
 function runCapture(command,args) { return new Promise((resolve,reject)=>{const p=spawn(command,args,{stdio:['ignore','pipe','pipe'],shell:false});let s='',e='';p.stdout.on('data',b=>s+=b);p.stderr.on('data',b=>{if(e.length<4096)e+=b.toString('utf8').slice(0,4096-e.length)});p.on('error',()=>reject(new Error('INTEGRATION_SUBPROCESS_FAILED')));p.on('close',c=>{if(c===0)return resolve(s);const match=e.match(/\b(VISUAL_REFERENCE_MISSING|VISUAL_REOPENED_SLIDE_MISSING|VISUAL_METRIC_UNAVAILABLE|VISUAL_DRIFT_OVER_THRESHOLD|PDF_TEXT_ASSERTION_FAILED|PDF_TITLE_MISSING|PDF_VALUE_MISSING|PDF_UNIT_MISSING|PDF_AS_OF_MISSING|PDF_DENOMINATOR_MISSING|PDF_SOURCE_ID_MISSING|PDF_PROVENANCE_MISSING|PDF_CONTENT_INCOMPLETE)\b/);reject(new Error(match?.[1]??'INTEGRATION_SUBPROCESS_FAILED'));});});}
-for (const mode of modes) { activeStage = `${mode}_render`; console.log(`Rendering ${mode}`); await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,mode),'--mode',mode]); }
-activeStage='html_repeat_render'; await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,'html-repeat'),'--mode','html']);
+for (const mode of modes) {
+  activeStage = `${mode}_render`; console.log(`Rendering ${mode}`);
+  const started = performance.now();
+  await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',path.join(out,mode),'--mode',mode]);
+  renderTimings[mode] = { build_1_elapsed_ms: Math.round(performance.now() - started) };
+}
+for (const mode of modes) {
+  if (mode !== 'html' && path.basename(fixture) !== 'pres07-cross-format-v1.json') continue;
+  const repeatDir = mode === 'html' ? path.join(out,'html-repeat') : path.join(out,`${mode}-repeat`);
+  activeStage = `${mode}_repeat_render`;
+  const started = performance.now();
+  await run('node',[path.join(root,'src/adapter.js'),'render','--input',fixture,'--output-dir',repeatDir,'--mode',mode]);
+  renderTimings[mode].build_2_elapsed_ms = Math.round(performance.now() - started);
+  const firstReceipt = JSON.parse(await readFile(path.join(out,mode,'receipt.json'),'utf8'));
+  const repeatReceipt = JSON.parse(await readFile(path.join(repeatDir,'receipt.json'),'utf8'));
+  if (firstReceipt.input_sha256 !== repeatReceipt.input_sha256) throw new Error(`Repeated ${mode} render used a different input`);
+  const firstOutput = await readFile(path.join(out,mode,firstReceipt.output));
+  const repeatOutput = await readFile(path.join(repeatDir,repeatReceipt.output));
+  renderTimings[mode].build_1_output_sha256 = sha(firstOutput);
+  renderTimings[mode].build_2_output_sha256 = sha(repeatOutput);
+  renderTimings[mode].output_hashes_match = sha(firstOutput) === sha(repeatOutput);
+}
+activeStage='html_repeat_inspection';
 activeStage='html_repeat_inspection'; await run('docker',['run','--rm','--network','none','--read-only','--user','10001:10001','--env','HOME=/tmp','--tmpfs','/tmp:rw,noexec,nosuid,size=256m','-v',`${path.join(out,'html-repeat')}:/evidence:ro`,'-v',`${fixture}:/fixture/deck.json:ro`,'-v',`${out}:/output:rw`,image,'sf-inspect-html','/evidence/deck.html','/output/repeat-screenshots',String(count),'/fixture/deck.json']);
 const htmlReceipt = JSON.parse(await readFile(path.join(out,'html','receipt.json'),'utf8'));
 const runtime = htmlReceipt.runtime;
@@ -89,6 +111,7 @@ for (const n of shotNames) {
 }
 // Record the fallback font resolution without treating the requested missing font as a failure.
 activeStage='font_fallback_check'; const font=await new Promise((resolve,reject)=>{const p=spawn('docker',['run','--rm','--network','none',image,'sf-font-fallback','SkillsFactoryFontThatDoesNotExist'],{stdio:['ignore','pipe','inherit']});let s='';p.stdout.on('data',b=>s+=b);p.on('error',reject);p.on('close',c=>c===0?resolve(s.trim()):reject(new Error('font fallback check failed')));});
-const evidence={schema_version:1,candidate_source_sha:process.env.SOURCE_REVISION??'local-unpinned',executed_at_utc:new Date().toISOString(),runner_os:process.env.RUNNER_OS??process.platform,slide_ids:htmlReceipt.slide_ids,commands:['node --test','python scripts/validate/presentation_model.py adapters/presentation-marp/fixtures/canonical-deck-v1.json','node scripts/assert-no-libreoffice.mjs','node scripts/assert-missing-runtime.mjs','node adapters/presentation-marp/scripts/integration.mjs'],fixture_sha256:sha(await readFile(fixture)),image, runtime,slide_count:count,outputs:Object.fromEntries(await Promise.all(modes.map(async m=>{const receipt=JSON.parse(await readFile(path.join(out,m,'receipt.json'),'utf8')); return [m,{file:receipt.output,sha256:receipt.output_sha256}]}))),repeated_html_sha256:repeatReceipt.output_sha256,html_screenshot_hashes:Object.fromEntries(await Promise.all(shotNames.map(async n=>[n,sha(await readFile(path.join(shotDir,n)))]))),font_fallback:font,visual_comparison:{basis:'Each slide screenshot repeated through same pinned Chromium render and compared to LibreOffice-reopened PDF slides.',threshold:'0 pixel difference for same-mode repeat; normalized mean absolute error <= 0.20 cross-format',cross_format_reports:['pdf-visual-comparison.json','pptx_flattened-visual-comparison.json','pptx_editable_experimental-visual-comparison.json']},limitations:['Experimental editable export is a Marp CLI feature with lower fidelity for complex CSS and no presenter notes.','Synthetic fixture only.']};
+const repeatShotHashes=Object.fromEntries(await Promise.all((await readdir(path.join(out,'repeat-screenshots'))).filter(n=>/^html-slide-\d+\.png$/.test(n)).sort().map(async n=>[n,sha(await readFile(path.join(out,'repeat-screenshots',n)))])));
+const evidence={schema_version:1,candidate_source_sha:process.env.SOURCE_REVISION??'local-unpinned',executed_at_utc:new Date().toISOString(),runner_os:process.env.RUNNER_OS??process.platform,slide_ids:htmlReceipt.slide_ids,commands:['node --test','python scripts/validate/presentation_model.py adapters/presentation-marp/fixtures/canonical-deck-v1.json','node scripts/assert-no-libreoffice.mjs','node scripts/assert-missing-runtime.mjs','node adapters/presentation-marp/scripts/integration.mjs'],fixture_sha256:sha(await readFile(fixture)),image, runtime,slide_count:count,outputs:Object.fromEntries(await Promise.all(modes.map(async m=>{const receipt=JSON.parse(await readFile(path.join(out,m,'receipt.json'),'utf8')); return [m,{file:receipt.output,sha256:receipt.output_sha256}]}))),render_repeatability:renderTimings,html_screenshot_hashes:{build_1:Object.fromEntries(await Promise.all(shotNames.map(async n=>[n,sha(await readFile(path.join(shotDir,n)))]))),build_2:repeatShotHashes},font_fallback:font,visual_comparison:{basis:'Each slide screenshot repeated through same pinned Chromium render and compared to LibreOffice-reopened PDF slides.',threshold:'0 pixel difference for same-mode repeat; normalized mean absolute error <= 0.20 cross-format',cross_format_reports:['pdf-visual-comparison.json','pptx_flattened-visual-comparison.json','pptx_editable_experimental-visual-comparison.json']},limitations:['Experimental editable export is a Marp CLI feature with lower fidelity for complex CSS and no presenter notes.','Synthetic fixture only.']};
 await writeFile(path.join(out,'integration-receipt.json'),JSON.stringify(evidence,null,2)+'\n');
 console.log(`Integration evidence written to ${path.join(out,'integration-receipt.json')}`);
