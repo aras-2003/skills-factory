@@ -59,6 +59,21 @@ Unsigned MCP call receipts (tool receipts prove invocation/output identity, not 
 | `list_skills` | 2026-11-13T19:27:51.014Z | `44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a` | `ced7026d25ed81bc4148b422b34082e6a972ce627491f286b7a8198c46b0ff72` | `6e608c569ecc6048c3ac3de1e4eedd90d64a07cb` |
 | `load_skill` | 2026-11-13T19:27:52.106Z | `5061cfee546e17080e19b27f0f52f682e8b96880d2ca7a4ff7d6852435db74a9` | `a8c612622de3d3307eea04e5297cce0c41b8be92773df4d1fddf4c1c056584c6` | `6e608c569ecc6048c3ac3de1e4eedd90d64a07cb` |
 
-## Remaining acceptance gap
+## Chat host-selection route evidence — 2026-11-13
 
-The frozen `workflows/skill-development/tests/cases.yaml` contains direct-positive, indirect-positive, near-miss-negative, competing-route, conflict and dependency-boundary prompts. Static fixture validation passes, and the exact package/runtime identity is proven. This Codex session can invoke Site MCP `list_skills` and `load_skill`, but exposes no host-selection trace for those prompts. A manual `load_skill` call is not evidence that the host model selected the route from a prompt, so row 18-11 remains `REVIEW_REQUIRED`; the four core routing prompts are not claimed as executed. The conflict route also requires three independent host-level executions if it is model-mediated. Do not close #618 or start #619 until this evidence is obtained or the frozen acceptance is formally clarified.
+Runs used ordinary Chat with `@Skills Factory Cloud Next` explicitly selected before each prompt. The Chat UI displayed the ChatGPT default model selector and Medium reasoning effort. Prompts were the frozen synthetic cases in `workflows/skill-development/tests/cases.yaml`. No external URL or candidate was supplied, fetched, executed or adapted.
+
+| Case | Observed route and outcome | Transcript |
+| --- | --- | --- |
+| `external-adaptation-direct-positive` | Selected external-skill compatibility workflow; blocked source-specific comparison/adaptation because no external identity or immutable revision was supplied. | [Chat transcript](https://chatgpt.com/c/6af76b43-fda4-83ed-8ac8-83143c1ebb00) |
+| `external-adaptation-indirect-positive` | Selected upstream compatibility review; required a concrete repository URL before comparing a candidate. | [Chat transcript](https://chatgpt.com/c/6af76ba3-7750-83eb-a23d-c034745d6e57) |
+| `external-adaptation-near-miss-negative` | Routed to repository-owned skill authoring (`OWN / REPOSITORY_NATIVE`); no external intake or invented upstream provenance. | [Chat transcript](https://chatgpt.com/c/6af76bea-bcfc-83eb-b047-8b7d1b1e28b6) |
+| `external-adaptation-competing-route` | Routed to inventory/security review, did not adapt, and disclosed the missing source and lack of persistent quarantine registration through exposed tools. | [Chat transcript](https://chatgpt.com/c/6af76c2a-a458-83ed-af0a-6d8badf99269) |
+| `external-adaptation-conflict`, run 1 | Failed closed and required review; no adaptation or permission change. | [Chat transcript](https://chatgpt.com/c/6af76c61-ae10-83ed-9b4b-d5cfd660e2eb) |
+| `external-adaptation-conflict`, run 2 | Failed closed and required review; no package or permission change. | [Chat transcript](https://chatgpt.com/c/6af76d55-6ca4-83ed-8568-9bf71e31609a) |
+| `external-adaptation-conflict`, run 3 | Failed closed and required review; no package or permission change. | [Chat transcript](https://chatgpt.com/c/6af76d8f-b238-83eb-b31f-5a8edad31aef) |
+
+The owner classified all three conflict repetitions as PASS: conditional mentions of REUSE/EXTEND/COMPOSE did not select an adaptation decision or emit a package proposal. These runs establish host-level route selection and fail-closed behavior on the pinned candidate. Because no source was supplied, they do not establish source-specific overlap, license or security findings.
+
+The app UI did not expose a stable backend model identifier; it displayed the ChatGPT default selector and Medium reasoning effort. No fixed model ID is claimed.
+
