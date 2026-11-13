@@ -10,7 +10,8 @@ test("provenance filter distinguishes all five states and preserves missing meta
   })), { name: "missing", kind: "skill", domain: "demo", description: "synthetic" }];
   assert.deepEqual(rows.map((row) => filterCatalog([row], { classification: "UNKNOWN" }).length), [0, 0, 0, 0, 1, 1]);
   for (const classification of PROVENANCE_CLASSIFICATIONS) {
-    assert.deepEqual(filterCatalog(rows, { classification }).map((row) => row.name), [classification.toLowerCase()]);
+    const expected = classification === "UNKNOWN" ? ["unknown", "missing"] : [classification.toLowerCase()];
+    assert.deepEqual(filterCatalog(rows, { classification }).map((row) => row.name), expected);
   }
 });
 
