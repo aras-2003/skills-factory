@@ -2,13 +2,13 @@
 
 Template derived from the iteration delivery policy. This is a scope lock proposal; it does not start implementation.
 
-- State: PLANNED; scope lock proposed in PR (record PR and lock commit after merge).
+- State: ACTIVE; scope locked by merged PR #660 (`0919deabab159cd6a8406b0c867fe4cbbf9cdf7c`).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #616 / not assigned; native Project iteration remains a scheduling mirror.
 - Previous terminal iteration: Iteration 14 CLOSED / ACCEPTED, #614; implementation PR #658 and evidence closeout PR #659; final main SHA `834c29258ce48d111a147b26540f13554a83be34`.
 - Baseline main SHA: `834c29258ce48d111a147b26540f13554a83be34`.
-- Lock commit SHA: pending scope-lock PR merge; record immutable SHA in #616 before implementation.
-- Started at / closed at (UTC): pending scope-lock merge / pending.
+- Lock commit SHA: `0919deabab159cd6a8406b0c867fe4cbbf9cdf7c`; recorded in #616.
+- Started at / closed at (UTC): 2026-11-13T08:12:20Z / pending.
 - Scope lock reviewed by / at: owner self-review / 2026-11-13; not independent.
 
 ## Frozen commitment
