@@ -12,62 +12,62 @@
       "change_description": "Zbudować najpierw proposal/experiment, nie auto-update production. Źródła sygnału: zanonimizowane real-use failures, development evals, regression corpus i version-bound receipts. Rozdzielić development evals od held-out regression/holdout; optimizer nie może widzieć pełnych evaluator rubrics ani całego holdout corpus. Pipeline: failure clustering → root-cause hypothesis → jedna/bounded mutation → static/security/routing gates → development evals → held-out regressions → runtime pilot → skill-release-review → osobna human authorization. Wynik ma być Improvement Proposal + candidate diff, nigdy samodzielna promocja.",
       "acceptance_summary": "- [ ] Optimizer nie ma dostępu do pełnego held-out corpus ani evaluator-only rubrics - [ ] Każda mutacja jest powiązana z obserwowanym failure i hipotezą root cause - [ ] Poprawa development score bez utrzymania held-out/regression jakości nie jest akceptowana - [ ] Security, capability i routing gates uruchamiają się przed runtime pilotem - [ ] Production evidence jest zanonimizowane i nie przenosi danych prywatnych do publicznych fixtures - [ ] Narzędzie tworzy candidate diff i changelog; nie merge'uje, nie publikuje i nie zmienia maturity automatycznie - [ ] Implementacja rozpoczyna się dopiero po zebraniu wystarczającej liczby rzeczywistych failure receipts; do tego czasu status może pozostać DISCOVERY/PROPOSED",
       "dependencies": "ENG-04, ENG-08, ENG-10, ENG-12, ENG-15, ENG-16",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/162"
     },
     "163": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-05] Zbudować ai-use-case-review",
       "change_description": "Problem → deterministic/no-AI alternative → data readiness → eval task → failure cost → pilot boundary. OAF specialists tylko dla problemu organizacyjnego.",
       "acceptance_summary": "- [ ] Porównanie do prostszej automatyzacji - [ ] Mierzalny pilot i quality/cost threshold - [ ] Explicit human/action authority - [ ] Brak AI ROI opartego na nieznanych liczbach",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/163"
     },
     "164": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "DESIGN",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LIF-02] Zaprojektować property-shortlist-review",
       "change_description": "Oferty → hard constraints → dojazdy/okolica → koszty znane/scenariusze → shortlist → pytania na viewing. Dokładny adres, budżet i stan w private context.",
       "acceptance_summary": "- [ ] Fakty z ofert odróżnione od zweryfikowanych - [ ] Nie wykonuje legal/technical clearance - [ ] Wskazuje dokumenty i due-diligence gaps - [ ] Brak automatycznego kontaktu z agentem",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/164"
     },
     "165": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-02] Zbudować strategic-environment-scan z PESTEL",
       "change_description": "Zakres, geografia i horyzont; PESTEL tylko dla czynników zmieniających decyzję. Factor → evidence → mechanism → exposed entities → impact/horizon → implication. Aktualność i sprzeczności jawne.",
       "acceptance_summary": "- [ ] Źródło/data przy decydujących claims - [ ] Rozróżnienie faktu, interpretacji, scenariusza i unknown - [ ] Brak wymuszonego wypełniania wszystkich sześciu kategorii - [ ] Stop gdy dalszy research nie zmienia opcji lub trzeba przetestować assumption",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/165"
     },
     "169": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[CON-01] Zdefiniować granice Consumer i prywatny purchase profile",
       "change_description": "Nowa domena skills/consumer; kraj/rynek, waluta, budżet, zastosowanie i posiadany sprzęt w kontekście. Nazwy i boundaries przechodzą skill-specification.",
       "acceptance_summary": "- [ ] Minimum 3 przykłady: sprzęt, dom/AGD, software subscription - [ ] Osobno must-have i nice-to-have - [ ] Kupno do użytku własnego nie uruchamia Commerce",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/169"
     },
     "170": {
-      "type": "IMPLEMENT",
-      "level": "A2",
+      "type": "DISCOVERY",
+      "level": "A0",
       "review": "PROPOSED",
       "title": "[WRI-01] Zidentyfikować istniejący skill artykułowy",
       "change_description": "Odczytać name/version/contract/dependencies, rozróżnić zewnętrzny plugin i repo source; zachować portable boundary. Bez kopiowania cudzej implementacji.",
       "acceptance_summary": "- [ ] Znana funkcja, wejście i wyjście - [ ] Legalny sposób użycia/adapter - [ ] Brak zależności oznacza unavailable, a nie udawane wywołanie",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/170"
     },
     "171": {
@@ -78,84 +78,84 @@
       "change_description": "Minimalny handoff: cel, źródła, ustalenia, decyzje, unknowns, authority, next action. Skill dopiero gdy niezależny handoff powtarza się w kilku domenach.",
       "acceptance_summary": "- [ ] Przeniesienie nie dopisuje zgód - [ ] Odbiorca dostaje potrzebny kontekst i nie dostaje rubryk - [ ] Da się wznowić zadanie bez odtwarzania całej rozmowy",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/171"
     },
     "172": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LIF-01] Zaprojektować trip-decision i itinerary-feasibility",
       "change_description": "Wybór lokalizacji/noclegu/transportu reużywa Consumer/Core; osobna metoda sprawdza czasy, dystanse, godziny, buffer i feasibility. Preferencje w projekcie.",
       "acceptance_summary": "- [ ] Koszty/datę/dostępność odświeżono - [ ] Plan uwzględnia buffers - [ ] Brak fikcyjnych reservations - [ ] Opcje odpadające na constraints nie są rekomendowane",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/172"
     },
     "173": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-01] Zdefiniować osobną domenę Strategy i rozliczyć strategy-ea",
       "change_description": "Docelowe skills/strategy. Zakres: otoczenie, struktura branży, konkurencja, pozycja, wybory i design. Zmapować historyczny strategy-ea: reuse strategy-challenge; wskazać istniejące OAF i PRO bez migracji działających skills.",
       "acceptance_summary": "- [ ] Jawne trigger/non-trigger PL/EN - [ ] Strategy nie jest obowiązkowym etapem każdej domeny - [ ] Historyczne nazwy nie prowadzą do duplikowania implemented OAF - [ ] Profil i bieżące dane organizacji pozostają w project context",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/173"
     },
     "174": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-03] Zbudować meeting-decision-extraction",
       "change_description": "Z supplied transcript/notes wydobyć decisions/actions z cytatem/time marker; właściciel i termin tylko gdy padły. Rozróżnić propozycję, zgodę i decyzję.",
       "acceptance_summary": "- [ ] Brak wymyślonych właścicieli i dat - [ ] Brak przypisania decyzji z luźnej dyskusji - [ ] Sporne ustalenia są oznaczone - [ ] Nie nagrywa i nie wysyła wiadomości",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/174"
     },
     "175": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LEA-01] Uruchomić learning-session zgodny z obecnym Learning OS",
       "change_description": "Quick question pozostaje quick; dla sesji: cel → minimum theory → practice → feedback → next. knowledge-diagnosis/concept-explainer początkowo jako gałęzie, nie automatyczny pipeline.",
       "acceptance_summary": "- [ ] Brak przymusowego quizu do definicji - [ ] Po wystarczającym rozumieniu przejście do zastosowania - [ ] Profil i prywatny log w kontekście - [ ] Nie dopisuje osiągniętej kompetencji",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/175"
     },
     "176": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CON-03] Zbudować product-evidence-review",
       "change_description": "Ocena znanego modelu: exact SKU, region/revision, official specs/manual, niezależne pomiary, awarie/limitations; popularność nie jest dowodem jakości.",
       "acceptance_summary": "- [ ] Źródło przy decydującej claim - [ ] Wariant modelu rozpoznany - [ ] Konflikt spec/test jest widoczny - [ ] Brak testu nie oznacza potwierdzonej jakości - [ ] Produkt niekompatybilny nie trafia do zwycięzców",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/176"
     },
     "177": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[ENG-07] Dodać mały scaffolder oparty na istniejącym template",
       "change_description": "Skrypt tworzy pakiet z kontraktu, korzystając z templates/skill-template; nie generuje pustych katalogów i nie nadpisuje istniejącego skill.",
       "acceptance_summary": "- [ ] Powtarzalny output - [ ] Brak overwrite i path traversal - [ ] Poprawne nazwy oraz walidacja - [ ] Referencje powstają tylko gdy potrzebne",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/177"
     },
     "178": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[ENG-09] Dodać analizę wpływu zmiany i wybór testów",
       "change_description": "Rozszerzyć istniejące walidatory o affected skills/workflows z grafu dependencies i zasobów; pełny suite przy zmianach registry, buildera lub wspólnego kontraktu.",
       "acceptance_summary": "- [ ] Zmiana specialist wybiera dependents i routing neighbors - [ ] Zmiana wspólnego pliku nie pomija dotkniętych flow - [ ] Dobór jest deterministyczny i ma uzasadnienie",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/178"
     },
     "179": {
@@ -166,7 +166,7 @@
       "change_description": "Dodać do istniejących receipts opcjonalne metryki czasu, dostępnych tokens/tool calls, kosztu jeśli faktycznie znany, interwencji i poprawek. Trzymać benchmark na tych samych wejściach.",
       "acceptance_summary": "- [ ] Brak kosztu jest unknown - [ ] Wynik zawiera medianę/range i denominator - [ ] Odsetek ciężkich błędów nie ginie w średniej - [ ] Porównanie do pracy bez skill lub accepted version",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/179"
     },
     "180": {
@@ -177,7 +177,7 @@
       "change_description": "Rozszerzyć istniejący revision/post-release loop; anonimizować wejście, zachować błąd i kontrakt, dodać regresję przed poprawką.",
       "acceptance_summary": "- [ ] Pierwotny failure pozostaje w historii - [ ] Dane prywatne nie trafiają do publicznego fixture - [ ] Test nie jest osłabiony, by naprawa wyglądała dobrze",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/180"
     },
     "181": {
@@ -188,95 +188,95 @@
       "change_description": "Okresowy review tylko na danych o użyciu/incydentach; wskazać komponenty nieużywane, pokrywające się i wyparte przez native tools.",
       "acceptance_summary": "- [ ] Każde merge/deprecate ma dowód i migration path - [ ] Rzadko używany skill o dużej wartości nie jest automatycznie usuwany - [ ] Brak telemetry nie udaje braku użycia",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/181"
     },
     "182": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CORE-01] Zrealizować minimalny research-brief",
       "change_description": "Cel decyzji, odbiorca, must-have, ograniczenia, zakres źródeł i stop condition. Pilot z Consumer i Writing przed utrwaleniem abstrakcji.",
       "acceptance_summary": "- [ ] 2–3 realne zastosowania pokazują tę samą metodę - [ ] Krótkie pytanie nie wymaga intake - [ ] Brak profilu użytkownika w skill - [ ] Kontrakt pasuje do obu flow",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/182"
     },
     "183": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CORE-02] Zrealizować evidence-validator bez drugiej analizy domenowej",
       "change_description": "Reużyć definicje pochodzenia i niepewności. Kontrola źródeł, daty, sprzeczności i adekwatności wniosku; bez wybierania produktu lub pisania artykułu.",
       "acceptance_summary": "- [ ] Nie kopiuje ledger z composer - [ ] Fakt, user claim, inference i unknown są rozróżnione - [ ] Testuje sprzeczne, stare i marketingowe dane - [ ] Nie analizuje ponownie domeny",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/183"
     },
     "184": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CORE-03] Zrealizować structured-comparison",
       "change_description": "Metoda porównania z hard constraints przed preferencjami; brak danych to unknown. Wagi tylko jawnie uzgodnione; obliczenia w skrypcie.",
       "acceptance_summary": "- [ ] Niespełnienie must-have nie jest kompensowane ceną - [ ] Brak specyfikacji nie staje się niskim score - [ ] Zmiana priorytetu pokazuje warunek zmiany rekomendacji",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/184"
     },
     "185": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CON-02] Zbudować purchase-decision jako pierwszy pionowy pilot",
       "change_description": "Need → constraints → shortlist → hard-filter → evidence → comparison → offer check → recommendation. Zacząć od lekkich reference stages; specialists wyodrębniać gdy są niezależnie użyteczni.",
       "acceptance_summary": "- [ ] 3–5 dopasowanych opcji jako default - [ ] Najlepszy wybór, alternatywa i warunek niewybierania - [ ] Odpowiedź rozróżnia model i ofertę - [ ] Brak zakupu/zamówienia - [ ] Ma stop condition i obsługę niedostępnego narzędzia",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/185"
     },
     "186": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CON-04] Zbudować product-fit-comparison",
       "change_description": "Porównać model do scenariuszy użytkowania, hard constraints, jakości dowodów i trade-offs. Na start własny mały kontrakt; po pilocie wykorzystać CORE-03.",
       "acceptance_summary": "- [ ] Jawne kryteria i dowody - [ ] Brak nieuzasadnionego aggregate score - [ ] Wskazany kompromis zwycięzcy i strongest alternative - [ ] Aktualny produkt/odroczenie może wygrać",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/186"
     },
     "187": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CON-05] Zbudować purchase-offer-review i prosty kalkulator TCO",
       "change_description": "Dla known SKU sprawdzić sprzedawcę, cenę, dostępność, dostawę, gwarancję/zwroty i warunki. TCO na znanym okresie: zakup, eksploatacja, abonament, opłaty; nie estymować nieznanych kosztów bez etykiety.",
       "acceptance_summary": "- [ ] Oferta ma exact SKU, walutę, rynek, URL i checked_at - [ ] Nieudokumentowane stock/seller quality są unknown - [ ] Arytmetyka ma testy i jednostki - [ ] Brak danych prawnych nie daje legal clearance",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/187"
     },
     "188": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[CON-06] Sprawdzić purchase-decision w realnych przypadkach",
       "change_description": "Pilot sprzętu, AGD/domu i subskrypcji oraz przypadki: brak must-have, podobne warianty, stare ceny, konflikt testów, zakup biznesowy, bardzo tania rzecz.",
       "acceptance_summary": "- [ ] Około 3–5 realnych użyć zgodnie z lifecycle - [ ] Zestaw realistycznych negatives i failure cases - [ ] Wynik skraca czas i poprawki vs baseline - [ ] Brak nieautoryzowanej transakcji",
       "dependencies": "CON-02, CON-03, CON-04, CON-05, ENG-04",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/188"
     },
     "189": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[CON-07] Dodać price/availability watch na wyraźne zlecenie",
       "change_description": "Reużyć automation hosta; zachować exact SKU, warunek alertu, cadence, expiry i quiet-on-unchanged. Nie budować crawlera/daemonu.",
       "acceptance_summary": "- [ ] Powiadomienie tylko o znaczącej zmianie - [ ] Dane odświeżone przed alertem - [ ] Wygaszenie/stop są jawne - [ ] Watch nie kupuje produktu",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/189"
     },
     "190": {
@@ -287,51 +287,51 @@
       "change_description": "Gałąź purchase-decision: obecny problem, naprawa/serwis, koszt wymiany, przewidywane ograniczenia i trade-off. Osobny skill tylko przy powtarzalnej analizie.",
       "acceptance_summary": "- [ ] Odroczenie i naprawa są realnymi opcjami - [ ] Brak diagnozy technicznej jest unknown - [ ] Nie wydaje niebezpiecznych instrukcji naprawczych",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/190"
     },
     "191": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[WRI-02] Zbudować article-development wokół obecnego writera",
       "change_description": "Brief → teza/odbiorca → potrzebny research → argument structure → existing writer → critique → evidence check → revision. Dla własnego draft pomijać wcześniejsze etapy.",
       "acceptance_summary": "- [ ] Jeden spójny tekst gotowy do redakcji - [ ] Odrębny factual/research gate - [ ] Research kończy się gdy wspiera główne claims - [ ] Nie tworzy nowego article-writer - [ ] Znany kontrakt fallback przy braku adaptera",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/191"
     },
     "192": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[WRI-03] Zbudować editorial-argument-review",
       "change_description": "Kontrola centralnej tezy, wnioskowania, weakest premise, strongest counterargument, struktury, powtórzeń i konkretności. Nie researchuje i nie przepisywuje całości bez potrzeby.",
       "acceptance_summary": "- [ ] Rozróżnia błąd logiczny i preferencję stylistyczną - [ ] Wskazuje minimalną poprawkę - [ ] Nie usuwa zastrzeżeń wzmacniających uczciwość - [ ] Nie narzuca generycznego AI tonu",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/192"
     },
     "193": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[WRI-04] Zdefiniować article-claim-check",
       "change_description": "Lista claims do kontroli: fakty/cytaty/liczby/causal claims; sprawdzić źródła i daty, oznaczyć opinion/inference. Najpierw reference w flow; po re-use delegować ogólną kontrolę do CORE-02.",
       "acceptance_summary": "- [ ] Nieistniejący link/cytat jest blokowany - [ ] Cytowanie wspiera konkretną claim - [ ] Prywatny case nie trafia do publikacji bez świadomej decyzji - [ ] Własne doświadczenie nie jest dopisywane",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/193"
     },
     "194": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[WRI-05] Zbudować prywatny voice profile i sprawdzić flow",
       "change_description": "3–5 tekstów/próbek, reguły struktury, słownictwo i antyprzykłady w kontekście projektu. Pilot: techniczny artykuł, executive opinion, poprawa własnego tekstu.",
       "acceptance_summary": "- [ ] Profil nie jest zaszyty w publiczny skill - [ ] Tekst nie wymyśla doświadczeń - [ ] Blind A/B ogranicza wpływ atrakcyjnego formatowania - [ ] Mierzony zakres Twoich poprawek",
       "dependencies": "WRI-02, WRI-03, WRI-04, ENG-04",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/194"
     },
     "195": {
@@ -342,51 +342,51 @@
       "change_description": "Adaptacja odbiorcy i formatu dopiero z ukończonego tekstu; SEO tylko dla właściwego kanału. Reużyć istniejące narzędzia strony/Docs; publikacja na wyraźne polecenie.",
       "acceptance_summary": "- [ ] Brak nowych niezweryfikowanych tez - [ ] Wersje mają źródłowy tekst i approved state - [ ] Przygotowanie nie publikuje automatycznie - [ ] Nie generuje niepotrzebnych treści kanałowych",
       "dependencies": "",
-      "architecture_reason": "A3 — potencjalna zmiana kontraktów lub przepływów między komponentami; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/195"
     },
     "196": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-01] Zbudować technical-option-review",
       "change_description": "Alternatywy techniczne, constraints, integration/data ownership, operacje, koszt, lock-in i reversibility. Output: krótki ADR lub input do decyzji; repo/tool docs są source of truth.",
       "acceptance_summary": "- [ ] Oddzielna granica od OAF architecture-review - [ ] Co najmniej strongest viable alternative - [ ] Nie wynajduje infrastruktury i API - [ ] Wskazuje co zmieniłoby decyzję",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/196"
     },
     "197": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-02] Zbudować technology-selection dla buy/build/vendor",
       "change_description": "Requirements → buy/build/defer → shortlist → evidence → trial → TCO/risk → recommendation. Dodawać tylko security/data/SLA/exit criteria właściwe dla organizacji.",
       "acceptance_summary": "- [ ] Nie myli produktu z enterprise offer - [ ] Vendor marketing nie jest dowodem SLA poza umową - [ ] Decyzja uwzględnia trial i exit cost - [ ] Brak automatycznego zakupu",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/197"
     },
     "198": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-04] Dodać executive-decision-memo jako profil",
       "change_description": "Profil: decision, evidence, options, risk, unknowns, owner/next action. Composer tylko jeśli dostępny; jasny lokalny text fallback dla nowego flow.",
       "acceptance_summary": "- [ ] Nie analizuje ponownie tematu - [ ] Zwarta rekomendacja i trade-offs - [ ] Format nie wzmacnia pewności - [ ] Brak zależności composer nie blokuje opcjonalnej prezentacji",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/198"
     },
     "199": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-06] Zbudować automation-opportunity-review",
       "change_description": "Intake procesu, źródła, deterministyczne kroki, judgement steps, właściciel, retry/idempotency, observability, stop. Output: mały automation brief; implementację wykonują właściwe narzędzia.",
       "acceptance_summary": "- [ ] Rzeczywista powtarzalność - [ ] Prosty script/native automation oceniony przed agentem - [ ] Error/rollback path - [ ] Brak automatycznego provisioningu",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/199"
     },
     "200": {
@@ -397,18 +397,18 @@
       "change_description": "Pierwszy wycinek: rfp-extraction → eligibility-check → capability-evidence-match → go-no-go. Parsery do kodu; requirements mają source location. Nie implementować od razu wszystkich 11 skills.",
       "acceptance_summary": "- [ ] Mandatory fail zatrzymuje dalszy research - [ ] Każda claim ma evidence - [ ] Braki nie stają się deklarowaną zgodnością - [ ] Pilotaż na rzeczywistym lub anonimizowanym RFP",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/200"
     },
     "201": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[PRO-08] Uruchomić website-quality-review zamiast kolejnego buildera",
       "change_description": "Najpierw design-critique i visual-regression-review; accessibility-gate dla judgement poza automatycznymi testami. Responsive, links i a11y scans w kodzie/CI.",
       "acceptance_summary": "- [ ] Sprawdzony realny render desktop/mobile - [ ] Uwagi z lokalizacją i impact - [ ] Brak duplikacji native builder - [ ] Ruch i wygląd wspierają funkcję",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/201"
     },
     "202": {
@@ -419,29 +419,29 @@
       "change_description": "Scenariusze decyzji/design/diagnosis z progresywną trudnością i kryterium sukcesu. Dostosować do demonstrated level; nie zdradzać rozwiązania w zadaniu.",
       "acceptance_summary": "- [ ] Ćwiczenie mierzy cel - [ ] Realne trade-offs i edge cases - [ ] Wskazówki oddzielone od zadania - [ ] Difficulty wynika z evidence",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/202"
     },
     "203": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LEA-03] Zrealizować competence-check",
       "change_description": "Ocenić supplied performance: correctness, independence, transfer, trade-offs, error correction; feedback i najmniejszy następny krok. Bez obowiązkowej skali poza checkpoints.",
       "acceptance_summary": "- [ ] Uzasadnienie oceny zachowuje evidence - [ ] Brak wykonania pozostaje nieocenione - [ ] Nie traktuje completion jako mastery - [ ] Nie zatrzymuje nauki dla nieistotnego perfekcjonizmu",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/203"
     },
     "204": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LEA-04] Dodać retention-review i learning log dopiero gdy potrzebne",
       "change_description": "Review na demonstrated gaps; log na prośbę lub dla ciągłości. Automatyczne przypomnienia tylko zlecone przez użytkownika.",
       "acceptance_summary": "- [ ] Recall/application zamiast streszczania - [ ] Log nie zawiera fikcyjnego postępu - [ ] Plan review ma stop/expiry - [ ] Brak niezamówionych powiadomień",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/204"
     },
     "205": {
@@ -452,51 +452,51 @@
       "change_description": "Budżet/czas/składniki → kilka posiłków → wspólna lista zakupów → batch prep. Agregacja jednostek i ilości w kodzie; preferencje/alergeny w kontekście.",
       "acceptance_summary": "- [ ] Lista nie duplikuje składników - [ ] Uwzględnia supplied restrictions - [ ] Brak twierdzeń medycznych - [ ] Koszt i wartości odżywcze bez źródła są unknown",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/205"
     },
     "206": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LIF-04] Zaprojektować local-service-selection",
       "change_description": "Brief → quotes → zakres włączeń/wyłączeń → dostępność → evidence/reviews → rekomendacja i pytania. Consumer profile nie zawiera prywatnego adresu w skill.",
       "acceptance_summary": "- [ ] Oferty mają porównywalny scope - [ ] Opinie to weak evidence, nie gwarancja - [ ] Brak automatycznego wysłania request - [ ] Najtańsza oferta nie wygrywa mimo braków",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/206"
     },
     "207": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "DESIGN",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LIF-05] Zaprojektować subscription-review",
       "change_description": "User-provided list/usage → duplicate value → known annual cost → keep/downgrade/cancel candidates. Przepływ nie korzysta z inwestycyjnego record-store.",
       "acceptance_summary": "- [ ] Koszt policzony ze znanych inputs - [ ] Brak dostępu do kont nie jest zastępowany domysłem - [ ] Nie anuluje bez zlecenia - [ ] Nie traktuje niskiego usage jako automatycznej decyzji",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/207"
     },
     "208": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[LIF-06] Zaprojektować document-to-action dla spraw domowych",
       "change_description": "Z supplied dokumentu wydobyć termin, warunek, krok i source location; przygotować checklistę/draft odpowiedzi. Privacy i data minimization.",
       "acceptance_summary": "- [ ] Nie wymyśla deadline - [ ] Interpretacja prawna odróżniona od tekstu dokumentu - [ ] Żadnego wysłania ani zapisania do zewnętrznego store bez odpowiedniego zlecenia",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/208"
     },
     "209": {
-      "type": "IMPLEMENT",
-      "level": "A1",
+      "type": "DISCOVERY",
+      "level": "A0",
       "review": "PROPOSED",
       "title": "[EXI-02] Domknąć dowody dla Career candidates",
       "change_description": "Priorytet według aktualnego recruitment use case; 3–5 real uses i routing/evidence cases. Mastery CV pozostaje approved private input.",
       "acceptance_summary": "- [ ] Brak invented experience - [ ] Validity przed kosztownym tailoring - [ ] Dokładna wersja ma evidence - [ ] Nie promuje wszystkich tylko dla kompletności",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/209"
     },
     "210": {
@@ -507,7 +507,7 @@
       "change_description": "Reużyć istniejące skills; etapy optional/required zależnie od wejścia; register tylko kanały z dependencies. Z supplied interview pomija discovery.",
       "acceptance_summary": "- [ ] Suggested vs registered jest jasne - [ ] Missing candidate nie jest symulowany - [ ] Flow nie wymusza całej ścieżki do wąskiej prośby",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/210"
     },
     "211": {
@@ -518,95 +518,95 @@
       "change_description": "Re-test affected runtime fixtures, wersjonować kontrakt, zachować domenowe stores. Consumer nie reuse investment-record-store; red-team inwestycyjny nie staje się generic critic.",
       "acceptance_summary": "- [ ] Nowy skill ma concrete recurring gap - [ ] Brak kopiowania starych product-research/ecommerce aliasów do nowych implementacji - [ ] Zmiana shared core nie powoduje niejawnej migracji istniejących flow",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/211"
     },
     "212": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-03] Zbudować industry-structure-review z 5 siłami Portera",
       "change_description": "Najpierw granice branży, buyer, geografia i business model. Następnie rivalry, new entrants, substitutes, buyer/supplier power; causal economic mechanisms i role platforms/complements tam gdzie materialne. Porter nie zastępuje company-level competitive review.",
       "acceptance_summary": "- [ ] Każda ocena force ma uzasadnienie i evidence - [ ] Potencjalni entrants i substitutes są odróżnieni - [ ] Market growth nie kompensuje strukturalnej presji na profitability - [ ] Nie tworzy pozornie precyzyjnego industry attractiveness score",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/212"
     },
     "213": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-04] Zbudować competitive-intelligence-review: pogłębiona analiza konkurencji",
       "change_description": "Granice rynku i strategic groups; direct/indirect/substitutes; segmenty, value proposition, model przychodów, zasoby/capabilities, distribution, moat/imitability, ruchy i możliwe reakcje. Reuse istniejącego Commerce evidence pack, jeśli aktualny i zakres zgodny; research wyłącznie gaps. Oddzielać observed move od hypothesis of intent.",
       "acceptance_summary": "- [ ] Znany scope/geografia/as-of - [ ] Każdy profil ma observed facts, interpretations i unknowns - [ ] Ceny/oferty porównywane na zgodnych wariantach i okresach - [ ] Brak marketingowego claim o przewadze jako niezależnego dowodu - [ ] Hipoteza reakcji konkurenta nie jest potwierdzonym zamiarem - [ ] Lekki commerce landscape nie uruchamia automatycznie deep dive",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/213"
     },
     "214": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-05] Zbudować strategic-position-review: zasoby, przewagi i ograniczenia",
       "change_description": "Supplied current position/results/resources; VRIO i capability fit warunkowo. Odróżnić istniejące zdolności od aspiracji; koszt pozyskania braków, dependency, right-to-win i defensibility. Dla organizacji reuse OAF capability evidence bez ponownego projektowania organizacji.",
       "acceptance_summary": "- [ ] Internal strengths/weaknesses mają evidence - [ ] Capability assertion nie powstaje z deklaracji marketingowej - [ ] VRIO nie gwarantuje sustainable advantage bez uzasadnienia - [ ] Bez danych wewnętrznych pozycja pozostaje provisional",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/214"
     },
     "215": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-06] Zbudować strategic-analysis jako selektywny flow diagnostyczny",
       "change_description": "Question/scope → selected environment/industry/competition/position stages → synthesis → critical uncertainties → handoff. Entry: broad diagnostic, narrow framework/deep competition, supplied evidence. Wynik strategic evidence pack; opcje w analizie są hipotezami, nie zatwierdzoną strategią.",
       "acceptance_summary": "- [ ] Dobiera tylko etapy zmieniające decyzję - [ ] Known competition request może trafić prosto do STR-04 - [ ] Supplied aktualny pack pomija zrobiony research - [ ] Registry/channels i required/optional/on_missing jawne przy implementacji - [ ] Brak narzędzi/danych nie jest ukrywany - [ ] Output: ustalenia, mechanizmy, uncertainties, opcje do design/test i next gate",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/215"
     },
     "216": {
-      "type": "DESIGN",
+      "type": "IMPLEMENT",
       "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-07] Zbudować strategic-options-design: pogłębiony projekt opcji",
       "change_description": "Z celów i accepted/provisional evidence pack wypracować 2–4 odmiennych opcji: where-to-play/how-to-win, value proposition, advantage, required capabilities/resources, what-not-to-do i trade-offs. Include keep/defer/no-go gdy viable; wybór wymaga zasobów/ograniczeń lub oznaczonych scenariuszy.",
       "acceptance_summary": "- [ ] Opcje nie są kosmetycznymi wariantami tej samej odpowiedzi - [ ] Każda ma causal rationale, sacrifices, feasibility i evidence links - [ ] Nie wymyśla budżetu/zdolności/mandatu - [ ] Wskazuje strongest viable alternative i co zmieni decyzję - [ ] Output odróżnia rekomendację, hypothesis i user-approved choice",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/216"
     },
     "217": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-08] Zbudować strategic-scenario-review i signposts",
       "change_description": "Najważniejsze niezależne uncertainties → kilka spójnych scenariuszy → option robustness → no-regret moves, contingent bets, reversible steps → measurable signposts. Nie wymuszać macierzy 2x2 i prawdopodobieństw.",
       "acceptance_summary": "- [ ] Scenariusze odróżnione od prognoz/faktów - [ ] Assumptions i causal relationships widoczne - [ ] No arbitrary probability ani score - [ ] Każdy material signpost ma obserwowalny warunek i implication - [ ] Dla małej decyzji wystarcza compact sensitivity",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/217"
     },
     "218": {
       "type": "IMPLEMENT",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-09] Zrealizować istniejący plan strategy-challenge",
       "change_description": "Pre-mortem, weakest assumption, missing alternatives, competitor response, evidence contradiction, falsification; kontrola before design approval. Brak własnego pełnego research engine, brak generic critic do każdej odpowiedzi.",
       "acceptance_summary": "- [ ] Challenge wskazuje najmniejszy test/poprawkę - [ ] Nie zamienia interpretacji w potwierdzone fakty - [ ] Nie odrzuca strategii dla stylistycznego upodobania - [ ] Znany severe feasibility/evidence problem widoczny, nie ukryty w average",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/218"
     },
     "219": {
-      "type": "DESIGN",
+      "type": "IMPLEMENT",
       "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-10] Zbudować strategy-design: od diagnozy do kompletnej strategii",
       "change_description": "Goals/constraints + evidence gate → strategic diagnosis → options → conditional scenarios/challenge → recommended choices → strategic objectives → capability/resource implications → staged validation, measures and review triggers. Entry: analyse-then-design lub supplied evidence. Missing decision-critical data stops final design, while supported sections remain reviewable. Business strategy i funkcjonalne strategie jako explicit modes.",
       "acceptance_summary": "- [ ] Diagnoza nie udaje wyboru kierunku - [ ] Strategy obejmuje choices, differentiation, sacrifices i causal logic, nie tylko task list - [ ] Nie powtarza aktualnej analizy bez potrzeby - [ ] Synthesis oddziela proposed od approved - [ ] Nie projektuje governance/operating model ani inwestycyjnej alokacji - [ ] Warunki stop/handoff i framework selection jawne - [ ] Optional STR-08 ma explicit on_missing",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/219"
     },
     "220": {
@@ -617,29 +617,29 @@
       "change_description": "Business goals → demand/customer evidence → segmentation/targeting/positioning → value proposition/brand → acquisition/retention/channel roles → mix trade-offs → known budget/resources, constraints and measurement → staged experiments. Reuse Commerce demand/differentiation/acquisition/unit-economics gdzie fit, Writing/native tools do downstream execution. Szerszy zakres także dla services/B2B; nie zmuszać non-commerce do commerce calculator.",
       "acceptance_summary": "- [ ] STP i kanały wynikają z dowodów, nie generycznych personas - [ ] Channel plan ma funkcję, rationale, assumptions i trade-offs - [ ] Budżet/CAC/ROI nie są wymyślane; arithmetic w kodzie i unknown jawne - [ ] Cele biznesowe odróżnione od vanity metrics - [ ] Brand, acquisition i retention nie mieszają poziomów strategii i taktyki - [ ] Obsługa B2B/services/eCommerce ma jawne assumptions - [ ] Brak automatycznego uruchomienia kampanii/content/publication",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/220"
     },
     "221": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-12] Zaprojektować prezentację raportu PESTEL",
       "change_description": "Profile w report-composer + semantic payload. Executive implications → material factors by P/E/S/T/E/L → mechanism/impact/horizon/evidence/uncertainty → options/signposts. Matrix/cards/timeline tylko gdy odpowiadają na pytanie; severity/confidence separate, no fake numeric heatmap.",
       "acceptance_summary": "- [ ] Każdy factor ma traceable source i adjacent implication - [ ] Brak nieuzasadnionego 0–5 score - [ ] Framework findings oddzielone od strategy choices - [ ] Inline presentation czytelna desktop/mobile i bez color-only meaning - [ ] Evidence-based visual z units/as-of; uczciwy documented renderer/fallback - [ ] Nie tworzy nowego strategic-report generator",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/221"
     },
     "222": {
       "type": "DESIGN",
-      "level": "A1",
+      "level": "A2",
       "review": "PROPOSED",
       "title": "[STR-13] Zaprojektować prezentację 5 sił Portera",
       "change_description": "Boundary header → five-force overview → grounded pressure assessment → evidence/mechanism per force → combined implications for value capture and options. Diagram opcjonalny z adjacent evidence table; pressure ordinal tylko anchored rationale. Brak radar chart z invented scores.",
       "acceptance_summary": "- [ ] Company competitive review nie miesza się z industry forces - [ ] Każda force ma evidence/mechanism i scope - [ ] Wizualny przegląd nie ukrywa niepewności - [ ] Combined conclusion nie jest średnią pięciu score - [ ] Brak renderer nie generuje phantom diagram",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/222"
     },
     "223": {
@@ -650,7 +650,7 @@
       "change_description": "Internal S/W z STR-05, external O/T z environment/industry/competition, stable finding IDs. Compact SWOT → wybrane TOWS links → proposed options → criteria/test. Nie generować obowiązkowo każdej kombinacji SO/ST/WO/WT. Nie wydzielać SWOT w osobny skill bez recurring independent need.",
       "acceptance_summary": "- [ ] S/W i O/T nie są zamienione - [ ] Każda pozycja dziedziczy evidence/uncertainty - [ ] TOWS option ma links do wspierających findings - [ ] Framework nie wzmacnia confidence względem source analysis - [ ] Aktualna synteza nie wymaga ponownego researchu",
       "dependencies": "STR-02, STR-03, STR-04, STR-05, STR-07",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/223"
     },
     "224": {
@@ -661,7 +661,7 @@
       "change_description": "Deep competition: strategic groups, evidence-backed profile/matrix, differentiation/response, missing facts. Design: choices & trade-offs, option comparison, rationale, capabilities/resources, staged roadmap and measures. Marketing: STP/positioning, channel roles, budgets with known inputs and measurement. Section: finding → evidence → visual → implication → choice; findings link do chosen/rejected options.",
       "acceptance_summary": "- [ ] Perceptual map tylko przy defensible axes/data; nie udaje customer research - [ ] Brak incomparable pricing/score - [ ] Map/diagram/rendering od istniejących tools, bez drugiego dashboarda - [ ] Wizualizacja nie dodaje niezweryfikowanych przewag ani causal claims - [ ] Reader widzi dlaczego opcja została wybrana i co odrzucono - [ ] Narrow task nie wymaga całego report profile - [ ] Chat default, external editable report/deck tylko na żądanie",
       "dependencies": "STR-04, STR-10, STR-11, STR-12, STR-13, STR-14",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/224"
     },
     "225": {
@@ -672,7 +672,7 @@
       "change_description": "Strategic evidence pack: decision/scope/horizon, finding IDs, provenance/as-of, hypotheses, options, assumptions, unknowns, recommended gate, status. Domain adapters, no new global store. Commerce consumes opportunity thesis; OAF goals/capability implications; Investing sector mechanism/scenarios before existing theme/security/portfolio review; Career/Learning competence hypotheses after personal context.",
       "acceptance_summary": "- [ ] Handoff nie przenosi nieudzielonych zgód - [ ] Strategy nie rekomenduje portfolio weights/security trade ani nie udaje underwriting - [ ] Nie duplikuje trend-theme-research - [ ] OAF design wymaga właściwych downstream evidence gates - [ ] Przekazanie tylko gdy użytkowy cel tego wymaga - [ ] Stary lub incompatible pack oznaczony, nie przyjęty silently",
       "dependencies": "",
-      "architecture_reason": "A3 — potencjalna zmiana kontraktów lub przepływów między komponentami; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/225"
     },
     "226": {
@@ -683,7 +683,7 @@
       "change_description": "Pilot: eCommerce category → marketing strategy, organisation/service business → strategy design → OAF handoff. Dodatkowo standalone deep competition, supplied evidence bypass, narrow PESTEL, existing-strategy execution failure, single-security research, stale/conflicting data, unavailable renderer. PL/EN natural routing, exact-version independent receipts, baseline quality/cost.",
       "acceptance_summary": "- [ ] Real-use pilot i value vs baseline - [ ] Competitor facts nie mieszają się z intentions - [ ] Framework list nie zastępuje choices/feasibility - [ ] Każdy report section zachowuje evidence i supported visuals - [ ] Narrow prompt nie uruchamia pełnego pipeline - [ ] Marketing forecast nie daje invented ROI - [ ] Evals bez rubric leakage i brak runtime evidence pozostaje NOT_RUN - [ ] Catalog/registry/channels aktualizowane dopiero dla rzeczywistych implementations",
       "dependencies": "STR-06, STR-10, STR-11, STR-15, STR-16, ENG-04",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/226"
     },
     "228": {
@@ -694,7 +694,7 @@
       "change_description": "Po ENG-19 przejrzeć istniejące skills i workflowy Career. Sprawdzić job discovery/validity evidence, role attractiveness vs interview preparation, CV/profile data handling, granice szkicowania i zewnętrznych działań oraz konflikty z sąsiadami. Wybrać retain/adopt/adapt/update/defer/no-change dla każdego obszaru.",
       "acceptance_summary": "- [ ] Inventory obejmuje wszystkie aktualne source components i runtime/channel mapping z exact revision - [ ] Routing cases obejmują PL/EN i realistyczne near-miss między job discovery, role evaluation, interview brief i CV tailoring - [ ] Źródła, świeżość, prywatność, external-write boundaries i brakujące runtime evidence są jawne - [ ] Każda rekomendacja ma mały plan zmiany/testów albo uzasadnienie braku zmiany - [ ] Maturity pozostaje bez zmian w ramach review",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/228"
     },
     "229": {
@@ -705,7 +705,7 @@
       "change_description": "Po ENG-19 przejrzeć istniejące skills i workflowy Commerce: odpowiedzialność względem Consumer, freshness/provenance, claim evidence, scoring, deterministic calculations, prywatny profil, regulatory boundaries i external actions. Odróżnić już zaimplementowane zachowanie od backlogowej intencji.",
       "acceptance_summary": "- [ ] Inventory obejmuje wszystkie aktualne source components i ich runtime availability - [ ] Realistyczne sąsiednie przypadki rozdzielają Commerce od Consumer i product research - [ ] Ceny, twierdzenia, źródła, daty, założenia i prywatne dane są sprawdzane w aktualnym flow - [ ] Obliczenia i nieufne treści mają przypisany sposób walidacji oraz konkretne testy - [ ] Plan przyjmuje retain/adopt/adapt/update/defer/no-change bez zmiany maturity",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/229"
     },
     "230": {
@@ -716,95 +716,95 @@
       "change_description": "Po ENG-19 przejrzeć istniejące skills/workflowy OAF, kontrakty on_missing, handoffs, evidence gates, wymagane wizualizacje i granice względem Strategy/software architecture. Rozróżnić diagnosis, design i execution oraz odnotować zależności runtime.",
       "acceptance_summary": "- [ ] Inventory mapuje source skill/workflow do właściciela decyzji i packaged availability - [ ] Testy mają konkretne realistyczne positives, near-misses i granice z Strategy/software - [ ] Wnioski, braki dowodów, unavailable dependency i visual-render status nie są maskowane - [ ] Zduplikowane lub niejasne zakresy otrzymują rekomendację z uzasadnieniem - [ ] Plan zmian ma testy i AC; maturity bez zmian podczas review",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/230"
     },
     "244": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[EXI-04] REVIEW — Sprawdzić przenośność report-composer i visual-output-design",
       "change_description": "Main i installed Lab mają różne wersje; nowe domeny nie powinny dziedziczyć sztywnych wymagań Investing przypadkowo.",
       "acceptance_summary": "- [ ] Nie zmienia domyślnie całej architektury raportów - [ ] Nie wymaga wykresu do krótkiego zakupu - [ ] Nie deklaruje render/client PASS - [ ] Jest test current version i kanału",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/244"
     },
     "260": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[IDEA] Scope & Evidence Guard — benchmark scope-creep-detector",
       "change_description": "Compare declared Issue/PR scope to changed files and behavior; guard immutable eval baseline/queue/receipts, identify test-only modifications, false positives, and meaningful unexpected side effects. Prototype read-only CI report; no automatic blocking until measured precision.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (160 180 248). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 160 180 248. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/260"
     },
     "261": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[IDEA] Independent multi-model evaluation panel experiment",
       "change_description": "Compare independent model evaluations on the same isolated cases with rubric-only evaluator access, adjudication of disagreements, false-PASS rate, per-case cost and reproducibility. Model consensus is not ground truth; start with a bounded fixture set.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (237 256). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 237 256. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/261"
     },
     "262": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[IDEA] Trust-gated multi-agent research and action audit benchmark",
       "change_description": "Evaluate delegated agents, approval boundaries, least privileges, provenance and trace auditability against existing capability contract and release gates. Start with non-writing isolated scenario; do not introduce new agent framework without measured benefit.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (246 245). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 246 245. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/262"
     },
     "263": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "IMPLEMENT",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[IDEA] Multi-MCP router benchmark against existing routing and collision gates",
       "change_description": "Compare candidate routing patterns with current Skills Factory MCP routes: single specialist vs workflow, near misses, ambiguous routes, error isolation and tool permissions. Research only, with no implicit new orchestrator.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (241 253). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 241 253. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/263"
     },
     "264": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[IDEA] RAG failure diagnostics for source retrieval and citation quality",
       "change_description": "Evaluate whether retrieval/citation diagnostics close measurable gaps in reference loading: missing source, stale chunks, unsupported citation, source-version mismatch. Use small labeled fixtures and check overlap with existing eval/evidence validators.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (183 256). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 183 256. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/264"
     },
     "265": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[IDEA] Evaluation dashboard prototype with verified receipts only",
       "change_description": "Assess a read-only dashboard for version-bound E2E outcomes, per-skill failure classes, drift and trace provenance. Never aggregate NOT_RUN/BLOCKED/REVIEW_REQUIRED into PASS or infer renderer visibility from tool success.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (149 251). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 149 251. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/265"
     },
     "266": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[IDEA] Shared context across multiple LLMs — privacy and provenance study",
       "change_description": "Explore portable context with explicit scope, origin, expiry, consent and deletion. Distinguish shared user context from forbidden evaluator-only rubrics and keep personal secrets out of model-agnostic stores. No memory system rollout without threat model.",
       "acceptance_summary": "- [ ] Verify upstream path/license/dependencies/security posture and runnable example. - [ ] Review actual current main code and existing Skills Factory solution, and record feature-by-feature gap vs existing components (162 245). - [ ] Define smallest measurable experiment, baseline, failure cases, cost/time and thresholds; do not modify held-out eval rubrics or release fixtures. - [ ] Decide ADOPT / ADAPT / DEFER / REJECT with evidence; only then create implementation tasks, if warranted. Related: 162 245. Labels indicate technical review, not release readiness.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/266"
     },
     "267": {
@@ -815,7 +815,7 @@
       "change_description": "Porównać wybrane wzorce z awesome-llm-apps z możliwościami Investment OS, Learning OS i innych domen. Wynikiem jest tabela overlap/gap, licencje, bezpieczeństwo i decyzja ADOPT/ADAPT/DEFER/REJECT; bez importu.",
       "acceptance_summary": "- [ ] Verify exact upstream directories, code licensing/dependencies/security before any reuse. - [ ] For each domain, record measured capability gap against existing code and workflow; note any overlap and reject redundant frameworks. - [ ] Select at most one low-cost bounded pilot if real demand justifies it; otherwise defer. - [ ] Preserve user-data isolation and source/evidence provenance. No unapproved external actions. - [ ] Record ADOPT/ADAPT/DEFER/REJECT, link to related pre-existing Issues. Historical proposal P2 is not a committed Project priority.",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A0 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/267"
     },
     "283": {
@@ -826,18 +826,18 @@
       "change_description": "1. Context before design. Establish what / why / for whom / desired change, ask or decision / setting (live talk vs leave-behind) / time / language / available evidence / restrictions / preferred brand / delivery format. Infer from existing brief rather than interrogating redundantly; ask only high-impact missing questions and surface assumptions; no final deck before decision-critical unknowns are resolved unless user explicitly approves provisional output. 2. Intent-specific storyline, not fixed agenda. Profiles: board decision, executive strategy, business case/investment committee, transformation roadmap, technical architecture, sales/pitch, workshop, keynote, training and research leave-behind. Support question-led, hypothesis-driven, SCQA/pyramid, problem→insight→options→ask, chronological/demo and teaching progressions; choose one based on audience and communication job. Do not impose consulting density on keynotes or teaching decks. 3. Research/evidence integrity. Reuse user docs, canonical analysis and existing workflow outputs; run bounded external research when materially required. Claims ledger with exact source,…",
       "acceptance_summary": "- [ ] Exact user-intent brief (audience, purpose, outcome/decision, constraints) before expensive execution; fewer questions when enough context. - [ ] Slide-title read-through reconstructs coherent argument; every analytical action title backed by slide evidence; disconfirming view/alternatives considered. - [ ] At least 3 distinct delivery profiles with materially different structure/density (board, persuasive/keynote, technical/teaching). - [ ] Traceable evidence ledger; zero fabricated external/client metrics or factual charts; bounded research and no leakage of confidential inputs. - [ ] Editable native deck in one verified tool (Figma Slides minimum); Canva adapter implemented and tested if user connects Canva. Any unsupported ability explicitly BLOCKED. - [ ] Deterministic…",
       "dependencies": "",
-      "architecture_reason": "A3 — koordynacja kilku zmian; szczegółowa klasyfikacja w podzadaniach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — program zmian zależnych, szczegółowy impact oceniany także w dzieciach. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/283"
     },
     "293": {
-      "type": "DISCOVERY",
-      "level": "A0",
+      "type": "EPIC",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[P1][REP-01] Report OS — long-form analytical reports, editable DOCX/PDF, independent review and verified delivery",
       "change_description": "- No compulsory PDF for every report; no compulsory PPTX or presentation. - No auto-publication/distribution to third parties. - No 40-page padding, academic structure or references just for appearance; use the minimum length needed for the decision and scope, while supporting true long form. - No separate strategy engine, duplicated research ledger, second chart renderer or new global database by default.",
       "acceptance_summary": "- [ ] No duplicate analysis/research/rendering engine; explicit routing and delegation to existing implemented services. - [ ] A report request does not automatically create slides; a request for a deck does not automatically produce a lengthy document. Report + deck request can reuse one versioned evidence pack. - [ ] Brief captures audience, purpose, decision/reader task, evidence, output length, format and privacy; avoids repeat questions. - [ ] At least 3 materially different report profiles (board strategy/decision, technical architecture, deep research) with appropriate narrative, methodology and detail. - [ ] Structured outline with section roles, linked claims, stable evidence IDs, sourced statistics, bibliography/notes, as-of and explicit uncertainty. - [ ] Reuse report-composer…",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — program zmian zależnych, szczegółowy impact oceniany także w dzieciach. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/293"
     },
     "296": {
@@ -848,7 +848,7 @@
       "change_description": "ID: IEX-01 — Interactive Experience OS (aka Interactive Results / Decision Experience) Priority: P1 architektura/kontrakty, P2 implementation pilot po stabilizacji source/evidence i bieżących prac; size L/XL etapami. Status: PROPOSED / DISCOVERY, not implemented / not runtime validated. Dodać trzeci, opcjonalny sposób komunikowania wyników Skills Factory obok Report OS 293 i Presentation OS 283: interaktywne doświadczenie webowe, od pojedynczego self-contained HTML po kompleksowy read-only analytical decision-room. Wyniki domen Strategy OS, OAF, Investing, Commerce etc. są up-stream; IEX tylko komponuje, prezentuje, wyjaśnia i umożliwia eksplorację. Nie zamienia ruchomych suwaków w nową, ukrytą strategię, nie wymyśla danych, zależności ani wskaźników. Docelowe zastosowania: - Explorable Report: długi raport jako interaktywny serwis z nawigacją po tezie, argumentacji, źródłach i drill-downie. - Decision Room: OAF/transformation/portfolio — klikane capability/strumienie wartości, scenariusze, roadmapy, zależności i trade-offy, z jawnym source/as-of/model. - Scenario Explorer: przełączanie parametrów, scenariuszy i wrażliwości, tylko…",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "PRES-01 283, REP-01 293, STR-16 225, EXI-04 244, PRO-08 201, CORE-02 183. Maintain R18 frozen tests/receipts separately.",
-      "architecture_reason": "A3 — koordynacja kilku zmian; szczegółowa klasyfikacja w podzadaniach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — program zmian zależnych, szczegółowy impact oceniany także w dzieciach. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/296"
     },
     "297": {
@@ -859,7 +859,7 @@
       "change_description": "- Single source-owned versioned DomainResult contract: result_id, revision, as_of, domain, workflow/source locator, evidence/finding/claim/option IDs, epistemic status, recommendation & approval state, caveats/conflicts, optional dataset/model references and access classification. - Consumer-neutral adapter: report/doc, slides, interactive web and future spreadsheet each map IDs to their own exhibit/sections; no default recalc or approval escalation. - Resolve duplicated design references between Report OS draft PR 295 (docs/architecture/content-to-artifact-contract.md) and STR-16 225. STR-16 owns domain-to-domain handoff; OUT-01 owns the minimum output-consumption interface, not investment/strategy decision semantics. - No global database or compulsory new storage. Version pin before reuse, provenance, permissions, unknowns and a UPSTREAM_REVIEW_REQUIRED response for material factual conflict. - Optional model_ref only for validated formulas/scenario engines; an interactive slider/Excel never becomes an independent analytical authority.",
       "acceptance_summary": "- [ ] Schema + portable, parseable JSON fixtures for valid/invalid/conflicting revisions and missing approvals; immutable ID references and no fictitious source verification. - [ ] Runtime-independent deterministic validation + tests where appropriate; no source claims strengthened by downstream medium. - [ ] Compatibility checklist with PR 284 (Presentation), PR 295 (Report), IEX-01 296, STR-16 225 and report-composer. - [ ] Exact versioning, no silent updates, per-artifact source revision and confidence. - [ ] Scope overlap reconciled, no parallel live \"canonical\" schema. No deployment claim. Dependencies: existing domain source/evidence contracts; shared data security assumptions. No automatic release: review source / unit CI first, real model/tool runtime later.",
       "dependencies": "",
-      "architecture_reason": "A3 — potencjalna zmiana kontraktów lub przepływów między komponentami; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/297"
     },
     "298": {
@@ -870,7 +870,7 @@
       "change_description": "- Interpret already-resolved output intent: chat, report, presentation, interactive_web, spreadsheet or requested combinations. Respect explicit user formats > convenience suggestions and preserve order/deduplicate. - Define named modes: ANALYZE_ONLY, PRESENT_EXISTING, ANALYZE_THEN_RENDER, MULTI_OUTPUT, EDIT_EXISTING. Domain analyses/strategy work are upstream, outputs consume the same source pack. If analysis is not available, BLOCKED_UPSTREAM not imaginary execution. - Separate semantic request resolution (model/person/tool to classify intent, with uncertainty) from deterministic policy validation (tiny script). For ambiguous classification, ask one material question instead of guessing a delivery medium. - Preflight target capabilities individually; mark NOT_RUN/BLOCKED when required provider unavailable, preserve supported targets independently, no cross-medium PASS propagation. - Single chart stays visual-output-design, a short chat memo stays report-composer, one slide edit stays Presentation OS, generic website belongs web-design. Spreadsheet P2/3 is NOT_IMPLEMENTED until approved.",
       "acceptance_summary": "- [ ] Small Python standard-library router takes structured, explicitly labeled intent and observed capabilities. It does not infer intent from keyword matching. - [ ] Discriminating unit tests: direct formats, multi-output, no accidental extras, unavailable tool, unsupported spreadsheet, domain-unknown, user-provided-pack, preserve IDs, ambiguity, edit intent, no default web publishing. - [ ] No changes to frozen R18 baseline/queue or runtime registry; consumer adapters remain draft. - [ ] Later host-model semantic routing E2E in new pinned candidate campaign; no static PASS substituted for model behavior. Depends on: OUT-01 provisional interface; domain OS remains analytical owner. PRES-01 283, REP-01 293, IEX-01 296.",
       "dependencies": "",
-      "architecture_reason": "A3 — potencjalna zmiana kontraktów lub przepływów między komponentami; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/298"
     },
     "299": {
@@ -881,7 +881,7 @@
       "change_description": "Create shared receipt vocabulary and acceptance matrix, not a fourth general reviewer skill. - Layer A upstream analytical integrity: provenance, claims, contradictions, evidence, scope/approval. - Layer B medium semantics: Report (chapters, footnotes, TOC and paginated Word/PDF); Presentation (storyline, per-slide/notes/native editability); Interactive (real controls, browser, a11y, numerical model, privacy); Spreadsheet (formulas/units/recalc if ever built); Chat (actual inline chart payload). - Layer C artifact and delivery integrity: actual generated file/URL, ability to reopen, compare source, inspect render, export fidelity, display/hosting publication evidence and explicit permission. - Shared severity CRITICAL/MAJOR/MINOR; per-check NOT_RUN/BLOCKED/UNVERIFIED/PASS/FAIL. Never aggregate unknowns to PASS; a style review cannot approve a strategy. - Reuse report-composer, visual-output-design, website-quality-review 201, skill-validation and current test/evidence infrastructure.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/299"
     },
     "300": {
@@ -892,7 +892,7 @@
       "change_description": "- ArtifactManifest per output: artifact_id, output_kind, source_result_id/revision, source_claim_ids, model_version?, provider_id/path, created_at, output_revision, privacy, quality_receipts, owner, publish_status. - Dependency graph/result snapshot diffs identify which artifacts are stale, not automatically inaccurate; separate stale state from material changed claim and approved rerender. - Plan REFRESH_REQUESTED → DIFF_REVIEW → RERENDER → QA → USER_APPROVAL → PUBLISH/SHARE; no writes to providers or auto-deployment without permission. - Reuse repo/GitHub/Drive/Cloudflare where actually appropriate; no mandatory new database or polling service. - Handle material source revision, citation retract, changed validated model, privacy revocation, provider missing and manual edits.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/300"
     },
     "301": {
@@ -903,7 +903,7 @@
       "change_description": "- First examine actual requirements for editable XLSX/Google Sheets deliverables that cannot be better served by Interactive Experience OS or an attached CSV/source-data export. - It would be an output adapter for already validated domain formulas/assumptions, not a new scenario valuation, financial or OAF reasoning engine. - Boundary: static tables/CSV/XLSX download; optional parameterized calculation sheet with transparent inputs/formulas/output and reproducible expected values; explicit security/hidden data provenance; version and cross-output consistency. - Reuse existing official spreadsheet authoring engines/connectors; avoid duplicating spreadsheet libraries and research engines.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/301"
     },
     "316": {
@@ -914,7 +914,7 @@
       "change_description": "Rozszerzyć etap product discovery / early screening w domenie Commerce o jawny, evidence-aware filtr potencjału produktu do sprzedaży DTC (inspirowany omawianymi w projekcie heurystykami bestsellerów / podejściem Daniela Borysewicza). Nie traktować tej listy jako zweryfikowanego, oficjalnego zestawu 8 zasad autora.",
       "acceptance_summary": "- [ ] Premium pet-hair remover vs tani generyk: wysoki WOW/demo, ale UNRESOLVED differentiation bez testu próbki → blokada płatnej skali/MOQ. - [ ] Produkt z widowiskowym demo i ujemnym contribution po CAC → FAIL economics, nie rekomendować do launch. - [ ] „Nudny” produkt z rzeczywistym problemem i mocną ekonomią nie odpada automatycznie za niski WOW. - [ ] Produkt bez repeat purchase może przejść, jeżeli unit economics i akwizycja są wystarczające. - [ ] Sukces na rynku USA lub viralowy film bez dowodu PL → HYPOTHESIS, nie PASS. - [ ] Brak danych o CAC, landed cost lub źródeł cen → UNRESOLVED, zero wymyślonych liczb. - [ ] Raport shortlisty pokazuje dlaczego kupią u nas, biggest blocker i pojedynczy następny test dla każdego kandydata. - [ ] Bez regresji w istniejących gate order,…",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/316"
     },
     "317": {
@@ -925,7 +925,7 @@
       "change_description": "Rozwinąć istniejące skills i workflowy domeny Commerce / eCommerce w Skills Factory o praktyczne wskazówki z dwóch materiałów użytkownika z 2026-10-11, tak aby wspierały pełny proces problem → discovery → ekonomia i sourcing → oferta/sklep → test kreacji i sprzedaży → decyzja o skalowaniu. Priorytet P1 (user requested, 2026-10-11). Nie tworzyć nowych skills bez wykazania luki — najpierw porównać aktualne source contracts, istniejące review/gates i regression tests.",
       "acceptance_summary": "- [ ] Macierz źródło+strona → wskazówka → existing skill / gap → decyzja adopt/adapt/defer; nie kopiować marketingowych twierdzeń jako faktów. - [ ] Screen kandydatów ocenia problem, wow/demo, 5 ad angles, przewagę nad generykami, margin/CAC headroom, repeat/upsell i low-touch oraz pojedynczy najtańszy next experiment (re-use 316). - [ ] Model 129/45/45/39 nie jest w skillu przedstawiony jako zysk netto bez VAT/fulfillment/returns/payment/other costs; unknown inputs remain unknown. - [ ] Przykład pet-hair remover vs tani generyk: bez testu funkcjonalnego brak potwierdzonej przewagi oraz blokada bulk MOQ / skali. - [ ] Przykład one-product store: flow landing, autentyczny proof, checkout PL, uczciwa oferta; brak wymyślonych opinii/sztucznego scarcity. - [ ] Przykład Ads: 3–5 niezależnych…",
       "dependencies": "",
-      "architecture_reason": "A3 — koordynacja kilku zmian; szczegółowa klasyfikacja w podzadaniach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — program zmian zależnych, szczegółowy impact oceniany także w dzieciach. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/317"
     },
     "319": {
@@ -936,7 +936,7 @@
       "change_description": "Specify optional technical context for timing, never a mandatory fundamental investment gate or trading instruction. No implementation in this issue.",
       "acceptance_summary": "- [ ] Optional path callable only for explicit technical/timing intention; long-term fundamental research continues without it. - [ ] Dataset quality checks gate calculations and no invented current price/earnings date. - [ ] Formulas and adjusted/unadjusted conventions documented; reproducible deterministic numerical output. - [ ] Scenarios labeled HYPOTHETICAL, no certainty claim, no trade execution. - [ ] Same-company thesis/valuation state never upgraded solely by RSI/MA breakout. - [ ] No canonical write by default.",
       "dependencies": "310 routing boundary, 231 investing audit, 303 authorization. Prefer isolated deterministic math tests before real-source integration. ---",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/319"
     },
     "320": {
@@ -947,7 +947,7 @@
       "change_description": "Specify deterministic hypothetical long paper-trade sizing for explicit stop-based setups, complementary to position-sizing-review. Do not replace strategic thesis/portfolio sizing or interpret a review trigger as a hard cap. No implementation yet.",
       "acceptance_summary": "- [ ] Deterministic formulas and fee models tested for fixed and percentage charges, including zero-fee baseline. - [ ] Final N simultaneously obeys risk budget, allocation cap and cash requirement after costs. - [ ] Missing policy/portfolio or unverified critical inputs block real portfolio size advice; hypothetical calculator may show labeled toy result from provided inputs. - [ ] No phantom 0% recommendation on missing data; zero shares from valid constraints explicitly explained. - [ ] Differentiate stop-based planned loss from maximum possible realized loss. - [ ] No live order placement, transaction entry or state change.",
       "dependencies": "Existing position-sizing-review and policy semantics; 231, 303 and 310. Source-of-truth policy remains canonical. ---",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/320"
     },
     "321": {
@@ -958,7 +958,7 @@
       "change_description": "Define release tests for the P1/P2 extensions while retaining current investment governance. Do not change existing baselines or claim runtime success without correlated traces.",
       "acceptance_summary": "- [ ] Baseline vs proposed behavior recorded for each impacted skill, with fixture IDs and expected results. - [ ] Zero unauthorized production writes/trades; no synthetic successful receipts. - [ ] Deterministic numeric fixtures pass; evidence-sanity blocks dependent outputs. - [ ] No look-ahead bias in as-of replays; historical audit snapshots immutable. - [ ] Failure/blocked/NOT_RUN differentiated from pass; source SHA and runtime trace correlated. - [ ] Explicit owner signoff before maturity/release claims.",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/321"
     },
     "325": {
@@ -969,7 +969,7 @@
       "change_description": "Przykłady trendów/bezpieczeństwa są synthetic hypotheses, nie twierdzenia o aktualnej częstości zdarzeń w Polsce ani rekomendacje produktów. Live research i product-specific evidence są wymagane dla faktycznych recommendations. Nie wymyślać cen, sprzedaży, TAM, CAC, sample size ani ochronnego działania produktów. Private source transcript nie jest publikowany. Status nie oznacza rozpoczętej implementacji, wykonanych testów ani gotowości produkcyjnej. Development przez dedykowany branch i PR, z test-design, scope checks, runtime evidence i release review zgodnie z istniejącym lifecycle. Bez merge/deploy/purchases.",
       "acceptance_summary": "- [ ] Brief określa rynek, horyzont, kanał/model, kapitał i ograniczenia operacyjne; brakujące ograniczenia pozostają UNKNOWN. - [ ] Mapa poszukiwań obejmuje zmiany demograficzne, ekonomiczne, technologiczne, środowiskowe, instytucjonalne oraz bezpieczeństwo. Obszary to kierunki poszukiwań, nie deklaracja występowania trendu. - [ ] Sygnał zawiera źródło/URL, datę publikacji i zdarzenia, geografię, zakres/populację, baseline, mechanizm zmiany potrzeby i dowody przeciwne. Rozróżnia trend strukturalny, sezonowość, pojedyncze zdarzenie i szum medialny. - [ ] Łączy źródła pierwotne (np. GUS/Eurostat, instytucje publiczne, dane sektorowe) z behawioralnymi i głosem klienta. Syndykowane kopie tej samej wiadomości nie liczą się jako niezależne źródła. - [ ] Każdy uruchomiony przebieg raportuje…",
       "dependencies": "- Pierwszy wycinek: aktualne kontrakty discovery i mapa covered/partial/missing przed zmianą. - Parent: 317; filtr produktu: 316; review domeny: 229; semantic/routing: 287. - Najpierw rozszerzenia istniejących procedur. Nowy skill tylko dla odrębnego recurring goal po skill-specification; deterministyczna normalizacja w kodzie, prywatny stan w…",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/325"
     },
     "326": {
@@ -980,7 +980,7 @@
       "change_description": "Przykłady trendów/bezpieczeństwa są synthetic hypotheses, nie twierdzenia o aktualnej częstości zdarzeń w Polsce ani rekomendacje produktów. Live research i product-specific evidence są wymagane dla faktycznych recommendations. Nie wymyślać cen, sprzedaży, TAM, CAC, sample size ani ochronnego działania produktów. Private source transcript nie jest publikowany. Status nie oznacza rozpoczętej implementacji, wykonanych testów ani gotowości produkcyjnej. Development przez dedykowany branch i PR, z test-design, scope checks, runtime evidence i release review zgodnie z istniejącym lifecycle. Bez merge/deploy/purchases.",
       "acceptance_summary": "- [ ] Nisza jest zdefiniowana jako konkretny segment × kontekst użycia × zadanie/problem × ograniczenie obecnego rozwiązania; nie jako ogólne 'bezpieczeństwo' albo 'seniorzy'. - [ ] Oddziela użytkownika, kupującego, płatnika, decydenta i cykl zakupowy; instytucjonalny zakup/usługa poza DTC ma osobny handoff albo OUT_OF_SCOPE. - [ ] Określa częstość/siłę/skutki problemu, bieżący workaround, koszt lub wysiłek workaroundu oraz przesłanki gotowości do zapłaty; obawa i wyświetlenia nie są dowodem zakupów. - [ ] Sprawdza mechanizm causal: czy produkt realnie redukuje nazwany problem i jaki dowód skuteczności jest wymagany. Dostępne alternatywy niefizyczne/usługowe mogą wygrać. - [ ] Bezpieczeństwo szkół jest hipotetycznym case, nie potwierdzonym trendem: oddziela kontakt/opiekę nad dzieckiem,…",
       "dependencies": "- CD-01: 325 - Parent: 317; filtr produktu: 316; review domeny: 229; semantic/routing: 287. - Najpierw rozszerzenia istniejących procedur. Nowy skill tylko dla odrębnego recurring goal po skill-specification; deterministyczna normalizacja w kodzie, prywatny stan w projekcie.",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/326"
     },
     "327": {
@@ -991,7 +991,7 @@
       "change_description": "Przykłady trendów/bezpieczeństwa są synthetic hypotheses, nie twierdzenia o aktualnej częstości zdarzeń w Polsce ani rekomendacje produktów. Live research i product-specific evidence są wymagane dla faktycznych recommendations. Nie wymyślać cen, sprzedaży, TAM, CAC, sample size ani ochronnego działania produktów. Private source transcript nie jest publikowany. Status nie oznacza rozpoczętej implementacji, wykonanych testów ani gotowości produkcyjnej. Development przez dedykowany branch i PR, z test-design, scope checks, runtime evidence i release review zgodnie z istniejącym lifecycle. Bez merge/deploy/purchases.",
       "acceptance_summary": "- [ ] Search plan używa nazw problemów, workaroundów i opisów frustracji w językach właściwych dla rynku/source markets; nie tylko 'winning products'. - [ ] Trianguluje rozwiązania i skargi klientów, lokalne substytuty/ceny, sourcing oraz źródła zakupowe/behawioralne. Recenzje, biblioteki reklam i listing nie dowodzą wolumenu sprzedaży ani rentowności. - [ ] Każdy rzeczywisty kandydat ma identyfikowalny model/SKU lub rodzinę z konkretnym dostawcą, dated link i warunki oferty. Nieznany SKU, cena lub MOQ pozostaje UNKNOWN; koncept oznaczony CONCEPT nie udaje dostępnego produktu. - [ ] Macierz pokazuje: problem → rozwiązanie obecne → luka → produkt → mechanizm korzyści → dowód → lokalna dostępność → przesłanka przewagi → biggest blocker. - [ ] Znalezienie produktu na Alibaba lub brak…",
       "dependencies": "- CD-02: 326 - Parent: 317; filtr produktu: 316; review domeny: 229; semantic/routing: 287. - Najpierw rozszerzenia istniejących procedur. Nowy skill tylko dla odrębnego recurring goal po skill-specification; deterministyczna normalizacja w kodzie, prywatny stan w projekcie.",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/327"
     },
     "328": {
@@ -1002,7 +1002,7 @@
       "change_description": "Przykłady trendów/bezpieczeństwa są synthetic hypotheses, nie twierdzenia o aktualnej częstości zdarzeń w Polsce ani rekomendacje produktów. Live research i product-specific evidence są wymagane dla faktycznych recommendations. Nie wymyślać cen, sprzedaży, TAM, CAC, sample size ani ochronnego działania produktów. Private source transcript nie jest publikowany. Status nie oznacza rozpoczętej implementacji, wykonanych testów ani gotowości produkcyjnej. Development przez dedykowany branch i PR, z test-design, scope checks, runtime evidence i release review zgodnie z istniejącym lifecycle. Bez merge/deploy/purchases.",
       "acceptance_summary": "- [ ] Rejestr ma stable ID, segment/problem, rodzinę produktu, źródła/as-of, wcześniejszą decyzję, przyczynę odrzucenia/odroczenia oraz warunek ponownego otwarcia. - [ ] Łączy duplikaty semantyczne na poziomie segment × problem × rozwiązanie, z czytelnym uzasadnieniem i możliwością korekty. Zmieniona marka/nazwa nie jest nową niszą. - [ ] Powrót do pomysłu wymaga dowodu co się zmieniło: lokalny popyt, koszt, produkt, kanał, segment, regulacja lub jakość. Sam upływ czasu/inna nazwa nie wystarcza. - [ ] Świeży scan pokazuje delta względem supplied history, zmienione hipotezy i powody pominięcia; dywersyfikacja nie wymusza słabszych pomysłów. - [ ] Zapis tylko do jawnie autoryzowanego project target z receipt; analiza nie nadaje zgody na zapis. Bez historii zwraca deduplikację w obrębie…",
       "dependencies": "- CD-02: 326 - Parent: 317; filtr produktu: 316; review domeny: 229; semantic/routing: 287. - Najpierw rozszerzenia istniejących procedur. Nowy skill tylko dla odrębnego recurring goal po skill-specification; deterministyczna normalizacja w kodzie, prywatny stan w projekcie.",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/328"
     },
     "329": {
@@ -1013,29 +1013,29 @@
       "change_description": "Przykłady trendów/bezpieczeństwa są synthetic hypotheses, nie twierdzenia o aktualnej częstości zdarzeń w Polsce ani rekomendacje produktów. Live research i product-specific evidence są wymagane dla faktycznych recommendations. Nie wymyślać cen, sprzedaży, TAM, CAC, sample size ani ochronnego działania produktów. Private source transcript nie jest publikowany. Status nie oznacza rozpoczętej implementacji, wykonanych testów ani gotowości produkcyjnej. Development przez dedykowany branch i PR, z test-design, scope checks, runtime evidence i release review zgodnie z istniejącym lifecycle. Bez merge/deploy/purchases.",
       "acceptance_summary": "- [ ] Ścieżka: signal → changed need → problem/segment/payer → niche → real solutions → 316 screening → staged validation → recommendation. - [ ] Karta kandydata zawiera source signal+date, lokalny problem i płatnika, konkretny produkt/link, substytuty i przewagę, ekonomię/UNKNOWN, supply/regulatory blockers oraz dowód przeciw tezie. - [ ] Decision state pozostaje BADAĆ TERAZ / TESTOWAĆ / ODŁOŻYĆ / ODRZUCIĆ. Forecast i hipoteza nie udają VERIFIED; konkretny test może weryfikować problem zamiast kupować ruch. - [ ] Najtańszy test wskazuje jedną decision-critical hypothesis, interwencję, obserwację, kryterium falsyfikacji i warunek kolejnego wydatku. Budżet/próba mają supplied lub evidence-based podstawę. - [ ] Kończy research gdy empirical unknown jest tańszy do rozstrzygnięcia testem;…",
       "dependencies": "- CD-01: 325 - CD-02: 326 - CD-03: 327 - CD-04: 328 - Parent: 317; filtr produktu: 316; review domeny: 229; semantic/routing: 287. - Najpierw rozszerzenia istniejących procedur. Nowy skill tylko dla odrębnego recurring goal po skill-specification; deterministyczna normalizacja w kodzie, prywatny stan w projekcie.",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/329"
     },
     "330": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[COM][P1][CD-06] Zweryfikować trafność i różnorodność discovery na porównywalnym benchmarku",
       "change_description": "Przykłady trendów/bezpieczeństwa są synthetic hypotheses, nie twierdzenia o aktualnej częstości zdarzeń w Polsce ani rekomendacje produktów. Live research i product-specific evidence są wymagane dla faktycznych recommendations. Nie wymyślać cen, sprzedaży, TAM, CAC, sample size ani ochronnego działania produktów. Private source transcript nie jest publikowany. Status nie oznacza rozpoczętej implementacji, wykonanych testów ani gotowości produkcyjnej. Development przez dedykowany branch i PR, z test-design, scope checks, runtime evidence i release review zgodnie z istniejącym lifecycle. Bez merge/deploy/purchases.",
       "acceptance_summary": "- [ ] Zamrożony zestaw obejmuje 3 różne klasy zmian i przypadki: głośny szum, brak local evidence, tani generyk, institutional payer, brak dostawcy, stare/sprzeczne źródła i ponownie podany pomysł. - [ ] Jawne miary: traceability od sygnału do produktu, evidence quality, lokalny problem/płatnik, actionability next test, liczba semantycznych duplikatów, reintroduced rejects bez delta, false promotion i koszt/czas jeśli znany. - [ ] Denominator, zakres i assessor rubric jawne w evaluator lane, niewidoczne dla executor. Nie premiować novelty kosztem trafności; nie wymyślać uplift/skuteczności sprzedaży. - [ ] Najpierw jedno pionowe source-level pilot, później exact-version runtime porównanie. Istniejąca kampania 317 nie jest dowodem dla niezaimplementowanego discovery. - [ ] NOT_RUN…",
       "dependencies": "- CD-05: 329 - Parent: 317; filtr produktu: 316; review domeny: 229; semantic/routing: 287. - Najpierw rozszerzenia istniejących procedur. Nowy skill tylko dla odrębnego recurring goal po skill-specification; deterministyczna normalizacja w kodzie, prywatny stan w projekcie.",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/330"
     },
     "615": {
-      "type": "EPIC",
+      "type": "IMPLEMENT",
       "level": "A3",
       "review": "PROPOSED",
       "title": "[Iteration ES-01][PLANNED] External Skills Supply Chain, domain adoption & catalog provenance",
       "change_description": "A. Capability provenance schema, lineage, license, ownership and derived-vs-source identity. B. External discovery/intake, threat scanning, immutable version pinning and update detection. C. Compatibility/overlap matching, skill adaptation, evaluation and lifecycle integration. D. Site/Cloud Next catalog UI and filters for OWN / EXTENDED / IMPORTED / COMPOSED, with clear maturity and channel availability separately. E. Domain pilots and refactoring: Presentation OS first (Marp/HTML/PPTX/LibreOffice editing, theme/asset registry), then Report/Web Design/OAF/Investment. F. Cross-channel packaging, migration, regression, release gates and documentation.",
       "acceptance_summary": "- Every skill/workflow has source provenance classification or explicit UNKNOWN with no falsely inferred ownership. - Imported/extended capability has license/source revision/sha, threat review, pinned dependency, safe update policy and reproducible manifest. - No elevation of maturity, runtime availability or trust from classification alone. - Site visibly distinguishes provenance from maturity and channel support; filters/detail lineage work on desktop/mobile and unknown/partial states. - Presentation OS E2E proof includes external-theme/skill adapter, Markdown/Marp, HTML, native/editable PPTX where required, LibreOffice roundtrip tests, source/exhibit fidelity, regression receipts; no claim of editable elements when flattened. - Cross-channel validation uses exact candidate revisions,…",
       "dependencies": "",
-      "architecture_reason": "A3 — koordynacja kilku zmian; szczegółowa klasyfikacja w podzadaniach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/615"
     },
     "618": {
@@ -1046,7 +1046,7 @@
       "change_description": "Add decision engine to compare candidate skill against current capabilities by trigger, output, tools, dependencies, domain semantics and conflicts. Decisions: REUSE_EXISTING / IMPORT / EXTEND / COMPOSE / REJECT, with evidence and human review for derivatives. Adapt to repo SKILL.md contract, progressive disclosure resources, runtime-specific dependency behavior, permission limits, explicit trigger/nontrigger and failure states. Generate scoped PR proposal; do not automatically author directly to production. Preserve original third-party license and precise change lineage. Treat existing skill-development workflow as canonical orchestration. Acceptance: same-function duplicate fixture rejected, complementary extension preserved, conflict case escalates, adapter produces portable valid package, negative routing cases distinguish old/new capability. Dependencies: ES-01, ES-02; skill-development, skill-specification, skill-authoring, ENG-18 162.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/618"
     },
     "619": {
@@ -1057,7 +1057,7 @@
       "change_description": "Build pinned-upstream update detection and source-diff review, deprecation and compatibility gates; compare adapted candidate versus accepted baseline and no-skill where appropriate. Connect to existing static/routing/behavior/regression/eval receipts, exact source->package->manifest digest, security re-review and human approval. Keep downstream skill and workflow dependency impact graph and rollback to accepted version. No silent updates, no test rubric leak, no automatic promotion. Acceptance: upstream change triggers NOT_READY, no change stays pinned, regression FAIL blocks, NOT_RUN cannot become PASS, approved rollback restores previous exact artifact, cross-channel matrix. Reuse: ENG-18 162, ENG-22 335, AUD-04 289 and lifecycle validators.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/619"
     },
     "621": {
@@ -1068,7 +1068,7 @@
       "change_description": "Audit existing Presentation OS components and PRES-02..08 608-614; do not duplicate canonical presentation model/renderers. Define external skill/theme/render adapter slots with provenance at component level, including own vs extended/imported templates, fonts/license, charts/assets/SVG, evidence and narrative. Pilot external skill and external style sources alongside Marp Markdown->HTML/PDF/PPTX and native slide generation. Retain LibreOffice roundtrip as a validation/editing path for existing PPTX; verify editable-native objects versus rasterized/flattened elements, fidelity, source reproducibility and correct change propagation into dependent outputs. Do not claim Marp PPTX is natively editable without per-element evidence. Document when Presentation OS switches/refactors to extension/composition versus building own skill. Acceptance: E2E fixture external+own provenance, Markdown source; HTML render; PPTX and LibreOffice open/edit/re-save check; chart/evidence consistency, visual QA, licensing, regression and decision matrix. Include exact limitation disclosure per format. Dependencies: ES-01..04, PRES-01 283, PRES-02..08…",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A2 — projektowane rozszerzenie komponentu/skilla lub capability. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/621"
     },
     "622": {
@@ -1079,7 +1079,7 @@
       "change_description": "Perform domain-by-domain inventory of external skills/repos/assets already adopted or proposed; classify OWN/IMPORTED/EXTENDED/COMPOSED/UNKNOWN per component with license, dependency, source revision and behavioral overlap. Refactor where useful to reusable adapters/composed workflows, not wholesale rewrite. Pilot Report OS document templates, Web Design UI libraries, OAF modeling/Archify patterns, Investment OS analytics/indicator logic; separate deterministic calculations from prompts; route domain-specific verification and avoid data hallucinations. Explicitly capture scope/change proposal for Career, Commerce, Strategy and Learning (defer low-ROI migration). Acceptance: evidence-backed inventory for four primary OS domains, at least one safe migrated/extended/composed representative per selected pilot domain OR explicit no-go reason, routing and behavioral regression, no loss of existing artifact contracts; published decision log / migration plan. Dependencies: ES-01..04, UX-01 422, STR-22 450, existing domain backlog.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A3 — potencjalna zmiana kontraktów lub przepływów między komponentami; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/622"
     },
     "623": {
@@ -1090,7 +1090,7 @@
       "change_description": "Prepare scope-locked final acceptance matrix per docs/governance/ITERATION-DELIVERY.md, with repository-level sources and downstream dependency contracts. Validate exact main SHA + Lab build + site provenance, and production/channel packaging separately. Include hostile import, license unknown/reject, extension-vs-own ambiguity, duplicate/matching, changed upstream revision, missing resource, malformed frontmatter, routing near miss, composite lineage, mobile/desktop Site filters, Presentation editable/flattened variants, rollback and critical unrelated regressions. Collect tool/runner traces and exact-source receipts; final decision must preserve PASS/FAIL/NOT_RUN/BLOCKED. Record successor incremental work and avoid promoting automatically. Acceptance: reviewed candidate matrix with observed receipts, explicit blocker list, risk acceptance and terminal closure only under governance rules. Runtime NOT_RUN blocks required acceptance. Dependencies: ES-01..07; ENG-22 335, AUD-01 286, AUD-04 289.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A1 — zmiana lokalna w istniejącej zdolności; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/623"
     },
     "673": {
@@ -1101,95 +1101,95 @@
       "change_description": "Migrate all 79 source skills from the 2026-11-13 source audit to a mandatory XML-structured instruction contract, retaining canonical Agent Skills-compatible SKILL.md YAML frontmatter, Markdown packaging, progressive disclosure and runtime/channel behavior. Full semantic quality and runtime acceptance required: changing text markers is NOT completion. Baseline inventory: 79 source skills: P0=5, P1=13, P2=17, P3=44. Refer to source CATALOG.md; audit date 2026-11-13. Freeze the exact source SHA and per-skill inventory in a committed versioned migration manifest at start, and reconcile any catalog changes before claiming 100% coverage. Existing source audit: attached in the Skills Factory project conversation; do not infer a project file was committed to git.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A3 — koordynacja kilku zmian; szczegółowa klasyfikacja w podzadaniach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — program zmian zależnych, szczegółowy impact oceniany także w dzieciach. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/673"
     },
     "674": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-01][P1] XML migration: P1 — Investing & Strategy (7 skills)",
       "change_description": "- investing (4): investment-record-store, market-opportunity-scan, security-underwriting, thesis-monitor - strategy-ea (3): financial-modeling, market-economics, strategy-economics",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 7 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 7 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 7/7 exact skills and classifications: static verified, behavioral verified, blocked, release…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/674"
     },
     "675": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-02][P1] XML migration: P1 — External tools & creative (3 skills)",
       "change_description": "- media (1): creative-generation - seo (1): seo-research - web-design (1): interface-design",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 3 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 3 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 3/3 exact skills and classifications: static verified, behavioral verified, blocked, release…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/675"
     },
     "676": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-03][P1] XML migration: P1 — Report & Presentation (3 skills)",
       "change_description": "- meta (2): report-composer, visual-output-design - presentations (1): presentation-slide-authoring",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 3 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 3 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 3/3 exact skills and classifications: static verified, behavioral verified, blocked, release…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/676"
     },
     "677": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-04][P2] XML migration: P2 — Decision, Career & Foundation exceptions (8 skills)",
       "change_description": "- career (2): company-context-research, process-update - investing (2): investor-pattern-research, trend-theme-research - meta (1): skills-factory-diagnostic - oaf (3): evidence-loop-review, global-local-model-review, operating-model-review",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 8 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 8 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 8/8 exact skills and classifications: static verified, behavioral verified, blocked, release…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/677"
     },
     "678": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-05][P2] XML migration: P2 — Presentation & Report drafts (9 skills)",
       "change_description": "- presentations (6): presentation-brief, presentation-deck-review, presentation-evidence-review, presentation-exhibit-design, presentation-export-verification, presentation-storyline - reports (3): report-document-architecture, report-document-authoring, report-document-review",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 9 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 9 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 9/9 exact skills and classifications: static verified, behavioral verified, blocked, release…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/678"
     },
     "679": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-06][P3] XML migration: P3 — Career & Commerce (15 skills)",
       "change_description": "- career (6): executive-role-evaluator, cv-gap-analysis, cv-tailoring, interview-brief, job-discovery, job-validity-check - commerce (9): problem-demand-validation, unit-economics-review, acquisition-fit-review, competition-landscape-review, supplier-viability-review, market-transferability-review, product-opportunity-discovery, differentiation-review, commerce-regulatory-risk-review",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 15 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 15 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 15/15 exact skills and classifications: static verified, behavioral verified, blocked,…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/679"
     },
     "680": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-07][P3] XML migration: P3 — Investing & OAF (21 skills)",
       "change_description": "- investing (9): decision-journal-update, investment-attention-triage, investment-policy-design, portfolio-state-review, position-sizing-review, thesis-challenge, valuation-scenario-review, historical-decision-replay, technical-structure - oaf (12): decision-bottleneck-analysis, decision-rights-review, governance-design, architecture-review, capability-gap-analysis, capability-map-review, portfolio-health-review, portfolio-prioritization, transformation-blueprint, strategy-to-execution-diagnostic, kpi-quality-review, organizational-interface-review",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 21 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 21 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 21/21 exact skills and classifications: static verified, behavioral verified, blocked,…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/680"
     },
     "681": {
       "type": "IMPLEMENT",
-      "level": "A2",
+      "level": "A3",
       "review": "PROPOSED",
       "title": "[XML-08][P3] XML migration: P3 — Web design, Meta & Strategy (8 skills)",
       "change_description": "- meta (1): skill-specification - strategy-ea (1): value-realization - web-design (6): accessibility-gate, design-critique, experience-design-routing, implementation-brief, visual-regression-review, website-quality-review",
       "acceptance_summary": "- [ ] Freeze baseline SHA, exact list of 8 skill source paths/versions, comparator and expected behavior. - [ ] Convert all 8 SKILL.md bodies to semantic XML-structured instruction contract; preserve tool/trigger behavior and metadata. - [ ] Validate XML syntax+meaning, source/trust delimiters, conditionals, required outputs and production-safe packaging. - [ ] Run risk-proportionate positive, near-miss, failure, prompt-injection and regression cases; verify each exact version where behavior changed. - [ ] Store per-skill case receipts and mandatory strengths/weaknesses/reasoning/score 0-10 or NOT_SCORABLE; record before/after deltas only when comparable. - [ ] Update batch coverage matrix with 8/8 exact skills and classifications: static verified, behavioral verified, blocked, release…",
       "dependencies": "",
-      "architecture_reason": "A2 — planowane rozszerzenie istniejącej zdolności/adaptera; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/681"
     },
     "682": {
@@ -1200,18 +1200,18 @@
       "change_description": "[XML-09][P0] Migrate 5 Meta quality-control skills and establish canonical XML grammar, parser, template & compatibility",
       "acceptance_summary": "- [ ] Frozen main SHA, documented canonical XML grammar/schema and required/conditional section matrix. - [ ] Static validator + authoring template/scaffolder, positive/negative fixtures and nonempty meaningful-content checks. - [ ] All 5/5 P0 meta skills XML migrated with per-skill source SHA, semantic diff and evidence. - [ ] Hybrid 0–10 Report Contract (strengths/weaknesses/reasoning/score) and hard gates exercised with known arithmetic and missing-evidence examples. - [ ] Agent Skills loader, Lab/production/mobile-safe/plugin/site compatibility validated against exact packages; no lost routing, tool permission, eval rubric leakage or user intent precedence. - [ ] Regression and security checks, independent review, rollback and explicit separate release authorization recorded. No…",
       "dependencies": "",
-      "architecture_reason": "A3 — potencjalna zmiana kontraktów lub przepływów między komponentami; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/682"
     },
     "683": {
       "type": "DISCOVERY",
-      "level": "A0",
+      "level": "A1",
       "review": "PROPOSED",
       "title": "[XML-10][GATE] Independent 79/79 XML conformance, behavior, security, channel and release audit",
       "change_description": "[XML-10][GATE] Independent 79/79 XML conformance, behavior, security, channel and release audit",
       "acceptance_summary": "1. Recompute source inventory against starting frozen baseline (79 = 5 P0 + 13 P1 + 17 P2 + 44 P3) and current catalog. Every source has exactly one owner/migration issue; new/renamed/retired sources must be reconciled explicitly. 2. Check 79/79 SKILL.md against mandatory semantic XML structure (not XML-looking decorative examples), unchanged correct YAML frontmatter, canonical tag grammar, instruction coverage, user-goal routing and expected output/stop/fallback. Verify any conversion adapter does not lose semantics in channel manifests. 3. Risk-scoped security tests on malicious source content, fake XML closers, tool calls, external write approval, data provenance, credentials; compare true behavior vs frozen baseline rather than assuming tag security. 4. Evaluate source-pinned…",
       "dependencies": "",
-      "architecture_reason": "A0 — analiza lub ocena, bez autoryzacji zmian w systemach; klasyfikacja wstępna według zakresu zadania, wymaga weryfikacji aktualnego main",
+      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/683"
     }
   }
