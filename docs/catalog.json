@@ -16,7 +16,9 @@
     "runtime_installation": "NOT_OBSERVED",
     "availability_semantics": "Source maturity and declared channels do not prove package inclusion or installed runtime availability.",
     "source_workflow_count": 19,
-    "registered_workflow_count": 19
+    "registered_workflow_count": 19,
+    "provenance_schema_version": 1,
+    "provenance_registry_sha256": "c22f94c64e39e03d592039000371dfc824304d447b32c8d3e87cdfcf6422cc11"
   },
   "skills": [
     {
@@ -27,7 +29,42 @@
       "description": "Research factual company context relevant to executive technology opportunities, including scale, revenue, headcount, ownership, leadership, transactions, strategy and technology organization. Use when the user asks for company facts or organizational context. Do not evaluate role attractiveness, candidate fit, career value, mandate quality or recommended recruitment actions unless the user explicitly asks what the company context means for a specific role; in that case hand off to executive-role-evaluator.",
       "source": "skills/career/company-context-research/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/company-context-research/SKILL.md",
+        "source_sha256": "258ad0634f3cd95d3637af99fe202391f5059276eb6f01137ad1bb517c13531c",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "cv-gap-analysis",
@@ -37,7 +74,42 @@
       "description": "Compare an approved mastery CV with a target executive technology role to identify evidence-backed strengths, missing proof, weak alignment and narrative gaps before tailoring. Use after a role is worth pursuing and before rewriting the CV.",
       "source": "skills/career/cv-gap-analysis/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/cv-gap-analysis/SKILL.md",
+        "source_sha256": "c47deb507d67ee2d44a12db748f7431e030ffe6de1949789e248aae64b80146b",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "cv-tailoring",
@@ -47,7 +119,42 @@
       "description": "Tailor an approved mastery CV to one specific executive technology role while preserving factual accuracy, seniority and evidence. Use after cv-gap-analysis; do not invent experience, inflate scope or optimize for keywords at the expense of credibility.",
       "source": "skills/career/cv-tailoring/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/cv-tailoring/SKILL.md",
+        "source_sha256": "357ff21c2c215a54385bb0df4b3588efe51e17fece7709a9e42a1ba16a6d9574",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "executive-role-evaluator",
@@ -57,7 +164,42 @@
       "description": "Evaluate senior and executive technology job opportunities based on real mandate, organizational scope, candidate fit, career value, risk and evidence quality. Use when assessing whether an executive technology role is worth pursuing, comparing opportunities, updating an assessment after recruiter/interview evidence, or identifying decision-critical unknowns. Do not use for company research alone, CV tailoring alone, interview preparation alone, generic job matching, or factual company research that does not explicitly ask for role implications.",
       "source": "skills/career/executive-role-evaluator/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/executive-role-evaluator/SKILL.md",
+        "source_sha256": "3f88b64b1f75635e982a9a9c7342c3d97a488e495c5b44c3a6b019839ae692bd",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "interview-brief",
@@ -67,7 +209,42 @@
       "description": "Prepare a concise executive interview brief from an evaluated role, company context and candidate profile, including likely themes, evidence-backed talking points, risks and high-value questions. Use before recruiter, hiring-manager or executive interviews.",
       "source": "skills/career/interview-brief/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/interview-brief/SKILL.md",
+        "source_sha256": "6e819dcd0c1a8522e03ccc98e2f01c0594c9409107367dcbfbe448485503fce5",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "job-discovery",
@@ -77,7 +254,42 @@
       "description": "Find current senior and executive technology roles from approved sources using explicit career filters, remove obvious mismatches and duplicates, and return a shortlist for validity checking. Use for role discovery, not deep role evaluation or company research.",
       "source": "skills/career/job-discovery/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/job-discovery/SKILL.md",
+        "source_sha256": "c719f4bd50ad62dbc626e128749f87420bb0cbf179b0b308d895fce600158091",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "job-validity-check",
@@ -87,7 +299,42 @@
       "description": "Verify whether a known job opportunity is still active, current, unique and materially unchanged across employer, ATS and aggregator sources. Use before spending time on role evaluation, company research or CV tailoring.",
       "source": "skills/career/job-validity-check/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/job-validity-check/SKILL.md",
+        "source_sha256": "c32e5a77a051377811edd2ef2db2fda14e1ca59a47e8b272bb5ff71219269b88",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "process-update",
@@ -97,7 +344,42 @@
       "description": "Convert new recruitment-process information into a concise structured status update with current stage, evidence, next action, owner/date and changes to prior assumptions. Use after recruiter calls, interviews, emails or offer updates.",
       "source": "skills/career/process-update/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/career/process-update/SKILL.md",
+        "source_sha256": "0eeb0d901a1d648d7436081c90da506634bccb1b6a41be6805bce5c46a5771e3",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "problem-demand-validation",
@@ -107,7 +389,42 @@
       "description": "Validate whether a target customer problem is frequent, painful and purchase-relevant enough to justify product testing. Use before assuming category interest equals demand.",
       "source": "skills/commerce/demand/problem-demand-validation/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/demand/problem-demand-validation/SKILL.md",
+        "source_sha256": "5cde379c55e713a34caf489941f792ce42f7aec62c5db758762619ef72dcb308",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "unit-economics-review",
@@ -117,7 +434,42 @@
       "description": "Evaluate e-commerce unit economics including VAT, COGS, freight, fulfilment, fees, returns and CAC headroom. Use before recommending a product test or scale decision.",
       "source": "skills/commerce/economics/unit-economics-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/economics/unit-economics-review/SKILL.md",
+        "source_sha256": "e82e12ac53afc203678c7482b2b89668c2bee948939db4ea18e32853b6c9c3d7",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "acquisition-fit-review",
@@ -127,7 +479,42 @@
       "description": "Assess whether a product is suitable for paid social and other direct-response acquisition based on demo strength, hooks, creative depth and CAC headroom. Use when channel fit matters after the offer and economics are at least provisionally defined.",
       "source": "skills/commerce/growth/acquisition-fit-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/growth/acquisition-fit-review/SKILL.md",
+        "source_sha256": "fdb3093c52e2340263bf257c75f6ca354c8bb173ce24984d089e2b4eda0dc656",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "competition-landscape-review",
@@ -137,7 +524,42 @@
       "description": "Review competition around an e-commerce opportunity across product, price, brand, distribution and acquisition. Use before calling a market empty or saturated.",
       "source": "skills/commerce/market/competition-landscape-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/market/competition-landscape-review/SKILL.md",
+        "source_sha256": "617861238cd5a440187f431964e5ff3d98def7b8a115f083e671459eea95f84a",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "supplier-viability-review",
@@ -147,7 +569,42 @@
       "description": "Assess whether sourcing, MOQ, lead time, quality, packaging and supplier concentration make a product viable to test and scale. Use when supplier or inventory risk can change the launch decision.",
       "source": "skills/commerce/operations/supplier-viability-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/operations/supplier-viability-review/SKILL.md",
+        "source_sha256": "ef3e42439b04734831b7179f3f46034c6351012c93108cecf31760d6fab2eec1",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "market-transferability-review",
@@ -157,7 +614,42 @@
       "description": "Review whether a product or business model proven in one market is plausibly transferable to another market, especially US-to-Poland, without assuming foreign traction will repeat locally. Use when the thesis depends materially on source-market success.",
       "source": "skills/commerce/opportunity/market-transferability-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/opportunity/market-transferability-review/SKILL.md",
+        "source_sha256": "9df2070e6741467f189370642c011f144132f9ff78a96ce7ef9a30692f5ba425",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "product-opportunity-discovery",
@@ -167,7 +659,42 @@
       "description": "Discover product opportunity hypotheses from customer problems, category signals and market gaps. Use for broad e-commerce idea generation before deep validation; do not use when a concrete product already needs an end-to-end business decision.",
       "source": "skills/commerce/opportunity/product-opportunity-discovery/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/opportunity/product-opportunity-discovery/SKILL.md",
+        "source_sha256": "0f4f140e4d90bf2ef8988fabe68eeb73798ccea2448927a50e6a5c9907c4b3f1",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "differentiation-review",
@@ -177,7 +704,42 @@
       "description": "Test whether an e-commerce offer has a credible reason to win versus cheap generics and established brands. Use when premium pricing, brand positioning or commodity risk matters.",
       "source": "skills/commerce/product/differentiation-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/product/differentiation-review/SKILL.md",
+        "source_sha256": "0df765bb7aaa2e788ab0845b6a46805ec6970b7ef783d2c515ad4ad0d0907b67",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "commerce-regulatory-risk-review",
@@ -187,7 +749,42 @@
       "description": "Triage regulatory, claims, safety and compliance risk for consumer e-commerce products. Use to decide whether complexity is proportionate before deeper legal review; do not use this skill as legal clearance.",
       "source": "skills/commerce/risk/commerce-regulatory-risk-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/commerce/risk/commerce-regulatory-risk-review/SKILL.md",
+        "source_sha256": "b37f82a397732c45391070ff8273a663e195190ad12e128f649e9f6496982c22",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "decision-journal-update",
@@ -197,7 +794,42 @@
       "description": "Append a structured investment decision record capturing what was known, decided and expected at the time, then later support ex-post review of thesis, timing and sizing quality. Use after meaningful buy/add/reduce/exit/watchlist decisions or when reviewing past decision quality. Do not rewrite old decisions using hindsight.",
       "source": "skills/investing/decision-journal-update/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/decision-journal-update/SKILL.md",
+        "source_sha256": "c68dfb207056a6f09088392de6db2182439086a043f352167a27686d838815fc",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "historical-decision-replay",
@@ -207,7 +839,42 @@
       "description": "Use when evaluating historical investment decisions from immutable dated snapshots with explicit no-look-ahead controls and simple baselines.",
       "source": "skills/investing/historical-decision-replay/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/historical-decision-replay/SKILL.md",
+        "source_sha256": "6a730dc4a229dbbc4a93bcdf4b3d71bb46affef3ec3cd41150ca63f61b288161",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-attention-triage",
@@ -217,7 +884,42 @@
       "description": "Use when new market, company, industry or portfolio information needs triage into a short attention queue based on materiality, thesis impact, valuation/expectations and decision relevance. Use structured research plugins for breadth, Firecrawl/primary sources for verification, and canonical Investment OS history for change detection.",
       "source": "skills/investing/investment-attention-triage/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/investment-attention-triage/SKILL.md",
+        "source_sha256": "230d5e9160a6c649b82e9224dc0a08b747b0046ca00a8fc053b253f7aefa5089",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-policy-design",
@@ -227,7 +929,42 @@
       "description": "Design or revise a personal investment policy from the investor's goals, liquidity, risk capacity, horizon, account structure and demonstrated behavior. Use when defining portfolio buckets, risk budget, concentration limits, sizing rules, review cadence or decision principles. Do not use for evaluating one security or reacting to one market move.",
       "source": "skills/investing/investment-policy-design/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/investment-policy-design/SKILL.md",
+        "source_sha256": "5014f6be5829c024631a5db4535ce56b573670ddf2b28684f960cbcbc008f785",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-record-store",
@@ -237,7 +974,42 @@
       "description": "Read and persist canonical Investment OS records in Supabase/Postgres, including portfolio state, transactions, research, signals, theses, decisions, policy, themes and sources. Use whenever an investing workflow needs durable state or history. Google Drive is raw-document/legacy migration storage, not the canonical relational store after cutover.",
       "source": "skills/investing/investment-record-store/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/investment-record-store/SKILL.md",
+        "source_sha256": "8cfcf39dafb8135595862e443368b169ddaa723d96a4a35def8ae745f354ff38",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investor-pattern-research",
@@ -247,7 +1019,42 @@
       "description": "Research how credible investors or investment organizations make decisions and extract transferable principles, archetypes and failure conditions. Use when building investment policy or learning from investors such as Buffett, Marks, Druckenmiller, Smith, Lynch or comparable practitioners. Do not copy their current holdings as recommendations.",
       "source": "skills/investing/investor-pattern-research/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/investor-pattern-research/SKILL.md",
+        "source_sha256": "16245ecab1b2b4f45f31aa6a3288eba573acecdad5f75792233d85d313c39a39",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "market-opportunity-scan",
@@ -257,7 +1064,42 @@
       "description": "Screen the XTB-investable equity and ETF universe for research candidates using changes in fundamentals, valuation, expectations, price behavior and portfolio relevance. Use for broad opportunity hunting or change detection. Prefer installed structured equity-research plugins for breadth, Firecrawl/primary sources for verification, and canonical portfolio context from investment-record-store. Do not issue buy/sell instructions.",
       "source": "skills/investing/market-opportunity-scan/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/market-opportunity-scan/SKILL.md",
+        "source_sha256": "ffee18999df6af45993209e6cc206dd4845978bf1e0d9a62c7e034b4637d2c8f",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "portfolio-state-review",
@@ -267,7 +1109,42 @@
       "description": "Reconstruct and review the current investment portfolio plus historical snapshots, exposures and material changes from canonical Investment OS data. Use when assessing concentration, diversification, overlap, cash deployment, risk changes or what changed since a prior snapshot. Prefer relational Supabase views and analytics over spreadsheet logic.",
       "source": "skills/investing/portfolio-state-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/portfolio-state-review/SKILL.md",
+        "source_sha256": "3e0a1220ad70214d4e3fbe81ded0876eab11f158037f1bb727001b16ba869c8a",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "position-sizing-review",
@@ -277,7 +1154,42 @@
       "description": "Determine a decision-support position-size band from investment policy, thesis strength, uncertainty, valuation, downside, volatility, correlation and current portfolio concentration. Use after underwriting and challenge when deciding starter, build, hold or reduction sizing. Do not use without portfolio context and policy constraints.",
       "source": "skills/investing/position-sizing-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/position-sizing-review/SKILL.md",
+        "source_sha256": "cacf54211f89751627e5087c6f8e852a97aa4f844aeeb738b3d2234c38bdb722",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "security-underwriting",
@@ -287,7 +1199,42 @@
       "description": "Underwrite one equity or ETF as an investment using structured equity research for breadth and primary filings/IR for decision-critical verification, then analyze economics, financial quality, growth drivers, valuation, catalysts, risks, variant perception and thesis invalidation. Do not use for broad market scanning.",
       "source": "skills/investing/security-underwriting/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/security-underwriting/SKILL.md",
+        "source_sha256": "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "technical-structure",
@@ -297,7 +1244,42 @@
       "description": "Use as the technical-structure analyst when an investment request concerns confirmed price swings, Dow-style trend state, support/resistance, and invalidation from supplied adjusted OHLCV.",
       "source": "skills/investing/technical-structure/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/technical-structure/SKILL.md",
+        "source_sha256": "d323761156bc4182b46dd6381087860a624bc83a91ce56c7524c229171d0596a",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "thesis-challenge",
@@ -307,7 +1289,42 @@
       "description": "Stress-test an existing investment thesis by seeking contradictory evidence, priced-in expectations, alternative explanations and failure modes. Use after an initial thesis exists or when confirmation bias is a material risk. Do not use to create the initial thesis from scratch.",
       "source": "skills/investing/thesis-challenge/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/thesis-challenge/SKILL.md",
+        "source_sha256": "133b1bc881e58329975ecff02cf41bdc20872879746274d818077076309bc31c",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "thesis-monitor",
@@ -317,7 +1334,42 @@
       "description": "Monitor an existing investment thesis against new earnings, guidance, industry data, price/valuation changes and predefined kill criteria. Use canonical thesis history plus structured research/primary evidence; do not restart full underwriting unless the thesis materially changes or evidence becomes stale.",
       "source": "skills/investing/thesis-monitor/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/thesis-monitor/SKILL.md",
+        "source_sha256": "91f2e87c82a11847df7c5e0119b9000434845bba61bf443354365cd6d60dec25",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "trend-theme-research",
@@ -327,7 +1379,42 @@
       "description": "Research an investment trend or market theme by mapping its economic value chain, demand drivers, bottlenecks, second-order beneficiaries and failure modes. Use when exploring themes such as AI infrastructure, power, memory, automation or other structural/cyclical trends. Do not use for one-company underwriting alone.",
       "source": "skills/investing/trend-theme-research/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/trend-theme-research/SKILL.md",
+        "source_sha256": "100c8c49c2cbcea72f5425751733cba39582b4564cd9b79ab9fd27fa44f5dae5",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "valuation-scenario-review",
@@ -337,7 +1424,42 @@
       "description": "Build bear, base and bull valuation scenarios for one security using explicit operating assumptions, valuation methods and market-implied expectations. Use when valuation could change an investment decision or position size. Do not use as a standalone price-target generator.",
       "source": "skills/investing/valuation-scenario-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/investing/valuation-scenario-review/SKILL.md",
+        "source_sha256": "9110bad5daea5c95b37417c5a072badba3a5147eb050fff8d1e5cecdbeae6e97",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "creative-generation",
@@ -347,7 +1469,42 @@
       "description": "Generate or revise a locally requested image or video with an explicitly configured on-device ComfyUI instance and reviewed open-weight checkpoints. Use when the user asks for creative media output; do not use paid inference, hosted services, or untrusted workflows.",
       "source": "skills/media/creative-generation/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/media/creative-generation/SKILL.md",
+        "source_sha256": "49485b2c9e5fa2ae3d0c09194251cf615b443aaaa8ffb73a7b6ba276170e6647",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "report-composer",
@@ -357,7 +1514,42 @@
       "description": "Compose one integrated decision report from an already-supported workflow result by interleaving narrative, evidence, decisions and contextually placed visual slots. Use when the user needs a coherent report where charts, diagrams, interactive components or Figma outputs appear inside the relevant sections instead of as a separate parallel artifact.",
       "source": "skills/meta/report-composer/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/report-composer/SKILL.md",
+        "source_sha256": "66bd51406e58a883664ccd70a4a28e0c62eab4d603605fcbed9dbabcb57957a0",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-authoring",
@@ -367,7 +1559,42 @@
       "description": "Create or refactor an Agent Skill package from an approved skill specification. Use when writing SKILL.md, splitting instructions into references/scripts/assets, improving progressive disclosure, or aligning a skill with repository and current Agent Skills authoring conventions.",
       "source": "skills/meta/skill-authoring/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skill-authoring/SKILL.md",
+        "source_sha256": "0ea0f76785702eceb84e47d4a2dcf8e98b97d5b86840fa3fbcf0d457c407a137",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-evaluation",
@@ -377,7 +1604,42 @@
       "description": "Evaluate an Agent Skill's routing and behavior using predeclared representative cases, a no-skill baseline or accepted prior version, and evidence-based regression analysis. Use when asked to evaluate a skill, classify or report test results, determine whether a queued or blocked case actually ran, distinguish test outcome from execution state, compare evidence, or assess release readiness. Use after validation and test design, before production promotion, and after material behavior changes.",
       "source": "skills/meta/skill-evaluation/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skill-evaluation/SKILL.md",
+        "source_sha256": "ba5917a4fcad30dcc873aa6078f6df65643dbd980805d4668d90b4371143d823",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-release-review",
@@ -387,7 +1649,42 @@
       "description": "Make an evidence-gated production-readiness decision for an Agent Skill after validation and evaluation are complete. Use before promotion or publication, including when reviewing a changed production skill.",
       "source": "skills/meta/skill-release-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skill-release-review/SKILL.md",
+        "source_sha256": "528589be39c2916f3c774256f708a16c1a5317a636f4cc811da8c9758b48735b",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-specification",
@@ -397,7 +1694,42 @@
       "description": "Decide whether a repeatable task should become an Agent Skill and define its behavioral contract before implementation. Use when proposing a new skill, splitting/merging skills, or when an existing skill has unclear scope, trigger conditions, inputs, outputs or boundaries.",
       "source": "skills/meta/skill-specification/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skill-specification/SKILL.md",
+        "source_sha256": "06db71b7495580ced459f861694ca83a4f3b1f756ec772c916fef4d233feee02",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-test-design",
@@ -407,7 +1739,42 @@
       "description": "Design and maintain routing, behavioral, edge-case, adversarial, and regression tests for an Agent Skill. Use after a skill draft exists, when changing its trigger or procedure, or when converting a real failure into a permanent evaluation case.",
       "source": "skills/meta/skill-test-design/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skill-test-design/SKILL.md",
+        "source_sha256": "af92c57c5fec76d296cb4d257cb4c93736d8f12c3f0564875e8214ec9bb90b1e",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-validation",
@@ -417,7 +1784,42 @@
       "description": "Validate an Agent Skill package for structural correctness, routing clarity, standards alignment, security, portability, duplication and maintainability. Use after authoring or modifying a skill and before behavioral evaluation or release.",
       "source": "skills/meta/skill-validation/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skill-validation/SKILL.md",
+        "source_sha256": "3b559e100d668667a86ee4c81869c7f0894e6d4a0d09494537e56e8124785812",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skills-factory-diagnostic",
@@ -427,7 +1829,42 @@
       "description": "Confirm that the Skills Factory plugin is exposing bundled skills to ChatGPT or Codex. Use when the user explicitly asks to test, verify, diagnose, or confirm whether Skills Factory is active.",
       "source": "skills/meta/skills-factory-diagnostic/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/skills-factory-diagnostic/SKILL.md",
+        "source_sha256": "e31329cd410cb4258bdf0edf3c89c240fa4a3e7be6c672f9401155663816a360",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "visual-output-design",
@@ -437,7 +1874,42 @@
       "description": "Select and render one source-backed exhibit for a report, presentation or local interactive component. Route quantitative charts, diagrams, illustrative imagery, motion and interactive HTML to suitable specialized renderers while preserving evidence. Use beneath report-composer, report-document-architecture or presentation-exhibit-design; do not replace those workflows or invent data for visual balance.",
       "source": "skills/meta/visual-output-design/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/meta/visual-output-design/SKILL.md",
+        "source_sha256": "0e14a4073eadabfc3cc4ecceb54fbc688ddbc3e7b22ef8b1fe5852e7ff1d5521",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "decision-bottleneck-analysis",
@@ -447,7 +1919,42 @@
       "description": "Diagnose why a specific material decision class is slow, repeatedly escalated or duplicated by tracing decision steps, waits, vetoes, evidence gaps and authority boundaries. Use after the problematic decision class and its decision owner/path are sufficiently identified; when the core unknown is who has final authority, lead with decision-rights-review. Do not lead a mixed cross-unit handoff/accountability/capacity diagnosis whose failure type is still unknown.",
       "source": "skills/oaf/decision-governance/decision-bottleneck-analysis/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/decision-governance/decision-bottleneck-analysis/SKILL.md",
+        "source_sha256": "f9dc49537bbfd5b32a27e20e815ca6da78bb6456c15b41772a236a0e2f913fba",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "decision-rights-review",
@@ -457,7 +1964,42 @@
       "description": "Map and review critical organisational decision rights, including who proposes, decides, executes, advises and escalates. Use when the primary question concerns ownership or authority for identified material decisions. Repeated escalation, decision circulation and uncertainty about who has final authority are decision-rights signals, even when latency is also present. Do not lead a mixed cross-unit handoff/accountability/capacity diagnosis before the decision problem is isolated, and do not use merely to create a generic RACI.",
       "source": "skills/oaf/decision-governance/decision-rights-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/decision-governance/decision-rights-review/SKILL.md",
+        "source_sha256": "033633057ac571db0c40c0e1555c093ee37f8f9271f6ec38f83b246696f9fdac",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "governance-design",
@@ -467,7 +2009,42 @@
       "description": "Design the minimum governance mechanisms needed for a defined set of material decisions, including ownership, evidence, cadence and escalation. Use only after decision-rights or operating-model problems are sufficiently diagnosed; do not create committees as a default response.",
       "source": "skills/oaf/decision-governance/governance-design/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/decision-governance/governance-design/SKILL.md",
+        "source_sha256": "4fcfdd9eab844cb445330fb1f2281ff90a32373d33ea4bb325e2740d0e7cc01e",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "strategy-to-execution-diagnostic",
@@ -477,7 +2054,42 @@
       "description": "Diagnose whether strategic intent is translated into explicit priorities, accountable owners, funding, roadmaps and measurable outcomes. Use when strategy appears disconnected from execution; do not use for generic strategy creation.",
       "source": "skills/oaf/direction-strategy/strategy-to-execution-diagnostic/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/direction-strategy/strategy-to-execution-diagnostic/SKILL.md",
+        "source_sha256": "3ce522114ea28aa025555f45ac00a8a1b582ed1a6c6a90b6ad9287fa98e03f16",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "architecture-review",
@@ -487,7 +2099,42 @@
       "description": "Review alignment across business direction, capabilities, organisational design, information and technology architecture. Use for enterprise or organisational architecture decisions; do not use as a low-level software design review.",
       "source": "skills/oaf/enterprise-architecture/architecture-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/enterprise-architecture/architecture-review/SKILL.md",
+        "source_sha256": "7694e465eb36aa49e8e15b85dff0231a9a78a0e5b6402d1359d4854ed089ad66",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "capability-gap-analysis",
@@ -497,7 +2144,42 @@
       "description": "Identify material gaps between required business capabilities and current organisational, process, information, technology, governance or capacity enablement. Use after strategic outcomes are sufficiently clear; do not translate every capability gap directly into a technology project.",
       "source": "skills/oaf/enterprise-architecture/capability-gap-analysis/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/enterprise-architecture/capability-gap-analysis/SKILL.md",
+        "source_sha256": "44f8096b814d0fdb91464aad1f071602315aea9f24e7f8ec6ece2f8dc542dd24",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "capability-map-review",
@@ -507,7 +2189,42 @@
       "description": "Assess whether a business capability map is coherent and decision-useful, including level consistency, overlap, gaps, ownership and linkage to strategy, investments, applications, risks or performance. Use to improve a map for a defined decision; do not infer detailed processes or technology defects from capability names alone.",
       "source": "skills/oaf/enterprise-architecture/capability-map-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/enterprise-architecture/capability-map-review/SKILL.md",
+        "source_sha256": "9c10a7b925d52eab14e69b993c4f8369662b81cda148f76e795e1c9557513e14",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "evidence-loop-review",
@@ -517,7 +2234,42 @@
       "description": "Review whether organisational KPIs, outcomes, reviews and feedback loops actually inform decisions and adaptation. Use when governance produces reporting but weak learning; do not use as a generic KPI-design task.",
       "source": "skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md",
+        "source_sha256": "17cc4df0497940dcf24e21fab06981b27770921eb1be9fa0a10e586c66f21a46",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "kpi-quality-review",
@@ -527,7 +2279,42 @@
       "description": "Review whether a defined KPI set is decision-useful, interpretable and linked to outcomes, owners, thresholds and actions. Use after the relevant decisions/outcomes are known; do not generate a generic KPI catalogue.",
       "source": "skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md",
+        "source_sha256": "6db896e5836d60de12a7113b6ab350bec7887f4cf9432e3753366792d20f9cae",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "global-local-model-review",
@@ -537,7 +2324,42 @@
       "description": "Review how responsibilities, standards, capabilities and decisions are split between global/central and local units. Use when the organisation needs to balance scale and consistency against local context and speed; do not default to centralisation.",
       "source": "skills/oaf/operating-model/global-local-model-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/operating-model/global-local-model-review/SKILL.md",
+        "source_sha256": "60f749909d31dc4198024332bbfdb89cf7f1f5116724fd3df21797406d5fac54",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "operating-model-review",
@@ -547,7 +2369,42 @@
       "description": "Review an operating model for role clarity, interfaces, accountability, autonomy, coordination and authority/resource alignment. Use as the lead diagnosis when symptoms span cross-unit handoffs plus unclear accountability or capacity/funding authority and the failure has not yet been isolated to one decision class. Do not reduce the review to an org chart.",
       "source": "skills/oaf/operating-model/operating-model-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/operating-model/operating-model-review/SKILL.md",
+        "source_sha256": "50dad32dc406e23054b6b81e753acc0745d82e07f96242745b33076af79707a2",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "organizational-interface-review",
@@ -557,7 +2414,42 @@
       "description": "Review critical organisational interfaces where ownership, work, information, funding or decisions cross unit boundaries. Use when handoffs, dependencies or coordination create delay or accountability loss; do not redesign the whole operating model.",
       "source": "skills/oaf/operating-model/organizational-interface-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/operating-model/organizational-interface-review/SKILL.md",
+        "source_sha256": "a6502d482e613ba76ffd95e7354a5964ab86e23a3778706d8aee069134e9fa22",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "portfolio-health-review",
@@ -567,7 +2459,42 @@
       "description": "Review whether an initiative portfolio is coherent, affordable, capacity-feasible, dependency-aware and aligned to strategic outcomes. Use for portfolio health diagnosis; do not force ranking when comparable evidence is missing.",
       "source": "skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md",
+        "source_sha256": "6324f8d6e4a4d03c94d2ca332463db16f22a4ce468410756c8452fd922482420",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "portfolio-prioritization",
@@ -577,7 +2504,42 @@
       "description": "Structure transparent prioritisation of initiatives using agreed strategic, value, risk, capacity and dependency criteria. Use when a portfolio needs comparable decisions; use deterministic calculation for scoring where possible.",
       "source": "skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md",
+        "source_sha256": "7190ad4e99614509911d51d8312111958f25b7e5f6b2ade9c4b79108f1555c87",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "transformation-blueprint",
@@ -587,7 +2549,42 @@
       "description": "Convert an approved organisational diagnosis and target direction into a sequenced transformation blueprint with workstreams, dependencies, decision gates, capacity needs and evidence checkpoints. Use after diagnosis and target-state direction are sufficiently agreed; do not roadmap unresolved design choices as facts.",
       "source": "skills/oaf/portfolio-execution/transformation-blueprint/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/oaf/portfolio-execution/transformation-blueprint/SKILL.md",
+        "source_sha256": "136839f7aa43224f071716a323fb8284af48c8413a12ba3d908d3f3345b840b2",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-brief",
@@ -597,7 +2594,42 @@
       "description": "Establish the audience, communication objective, intended decision or behavior and constraints before producing a slide deck. Use when someone asks to prepare a presentation from a topic, idea, notes, brief or source documents; do not use for a narrow request to edit a known slide.",
       "source": "skills/presentations/presentation-brief/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-brief/SKILL.md",
+        "source_sha256": "c9942c2363b8be74f43df5cd8b5d4f3a5ea4a82f15614bab2036126f98e42b93",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-deck-review",
@@ -607,7 +2639,42 @@
       "description": "Critique a real or draft presentation for strategy, audience fit, evidence integrity, narrative and visual craft; rank specific defects and guide targeted revision. Use before final delivery or after deck changes; do not confuse an opinion score with verified rendered output.",
       "source": "skills/presentations/presentation-deck-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-deck-review/SKILL.md",
+        "source_sha256": "a369a1595cf674a3e9847ea5b1446d4e9d55b0dc8b384a06bd9a42bc2fec22aa",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-evidence-review",
@@ -617,7 +2684,42 @@
       "description": "Check source-to-slide fidelity, citations, claim sufficiency, conflicting evidence and chart inputs in presentations. Use when slide assertions/exhibits need source mapping; delegate substantive new strategy research and analysis to their domain/shared owners.",
       "source": "skills/presentations/presentation-evidence-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-evidence-review/SKILL.md",
+        "source_sha256": "35816471ac72b4d561fa5d40c5698ef7e829d65e69c003dcd8360169b9d85444",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-exhibit-design",
@@ -627,7 +2729,42 @@
       "description": "Choose data-faithful charts, diagrams and presentation exhibits for an approved slide claim and audience, delegating actual rendering to existing visual-output-design and deterministic tools. Use after storyline/evidence planning; do not use for decorative image prompts alone.",
       "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
+        "source_sha256": "fb107eb683bdad07797607b5518e5afeed251cd8fe4f41184f1c2f7e2049257a",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-export-verification",
@@ -637,7 +2774,42 @@
       "description": "Verify a presentation's actual rendered slides, delivery format, PowerPoint/PDF round-trip behavior, editability, fonts and animation limitations. Use when a deck exists and the user needs final deliverable QA; do not treat a planned export or tool invocation as successful delivery.",
       "source": "skills/presentations/presentation-export-verification/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-export-verification/SKILL.md",
+        "source_sha256": "7fb6c9aa3265e955209dd54f8d228e7658dd08522d4a83825b871656dcd5acd3",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-slide-authoring",
@@ -647,7 +2819,42 @@
       "description": "Create or revise an editable presentation in a supported Figma Slides, Canva or Google Slides runtime from a validated storyboard and exhibit plan. Use when a user requests actual native slides or deck edits; do not claim a deck exists from specifications, images or unsupported connector actions.",
       "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
+        "source_sha256": "f1c209b96cfa9404c1bbb893b9fed1f4393c15b806ddb91e701e0166a8a9a2bf",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-storyline",
@@ -657,7 +2864,42 @@
       "description": "Design and stress-test a slide deck's audience-specific argument, narrative order and action-title ghost deck before visual authoring. Use when a presentation brief or draft deck needs story structure, executive flow, persuasive narrative that communicates supplied or domain-supported conclusions; do not design business strategy or just a chart.",
       "source": "skills/presentations/presentation-storyline/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/presentations/presentation-storyline/SKILL.md",
+        "source_sha256": "4893dbea117ed156ab1ff192fded325fea6d070b1bc914aa714bcefbaf628f7d",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "report-document-architecture",
@@ -667,7 +2909,42 @@
       "description": "Plan the section hierarchy and evidence-backed reading flow for a substantial written report or technical document before DOCX/PDF production. Use when a long-form analytical document needs a coherent chapter outline, section arguments, exhibits, appendix and citation plan; do not design slide storylines or redo domain research.",
       "source": "skills/reports/report-document-architecture/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/reports/report-document-architecture/SKILL.md",
+        "source_sha256": "6fbc0aa92d1878443f7bc1c6e90519c118f3789532f449549715133983960ee9",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "report-document-authoring",
@@ -677,7 +2954,42 @@
       "description": "Turn an approved long-form report model into a real editable and professionally typeset DOCX, Google Doc or paginated PDF using available document tools. Use when an external report document with headings, citations, figures and page layout is explicitly requested; do not claim exported files from chat prose or create presentation slides.",
       "source": "skills/reports/report-document-authoring/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/reports/report-document-authoring/SKILL.md",
+        "source_sha256": "85dc819072b2dda89d940b9a5f4fb66a6d7fb8e9f87e3b0587b95d1e2f142cdc",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "report-document-review",
@@ -687,7 +2999,42 @@
       "description": "Critique and verify actual long-form DOCX/PDF report artifacts page by page for content fidelity, citations, style, pagination, tables, links, editability and export parity. Use for quality review or regression checks of generated written documents; do not replace Strategy/OAF analysis reviews or certify a report without rendered pages.",
       "source": "skills/reports/report-document-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/reports/report-document-review/SKILL.md",
+        "source_sha256": "8b1dc67ae0b01f1f0bc03f5a8b998b29c90ca9f93313a0ff555059e0403c1483",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "seo-research",
@@ -697,7 +3044,42 @@
       "description": "Use when the user requests evidence-backed SEO research about their own website, keywords, organic visibility, or AI-search visibility through an explicitly connected OpenSEO MCP. Require a configured connection and explicit approval before any credit-consuming call; do not use for generic SEO advice or when the OpenSEO project and target site do not match.",
       "source": "skills/seo/seo-research/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/seo/seo-research/SKILL.md",
+        "source_sha256": "baf11019b1cbe24848c05400bddde8cd6e6be70e924c18d81c2ea1936e70cfeb",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "financial-modeling",
@@ -707,7 +3089,42 @@
       "description": "Run deterministic, evidence-bound NPV, DCF, IRR, payback, scenario and sensitivity calculations from explicit supplied inputs.",
       "source": "skills/strategy-ea/financial-modeling/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/strategy-ea/financial-modeling/SKILL.md",
+        "source_sha256": "98bc11e8f3f5694741db904814c8ce287c8b6312285d513b4d90bd1fc33a9f28",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "skills-factory"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "market-economics",
@@ -717,7 +3134,42 @@
       "description": "Reconcile explicit market sizing and customer-segment evidence, calculate SAM/SOM and white space, and state transferability limits. Use for market size, needs-based segmentation or whitespace economics; do not invent demand, infer evidence, or duplicate competitive-intelligence research.",
       "source": "skills/strategy-ea/market-economics/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/strategy-ea/market-economics/SKILL.md",
+        "source_sha256": "b168492514ede9cb1edfa2e54cb37b1a2b3be7e08209cdbb33b44a27cc1f6e56",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "Skills Factory"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "strategy-economics",
@@ -727,7 +3179,42 @@
       "description": "Reconcile sourced profit pools, value-driver trees, price-volume-mix bridges and cost bridges with explicit assumptions. Use for unit economics and strategy economics; never infer missing financial inputs or claim causality from descriptive decompositions.",
       "source": "skills/strategy-ea/strategy-economics/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/strategy-ea/strategy-economics/SKILL.md",
+        "source_sha256": "a38d813dafbd94e8ac33811c8b960d149cd88b6f4e382df6cdebe06c840cb505",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "Skills Factory"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "value-realization",
@@ -737,7 +3224,42 @@
       "description": "Review a funded strategy initiative against dated benefit baselines, forecasts, realized KPIs, owners and explicit decision rules.",
       "source": "skills/strategy-ea/value-realization/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/strategy-ea/value-realization/SKILL.md",
+        "source_sha256": "056c3e0205faf1eaa376c39133f57a051aab1bf42e00d8276a8f5b3f2d45b79e",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "skills-factory"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "accessibility-gate",
@@ -747,7 +3269,42 @@
       "description": "Review interface implementation evidence for accessibility risks and required follow-up checks. Use when a team needs an evidence-bound accessibility gate beyond deterministic CI; never claim WCAG conformance without an appropriate audit.",
       "source": "skills/web-design/accessibility-gate/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/accessibility-gate/SKILL.md",
+        "source_sha256": "05088544453cbc9ae497e2a0d4d5ae72e34e44a8a00f787cc1800b79740dca68",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "design-critique",
@@ -757,7 +3314,42 @@
       "description": "Use when reviewing a supplied interface screenshot or visual artifact for hierarchy, clarity, affordance, responsiveness, consistency, distinctiveness and cognitive risk. Give evidence-bound findings and practical repairs; do not infer hidden behavior or claim automated accessibility/runtime checks.",
       "source": "skills/web-design/design-critique/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/design-critique/SKILL.md",
+        "source_sha256": "fd1f4fdf6ae2e614090e8838f4b13e6a8649d317ee1a2f3f74846d04ae2b1f26",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "experience-design-routing",
@@ -767,7 +3359,42 @@
       "description": "Use as the UI/UX task router when a user asks for interface design, visual critique, design handoff, accessibility review, or visual regression; route to the existing specialist skill.",
       "source": "skills/web-design/experience-design-routing/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/experience-design-routing/SKILL.md",
+        "source_sha256": "8812f7b442c34bd7ec1422b979708b27b5511483520efad15a6192e3820d0dae",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "implementation-brief",
@@ -777,7 +3404,42 @@
       "description": "Turn an approved interface concept into a build-ready specification for an existing product implementation, including components, states, props, tokens, responsive rules and verifiable acceptance checks. Use when the user asks to hand a design to engineering; do not use to design a new concept or implement it.",
       "source": "skills/web-design/implementation-brief/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/implementation-brief/SKILL.md",
+        "source_sha256": "fc90081c53bc09b0bf318ec674f5d3f3425e5cc6e878b2b6e377f4d79a9d4426",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "interface-design",
@@ -787,7 +3449,42 @@
       "description": "Design the information hierarchy, navigation, responsive layout, interaction states and accessible behavior for a specific product screen or user flow. Use when the requested outcome is a design brief for an interface, not an implemented page, general report, data visualization or architecture diagram.",
       "source": "skills/web-design/interface-design/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/interface-design/SKILL.md",
+        "source_sha256": "fb33b29a9c78630123c0ae3a7f0087f16c6adf378a7962f397787fc432f20294",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "visual-regression-review",
@@ -797,7 +3494,42 @@
       "description": "Review rendered UI against an approved visual baseline and implementation brief. Use when the request is to find visual regressions in comparable screenshots or browser captures; distinguish measured diffs from human interpretation.",
       "source": "skills/web-design/visual-regression-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/visual-regression-review/SKILL.md",
+        "source_sha256": "eae5ba31167a9f9711fb91f15ffed881fb06eba93649340db98891c680e2258d",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "website-quality-review",
@@ -807,7 +3539,42 @@
       "description": "Review an existing website across rendered desktop and mobile views, user-task clarity, links, accessibility evidence and motion. Use for a whole-site quality review; report scoped findings without building, editing or claiming production readiness.",
       "source": "skills/web-design/website-quality-review/SKILL.md",
       "source_status": "present",
-      "capability_assessment": "DECLARED"
+      "capability_assessment": "DECLARED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "skills/web-design/website-quality-review/SKILL.md",
+        "source_sha256": "9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     }
   ],
   "workflows": [
@@ -824,7 +3591,9 @@
         "lab": "supported",
         "plugin": "supported"
       },
-      "required_dependencies": [],
+      "required_dependencies": [
+
+      ],
       "optional_dependencies": [
         "acquisition-fit-review",
         "commerce-product-deep-dive",
@@ -839,7 +3608,42 @@
         "unit-economics-review",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/commerce-opportunity-review/WORKFLOW.md",
+        "source_sha256": "7348378ce4e73881c58ef4a0f0412764596d4b621b2606ab3018e45aec0e1fac",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "commerce-product-deep-dive",
@@ -869,7 +3673,42 @@
         "report-composer",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/commerce-product-deep-dive/WORKFLOW.md",
+        "source_sha256": "c8c1a7561f2970842df4c4874863a206c5991297b1a770903730836f1ea88d74",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-attention-review",
@@ -899,7 +3738,42 @@
         "valuation-scenario-review",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-attention-review/WORKFLOW.md",
+        "source_sha256": "e6571faeace0fa2446b10514d533bfb3af5e84736ef70672eb370cf844be98b1",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-opportunity-hunter",
@@ -928,7 +3802,42 @@
         "valuation-scenario-review",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-opportunity-hunter/WORKFLOW.md",
+        "source_sha256": "e1bc76bce366b674e7f6b3dbf9d54b3adc236e90babc44fec670b5458d2f47ee",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-os-review",
@@ -955,7 +3864,42 @@
       "optional_dependencies": [
         "technical-structure"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-os-review/WORKFLOW.md",
+        "source_sha256": "1fcda42480b060baba283cb0509be76f302b3329398e3e2431f3584e1c242a2b",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-portfolio-observation",
@@ -980,7 +3924,42 @@
         "thesis-monitor",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-portfolio-observation/WORKFLOW.md",
+        "source_sha256": "700bc3774d3624c959ee30224f1cf71419f300397576e43cffc8200857a3d7d2",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-portfolio-review",
@@ -1009,7 +3988,42 @@
         "valuation-scenario-review",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-portfolio-review/WORKFLOW.md",
+        "source_sha256": "d24897dd84cc3fb5a293f5719f17f853736b00b13e357b97518de44368eff6db",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-security-review",
@@ -1038,7 +4052,42 @@
         "trend-theme-research",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-security-review/WORKFLOW.md",
+        "source_sha256": "de101bc7232a8f1969d3b09e8c0c7a52634054f13f0b990a339dd2847863478f",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "investment-theme-discovery",
@@ -1065,7 +4114,42 @@
         "thesis-challenge",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/investment-theme-discovery/WORKFLOW.md",
+        "source_sha256": "f6caf0cffb7a76d9cfa368e6c1b8b1428a02a6b5d363ce981f2b7135142bfbd0",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-enterprise-architecture-review",
@@ -1089,7 +4173,42 @@
         "report-composer",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-enterprise-architecture-review/WORKFLOW.md",
+        "source_sha256": "6bdcbe830ed5303a87dbf7b988de6a59e267fd3d465551812486305901cc4dc2",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-enterprise-change-review",
@@ -1104,7 +4223,9 @@
         "lab": "supported",
         "plugin": "supported"
       },
-      "required_dependencies": [],
+      "required_dependencies": [
+
+      ],
       "optional_dependencies": [
         "architecture-review",
         "capability-gap-analysis",
@@ -1122,7 +4243,42 @@
         "portfolio-prioritization",
         "strategy-to-execution-diagnostic"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-enterprise-change-review/WORKFLOW.md",
+        "source_sha256": "ef69a66a1337087bcebe838f822492e8555dd17c52b925fb48acfdf2717b708a",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-governance-redesign",
@@ -1146,7 +4302,42 @@
         "report-composer",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-governance-redesign/WORKFLOW.md",
+        "source_sha256": "313993e6b4f8278467e4b860c7c8c92eb8755d481b6b299582a18a7bb68aca0f",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-health-check",
@@ -1161,7 +4352,9 @@
         "lab": "supported",
         "plugin": "supported"
       },
-      "required_dependencies": [],
+      "required_dependencies": [
+
+      ],
       "optional_dependencies": [
         "architecture-review",
         "capability-map-review",
@@ -1175,7 +4368,42 @@
         "transformation-blueprint",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-health-check/WORKFLOW.md",
+        "source_sha256": "a9d4cdaf9303968961064baac3f790ab631dbc331073b5b3b7787150730b412c",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-operating-model-redesign",
@@ -1203,7 +4431,42 @@
         "transformation-blueprint",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-operating-model-redesign/WORKFLOW.md",
+        "source_sha256": "cb1eaf3565b36bccf9305cfe7fb68806270048cb9bbe307e79b8f92264ec7ab9",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-strategy-execution-reset",
@@ -1229,7 +4492,42 @@
         "portfolio-prioritization",
         "transformation-blueprint"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-strategy-execution-reset/WORKFLOW.md",
+        "source_sha256": "8fc21832fd700b573f161412760af30e535094d8af454b9b056f2f9a4af5ee52",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "oaf-transformation-design",
@@ -1251,7 +4549,42 @@
         "report-composer",
         "visual-output-design"
       ],
-      "capability_assessment": "UNASSESSED"
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/oaf-transformation-design/WORKFLOW.md",
+        "source_sha256": "7bbbd3a1449defbbdb18b669e5978d7a3deb96bba2b11feb040c739b51f0a0f8",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "presentation-production",
@@ -1275,8 +4608,45 @@
         "presentation-slide-authoring",
         "presentation-storyline"
       ],
-      "optional_dependencies": [],
-      "capability_assessment": "UNASSESSED"
+      "optional_dependencies": [
+
+      ],
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/presentation-production/WORKFLOW.md",
+        "source_sha256": "ca5da03e04277dd8e9d16b66b7202c9832971ca41a11e2303aa5e764b942ad61",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "report-production",
@@ -1296,8 +4666,45 @@
         "report-document-authoring",
         "report-document-review"
       ],
-      "optional_dependencies": [],
-      "capability_assessment": "UNASSESSED"
+      "optional_dependencies": [
+
+      ],
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/report-production/WORKFLOW.md",
+        "source_sha256": "40161af0f615656e4b3907a14b44aecf146e9b64d351069b3c0da4cbe46a61d0",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     },
     {
       "name": "skill-development",
@@ -1320,8 +4727,45 @@
         "skill-test-design",
         "skill-validation"
       ],
-      "optional_dependencies": [],
-      "capability_assessment": "UNASSESSED"
+      "optional_dependencies": [
+
+      ],
+      "capability_assessment": "UNASSESSED",
+      "provenance": {
+        "schema_version": 1,
+        "classification": "UNKNOWN",
+        "source": "workflows/skill-development/WORKFLOW.md",
+        "source_sha256": "f6608650ec33f73479716319e872e39cddec7b59c60d1bf65f500d856c735deb",
+        "upstream": null,
+        "components": [
+
+        ],
+        "basis_evidence": [
+
+        ],
+        "local_modifications": {
+          "status": "UNKNOWN",
+          "items": [
+
+          ]
+        },
+        "license": {
+          "status": "UNKNOWN",
+          "spdx_id": null,
+          "attribution": [
+
+          ]
+        },
+        "update_policy": "MANUAL_REVIEW",
+        "verification": {
+          "state": "NOT_CLASSIFIED",
+          "reviewed_at": null,
+          "owner": "arkadiusz-kamrowski"
+        },
+        "dependencies": [
+
+        ]
+      }
     }
   ]
 }

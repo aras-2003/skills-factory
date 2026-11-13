@@ -16,6 +16,8 @@ def main() -> int:
         here / "validate_skill.py",
         here / "validate_tests.py",
         here / "validate_catalog.py",
+        here / "validate_provenance.py",
+        here.parent / "catalog" / "validate_runtime_registry_parity.py",
         here / "validate_investing.py",
         here / "validate_runtime.py",
         here / "presentation_model.py",

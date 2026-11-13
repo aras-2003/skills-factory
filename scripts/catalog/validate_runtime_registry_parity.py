@@ -8,11 +8,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from provenance.catalog import load_registry, projection, records_by_source, registry_digest  # noqa: E402
+
 CHANNELS = {"plugin", "lab", "chatgpt-zip"}
 STATES = {"supported", "unavailable", "requiring_approval", "unknown"}
 
@@ -60,6 +64,13 @@ def assess(root: Path, *, registry: object | None = None, catalog: object | None
     sources = {x.relative_to(root).as_posix() for x in (root / "workflows").rglob("WORKFLOW.md")}
     skill_sources = {x.relative_to(root).as_posix() for x in (root / "skills").rglob("SKILL.md")}
     declared = contract["component_declarations"]
+    try:
+        provenance = load_registry(root)
+        provenance_by_source = records_by_source(provenance)
+    except Exception as exc:
+        errors.append(f"provenance registry invalid: {type(exc).__name__}")
+        provenance = {"records": [], "schema_version": 1}
+        provenance_by_source = {}
 
     for name in sorted(set(reg) ^ set(cat)):
         errors.append(f"registry/catalog workflow mismatch: {name}")
@@ -86,6 +97,9 @@ def assess(root: Path, *, registry: object | None = None, catalog: object | None
         for key in ("version", "maturity"):
             if metadata.get(key) != exported.get(key):
                 errors.append(f"{name}: {key} mismatch")
+        record = provenance_by_source.get(exported.get("source"))
+        if record is None or exported.get("provenance") != projection(record, provenance_by_source):
+            errors.append(f"{name}: workflow provenance projection mismatch")
         channels = row.get("channels")
         if not isinstance(channels, dict) or set(channels) != CHANNELS or any(x not in STATES for x in channels.values()):
             errors.append(f"{name}: invalid declared channels")
@@ -118,6 +132,9 @@ def assess(root: Path, *, registry: object | None = None, catalog: object | None
     for name, item in skills.items():
         if item.get("source") not in skill_sources:
             errors.append(f"{name}: missing source SKILL.md")
+        record = provenance_by_source.get(item.get("source"))
+        if record is None or item.get("provenance") != projection(record, provenance_by_source):
+            errors.append(f"{name}: skill provenance projection mismatch")
         decl = declared.get(name) or {}
         reqs = decl.get("requirements") if isinstance(decl, dict) else None
         if not isinstance(reqs, dict) or any(x == "unassessed" for x in reqs.values()):
@@ -129,6 +146,10 @@ def assess(root: Path, *, registry: object | None = None, catalog: object | None
         errors.append("catalog must not claim installed runtime from static source")
     if metadata.get("registered_workflow_count") != len(reg) or metadata.get("source_workflow_count") != len(sources):
         errors.append("generated workflow totals do not match exact source set")
+    if metadata.get("provenance_schema_version") != provenance.get("schema_version"):
+        errors.append("catalog provenance schema version mismatch")
+    if metadata.get("provenance_registry_sha256") != registry_digest(provenance):
+        errors.append("catalog provenance registry digest mismatch")
     return {
         "schema_version": "1.0", "kind": "static_registry_catalog_contract_parity",
         "status": "BLOCKED" if errors else "SOURCE_PARITY_ONLY_REVIEW_REQUIRED",

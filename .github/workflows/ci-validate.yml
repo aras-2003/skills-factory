@@ -43,6 +43,8 @@ jobs:
         run: |
           python scripts/validate/validate_all.py
           python -m unittest discover -s scripts/validate/tests -p 'test_*.py'
+          python -m unittest discover -s scripts/provenance/tests -p 'test_*.py'
+          python scripts/provenance/migrate.py --check
           python scripts/catalog/generate_catalog.py
           git diff --exit-code -- CATALOG.md docs/catalog.json
 

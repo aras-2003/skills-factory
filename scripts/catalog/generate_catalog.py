@@ -5,13 +5,17 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "validate"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from common import repo_root_from, split_frontmatter  # noqa: E402
 from generate_site_catalog import build_catalog, collect_workflow_sources, current_revision  # noqa: E402
+from provenance.catalog import load_registry, records_by_source  # noqa: E402
 
 
 def main() -> int:
     root = repo_root_from(__file__)
     rows = []
+    provenance_registry = load_registry(root)
+    provenance_by_source = records_by_source(provenance_registry)
 
     for skill_file in sorted((root / "skills").rglob("SKILL.md")):
         frontmatter, _ = split_frontmatter(skill_file.read_text(encoding="utf-8"))
@@ -27,20 +31,21 @@ def main() -> int:
                 metadata.get("maturity", ""),
                 metadata.get("version", ""),
                 str(rel / "SKILL.md"),
+                provenance_by_source[str(rel / "SKILL.md")]["classification"],
             )
         )
 
     out = [
         "# Skill Catalog",
         "",
-        "> Generated from SKILL.md metadata. Do not edit manually.",
+        "> Generated from SKILL.md metadata and `provenance/registry.yaml`. Do not edit manually.",
         "",
-        "| Skill | Domain | Maturity | Version | Description | Source |",
-        "|---|---|---|---|---|---|",
+        "| Skill | Domain | Maturity | Version | Description | Source | Provenance |",
+        "|---|---|---|---|---|---|---|",
     ]
-    for name, domain, description, maturity, version, source in rows:
+    for name, domain, description, maturity, version, source, provenance in rows:
         safe = description.replace("|", "\\|")
-        out.append(f"| {name} | {domain} | {maturity} | {version} | {safe} | {source} |")
+        out.append(f"| {name} | {domain} | {maturity} | {version} | {safe} | {source} | {provenance} |")
 
     markdown = "\n".join(out) + "\n"
     catalog_path = root / "CATALOG.md"
@@ -62,6 +67,7 @@ def main() -> int:
         (root / "workflows" / "runtime-registry.yaml").read_text(encoding="utf-8"),
         (root / "release" / "capability-contract.yaml").read_text(encoding="utf-8"),
         collect_workflow_sources(root),
+        provenance_registry,
     )
     site_path.write_text(
         json.dumps(site_catalog, ensure_ascii=False, indent=2) + "\n",

@@ -5,12 +5,20 @@ import hashlib
 import json
 import shutil
 from pathlib import Path
+import sys
 
 import yaml
 
 from build_utils import atomic_output, capability_assessment, capability_contract_metadata, ensure_source_valid, package_runtime_mcp, package_version, sha256_tree, source_revision, write_json
 from build_plugin import copy_skill
 from workflow_entrypoints import add_workflow_entrypoints, load_registry
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from provenance.catalog import (  # noqa: E402
+    enrich_capabilities,
+    load_registry as load_provenance_registry,
+    provenance_metadata,
+)
 
 
 PLUGIN_NAME = "skills-factory-lab"
@@ -159,6 +167,9 @@ def main() -> int:
                 }
             )
 
+        provenance_registry = load_provenance_registry(root)
+        enrich_capabilities(capabilities, provenance_registry)
+
         version = package_version(root, "lab")
         interface = {
             "displayName": "Skills Factory Lab",
@@ -230,6 +241,7 @@ def main() -> int:
                 "channel": "lab",
                 "source_revision": revision,
                 "capability_contract": capability_contract_metadata(),
+                **provenance_metadata(provenance_registry),
                 "session_rule": "Use this isolated Lab without the production plugin in the same runtime session.",
                 "capabilities": sorted(capabilities, key=lambda x: x["name"]),
                 "runtime_fixture_targets": fixture_status,
@@ -247,6 +259,7 @@ def main() -> int:
                 "channel": "lab",
                 "source_revision": revision,
                 "capability_contract": capability_contract_metadata(),
+                **provenance_metadata(provenance_registry),
                 "payload_content_sha256": digest,
                 "components": [
                     {
@@ -256,6 +269,7 @@ def main() -> int:
                         "version": item.get("version"),
                         "content_sha256": item.get("content_sha256"),
                         "capability_assessment": item.get("capability_assessment"),
+                        "provenance": item.get("provenance"),
                     }
                     for item in sorted(capabilities, key=lambda x: x["name"])
                 ],

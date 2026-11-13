@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "COMPLETE",
+  "record_count": 98,
+  "skill_count": 79,
+  "workflow_count": 19,
+  "classification_counts": {
+    "skill": {
+      "UNKNOWN": 79
+    },
+    "workflow": {
+      "UNKNOWN": 19
+    }
+  },
+  "registry_sha256": "c22f94c64e39e03d592039000371dfc824304d447b32c8d3e87cdfcf6422cc11",
+  "source_inventory_sha256": "a8e6a1d8874385614f98b4133b44bda563804e8fea20f7d8a30558ad22ee420e",
+  "interpretation": "Every current source has a record. UNKNOWN is explicit and carries no ownership, upstream, attribution, or license claim.",
+  "external_sources_executed": false
+}

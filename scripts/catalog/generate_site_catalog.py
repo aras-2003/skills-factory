@@ -4,12 +4,15 @@ import json
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 import yaml
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from provenance.catalog import projection, records_by_source, registry_digest  # noqa: E402
 
 
 def collect_workflow_sources(root: Path) -> dict[str, str]:
@@ -84,7 +87,19 @@ def build_catalog(
     workflow_registry: str = "workflows: []\n",
     capability_contract: str = "contract_id: repository-side-v1\ncomponent_declarations: {}\n",
     workflow_sources: dict[str, str] | None = None,
+    provenance_registry: dict[str, object] | None = None,
 ) -> dict[str, object]:
+    provenance_by_source = records_by_source(provenance_registry) if provenance_registry else {}
+    component_records = provenance_by_source
+
+    def provenance_for(source: str) -> dict[str, object] | None:
+        record = provenance_by_source.get(source)
+        if record is None:
+            if provenance_registry is not None:
+                raise ValueError(f"Missing canonical provenance record for {source}")
+            return None
+        return projection(record, component_records)
+
     contract = yaml.safe_load(capability_contract) or {}
     if contract.get("contract_id") not in {None, "repository-side-v1"}:
         raise ValueError("Unsupported capability contract in site catalog input")
@@ -103,19 +118,19 @@ def build_catalog(
             return "UNASSESSED"
         return "DECLARED"
 
-    skills: list[dict[str, str]] = []
+    skills: list[dict[str, object]] = []
     for line in markdown.splitlines():
         if not line.lstrip().startswith("|"):
             continue
         cells = split_markdown_row(line)
-        if len(cells) != 6 or cells[0] == "Skill" or set("".join(cells)) <= {"-", ":", " "}:
+        if len(cells) not in {6, 7} or cells[0] == "Skill" or set("".join(cells)) <= {"-", ":", " "}:
             continue
-        name, domain, maturity, version, description, source = cells
+        name, domain, maturity, version, description, source = cells[:6]
         if not all((name, domain, maturity, description, source)):
             raise ValueError(f"Invalid catalog row for {name or '(unnamed skill)'}")
         if source.startswith("/") or ".." in Path(source).parts:
             raise ValueError(f"Unsafe source path for {name}: {source}")
-        skills.append({
+        skill = {
             "name": name,
             "domain": domain,
             "maturity": maturity,
@@ -124,7 +139,13 @@ def build_catalog(
             "source": source,
             "source_status": "present",
             "capability_assessment": assessment(name),
-        })
+        }
+        item_provenance = provenance_for(source)
+        if item_provenance is not None:
+            if len(cells) == 7 and cells[6] != item_provenance["classification"]:
+                raise ValueError(f"CATALOG.md provenance mismatch for {source}")
+            skill["provenance"] = item_provenance
+        skills.append(skill)
     if not skills:
         raise ValueError("CATALOG.md did not contain any skill rows")
     revision = source_revision.strip()
@@ -143,7 +164,7 @@ def build_catalog(
             raise ValueError(f"Missing workflow source for {item.get('name')}: {workflow_path}")
         registered_sources.add(workflow_path)
         dependencies = item.get("dependencies") or {}
-        workflows.append({
+        workflow = {
             "name": str(item["name"]),
             "source": workflow_path,
             "source_status": "present",
@@ -158,14 +179,18 @@ def build_catalog(
                 if isinstance(x, dict) and x.get("name")
             ),
             "capability_assessment": assessment(str(item["name"])),
-        })
+        }
+        item_provenance = provenance_for(workflow_path)
+        if item_provenance is not None:
+            workflow["provenance"] = item_provenance
+        workflows.append(workflow)
     for workflow_path, content in sorted((workflow_sources or {}).items()):
         if workflow_path in registered_sources:
             continue
         if not workflow_path.startswith("workflows/") or not workflow_path.endswith("/WORKFLOW.md") or ".." in Path(workflow_path).parts:
             raise ValueError(f"Unsafe unregistered workflow source path: {workflow_path}")
         workflow_name = Path(workflow_path).parent.name
-        workflows.append({
+        workflow = {
             "name": workflow_name,
             "source": workflow_path,
             "source_status": "present",
@@ -177,23 +202,31 @@ def build_catalog(
             "required_dependencies": [],
             "optional_dependencies": [],
             "capability_assessment": assessment(workflow_name),
-        })
+        }
+        item_provenance = provenance_for(workflow_path)
+        if item_provenance is not None:
+            workflow["provenance"] = item_provenance
+        workflows.append(workflow)
     workflows.sort(key=lambda item: str(item["name"]))
     statuses = [item["capability_assessment"] for item in skills + workflows]
     overall_assessment = "UNASSESSED" if not any(status == "DECLARED" for status in statuses) else (
         "ASSESSED" if all(status == "DECLARED" for status in statuses) else "PARTIALLY_DECLARED"
     )
+    metadata = {
+        "packages": parse_package_manifest(package_manifest),
+        "source_revision": revision[:12],
+        "capability_contract": "repository-side-v1",
+        "capability_assessment": overall_assessment,
+        "runtime_installation": "NOT_OBSERVED",
+        "availability_semantics": "Source maturity and declared channels do not prove package inclusion or installed runtime availability.",
+        "source_workflow_count": len(workflows),
+        "registered_workflow_count": sum(item["runtime_registration"] == "registered" for item in workflows),
+    }
+    if provenance_registry is not None:
+        metadata["provenance_schema_version"] = provenance_registry["schema_version"]
+        metadata["provenance_registry_sha256"] = registry_digest(provenance_registry)
     return {
-        "metadata": {
-            "packages": parse_package_manifest(package_manifest),
-            "source_revision": revision[:12],
-            "capability_contract": "repository-side-v1",
-            "capability_assessment": overall_assessment,
-            "runtime_installation": "NOT_OBSERVED",
-            "availability_semantics": "Source maturity and declared channels do not prove package inclusion or installed runtime availability.",
-            "source_workflow_count": len(workflows),
-            "registered_workflow_count": sum(item["runtime_registration"] == "registered" for item in workflows),
-        },
+        "metadata": metadata,
         "skills": skills,
         "workflows": workflows,
     }
@@ -217,6 +250,8 @@ def main() -> int:
     source = ROOT / "CATALOG.md"
     package_source = ROOT / "release" / "package.yaml"
     output = ROOT / "docs" / "catalog.json"
+    from provenance.catalog import load_registry
+
     catalog = build_catalog(
         source.read_text(encoding="utf-8"),
         package_source.read_text(encoding="utf-8"),
@@ -224,6 +259,7 @@ def main() -> int:
         (ROOT / "workflows" / "runtime-registry.yaml").read_text(encoding="utf-8"),
         (ROOT / "release" / "capability-contract.yaml").read_text(encoding="utf-8"),
         collect_workflow_sources(ROOT),
+        load_registry(ROOT),
     )
     output.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Generated site catalog with {len(catalog['skills'])} skills")
