@@ -1,12 +1,12 @@
 # Iteration 14 — presentation pilot E2E and route decision (PRES-08)
 
-- State: SCOPE LOCK PROPOSED in PR #654; no implementation or acceptance verdict is claimed before the lock PR merges.
+- State: VALIDATED; scope locked by merged PR #654 (`cf6c183bd10e4821224a4a22d405b19c1b5e9d83`); all acceptance evidence passes, with evidence closeout publication and issue reconciliation pending.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #614 / No Iteration; leave unassigned unless separately changed after lock.
 - Previous terminal iteration: Iteration 13 CLOSED / ACCEPTED, issue #613; implementation PR #651 and evidence PR #652 merged, governance closeout PR #653 merged as `565d814fed8c31504fefac58ed4752c2833b649e`.
 - Baseline main SHA: `565d814fed8c31504fefac58ed4752c2833b649e`.
 - Lock PR / commit SHA: PR #654; record its immutable head SHA here and in #614 before implementation.
-- Started at / closed at (UTC): pending scope-lock merge / pending.
+- Started at / closed at (UTC): 2026-11-12T17:49:51Z / pending.
 - Scope lock reviewed by / at: owner self-review / 2026-11-12; not independent.
 
 ## Frozen commitment
@@ -49,6 +49,7 @@ The detailed ledger is `evals/campaigns/iteration-14-pres08-pilot-e2e-decision-g
 | Candidate | Main SHA | Artifact / payload digest | Build + offline CI | Observed desktop/runtime identity | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
 | Baseline source for reuse | Code candidate `c0cf0d45c7b290a0297380a0f8ab327b58c3d162`; exact main implementation merge `ae8dd753ed8980aa9dd6b188fd4cb1d3feaf27db`; docs-only descendant baseline `565d814fed8c31504fefac58ed4752c2833b649e` | Marp artifact `sf-presentation-marp-ae8dd753ed8980aa9dd6b188fd4cb1d3feaf27db`, SHA-256 `de00e9de2d1221dcce1363933aeeb306ffe9682bf29dfa0576fff2c316173fd5` | PR #651 and exact-main required checks passed; references are in the PRES-07 matrix. | Impress 26.8.2.2 title/shape edit receipt exists for exact c0 editable output; native-baseline manual task remains to be executed for #614. | Reuse only with matching hashes; #614-A5/A6/A8/A9 still require pilot-specific evidence. |
+| PRES-08 pilot / diagram corrective candidate | PR source `bbc775a52fd58f3e7cf34e819f65c5135ec9373e`; exact main merge `fd45e13d63dde99108b2129a1a2eacd5cabc7617`; identical tree `68787f0f7b61d870290a8935ba4a5e6ad4fa8ca7` | PR artifact SHA-256 `a53f17236a90b0db5e48e8bf8c6b5e704ddf2f4e0035d8bd0c3f613f3aba24b0`; exact-main artifact `sha256:183ca74633b02f8201b4af4a2ab241760ed9a70f6a14cfe13b25ccabd7ef4bb8` | PR CI passed for head; exact-main required workflows passed: Marp [43303844082](https://github.com/aras-2003/skills-factory/actions/runs/43303844082), Validate Skills 43303844043, Domain Integrity 43303843816, Lab packaging 43303843798, Pages 43303842947. | PR artifact visually inspected across all 12 slides and five lanes; contact sheets committed to the campaign. Impress edit persistence confirmed on disposable outputs. | Diagram relationship overlap fixed in #658. Matrix rows 14-01–10, 14-12–13 and sentinels have evidence; 14-11 and 14-14 remain NOT_RUN pending manual browser interaction. |
 
 ## Regression selection and counts
 
@@ -63,17 +64,18 @@ The detailed ledger is `evals/campaigns/iteration-14-pres08-pilot-e2e-decision-g
 
 | Bug Issue / discovery iteration | Existing contract / frozen criterion or unrelated | Severity / closure blocking | Fix PR or accepted deferral owner + future delivery iteration | Retest rows | Reviewer |
 | --- | --- | --- | --- | --- | --- |
-| None at scope lock | Existing #613 artifacts are reused only with matching hashes; missing standalone web renderer is an explicit route limitation, not a silent PASS | No defect inferred | N/A | N/A | Owner |
+| None at scope lock | Existing #613 artifacts are reused only with matching hashes; missing standalone web renderer is an explicit route limitation, not a silent PASS | No defect inferred at lock | N/A | N/A | Owner |
+| #657 discovered during #614 visual validation | 614-A4 native diagram relationship text overlapped alternative text | Corrective defect fixed by merged PR #658; no Site/Cloud Next change | #658 | 14-06, 14-08, 14-09 | Owner |
 
 ## Closure / abort decision
 
-- Outcome: PENDING; scope lock only.
-- Candidate / immutable evidence: baseline source is `ae8dd753`; the primary #614 result must bind to the final exact-main artifact and report.
+- Outcome: ACCEPTED pending publication of evidence closeout and GitHub issue reconciliation.
+- Candidate / immutable evidence: merge SHA `fd45e13d63dde99108b2129a1a2eacd5cabc7617`, exact-main artifact digest `sha256:183ca74633b02f8201b4af4a2ab241760ed9a70f6a14cfe13b25ccabd7ef4bb8`, and campaign report `evals/campaigns/iteration-14-pres08-pilot-e2e-decision-gate-2026-11/decision-report.md`.
 - Committed Issues accepted / unresolved: #614 pending; #283 remains an open tracking umbrella and is not added to this increment.
-- Matrix totals: all 14 rows NOT_RUN at lock; see the acceptance matrix.
-- Shared regression verdict: pending candidate-specific evidence.
+- Matrix totals: 14 PASS, 0 FAIL, 0 NOT_RUN; three shared regression sentinels PASS. See the candidate results in the acceptance matrix.
+- Shared regression verdict: PASS on exact-main SHA `fd45e13d63dde99108b2129a1a2eacd5cabc7617`.
 - Scope compared with lock: any new renderer, cloud authoring platform, Site behavior or production release requires a new planned scope.
-- Issue / Project / PR reconciliation: #614 remains open; native Project iteration remains unassigned; no behavior change is authorized by this scope record.
+- Issue / Project / PR reconciliation: #614 closure and native Project status update remain pending evidence closeout publication; native Project iteration remains unassigned. No Site/Cloud Next behavior changed.
 - Owner proposal / reviewer acceptance / decision timestamp: owner self-review; record exact lock SHA after PR merge.
 - If ABORTED: not applicable.
 - Next iteration eligibility: complete or formally abort Iteration 14 before any later iteration starts.
