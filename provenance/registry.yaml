@@ -3497,7 +3497,7 @@
       "kind": "workflow",
       "name": "skill-development",
       "source": "workflows/skill-development/WORKFLOW.md",
-      "source_sha256": "f6608650ec33f73479716319e872e39cddec7b59c60d1bf65f500d856c735deb",
+      "source_sha256": "a6541fc094f9d85bc8b77b6093001f6cf7341b2ff1f9d188e87e07bf6497b892",
       "classification": "UNKNOWN",
       "upstream": null,
       "components": [
