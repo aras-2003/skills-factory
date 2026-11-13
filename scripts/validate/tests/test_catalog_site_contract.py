@@ -149,10 +149,11 @@ lab:
     def test_cloud_next_site_exposes_accessible_provenance_catalog_browser(self) -> None:
         page = (ROOT / "sites/skills-factory-site/app/page.tsx").read_text(encoding="utf-8")
         component = (ROOT / "sites/skills-factory-site/components/catalog-browser.tsx").read_text(encoding="utf-8")
+        catalog_view = (ROOT / "adapters/skills-factory-cloud-next/src/catalog-view.ts").read_text(encoding="utf-8")
         styles = (ROOT / "sites/skills-factory-site/app/globals.css").read_text(encoding="utf-8")
         self.assertIn("<CatalogBrowser/>", page)
+        self.assertIn('["OWN", "EXTENDED", "IMPORTED", "COMPOSED", "UNKNOWN"]', catalog_view)
         for marker in (
-            '"OWN", "EXTENDED", "IMPORTED", "COMPOSED", "UNKNOWN"',
             'aria-labelledby="catalog-heading"',
             'type="search"',
             "Pochodzenie",
