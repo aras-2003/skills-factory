@@ -12,8 +12,8 @@
       "UNKNOWN": 19
     }
   },
-  "registry_sha256": "437664ecff88bb65260e609b2a4095ac6188e5b785208d84653db46e2a090e28",
-  "source_inventory_sha256": "f51cf8528276ad7b7ba54ace5b93179e0843df8d00b0ab20b5bcfb7b8e2b10d3",
+  "registry_sha256": "cc977739b50c24b6fa3af9c3900e499fff1784caf84e62a9635f8f42cff85baf",
+  "source_inventory_sha256": "920d132a78cb5fc0c9a0bce9649f7ec04530dcf52accb517ecbb64ef02eab930",
   "interpretation": "Every current source has a record. UNKNOWN is explicit and carries no ownership, upstream, attribution, or license claim.",
   "external_sources_executed": false
 }
