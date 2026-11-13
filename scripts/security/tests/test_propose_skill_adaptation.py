@@ -29,12 +29,12 @@ COMMIT = "a" * 40
 REPO = "example-org/example-skills"
 
 
-def make_inputs(root: Path, *, decision: str = "EXTEND", security_status: str = "REVIEW_REQUIRED"):
+def make_inputs(root: Path, *, decision: str = "EXTEND", security_status: str = "REVIEW_REQUIRED", skill_bytes: bytes = SKILL):
     receipt, _manifest = intake.build_receipt(
         {"type": "github_repository", "repository": REPO, "commit": COMMIT,
          "source_digest": "b" * 64, "subdir": None,
          "author": {"state": "UNKNOWN", "name": None, "login": None, "commit_sha": None}},
-        {"SKILL.md": SKILL, "references/guide.md": b"Synthetic reference."},
+        {"SKILL.md": skill_bytes, "references/guide.md": b"Synthetic reference."},
         scan_fn=lambda _root, today=None: ([], []),
     )
     receipt["security_review"]["status"] = security_status
@@ -42,7 +42,7 @@ def make_inputs(root: Path, *, decision: str = "EXTEND", security_status: str = 
     receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
     quarantine = root / "quarantine"
     quarantine.mkdir()
-    (quarantine / "SKILL.md").write_bytes(SKILL)
+    (quarantine / "SKILL.md").write_bytes(skill_bytes)
     (quarantine / "references").mkdir()
     (quarantine / "references" / "guide.md").write_bytes(b"Synthetic reference.")
 
@@ -194,6 +194,23 @@ class ProposeSkillAdaptationTests(unittest.TestCase):
             expected_change_sha = hashlib.sha256((json.dumps(change_record, sort_keys=True, ensure_ascii=False, separators=(",", ":")) + "\n").encode()).hexdigest()
             self.assertEqual(expected_change_sha, updated["change_record_sha256"])
             self.assertFalse(updated["release_eligible"])
+
+    def test_nonportable_compatibility_is_a_blocker_at_finalization(self):
+        invalid_skill = (
+            b"""---
+name: demo-skill
+description: Adapt a reviewed external skill into a portable package when its capabilities complement this repository.
+compatibility: """
+            + b"x" * 501
+            + b"\n---\n## Purpose\nA synthetic fixture.\n\n## Procedure\nUse the reviewed fixture only.\n\n## Output contract\nProduce a proposal.\n"
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            args = make_inputs(Path(temp), skill_bytes=invalid_skill)
+            adaptation.create_proposal(*args)
+            change_path = Path(temp) / "changes.json"
+            change_path.write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(adaptation.ProposalError, "fails repository portability validation"):
+                adaptation.finalize_proposal(args[-1], change_path)
 
     def test_finalization_refuses_unrecorded_local_changes(self):
         with tempfile.TemporaryDirectory() as temp:
