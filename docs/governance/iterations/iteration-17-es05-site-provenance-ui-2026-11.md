@@ -2,13 +2,13 @@
 
 This record and its acceptance matrix define the complete scope for #620. Changes to frozen criteria require a separately reviewed clarification. Follow docs/governance/ITERATION-DELIVERY.md and the canonical Site publication runbook at docs/SITES-PUBLISHING.md.
 
-- State: PLANNED; scope-lock PR not yet merged; implementation NOT_STARTED.
+- State: CLOSED / ACCEPTED; PR #669 merged; exact-source private runtime acceptance completed.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking issue / native Project iteration: #620 / not assigned; Project iteration is a scheduling mirror.
 - Previous terminal iteration: Iteration 16 / #617 CLOSED / ACCEPTED; main SHA 87c2f736679a29c2ca228d806cc17d98bfc25879.
 - Baseline main SHA: 87c2f736679a29c2ca228d806cc17d98bfc25879.
-- Started / closed at (UTC): pending / pending.
-- Scope lock reviewed by / at: owner self-review / pending.
+- Started / closed at (UTC): 2026-11-13 after scope-lock merge / 2026-11-13T16:47:52Z.
+- Scope lock reviewed by / at: owner self-review / 2026-11-13.
 
 ## Frozen commitment
 
@@ -44,7 +44,8 @@ Authoritative ledger: evals/campaigns/iteration-17-es05-site-provenance-2026-11/
 
 | Candidate | Main SHA | Site version / deployment | Build + CI | Observed Site/MCP identity and UI evidence | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
-| Scope baseline | 87c2f736679a29c2ca228d806cc17d98bfc25879 | Current private Site state to be discovered before publication | Existing #617 accepted baseline; this iteration not run | N/A; scope only | None |
+| Scope baseline | 87c2f736679a29c2ca228d806cc17d98bfc25879 | Site v132 before publication | Scope-lock PR #668 merged; implementation candidate #669 validated | Baseline only | None |
+| Accepted candidate | 197f12e96a2282eb13cf787246e76e3621c960eb | Site v133; deployment appgdep_6af73cad04ac8191990a27864dd0a7f0; mirror b0216d283dad3fd297b6e3a64293a4434b8245f6 | Candidate CI #1391/#642 and exact-main Validate #1392/Site CI #643 passed; local tsc/lint/build passed | Runtime info verified; list_skills returned 98 rows / release 1.38.526+197f12e96a22; desktop and mobile interactions observed | Scope-lock SHA 483f78b; implementation PR #669 |
 
 ## Regression selection
 
@@ -63,13 +64,12 @@ Authoritative ledger: evals/campaigns/iteration-17-es05-site-provenance-2026-11/
 
 ## Closure / abort decision
 
-- Outcome: PENDING.
-- Final implementation source SHA / Site mirror SHA / embedded Lab SHA: pending.
-- Matrix and immutable evidence: pending.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / reviewed N/A: pending.
-- Shared regression verdict: pending.
-- Site version/deployment result and owner-private access confirmation: pending.
-- Scope compared with lock: pending.
-- Issue / PR reconciliation: pending.
-- Owner proposal / reviewer acceptance / timestamp: pending.
-- Next iteration eligibility: #620 must be terminal before #618; no automatic production promotion.
+- Outcome: CLOSED / ACCEPTED.
+- Final implementation source SHA: 197f12e96a2282eb13cf787246e76e3621c960eb; Site mirror SHA: b0216d283dad3fd297b6e3a64293a4434b8245f6; embedded Lab SHA: 197f12e96a2282eb13cf787246e76e3621c960eb.
+- Matrix: evals/campaigns/iteration-17-es05-site-provenance-2026-11/acceptance-matrix.md; 17 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED/REVIEW_REQUIRED, 0 reviewed N/A.
+- Shared regression verdict: PASS; candidate Domain Integrity #1391, Site CI #642, exact-main Validate skills #1392 and Site CI #643 passed; local TypeScript/lint/build passed.
+- Site version/deployment: v133; deployment appgdep_6af73cad04ac8191990a27864dd0a7f0 succeeded at 2026-11-13T16:37:42Z; owner-only access confirmed; archive sha256 0699e27e4e4ab6e3a7e81b31b392cea3cb794639e2377b0b9935ffb6a5d3614c.
+- Scope compared with lock: no deviations; actual catalog's 98 classifications remain UNKNOWN where evidence is absent; no automatic ownership inference.
+- Issue / PR reconciliation: #620 closed after successful implementation/runtime acceptance; PR #669 merged.
+- Owner proposal / reviewer acceptance / timestamp: owner self-review; independent review not claimed; acceptance recorded 2026-11-13T16:47:52Z.
+- Next iteration eligibility: #618 is eligible after terminal #620; #616/#617 are terminal. No automatic production promotion.
