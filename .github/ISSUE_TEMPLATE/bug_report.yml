@@ -35,24 +35,16 @@ body:
     attributes:
       label: Reproduction and evidence
       description: Include test case, URL or receipt, source revision, runtime version and surface; never include secrets
-  - type: dropdown
-    id: architecture_level
-    attributes:
-      label: Architecture impact level
-      description: Assess actual affected contracts (A0/A1/A2/A3/A4), UNKNOWN until inspected
-      options: [UNKNOWN, A0, A1, A2, A3, A4]
-    validations:
-      required: true
   - type: textarea
-    id: architecture_impact
+    id: change_description
     attributes:
-      label: Architecture Impact
-      description: Existing and affected components/contracts, whether architecture changes, target delta, consumer regressions and rollback; see TDC v1.1
+      label: Opis zmiany — perspektywa architektoniczna
+      description: "What existing component or contract changes to fix this bug? Document unaffected consumers, regressions and rollback. Set native Projects Architecture Impact classification separately."
       placeholder: |
-        Architecture change YES/NO/TO_CONFIRM:
-        Baseline and affected interfaces:
-        Target delta and unchanged contracts:
-        Dependent regression / rollback:
+        Architektura obecna i naruszony kontrakt:
+        Minimalna proponowana zmiana:
+        Interfejsy/dane/konsumenci objęci wpływem:
+        Testy regresji i rollback:
     validations:
       required: true
   - type: textarea
