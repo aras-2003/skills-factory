@@ -78,10 +78,10 @@ test_modules:
 - adapters/skills-factory-cloud-next/tests/contracts.test.ts
 # Catalog-only refresh for interface-design v0.1.20 (2026-11-10); historical
 # Iteration 07 candidate/runtime revisions and behavioral evidence are unchanged.
-# Catalog provenance projection refresh (2026-11-13); generated metadata only,
+# CATALOG/docs catalog provenance refresh (2026-11-13); generated metadata only,
 # candidate/runtime revisions and behavioral evidence remain unchanged.
 source_sha256:
-  CATALOG.md: fadcf7833ce70964f5349d1cae0e6a8f20ebfd30fd690639f8c8d5498365074d
+  CATALOG.md: 0377975c99cb155e010671bc065fa55360c73c2cb1af75ab84071812a32c26c8
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
   adapters/skills-factory-cloud-next/src/mcp-handler.ts: b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8
   adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
