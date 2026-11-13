@@ -6,6 +6,8 @@ on:
       - 'docs/governance/task-architecture-impact-2026-11.json'
       - 'tests/governance/test_task_architecture_sync.py'
       - '.github/workflows/maintenance-architecture-impact.yml'
+  issues:
+    types: [edited]
   workflow_dispatch:
     inputs:
       apply:
@@ -21,7 +23,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: architecture-impact-sync-${{ github.event_name == 'workflow_dispatch' && (inputs.issue_number || 'all') || 'pr' }}
+  group: architecture-impact-sync-${{ github.event_name == 'issues' && 'control' || (github.event_name == 'workflow_dispatch' && (inputs.issue_number || 'all') || 'pr') }}
   cancel-in-progress: false
 jobs:
   validate:
@@ -33,7 +35,14 @@ jobs:
       - run: python3 scripts/governance/sync_task_architecture.py --check
   sync:
     name: Governance / Sync native Architecture Impact
-    if: github.event_name == 'workflow_dispatch' && github.repository == 'aras-2003/skills-factory'
+    if: >-
+      github.repository == 'aras-2003/skills-factory' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'issues' &&
+        github.event.issue.number == 688 &&
+        github.actor == 'aras-2003' &&
+        (contains(github.event.issue.body, '<!-- architecture-impact-sync: dry-run -->') != contains(github.event.issue.body, '<!-- architecture-impact-sync: apply -->'))))
+
     needs: validate
     runs-on: ubuntu-latest
     env:
@@ -48,9 +57,15 @@ jobs:
           test -n "$GH_TOKEN" || { echo "::error::PROJECTS_TOKEN required"; exit 1; }
       - name: Preview or synchronize existing Project items
         env:
-          APPLY: ${{ inputs.apply }}
-          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          REQUEST_APPLY: ${{ inputs.apply }}
+          REQUEST_ISSUE: ${{ inputs.issue_number }}
+          APPROVED_CONTROL_APPLY: ${{ github.event_name == 'issues' && contains(github.event.issue.body, '<!-- architecture-impact-sync: apply -->') }}
         run: |
-          args=(--issue-number "$ISSUE_NUMBER")
-          if [ "$APPLY" = "true" ]; then args+=(--apply); fi
+          if [ "$GITHUB_EVENT_NAME" = "issues" ]; then
+            args=(--issue-number 0)
+            if [ "$APPROVED_CONTROL_APPLY" = "true" ]; then args+=(--apply); fi
+          else
+            args=(--issue-number "${REQUEST_ISSUE:-0}")
+            if [ "$REQUEST_APPLY" = "true" ]; then args+=(--apply); fi
+          fi
           python3 scripts/governance/sync_task_architecture.py "${args[@]}"
