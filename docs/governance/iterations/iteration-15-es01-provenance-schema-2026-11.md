@@ -64,7 +64,7 @@ The fixed ledger is `evals/campaigns/iteration-15-es01-provenance-schema-2026-11
 ## Closure / abort decision
 
 - Outcome: CLOSED / ACCEPTED.
-- Final candidate: exact main SHA `bb255409fc0eabba494a17841d3528459aeb7201`; implementation PR [#662](https://github.com/aras-2003/skills-factory/pull/662), reproducibility validation PR [#663](https://github.com/aras-2003/skills-factory/pull/663). Final matrix: [Iteration 15 acceptance results](../../../../evals/campaigns/iteration-15-es01-provenance-schema-2026-11/acceptance-matrix.md).
+- Final candidate: exact main SHA `bb255409fc0eabba494a17841d3528459aeb7201`; implementation PR [#662](https://github.com/aras-2003/skills-factory/pull/662), reproducibility validation PR [#663](https://github.com/aras-2003/skills-factory/pull/663). Final matrix: [Iteration 15 acceptance results](../../../evals/campaigns/iteration-15-es01-provenance-schema-2026-11/acceptance-matrix.md).
 - Immutable build evidence: exact-main Lab artifact [run 43404821655](https://github.com/aras-2003/skills-factory/actions/runs/43404821655), artifact ID 14027180796, SHA-256 `96be0ceffda710f3dd69ab83bae2b1a133cc9e65ba33e76a12d1dfe02b7c12a3`.
 - Committed Issue accepted: #616. Parent #615 remains PLANNED and open as the umbrella.
 - Required rows: 8 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED, 0 REVIEW_REQUIRED, 0 reviewed N/A; source inventory 98 records (79 skills, 19 workflows), explicitly UNKNOWN.
