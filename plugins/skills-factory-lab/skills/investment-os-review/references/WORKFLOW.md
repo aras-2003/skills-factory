@@ -17,6 +17,7 @@ Typical requests include:
 - "does this news/event matter for my holdings?";
 - "help me define my investment policy/risk limits";
 - classify supplied adjusted OHLCV into confirmed price swings, trend state or invalidation.
+- audit or review the Investment OS methodology, workflow, routing or skill architecture, including requests that mention tickers only as examples.
 
 Do not require the user to know Investment OS terminology, canonical storage, specialist names or workflow names.
 
@@ -70,6 +71,9 @@ Use `investment-attention-review` when the user brings new company/industry/mark
 
 ### Policy route
 Use `investment-policy-design` when the decision is about portfolio rules, risk limits, target bands, sizing constraints or investment governance rather than reviewing current holdings.
+
+### Investment OS process audit
+When the user asks to audit or review Investment OS methodology, workflows, routing, prompts or skill architecture, keep the process as the decision object even if the request mentions tickers as examples. Do not run single-security underwriting, read portfolio/canonical records, or write state because an incidental ticker appears. Use supplied process artifacts and explicitly requested evidence. If the user actually asks for an investment decision about a named security, route that distinct decision to `investment-security-review`.
 
 ### Clarify before routing
 If the user refers to existing shares but does not specify whether they want an observation, a portfolio risk review, analysis of a named security, or policy help, ask one short question to establish the decision object. Do not offer HOLD / ADD / TRIM / EXIT (or equivalent actions) before that clarification. Ask for holdings, weights, or risk preferences only after the user selects a route.
