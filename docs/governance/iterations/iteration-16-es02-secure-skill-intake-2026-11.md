@@ -1,14 +1,14 @@
 # Iteration 16 — secure external skill intake and immutable authorization (ES-02)
 
-Scope lock proposal. This record and its matrix define the entire increment; implementation must not begin until the scope-lock PR is merged. Follow [iteration delivery](../../../docs/governance/ITERATION-DELIVERY.md).
+The scope lock is preserved by merged PR #665. This record and its matrix define the entire increment; changes to frozen criteria require a separately reviewed clarification and must not expand acceptance. Follow [iteration delivery](../../../docs/governance/ITERATION-DELIVERY.md).
 
-- State: PLANNED / scope-lock PR open; implementation NOT_STARTED.
+- State: ACTIVE; scope locked by merged PR #665 (`1e53068c24470353fa1cb58fe619018033785519`).
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #617 / not assigned; native Project iteration is a scheduling mirror.
 - Previous terminal iteration / closure link: Iteration 15 / #616 CLOSED / ACCEPTED; [record](../iterations/iteration-15-es01-provenance-schema-2026-11.md); exact accepted main SHA `0c193d6982c8f18255cc33c31356f95078f2e882`.
 - Baseline main SHA: `0c193d6982c8f18255cc33c31356f95078f2e882`.
-- Lock commit SHA: record the merged scope-lock commit in #617 after merge.
-- Started at / closed at (UTC): pending / pending.
+- Lock commit SHA: `1e53068c24470353fa1cb58fe619018033785519`; recorded in #617.
+- Started at / closed at (UTC): 2026-11-13T10:27:57Z / pending.
 - Scope lock reviewed by / at: owner self-review / 2026-11-13; not independent.
 
 ## Frozen commitment
