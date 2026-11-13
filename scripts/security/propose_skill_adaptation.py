@@ -25,6 +25,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts" / "validate"))
 import external_skill_intake as intake  # noqa: E402
 from common import load_json, split_frontmatter  # noqa: E402
 from validate_skill import validate_skill  # noqa: E402
+from validate_runtime import validate_portable  # noqa: E402
 
 ALLOWED_DECISIONS = {"IMPORT", "EXTEND", "COMPOSE"}
 HEX_64 = re.compile(r"^[a-f0-9]{64}$")
@@ -261,6 +262,8 @@ def create_proposal(receipt_path: Path, quarantine_path: Path, matcher_report_pa
 
         schema = load_json(REPO_ROOT / "scripts/validate/schemas/skill.schema.json")
         issues = validate_skill(package, schema, root=REPO_ROOT)
+        package_frontmatter, _ = split_frontmatter((package / "SKILL.md").read_text(encoding="utf-8"))
+        issues.extend(validate_portable(package_frontmatter, str(package / "SKILL.md")))
         proposal = {
             "schema_version": 1,
             "status": "ADAPTATION_SEED",
@@ -317,6 +320,8 @@ def finalize_proposal(proposal_path: Path, change_record_path: Path) -> dict[str
         raise ProposalError("proposal package directory is missing or unsafe")
     schema = load_json(REPO_ROOT / "scripts/validate/schemas/skill.schema.json")
     issues = validate_skill(package, schema, root=REPO_ROOT)
+    package_frontmatter, _ = split_frontmatter((package / "SKILL.md").read_text(encoding="utf-8"))
+    issues.extend(validate_portable(package_frontmatter, str(package / "SKILL.md")))
     blockers = _validation_failures(issues)
     if blockers:
         raise ProposalError("adapted package fails repository portability validation: " + "; ".join(blockers))
