@@ -57,13 +57,15 @@ test_modules:
   - scripts/eval/tests/test_runtime_campaign.py
 # Iteration 06 completion-state isolation update (2026-11-10); Iteration 08
 # candidate/runtime revisions and behavioral evidence remain unchanged.
+# Catalog provenance projection refresh (2026-11-13); generated metadata only,
+# candidate/runtime revisions and behavioral evidence remain unchanged.
 source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/acceptance-matrix.md: "c3d976d8b6789b21b5c2ff0e35cccecde0054cffd25b6043cccd8f917af5d7e1"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-evidence.md: "42352f168c7eea4fdb7d53d160d4c194c624ea1f3fdd50e043e9799d0f224360"
   CATALOG.md: "b891aff1da3d08f55a5bdcb4d597c1b12318af6113aa07d668b37efc12145e27"
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: "622ac6fa557a8d98809d75cac6a188838ed9f6cc9bedd8382b13e640e079edd5"
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: "b6a39aa3eb75e60678e94b893a099e00c73796a49d005daeb771110a532f9a4e"
-  docs/catalog.json: "2f426401c52106dc2ad6ff4c99d36e7fd20a8df73751211e87b2ebf4107da873"
+  docs/catalog.json: "4c3c80b1bf9f23f51c8d955e2468151310e1cf6e59066075624dcbac51b3f62e"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml: "c2c406b56460ae809a44db3d31cf3f47a3b761fe6c62a66d55e0184c60e08787"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml: "de76470d524da9a44c1466a42a23311dbecbf5147a5454f636505be1feec535c"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-01.input.md: "e7b8e6bd02ba5472bed7dd966624aa2d8cce22692434e2361c74db6480efb648"
