@@ -146,6 +146,28 @@ lab:
         ):
             self.assertIn(marker, page)
 
+    def test_cloud_next_site_exposes_accessible_provenance_catalog_browser(self) -> None:
+        page = (ROOT / "sites/skills-factory-site/app/page.tsx").read_text(encoding="utf-8")
+        component = (ROOT / "sites/skills-factory-site/components/catalog-browser.tsx").read_text(encoding="utf-8")
+        styles = (ROOT / "sites/skills-factory-site/app/globals.css").read_text(encoding="utf-8")
+        self.assertIn("<CatalogBrowser/>", page)
+        for marker in (
+            '"OWN", "EXTENDED", "IMPORTED", "COMPOSED", "UNKNOWN"',
+            'aria-labelledby="catalog-heading"',
+            'type="search"',
+            "Pochodzenie",
+            "Domena",
+            "canonical_source_revision",
+            "NOT_RECORDED",
+            "UNKNOWN",
+            "Dojrzałość",
+            "Deklarowane kanały",
+            "Szczegóły pochodzenia i dostępności",
+        ):
+            self.assertIn(marker, component)
+        for marker in (".catalog-filters :focus-visible", "@media(max-width:800px)", ".provenance-unknown"):
+            self.assertIn(marker, styles)
+
     def test_site_lab_receipt_has_source_bound_identity(self) -> None:
         receipt = json.loads((ROOT / "docs/lab-release.json").read_text(encoding="utf-8"))
         # Pages publishes the last verified immutable Lab build receipt. The
