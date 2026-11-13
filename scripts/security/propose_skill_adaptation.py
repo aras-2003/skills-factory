@@ -367,8 +367,10 @@ def finalize_proposal(proposal_path: Path, change_record_path: Path) -> dict[str
     if set(descriptions) != set(changed_paths):
         raise ProposalError("change record must describe every added, modified and removed package path exactly")
 
+    change_record_sha = hashlib.sha256((json.dumps(change_record, sort_keys=True, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")).hexdigest()
     proposal.update({
         "status": "FINALIZED_SCOPED_PR_PROPOSAL",
+        "change_record_sha256": change_record_sha,
         "local_modifications": {"status": "HUMAN_REVIEWED", "reviewer": reviewer, "reviewed_at": change_record["reviewed_at"],
                                  "rationale": rationale, "items": [descriptions[path] for path in changed_paths]},
         "package_files": current,
