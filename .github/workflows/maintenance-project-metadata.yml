@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'scripts/governance/sync_project_metadata.py'
+      - 'scripts/governance/sync_task_architecture.py'
+      - 'docs/governance/task-architecture-impact-2026-11.json'
+      - 'tests/governance/test_task_architecture_sync.py'
       - 'tests/governance/test_project_metadata_sync.py'
       - '.github/workflows/maintenance-project-metadata.yml'
   issues:
@@ -13,11 +16,16 @@ on:
         description: Existing issue to resync
         required: true
         type: number
+      apply_architecture:
+        description: 'Set Architecture Impact for issue_number=0 (default dry-run)'
+        required: false
+        type: boolean
+        default: false
 permissions:
   contents: read
   issues: read
 concurrency:
-  group: project-metadata-${{ github.event.issue.number || inputs.issue_number }}
+  group: project-metadata-${{ github.event.issue.number || inputs.issue_number || 'all' }}
   cancel-in-progress: false
 jobs:
   test-mapping:
@@ -27,6 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - run: python3 -m unittest discover -s tests/governance -p 'test_project_metadata_sync.py' -v
+      - run: python3 -m unittest discover -s tests/governance -p 'test_task_architecture_sync.py' -v
+      - run: python3 scripts/governance/sync_task_architecture.py --check
   sync:
     name: Governance / Sync issue metadata
     runs-on: ubuntu-latest
@@ -35,6 +45,9 @@ jobs:
       GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
       GH_REPOSITORY: ${{ github.repository }}
       ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
+      ARCHITECTURE_APPLY_REQUESTED: ${{ inputs.apply_architecture }}
+      CONTROL_DRY_RUN: ${{ github.event_name == 'issues' && github.event.issue.number == 688 && contains(github.event.issue.body, '<!-- architecture-impact-sync: dry-run -->') }}
+      CONTROL_APPLY: ${{ github.event_name == 'issues' && github.event.issue.number == 688 && contains(github.event.issue.body, '<!-- architecture-impact-sync: apply -->') }}
       PROJECT_OWNER: aras-2003
       PROJECT_NUMBER: '1'
     steps:
@@ -45,4 +58,15 @@ jobs:
             echo "::error::PROJECTS_TOKEN secret missing. Configure a scoped GitHub App token or fine-grained PAT with Projects write permission."
             exit 1
           fi
-          python3 scripts/governance/sync_project_metadata.py
+          if [ "$CONTROL_DRY_RUN" = "true" ] && [ "$CONTROL_APPLY" = "true" ]; then
+            echo "::error::Ambiguous architecture control markers in Issue #688"
+            exit 1
+          fi
+          if [ "$ISSUE_NUMBER" = "0" ] || [ "$CONTROL_DRY_RUN" = "true" ] || [ "$CONTROL_APPLY" = "true" ]; then
+            args=(--issue-number 0)
+            if [ "$CONTROL_APPLY" = "true" ] || [ "$ARCHITECTURE_APPLY_REQUESTED" = "true" ]; then args+=(--apply); fi
+            python3 scripts/governance/sync_task_architecture.py "${args[@]}"
+          else
+            # Preserve the proven existing metadata sync for normal Issue updates.
+            python3 scripts/governance/sync_project_metadata.py
+          fi
