@@ -46,8 +46,8 @@ jobs:
       GH_REPOSITORY: ${{ github.repository }}
       ISSUE_NUMBER: ${{ github.event.issue.number || inputs.issue_number }}
       ARCHITECTURE_APPLY_REQUESTED: ${{ inputs.apply_architecture }}
-      CONTROL_DRY_RUN: ${{ github.event_name == 'issues' && github.event.issue.number == 688 && contains(github.event.issue.body, '<!-- architecture-impact-sync: dry-run -->') }}
-      CONTROL_APPLY: ${{ github.event_name == 'issues' && github.event.issue.number == 688 && contains(github.event.issue.body, '<!-- architecture-impact-sync: apply -->') }}
+      CONTROL_DRY_RUN: "${{ github.event_name == 'issues' && github.event.issue.number == 688 && contains(github.event.issue.body, '<!-- architecture-impact-sync: dry-run -->') }}"
+      CONTROL_APPLY: "${{ github.event_name == 'issues' && github.event.issue.number == 688 && contains(github.event.issue.body, '<!-- architecture-impact-sync: apply -->') }}"
       PROJECT_OWNER: aras-2003
       PROJECT_NUMBER: '1'
     steps:
