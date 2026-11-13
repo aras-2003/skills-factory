@@ -458,6 +458,12 @@ test("MCP initialize, discover parity tools, authenticate and call", async () =>
   assert.deepEqual(lineGood.result.structuredContent.data.x_labels, ["Q1", "Q2"]); assert.match(lineGood.result.structuredContent.svg, /<title>Series \/ Q1: 0 PLN<\/title>/); assert.match(lineGood.result.structuredContent.svg, /<title>Series \/ Q2: -10 PLN<\/title>/); assert.ok(lineGood.result.content.every((item) => item.type === "text"));
   const bad = await (await handleMcp(rpc("tools/call", { name: "render_line_chart", arguments: { ...line, series_values: [[1]], expected_x_labels: 2, expected_series: 1, expected_points_per_series: 2 } }, { "oai-authenticated-user-id": "test-only" }))).json() as { result: { isError: boolean } }; assert.equal(bad.result.isError, true);
   const catalog = callTool("list_skills", {}); assert.equal(catalog.skills.length, catalog.skill_count); assert.ok(catalog.skills.every((item) => !("reference_files" in item)));
+  assert.match(catalog.canonical_catalog_registry_sha256, /^[a-f0-9]{64}$/);
+  assert.ok(catalog.skills.every((item) => item.canonical_source_revision === LAB_RELEASE.source_revision));
+  assert.ok(catalog.skills.every((item) => item.canonical_source === item.provenance.source && /^[a-f0-9]{64}$/.test(item.provenance.source_sha256)));
+  assert.ok(catalog.skills.every((item) => ["OWN", "EXTENDED", "IMPORTED", "COMPOSED", "UNKNOWN"].includes(item.provenance.classification)));
+  assert.ok(catalog.skills.every((item) => item.maturity && item.source_status && item.capability_assessment));
+  assert.equal(catalog.skills.find((item) => item.provenance.classification === "UNKNOWN")?.provenance.classification, "UNKNOWN");
   const loaded = callTool("load_skill", { skill_name: "oaf-health-check" });
   const loadedReferences = loaded.reference_files as Record<string, string>;
   assert.match(loaded.instructions, /Load `references\/WORKFLOW\.md`/);
