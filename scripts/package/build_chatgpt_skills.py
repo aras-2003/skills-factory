@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 import zipfile
 from pathlib import Path
 
@@ -20,6 +21,13 @@ from build_utils import (
 from portable import read_frontmatter, render_portable_skill
 from workflow_entrypoints import load_registry
 from skill_interface import repository_root, skill_domain, write_skill_interface
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from provenance.catalog import (  # noqa: E402
+    enrich_capabilities,
+    load_registry as load_provenance_registry,
+    provenance_metadata,
+)
 
 
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
@@ -137,10 +145,14 @@ def build(root: Path, output_dir: Path, maturity: str, allow_empty: bool = False
 
     revision = source_revision(root)
     version = package_version(root, "package")
+    provenance_registry = load_provenance_registry(root)
+    provenance_meta = provenance_metadata(provenance_registry)
 
     with atomic_output(root, output_dir) as stage:
         bundles = [build_skill_bundle(skill_dir, stage) for skill_dir in selected]
+        enrich_capabilities(bundles, provenance_registry)
         workflows = workflow_channel_status(root, maturity)
+        enrich_capabilities(workflows, provenance_registry)
         index = {
             "format": "chatgpt-personal-skills",
             "schema_version": "1.0",
@@ -148,6 +160,7 @@ def build(root: Path, output_dir: Path, maturity: str, allow_empty: bool = False
             "package_version": version,
             "source_revision": revision,
             "capability_contract": capability_contract_metadata(),
+            **provenance_meta,
             "maturity": maturity,
             "skills": bundles,
             "workflows": workflows,
@@ -169,6 +182,7 @@ def build(root: Path, output_dir: Path, maturity: str, allow_empty: bool = False
                 "channel": "chatgpt-zip",
                 "source_revision": revision,
                 "capability_contract": capability_contract_metadata(),
+                **provenance_meta,
                 "payload_content_sha256": payload_digest,
                 "component_count": len(bundles),
                 "components": [
@@ -182,6 +196,7 @@ def build(root: Path, output_dir: Path, maturity: str, allow_empty: bool = False
                         "archive_sha256": x["archive_sha256"],
                         "inventory": x["inventory"],
                         "capability_assessment": x["capability_assessment"],
+                        "provenance": x["provenance"],
                     }
                     for x in bundles
                 ],
@@ -195,6 +210,7 @@ def build(root: Path, output_dir: Path, maturity: str, allow_empty: bool = False
                 "package_version": version,
                 "source_revision": revision,
                 "capability_contract": capability_contract_metadata(),
+                **provenance_meta,
                 "skills": [
                     {
                         "name": x["name"],
@@ -206,6 +222,7 @@ def build(root: Path, output_dir: Path, maturity: str, allow_empty: bool = False
                         "archive_sha256": x["archive_sha256"],
                         "inventory": x["inventory"],
                         "capability_assessment": x["capability_assessment"],
+                        "provenance": x["provenance"],
                     }
                     for x in bundles
                 ],

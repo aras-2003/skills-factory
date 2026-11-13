@@ -330,6 +330,29 @@ def validate_zips(path: Path) -> list[str]:
     contract = index.get("capability_contract")
     if not isinstance(contract, dict) or contract != capabilities.get("capability_contract") or contract != release.get("capability_contract"):
         errors.append("index/capabilities/release capability_contract mismatch")
+    for key in ("provenance_schema_version", "provenance_registry_sha256"):
+        if index.get(key) != capabilities.get(key) or index.get(key) != release.get(key):
+            errors.append(f"index/capabilities/release {key} mismatch")
+
+    repo_root = Path(__file__).resolve().parents[2]
+    try:
+        provenance_registry = load_registry(repo_root)
+        by_identity = records_by_identity(provenance_registry)
+        by_source = records_by_source(provenance_registry)
+        for collection, label, kind in (
+            (index.get("skills") or [], "index skill", "skill"),
+            (index.get("workflows") or [], "index workflow", "workflow"),
+            (capabilities.get("workflows") or [], "capabilities workflow", "workflow"),
+        ):
+            for item in collection:
+                if not isinstance(item, dict) or not item.get("name"):
+                    continue
+                record = by_identity.get((kind, str(item["name"])))
+                expected = projection(record, by_source) if record else None
+                if expected is None or item.get("provenance") != expected:
+                    errors.append(f"{label} {item.get('name')}: provenance does not match canonical registry")
+    except Exception:
+        errors.append("canonical provenance registry invalid for ZIP package")
 
     index_by_name = _unique_by_name(index.get("skills") or [], "index", errors)
     capabilities_by_name = _unique_by_name(capabilities.get("skills") or [], "capabilities", errors)
@@ -353,7 +376,7 @@ def validate_zips(path: Path) -> list[str]:
 
         capability = capabilities_by_name.get(name)
         release_item = release_by_name.get(name)
-        identity_fields = ("version", "maturity", "zip", "content_sha256", "archive_sha256", "inventory", "capability_assessment")
+        identity_fields = ("version", "maturity", "zip", "content_sha256", "archive_sha256", "inventory", "capability_assessment", "provenance")
         if capability is not None:
             for field in identity_fields:
                 if capability.get(field) != item.get(field):

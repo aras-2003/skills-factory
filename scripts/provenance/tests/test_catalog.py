@@ -70,9 +70,9 @@ class ProvenanceSchemaTests(unittest.TestCase):
     def test_four_types_unknown_and_mixed_origin_composition_fixtures_validate(self) -> None:
         for classification in ("OWN", "IMPORTED", "EXTENDED", "UNKNOWN"):
             with self.subTest(classification=classification):
-                self.assertEqual([], list(VALIDATOR.iter_errors(record(classification))))
+                self.assertEqual([], list(VALIDATOR.iter_errors({"schema_version": 1, "records": [record(classification)]})))
         composed = record("COMPOSED")
-        self.assertEqual([], list(VALIDATOR.iter_errors(composed)))
+        self.assertEqual([], list(VALIDATOR.iter_errors({"schema_version": 1, "records": [composed]})))
         own_child = record("OWN")
         own_child.update({"name": "one", "source": "skills/demo/one/SKILL.md"})
         imported_child = record("IMPORTED")
@@ -84,7 +84,7 @@ class ProvenanceSchemaTests(unittest.TestCase):
 
     def test_hybrid_external_base_with_local_changes_is_extended_not_own(self) -> None:
         hybrid = record("EXTENDED")
-        self.assertEqual([], list(VALIDATOR.iter_errors(hybrid)))
+        self.assertEqual([], list(VALIDATOR.iter_errors({"schema_version": 1, "records": [hybrid]})))
         self.assertEqual("EXTENDED", hybrid["classification"])
         self.assertIsNotNone(hybrid["upstream"])
         self.assertEqual("DOCUMENTED", hybrid["local_modifications"]["status"])
@@ -114,7 +114,7 @@ class ProvenanceSchemaTests(unittest.TestCase):
 
         for invalid in cases:
             with self.subTest(classification=invalid["classification"], record=invalid):
-                self.assertTrue(list(VALIDATOR.iter_errors(invalid)))
+                self.assertTrue(list(VALIDATOR.iter_errors({"schema_version": 1, "records": [invalid]})))
 
 
 class ProvenanceMigrationTests(unittest.TestCase):
