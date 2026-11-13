@@ -45,8 +45,14 @@ jobs:
           python -m unittest discover -s scripts/validate/tests -p 'test_*.py'
           python -m unittest discover -s scripts/provenance/tests -p 'test_*.py'
           python scripts/provenance/migrate.py --check
+          mkdir -p .tmp
           python scripts/catalog/generate_catalog.py
+          sha256sum CATALOG.md docs/catalog.json > .tmp/catalog-generation-first.sha256
+          python scripts/catalog/generate_catalog.py
+          sha256sum CATALOG.md docs/catalog.json > .tmp/catalog-generation-second.sha256
+          diff -u .tmp/catalog-generation-first.sha256 .tmp/catalog-generation-second.sha256
           git diff --exit-code -- CATALOG.md docs/catalog.json
+          git diff --exit-code -- provenance/registry.yaml provenance/migration-audit.json
 
   security-capabilities:
     name: CI / Security and capability checks
