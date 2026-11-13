@@ -1,0 +1,84 @@
+name: Engineering task (TDC v1.1)
+description: Implementation or design task with explicit architecture impact and verifiable acceptance
+title: "[TASK] "
+body:
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: Task type
+      options: [DISCOVERY, DESIGN, IMPLEMENT, VALIDATE, EPIC]
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / evidence
+      description: Observed gap and consequence, not an unverified solution
+    validations:
+      required: true
+  - type: textarea
+    id: baseline
+    attributes:
+      label: Baseline / existing capability
+      description: Verified source/commit/contracts, reuse possibilities and unknowns
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective / deliverable
+      description: One bounded observable result (EPIC links child results)
+    validations:
+      required: true
+  - type: dropdown
+    id: architecture_level
+    attributes:
+      label: Architecture impact level
+      description: A0 no change, A1 local, A2 extension, A3 cross-component, A4 fundamental, UNKNOWN intake only
+      options: [UNKNOWN, A0, A1, A2, A3, A4]
+    validations:
+      required: true
+  - type: textarea
+    id: architecture_impact
+    attributes:
+      label: Architecture Impact
+      description: "Change YES/NO/TO_CONFIRM; REUSE/EXTEND/COMPOSE/IMPORT/CREATE/REPLACE; baseline; affected components/interfaces/data/runtime; target delta; compatibility/rollback; ADR gate; architecture regressions. See docs/governance/TASK-DEFINITION-STANDARD.md"
+      placeholder: |
+        Architecture change:
+        Decision:
+        Baseline:
+        Affected:
+        Target delta:
+        Compatibility / migration / rollback:
+        Design evidence / gate:
+        Architecture validation:
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope / exclusions
+      description: In and out, with forbidden changes
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs / dependencies
+      description: Source files, fixtures, linked Issues and prerequisites
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and test mapping
+      description: "AC-01 → T-01: input, objective assertion, expected evidence; distinguish offline/CI/runtime"
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Blockers / failure handling
+      description: Missing evidence, decisions, escalation and next action
+    validations:
+      required: true
