@@ -19,6 +19,11 @@ sync = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(sync)
 
 VALID = {"A0", "A1", "A2", "A3", "A4"}
+FIELD_VALUES = """query($id:ID!){node(id:$id){... on ProjectV2Item{
+  fieldValues(first:100){nodes{... on ProjectV2ItemFieldSingleSelectValue {
+    name field {... on ProjectV2FieldCommon {name}}
+  }}}
+}}}"""
 QUERY = """query($owner:String!, $project:Int!, $repo:String!, $issue:Int!) {
  user(login:$owner) {
    projectV2(number:$project) {
@@ -95,14 +100,21 @@ def sync_one(issue_number, row, apply=False):
     if not apply:
         print(f"DRY_RUN Issue #{issue_number}: Architecture Impact={row['level']} assessment={row['review']}")
         return "DRY_RUN"
+    # Do not clobber a field a project reviewer already classified differently.
+    before = sync.gql(FIELD_VALUES, {"id": items[0]["id"]})
+    present = [v["name"] for v in ((before.get("node") or {}).get("fieldValues") or {}).get("nodes", [])
+               if v and (v.get("field") or {}).get("name", "").casefold() == "architecture impact"]
+    if len(present) > 1:
+        raise RuntimeError(f"Issue {issue_number}: ambiguous existing Architecture Impact values")
+    if present == [row["level"]]:
+        print(f"ALREADY_VERIFIED Issue #{issue_number}: Architecture Impact={row['level']}")
+        return "ALREADY_VERIFIED"
+    if present:
+        raise RuntimeError(f"Issue {issue_number}: existing reviewed Architecture Impact differs; refusing overwrite")
     sync.gql(sync.UPDATE, {"project": project["id"], "item": items[0]["id"],
                            "field": field_id, "option": selected})
     # Independent readback, not a GraphQL mutation receipt alone.
-    verify = sync.gql("""query($id:ID!){node(id:$id){... on ProjectV2Item{
-      fieldValues(first:100){nodes{... on ProjectV2ItemFieldSingleSelectValue {
-        name field {... on ProjectV2FieldCommon {name}}
-      }}}
-    }}}""", {"id": items[0]["id"]})
+    verify = sync.gql(FIELD_VALUES, {"id": items[0]["id"]})
     node = (verify.get("node") or {})
     values = (node.get("fieldValues") or {}).get("nodes", [])
     observed = [v["name"] for v in values if v and (v.get("field") or {}).get("name", "").casefold() == "architecture impact"]
