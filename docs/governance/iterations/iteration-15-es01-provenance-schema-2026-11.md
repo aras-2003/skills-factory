@@ -2,7 +2,7 @@
 
 Template derived from the iteration delivery policy. This is a scope lock proposal; it does not start implementation.
 
-- State: ACTIVE; scope locked by merged PR #660 (`0919deabab159cd6a8406b0c867fe4cbbf9cdf7c`).
+- State: CLOSED / ACCEPTED; corrected on 2026-11-13 to match the existing closure decision below. This metadata correction does not alter scope, evidence, or outcome.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #616 / not assigned; native Project iteration remains a scheduling mirror.
 - Previous terminal iteration: Iteration 14 CLOSED / ACCEPTED, #614; implementation PR #658 and evidence closeout PR #659; final main SHA `834c29258ce48d111a147b26540f13554a83be34`.
@@ -75,3 +75,8 @@ The fixed ledger is `evals/campaigns/iteration-15-es01-provenance-schema-2026-11
 - Owner proposal / reviewer acceptance: Arkadiusz Kamrowski / self-review (not independent). Completed 2026-11-13 UTC.
 - If ABORTED: N/A.
 - Next iteration eligibility: #617 may begin under a new scope lock; no other planned issue is started by this closeout.
+
+
+## Record consistency correction (2026-11-13)
+
+The state header above previously remained `ACTIVE` even though the immutable closure section below records Iteration 15 as CLOSED / ACCEPTED and #616 as accepted. This correction aligns the current lifecycle marker with that already-merged decision; no acceptance criteria, historical evidence, or scope were changed.
