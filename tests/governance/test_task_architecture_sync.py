@@ -43,9 +43,25 @@ class ArchitectureSyncTest(unittest.TestCase):
     def test_apply_readback(self):
         first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
         third={"node":{"fieldValues":{"nodes":[{"name":"A2","field":{"name":"Architecture Impact"}}]}}}
-        with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,{},third]) as gql:
+        before={"node":{"fieldValues":{"nodes":[]}}}
+        with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,before,{},third]) as gql:
             self.assertEqual(mod.sync_one(42,{"title":"Example","level":"A2"},True),"VERIFIED")
-            self.assertEqual(gql.call_count,3)
+            self.assertEqual(gql.call_count,4)
+
+    def test_does_not_overwrite_manual_value(self):
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        previous={"node":{"fieldValues":{"nodes":[{"name":"A3","field":{"name":"Architecture Impact"}}]}}}
+        with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,previous]) as gql:
+            with self.assertRaisesRegex(RuntimeError,"refusing overwrite"):
+                mod.sync_one(42,{"title":"Example","level":"A2"},True)
+            self.assertEqual(gql.call_count,2)
+
+    def test_existing_equal_value_does_not_write(self):
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        previous={"node":{"fieldValues":{"nodes":[{"name":"A2","field":{"name":"Architecture Impact"}}]}}}
+        with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,previous]) as gql:
+            self.assertEqual(mod.sync_one(42,{"title":"Example","level":"A2"},True),"ALREADY_VERIFIED")
+            self.assertEqual(gql.call_count,2)
 
     def test_manifest_refuses_ambiguity(self):
         invalid={"schema":"tdc-architecture-batch-v1","repository":"aras-2003/skills-factory","issues":{"42":{"title":"Example item has enough words","level":"UNKNOWN","review":"PROPOSED","change_description":"A concrete change detailed here more than enough","architecture_reason":"Some architecture reasoning here longer than 25 characters","acceptance_summary":"Acceptance details with evidence requirements"}}}
