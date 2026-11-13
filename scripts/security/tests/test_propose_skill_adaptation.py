@@ -191,6 +191,8 @@ class ProposeSkillAdaptationTests(unittest.TestCase):
             updated = json.loads((args[-1] / "proposal.json").read_text())
             self.assertEqual("HUMAN_REVIEWED", updated["local_modifications"]["status"])
             self.assertEqual("MODIFIED", updated["local_modifications"]["items"][0]["change"])
+            expected_change_sha = hashlib.sha256((json.dumps(change_record, sort_keys=True, ensure_ascii=False, separators=(",", ":")) + "\n").encode()).hexdigest()
+            self.assertEqual(expected_change_sha, updated["change_record_sha256"])
             self.assertFalse(updated["release_eligible"])
 
     def test_finalization_refuses_unrecorded_local_changes(self):
