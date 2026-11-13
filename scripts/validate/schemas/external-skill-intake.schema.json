@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skills-factory:external-skill-intake:1",
+  "title": "Skills Factory quarantined external skill intake",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "locator", "subdir", "source_digest", "commit", "author"],
+          "properties": {
+            "type": {"const": "local_directory"},
+            "locator": {"type": "string", "minLength": 1},
+            "subdir": {"type": ["string", "null"]},
+            "source_digest": {"$ref": "#/$defs/sha256"},
+            "commit": {"type": "null"},
+            "author": {"$ref": "#/$defs/author"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "locator", "subdir", "source_digest", "commit", "author"],
+          "properties": {
+            "type": {"const": "local_bundle"},
+            "locator": {"type": "string", "minLength": 1},
+            "subdir": {"type": ["string", "null"]},
+            "source_digest": {"$ref": "#/$defs/sha256"},
+            "commit": {"type": "null"},
+            "author": {"$ref": "#/$defs/author"}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "repository", "commit", "subdir", "source_url", "source_digest", "author"],
+          "properties": {
+            "type": {"const": "github_repository"},
+            "repository": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9.-]*/[A-Za-z0-9][A-Za-z0-9._-]*$"},
+            "commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+            "subdir": {"type": ["string", "null"]},
+            "source_url": {"type": "string", "format": "uri", "pattern": "^https://github\\.com/"},
+            "source_digest": {"$ref": "#/$defs/sha256"},
+            "author": {"$ref": "#/$defs/author"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "author": {
+      "type": "object",
+      "required": ["state", "name", "login", "commit_sha"],
+      "properties": {
+        "state": {"enum": ["PROVIDER_COMMIT_METADATA", "UNKNOWN"]},
+        "name": {"type": ["string", "null"]},
+        "login": {"type": ["string", "null"]},
+        "commit_sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40}$"}
+      },
+      "additionalProperties": false
+    },
+    "file": {
+      "type": "object",
+      "required": ["path", "size_bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(/|$))(?!.*//).+"},
+        "size_bytes": {"type": "integer", "minimum": 0, "maximum": 10000000},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "scan_finding": {
+      "type": "object",
+      "required": ["rule_id", "severity", "path", "line", "fingerprint", "suppressed"],
+      "properties": {
+        "rule_id": {"type": "string", "pattern": "^SEC[0-9]{3}$"},
+        "severity": {"enum": ["high", "medium", "low"]},
+        "path": {"type": "string"},
+        "line": {"type": "integer", "minimum": 0},
+        "fingerprint": {"$ref": "#/$defs/sha256"},
+        "suppressed": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "security_review": {
+      "type": "object",
+      "required": ["status", "findings", "errors"],
+      "properties": {
+        "status": {"enum": ["BLOCKED", "REVIEW_REQUIRED", "NOT_RUN"]},
+        "findings": {"type": "array", "items": {"$ref": "#/$defs/scan_finding"}},
+        "errors": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "format_finding": {
+      "type": "object",
+      "required": ["path", "code"],
+      "properties": {
+        "path": {"type": "string"},
+        "code": {"enum": ["SKILL_FRONTMATTER_TOO_LARGE", "SKILL_INVALID_UTF8", "SKILL_FRONTMATTER_MISSING", "SKILL_FRONTMATTER_UNCLOSED", "SAFE_YAML_PARSER_UNAVAILABLE", "SKILL_FRONTMATTER_ALIAS_NOT_ALLOWED", "SKILL_FRONTMATTER_INVALID", "SKILL_FRONTMATTER_REQUIRED_FIELDS_MISSING", "SKILL_FILE_MISSING"]}
+      },
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "required": ["schema_version", "tool_version", "source", "inventory_sha256", "files", "skill_paths", "author_provenance", "license_evidence", "license_decision", "security_review", "format_findings", "review_hints", "duplicate_inventory_matches", "duplicate_skill_content_matches", "duplicate_skill_paths", "authorization_state"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "tool_version": {"type": "string", "minLength": 1},
+        "source": {"$ref": "#/$defs/source"},
+        "inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/file"}},
+        "skill_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "author_provenance": {"$ref": "#/$defs/author"},
+        "license_evidence": {"type": "array", "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}, "additionalProperties": false}},
+        "license_decision": {"enum": ["APPROVED", "REVIEW_REQUIRED", "REJECTED", "UNKNOWN"]},
+        "security_review": {"$ref": "#/$defs/security_review"},
+        "format_findings": {"type": "array", "items": {"$ref": "#/$defs/format_finding"}},
+        "review_hints": {"type": "array", "uniqueItems": true, "items": {"enum": ["PROMPT_OVERRIDE", "CREDENTIAL_ACCESS", "NETWORK_ACTIVITY", "DESTRUCTIVE_OPERATION", "UNEXPECTED_WRITE_ACTIVITY", "TOOL_PERMISSION_DECLARATION", "EMBEDDED_OR_BINARY_ASSET", "DEPENDENCY_OR_LIFECYCLE_REVIEW"]}},
+        "duplicate_inventory_matches": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sha256"}},
+        "duplicate_skill_content_matches": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/sha256"}},
+        "duplicate_skill_paths": {"type": "object", "propertyNames": {"pattern": "^[a-f0-9]{64}$"}, "additionalProperties": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}},
+        "authorization_state": {"const": "NOT_AUTHORIZED"}
+      },
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "required": ["schema_version", "source", "inventory_sha256", "files", "pinned", "upstream_commit_pinned", "license_decision", "authorization_state"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "source": {"$ref": "#/$defs/source"},
+        "inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/file"}},
+        "pinned": {"const": true},
+        "upstream_commit_pinned": {"type": "boolean"},
+        "license_decision": {"enum": ["APPROVED", "REVIEW_REQUIRED", "REJECTED", "UNKNOWN"]},
+        "authorization_state": {"const": "NOT_AUTHORIZED"}
+      },
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "required": ["schema_version", "receipt_sha256", "inventory_sha256", "source", "reviewer", "reviewed_at", "rationale", "license_decision", "security_decision", "license_evidence_reference", "security_evidence_reference"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "source": {"type": "object", "required": ["repository", "commit"], "properties": {"repository": {"type": ["string", "null"]}, "commit": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40}$"}}, "additionalProperties": false},
+        "reviewer": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "format": "date-time"},
+        "rationale": {"type": "string", "minLength": 1},
+        "license_decision": {"enum": ["APPROVED", "REVIEW_REQUIRED", "REJECTED", "UNKNOWN"]},
+        "security_decision": {"enum": ["APPROVED", "REVIEW_REQUIRED", "REJECTED", "UNKNOWN"]},
+        "license_evidence_reference": {"type": "string"},
+        "security_evidence_reference": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/receipt"
+}
