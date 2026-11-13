@@ -2,13 +2,13 @@
 
 The scope lock is preserved by merged PR #665. This record and its matrix define the entire increment; changes to frozen criteria require a separately reviewed clarification and must not expand acceptance. Follow [iteration delivery](../../../docs/governance/ITERATION-DELIVERY.md).
 
-- State: ACTIVE; scope locked by merged PR #665 (`1e53068c24470353fa1cb58fe619018033785519`).
+- State: CLOSED (ACCEPTED); all 16 acceptance rows PASS on the exact implementation source candidate.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #617 / not assigned; native Project iteration is a scheduling mirror.
 - Previous terminal iteration / closure link: Iteration 15 / #616 CLOSED / ACCEPTED; [record](../iterations/iteration-15-es01-provenance-schema-2026-11.md); exact accepted main SHA `0c193d6982c8f18255cc33c31356f95078f2e882`.
 - Baseline main SHA: `0c193d6982c8f18255cc33c31356f95078f2e882`.
 - Lock commit SHA: `1e53068c24470353fa1cb58fe619018033785519`; recorded in #617.
-- Started at / closed at (UTC): 2026-11-13T10:27:57Z / pending.
+- Started at / closed at (UTC): 2026-11-13T10:27:57Z / 2026-11-13T11:12:47Z.
 - Scope lock reviewed by / at: owner self-review / 2026-11-13; not independent.
 
 ## Frozen commitment
@@ -48,6 +48,7 @@ Run deterministic helper contract cases for normal input, invalid input, limits/
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
 | Scope baseline | `0c193d6982c8f18255cc33c31356f95078f2e882` | N/A for scope lock | Existing exact-main closeout checks for #616; this iteration not run | N/A for scope lock; no Site behavior | None |
+| Accepted candidate | `ddf800634a7bd6de81d3cd5622dfab154cb910cb` | N/A (CLI tooling only) | PR #666 source candidate `3295a0810fa28351a04eb3f6c81b6e6a38375eae`; Validate Skills `43414175351`, Domain Integrity `43414175314`, Evaluation CI `43414175425` all SUCCESS; matrix evidence lists hashes/artifacts | No Site/runtime behavior; CLI smoke was local synthetic and authorization remained NOT_AUTHORIZED | No prior candidate; merge result is exact source tree from PR #666
 
 ## Regression selection and counts
 
@@ -67,14 +68,14 @@ Run deterministic helper contract cases for normal input, invalid input, limits/
 
 ## Closure / abort decision
 
-- Outcome: PENDING (CLOSED or ABORTED only after decision)
-- Final candidate / matrix and immutable evidence links: pending
-- Committed Issues accepted / unresolved: #617 pending
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: pending
-- Shared regression verdict: pending
-- Non-blocking findings and accepted impact (owner/reviewer + future Issue): pending
-- Scope compared with lock commit: pending
-- Issue / Project / PR reconciliation: pending
-- Owner proposal / reviewer acceptance / decision timestamp: pending
+- Outcome: CLOSED (ACCEPTED)
+- Final source candidate: `3295a0810fa28351a04eb3f6c81b6e6a38375eae`; exact-main merge SHA: `ddf800634a7bd6de81d3cd5622dfab154cb910cb`; [acceptance matrix](../../../evals/campaigns/iteration-16-es02-secure-skill-intake-2026-11/acceptance-matrix.md); [PR #666](https://github.com/aras-2003/skills-factory/pull/666).
+- Committed Issues accepted / unresolved: #617 accepted and ready to close; none unresolved in locked scope.
+- Required rows: PASS 16; FAIL 0; NOT_RUN 0; BLOCKED 0; REVIEW_REQUIRED 0; runtime N/A reviewed against the final six-file implementation diff.
+- Shared regression verdict: PASS; all applicable PR workflows passed on source candidate `3295a0810fa28351a04eb3f6c81b6e6a38375eae` before squash merge to `main`.
+- Non-blocking limitation: host Python lacked PyYAML/jsonschema; full locked-dependency CI passed and the exact synthetic CLI smoke passed. Owner/reviewer accepts this as environment-only.
+- Scope compared with lock commit: unchanged; only the frozen #617 intake command/library, tests, schema, docs, and acceptance evidence were added. No Site, runtime or production behavior changed.
+- Issue / Project / PR reconciliation: #665 scope lock merged; #666 implementation merged; #617 accepted for closure; parent #615 and later work remain planned.
+- Owner acceptance / decision timestamp: Arkadiusz Kamrowski, 2026-11-13T11:12:47Z (self-review; not independent).
 - If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: N/A
 - Next iteration eligibility: only after #617 terminal; parent #615 remains planned; no automatic start or production promotion.
