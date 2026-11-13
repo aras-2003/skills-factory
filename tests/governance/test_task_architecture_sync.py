@@ -23,6 +23,19 @@ class ArchitectureSyncTest(unittest.TestCase):
         self.assertEqual(mod.option_id(fields,"A2"),("f","a"))
         with self.assertRaises(RuntimeError): mod.option_id(fields,"Medium")
 
+    def test_text_field_contains_issue_specific_change(self):
+        fields=[{"id":"text-field","name":"Architecture Impact","dataType":"TEXT"}]
+        row={"level":"A3","change_description":"Replace X interface with backward compatible typed API.","architecture_reason":"A3 cross-component schema change requiring review."}
+        self.assertEqual(mod.field_target(fields,row)[0:2],("text-field","text"))
+        value=mod.field_target(fields,row)[2]
+        self.assertIn("A3",value)
+        self.assertIn("Replace X interface",value)
+        self.assertLessEqual(len(value),1000)
+
+    def test_text_field_readback(self):
+        data={"node":{"fieldValues":{"nodes":[{"text":"A2 — impact description","field":{"name":"Architecture Impact"}}]}}}
+        self.assertEqual(mod.field_values(data),["A2 — impact description"])
+
     def test_duplicate_field_refused(self):
         f={"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}
         with self.assertRaises(RuntimeError): mod.option_id([f,f],"A2")
