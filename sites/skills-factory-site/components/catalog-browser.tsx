@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CATALOG } from "@/lib/skills-factory-adapter/cloud-tools";
+import { CATALOG, filterCatalog, PROVENANCE_CLASSIFICATIONS } from "@/lib/skills-factory-adapter/catalog-view";
 
-const classifications = ["OWN", "EXTENDED", "IMPORTED", "COMPOSED", "UNKNOWN"] as const;
+const classifications = PROVENANCE_CLASSIFICATIONS;
 type ComponentLineageRecord = {
   name: string;
   kind: string;
@@ -74,14 +74,7 @@ export function CatalogBrowser() {
   const [classification, setClassification] = useState("all");
   const [domain, setDomain] = useState("all");
   const domains = useMemo(() => [...new Set(catalog.map((item) => item.domain || "unknown"))].sort(), []);
-  const visible = useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase();
-    return catalog.filter((item) => {
-      const state = item.provenance?.classification || "UNKNOWN";
-      const text = [item.name, item.domain, item.kind, item.description, item.canonical_source, state].join(" ").toLocaleLowerCase();
-      return (!needle || text.includes(needle)) && (classification === "all" || state === classification) && (domain === "all" || (item.domain || "unknown") === domain);
-    });
-  }, [query, classification, domain]);
+  const visible = useMemo(() => filterCatalog(catalog, { query, classification, domain }), [query, classification, domain]);
 
   return <section className="catalog-browser" aria-labelledby="catalog-heading">
     <div className="catalog-heading-row"><div><p className="eyebrow">SOURCE LINEAGE</p><h2 id="catalog-heading">Katalog umiejętności i workflowów</h2><p className="catalog-intro">Pochodzenie, licencja, dojrzałość i dostępność są osobnymi informacjami. Żaden status nie oznacza automatycznie gotowości produkcyjnej.</p></div><span className="catalog-total" aria-live="polite">{visible.length} z {catalog.length}</span></div>
