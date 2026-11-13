@@ -8,8 +8,12 @@ const siteRoot = process.cwd();
 const require = createRequire(path.join(siteRoot, "package.json"));
 const toolRequire = createRequire(require.resolve("wrangler"));
 const { build } = await import(toolRequire.resolve("esbuild"));
-const output = path.join(siteRoot, ".sites-runtime", "contracts.test.mjs");
-await mkdir(path.dirname(output), { recursive: true });
-await build({ entryPoints: [fileURLToPath(new URL("../tests/contracts.test.ts", import.meta.url))], bundle: true, platform: "node", format: "esm", outfile: output });
-const result = spawnSync(process.execPath, ["--test", output], { stdio: "inherit" });
+const outputRoot = path.join(siteRoot, ".sites-runtime");
+const testEntries = ["contracts.test.ts", "catalog-provenance.test.ts"].map((name) => fileURLToPath(new URL(`../tests/${name}`, import.meta.url)));
+const outputs = testEntries.map((_, index) => path.join(outputRoot, `contracts-${index}.test.mjs`));
+await mkdir(outputRoot, { recursive: true });
+for (let index = 0; index < testEntries.length; index++) {
+  await build({ entryPoints: [testEntries[index]], bundle: true, platform: "node", format: "esm", outfile: outputs[index] });
+}
+const result = spawnSync(process.execPath, ["--test", ...outputs], { stdio: "inherit" });
 process.exit(result.status ?? 1);
