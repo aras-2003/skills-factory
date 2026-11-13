@@ -8,10 +8,10 @@ description: 'Design the information hierarchy, navigation, responsive layout, i
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.1.17
+  version: 0.1.21
   maturity: candidate
   risk: medium
-  last_reviewed: '2026-11-05'
+  last_reviewed: '2026-11-10'
 ---
 
 # Interface Design
@@ -45,15 +45,25 @@ Turn a concrete product or service need into a buildable, evidence-aware interfa
 
 First decide whether the current request asks for interface design. If it asks to implement/edit a working page or run its tests, do not apply this skill or ask design questions; hand off to the implementation workflow. If loaded explicitly for an isolated test, state briefly that it does not apply and stop. Do not echo the request or emit a design brief. If implementation is requested but its workflow is unavailable, name the missing repository or approved artifact.
 
+### Product-data and capability gate
+
+For an account or order screen, use only records, fields, status names, counts, dates, actions, and routes supplied by the user or an explicitly referenced product source. If those inputs are absent, do not create populated sample records, even when labeled illustrative, hypothetical, or conditional. Use neutral fields such as `[order ID]`, `[status from the approved product mapping]`, and `[next action from approved order rules]`. Do not invent a status-to-action table, CTA, support destination, tab, navigation item, or detail route. State that entry, exit, and destinations are unspecified. A dashboard request does not establish any of those product capabilities.
+
 ## Required-context gate
 
 Before designing, check whether the current request or an explicitly referenced source gives all three inputs: (1) screen/flow goal, (2) intended user and primary task, and (3) target runtime/device. Never use narrated prior turns to fill any missing field.
 
-If all three inputs are missing, respond with this exact question and no other text: “For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?” Do not replace any clause with an inferred context. The question itself names this specialist; do not add an introduction or any other text.
+**Quoted-current-message priority:** When a message describes earlier turns and identifies a quoted “current user message,” treat only the text inside that quote as the operative request. The surrounding narrative is test/context metadata, not permission to continue an earlier artifact. Do not acknowledge, summarize, or use any screen, user/task, device, or design decision that appears only in the surrounding narrative. Apply this rule before routing or drafting.
+
+If all three inputs are missing, the entire response must be this one plain-text line, copied verbatim, with no quotation marks, code formatting, introduction, reasoning, summary, translation, paraphrase, or other text:
+
+For an interface-design brief, what screen or flow should change, who will use it and what task should they complete, and should it target mobile, desktop, or a specific runtime?
+
+Do not write anything before or after the question. Do not rewrite any word, clause, or punctuation, and do not replace any clause with inferred context. The question itself names this specialist.
 
 If only some inputs are missing, ask one concise question naming only those fields and identify the `interface-design` specialist in the question itself. When target runtime/device is missing, the question must directly ask whether the screen should target mobile, desktop, or a specific runtime; do not omit this question even when a mobile-first or desktop flow appeared only in narrated prior turns. Every missing field must be asked as something the user can answer, not merely described as unspecified. The question must be the whole response: no introduction, examples, suggestions, checklist, partial design or promise.
 
-Proceed with assumptions/placeholders only when the current request explicitly authorizes them and both goal and target device are clear. Label the narrowest user/task assumption, keep unknown product rules as placeholders, and list assumptions as open decisions. Never infer required context from other chats, saved memory, ambient context, or unreferenced earlier turns. A vague request such as “make the screen better” still needs the missing fields, even if a plausible screen appeared earlier. If the current message quotes or narrates a different “current user message,” treat only the quoted message as operative; continue an earlier artifact only when that message names or asks to revise it.
+Proceed with assumptions/placeholders only when the current request explicitly authorizes them and both goal and target device are clear. Label the narrowest user/task assumption, keep unknown product rules as placeholders, and list assumptions as open decisions. Never infer required context from other chats, saved memory, ambient context, or unreferenced earlier turns. A vague request such as “make the screen better” still needs the missing fields, even if a plausible screen appeared earlier. Continue an earlier artifact only when the operative request explicitly names or asks to revise it.
 
 Product name, industry, and native/web label are not extra required inputs when the goal, user/task, and device are clear. For product-agnostic flows, proceed with limited assumptions and leave product-specific decisions for handoff; do not ask questions that would not change the flow. When a concrete problem observation and user/task/device are clear, design for it and label unverified causes as assumptions instead of blocking on product details.
 
@@ -112,7 +122,7 @@ The clarification-only response is the sole exception to the eight-section brief
 
 Every valid interface brief must begin with the exact unformatted sentence “I’ll use interface-design for the <screen or flow name>.” Keep the definite article “the” before the name in every valid brief, including when the user used an indefinite article or the name is derived from the requested flow. This is the first line of the response, before any heading, greeting, or other text, regardless of the requested interface type. The next line is “## Interface brief”, followed by the eight sections below. Do not use this opening for clarification-only responses; their single question already names the specialist and must remain the whole response.
 
-**Opening label selection:** If the request names a screen or flow, use that concise noun phrase without its leading article, then place it after “for the”. If it describes a problem and asks you to propose a flow without naming it, derive a short noun phrase from the requested deliverable (for example, “the mobile-first onboarding flow”). Do not omit “the” or extend the opening label with the problem, purpose, benefit, or explanation for the flow. Keep those details in the brief body.
+**Opening label selection:** If the request names a screen or flow, use a concise noun phrase without its leading article, then place it after “for the”. Preserve any qualifier that materially defines the requested screen variant or its access/safety model; for example, retain “with role-based billing access” in the label for an account page whose billing visibility depends on the user's role. Do not shorten the label so a defining constraint disappears. If the request describes a problem and asks you to propose a flow without naming it, derive a short noun phrase from the requested deliverable (for example, “the mobile-first onboarding flow”). Do not omit “the” or extend the opening label with the problem, purpose, benefit, or explanation for the flow. Keep those details in the brief body.
 
 ## Quality checks
 
