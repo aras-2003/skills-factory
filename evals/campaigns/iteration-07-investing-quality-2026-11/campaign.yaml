@@ -80,6 +80,8 @@ test_modules:
 # Iteration 07 candidate/runtime revisions and behavioral evidence are unchanged.
 # CATALOG/docs catalog provenance refresh (2026-11-13); generated metadata only,
 # candidate/runtime revisions and behavioral evidence remain unchanged.
+# Packaging contract test pin refresh (2026-11-13); test now selects a skill in the
+# production profile; runtime candidate and behavioral evidence remain unchanged.
 source_sha256:
   CATALOG.md: 0377975c99cb155e010671bc065fa55360c73c2cb1af75ab84071812a32c26c8
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
@@ -139,7 +141,7 @@ source_sha256:
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
   scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: c82cda1be43e30e7020745e6dd945a8a7d5d316a504a1f3a71d7b1d10a5ef751
   scripts/package/build_utils.py: 8b6482ccdbc50c42462ebf9d55740e83f584385406c94fcc8a2941f40b62ec64
-  scripts/package/tests/test_packaging.py: 9dd5ecf8ef223615071910d9c83c89e996fefc122e4e73592dd61c4cabdb71b3
+  scripts/package/tests/test_packaging.py: f70a8eb37aa29c4d72e3a1f971a2310323e71727d92eedc504514a6c63aa44f2
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
