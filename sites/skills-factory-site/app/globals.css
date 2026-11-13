@@ -185,6 +185,9 @@ h1 { font-size:clamp(28px,4vw,42px); line-height:1.15; font-weight:700; margin:0
 .catalog-details dd { margin:0; min-width:0; overflow-wrap:anywhere; }
 .catalog-details a { color:#174f9f; text-decoration:underline; }
 .catalog-details code { overflow-wrap:anywhere; }
+.lineage-tree { margin:0; padding-left:20px; }
+.lineage-tree li { margin:7px 0; overflow-wrap:anywhere; }
+.lineage-tree .provenance-badge { margin-left:5px; vertical-align:middle; }
 .catalog-empty { padding:24px; color:#506579; text-align:center; }
 footer { border-top:1px solid #cfdbea; padding:18px 0; font-size:13px; color:#506579; }
 @media(max-width:800px) { .console-grid,.contract { grid-template-columns:1fr; } .input-panel { border-right:0; border-bottom:1px solid #cfdbea; } .intro { align-items:start; flex-direction:column; } header { align-items:start; flex-direction:column; } .workspace { padding-top:28px; } .tool-tabs { width:100%; } .tool-tabs button { white-space:normal; padding:9px 12px; } .contract { gap:22px; } .json-input { min-height:270px; } }
