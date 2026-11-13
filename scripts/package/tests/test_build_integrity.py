@@ -126,16 +126,29 @@ class BuildIntegrityTests(unittest.TestCase):
             archive.write_bytes(b"synthetic archive")
             site = root / "site"
             (site / "lib").mkdir(parents=True)
+            published_catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+            canonical_catalog = root / "canonical-catalog.json"
+            canonical_catalog.write_text(json.dumps({
+                "metadata": {"provenance_registry_sha256": published_catalog["metadata"]["provenance_registry_sha256"]},
+                "skills": [{"name": "sample", "domain": "sample", "source": "skills/sample/SKILL.md", "maturity": "production", "source_status": "present", "capability_assessment": "DECLARED", "provenance": {
+                    "classification": "OWN", "source": "skills/sample/SKILL.md", "source_sha256": "e" * 64, "upstream": None, "components": [], "dependencies": [], "basis_evidence": [],
+                    "local_modifications": {"status": "NONE", "items": []}, "license": {"status": "APPROVED", "spdx_id": "MIT", "attribution": []}, "update_policy": "MANUAL_REVIEW", "verification": {"state": "VERIFIED", "reviewed_at": "2026-11-13", "owner": "test"},
+                }}],
+                "workflows": [],
+            }), encoding="utf-8")
             before = {path.relative_to(artifact).as_posix() for path in artifact.rglob("*") if path.is_file()}
 
             subprocess.run(
-                [sys.executable, str(ROOT / "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py"), str(artifact), str(archive), "--site-root", str(site)],
+                [sys.executable, str(ROOT / "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py"), str(artifact), str(archive), "--site-root", str(site), "--canonical-catalog", str(canonical_catalog)],
                 check=True,
             )
 
             after = {path.relative_to(artifact).as_posix() for path in artifact.rglob("*") if path.is_file()}
             self.assertEqual(before, after)
             self.assertFalse((mcp / "__pycache__").exists())
+            generated = (site / "lib" / "skill-catalog.ts").read_text(encoding="utf-8")
+            self.assertIn('"classification":"OWN"', generated)
+            self.assertIn('"canonical_source_revision":"' + "b" * 40 + '"', generated)
 
     def test_source_root_and_nested_source_tree_are_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as td:
