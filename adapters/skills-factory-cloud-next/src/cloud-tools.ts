@@ -18,7 +18,6 @@ export const SOURCE = {
   runtime_release: RUNTIME_RELEASE,
 };
 export const SKILLS = SKILL_CATALOG.map((skill) => skill.name);
-export const CATALOG = SKILL_CATALOG;
 const text = z.string().trim().min(1).max(160);
 const label = z.string().trim().min(1).max(80);
 const number = z.number().finite().min(-1e12).max(1e12);
