@@ -5,3 +5,7 @@
 High-severity findings fail the CI gate unless an exact `(rule_id, path, fingerprint)` waiver is present. Waivers require a reason and ISO date expiry in `waivers.yaml`; expired or malformed waivers block the scan. Medium findings remain visible in the receipt but do not fail the gate. CI keeps the JSON receipt as an artifact.
 
 This is a triage control, not a proof of safety. It can miss obfuscated, generated, indirect, or context-dependent behavior and can flag benign code for review. Passing this scan does not establish runtime safety, permission approval, or security clearance. Rules should be expanded from reviewed false negatives and tested with mutation fixtures. Never add a waiver merely to make a build green.
+
+## External skill intake
+
+Use `external_skill_intake.py` to inventory a local directory, ZIP, or pinned GitHub commit into a deterministic receipt and read-only quarantine. Intake does not execute, install, approve, or promote candidate content. See [the intake runbook](EXTERNAL-SKILL-INTAKE.md) for trust boundaries, review evidence, and limitations.
