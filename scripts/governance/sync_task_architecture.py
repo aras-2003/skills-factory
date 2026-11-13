@@ -95,9 +95,9 @@ def field_target(fields, row):
     if field.get("dataType") == "TEXT":
         # GitHub Projects text field: preserve concise issue-specific impact, rather than
         # assuming single-select A0..A4 options which the user did not guarantee.
-        description = row["change_description"].replace("\\n", " ").strip()
-        reason = row["architecture_reason"].replace("\\n", " ").strip()
-        value = f"{row['level']} — {reason}\\nOpis zmiany: {description}"
+        description = row["change_description"].replace("\n", " ").strip()
+        reason = row["architecture_reason"].replace("\n", " ").strip()
+        value = f"{row['level']} — {reason}\nOpis zmiany: {description}"
         if len(value) > 1000:
             value = value[:997].rsplit(" ", 1)[0] + "..."
         return field["id"], "text", value, value
