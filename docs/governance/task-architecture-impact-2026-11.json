@@ -1028,14 +1028,14 @@
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/330"
     },
     "615": {
-      "type": "IMPLEMENT",
+      "type": "EPIC",
       "level": "A3",
       "review": "PROPOSED",
       "title": "[Iteration ES-01][PLANNED] External Skills Supply Chain, domain adoption & catalog provenance",
       "change_description": "A. Capability provenance schema, lineage, license, ownership and derived-vs-source identity. B. External discovery/intake, threat scanning, immutable version pinning and update detection. C. Compatibility/overlap matching, skill adaptation, evaluation and lifecycle integration. D. Site/Cloud Next catalog UI and filters for OWN / EXTENDED / IMPORTED / COMPOSED, with clear maturity and channel availability separately. E. Domain pilots and refactoring: Presentation OS first (Marp/HTML/PPTX/LibreOffice editing, theme/asset registry), then Report/Web Design/OAF/Investment. F. Cross-channel packaging, migration, regression, release gates and documentation.",
       "acceptance_summary": "- Every skill/workflow has source provenance classification or explicit UNKNOWN with no falsely inferred ownership. - Imported/extended capability has license/source revision/sha, threat review, pinned dependency, safe update policy and reproducible manifest. - No elevation of maturity, runtime availability or trust from classification alone. - Site visibly distinguishes provenance from maturity and channel support; filters/detail lineage work on desktop/mobile and unknown/partial states. - Presentation OS E2E proof includes external-theme/skill adapter, Markdown/Marp, HTML, native/editable PPTX where required, LibreOffice roundtrip tests, source/exhibit fidelity, regression receipts; no claim of editable elements when flattened. - Cross-channel validation uses exact candidate revisions,…",
       "dependencies": "",
-      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
+      "architecture_reason": "A3 — koordynacja podprogramów ES-01..08; wpływ musi zostać rozbity na dzieci. Potwierdzić przy scope lock; nie jest to potwierdzony diff runtime.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/615"
     },
     "618": {
@@ -1072,25 +1072,25 @@
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/621"
     },
     "622": {
-      "type": "IMPLEMENT",
+      "type": "EPIC",
       "level": "A3",
       "review": "PROPOSED",
       "title": "[ES-07][P1] Cross-domain refactor: Report OS, Web Design, OAF & Investment OS",
       "change_description": "Perform domain-by-domain inventory of external skills/repos/assets already adopted or proposed; classify OWN/IMPORTED/EXTENDED/COMPOSED/UNKNOWN per component with license, dependency, source revision and behavioral overlap. Refactor where useful to reusable adapters/composed workflows, not wholesale rewrite. Pilot Report OS document templates, Web Design UI libraries, OAF modeling/Archify patterns, Investment OS analytics/indicator logic; separate deterministic calculations from prompts; route domain-specific verification and avoid data hallucinations. Explicitly capture scope/change proposal for Career, Commerce, Strategy and Learning (defer low-ROI migration). Acceptance: evidence-backed inventory for four primary OS domains, at least one safe migrated/extended/composed representative per selected pilot domain OR explicit no-go reason, routing and behavioral regression, no loss of existing artifact contracts; published decision log / migration plan. Dependencies: ES-01..04, UX-01 422, STR-22 450, existing domain backlog.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A3 — proponowany wpływ na kontrakty, granice lub przepływy między komponentami. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
+      "architecture_reason": "A3 — koordynacja czterech domen; odrębne kontrakty dla każdego pilota. Potwierdzić przy scope lock; nie jest to potwierdzony diff runtime.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/622"
     },
     "623": {
-      "type": "IMPLEMENT",
-      "level": "A1",
+      "type": "VALIDATE",
+      "level": "A0",
       "review": "PROPOSED",
       "title": "[ES-08][P1] Integrated test campaign, migration compatibility and ES-01 release decision",
       "change_description": "Prepare scope-locked final acceptance matrix per docs/governance/ITERATION-DELIVERY.md, with repository-level sources and downstream dependency contracts. Validate exact main SHA + Lab build + site provenance, and production/channel packaging separately. Include hostile import, license unknown/reject, extension-vs-own ambiguity, duplicate/matching, changed upstream revision, missing resource, malformed frontmatter, routing near miss, composite lineage, mobile/desktop Site filters, Presentation editable/flattened variants, rollback and critical unrelated regressions. Collect tool/runner traces and exact-source receipts; final decision must preserve PASS/FAIL/NOT_RUN/BLOCKED. Record successor incremental work and avoid promoting automatically. Acceptance: reviewed candidate matrix with observed receipts, explicit blocker list, risk acceptance and terminal closure only under governance rules. Runtime NOT_RUN blocks required acceptance. Dependencies: ES-01..07; ENG-22 335, AUD-01 286, AUD-04 289.",
       "acceptance_summary": "Odbiór: zgodnie z oryginalnymi kryteriami w Issue; przed Ready wymaga mapy AC→test/fixture i potwierdzenia dowodów.",
       "dependencies": "",
-      "architecture_reason": "A1 — lokalna zmiana wewnętrzna bez zatwierdzonej zmiany interfejsu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
+      "architecture_reason": "A0 — kampania weryfikacyjna korzystająca z istniejących testów; nowe komponenty nie są celem zadania. Potwierdzić przy scope lock; nie jest to potwierdzony diff runtime.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/623"
     },
     "673": {
@@ -1204,14 +1204,14 @@
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/682"
     },
     "683": {
-      "type": "DISCOVERY",
-      "level": "A1",
+      "type": "VALIDATE",
+      "level": "A0",
       "review": "PROPOSED",
       "title": "[XML-10][GATE] Independent 79/79 XML conformance, behavior, security, channel and release audit",
       "change_description": "[XML-10][GATE] Independent 79/79 XML conformance, behavior, security, channel and release audit",
       "acceptance_summary": "1. Recompute source inventory against starting frozen baseline (79 = 5 P0 + 13 P1 + 17 P2 + 44 P3) and current catalog. Every source has exactly one owner/migration issue; new/renamed/retired sources must be reconciled explicitly. 2. Check 79/79 SKILL.md against mandatory semantic XML structure (not XML-looking decorative examples), unchanged correct YAML frontmatter, canonical tag grammar, instruction coverage, user-goal routing and expected output/stop/fallback. Verify any conversion adapter does not lose semantics in channel manifests. 3. Risk-scoped security tests on malicious source content, fake XML closers, tool calls, external write approval, data provenance, credentials; compare true behavior vs frozen baseline rather than assuming tag security. 4. Evaluate source-pinned…",
       "dependencies": "",
-      "architecture_reason": "A1 — ocena/discovery bez modyfikacji architektury w tym zadaniu. Klasyfikacja zakresu planowanego, nie stan wdrożenia; aktualny main wymaga potwierdzenia.",
+      "architecture_reason": "A0 — niezależna walidacja 79 skills; brak autoryzacji zmian architektury. Potwierdzić przy scope lock; nie jest to potwierdzony diff runtime.",
       "source_issue_url": "https://github.com/aras-2003/skills-factory/issues/683"
     }
   }
