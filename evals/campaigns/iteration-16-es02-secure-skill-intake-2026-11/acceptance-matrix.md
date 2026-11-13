@@ -40,3 +40,10 @@ All frozen criteria must map to passing rows on the final candidate. Preserve ea
 - Threat/review tests: `test_review_authorization_requires_explicit_approved_review_bound_to_exact_receipt`, `test_missing_skill_is_refused_and_candidate_scripts_remain_inert`, `test_prompt_secret_network_permission_and_asset_hints_are_review_only`, archive boundary cases, schema validation, and existing static scanner integration in `scripts/security/tests/test_external_skill_intake.py`.
 - Shared unchanged probes in exact-source CI: the existing security scan and repository security tests passed in run 43413312363; Domain Integrity passed in run 43413312326; Eval campaigns and packaging safety passed in run 43413312363. Artifact digests: core build `sha256:f531aefc74a074f53b81bad1056beda97160bfc58bad956071b043a8e76fc0b8`; skills-only profile `sha256:a3b98d51922064856bf9f2308d813bf4786b3ae7aa5a8883cdfa2243d3986388`.
 - The two local attempts to rerun the existing scanner/package suite could not import PyYAML in the host Python; this did not alter source or the candidate. The locked GitHub CI environment ran the corresponding security and packaging checks successfully.
+
+
+## Final integration
+
+- Implementation source candidate `3295a0810fa28351a04eb3f6c81b6e6a38375eae` was squash merged by PR #666 as main commit `ddf800634a7bd6de81d3cd5622dfab154cb910cb`. The accepted source tree is the exact CI-tested candidate; CI ran on the PR head before merge.
+- Scope recheck against the final diff confirms no Site, runtime adapter, skill behavior, plugin, or production package behavior changed. The scope-lock N/A for runtime/UI remains valid.
+- Final verdict: 16/16 PASS, 0 unresolved; Iteration 16 / #617 ACCEPTED.
