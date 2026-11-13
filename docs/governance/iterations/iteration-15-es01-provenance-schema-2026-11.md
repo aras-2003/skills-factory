@@ -43,6 +43,7 @@ The fixed ledger is `evals/campaigns/iteration-15-es01-provenance-schema-2026-11
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
 | Scope baseline | `834c29258ce48d111a147b26540f13554a83be34` | Pending implementation candidate | Existing exact-main checks from #614 closeout; new iteration checks not run | N/A for scope lock; no Site behavior | None |
+| Implementation + final acceptance | `bb255409fc0eabba494a17841d3528459aeb7201` (PR #662 implementation `f092c0bde5a30fb8a6d07bb889539e16cd2d02d7`; PR #663 deterministic-generation gate `bb255409fc0eabba494a17841d3528459aeb7201`) | Exact-main Lab ZIP SHA-256 `96be0ceffda710f3dd69ab83bae2b1a133cc9e65ba33e76a12d1dfe02b7c12a3` (artifact 14027180796) | PR #662 and #663 checks PASS; exact main Validate [43404821673](https://github.com/aras-2003/skills-factory/actions/runs/43404821673), Domain [43404821698](https://github.com/aras-2003/skills-factory/actions/runs/43404821698), Site CI [43404821673](https://github.com/aras-2003/skills-factory/actions/runs/43404821673), Lab build [43404821655](https://github.com/aras-2003/skills-factory/actions/runs/43404821655), Pages deploy [43404820917](https://github.com/aras-2003/skills-factory/actions/runs/43404820917) all PASS | No external runtime behavior in scope; no Site/plugin promotion; inventory is explicitly 98 UNKNOWN records | Supersedes planning-only row; no acceptance rows invalidated |
 
 ## Regression selection and counts
 
@@ -62,14 +63,15 @@ The fixed ledger is `evals/campaigns/iteration-15-es01-provenance-schema-2026-11
 
 ## Closure / abort decision
 
-- Outcome: PENDING (CLOSED or ABORTED only after decision)
-- Final candidate / matrix and immutable evidence links: pending
-- Committed Issues accepted / unresolved: #616 pending
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: pending
-- Shared regression verdict: pending
-- Non-blocking findings and accepted impact (owner/reviewer + future Issue): pending
-- Scope compared with lock commit: pending
-- Issue / Project / PR reconciliation: pending
-- Owner proposal / reviewer acceptance / decision timestamp: pending
-- If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: N/A
-- Next iteration eligibility (no automatic start or production promotion): only after #616 is terminal; parent #615 remains a planned umbrella
+- Outcome: CLOSED / ACCEPTED.
+- Final candidate: exact main SHA `bb255409fc0eabba494a17841d3528459aeb7201`; implementation PR [#662](https://github.com/aras-2003/skills-factory/pull/662), reproducibility validation PR [#663](https://github.com/aras-2003/skills-factory/pull/663). Final matrix: [Iteration 15 acceptance results](../../../../evals/campaigns/iteration-15-es01-provenance-schema-2026-11/acceptance-matrix.md).
+- Immutable build evidence: exact-main Lab artifact [run 43404821655](https://github.com/aras-2003/skills-factory/actions/runs/43404821655), artifact ID 14027180796, SHA-256 `96be0ceffda710f3dd69ab83bae2b1a133cc9e65ba33e76a12d1dfe02b7c12a3`.
+- Committed Issue accepted: #616. Parent #615 remains PLANNED and open as the umbrella.
+- Required rows: 8 PASS, 0 FAIL, 0 NOT_RUN, 0 BLOCKED, 0 REVIEW_REQUIRED, 0 reviewed N/A; source inventory 98 records (79 skills, 19 workflows), explicitly UNKNOWN.
+- Shared regression verdict: PASS. Exact-main Validate, Domain Integrity, Site CI, Lab build, release packaging preparation, and Pages checks all passed; the source-contract job performed two catalog generations and confirmed identical SHA-256 outputs with source registry/audit unchanged.
+- Non-blocking finding: historical sources remain UNKNOWN until separately reviewed; this is the intended fail-closed outcome and does not imply ownership, license, security review, runtime availability or production readiness.
+- Scope compared with lock: unchanged. No external intake, Site UI/runtime change, plugin promotion or production release is claimed.
+- Issue / Project / PR reconciliation: implementation PR #662 and validation PR #663 are merged; #616 is closed after this acceptance closeout; #615 remains open/planned. Native Project Iteration remains unassigned as locked.
+- Owner proposal / reviewer acceptance: Arkadiusz Kamrowski / self-review (not independent). Completed 2026-11-13 UTC.
+- If ABORTED: N/A.
+- Next iteration eligibility: #617 may begin under a new scope lock; no other planned issue is started by this closeout.
