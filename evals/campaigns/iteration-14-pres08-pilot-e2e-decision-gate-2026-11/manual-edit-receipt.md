@@ -21,3 +21,14 @@
 | Experimental editable copy `experimental-editable-manual-copy.pptx` | `d192c27b65e15fede3252f3a65871688b9af3a7a6f194e7979eeaa4306314d8c` |
 
 The generated source PPTX files were not changed. The manual copies are temporary local test data and are not included in the repository. The assessment covers object text and geometry persistence only; it does not imply visual fidelity or notes support.
+
+## Corrected PRES-08 candidate retest — 2026-11-12
+
+The PR #658 artifact (`bbc775a52fd58f3e7cf34e819f65c5135ec9373e`; fixture SHA unchanged) was reopened in LibreOffice Impress 26.8.2.2. Disposable copies were edited, saved as PPTX, closed and reopened. The experiment title was shortened to `Source and formats` after an initial longer replacement overlapped the subtitle; the native copy retained `One source, five output formats [EDITED]`. A text object was moved by one Right-arrow increment and its geometry was checked again after reopening.
+
+| Route | Reopened text | Moved object geometry after reopen | Disposable copy SHA-256 |
+| --- | --- | --- | --- |
+| Experimental editable PPTX | Title `Source and formats` | subtitle X 2.38 cm, Y 4.36 cm, width 23.16 cm, height 0.82 cm | `ff41804fe6f4d883d98bf54870a1722904a4a93d8d71fcbcb7d5126b5086e6cd` |
+| Native editable PPTX | Title `One source, five output formats [EDITED]`; original synthetic claim text restored and verified | `Claims data and provenance` object X 1.20 cm | `dc12c84d172e4a8ecf65700c9ea7158bf46d05e97436dd9761291bf9b379184e` |
+
+The long temporary native title was used only to exercise title editing; this receipt establishes persistence of text and geometry, not visual acceptance of that edited test copy. The source artifact decks remain unchanged.
