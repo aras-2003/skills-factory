@@ -2,13 +2,13 @@
 
 This scope lock defines the bounded implementation of #618. Follow [iteration delivery](../ITERATION-DELIVERY.md); changes to frozen criteria require a separately reviewed clarification.
 
-- State: PLANNED (scope-lock PR; implementation has not started).
+- State: ACTIVE; implementation PRs are merged, offline acceptance and exact-version package smoke are recorded, host-selection route evidence remains open.
 - Owner / reviewer: Arkadiusz Kamrowski / Arkadiusz Kamrowski (self-review; not independent).
 - Tracking Issue / native Project iteration: #618 / not assigned; native Project iteration remains a scheduling mirror.
 - Previous terminal iteration / closure link: Iteration 17 / #620 CLOSED / ACCEPTED; [closeout PR #670](https://github.com/aras-2003/skills-factory/pull/670), merged to main as `ae0e26dc210496c5b488f11535bdaf50158e227f`.
 - Baseline main SHA: `ae0e26dc210496c5b488f11535bdaf50158e227f`.
-- Lock commit SHA: recorded in #618 after this scope-lock PR merges.
-- Started at / closed at (UTC): not started / pending.
+- Lock commit SHA: `f55776b3953edbf8459c0aaf78a1264ddaafd901` (scope-lock PR #671).
+- Started at / closed at (UTC): `2026-11-13T17:07:53Z` / pending.
 - Scope lock reviewed by / at: owner self-review / 2026-11-13; not independent.
 
 ## Frozen commitment
@@ -34,7 +34,7 @@ Keep repo package contract and portability explicit: required SKILL.md frontmatt
 
 ## Test plan
 
-Authoritative ledger: [Iteration 18 acceptance matrix](../../evals/campaigns/iteration-18-es03-capability-overlap-adaptation-2026-11/acceptance-matrix.md). All rows start NOT_RUN. Required validation includes deterministic matcher boundaries, duplicate/complement/conflict fixtures, secure-intake receipt tampering and staleness, source/license/change lineage, package portability/frontmatter/resources, explicit review authorization, no-execution/no-network/no-write adversarial cases, workflow integration, four routing cases (direct positive, indirect positive, near-miss negative, competing-capability conflict), applicable full offline CI and exact-main checks, candidate package integrity and exact-version runtime smoke for any changed packaged behavior. Site MCP is N/A only if the final diff changes no Site/MCP/runtime adapter; re-evaluate this against the actual diff at close. Any actual runtime test must use the exact Lab artifact/candidate and preserve input/rubric isolation and receipts.
+Authoritative ledger: [Iteration 18 acceptance matrix](../../../evals/campaigns/iteration-18-es03-capability-overlap-adaptation-2026-11/acceptance-matrix.md). All rows start NOT_RUN. Required validation includes deterministic matcher boundaries, duplicate/complement/conflict fixtures, secure-intake receipt tampering and staleness, source/license/change lineage, package portability/frontmatter/resources, explicit review authorization, no-execution/no-network/no-write adversarial cases, workflow integration, four routing cases (direct positive, indirect positive, near-miss negative, competing-capability conflict), applicable full offline CI and exact-main checks, candidate package integrity and exact-version runtime smoke for any changed packaged behavior. Site MCP is N/A only if the final diff changes no Site/MCP/runtime adapter; re-evaluate this against the actual diff at close. Any actual runtime test must use the exact Lab artifact/candidate and preserve input/rubric isolation and receipts.
 
 Required direct consumers/dependencies to inspect before implementation: #617 intake manifest/receipt contract, canonical provenance registry/schema and validator, current skill-validation/package code, skill-development workflow, skill-specification, skill-authoring and generated Lab catalog. Use the repository's locked test environment. No external repository fetch is planned; local pinned synthetic intake fixtures are sufficient and repeatable.
 
@@ -43,16 +43,17 @@ Required direct consumers/dependencies to inspect before implementation: #617 in
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
 | Scope baseline | `ae0e26dc210496c5b488f11535bdaf50158e227f` | N/A for scope lock | Prior Iteration 17 closure CI passed | Iteration 17 runtime acceptance was bound to canonical source `197f12e96a2282eb13cf787246e76e3621c960eb`, Site mirror `b0216d283dad3fd297b6e3a64293a4434b8245f6`, Site v133 | None |
+| ES-03 implementation candidate | `1d55767564bd092935c4d8a21fa0debc7a382db2` | Lab `1.38.531+1d55767564bd`; payload `350723b32224f4efab35ac95eb0b208a7f718a782be1fad941cd2d5706d228d5` | Validate Skills, Domain Integrity, Site CI, Lab packaging and Pages all succeeded; local engineering/security/package tests 27/64/102 passed | Site v134, mirror `6e608c569ecc6048c3ac3de1e4eedd90d64a07cb`; private deployment succeeded; attestation verified and exact `skill-development` package loaded | Supersedes scope baseline; row 18-11 still REVIEW_REQUIRED |
 
 ## Regression selection and counts
 
 - Changed contracts / direct and transitive consumers: new comparison/adaptation contract, secure intake receipt, provenance lineage, skill package validation, skill-development workflow routing, generated Lab package and associated fixtures. Verify and record the actual dependency graph before implementation.
 - Included cases / exclusions: rows 18-01–18-15; secure receipt mutation/staleness; missing metadata; exact and complementary overlap; conflict; package portability; positive/negative routing; no-execution/security; existing provenance, packaging, validation and domain integrity CI. No arbitrary external source retrieval.
-- Fixed sentinels / rotating unchanged-domain probes: unknown evidence never authorizes adaptation; no execution/no side effects; exact source digest and lineage survive; package validation remains fail-closed. Rotate two existing unchanged-domain skill/workflow probes before final validation and record them in the matrix.
+- Fixed sentinels / rotating unchanged-domain probes: unknown evidence never authorizes adaptation; no execution/no canonical write; exact source digest and lineage survive; package validation remains fail-closed. Preselected and executed Investment OS and Presentation OS probes are recorded in the acceptance matrix and [closeout evidence](../../../evals/campaigns/iteration-18-es03-capability-overlap-adaptation-2026-11/closeout-evidence.md).
 - Last full runtime baseline candidate / behavior iterations since baseline: Iteration 17 source `197f12e96a2282eb13cf787246e76e3621c960eb` (Site v133); one closed behavior-bearing iteration since. This iteration requires a full supported runtime baseline only if change impact cannot be bounded to the new workflow/tool boundary.
-- Planned distinct scenarios / executions by layer: at least 10 deterministic matcher/adapter assertions; 4 routing cases; all applicable repo CI on each PR and exact main; one exact package identity/runtime smoke if packaged behavior changes; two unchanged-domain probes; adversarial missing/stale receipt and conflicting capability checks.
+- Planned distinct scenarios / executions by layer: at least 10 deterministic matcher/adapter assertions; 4 routing cases; all applicable repo CI on each PR and exact main; one exact package identity/runtime smoke if packaged behavior changes; two unchanged-domain probes; adversarial missing/stale receipt and conflicting capability checks. Offline, package, CI, provenance and unchanged-domain evidence is recorded. The four model-selected routing prompts remain unexecuted because this session exposes no host-selection trace; the manual `load_skill` smoke does not satisfy that gate.
 - Critical stochastic scenarios repeated at least 3 times / instability history: comparison helper is deterministic; runtime routing conflict/escalation is critical and will run 3 independent times per applicable surface if model-mediated behavior is introduced. Otherwise no stochastic claims.
-- PR CI / final-main checks and build / external runtime runs: Validate skills, Domain integrity, evaluation/packaging/safety, package build and exact-main Validate + Domain Integrity; retain run IDs and artifact digests. Runtime and Site applicability determined from the actual final diff; no production promotion.
+- PR CI / final-main checks and build / external runtime runs: Exact-main Validate Skills, Domain Integrity, Site CI, Lab packaging and Pages all passed. The exact Lab package was built and validated, then privately deployed to Site v134; runtime attestation and `list_skills`/`load_skill` receipts are recorded in [closeout evidence](../../../evals/campaigns/iteration-18-es03-capability-overlap-adaptation-2026-11/closeout-evidence.md). This is a private test, not a production plugin promotion.
 
 ## Defect intake and clarifications (append; intake always open)
 
@@ -62,14 +63,14 @@ Required direct consumers/dependencies to inspect before implementation: #617 in
 
 ## Closure / abort decision
 
-- Outcome: PENDING.
-- Final candidate / matrix and immutable evidence links: pending.
-- Committed Issues accepted / unresolved: #618 pending; #283 explicitly excluded and remains tracked separately.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: pending; all rows begin NOT_RUN.
-- Shared regression verdict: pending.
-- Non-blocking findings and accepted impact: pending.
-- Scope compared with lock commit: pending.
-- Issue / Project / PR reconciliation: scope lock PR pending; #618 remains PLANNED until lock merges; #615 remains a tracking umbrella.
-- Owner proposal / reviewer acceptance / decision timestamp: pending.
+- Outcome: PENDING; do not close this iteration.
+- Final candidate / matrix and immutable evidence links: `1d55767564bd092935c4d8a21fa0debc7a382db2`; [acceptance matrix](../../../evals/campaigns/iteration-18-es03-capability-overlap-adaptation-2026-11/acceptance-matrix.md) and [execution evidence](../../../evals/campaigns/iteration-18-es03-capability-overlap-adaptation-2026-11/closeout-evidence.md).
+- Committed Issues accepted / unresolved: implementation for #618 is merged; #618 remains OPEN pending row 18-11 host-selection evidence. #283 is excluded and remains tracked separately.
+- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: 14 PASS; 0 FAIL; row 18-11 REVIEW_REQUIRED; no rows are claimed N/A.
+- Shared regression verdict: validators, 193 targeted unit tests, two preselected unchanged-domain probes, exact-main CI, package validation and private Site runtime identity/smoke passed; host-selected routing cases are outstanding.
+- Non-blocking findings and accepted impact: repository validator reports existing MEDIUM/LOW advisories; no blocking validator failure. Site runtime is verified for the exact candidate and remains owner-only.
+- Scope compared with lock commit: implementation remains within #618's frozen matcher, adapter, lineage and runtime dependency boundary; no Site UI/MCP feature, upstream update, domain pilot or #283 acceptance was added.
+- Issue / Project / PR reconciliation: scope lock PR #671 merged; #618 remains ACTIVE/OPEN; #615 remains the tracking umbrella. Do not start #619 until #618 is terminal.
+- Owner proposal / reviewer acceptance / decision timestamp: owner self-review only; independent review not claimed. Closure decision pending row 18-11.
 - If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: pending.
-- Next iteration eligibility: only after terminal closure/abort; no automatic start, Site deployment or production promotion.
+- Next iteration eligibility: not eligible until row 18-11 is reviewed and #618 is closed or formally aborted; no automatic start or production plugin promotion.
