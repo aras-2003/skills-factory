@@ -38,6 +38,8 @@ class CapabilityOverlapTests(unittest.TestCase):
         self.assertEqual("REUSE_EXISTING", report["decision"])
         self.assertIn("DUPLICATE_REIMPORT_REJECTED", report["reason_codes"])
         self.assertEqual([existing["identity"]], report["matched_capabilities"])
+        self.assertEqual(["filesystem"], report["candidate_facts"]["tools"]["values"])
+        self.assertEqual("COMPARED", report["candidate_facts"]["dependencies"]["status"])
         self.assertFalse(report["human_review_required"])
 
     def test_complementary_extension_is_preserved(self):

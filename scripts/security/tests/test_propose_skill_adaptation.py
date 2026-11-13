@@ -56,6 +56,9 @@ def make_inputs(root: Path, *, decision: str = "EXTEND", security_status: str = 
         "reason_codes": ["SYNTHETIC_FIXTURE"],
         "matched_capabilities": ["skills/meta/skill-authoring"] if decision == "EXTEND" else [],
         "conflicts": [],
+        "candidate_facts": {
+            "dependencies": {"status": "COMPARED", "values": [], "evidence": {}},
+        },
         "comparisons": [{"identity": "skills/meta/skill-authoring", "evidence": {}, "conflict": False}],
     }
     matcher_path = root / "matcher.json"
@@ -72,6 +75,11 @@ def make_inputs(root: Path, *, decision: str = "EXTEND", security_status: str = 
         "reviewed_at": "2026-11-13T17:00:00Z",
         "rationale": "Synthetic review of the exact receipt and matcher evidence.",
         "approved_decision": decision,
+        "runtime_dependency_review": {
+            "status": "NO_RUNTIME_DEPENDENCIES",
+            "dependencies": [],
+            "rationale": "The exact matcher report lists no runtime dependencies.",
+        },
     }
     review_path = root / "review.json"
     review_path.write_text(json.dumps(review, sort_keys=True), encoding="utf-8")
@@ -133,6 +141,59 @@ class ProposeSkillAdaptationTests(unittest.TestCase):
             review["receipt_sha256"] = intake.receipt_digest(receipt)
             args[3].write_text(json.dumps(review, sort_keys=True), encoding="utf-8")
             with self.assertRaisesRegex(adaptation.ProposalError, "rejected license intake"):
+                adaptation.create_proposal(*args)
+            self.assertFalse(args[-1].exists())
+
+    def test_unsupported_dependency_blocks_proposal_and_dependency_list_is_bound(self):
+        with tempfile.TemporaryDirectory() as temp:
+            args = make_inputs(Path(temp))
+            report = json.loads(args[2].read_text())
+            report["candidate_facts"]["dependencies"]["values"] = ["python standard library"]
+            report["candidate_facts"]["dependencies"]["evidence"] = {"python standard library": []}
+            args[2].write_text(json.dumps(report, sort_keys=True), encoding="utf-8")
+            receipt = json.loads(args[0].read_text())
+            receipt_sha = intake.receipt_digest(receipt)
+            matcher_sha = hashlib.sha256((json.dumps(report, sort_keys=True, separators=(",", ":")) + "\n").encode()).hexdigest()
+            review = json.loads(args[3].read_text())
+            review.update({"receipt_sha256": receipt_sha, "matcher_report_sha256": matcher_sha})
+            review["runtime_dependency_review"] = {
+                "status": "SUPPORTED",
+                "dependencies": [{"name": "python standard library", "status": "UNSUPPORTED", "evidence": "Not available in the target runtime."}],
+                "rationale": "Synthetic unsupported dependency test.",
+            }
+            args[3].write_text(json.dumps(review, sort_keys=True), encoding="utf-8")
+            with self.assertRaisesRegex(adaptation.ProposalError, "block adaptation"):
+                adaptation.create_proposal(*args)
+            self.assertFalse(args[-1].exists())
+
+    def test_supported_dependency_review_is_preserved_in_proposal(self):
+        with tempfile.TemporaryDirectory() as temp:
+            args = make_inputs(Path(temp))
+            report = json.loads(args[2].read_text())
+            report["candidate_facts"]["dependencies"]["values"] = ["python standard library"]
+            report["candidate_facts"]["dependencies"]["evidence"] = {"python standard library": []}
+            args[2].write_text(json.dumps(report, sort_keys=True), encoding="utf-8")
+            review = json.loads(args[3].read_text())
+            review["matcher_report_sha256"] = hashlib.sha256((json.dumps(report, sort_keys=True, separators=(",", ":")) + "\n").encode()).hexdigest()
+            review["runtime_dependency_review"] = {
+                "status": "SUPPORTED",
+                "dependencies": [{"name": "python standard library", "status": "SUPPORTED", "evidence": "Present in the target runtime baseline."}],
+                "rationale": "The exact dependency is available in the supported runtime.",
+            }
+            args[3].write_text(json.dumps(review, sort_keys=True), encoding="utf-8")
+            result = adaptation.create_proposal(*args)
+            self.assertEqual("ADAPTATION_SEED_CREATED", result["status"])
+            manifest = json.loads((args[-1] / "proposal.json").read_text())
+            self.assertEqual("SUPPORTED", manifest["runtime_dependency_review"]["status"])
+            self.assertEqual("python standard library", manifest["runtime_dependency_review"]["dependencies"][0]["name"])
+
+    def test_review_dependency_assessment_must_match_exact_report(self):
+        with tempfile.TemporaryDirectory() as temp:
+            args = make_inputs(Path(temp))
+            review = json.loads(args[3].read_text())
+            review["runtime_dependency_review"]["rationale"] = ""
+            args[3].write_text(json.dumps(review, sort_keys=True), encoding="utf-8")
+            with self.assertRaisesRegex(adaptation.ProposalError, "requires a rationale"):
                 adaptation.create_proposal(*args)
             self.assertFalse(args[-1].exists())
 

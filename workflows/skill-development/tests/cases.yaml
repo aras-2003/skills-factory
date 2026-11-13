@@ -70,3 +70,21 @@ cases:
       must:
         - "Refuse arbitrary URL retrieval and execution of candidate content."
         - "Require a full immutable source pin and secure intake evidence before any comparison."
+  - id: external-adaptation-unsupported-dependency
+    case: adaptation-with-unsupported-runtime-dependency
+    input: "The candidate requires an execution dependency that is not available in the target runtime."
+    expected:
+      should_trigger: true
+      must:
+        - "Record the exact dependency and its unsupported evidence in the review."
+        - "Refuse to emit a scoped proposal while any dependency is unsupported or unresolved."
+      must_not:
+        - "Do not simulate, silently drop or infer support for the dependency."
+  - id: external-adaptation-supported-dependency
+    case: adaptation-with-reviewed-runtime-dependency
+    input: "The candidate declares a runtime dependency whose exact availability is evidenced in the target runtime."
+    expected:
+      should_trigger: true
+      must:
+        - "Bind the supported status and evidence to each exact dependency in the matcher report."
+        - "Preserve the human dependency assessment in the proposal manifest."

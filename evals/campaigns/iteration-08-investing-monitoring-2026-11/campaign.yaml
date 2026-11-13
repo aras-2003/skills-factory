@@ -66,7 +66,7 @@ source_sha256:
   CATALOG.md: "0377975c99cb155e010671bc065fa55360c73c2cb1af75ab84071812a32c26c8"
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: "622ac6fa557a8d98809d75cac6a188838ed9f6cc9bedd8382b13e640e079edd5"
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: "b6a39aa3eb75e60678e94b893a099e00c73796a49d005daeb771110a532f9a4e"
-  docs/catalog.json: "af63e02926e7172761b19e42addc466d7dd6faafc24e14489719f78cc3158ce9"
+  docs/catalog.json: "15024ccb8b6adf4da11111b62d0c422ff89e912b9b61760bdd4a66e531c45149"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml: "c2c406b56460ae809a44db3d31cf3f47a3b761fe6c62a66d55e0184c60e08787"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-cases.yaml: "de76470d524da9a44c1466a42a23311dbecbf5147a5454f636505be1feec535c"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-inputs/308-01.input.md: "e7b8e6bd02ba5472bed7dd966624aa2d8cce22692434e2361c74db6480efb648"

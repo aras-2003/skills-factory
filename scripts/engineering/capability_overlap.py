@@ -187,6 +187,14 @@ def compare_capabilities(candidate_raw: Any, inventory_raw: Any) -> dict[str, An
         "escalation_required": escalate,
         "human_review_required": decision in {"IMPORT", "EXTEND", "COMPOSE", "REJECT"},
         "inventory_complete": inventory_raw["complete"],
+        "candidate_facts": {
+            facet: {
+                "status": "UNKNOWN" if candidate[facet] is None else "COMPARED",
+                "values": None if candidate[facet] is None else sorted(candidate[facet]),
+                "evidence": None if candidate[facet] is None else candidate_refs[facet],
+            }
+            for facet in FACETS
+        },
         "comparisons": sorted(comparisons, key=lambda item: _normalize(item["identity"])),
         "method_limitations": ["Compares only reviewer-supplied structured phrases using normalized exact equality.",
                                "Carries reviewer-supplied source citations but does not verify cited bytes or line ranges.",

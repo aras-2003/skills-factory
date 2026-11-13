@@ -90,7 +90,7 @@ source_sha256:
   adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: dde0bec7f94ed2ae6b2d9d03a6bdfc23772b420b395b369da3f9f2a85b923002
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
-  docs/catalog.json: af63e02926e7172761b19e42addc466d7dd6faafc24e14489719f78cc3158ce9
+  docs/catalog.json: 15024ccb8b6adf4da11111b62d0c422ff89e912b9b61760bdd4a66e531c45149
   docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 103aeac510414404dad8ca89356301737411673ca15ab916392a46c078296609
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7

@@ -18,7 +18,7 @@
     "source_workflow_count": 19,
     "registered_workflow_count": 19,
     "provenance_schema_version": 1,
-    "provenance_registry_sha256": "bbf92683bc31f67c7db856f705198221b65e6e6c49d06a89ef262445a125788d"
+    "provenance_registry_sha256": "cc977739b50c24b6fa3af9c3900e499fff1784caf84e62a9635f8f42cff85baf"
   },
   "skills": [
     {
@@ -3753,7 +3753,7 @@
         "schema_version": 1,
         "classification": "UNKNOWN",
         "source": "workflows/skill-development/WORKFLOW.md",
-        "source_sha256": "a6541fc094f9d85bc8b77b6093001f6cf7341b2ff1f9d188e87e07bf6497b892",
+        "source_sha256": "9a5c57da39931fc1732cae6ae1f920a5d43272de46dd9d1830e5c602eb6de9e4",
         "upstream": null,
         "components": [],
         "dependencies": [],
