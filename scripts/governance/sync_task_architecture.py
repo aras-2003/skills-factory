@@ -122,8 +122,10 @@ def sync_one(issue_number, row, apply=False):
     issue = (user.get("repository") or {}).get("issue") or {}
     if not project or not issue:
         raise RuntimeError(f"Issue {issue_number}: Project or Issue unavailable")
-    if issue.get("state") != "OPEN":
-        return "SKIPPED_CLOSED"
+    # Manifest was frozen while items were OPEN. Retain coverage if a captured Issue
+    # becomes CLOSED before the backfill; only the Project field is being updated.
+    if issue.get("state") not in {"OPEN", "CLOSED"}:
+        raise RuntimeError(f"Issue {issue_number}: unknown issue state")
     if issue.get("title") != row["title"]:
         raise RuntimeError(f"Issue {issue_number}: title changed since evidence capture; refresh manifest")
     items = [i for i in issue.get("projectItems", {}).get("nodes", []) if i.get("project", {}).get("id") == project["id"]]
