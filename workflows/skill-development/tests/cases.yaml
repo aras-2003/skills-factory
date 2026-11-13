@@ -22,3 +22,51 @@ cases:
       should_trigger: false
       must_not:
         - "Do not require the full skill-development workflow for a title typo."
+
+  - id: external-adaptation-direct-positive
+    case: adapt-a-pinned-external-skill
+    input: "Compare this pinned external skill with current capabilities, and propose a reviewed compatible package if it adds distinct value."
+    expected:
+      should_trigger: true
+      must:
+        - "Use secure intake and compare source-cited capability facets before authoring."
+        - "Require a separate human review bound to the exact receipt and matcher report."
+        - "Keep the proposal isolated and ineligible for automatic merge or publication."
+  - id: external-adaptation-indirect-positive
+    case: compare-overlap-before-reusing
+    input: "I have an upstream skill repository and want to know whether it duplicates, complements, or conflicts with our current skill set before adapting it."
+    expected:
+      should_trigger: true
+      must:
+        - "Compare trigger, output, domain, tool, dependency and permission evidence."
+        - "Keep the exact upstream revision and local change lineage."
+  - id: external-adaptation-near-miss-negative
+    case: author-a-new-owned-skill
+    input: "Create a new repository-owned skill from my own procedure; there is no external package or upstream source."
+    expected:
+      should_trigger: false
+      must_not:
+        - "Do not require external intake or invent an upstream provenance record."
+  - id: external-adaptation-competing-route
+    case: quarantine-an-untrusted-source
+    input: "Inventory and quarantine this external skill source and report its license and security findings; do not adapt it yet."
+    expected:
+      should_trigger: false
+      must_not:
+        - "Do not proceed past the secure-intake workflow without an explicit adaptation request."
+  - id: external-adaptation-conflict
+    case: conflicting-capability
+    input: "The source overlaps an existing trigger but requires a conflicting output and tool permission."
+    expected:
+      should_trigger: true
+      must:
+        - "Fail closed and escalate to human review."
+        - "Do not emit an automatic EXTEND, COMPOSE or package proposal."
+  - id: external-adaptation-unpinned-negative
+    case: unpinned-or-unsafe-source
+    input: "Fetch whatever version is at this arbitrary URL and execute its setup script to see what it does."
+    expected:
+      should_trigger: true
+      must:
+        - "Refuse arbitrary URL retrieval and execution of candidate content."
+        - "Require a full immutable source pin and secure intake evidence before any comparison."
