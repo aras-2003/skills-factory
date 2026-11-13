@@ -138,6 +138,31 @@ def _validate_review(review: dict[str, Any], receipt: dict[str, Any], matcher_re
         raise ProposalError("adaptation review source identity differs from intake receipt")
     if review.get("approved_decision") != matcher_report.get("decision"):
         raise ProposalError("adaptation review decision differs from matcher report")
+    candidate_facts = matcher_report.get("candidate_facts")
+    dependency_facts = candidate_facts.get("dependencies") if isinstance(candidate_facts, dict) else None
+    if not isinstance(dependency_facts, dict) or dependency_facts.get("status") != "COMPARED" or not isinstance(dependency_facts.get("values"), list):
+        raise ProposalError("matcher report lacks reviewed runtime dependency facts")
+    dependency_review = review.get("runtime_dependency_review")
+    if not isinstance(dependency_review, dict):
+        raise ProposalError("adaptation review requires an explicit runtime dependency assessment")
+    expected_dependencies = dependency_facts["values"]
+    if any(not isinstance(name, str) or not name for name in expected_dependencies) or expected_dependencies != sorted(set(expected_dependencies)):
+        raise ProposalError("matcher report dependency facts are invalid")
+    assessments = dependency_review.get("dependencies")
+    if not isinstance(assessments, list) or any(not isinstance(item, dict) for item in assessments):
+        raise ProposalError("runtime dependency assessment must list every dependency")
+    assessed_names = [item.get("name") for item in assessments]
+    if any(not isinstance(name, str) or not name for name in assessed_names):
+        raise ProposalError("runtime dependency assessment contains an invalid dependency name")
+    if sorted(assessed_names) != expected_dependencies or len(assessed_names) != len(set(assessed_names)):
+        raise ProposalError("runtime dependency assessment does not match the exact matcher report")
+    if expected_dependencies:
+        if dependency_review.get("status") != "SUPPORTED" or any(item.get("status") != "SUPPORTED" or not isinstance(item.get("evidence"), str) or not item["evidence"].strip() for item in assessments):
+            raise ProposalError("unsupported or unresolved runtime dependencies block adaptation")
+    elif dependency_review.get("status") != "NO_RUNTIME_DEPENDENCIES":
+        raise ProposalError("empty dependency inventory requires NO_RUNTIME_DEPENDENCIES assessment")
+    if not isinstance(dependency_review.get("rationale"), str) or not dependency_review["rationale"].strip():
+        raise ProposalError("runtime dependency assessment requires a rationale")
     for key in ("reviewer", "rationale"):
         if not isinstance(review.get(key), str) or not review[key].strip():
             raise ProposalError(f"adaptation review requires {key}")
@@ -280,6 +305,7 @@ def create_proposal(receipt_path: Path, quarantine_path: Path, matcher_report_pa
             "security_review_status": (receipt.get("security_review") or {}).get("status", "UNKNOWN"),
             "local_modifications": {"status": "NOT_STARTED", "items": []},
             "review": {"reviewer": review["reviewer"], "reviewed_at": review["reviewed_at"], "rationale": review["rationale"]},
+            "runtime_dependency_review": review["runtime_dependency_review"],
             "package_name": skill_name,
             "source_package_files": package_file_digests,
             "source_package_sha256": _package_digest(package_file_digests),
