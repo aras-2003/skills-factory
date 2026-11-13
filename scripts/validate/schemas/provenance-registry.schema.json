@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skills-factory:provenance-registry:1",
+  "title": "Skills Factory provenance registry",
+  "type": "object",
+  "required": ["schema_version", "records"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "records": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/record"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "upstream": {
+      "type": "object",
+      "required": ["provider", "url", "path", "content_sha256", "version", "commit", "attribution"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"},
+        "path": {"type": "string", "minLength": 1},
+        "version": {"type": ["string", "null"]},
+        "commit": {"type": ["string", "null"]},
+        "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "attribution": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "record": {
+      "type": "object",
+      "required": ["kind", "name", "source", "source_sha256", "classification", "upstream", "components", "dependencies", "basis_evidence", "local_modifications", "license", "update_policy", "verification"],
+      "properties": {
+        "kind": {"enum": ["skill", "workflow"]},
+        "name": {"type": "string", "minLength": 1},
+        "source": {"type": "string", "minLength": 1},
+        "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "classification": {"enum": ["OWN", "IMPORTED", "EXTENDED", "COMPOSED", "UNKNOWN"]},
+        "upstream": {"anyOf": [{"$ref": "#/$defs/upstream"}, {"type": "null"}]},
+        "components": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "basis_evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "local_modifications": {
+          "type": "object",
+          "required": ["status", "items"],
+          "properties": {
+            "status": {"enum": ["NONE", "DOCUMENTED", "UNKNOWN"]},
+            "items": {"type": "array", "items": {"type": "string", "minLength": 1}}
+          },
+          "allOf": [
+            {
+              "if": {"properties": {"status": {"const": "NONE"}}, "required": ["status"]},
+              "then": {"properties": {"items": {"maxItems": 0}}}
+            },
+            {
+              "if": {"properties": {"status": {"const": "DOCUMENTED"}}, "required": ["status"]},
+              "then": {"properties": {"items": {"minItems": 1}}}
+            },
+            {
+              "if": {"properties": {"status": {"const": "UNKNOWN"}}, "required": ["status"]},
+              "then": {"properties": {"items": {"maxItems": 0}}}
+            }
+          ],
+          "additionalProperties": false
+        },
+        "license": {
+          "type": "object",
+          "required": ["status", "spdx_id", "attribution"],
+          "properties": {
+            "status": {"enum": ["VERIFIED", "UNVERIFIED", "UNKNOWN", "NOT_APPLICABLE"]},
+            "spdx_id": {"type": ["string", "null"]},
+            "attribution": {"type": "array", "items": {"type": "string"}}
+          },
+          "allOf": [
+            {
+              "if": {"properties": {"status": {"const": "VERIFIED"}}, "required": ["status"]},
+              "then": {},
+              "else": {"properties": {"spdx_id": {"type": "null"}, "attribution": {"maxItems": 0}}}
+            }
+          ],
+          "additionalProperties": false
+        },
+        "update_policy": {"enum": ["MANUAL_REVIEW", "PINNED_MANUAL", "TRACK_UPSTREAM", "NONE", "UNKNOWN"]},
+        "verification": {
+          "type": "object",
+          "required": ["state", "reviewed_at", "owner"],
+          "properties": {
+            "state": {"enum": ["VERIFIED", "UNVERIFIED", "NOT_CLASSIFIED"]},
+            "reviewed_at": {"type": ["string", "null"], "format": "date"},
+            "owner": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"classification": {"const": "OWN"}}, "required": ["classification"]},
+          "then": {
+            "properties": {
+              "upstream": {"type": "null"},
+              "components": {"maxItems": 0},
+              "dependencies": {"uniqueItems": true},
+              "basis_evidence": {"minItems": 1},
+              "local_modifications": {"properties": {"status": {"const": "NONE"}, "items": {"maxItems": 0}}},
+              "verification": {"properties": {"state": {"const": "VERIFIED"}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"classification": {"const": "IMPORTED"}}, "required": ["classification"]},
+          "then": {
+            "properties": {
+              "upstream": {"$ref": "#/$defs/upstream"},
+              "components": {"maxItems": 0},
+              "basis_evidence": {"minItems": 1},
+              "local_modifications": {"properties": {"status": {"enum": ["NONE", "DOCUMENTED"]}}},
+              "verification": {"properties": {"state": {"const": "VERIFIED"}, "reviewed_at": {"type": "string", "format": "date"}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"classification": {"const": "EXTENDED"}}, "required": ["classification"]},
+          "then": {
+            "properties": {
+              "upstream": {"$ref": "#/$defs/upstream"},
+              "basis_evidence": {"minItems": 1},
+              "local_modifications": {"properties": {"status": {"const": "DOCUMENTED"}, "items": {"minItems": 1}}},
+              "verification": {"properties": {"state": {"const": "VERIFIED"}, "reviewed_at": {"type": "string", "format": "date"}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"classification": {"const": "COMPOSED"}}, "required": ["classification"]},
+          "then": {
+            "properties": {
+              "upstream": {"type": "null"},
+              "components": {"minItems": 2},
+              "basis_evidence": {"minItems": 1},
+              "verification": {"properties": {"state": {"const": "VERIFIED"}, "reviewed_at": {"type": "string", "format": "date"}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"classification": {"const": "UNKNOWN"}}, "required": ["classification"]},
+          "then": {
+            "properties": {
+              "upstream": {"type": "null"},
+              "components": {"maxItems": 0},
+              "dependencies": {"maxItems": 0},
+              "basis_evidence": {"maxItems": 0},
+              "local_modifications": {"properties": {"status": {"const": "UNKNOWN"}, "items": {"maxItems": 0}}},
+              "license": {"properties": {"status": {"const": "UNKNOWN"}, "spdx_id": {"type": "null"}, "attribution": {"maxItems": 0}}},
+              "update_policy": {"const": "MANUAL_REVIEW"},
+              "verification": {"properties": {"state": {"const": "NOT_CLASSIFIED"}, "reviewed_at": {"type": "null"}}}
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 
 from build_utils import (
     atomic_output,
@@ -19,6 +20,13 @@ from build_utils import (
 from portable import read_frontmatter, render_portable_skill
 from workflow_entrypoints import add_workflow_entrypoints, load_registry
 from skill_interface import repository_root, skill_domain, write_skill_interface
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from provenance.catalog import (  # noqa: E402
+    enrich_capabilities,
+    load_registry as load_provenance_registry,
+    provenance_metadata,
+)
 
 PLUGIN_NAME = "skills-factory"
 
@@ -92,6 +100,7 @@ def build(
             channel="plugin",
             available_names=available_names,
         )
+        provenance_registry = load_provenance_registry(root)
         registry_by_name = {
             str(item.get("name")): item
             for item in load_registry(root)
@@ -108,6 +117,7 @@ def build(
             }
             for name in workflow_names
         )
+        enrich_capabilities(capabilities, provenance_registry)
 
         version = package_version(root, "package")
         manifest = {
@@ -161,6 +171,7 @@ def build(
                 },
                 "source_revision": revision,
                 "capability_contract": capability_contract_metadata(),
+                **provenance_metadata(provenance_registry),
                 "capabilities": sorted(capabilities, key=lambda x: x["name"]),
                 "runtime_tools": runtime_tools,
             },
@@ -177,6 +188,7 @@ def build(
                 "runtime_mode": runtime_mode,
                 "source_revision": revision,
                 "capability_contract": capability_contract_metadata(),
+                **provenance_metadata(provenance_registry),
                 "payload_content_sha256": payload_digest,
                 "components": [
                     {
@@ -186,6 +198,7 @@ def build(
                         "version": item.get("version"),
                         "content_sha256": item.get("content_sha256"),
                         "capability_assessment": item.get("capability_assessment"),
+                        "provenance": item.get("provenance"),
                     }
                     for item in sorted(capabilities, key=lambda x: x["name"])
                 ],

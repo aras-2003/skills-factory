@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from scripts.catalog.generate_site_catalog import build_catalog, collect_workflow_sources  # noqa: E402
 from scripts.catalog.sync_cloud_catalog import build_snapshot  # noqa: E402
+from scripts.provenance.catalog import load_registry, projection, records_by_source, registry_digest  # noqa: E402
 
 
 class SiteCatalogContractTests(unittest.TestCase):
@@ -96,7 +97,8 @@ lab:
     def test_published_catalog_versions_match_package_source(self) -> None:
         markdown = (ROOT / "CATALOG.md").read_text(encoding="utf-8")
         package_manifest = (ROOT / "release/package.yaml").read_text(encoding="utf-8")
-        source_catalog = build_catalog(markdown, package_manifest, "revision", self.workflow_registry(), self.capability_contract(), self.workflow_sources())
+        provenance_registry = load_registry(ROOT)
+        source_catalog = build_catalog(markdown, package_manifest, "revision", self.workflow_registry(), self.capability_contract(), self.workflow_sources(), provenance_registry)
         published = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
 
         self.assertEqual(source_catalog["metadata"]["packages"], published["metadata"]["packages"])
@@ -111,6 +113,19 @@ lab:
         ):
             self.assertEqual(version, by_name[name]["version"])
             self.assertEqual("draft", by_name[name]["maturity"])
+
+    def test_catalog_provenance_matches_canonical_registry_and_is_orthogonal(self) -> None:
+        catalog = json.loads((ROOT / "docs/catalog.json").read_text(encoding="utf-8"))
+        registry = load_registry(ROOT)
+        by_source = records_by_source(registry)
+        self.assertEqual(1, catalog["metadata"]["provenance_schema_version"])
+        self.assertEqual(registry_digest(registry), catalog["metadata"]["provenance_registry_sha256"])
+        for item in catalog["skills"] + catalog["workflows"]:
+            source = item["source"]
+            self.assertEqual(projection(by_source[source], by_source), item["provenance"])
+            self.assertIn(item["provenance"]["classification"], {"OWN", "IMPORTED", "EXTENDED", "COMPOSED", "UNKNOWN"})
+            self.assertIn(item["maturity"], {"draft", "candidate", "production", "deprecated", "unknown"})
+            self.assertIn("capability_assessment", item)
 
     def test_default_page_is_area_first_and_discloses_versions(self) -> None:
         page = (ROOT / "docs/index.html").read_text(encoding="utf-8")

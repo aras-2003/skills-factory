@@ -11,6 +11,15 @@ import yaml
 
 from build_utils import sha256_tree
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from provenance.catalog import (  # noqa: E402
+    load_registry,
+    provenance_metadata,
+    projection,
+    records_by_identity,
+    records_by_source,
+)
+
 FORBIDDEN_PARTS = {"tests", "__pycache__", "evals"}
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
@@ -64,8 +73,25 @@ def validate_manifests(path: Path) -> list[str]:
             errors.append("release/capabilities source_revision mismatch")
         if r.get("capability_contract") != c.get("capability_contract"):
             errors.append("release/capabilities capability_contract mismatch")
+        repo_root = Path(__file__).resolve().parents[2]
+        try:
+            provenance_registry = load_registry(repo_root)
+            expected_provenance_meta = provenance_metadata(provenance_registry)
+            by_identity = records_by_identity(provenance_registry)
+            by_source = records_by_source(provenance_registry)
+            for key, value in expected_provenance_meta.items():
+                if c.get(key) != value or r.get(key) != value:
+                    errors.append(f"release/capabilities {key} mismatch")
+        except Exception as exc:
+            errors.append(f"canonical provenance registry invalid: {type(exc).__name__}")
+            by_identity, by_source = {}, {}
         if not r.get("release_id"):
             errors.append("release manifest missing immutable release_id")
+
+        if not isinstance(c.get("provenance_registry_sha256"), str):
+            errors.append("capabilities missing provenance registry digest")
+        if not isinstance(r.get("provenance_registry_sha256"), str):
+            errors.append("release manifest missing provenance registry digest")
 
         if "capabilities" in c:
             capability_items = c.get("capabilities") or []
@@ -80,6 +106,11 @@ def validate_manifests(path: Path) -> list[str]:
                     errors.append("invalid capability manifest item")
                     continue
                 name = item["name"]
+                identity = (str(item.get("kind") or ""), name)
+                provenance_record = by_identity.get(identity)
+                expected_provenance = projection(provenance_record, by_source) if provenance_record else None
+                if expected_provenance is None or item.get("provenance") != expected_provenance:
+                    errors.append(f"{name}: capabilities provenance does not match canonical registry")
                 component_dir = path / "skills" / name
                 if not component_dir.is_dir():
                     errors.append(f"{name}: capability directory missing")
@@ -94,7 +125,7 @@ def validate_manifests(path: Path) -> list[str]:
                 if release_item is None:
                     errors.append(f"{name}: missing from release manifest")
                     continue
-                for field in ("kind", "maturity", "version", "content_sha256"):
+                for field in ("kind", "maturity", "version", "content_sha256", "provenance"):
                     if release_item.get(field) != item.get(field):
                         errors.append(f"{name}: release/capabilities {field} mismatch")
                 if item.get("capability_assessment") != release_item.get("capability_assessment"):
@@ -299,6 +330,29 @@ def validate_zips(path: Path) -> list[str]:
     contract = index.get("capability_contract")
     if not isinstance(contract, dict) or contract != capabilities.get("capability_contract") or contract != release.get("capability_contract"):
         errors.append("index/capabilities/release capability_contract mismatch")
+    for key in ("provenance_schema_version", "provenance_registry_sha256"):
+        if index.get(key) != capabilities.get(key) or index.get(key) != release.get(key):
+            errors.append(f"index/capabilities/release {key} mismatch")
+
+    repo_root = Path(__file__).resolve().parents[2]
+    try:
+        provenance_registry = load_registry(repo_root)
+        by_identity = records_by_identity(provenance_registry)
+        by_source = records_by_source(provenance_registry)
+        for collection, label, kind in (
+            (index.get("skills") or [], "index skill", "skill"),
+            (index.get("workflows") or [], "index workflow", "workflow"),
+            (capabilities.get("workflows") or [], "capabilities workflow", "workflow"),
+        ):
+            for item in collection:
+                if not isinstance(item, dict) or not item.get("name"):
+                    continue
+                record = by_identity.get((kind, str(item["name"])))
+                expected = projection(record, by_source) if record else None
+                if expected is None or item.get("provenance") != expected:
+                    errors.append(f"{label} {item.get('name')}: provenance does not match canonical registry")
+    except Exception:
+        errors.append("canonical provenance registry invalid for ZIP package")
 
     index_by_name = _unique_by_name(index.get("skills") or [], "index", errors)
     capabilities_by_name = _unique_by_name(capabilities.get("skills") or [], "capabilities", errors)
@@ -322,7 +376,7 @@ def validate_zips(path: Path) -> list[str]:
 
         capability = capabilities_by_name.get(name)
         release_item = release_by_name.get(name)
-        identity_fields = ("version", "maturity", "zip", "content_sha256", "archive_sha256", "inventory", "capability_assessment")
+        identity_fields = ("version", "maturity", "zip", "content_sha256", "archive_sha256", "inventory", "capability_assessment", "provenance")
         if capability is not None:
             for field in identity_fields:
                 if capability.get(field) != item.get(field):

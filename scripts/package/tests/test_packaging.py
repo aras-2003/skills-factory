@@ -180,12 +180,19 @@ class PackagingTests(unittest.TestCase):
 
             capabilities = json.loads((out / "capabilities.json").read_text(encoding="utf-8"))
             self.assertEqual("repository-side-v1", capabilities["capability_contract"]["contract_id"])
+            self.assertEqual(1, capabilities["provenance_schema_version"])
+            self.assertRegex(capabilities["provenance_registry_sha256"], r"^[a-f0-9]{64}$")
             production_skill = next(x for x in capabilities["capabilities"] if x.get("kind") == "skill")
+            self.assertEqual("UNKNOWN", production_skill["provenance"]["classification"])
+            self.assertTrue(production_skill["provenance"]["source"].startswith("skills/"))
             self.assertEqual("UNASSESSED", production_skill["capability_assessment"]["status"])
             self.assertIn("unassessed", production_skill["capability_assessment"]["requirements"].values())
             release = json.loads((out / "release-manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(capabilities["provenance_registry_sha256"], release["provenance_registry_sha256"])
             release_skill = next(x for x in release["components"] if x.get("kind") == "skill")
             self.assertEqual(production_skill["capability_assessment"], release_skill["capability_assessment"])
+            self.assertEqual(production_skill["provenance"], release_skill["provenance"])
+            self.assertEqual([], artifact_validation.validate_tree(out))
             runtime_tools = {item["name"]: item for item in capabilities["runtime_tools"]}
             self.assertEqual({"skills-factory-runtime"}, set(runtime_tools))
             runtime = runtime_tools["skills-factory-runtime"]
@@ -267,6 +274,8 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual([], errors)
 
             lab_manifest = json.loads((out / "release-manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(1, lab_manifest["provenance_schema_version"])
+            self.assertRegex(lab_manifest["provenance_registry_sha256"], r"^[a-f0-9]{64}$")
             self.assertEqual(package_version(ROOT, "lab"), lab_manifest["version"])
             source_skill_names = {path.name for path in build_lab_plugin.discover_all_skills(ROOT)}
             self.assertEqual(source_skill_names, {
@@ -330,6 +339,16 @@ class PackagingTests(unittest.TestCase):
 
             capabilities = json.loads((out / "capabilities.json").read_text(encoding="utf-8"))
             self.assertEqual("repository-side-v1", capabilities["capability_contract"]["contract_id"])
+            self.assertEqual(lab_manifest["provenance_registry_sha256"], capabilities["provenance_registry_sha256"])
+            self.assertTrue(all(item["provenance"]["classification"] == "UNKNOWN" for item in capabilities["capabilities"]))
+            caps_path = out / "capabilities.json"
+            original_caps_text = caps_path.read_text(encoding="utf-8")
+            tampered_caps = json.loads(original_caps_text)
+            tampered_caps["capabilities"][0]["provenance"]["classification"] = "OWN"
+            caps_path.write_text(json.dumps(tampered_caps, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            tamper_errors = artifact_validation.validate_tree(out, allow_lab_evals=True)
+            self.assertTrue(any("provenance" in error for error in tamper_errors), tamper_errors)
+            caps_path.write_text(original_caps_text, encoding="utf-8")
             workflows = [x for x in capabilities["capabilities"] if x.get("kind") == "workflow"]
             self.assertTrue(workflows)
             self.assertTrue(all(x.get("version") for x in workflows))

@@ -78,14 +78,18 @@ test_modules:
 - adapters/skills-factory-cloud-next/tests/contracts.test.ts
 # Catalog-only refresh for interface-design v0.1.20 (2026-11-10); historical
 # Iteration 07 candidate/runtime revisions and behavioral evidence are unchanged.
+# CATALOG/docs catalog provenance refresh (2026-11-13); generated metadata only,
+# candidate/runtime revisions and behavioral evidence remain unchanged.
+# Packaging contract test pin refresh (2026-11-13); test now selects a skill in the
+# production profile; runtime candidate and behavioral evidence remain unchanged.
 source_sha256:
-  CATALOG.md: fadcf7833ce70964f5349d1cae0e6a8f20ebfd30fd690639f8c8d5498365074d
+  CATALOG.md: 0377975c99cb155e010671bc065fa55360c73c2cb1af75ab84071812a32c26c8
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 1c6656e574f672b721a605da1d82bc07973d5911f0d90519a971363f213025f2
   adapters/skills-factory-cloud-next/src/mcp-handler.ts: b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8
   adapters/skills-factory-cloud-next/src/peer-comparability.ts: f355eecb8c6bce63f0824987608b8dcf5bd46597c6bff53016666419f2d6057a
   adapters/skills-factory-cloud-next/tests/contracts.test.ts: dde0bec7f94ed2ae6b2d9d03a6bdfc23772b420b395b369da3f9f2a85b923002
   docs/audits/investing-domain-audit-iteration-07-2026-11.md: 1e0cc8b95ce772ef3f5a9322b61defd376a271149e7f94ab0da061e85d87afa9
-  docs/catalog.json: 687c0979aaddf5961ce638e736ce57f9242bb5b24eab2d3604bd2209df871765
+  docs/catalog.json: 4c3c80b1bf9f23f51c8d955e2468151310e1cf6e59066075624dcbac51b3f62e
   docs/governance/iterations/iteration-07-investing-quality-2026-11.md: 103aeac510414404dad8ca89356301737411673ca15ab916392a46c078296609
   evals/campaigns/investment-quality-2026-10/campaign.yaml: 2755fc10acc409e9653f247fc6a6cb073ac6376cd71b35a46b9bad6ba55276e2
   evals/campaigns/iteration-02-workflow-hardening-2026-10/campaign.yaml: b93e77ad9bd2942e96f2c02b99e82b3996eb147ff7dcc56609c488cd03836bc7
@@ -137,7 +141,7 @@ source_sha256:
   scripts/eval/tests/test_iteration02_workflow_hardening_release.py: 16fba000ab4129a3895acdbad538d81130e09a471c1f5af55e3c8de5114f37ea
   scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: c82cda1be43e30e7020745e6dd945a8a7d5d316a504a1f3a71d7b1d10a5ef751
   scripts/package/build_utils.py: 8b6482ccdbc50c42462ebf9d55740e83f584385406c94fcc8a2941f40b62ec64
-  scripts/package/tests/test_packaging.py: 819a510b6bf8c7d0b7be9031e309620a9a80e270c034b966be7fffd764e001a0
+  scripts/package/tests/test_packaging.py: f70a8eb37aa29c4d72e3a1f971a2310323e71727d92eedc504514a6c63aa44f2
   sites/skills-factory-site/README.md: 7e31a6ff02f4ac7906fa648940cc80d691be6745f6d0be696b3bf90620e6e3ed
   skills/investing/fundamental-intelligence/README.md: 7a792c9de5f315f6541b92f3889af660730c3a6eefe2758fff82dc4d7bf52723
   skills/investing/fundamental-intelligence/test_engine.py: 9bbcf46498500b0be242a4444da550a10569b93d6b4e2a18c44cccb959865cdd
