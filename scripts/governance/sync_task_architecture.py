@@ -20,22 +20,28 @@ spec.loader.exec_module(sync)
 
 VALID = {"A0", "A1", "A2", "A3", "A4"}
 FIELD_VALUES = """query($id:ID!){node(id:$id){... on ProjectV2Item{
-  fieldValues(first:100){nodes{... on ProjectV2ItemFieldSingleSelectValue {
-    name field {... on ProjectV2FieldCommon {name}}
-  }}}
+ fieldValues(first:100){nodes{
+  ... on ProjectV2ItemFieldSingleSelectValue {name field {... on ProjectV2FieldCommon {name}}}
+  ... on ProjectV2ItemFieldTextValue {text field {... on ProjectV2FieldCommon {name}}}
+ }}
 }}}"""
+TEXT_UPDATE = """mutation($project:ID!, $item:ID!, $field:ID!, $text:String!){
+ updateProjectV2ItemFieldValue(input:{
+  projectId:$project,itemId:$item,fieldId:$field,value:{text:$text}
+ }){projectV2Item{id}}
+}"""
 QUERY = """query($owner:String!, $project:Int!, $repo:String!, $issue:Int!) {
  user(login:$owner) {
    projectV2(number:$project) {
      id
      fields(first:100) {nodes {
        ... on ProjectV2SingleSelectField {id name options{id name}}
+       ... on ProjectV2Field {id name dataType}
      }}
    }
    repository(name:$repo) {
      issue(number:$issue) {
-       state
-       title
+       state title
        projectItems(first:100) {nodes{id project{id}}}
      }
    }
@@ -77,6 +83,33 @@ def option_id(fields, level):
     return field["id"], options[0]["id"]
 
 
+def field_target(fields, row):
+    """Project's native field may be a single-select classification or a text description."""
+    matched = [f for f in fields if f and f.get("name", "").casefold() == "architecture impact"]
+    if len(matched) != 1:
+        raise RuntimeError("Architecture Impact field missing or ambiguous")
+    field = matched[0]
+    if "options" in field:
+        _, option = option_id(fields, row["level"])
+        return field["id"], "option", option, row["level"]
+    if field.get("dataType") == "TEXT":
+        # GitHub Projects text field: preserve concise issue-specific impact, rather than
+        # assuming single-select A0..A4 options which the user did not guarantee.
+        description = row["change_description"].replace("\\n", " ").strip()
+        reason = row["architecture_reason"].replace("\\n", " ").strip()
+        value = f"{row['level']} — {reason}\\nOpis zmiany: {description}"
+        if len(value) > 1000:
+            value = value[:997].rsplit(" ", 1)[0] + "..."
+        return field["id"], "text", value, value
+    raise RuntimeError("Architecture Impact field is neither TEXT nor single-select")
+
+
+def field_values(data):
+    nodes = ((data.get("node") or {}).get("fieldValues") or {}).get("nodes", [])
+    return [v.get("name", v.get("text")) for v in nodes
+            if v and (v.get("field") or {}).get("name", "").casefold() == "architecture impact"]
+
+
 def sync_one(issue_number, row, apply=False):
     owner = os.environ.get("PROJECT_OWNER", "aras-2003")
     project_number = int(os.environ.get("PROJECT_NUMBER", "1"))
@@ -96,29 +129,27 @@ def sync_one(issue_number, row, apply=False):
     items = [i for i in issue.get("projectItems", {}).get("nodes", []) if i.get("project", {}).get("id") == project["id"]]
     if len(items) != 1:
         raise RuntimeError(f"Issue {issue_number}: expected exactly one existing project item, got {len(items)}")
-    field_id, selected = option_id(project["fields"]["nodes"], row["level"])
+    field_id, mode, selected, expected = field_target(project["fields"]["nodes"], row)
     if not apply:
         print(f"DRY_RUN Issue #{issue_number}: Architecture Impact={row['level']} assessment={row['review']}")
         return "DRY_RUN"
     # Do not clobber a field a project reviewer already classified differently.
     before = sync.gql(FIELD_VALUES, {"id": items[0]["id"]})
-    present = [v["name"] for v in ((before.get("node") or {}).get("fieldValues") or {}).get("nodes", [])
-               if v and (v.get("field") or {}).get("name", "").casefold() == "architecture impact"]
+    present = field_values(before)
     if len(present) > 1:
         raise RuntimeError(f"Issue {issue_number}: ambiguous existing Architecture Impact values")
-    if present == [row["level"]]:
+    if present == [expected]:
         print(f"ALREADY_VERIFIED Issue #{issue_number}: Architecture Impact={row['level']}")
         return "ALREADY_VERIFIED"
     if present:
         raise RuntimeError(f"Issue {issue_number}: existing reviewed Architecture Impact differs; refusing overwrite")
-    sync.gql(sync.UPDATE, {"project": project["id"], "item": items[0]["id"],
-                           "field": field_id, "option": selected})
+    mutation = sync.UPDATE if mode == "option" else TEXT_UPDATE
+    sync.gql(mutation, {"project": project["id"], "item": items[0]["id"],
+                        "field": field_id, mode: selected})
     # Independent readback, not a GraphQL mutation receipt alone.
     verify = sync.gql(FIELD_VALUES, {"id": items[0]["id"]})
-    node = (verify.get("node") or {})
-    values = (node.get("fieldValues") or {}).get("nodes", [])
-    observed = [v["name"] for v in values if v and (v.get("field") or {}).get("name", "").casefold() == "architecture impact"]
-    if observed != [row["level"]]:
+    observed = field_values(verify)
+    if observed != [expected]:
         raise RuntimeError(f"Issue {issue_number}: post-write readback mismatch for Architecture Impact")
     print(f"VERIFIED Issue #{issue_number}: Architecture Impact={row['level']}")
     return "VERIFIED"
