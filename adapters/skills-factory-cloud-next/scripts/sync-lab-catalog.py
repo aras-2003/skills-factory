@@ -37,11 +37,16 @@ for kind,items in (('skill',canonical.get('skills',[])),('workflow',canonical.ge
     if not identity[1] or identity in canonical_by_identity:
         raise ValueError(f'Duplicate or incomplete canonical catalog identity: {identity}')
     canonical_by_identity[identity]=item
-components={c['name']:c for c in manifest['components']}
+components={(c['kind'],c['name']):c for c in manifest['components']}
+if len(components) != len(manifest['components']):
+    raise ValueError('Lab manifest contains duplicate (kind, name) identities')
 rows=[]
 for entry in m.entries():
-    s=m.load_skill(entry['name']); c=components[s['name']]
-    identity=(c['kind'],s['name'])
+    identity=(entry['kind'],entry['name'])
+    c=components.get(identity)
+    if c is None:
+        raise ValueError(f'Lab catalog entry is missing from its manifest: {identity}')
+    s=m.load_skill(entry['name'])
     source_record=canonical_by_identity.get(identity)
     if source_record is None:
         raise ValueError(f'Lab component is missing from the canonical catalog: {identity}')
@@ -65,6 +70,7 @@ for entry in m.entries():
         canonical_catalog_registry_sha256=registry_digest,
     )
     s.update(kind=c['kind'],instruction_sha256=hashlib.sha256(s['instructions'].encode()).hexdigest())
+    s['lab_inclusion']='INCLUDED'
     s.pop('execution_mode');s.pop('source_revision')
     s['reference_files']={r['path']:r['content'] for r in s['reference_files']}
     surface_digest=hashlib.sha256()
@@ -75,7 +81,7 @@ for entry in m.entries():
     rows.append(s)
 release={k:manifest[k] for k in ('channel','version','source_revision','release_id','payload_content_sha256')}
 release.update(skill_count=len(rows),catalog_digest=m.catalog_digest(),artifact_sha256=hashlib.sha256(archive.read_bytes()).hexdigest())
-assert len(rows) == len(components) and {row['name'] for row in rows} == set(components), 'Lab catalog must match every manifest component'
+assert len(rows) == len(components) and {(row['kind'],row['name']) for row in rows} == set(components), 'Lab catalog must match every manifest component'
 draft_release=None
 if args.pinned_draft_source:
     draft_spec=importlib.util.spec_from_file_location('draft_catalog',Path(__file__).with_name('draft-catalog.py'))
