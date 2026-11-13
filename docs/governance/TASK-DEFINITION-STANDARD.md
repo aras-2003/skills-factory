@@ -94,3 +94,24 @@ Historical completed #608–611, #335 and #657 are not rewritten. Any remaining 
 
 ## Rollout
 Use the existing native GitHub Projects Architecture Impact field as canonical classification; use Issue Form **Opis zmiany** to document rationale, affected contracts, target delta and verification. Assess existing OPEN/PLANNED items, later implement structural/model-based checks through existing evals/ and skill-development. This change does not automatically populate the native Project field: a project-field-capable API/permission and observation are required. This proposal does not mutate production, enable CI gates, or claim any runtime PASS.
+
+
+## Controlled Projects field synchronization (implementation proposal)
+
+The canonical native GitHub Projects `Architecture Impact` is a single-select field on user project `aras-2003 / #1`; expected *exact* option names: `A0`, `A1`, `A2`, `A3`, `A4`. The field and option names are checked at execution time and **not** assumed to exist by the source-only validation.
+
+- Source of the planned classification and per-Issue task-specific input: `docs/governance/task-architecture-impact-2026-11.json`. Entries are `PROPOSED` until an actual current-main architecture review; a value describes **planned impact**, never observed deployment.
+- Reuse the existing `scripts/governance/sync_project_metadata.py` GraphQL/option matching and the existing `PROJECTS_TOKEN`; do not create a second Project or add missing project items automatically.
+- Job: `.github/workflows/maintenance-architecture-impact.yml` (`workflow_dispatch`). `apply=false` is default dry-run; `issue_number=0` covers manifest Issues. `apply=true` writes native Project item fields and reads back every written value. Existing differing manually-set values cause a refusal, not an overwrite.
+- The job fails for unavailable token, missing/ambiguous Project field or option, missing Project membership, changed Issue title, readback mismatch, or missing manifest contract. It never creates Issues, changes their status, or promotes release.
+- The workflow is available for manual dispatch **only after it exists on the repository's default branch**. PR CI checks manifest shape and deterministic tests but does not prove a Projects write. Neither a green PR nor dry-run is a `RUNTIME_VERIFIED` result for Project data.
+- Bulk run must retain the exact run URL, manifest SHA, per-Issue results, all errors and final error count. Re-run missing/blocked items only after resolving the discrepancy; avoid overriding a reviewer decision.
+
+Runbook (after reviewed merge):
+```bash
+gh workflow run maintenance-architecture-impact.yml -R aras-2003/skills-factory -f apply=false -f issue_number=0
+# Review project options, project membership, dry-run outputs, and proposed classification.
+gh workflow run maintenance-architecture-impact.yml -R aras-2003/skills-factory -f apply=true -f issue_number=0
+```
+
+The per-Issue authored descriptions in GitHub are updated separately from the native Project field; neither operation implies architecture review approval.
