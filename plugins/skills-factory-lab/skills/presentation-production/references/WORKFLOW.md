@@ -7,7 +7,7 @@ Produce an audience-specific, evidence-backed, deliberately art-directed **prese
 
 **Entry:** User requests a new presentation/deck or major rebuild of a deck from topic, idea, notes, document or analysis. For a local slide edit, individual chart, source verification or story-only outline, route to the matching specialist and stop. Do not create external artifacts for ordinary explanations or reports that do not request a presentation.
 
-**Source status:** draft; registered only in the isolated Lab runtime and unavailable in the production channel until validation. Read `references/artifact-contract.md`, `references/quality-standard.md` and `references/creative-direction.md` when needed. For Canva provider actions, permissions and export restrictions read `references/canva-connector-contract.md`.
+**Source status:** draft; registered only in the isolated Lab runtime and unavailable in the production channel until validation. Read `references/artifact-contract.md`, `references/quality-standard.md` and `references/creative-direction.md` when needed. Apply the intent/format and editability decision matrix in [FORMAT-ROUTING.md](../../docs/presentations/FORMAT-ROUTING.md) at Stage 0; never infer delivery format from audience profile or silently downgrade an editability request. For Canva provider actions, permissions and export restrictions read `references/canva-connector-contract.md`.
 
 ## Experimental Design Library v0.1 (optional advisory step)
 
