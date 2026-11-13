@@ -148,7 +148,7 @@ class BuildIntegrityTests(unittest.TestCase):
             self.assertFalse((mcp / "__pycache__").exists())
             generated = (site / "lib" / "skill-catalog.ts").read_text(encoding="utf-8")
             self.assertIn('"classification": "OWN"', generated)
-            self.assertIn('"canonical_source_revision":"' + "b" * 40 + '"', generated)
+            self.assertIn('"canonical_source_revision": "' + "b" * 40 + '"', generated)
 
     def test_source_root_and_nested_source_tree_are_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as td:
