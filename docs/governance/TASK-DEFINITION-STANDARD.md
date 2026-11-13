@@ -19,7 +19,7 @@ A task is executable when an independent engineer can identify the present state
 1. **Problem / why**: observed behavior or business gap with source/evidence; avoid prescribing a solution without a reason.
 2. **Baseline / existing capability**: links to source paths/revisions, current contracts, ownership and what is UNKNOWN.
 3. **Objective / deliverable**: **one** bounded result. EPICs describe children, not implementation.
-4. **Architecture Impact**: required structured field below. For nontechnical tasks A0 with rationale, never an unsubstantiated default.
+4. **Opis zmiany — perspektywa architektoniczna**: specific current→target architectural delta, affected components/interfaces and required safeguards. **Architecture Impact classification** is stored separately in the user's native GitHub Projects field; it is not duplicated as a second Issue metadata field.
 5. **In scope / out of scope**: explicit changes, excluded domains and forbidden side effects.
 6. **Inputs / dependencies**: source-of-truth, fixtures, APIs, prerequisites and owners.
 7. **Execution / decisions**: smallest meaningful steps; design alternatives REUSE/EXTEND/COMPOSE/IMPORT/CREATE/REPLACE.
@@ -31,7 +31,7 @@ Link policies instead of repeating them; status history belongs in comments/iter
 
 ## Architecture Impact — mandatory field
 
-Use this concise block in a GitHub Issue body; GitHub issue form renders it as the labeled **Architecture Impact** textarea.
+Use the dedicated **Architecture Impact** custom field in GitHub Projects for classification A0/A1/A2/A3/A4 (or an available UNKNOWN intake value). Keep the substantive **Opis zmiany** in the Issue body. Project field options, project item membership and synchronisation must be verified on the actual Project; writing a body section never changes that custom field.
 
 ```yaml
 Architecture Impact:
@@ -93,4 +93,4 @@ Problem/evidence (2), atomic scope (2), source inputs/dependencies (1), target a
 Historical completed #608–611, #335 and #657 are not rewritten. Any remaining work requires a new, nonduplicate Issue based on observed gaps.
 
 ## Rollout
-Add the Architecture Impact textarea to GitHub Issue Forms, assess existing OPEN/PLANNED items, and later implement structural and model-based checks through existing evals/ and skill-development rather than parallel grading infrastructure. A native GitHub Projects custom field is a separate metadata feature; it is **not** created by this document or the Issue Forms. Project-field setup requires a project-field-capable API/permission and independent verification. This proposal does not mutate production, enable CI gates, or claim any runtime PASS.
+Use the existing native GitHub Projects Architecture Impact field as canonical classification; use Issue Form **Opis zmiany** to document rationale, affected contracts, target delta and verification. Assess existing OPEN/PLANNED items, later implement structural/model-based checks through existing evals/ and skill-development. This change does not automatically populate the native Project field: a project-field-capable API/permission and observation are required. This proposal does not mutate production, enable CI gates, or claim any runtime PASS.
