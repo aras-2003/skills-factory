@@ -1,20 +1,20 @@
 # Iteration 19 — TDC v1.1 and Projects Architecture Impact sync
 
-- **State: ACTIVE upon this scope-lock merge**. No concurrent increment: Iteration 18 CLOSED / ACCEPTED via [PR #690](https://github.com/aras-2003/skills-factory/pull/690), main `22d31320e6114d8c1dbe6b1ed79dff12cb2223cf`; #618 closed.
+- **State: CLOSED / ACCEPTED** as of 2026-11-14. Evidence and explicit #618 blocked result: [closeout evidence](../../../evals/campaigns/iteration-19-tdc-architecture-impact-2026-11/closeout-evidence.md). Iteration 18 was CLOSED / ACCEPTED before this scope began via [PR #690](https://github.com/aras-2003/skills-factory/pull/690); #618 is closed and was not rewritten.
 - Tracking Issue: [#688](https://github.com/aras-2003/skills-factory/issues/688).
-- Owner / reviewer: Arkadiusz Kamrowski / owner self-review; not independent.
+- Owner / reviewer: Arkadiusz Kamrowski / owner-delegated Codex review; not independent.
 - Baseline main SHA: `22d31320e6114d8c1dbe6b1ed79dff12cb2223cf`.
-- Scope lock SHA: the merge SHA of this scope-lock PR, to be recorded after merge.
-- Started: scope-lock merge; closed: PENDING.
+- Scope lock SHA: `5fdd175` (PR #691).
+- Started: scope-lock merge `5fdd175`; closed: 2026-11-14 after required evidence was integrated in PR #696 and apply run #43594714254 was itemized.
 - Native GitHub Project iteration: NOT_ASSIGNED (scheduling mirror, not authorization).
-- Source candidate: [PR #686](https://github.com/aras-2003/skills-factory/pull/686), pre-existing Draft, to be reconciled with this baseline before implementation integration.
+- Source candidate: stale PR #686 was closed; its unsafe/out-of-scope diff was replaced by clean PR #693 and follow-up PR #694. PR #695 records the reviewed manifest and audit; PR #696 records final evidence.
 - Governance: [ITERATION-DELIVERY](../ITERATION-DELIVERY.md); one active increment, max 2 implementation WIP + 1 validation lane.
 
 ## Frozen scope
 
 | Workstream | Locked outcome | Included | Excluded | Size |
 | --- | --- | --- | --- | --- |
-| A — issue definition | TDC 19-A1/A2: source-controlled task definition standard, engineer/bug Issue Forms and independently verified 110 current open Issues have issue-specific change descriptions and preserved acceptance/evidence history | Docs, issue forms, read-only/safe inspection of 110 issue bodies and representative quality spot checks; no claims of universal Ready | Rewriting historic closed issues, altering scope of other locked iterations, automatic Ready or release | S |
+| A — issue definition | TDC 19-A1/A2: source-controlled task definition standard, engineer/bug Issue Forms, and verified 110 frozen Issue descriptions with exact captured acceptance-summary preservation; owner-delegated review only, no independent quality certification | Docs, issue forms, read-only/safe inspection of 110 issue bodies and representative quality spot checks; no claims of universal Ready | Rewriting historic closed issues, altering scope of other locked iterations, automatic Ready or release | S |
 | B — Project custom field | TDC 19-B1..B4: Project V2 `Architecture Impact` A0–A4 synched from versioned 110-entry manifest via existing Projects token/GraphQL, readback verified | Existing `PROJECTS_TOKEN` + `scripts/governance/sync_project_metadata.py`; new bounded safe sync, manifest/tests, manually dispatched dry-run and reviewed apply | New Project, silently creating items/options, overwriting human decisions, status/iteration writes, production runtime/deployment, moving old Issues to Ready | M |
 
 ## Architecture design / affected contracts
@@ -46,4 +46,9 @@ Use [the acceptance matrix](../../../evals/campaigns/iteration-19-tdc-architectu
 
 ## Closure
 
-Close only if all required rows PASS with exact-version evidence; otherwise stay VALIDATING/BLOCKED. Offline CI never substitutes live Project field readback. Runtime/Site MCP is N/A for this governance-only automation with rationale recorded at scope lock; **GitHub Actions Project read/write** is required for B2/B3. Owner review is self-review; independent reviewer acceptance is not implied.
+Close only if all required rows PASS with exact-version evidence; otherwise stay VALIDATING/BLOCKED. Offline CI never substitutes live Project field readback. Runtime/Site MCP is N/A for this governance-only automation with rationale recorded at scope lock; **GitHub Actions Project read/write** is required for B2/B3. Owner review is delegated Codex review; independent reviewer acceptance is not implied.
+
+
+## Closure evidence and decision
+
+See `evals/campaigns/iteration-19-tdc-architecture-impact-2026-11/closeout-evidence.md` for the exact PR/main/run identities, 109 verified Project values, blocked closed Issue #618, scope reconciliation, limitations and owner decision. No Site/plugin release or runtime promotion was performed. The explicit #618 refusal is the required fail-closed behavior and is not represented as a write or successful readback.
