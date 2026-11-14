@@ -1,13 +1,13 @@
 # Iteration 21 — canonical XML grammar and static skill-body validation
 
-- State: PLANNED; implementation is not authorized until this scope lock is reviewed and merged.
+- State: ACTIVE; scope lock merged at main `cb3e73d1e3d00aca733fec1e888f595511f118c9`. Implementation is now underway.
 - Owner / reviewer: repository owner / owner-delegated Codex review (not independent human review).
-- Tracking Issue / native Project iteration: #704 / NOT ASSIGNED until the scope lock is merged and verified in GitHub Projects.
+- Tracking Issue / native Project iteration: #704 / `21 | Core extraction (provisional)`; assigned and read back after the scope lock merged.
 - Previous terminal iteration: Iteration 20 CLOSED / ACCEPTED at main `54ac64a3029923c788b828ce63acdc0b88f18872`.
 - Baseline main SHA: `54ac64a3029923c788b828ce63acdc0b88f18872`.
-- Lock commit SHA: see the scope-lock PR commit; record the merged lock SHA in #704 before implementation.
-- Started at / closed at (UTC): not started / not closed.
-- Scope lock reviewed by / at: repository owner / owner-delegated Codex review; self-review is not independent and merge approval remains separate.
+- Lock commit SHA: `cb3e73d1e3d00aca733fec1e888f595511f118c9`; recorded in #704 before implementation.
+- Started at / closed at (UTC): 2026-11-14 23:16 / not closed.
+- Scope lock reviewed by / at: repository owner / owner-delegated Codex review; merged via PR #705 after explicit owner approval. Review was not independent.
 
 ## Frozen commitment
 
@@ -25,15 +25,15 @@ The acceptance matrix is `iteration-21-acceptance-matrix.md`. Required checks ar
 
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
-| None | — | — | Not run; scope is awaiting approval. | N/A for this static-only slice; no runtime artifacts or skill behavior are changed. | — |
+| No implementation candidate yet | Main `cb3e73d1e3d00aca733fec1e888f595511f118c9` | N/A | Scope-lock checks passed; implementation checks not run yet. | N/A for this static-only slice; no runtime artifacts or skill behavior are changed. | — |
 
 ## Regression selection and counts
 
 - Changed contracts / direct and transitive consumers (evidence links): TDC XML grammar, static validator, authoring template and validation documentation. No runtime or packaged contract consumer is changed.
-- Included cases / exclusions with bounded-impact rationale: four parser/authoring fixture classes and repository validation are listed in the matrix. Runtime/model cases and cross-channel compatibility are excluded because no skill body, loader or package output changes; these remain explicit requirements of #682.
+- Included cases / exclusions with bounded-impact rationale: eight parser/authoring fixture scenarios, five shared offline sentinels, two unchanged-skill probes and repository validation are listed in the matrix. Runtime/model cases and cross-channel compatibility are excluded because no skill body, loader or package output changes; these remain explicit requirements of #682.
 - Fixed sentinels / rotating unchanged-domain probes (minimum 2): offline regression checks for YAML frontmatter parsing, skill routing/catalog registrations, tool permission declarations, evaluator-only fixture isolation, and package/catalog manifests; two unchanged skill fixtures are selected in the matrix.
 - Last full runtime baseline candidate / behavior iterations since baseline (maximum 4): current Site Lab attestation is source `1d55767564bd092935c4d8a21fa0debc7a382db2`, older than this scope baseline. No runtime baseline claim is made; this tooling-only slice does not change runtime behavior.
-- Planned distinct scenarios / executions by layer and required surface: four focused XML fixture scenarios, five shared offline sentinels, two unchanged-skill probes, and full applicable offline CI; runtime surface N/A with the scope rationale above.
+- Planned distinct scenarios / executions by layer and required surface: eight parser/authoring fixture scenarios, five shared offline sentinels, two unchanged-skill probes, and full applicable offline CI; runtime surface N/A with the scope rationale above.
 - Critical stochastic scenarios repeated at least 3 times / instability history: N/A; this scope introduces no model behavior or stochastic runtime path.
 - PR CI / final-main checks and build / external runtime runs: required PR checks on the exact scope commit and final main source; post-merge offline CI. No external runtime run is required for this static-only slice.
 
@@ -52,7 +52,7 @@ The acceptance matrix is `iteration-21-acceptance-matrix.md`. Required checks ar
 - Shared regression verdict: pending
 - Non-blocking findings and accepted impact (owner/reviewer + future Issue): pending
 - Scope compared with lock commit: pending
-- Issue / Project / PR reconciliation: pending; native Iteration remains unassigned until the lock is merged and read back.
+- Issue / Project / PR reconciliation: pending closeout; #704 is assigned to Iteration 21 and In progress after native Project readback; PR #705 is merged.
 - Owner proposal / reviewer acceptance / decision timestamp: pending
 - If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: N/A
 - Next iteration eligibility (no automatic start or production promotion): only after this increment is CLOSED or formally ABORTED.
