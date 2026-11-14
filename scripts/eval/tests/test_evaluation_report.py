@@ -73,9 +73,10 @@ class EvaluationReportTests(unittest.TestCase):
         profile = copy.deepcopy(self.example["evaluation_profile"])
         profile["calibration_status"] = "VALIDATED"
         assertions = copy.deepcopy(self.example["assertions"])
-        assertions[0]["grade"] = 0
-        assertions[0]["blocking_gate"] = True
+        assertions[-1]["grade"] = 0
+        assertions[-1]["blocking_gate"] = True
         score = report.calculate_score(profile, assertions)
+        self.assertGreaterEqual(score["value"], 8.5)
         self.assertEqual("REJECT", score["decision"]["status"])
         self.assertTrue(score["decision"]["blocking_gates"])
 
