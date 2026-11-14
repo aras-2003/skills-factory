@@ -1,0 +1,59 @@
+name: Skills Factory / Architecture Impact sync
+on:
+  pull_request:
+    paths:
+      - 'scripts/governance/sync_project_metadata.py'
+      - 'scripts/governance/sync_task_architecture.py'
+      - 'docs/governance/task-architecture-impact-2026-11.json'
+      - 'tests/governance/test_task_architecture_sync.py'
+      - 'tests/governance/test_project_metadata_sync.py'
+      - '.github/workflows/maintenance-architecture-impact.yml'
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Write Project Architecture Impact field (false = dry-run)"
+        required: true
+        type: boolean
+        default: false
+      issue_number:
+        description: "Existing Issue number; 0 = full manifest"
+        required: true
+        type: number
+        default: 0
+permissions:
+  contents: read
+concurrency:
+  group: architecture-impact-sync-${{ github.event_name == 'workflow_dispatch' && (inputs.issue_number || 'all') || 'pr' }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    name: Governance / Test Architecture Impact manifest and synchronization
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - run: python3 -m unittest discover -s tests/governance -p 'test_project_metadata_sync.py' -v
+      - run: python3 -m unittest discover -s tests/governance -p 'test_task_architecture_sync.py' -v
+      - run: python3 scripts/governance/sync_task_architecture.py --check
+  sync:
+    name: Governance / Sync native Architecture Impact
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'aras-2003/skills-factory' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      GH_REPOSITORY: ${{ github.repository }}
+      PROJECT_OWNER: aras-2003
+      PROJECT_NUMBER: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Fail closed when project credential is absent
+        run: |
+          test -n "$GH_TOKEN" || { echo "::error::PROJECTS_TOKEN required"; exit 1; }
+      - name: Preview or synchronize existing Project items
+        env:
+          APPLY: ${{ inputs.apply }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+        run: |
+          args=(--issue-number "$ISSUE_NUMBER")
+          if [ "$APPLY" = "true" ]; then args+=(--apply); fi
+          python3 scripts/governance/sync_task_architecture.py "${args[@]}"

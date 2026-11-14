@@ -36,6 +36,18 @@ body:
       label: Reproduction and evidence
       description: Include test case, URL or receipt, source revision, runtime version and surface; never include secrets
   - type: textarea
+    id: change_description
+    attributes:
+      label: Opis zmiany — perspektywa architektoniczna
+      description: "What existing component or contract changes to fix this bug? Document unaffected consumers, regressions and rollback. Set native Projects Architecture Impact classification separately."
+      placeholder: |
+        Architektura obecna i naruszony kontrakt:
+        Minimalna proponowana zmiana:
+        Interfejsy/dane/konsumenci objęci wpływem:
+        Testy regresji i rollback:
+    validations:
+      required: true
+  - type: textarea
     id: impact
     attributes:
       label: Impact / risk / constraints
