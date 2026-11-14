@@ -5,6 +5,7 @@
 - Target: user Project https://github.com/users/aras-2003/projects/1 and Issues in `aras-2003/skills-factory`.
 - GitHub's built-in Auto-add handles Issue membership. This workflow **does not** add items; it waits for built-in Auto-add.
 - Issue labels are source for `priority:P0..P3`, `area:<exact option>`, `size:XS..XL`. If absent, strictly parse the migration Issue body header `historical priority: **P1**`, `size: L`, and legacy ID in issue title for Area. Missing metadata stays blank.
+- The Engineering Task Issue Form emits exact dropdown values under `### Priority`, `### Size`, `### Area` and `### Project status`. The mapper validates those values against configured Project options and refuses invalid or conflicting selections. Keep each option machine-readable; put the human explanation in the form description and task text.
 - No `Type` field: GitHub reserves this for native Issue Types.
 - GitHub Project **Size** exists; no duplicate `Effort` field.
 - Workflow triggers when issues open/edit/labels change, or manually via workflow_dispatch for a specific issue number.

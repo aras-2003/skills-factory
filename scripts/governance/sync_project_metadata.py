@@ -67,6 +67,23 @@ def values(title, body, labels):
     """Strict fields from labels, or legacy exact key syntax. Never guess missing values."""
     labels = {x.lower() for x in labels}
     result = {}
+
+    def form_value(label, options):
+        # GitHub Issue Forms render dropdowns as a heading and selected option.
+        pattern = rf"(?im)^###\s*{re.escape(label)}\s*\r?\n\s*([^\r\n]+?)\s*$"
+        raw = re.findall(pattern, body)
+        if not raw:
+            return None
+        selected = []
+        for value in raw:
+            option = next((v for v in options if v.casefold() == value.strip().casefold()), None)
+            if option is None:
+                raise ValueError(f"Invalid {label} form value: {value.strip()!r}")
+            selected.append(option)
+        if len(set(selected)) > 1:
+            raise ValueError(f"Conflicting {label} form values: {selected}")
+        return selected[0]
+
     for field, valid, pattern in (
         ("Priority", PRIORITY, r"(?im)(?:^\s*-?\s*|;)\s*(?:historical )?priority\s*:\s*\*{0,2}(P[0-3])\b"),
         ("Size", SIZE, r"(?im)(?:^\s*-?\s*|;)\s*(?:size|effort)\s*:\s*\*{0,2}(XS|S|M|L|XL)\b"),
@@ -74,17 +91,30 @@ def values(title, body, labels):
         selected = [v for v in valid if f"{field.lower()}:{v.lower()}" in labels]
         if len(selected) > 1:
             raise ValueError(f"Conflicting {field} labels: {selected}")
-        if selected:
-            result[field] = selected[0]
-        elif pattern:
-            m = re.search(pattern, body)
-            if m:
-                result[field] = m.group(1)
+        body_values = set(re.findall(pattern, body)) if pattern else set()
+        form = form_value(field, valid)
+        if form:
+            body_values.add(form)
+        if len(body_values) > 1:
+            raise ValueError(f"Conflicting {field} body values: {sorted(body_values)}")
+        body_value = next(iter(body_values), None)
+        if selected and body_value and selected[0].casefold() != body_value.casefold():
+            raise ValueError(f"Conflicting {field} label and body values")
+        if selected or body_value:
+            result[field] = selected[0] if selected else body_value
+    area_form = form_value("Area", AREA)
+    if area_form:
+        if "Area" in result and result["Area"].casefold() != area_form.casefold():
+            raise ValueError("Conflicting Area label and body values")
+        result["Area"] = area_form
     # Only a dedicated Project status marker controls the live Project column.
     # Historical backlog status and narrative "Status" remain non-authoritative.
     raw = re.findall(r"(?im)^\s*-?\s*Project status\s*:\s*\*{0,2}(In Progress|Blocked|Discovery|Validation|In review|Done|Ready|Backlog)\*{0,2}\s*$", body)
     selected_status = [v for v in STATUS if "status:" + v.lower() in labels]
-    if len(set(selected_status)) > 1 or len(set(raw)) > 1:
+    status_form = form_value("Project status", STATUS)
+    if status_form:
+        raw.append(status_form)
+    if len({v.casefold() for v in selected_status}) > 1 or len({v.casefold() for v in raw}) > 1:
         raise ValueError("Conflicting Project Status values")
     if selected_status and raw and selected_status[0].casefold() != raw[0].casefold():
         raise ValueError("Conflicting Project Status label and body")

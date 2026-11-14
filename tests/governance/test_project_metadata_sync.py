@@ -29,6 +29,21 @@ class MappingTest(unittest.TestCase):
         result = mod.values("Some new issue", "", ["priority:P0", "area:Commerce", "size:XS"])
         self.assertEqual(result, {"Priority": "P0", "Area": "Commerce", "Size": "XS"})
 
+    def test_issue_form_dropdown_fields(self):
+        body = "### Priority\nP1\n\n### Size\nM\n\n### Area\nEngineering\n\n### Project status\nBacklog"
+        self.assertEqual(mod.values("New task", body, []), {
+            "Priority": "P1", "Size": "M", "Area": "Engineering", "Status": "Backlog"})
+
+    def test_issue_form_rejects_unknown_metadata_values(self):
+        with self.assertRaisesRegex(ValueError, "Invalid Priority form value"):
+            mod.values("New task", "### Priority\nurgent", [])
+
+    def test_issue_form_metadata_conflicts_fail_closed(self):
+        with self.assertRaisesRegex(ValueError, "Conflicting Priority label and body"):
+            mod.values("New task", "### Priority\nP1", ["priority:P0"])
+        with self.assertRaisesRegex(ValueError, "Conflicting Area label and body"):
+            mod.values("New task", "### Area\nCommerce", ["area:Engineering"])
+
     def test_unknown_stays_blank(self):
         self.assertEqual(mod.values("No metadata", "Please handle soon", []), {})
 
