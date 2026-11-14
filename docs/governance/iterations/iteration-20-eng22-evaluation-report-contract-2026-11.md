@@ -1,9 +1,9 @@
 # Iteration 20 — ENG-22 Evaluation Report Contract v1
 
-- **State: ACTIVE.** Scope lock merged in PR #698 at main SHA `071e96c080ca40a44ebda4ea0c5c3122134bc5e7`; implementation began against that exact baseline. Previous iteration 19 (#688) is CLOSED / ACCEPTED.
+- **State: CLOSED / ACCEPTED (bounded slice only).** Scope lock merged in PR #698 at `071e96c080ca40a44ebda4ea0c5c3122134bc5e7`; implementation merged by PR #699 (main `92cd882a40996ae3c2345b1bfe671b0647798d06`), boundary tests by PR #700 (main `3418f3dca5e8452d489f1eef6c43accda9c49ab5`), and high-score blocking regression by PR #701 (main `c8e96d6274599bee2629c0d46befc136dd1679a0`). Previous iteration 19 (#688) is CLOSED / ACCEPTED.
 - Tracking issue / bounded ENG-22 dependency slice: https://github.com/aras-2003/skills-factory/issues/697.
-- Parent dependency: #335 was reopened only to track this bounded contract slice; its wider L-sized observability scope remains partial and is not activated by this record.
-- Downstream consumer: #619, which must reuse the contract unchanged in a later separately scoped increment.
+- Parent source requirement: ENG-22 #335. This bounded contract slice was tracked through #697; the wider observability scope remains partial and is not accepted or completed here.
+- Downstream consumer: #619, updated to reuse the merged contract unchanged in a later separately scoped increment.
 - Owner / reviewer: repository owner / owner-delegated Codex review; not independent human review.
 - Implementation baseline main SHA: `071e96c080ca40a44ebda4ea0c5c3122134bc5e7`.
 - Native Project iteration: NOT_ASSIGNED unless independently read back.
@@ -43,10 +43,15 @@ Use the companion acceptance matrix, cases 20-01 through 20-06.
 6. Existing receipt schema, sample receipts and historical evidence remain unchanged/readable; no runtime adapters are introduced.
 7. Full repository validator, eval tests, domain integrity and exact PR/main CI pass.
 
-## Execution gates
+## Execution and verification
 
-Scope-lock PR first. Implementation begins only after its merge and exact main identity are recorded. Validate offline with synthetic fixtures; preserve all tests and failure results. Merge implementation only after exact-head CI. No runtime/Site verification is applicable to this static contract/calculator slice; this does not satisfy #335's broader runtime/UI acceptance or close #335.
+- Scope lock PR #698 merged at main `071e96c080ca40a44ebda4ea0c5c3122134bc5e7` before implementation.
+- Implementation PR #699 merged at `92cd882a40996ae3c2345b1bfe671b0647798d06`; test PR #700 merged at `3418f3dca5e8452d489f1eef6c43accda9c49ab5`; high-score blocking regression PR #701 merged at `c8e96d6274599bee2629c0d46befc136dd1679a0`.
+- Exact-head PR CI and merged-main CI passed for PRs #699, #700 and #701; see the closeout evidence file.
+- Local contract tests pass (9/9); full eval suite in GitHub CI passes. Local full-suite run was limited by the shallow checkout (6 full-history errors, 2 skipped); no code assertion failed.
+- Full repository validator completed with existing MEDIUM/LOW findings; domain integrity passed. Existing receipt schema and historical evidence files were not modified.
+- No runtime/Site verification applies to this static contract/calculator slice. This does not satisfy #335's broader runtime/UI acceptance or claim runtime quality.
 
 ## Closure
 
-Close #697 and mark Iteration 20 CLOSED only after every matrix row passes with exact source/CI identities. Then update #619 to reference this shared contract as a dependency; do not implement #619 in parallel with Iteration 20.
+All locked rows are recorded in the companion matrix with exact source and CI evidence. #697 is closed as the bounded dependency slice; #619 references the shared contract and remains separate. The wider #335 scope is not completed by this slice.
