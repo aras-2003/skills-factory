@@ -71,10 +71,13 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
     if tags != expected_order:
         _fail(path, 1, "sections are out of order; use the order shown in the grammar")
 
-    def substantive(el: ET.Element, line: int | None = None) -> None:
+    def substantive(
+        el: ET.Element, line: int | None = None, allowed_attributes: set[str] | None = None
+    ) -> None:
         line = line or line_of(el)
-        if el.attrib:
-            _fail(path, line, f"<{el.tag}> does not allow attributes")
+        expected_attributes = allowed_attributes or set()
+        if set(el.attrib) != expected_attributes:
+            _fail(path, line, f"<{el.tag}> requires attributes {sorted(expected_attributes)}")
         if len(el):
             _fail(path, line, f"<{el.tag}> must contain text, not nested elements")
         text = (el.text or "").strip()
@@ -102,7 +105,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"S[1-9][0-9]*", value) for value in ids):
                 _fail(path, 1, "step IDs must be unique and use S1, S2, …")
             for item in section:
-                substantive(item)
+                substantive(item, allowed_attributes={"id"})
         elif section.tag == "decision_rules":
             if not section or any(item.tag != "rule" or set(item.attrib) != {"id"} for item in section):
                 _fail(path, 1, "<decision_rules> must contain one or more <rule id=\"D1\"> elements")
@@ -132,7 +135,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
                     _fail(path, 1, f"field {name!r} has an unsupported type")
                 if field.get("required") not in {"true", "false"} or field.get("trust") not in {"trusted", "untrusted"}:
                     _fail(path, 1, f"field {name!r} requires required=true|false and trust=trusted|untrusted")
-                substantive(field)
+                substantive(field, allowed_attributes={"name", "type", "required", "trust"})
         elif section.tag == "examples":
             if not section or any(item.tag != "example" or set(item.attrib) != {"id"} for item in section):
                 _fail(path, 1, "<examples> must contain one or more <example id=\"E1\"> elements")
@@ -148,14 +151,14 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
                 if set(children[0].attrib) != {"trust"} or children[0].get("trust") not in {"trusted", "untrusted"}:
                     _fail(path, 1, "<input> requires trust=trusted or trust=untrusted")
                 for child in children:
-                    substantive(child)
+                    substantive(child, allowed_attributes={"trust"} if child.tag == "input" else set())
         elif section.tag == "references":
             if not section or any(item.tag != "reference" or set(item.attrib) != {"href"} for item in section):
                 _fail(path, 1, "<references> must contain one or more <reference href=\"…\"> elements")
             for item in section:
                 if not item.get("href", "").strip():
                     _fail(path, 1, "reference href must not be empty")
-                substantive(item)
+                substantive(item, allowed_attributes={"href"})
 
 
 def validate_skill_file(path: Path) -> None:
