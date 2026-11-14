@@ -1,5 +1,5 @@
-name: Engineering task (TDC v1.1)
-description: Implementation or design task with explicit architecture impact and verifiable acceptance
+name: Engineering task (TDC v1.2)
+description: Implementation or design task with readable priority, size, area, status and verifiable acceptance
 title: "[TASK] "
 body:
   - type: dropdown
@@ -7,6 +7,38 @@ body:
     attributes:
       label: Task type
       options: [DISCOVERY, DESIGN, IMPLEMENT, VALIDATE, EPIC]
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: "Choose the importance: P0 Critical (blocks a critical path or addresses high-impact risk); P1 High (important dependency); P2 Planned (follows higher priorities); P3 Optional (exploratory or lower priority). Priority is not failure severity."
+      options: [P0, P1, P2, P3]
+    validations:
+      required: true
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      description: "Estimate effort: XS tiny, S one focused change, M one bounded deliverable, L several components, XL multiple workstreams or an umbrella. Split L/XL into bounded S/M slices before locking an iteration."
+      options: [XS, S, M, L, XL]
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Primary owner or product area. Choose Other when the work is cross-domain and has no clearer single owner.
+      options: [Engineering, Runtime, "E2E & Quality", Security, Commerce, Investing, OAF, Learning, Strategy, Other]
+    validations:
+      required: true
+  - type: dropdown
+    id: project_status
+    attributes:
+      label: Project status
+      description: "Choose the status supported by evidence. Ready requires a locked iteration, clear acceptance, dependencies, owner and tests; new unscheduled work normally starts in Backlog or Discovery."
+      options: [Backlog, Discovery, Ready, "In progress", "In review", Verification, Done]
     validations:
       required: true
   - type: textarea
@@ -34,7 +66,7 @@ body:
     id: change_description
     attributes:
       label: Opis zmiany — perspektywa architektoniczna
-      description: "Describe existing vs target architecture, affected components/contracts/data/runtime, decision REUSE/EXTEND/COMPOSE, compatibility, rollback and tests. Set Architecture Impact A0–A4 separately in the existing GitHub Projects custom field."
+      description: "Explain the current design, proposed change, affected parts, compatibility and tests in plain language. Set Architecture Impact in the native GitHub Projects field after the issue is added: A0 no runtime/contract change; A1 internal change; A2 compatible capability extension; A3 interface or cross-component change; A4 domain-boundary or runtime redesign. The body text does not set that field."
       placeholder: |
         Architektura obecna:
         Opis planowanej zmiany:
