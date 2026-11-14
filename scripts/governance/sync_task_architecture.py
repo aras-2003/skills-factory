@@ -81,10 +81,17 @@ def load_manifest(path=MANIFEST):
 
 
 def option_id(fields, level):
+    if level not in VALID:
+        raise RuntimeError(f"Unrecognized Architecture Impact level: {level}")
     matched = [f for f in fields if f and f.get("name", "").casefold() == "architecture impact"]
     if len(matched) != 1 or "options" not in matched[0]:
         raise RuntimeError("Architecture Impact Project single-select field missing or ambiguous")
     field = matched[0]
+    missing_or_ambiguous = [level for level in sorted(VALID)
+                            if sum(o["name"].strip().casefold() == level.casefold()
+                                   for o in field["options"]) != 1]
+    if missing_or_ambiguous:
+        raise RuntimeError(f"Architecture Impact options missing or ambiguous: {missing_or_ambiguous}")
     options = [o for o in field["options"] if o["name"].strip().casefold() == level.casefold()]
     if len(options) != 1:
         # Explicitly fail rather than silently map labels such as Low/Medium.
@@ -143,8 +150,14 @@ def sync_one(issue_number, row, apply=False):
     if len(items) != 1:
         raise RuntimeError(f"Issue {issue_number}: expected exactly one existing project item, got {len(items)}")
     field_id, mode, selected, expected = field_target(project["fields"]["nodes"], row)
+    if mode == "option":
+        impact_field = next(f for f in project["fields"]["nodes"]
+                            if f and f.get("name", "").casefold() == "architecture impact")
+        field_summary = "single-select options=" + ",".join(sorted(o["name"].strip() for o in impact_field["options"]))
+    else:
+        field_summary = "text"
     if not apply:
-        print(f"DRY_RUN Issue #{issue_number}: Architecture Impact={row['level']} assessment={row['review']}")
+        print(f"DRY_RUN Issue #{issue_number}: Architecture Impact={row['level']} assessment={row['review']} field={field_summary}")
         return "DRY_RUN"
     # Do not clobber a field a project reviewer already classified differently.
     before = sync.gql(FIELD_VALUES, {"id": items[0]["id"]})
