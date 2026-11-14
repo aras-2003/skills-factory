@@ -1,0 +1,7 @@
+<skill_instructions version="1.0">
+  <purpose>TODO</purpose>
+  <guidelines><guideline>Use plain language.</guideline></guidelines>
+  <steps><step id="S1">Review the supplied material.</step></steps>
+  <output_contract>Return an ordered explanation.</output_contract>
+  <failure_handling>State when the process details are incomplete.</failure_handling>
+</skill_instructions>

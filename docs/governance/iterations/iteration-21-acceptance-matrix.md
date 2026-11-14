@@ -9,8 +9,9 @@ This matrix is part of the proposed scope lock for #704. No row is PASS until ex
 | 21-AC02-T02b | #704 AC-02 | Offline negative fixture: malformed XML fails with file and location. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
 | 21-AC02-T02c | #704 AC-02 | Offline negative fixture: missing required section fails with file and location. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
 | 21-AC02-T02d | #704 AC-02 | Offline negative fixture: empty or dummy-only section fails with file and location. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
-| 21-AC02-T02e | #704 AC-02 | Offline negative fixtures: duplicate and unknown structural elements fail with file and location. | Required | Pending | Local validator | Fixture hashes | NOT_RUN | — | Pending | Owner-delegated Codex review |
-| 21-AC02-T02f | #704 AC-02 | Offline negative fixture: literal or untrusted text that violates the grammar fails clearly without being treated as instructions by the validator. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
+| 21-AC02-T02e | #704 AC-02 | Offline negative fixture: duplicate structural element fails with file and location. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
+| 21-AC02-T02f | #704 AC-02 | Offline negative fixture: unknown structural element fails with file and location. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
+| 21-AC02-T02g | #704 AC-02 | Offline negative fixture: literal or untrusted text that violates the grammar fails clearly without being treated as instructions by the validator. | Required | Pending | Local validator | Fixture hash | NOT_RUN | — | Pending | Owner-delegated Codex review |
 | 21-AC03-T03 | #704 AC-03 | Offline: authoring template has substantive XML examples and valid unchanged YAML frontmatter / Markdown packaging. | Required | Pending | YAML + template validator | Test revision | NOT_RUN | — | Pending | Owner-delegated Codex review |
 | 21-AC04-T04 | #704 AC-04 | Offline: existing representative skill fixtures and the full repository validator pass; changed tests fail when their assertions are intentionally violated. | Required | Pending | Repository CI | Test revision | NOT_RUN | — | Pending | Owner-delegated Codex review |
 | 21-AC04-S01 | Iteration shared sentinel | Offline: YAML frontmatter and catalog registration remain valid. | Required | Pending | Repository CI | Test revision | NOT_RUN | — | Pending | Owner-delegated Codex review |
@@ -27,7 +28,7 @@ This matrix is part of the proposed scope lock for #704. No row is PASS until ex
 
 | Layer / surface | Required distinct scenarios | Planned executions / repetitions | Executed PASS | Executed FAIL | NOT_RUN / BLOCKED / REVIEW_REQUIRED | Reviewed N/A | Evidence compatibility |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Offline parser/authoring fixtures | 7 | 1 each: positive, malformed, missing, empty/dummy, duplicate/unknown, literal/untrusted, frontmatter/template | 0 | 0 | 7 | 0 | Pending exact candidate |
+| Offline parser/authoring fixtures | 8 | 1 each: positive, malformed, missing, empty/dummy, duplicate, unknown, literal/untrusted, frontmatter/template | 0 | 0 | 8 | 0 | Pending exact candidate |
 | Offline shared sentinels | 5 | 1 each in PR and final-main CI | 0 | 0 | 5 | 0 | Pending exact candidate |
 | Offline rotating probes | 2 | 1 each in PR and final-main CI | 0 | 0 | 2 | 0 | Pending exact candidate |
 | Documentation review | 1 | 1 per candidate | 0 | 0 | 1 | 0 | Pending exact candidate |

@@ -1,0 +1,7 @@
+<skill_instructions version="1.0">
+  <purpose>Return a concise, evidence-based summary of the provided notes.</purpose>
+  <guidelines><guideline>Use only the supplied notes.</guideline></guidelines>
+  <steps><step id="S1">Read the notes and identify their main conclusions.</step></steps>
+  <output_contract>Return a summary and identify any unresolved point.</output_contract>
+  <failure_handling>Explain when the notes do not support a reliable conclusion.</failure_handling>
+</skill_instructions>
