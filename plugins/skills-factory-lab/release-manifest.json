@@ -20,6 +20,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "accessibility-gate",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/accessibility-gate/SKILL.md",
+        "source_sha256": "05088544453cbc9ae497e2a0d4d5ae72e34e44a8a00f787cc1800b79740dca68",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -37,6 +62,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "acquisition-fit-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/growth/acquisition-fit-review/SKILL.md",
+        "source_sha256": "fdb3093c52e2340263bf257c75f6ca354c8bb173ce24984d089e2b4eda0dc656",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -54,6 +104,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "architecture-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/enterprise-architecture/architecture-review/SKILL.md",
+        "source_sha256": "7694e465eb36aa49e8e15b85dff0231a9a78a0e5b6402d1359d4854ed089ad66",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -71,6 +146,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "capability-gap-analysis",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/enterprise-architecture/capability-gap-analysis/SKILL.md",
+        "source_sha256": "44f8096b814d0fdb91464aad1f071602315aea9f24e7f8ec6ece2f8dc542dd24",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -88,6 +188,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "capability-map-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/enterprise-architecture/capability-map-review/SKILL.md",
+        "source_sha256": "9c10a7b925d52eab14e69b993c4f8369662b81cda148f76e795e1c9557513e14",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -105,6 +230,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "commerce-opportunity-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/commerce-opportunity-review/WORKFLOW.md",
+        "source_sha256": "7348378ce4e73881c58ef4a0f0412764596d4b621b2606ab3018e45aec0e1fac",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -122,6 +272,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "commerce-product-deep-dive",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/commerce-product-deep-dive/WORKFLOW.md",
+        "source_sha256": "c8c1a7561f2970842df4c4874863a206c5991297b1a770903730836f1ea88d74",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -139,6 +314,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "commerce-regulatory-risk-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/risk/commerce-regulatory-risk-review/SKILL.md",
+        "source_sha256": "b37f82a397732c45391070ff8273a663e195190ad12e128f649e9f6496982c22",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.1"
     },
     {
@@ -156,6 +356,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "company-context-research",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/company-context-research/SKILL.md",
+        "source_sha256": "258ad0634f3cd95d3637af99fe202391f5059276eb6f01137ad1bb517c13531c",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.2"
     },
     {
@@ -173,6 +398,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "competition-landscape-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/market/competition-landscape-review/SKILL.md",
+        "source_sha256": "617861238cd5a440187f431964e5ff3d98def7b8a115f083e671459eea95f84a",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.1"
     },
     {
@@ -190,6 +440,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "creative-generation",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/media/creative-generation/SKILL.md",
+        "source_sha256": "49485b2c9e5fa2ae3d0c09194251cf615b443aaaa8ffb73a7b6ba276170e6647",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -207,6 +482,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "cv-gap-analysis",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/cv-gap-analysis/SKILL.md",
+        "source_sha256": "c47deb507d67ee2d44a12db748f7431e030ffe6de1949789e248aae64b80146b",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -224,6 +524,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "cv-tailoring",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/cv-tailoring/SKILL.md",
+        "source_sha256": "357ff21c2c215a54385bb0df4b3588efe51e17fece7709a9e42a1ba16a6d9574",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -241,6 +566,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "decision-bottleneck-analysis",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/decision-governance/decision-bottleneck-analysis/SKILL.md",
+        "source_sha256": "f9dc49537bbfd5b32a27e20e815ca6da78bb6456c15b41772a236a0e2f913fba",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.2"
     },
     {
@@ -258,6 +608,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "decision-journal-update",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/decision-journal-update/SKILL.md",
+        "source_sha256": "c68dfb207056a6f09088392de6db2182439086a043f352167a27686d838815fc",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -275,6 +650,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "decision-rights-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/decision-governance/decision-rights-review/SKILL.md",
+        "source_sha256": "033633057ac571db0c40c0e1555c093ee37f8f9271f6ec38f83b246696f9fdac",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.1"
     },
     {
@@ -292,6 +692,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "design-critique",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/design-critique/SKILL.md",
+        "source_sha256": "fd1f4fdf6ae2e614090e8838f4b13e6a8649d317ee1a2f3f74846d04ae2b1f26",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -309,6 +734,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "differentiation-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/product/differentiation-review/SKILL.md",
+        "source_sha256": "0df765bb7aaa2e788ab0845b6a46805ec6970b7ef783d2c515ad4ad0d0907b67",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.1"
     },
     {
@@ -326,6 +776,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "evidence-loop-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/evidence-adaptation/evidence-loop-review/SKILL.md",
+        "source_sha256": "17cc4df0497940dcf24e21fab06981b27770921eb1be9fa0a10e586c66f21a46",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -343,6 +818,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "executive-role-evaluator",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/executive-role-evaluator/SKILL.md",
+        "source_sha256": "3f88b64b1f75635e982a9a9c7342c3d97a488e495c5b44c3a6b019839ae692bd",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -360,6 +860,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "experience-design-routing",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/experience-design-routing/SKILL.md",
+        "source_sha256": "8812f7b442c34bd7ec1422b979708b27b5511483520efad15a6192e3820d0dae",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.5"
     },
     {
@@ -377,6 +902,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "financial-modeling",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/strategy-ea/financial-modeling/SKILL.md",
+        "source_sha256": "98bc11e8f3f5694741db904814c8ce287c8b6312285d513b4d90bd1fc33a9f28",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "skills-factory",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -394,6 +944,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "global-local-model-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/operating-model/global-local-model-review/SKILL.md",
+        "source_sha256": "60f749909d31dc4198024332bbfdb89cf7f1f5116724fd3df21797406d5fac54",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -411,6 +986,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "governance-design",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/decision-governance/governance-design/SKILL.md",
+        "source_sha256": "4fcfdd9eab844cb445330fb1f2281ff90a32373d33ea4bb325e2740d0e7cc01e",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -428,6 +1028,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "historical-decision-replay",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/historical-decision-replay/SKILL.md",
+        "source_sha256": "6a730dc4a229dbbc4a93bcdf4b3d71bb46affef3ec3cd41150ca63f61b288161",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -445,6 +1070,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "implementation-brief",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/implementation-brief/SKILL.md",
+        "source_sha256": "fc90081c53bc09b0bf318ec674f5d3f3425e5cc6e878b2b6e377f4d79a9d4426",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -458,11 +1108,36 @@
         },
         "status": "DECLARED"
       },
-      "content_sha256": "63c016a93a366464ea691404365382dbddd802c3f5f0a550f8f1deaa4d15d5e7",
+      "content_sha256": "eb990dfb4b1e11c6695a08aa0a746776bc11358f1de645d5a4453a48072eea56",
       "kind": "skill",
       "maturity": "candidate",
       "name": "interface-design",
-      "version": "0.1.17"
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/interface-design/SKILL.md",
+        "source_sha256": "fb33b29a9c78630123c0ae3a7f0087f16c6adf378a7962f397787fc432f20294",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
+      "version": "0.1.21"
     },
     {
       "capability_assessment": {
@@ -479,6 +1154,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "interview-brief",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/interview-brief/SKILL.md",
+        "source_sha256": "6e819dcd0c1a8522e03ccc98e2f01c0594c9409107367dcbfbe448485503fce5",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -496,6 +1196,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-attention-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-attention-review/WORKFLOW.md",
+        "source_sha256": "e6571faeace0fa2446b10514d533bfb3af5e84736ef70672eb370cf844be98b1",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.2.2"
     },
     {
@@ -513,6 +1238,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "investment-attention-triage",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/investment-attention-triage/SKILL.md",
+        "source_sha256": "230d5e9160a6c649b82e9224dc0a08b747b0046ca00a8fc053b253f7aefa5089",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.2.4"
     },
     {
@@ -530,6 +1280,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-opportunity-hunter",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-opportunity-hunter/WORKFLOW.md",
+        "source_sha256": "e1bc76bce366b674e7f6b3dbf9d54b3adc236e90babc44fec670b5458d2f47ee",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.5.1"
     },
     {
@@ -543,10 +1318,35 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "6b9f8afd071fe2bb3812358eb1d5f9da45807535fe2fb81ca17a8b21ecb11c72",
+      "content_sha256": "2af2bef13d37d2f75c71585852c3d734df41b3579eff1c9b6507fb89b15e59ec",
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-os-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-os-review/WORKFLOW.md",
+        "source_sha256": "1fcda42480b060baba283cb0509be76f302b3329398e3e2431f3584e1c242a2b",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.3.2"
     },
     {
@@ -564,6 +1364,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "investment-policy-design",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/investment-policy-design/SKILL.md",
+        "source_sha256": "5014f6be5829c024631a5db4535ce56b573670ddf2b28684f960cbcbc008f785",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -581,6 +1406,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-portfolio-observation",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-portfolio-observation/WORKFLOW.md",
+        "source_sha256": "700bc3774d3624c959ee30224f1cf71419f300397576e43cffc8200857a3d7d2",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.2.1"
     },
     {
@@ -598,6 +1448,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-portfolio-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-portfolio-review/WORKFLOW.md",
+        "source_sha256": "d24897dd84cc3fb5a293f5719f17f853736b00b13e357b97518de44368eff6db",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.5.1"
     },
     {
@@ -615,6 +1490,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "investment-record-store",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/investment-record-store/SKILL.md",
+        "source_sha256": "8cfcf39dafb8135595862e443368b169ddaa723d96a4a35def8ae745f354ff38",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.2"
     },
     {
@@ -632,6 +1532,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-security-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-security-review/WORKFLOW.md",
+        "source_sha256": "de101bc7232a8f1969d3b09e8c0c7a52634054f13f0b990a339dd2847863478f",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.4.4"
     },
     {
@@ -649,6 +1574,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "investment-theme-discovery",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/investment-theme-discovery/WORKFLOW.md",
+        "source_sha256": "f6caf0cffb7a76d9cfa368e6c1b8b1428a02a6b5d363ce981f2b7135142bfbd0",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.2.1"
     },
     {
@@ -666,6 +1616,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "investor-pattern-research",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/investor-pattern-research/SKILL.md",
+        "source_sha256": "16245ecab1b2b4f45f31aa6a3288eba573acecdad5f75792233d85d313c39a39",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -683,6 +1658,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "job-discovery",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/job-discovery/SKILL.md",
+        "source_sha256": "c719f4bd50ad62dbc626e128749f87420bb0cbf179b0b308d895fce600158091",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -700,6 +1700,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "job-validity-check",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/job-validity-check/SKILL.md",
+        "source_sha256": "c32e5a77a051377811edd2ef2db2fda14e1ca59a47e8b272bb5ff71219269b88",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -717,6 +1742,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "kpi-quality-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/evidence-adaptation/kpi-quality-review/SKILL.md",
+        "source_sha256": "6db896e5836d60de12a7113b6ab350bec7887f4cf9432e3753366792d20f9cae",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -734,6 +1784,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "market-economics",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/strategy-ea/market-economics/SKILL.md",
+        "source_sha256": "b168492514ede9cb1edfa2e54cb37b1a2b3be7e08209cdbb33b44a27cc1f6e56",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "Skills Factory",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -751,6 +1826,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "market-opportunity-scan",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/market-opportunity-scan/SKILL.md",
+        "source_sha256": "ffee18999df6af45993209e6cc206dd4845978bf1e0d9a62c7e034b4637d2c8f",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.4.2"
     },
     {
@@ -768,6 +1868,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "market-transferability-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/opportunity/market-transferability-review/SKILL.md",
+        "source_sha256": "9df2070e6741467f189370642c011f144132f9ff78a96ce7ef9a30692f5ba425",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -785,6 +1910,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-enterprise-architecture-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-enterprise-architecture-review/WORKFLOW.md",
+        "source_sha256": "6bdcbe830ed5303a87dbf7b988de6a59e267fd3d465551812486305901cc4dc2",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -802,6 +1952,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-enterprise-change-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-enterprise-change-review/WORKFLOW.md",
+        "source_sha256": "ef69a66a1337087bcebe838f822492e8555dd17c52b925fb48acfdf2717b708a",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -819,6 +1994,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-governance-redesign",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-governance-redesign/WORKFLOW.md",
+        "source_sha256": "313993e6b4f8278467e4b860c7c8c92eb8755d481b6b299582a18a7bb68aca0f",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -836,6 +2036,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-health-check",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-health-check/WORKFLOW.md",
+        "source_sha256": "a9d4cdaf9303968961064baac3f790ab631dbc331073b5b3b7787150730b412c",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.6.0"
     },
     {
@@ -853,6 +2078,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-operating-model-redesign",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-operating-model-redesign/WORKFLOW.md",
+        "source_sha256": "cb1eaf3565b36bccf9305cfe7fb68806270048cb9bbe307e79b8f92264ec7ab9",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -870,6 +2120,31 @@
       "kind": "workflow",
       "maturity": "candidate",
       "name": "oaf-strategy-execution-reset",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-strategy-execution-reset/WORKFLOW.md",
+        "source_sha256": "8fc21832fd700b573f161412760af30e535094d8af454b9b056f2f9a4af5ee52",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -887,6 +2162,31 @@
       "kind": "workflow",
       "maturity": "production",
       "name": "oaf-transformation-design",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/oaf-transformation-design/WORKFLOW.md",
+        "source_sha256": "7bbbd3a1449defbbdb18b669e5978d7a3deb96bba2b11feb040c739b51f0a0f8",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -904,6 +2204,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "operating-model-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/operating-model/operating-model-review/SKILL.md",
+        "source_sha256": "50dad32dc406e23054b6b81e753acc0745d82e07f96242745b33076af79707a2",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -921,6 +2246,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "organizational-interface-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/operating-model/organizational-interface-review/SKILL.md",
+        "source_sha256": "a6502d482e613ba76ffd95e7354a5964ab86e23a3778706d8aee069134e9fa22",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -938,6 +2288,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "portfolio-health-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/portfolio-execution/portfolio-health-review/SKILL.md",
+        "source_sha256": "6324f8d6e4a4d03c94d2ca332463db16f22a4ce468410756c8452fd922482420",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -955,6 +2330,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "portfolio-prioritization",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/portfolio-execution/portfolio-prioritization/SKILL.md",
+        "source_sha256": "7190ad4e99614509911d51d8312111958f25b7e5f6b2ade9c4b79108f1555c87",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -972,6 +2372,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "portfolio-state-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/portfolio-state-review/SKILL.md",
+        "source_sha256": "3e0a1220ad70214d4e3fbe81ded0876eab11f158037f1bb727001b16ba869c8a",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.7.2"
     },
     {
@@ -989,6 +2414,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "position-sizing-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/position-sizing-review/SKILL.md",
+        "source_sha256": "cacf54211f89751627e5087c6f8e852a97aa4f844aeeb738b3d2234c38bdb722",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.3.1"
     },
     {
@@ -1006,6 +2456,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-brief",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-brief/SKILL.md",
+        "source_sha256": "c9942c2363b8be74f43df5cd8b5d4f3a5ea4a82f15614bab2036126f98e42b93",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1023,6 +2498,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-deck-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-deck-review/SKILL.md",
+        "source_sha256": "a369a1595cf674a3e9847ea5b1446d4e9d55b0dc8b384a06bd9a42bc2fec22aa",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1040,6 +2540,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-evidence-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-evidence-review/SKILL.md",
+        "source_sha256": "35816471ac72b4d561fa5d40c5698ef7e829d65e69c003dcd8360169b9d85444",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1057,6 +2582,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-exhibit-design",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-exhibit-design/SKILL.md",
+        "source_sha256": "fb107eb683bdad07797607b5518e5afeed251cd8fe4f41184f1c2f7e2049257a",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1074,6 +2624,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-export-verification",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-export-verification/SKILL.md",
+        "source_sha256": "7fb6c9aa3265e955209dd54f8d228e7658dd08522d4a83825b871656dcd5acd3",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1087,10 +2662,35 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "5decba87cd202c02cf29eb5a0df1ef5a03593a83f8587592949ca8488f72ead3",
+      "content_sha256": "0f135faecb44cf9048a0b4b56ab65bd49769cfaec5ba77a89f82aaae8c59b94a",
       "kind": "workflow",
       "maturity": "draft",
       "name": "presentation-production",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/presentation-production/WORKFLOW.md",
+        "source_sha256": "ca5da03e04277dd8e9d16b66b7202c9832971ca41a11e2303aa5e764b942ad61",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1108,6 +2708,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-slide-authoring",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
+        "source_sha256": "f1c209b96cfa9404c1bbb893b9fed1f4393c15b806ddb91e701e0166a8a9a2bf",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1125,6 +2750,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "presentation-storyline",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/presentations/presentation-storyline/SKILL.md",
+        "source_sha256": "4893dbea117ed156ab1ff192fded325fea6d070b1bc914aa714bcefbaf628f7d",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1142,6 +2792,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "problem-demand-validation",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/demand/problem-demand-validation/SKILL.md",
+        "source_sha256": "5cde379c55e713a34caf489941f792ce42f7aec62c5db758762619ef72dcb308",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -1159,6 +2834,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "process-update",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/career/process-update/SKILL.md",
+        "source_sha256": "0eeb0d901a1d648d7436081c90da506634bccb1b6a41be6805bce5c46a5771e3",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -1176,6 +2876,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "product-opportunity-discovery",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/opportunity/product-opportunity-discovery/SKILL.md",
+        "source_sha256": "0f4f140e4d90bf2ef8988fabe68eeb73798ccea2448927a50e6a5c9907c4b3f1",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -1193,6 +2918,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "report-composer",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/report-composer/SKILL.md",
+        "source_sha256": "66bd51406e58a883664ccd70a4a28e0c62eab4d603605fcbed9dbabcb57957a0",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.12.1"
     },
     {
@@ -1210,6 +2960,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "report-document-architecture",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/reports/report-document-architecture/SKILL.md",
+        "source_sha256": "6fbc0aa92d1878443f7bc1c6e90519c118f3789532f449549715133983960ee9",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1227,6 +3002,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "report-document-authoring",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/reports/report-document-authoring/SKILL.md",
+        "source_sha256": "85dc819072b2dda89d940b9a5f4fb66a6d7fb8e9f87e3b0587b95d1e2f142cdc",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1244,6 +3044,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "report-document-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/reports/report-document-review/SKILL.md",
+        "source_sha256": "8b1dc67ae0b01f1f0bc03f5a8b998b29c90ca9f93313a0ff555059e0403c1483",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1261,6 +3086,31 @@
       "kind": "workflow",
       "maturity": "draft",
       "name": "report-production",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/report-production/WORKFLOW.md",
+        "source_sha256": "40161af0f615656e4b3907a14b44aecf146e9b64d351069b3c0da4cbe46a61d0",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1274,11 +3124,36 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "b6e76471464882ab0f4a25e936b160cd8773715e279e6c6204486bebe3e7b743",
+      "content_sha256": "f59f9a9c50b4387bc0345166fe8270698865aa2726d5bbd90cd25bcc452f34b6",
       "kind": "skill",
       "maturity": "production",
       "name": "security-underwriting",
-      "version": "0.5.3"
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/security-underwriting/SKILL.md",
+        "source_sha256": "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
+      "version": "0.6.0"
     },
     {
       "capability_assessment": {
@@ -1295,6 +3170,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "seo-research",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/seo/seo-research/SKILL.md",
+        "source_sha256": "baf11019b1cbe24848c05400bddde8cd6e6be70e924c18d81c2ea1936e70cfeb",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1312,6 +3212,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "skill-authoring",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skill-authoring/SKILL.md",
+        "source_sha256": "0ea0f76785702eceb84e47d4a2dcf8e98b97d5b86840fa3fbcf0d457c407a137",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.2"
     },
     {
@@ -1325,10 +3250,35 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "c72bdc6eb0fe0b621fc0477f29c51c63507e177632e29abf0237fb1a3b3d4416",
+      "content_sha256": "b5090f66e368014108fb795a6b6c60720c57eae0569717cb00f28537bdfd9eea",
       "kind": "workflow",
       "maturity": "draft",
       "name": "skill-development",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "workflows/skill-development/WORKFLOW.md",
+        "source_sha256": "9a5c57da39931fc1732cae6ae1f920a5d43272de46dd9d1830e5c602eb6de9e4",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1346,6 +3296,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "skill-evaluation",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skill-evaluation/SKILL.md",
+        "source_sha256": "ba5917a4fcad30dcc873aa6078f6df65643dbd980805d4668d90b4371143d823",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.3.5"
     },
     {
@@ -1363,6 +3338,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "skill-release-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skill-release-review/SKILL.md",
+        "source_sha256": "528589be39c2916f3c774256f708a16c1a5317a636f4cc811da8c9758b48735b",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.3.0"
     },
     {
@@ -1380,6 +3380,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "skill-specification",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skill-specification/SKILL.md",
+        "source_sha256": "06db71b7495580ced459f861694ca83a4f3b1f756ec772c916fef4d233feee02",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.1"
     },
     {
@@ -1397,6 +3422,31 @@
       "kind": "skill",
       "maturity": "draft",
       "name": "skill-test-design",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skill-test-design/SKILL.md",
+        "source_sha256": "af92c57c5fec76d296cb4d257cb4c93736d8f12c3f0564875e8214ec9bb90b1e",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.3.1"
     },
     {
@@ -1414,6 +3464,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "skill-validation",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skill-validation/SKILL.md",
+        "source_sha256": "3b559e100d668667a86ee4c81869c7f0894e6d4a0d09494537e56e8124785812",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -1431,6 +3506,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "skills-factory-diagnostic",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/skills-factory-diagnostic/SKILL.md",
+        "source_sha256": "e31329cd410cb4258bdf0edf3c89c240fa4a3e7be6c672f9401155663816a360",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.1"
     },
     {
@@ -1448,6 +3548,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "strategy-economics",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/strategy-ea/strategy-economics/SKILL.md",
+        "source_sha256": "a38d813dafbd94e8ac33811c8b960d149cd88b6f4e382df6cdebe06c840cb505",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "Skills Factory",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1465,6 +3590,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "strategy-to-execution-diagnostic",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/direction-strategy/strategy-to-execution-diagnostic/SKILL.md",
+        "source_sha256": "3ce522114ea28aa025555f45ac00a8a1b582ed1a6c6a90b6ad9287fa98e03f16",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1482,6 +3632,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "supplier-viability-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/operations/supplier-viability-review/SKILL.md",
+        "source_sha256": "ef3e42439b04734831b7179f3f46034c6351012c93108cecf31760d6fab2eec1",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -1499,6 +3674,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "technical-structure",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/technical-structure/SKILL.md",
+        "source_sha256": "d323761156bc4182b46dd6381087860a624bc83a91ce56c7524c229171d0596a",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.1"
     },
     {
@@ -1516,6 +3716,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "thesis-challenge",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/thesis-challenge/SKILL.md",
+        "source_sha256": "133b1bc881e58329975ecff02cf41bdc20872879746274d818077076309bc31c",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.2"
     },
     {
@@ -1529,11 +3754,36 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4a2c748ef5931e625d5bfda342fd297e883937bafd3ac275b63191fddbd7f38d",
+      "content_sha256": "367af600790b55c7d82a496fb986061dff4f74ef8b04310c80fd5f5a03672f39",
       "kind": "skill",
       "maturity": "production",
       "name": "thesis-monitor",
-      "version": "0.3.2"
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/thesis-monitor/SKILL.md",
+        "source_sha256": "91f2e87c82a11847df7c5e0119b9000434845bba61bf443354365cd6d60dec25",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -1550,6 +3800,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "transformation-blueprint",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/oaf/portfolio-execution/transformation-blueprint/SKILL.md",
+        "source_sha256": "136839f7aa43224f071716a323fb8284af48c8413a12ba3d908d3f3345b840b2",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.0.0"
     },
     {
@@ -1567,6 +3842,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "trend-theme-research",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/trend-theme-research/SKILL.md",
+        "source_sha256": "100c8c49c2cbcea72f5425751733cba39582b4564cd9b79ab9fd27fa44f5dae5",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1584,6 +3884,31 @@
       "kind": "skill",
       "maturity": "production",
       "name": "unit-economics-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/commerce/economics/unit-economics-review/SKILL.md",
+        "source_sha256": "e82e12ac53afc203678c7482b2b89668c2bee948939db4ea18e32853b6c9c3d7",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "1.1.0"
     },
     {
@@ -1597,11 +3922,36 @@
         },
         "status": "UNASSESSED"
       },
-      "content_sha256": "4b1205b67626e689ce009ae85d0bb5ba2c45faf61dc56208c5efabdc95d77532",
+      "content_sha256": "4ceaa89860d156b4bbc9fdce2ac13a474b2f9ee8d813d869777afcc5f022f0d6",
       "kind": "skill",
       "maturity": "production",
       "name": "valuation-scenario-review",
-      "version": "0.3.5"
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/investing/valuation-scenario-review/SKILL.md",
+        "source_sha256": "9110bad5daea5c95b37417c5a072badba3a5147eb050fff8d1e5cecdbeae6e97",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
+      "version": "0.4.0"
     },
     {
       "capability_assessment": {
@@ -1618,6 +3968,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "value-realization",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/strategy-ea/value-realization/SKILL.md",
+        "source_sha256": "056c3e0205faf1eaa376c39133f57a051aab1bf42e00d8276a8f5b3f2d45b79e",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "skills-factory",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1635,6 +4010,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "visual-output-design",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/meta/visual-output-design/SKILL.md",
+        "source_sha256": "0e14a4073eadabfc3cc4ecceb54fbc688ddbc3e7b22ef8b1fe5852e7ff1d5521",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.13.0"
     },
     {
@@ -1652,6 +4052,31 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "visual-regression-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/visual-regression-review/SKILL.md",
+        "source_sha256": "eae5ba31167a9f9711fb91f15ffed881fb06eba93649340db98891c680e2258d",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     },
     {
@@ -1669,13 +4094,40 @@
       "kind": "skill",
       "maturity": "candidate",
       "name": "website-quality-review",
+      "provenance": {
+        "basis_evidence": [],
+        "classification": "UNKNOWN",
+        "components": [],
+        "dependencies": [],
+        "license": {
+          "attribution": [],
+          "spdx_id": null,
+          "status": "UNKNOWN"
+        },
+        "local_modifications": {
+          "items": [],
+          "status": "UNKNOWN"
+        },
+        "schema_version": 1,
+        "source": "skills/web-design/website-quality-review/SKILL.md",
+        "source_sha256": "9ed97aaf2fa6dce131cf68b87f5c60e8e20649a487d273a8f7cdd2c0d9783fdc",
+        "update_policy": "MANUAL_REVIEW",
+        "upstream": null,
+        "verification": {
+          "owner": "arkadiusz-kamrowski",
+          "reviewed_at": null,
+          "state": "NOT_CLASSIFIED"
+        }
+      },
       "version": "0.1.0"
     }
   ],
   "package": "skills-factory-lab",
-  "payload_content_sha256": "1dd657875c974905bd323bb262fe4891e9ec99ec4569dd6ce43eb3155678f56b",
-  "release_id": "1.38.477+d43250f3982f",
+  "payload_content_sha256": "66bc723cc76dc6e2dcf3fb72435ed9681eb00544a8a7a741a52139ab75dec87a",
+  "provenance_registry_sha256": "cc977739b50c24b6fa3af9c3900e499fff1784caf84e62a9635f8f42cff85baf",
+  "provenance_schema_version": 1,
+  "release_id": "1.38.537+34e91a00ab0e",
   "schema_version": "1.0",
-  "source_revision": "d43250f3982f9ea6ae7b5eb4112922135a7add05",
-  "version": "1.38.477"
+  "source_revision": "34e91a00ab0e1e4b49947625235ea49510a18649",
+  "version": "1.38.537"
 }
