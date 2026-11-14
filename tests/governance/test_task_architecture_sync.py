@@ -11,6 +11,7 @@ PATH=pathlib.Path(__file__).resolve().parents[2]/"scripts/governance/sync_task_a
 spec=importlib.util.spec_from_file_location("sync_task_architecture", PATH)
 mod=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
+OPTIONS=[{"id":level.lower(),"name":level} for level in ("A0","A1","A2","A3","A4")]
 
 class ArchitectureSyncTest(unittest.TestCase):
     def test_manifest_valid_and_issue_specific(self):
@@ -20,9 +21,14 @@ class ArchitectureSyncTest(unittest.TestCase):
         self.assertTrue(all(x["level"] in mod.VALID for x in data.values()))
 
     def test_option_exact_not_inferred(self):
-        fields=[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"},{"id":"b","name":"A3"}]}]
-        self.assertEqual(mod.option_id(fields,"A2"),("f","a"))
+        fields=[{"id":"f","name":"Architecture Impact","options":OPTIONS+[ {"id":"medium","name":"Medium"}]}]
+        self.assertEqual(mod.option_id(fields,"A2"),("f","a2"))
         with self.assertRaises(RuntimeError): mod.option_id(fields,"Medium")
+
+    def test_all_canonical_options_are_required(self):
+        fields=[{"id":"f","name":"Architecture Impact","options":[{"id":value.lower(),"name":value} for value in ["A0","A1","A2","A3"]]}]
+        with self.assertRaisesRegex(RuntimeError,"options missing or ambiguous.*A4"):
+            mod.option_id(fields,"A2")
 
     def test_text_field_contains_issue_specific_change(self):
         fields=[{"id":"text-field","name":"Architecture Impact","dataType":"TEXT"}]
@@ -38,12 +44,12 @@ class ArchitectureSyncTest(unittest.TestCase):
         self.assertEqual(mod.field_values(data),["A2 — impact description"])
 
     def test_duplicate_field_refused(self):
-        f={"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}
+        f={"id":"f","name":"Architecture Impact","options":OPTIONS}
         with self.assertRaises(RuntimeError): mod.option_id([f,f],"A2")
 
     def test_dry_run_has_no_mutation(self):
         item={"id":"item","project":{"id":"project"}}
-        data={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[item]}}}}}
+        data={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[item]}}}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",return_value=data) as gql:
             self.assertEqual(mod.sync_one(42,{"title":"Example","level":"A2","review":"PROPOSED"},False),"DRY_RUN")
             self.assertEqual(gql.call_count,1)
@@ -55,7 +61,7 @@ class ArchitectureSyncTest(unittest.TestCase):
                 mod.sync_one(42,{"title":"Example","level":"A2"},False)
 
     def test_missing_project_membership_refused(self):
-        data={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[]}}}}}
+        data={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[]}}}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",return_value=data):
             with self.assertRaisesRegex(RuntimeError,"expected exactly one existing project item"):
                 mod.sync_one(42,{"title":"Example","level":"A2","review":"PROPOSED"},False)
@@ -67,7 +73,7 @@ class ArchitectureSyncTest(unittest.TestCase):
             gql.assert_not_called()
 
     def test_apply_readback(self):
-        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
         third={"node":{"fieldValues":{"nodes":[{"name":"A2","field":{"name":"Architecture Impact"}}]}}}
         before={"node":{"fieldValues":{"nodes":[]}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,before,{},third]) as gql:
@@ -75,7 +81,7 @@ class ArchitectureSyncTest(unittest.TestCase):
             self.assertEqual(gql.call_count,4)
 
     def test_does_not_overwrite_manual_value(self):
-        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
         previous={"node":{"fieldValues":{"nodes":[{"name":"A3","field":{"name":"Architecture Impact"}}]}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,previous]) as gql:
             with self.assertRaisesRegex(RuntimeError,"refusing overwrite"):
@@ -83,14 +89,14 @@ class ArchitectureSyncTest(unittest.TestCase):
             self.assertEqual(gql.call_count,2)
 
     def test_existing_equal_value_does_not_write(self):
-        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
         previous={"node":{"fieldValues":{"nodes":[{"name":"A2","field":{"name":"Architecture Impact"}}]}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,previous]) as gql:
             self.assertEqual(mod.sync_one(42,{"title":"Example","level":"A2","review":"APPROVED"},True),"ALREADY_VERIFIED")
             self.assertEqual(gql.call_count,2)
 
     def test_closed_issue_without_matching_value_is_not_written(self):
-        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"CLOSED","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"CLOSED","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
         empty={"node":{"fieldValues":{"nodes":[]}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,empty]) as gql:
             with self.assertRaisesRegex(RuntimeError,"closed after manifest capture"):
@@ -121,7 +127,7 @@ class ArchitectureSyncTest(unittest.TestCase):
                 mod.load_manifest(p)
 
     def test_apply_readback_mismatch_fails(self):
-        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":[{"id":"a","name":"A2"}]}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
+        first={"user":{"projectV2":{"id":"project","fields":{"nodes":[{"id":"f","name":"Architecture Impact","options":OPTIONS}]}},"repository":{"issue":{"title":"Example","state":"OPEN","projectItems":{"nodes":[{"id":"item","project":{"id":"project"}}]}}}}}
         before={"node":{"fieldValues":{"nodes":[]}}}
         wrong={"node":{"fieldValues":{"nodes":[{"name":"A3","field":{"name":"Architecture Impact"}}]}}}
         with patch.dict(mod.os.environ,{"GH_REPOSITORY":"aras-2003/skills-factory"}),patch.object(mod.sync,"gql",side_effect=[first,before,{},wrong]):
