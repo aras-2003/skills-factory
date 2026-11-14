@@ -6,8 +6,9 @@
 - 110/110 open issues contained a TDC or tailored architecture change-description section.
 - 102 were normalized with a new TDC summary; 8 (ES-03, ES-04, ES-06, ES-07, ES-08, XML-00, XML-09, XML-10) retained tailored change descriptions.
 - All 110 were fetched via issue search and checked for the expected heading; no missing heading.
-- The frozen manifest now locks the exact 110 Issue IDs to source main `22d31320e6114d8c1dbe6b1ed79dff12cb2223cf` with SHA-256 `253776f718f5f2da421f85feafa21f065aa8f773fd9a53b68001c8657797352f`.
-- Reconciliation on 2026-11-14 found 109/110 captured Issues still open; #618 closed after the snapshot and retains its description. New tracker #688 is post-lock and excluded from the 110-item denominator. The current open Issue set is 110, including #688.
+- The frozen manifest locks the exact 110 Issue IDs to source main `22d31320e6114d8c1dbe6b1ed79dff12cb2223cf`. The reviewed manifest content SHA-256 is `edf1ccc4a526aee511ee6f747375cccceaab289f482be10f273fec66ddb1f1ab` (110 IDs unchanged).
+- Reconciliation on 2026-11-14 found 109/110 captured Issues still open; #618 closed after the snapshot and retains its description. New tracker #688 is post-lock and excluded from the 110-item denominator. The current open Issue set is 110, including #688. Every one of the 110 frozen `acceptance_summary` strings was checked against the live Issue body (110/110 exact substring matches); all 110 titles also match the lock, and all 110 current open bodies contain the change-description heading. This confirms preservation of the captured summary text, not every source-era sentence or a complete AC-to-test mapping.
+- A delegated planned-impact review was recorded against exact `main` `6ddd15e24196ab49ed40df764cbbd8889320dbba`: A0=21 discovery/validation scopes, A1=2 internal regression scopes, A2=62 within-domain capability extensions, A3=25 cross-domain/shared-contract/program scopes, A4=0. All 110 `review` values now mean **planned-impact classification reviewed only**; they do not mean implementation Ready, independent approval, or release authorization.
 - **This is format coverage, not independent acceptance.** Existing Issues contain unverified `TO_CONFIRM` architecture ranges, condensed acceptance text and historical status context.
 - The native GitHub Projects **Architecture Impact** custom field was reported by the user as created. The current GitHub connector does not expose Project-item field value reads/writes. Field values were **not** updated or verified, and no labels should be treated as a substitute.
 
@@ -24,16 +25,18 @@
 
 ## Critical limitations
 1. No independent human handoff or semantic model-graded scoring executed for all 110; no task-level 0–10 scores asserted.
-2. No systematic code-to-Issue architecture reconciliation: all 110 Architecture Impact entries remain `PROPOSED`, and `TO_CONFIRM` remains an explicit blocker for architecture-sensitive Ready.
-3. The GitHub edit history does not provide a source-controlled before-image for every Issue body; this audit verifies current descriptions and the frozen ID/title set, but does not independently prove preservation of every original acceptance sentence or map all criteria to executable fixture IDs.
-4. Project field type/options, membership and credentials have not yet been read through the dedicated workflow; no Project values were written. The sync helper now refuses writes unless an entry is explicitly `APPROVED`.
-5. No production plugin or Site deployment is part of this iteration.
+2. The planned-impact review used each frozen Issue's change description and acceptance summary against the TDC taxonomy; it did not claim a code-level architecture audit or task readiness. `TO_CONFIRM` remains an explicit blocker for architecture-sensitive Ready where scope needs implementation-specific evidence.
+3. The GitHub edit history does not provide a source-controlled before-image for every Issue body. The exact 110/110 frozen acceptance-summary match is verified, but this does not prove preservation of every original acceptance sentence or map all criteria to executable fixture IDs.
+4. Live read-only run [#43593376206](https://github.com/aras-2003/skills-factory/actions/runs/43593376206) verified the native Project field, all 110 memberships/titles and the required A0–A4 options with 0 errors. The field is a single-select and also has an extra `Epic` option; the manifest does not use it. No Project values were written in this run. The helper refuses writes unless an entry is explicitly `APPROVED` and refuses to update a captured Issue closed since the snapshot.
+5. GitHub UI rendering was checked without creating an Issue: Engineering task (TDC v1.1) displays required fields including `Opis zmiany — perspektywa architektoniczna`; Bug / regression displays its required evidence and architecture fields. No duplicate Architecture Impact field appears in either form. YAML and Markdown source validation are covered by repository CI.
+6. Offline verification on the reviewed tree: 19 project-metadata tests and 18 architecture-sync tests pass; `scripts/validate/validate_all.py` exits 0 with existing MEDIUM/LOW advisory findings. Exact pull request and main CI receipts are recorded in the iteration closeout after integration.
+7. No production plugin or Site deployment is part of this iteration.
 
 ## Recommended next actions
-1. Run a read-only Projects dry-run; review actual field options, membership and all proposed levels before marking any manifest rows `APPROVED`. Apply only approved rows and preserve per-item readback or a specific blocked reason for every other row.
+1. Apply the reviewed planned-impact classifications via the dedicated workflow. Preserve exact per-item readback or a specific blocked reason for every row; do not rewrite closed Issue #618 or overwrite an existing manual value.
 2. Pilot independent TDC quality review with #163, #219, #297, #317, #622 and #674, recording strengths, weaknesses, concrete missing inputs, AC↔case mapping and NOT_SCORABLE until adequate evidence.
 3. Reconcile open EPICs against already closed children and current runtime evidence, then adjust only next planned slices; do not re-open completed scope.
 4. Add source-controlled deterministic TDC structure checks and risk-scoped semantic grading to existing evaluation infrastructure, with held-out examples and an explicit adoption gate.
 5. Validate the dedicated workflow and forms on the exact candidate and merged-main revisions before closing the iteration.
 
-**Disposition:** DOCUMENTED / REVIEW REQUIRED. Neither migration completeness nor existence of a review report means READY, TESTED or RUNTIME_VERIFIED.
+**Disposition:** DESCRIPTION/FORM ACCEPTANCE VERIFIED; architecture-impact Project write acceptance is pending its reviewed apply run. Classification means planned impact only, not implementation readiness, independent review, or release authorization.
