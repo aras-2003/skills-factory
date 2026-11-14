@@ -190,6 +190,10 @@ def _expected_delta(report: dict[str, Any], calculated_score: dict[str, Any]) ->
         null_reason = "Evaluation profiles differ."
     elif comparator["evalset_id"] != report["evalset"]["id"] or comparator["evalset_version"] != report["evalset"]["version"]:
         null_reason = "EvalSet identity differs."
+    elif sorted(comparator["case_ids"]) != sorted(case["case_id"] for case in report["cases"]):
+        null_reason = "Evaluation case identities differ."
+    elif sorted(comparator["assertion_ids"]) != sorted(assertion["id"] for assertion in report["assertions"]):
+        null_reason = "Evaluation assertion identities differ."
     elif comparator["runtime_identity"] != report["runtime"]:
         null_reason = "Runtime/model/tool identity differs."
     elif comparator["score"] is None:

@@ -82,6 +82,8 @@ class EvaluationReportTests(unittest.TestCase):
             "profile_id":candidate["evaluation_profile"]["profile_id"],
             "profile_version":candidate["evaluation_profile"]["version"],
             "evalset_id":candidate["evalset"]["id"],"evalset_version":candidate["evalset"]["version"],
+            "case_ids":[case["case_id"] for case in candidate["cases"]],
+            "assertion_ids":[assertion["id"] for assertion in candidate["assertions"]],
             "runtime_identity":copy.deepcopy(candidate["runtime"]),"not_applicable_reason":None}
         candidate.update(report.calculate_report(candidate))
         self.assertEqual(2.0, candidate["comparison_delta"]["value"])
@@ -89,6 +91,11 @@ class EvaluationReportTests(unittest.TestCase):
         candidate.update(report.calculate_report(candidate))
         self.assertIsNone(candidate["comparison_delta"]["value"])
         self.assertIn("Runtime/model/tool identity differs", candidate["comparison_delta"]["reason"])
+        candidate["comparator"]["runtime_identity"] = copy.deepcopy(candidate["runtime"])
+        candidate["comparator"]["assertion_ids"].pop()
+        candidate.update(report.calculate_report(candidate))
+        self.assertIsNone(candidate["comparison_delta"]["value"])
+        self.assertIn("assertion identities differ", candidate["comparison_delta"]["reason"])
 
 
 if __name__ == "__main__":

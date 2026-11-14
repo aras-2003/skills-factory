@@ -67,6 +67,8 @@
     "profile_version": null,
     "evalset_id": null,
     "evalset_version": null,
+    "case_ids": null,
+    "assertion_ids": null,
     "runtime_identity": null,
     "not_applicable_reason": "A comparator is not applicable to this schema-only synthetic example."
   },
