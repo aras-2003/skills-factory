@@ -1,0 +1,74 @@
+name: Engineering task (TDC v1.1)
+description: Implementation or design task with explicit architecture impact and verifiable acceptance
+title: "[TASK] "
+body:
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: Task type
+      options: [DISCOVERY, DESIGN, IMPLEMENT, VALIDATE, EPIC]
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / evidence
+      description: Observed gap and consequence, not an unverified solution
+    validations:
+      required: true
+  - type: textarea
+    id: baseline
+    attributes:
+      label: Baseline / existing capability
+      description: Verified source/commit/contracts, reuse possibilities and unknowns
+    validations:
+      required: true
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective / deliverable
+      description: One bounded observable result (EPIC links child results)
+    validations:
+      required: true
+  - type: textarea
+    id: change_description
+    attributes:
+      label: Opis zmiany — perspektywa architektoniczna
+      description: "Describe existing vs target architecture, affected components/contracts/data/runtime, decision REUSE/EXTEND/COMPOSE, compatibility, rollback and tests. Set Architecture Impact A0–A4 separately in the existing GitHub Projects custom field."
+      placeholder: |
+        Architektura obecna:
+        Opis planowanej zmiany:
+        Komponenty/interfejsy/dane objęte wpływem:
+        Elementy pozostające bez zmian:
+        Decyzja reuse/extend/compose i uzasadnienie:
+        Weryfikacja kompatybilności / rollback:
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope / exclusions
+      description: In and out, with forbidden changes
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs / dependencies
+      description: Source files, fixtures, linked Issues and prerequisites
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and test mapping
+      description: "AC-01 → T-01: input, objective assertion, expected evidence; distinguish offline/CI/runtime"
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Blockers / failure handling
+      description: Missing evidence, decisions, escalation and next action
+    validations:
+      required: true
