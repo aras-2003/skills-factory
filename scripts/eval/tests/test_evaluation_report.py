@@ -29,18 +29,28 @@ class EvaluationReportTests(unittest.TestCase):
         invalid = json.loads(invalid_path.read_text())
         self.assertTrue(report.validate_report(invalid))
 
+    def test_schema_and_semantics_reject_invalid_enum_and_case_outcome(self):
+        invalid_enum = copy.deepcopy(self.example)
+        invalid_enum["cases"][0]["compatibility_status"] = "MAYBE"
+        self.assertTrue(report.validate_report(invalid_enum))
+        contradictory = copy.deepcopy(self.example)
+        contradictory["cases"][0]["outcome"] = "failed"
+        self.assertTrue(any("status/outcome contradict" in error for error in report.validate_report(contradictory)))
+
     def test_weighted_assertions_and_half_up_rounding_are_deterministic(self):
         profile = {"profile_id":"p", "version":"1", "calibration_status":"VALIDATED",
-                   "dimensions":[{"name":"quality","weight":100,"critical":True}],
+                   "dimensions":[{"name":"quality","weight":55,"critical":True},
+                                  {"name":"compliance","weight":45,"critical":False}],
                    "thresholds":{"pass_minimum":8.5,"critical_dimension_minimum":7,"reject_below":5}}
         assertions = [
-            {"id":"a","dimension":"quality","case_id":"c","required":True,"importance":1,"execution_state":"executed","grade":1,"evidence_refs":["e"],"blocking_gate":False},
-            {"id":"b","dimension":"quality","case_id":"c","required":True,"importance":1,"execution_state":"executed","grade":0.5,"evidence_refs":["e"],"blocking_gate":False},
+            {"id":"a","dimension":"quality","case_id":"c","required":True,"importance":1,"execution_state":"executed","grade":0.5,"evidence_refs":["e"],"blocking_gate":False},
+            {"id":"b","dimension":"compliance","case_id":"c","required":True,"importance":1,"execution_state":"executed","grade":1,"evidence_refs":["e"],"blocking_gate":False},
         ]
         first = report.calculate_score(profile, assertions)
         second = report.calculate_score(profile, assertions)
         self.assertEqual(first, second)
-        self.assertEqual(7.5, first["value"])
+        self.assertEqual(7.3, first["value"])
+        self.assertEqual(7.25, first["unrounded_value"])
         self.assertEqual("ITERATE", first["decision"]["status"])
 
     def test_profile_weights_must_total_one_hundred(self):
