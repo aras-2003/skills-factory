@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "evaluation_id": "example-eval-report-v1",
+  "skill_id": "synthetic-example-skill",
+  "candidate_version": "0.0.0-example",
+  "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "runtime": {
+    "provider": "synthetic",
+    "model_id": null,
+    "tool_identity": [
+      "offline-fixture"
+    ]
+  },
+  "evaluation_profile": {
+    "profile_id": "six-dimension-default",
+    "version": "1.0.0",
+    "calibration_status": "PROPOSED",
+    "dimensions": [
+      {
+        "name": "task_completion",
+        "weight": 25,
+        "critical": true
+      },
+      {
+        "name": "grounding_provenance",
+        "weight": 25,
+        "critical": true
+      },
+      {
+        "name": "instruction_compliance",
+        "weight": 15,
+        "critical": true
+      },
+      {
+        "name": "routing_boundary",
+        "weight": 15,
+        "critical": true
+      },
+      {
+        "name": "robustness_regressions",
+        "weight": 15,
+        "critical": false
+      },
+      {
+        "name": "efficiency",
+        "weight": 5,
+        "critical": false
+      }
+    ],
+    "excluded_dimensions": [],
+    "thresholds": {
+      "pass_minimum": 8.5,
+      "critical_dimension_minimum": 7.0,
+      "reject_below": 5.0
+    }
+  },
+  "evalset": {
+    "id": "synthetic-evalset",
+    "version": "1.0.0"
+  },
+  "comparator": {
+    "id": null,
+    "version": null,
+    "source_sha": null,
+    "score": null,
+    "profile_id": null,
+    "profile_version": null,
+    "evalset_id": null,
+    "evalset_version": null,
+    "runtime_identity": null,
+    "not_applicable_reason": "A comparator is not applicable to this schema-only synthetic example."
+  },
+  "evaluated_at": "2026-11-14T13:30:00Z",
+  "evidence_receipts": [
+    {
+      "ref": "scripts/eval/tests/fixtures/evaluation-report-evidence-v1.json",
+      "sha256": "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+    }
+  ],
+  "strengths": [
+    {
+      "dimension": "task_completion",
+      "claim": "All predeclared synthetic assertions are fully met.",
+      "case_ids": [
+        "synthetic-case-01"
+      ],
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "impact": "Demonstrates the complete scoring path."
+    }
+  ],
+  "strengths_empty_reason": null,
+  "weaknesses": [],
+  "weaknesses_empty_reason": "No observed weaknesses in this synthetic contract fixture; this is not a claim that the skill is risk-free.",
+  "reasoning": "Synthetic schema example only. All six assertions have observed fixture evidence. No real skill behavior or release outcome is represented.",
+  "assertions": [
+    {
+      "id": "task-completion",
+      "case_id": "synthetic-case-01",
+      "dimension": "task_completion",
+      "required": true,
+      "importance": 1,
+      "execution_state": "executed",
+      "grade": 1,
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "blocking_gate": false
+    },
+    {
+      "id": "grounding",
+      "case_id": "synthetic-case-01",
+      "dimension": "grounding_provenance",
+      "required": true,
+      "importance": 1,
+      "execution_state": "executed",
+      "grade": 1,
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "blocking_gate": false
+    },
+    {
+      "id": "instruction-compliance",
+      "case_id": "synthetic-case-01",
+      "dimension": "instruction_compliance",
+      "required": true,
+      "importance": 1,
+      "execution_state": "executed",
+      "grade": 1,
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "blocking_gate": false
+    },
+    {
+      "id": "routing",
+      "case_id": "synthetic-case-01",
+      "dimension": "routing_boundary",
+      "required": true,
+      "importance": 1,
+      "execution_state": "executed",
+      "grade": 1,
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "blocking_gate": false
+    },
+    {
+      "id": "robustness",
+      "case_id": "synthetic-case-01",
+      "dimension": "robustness_regressions",
+      "required": true,
+      "importance": 1,
+      "execution_state": "executed",
+      "grade": 1,
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "blocking_gate": false
+    },
+    {
+      "id": "efficiency",
+      "case_id": "synthetic-case-01",
+      "dimension": "efficiency",
+      "required": true,
+      "importance": 1,
+      "execution_state": "executed",
+      "grade": 1,
+      "evidence_refs": [
+        "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+      ],
+      "blocking_gate": false
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "synthetic-case-01",
+      "execution_state": "executed",
+      "execution_reason": null,
+      "outcome": "passed",
+      "evaluation_status": "PASS",
+      "compatibility_status": "NOT_APPLICABLE"
+    }
+  ],
+  "decision": {
+    "status": "ITERATE",
+    "blocking_gates": [],
+    "next_actions": [
+      "Calibrate profile thresholds against an approved reference set before release decisions."
+    ]
+  },
+  "comparison_delta": {
+    "value": null,
+    "reason": "A comparator is not applicable to this schema-only synthetic example."
+  },
+  "score": {
+    "value": 10.0,
+    "unrounded_value": 10.0,
+    "scale": "0-10",
+    "status": "PROVISIONAL",
+    "profile": "six-dimension-default@1.0.0",
+    "dimensions": [
+      {
+        "name": "task_completion",
+        "weight": 25.0,
+        "value": 10.0,
+        "required_assertions": 1,
+        "executed_assertions": 1,
+        "case_count": 1,
+        "evidence_refs": [
+          "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+        ]
+      },
+      {
+        "name": "grounding_provenance",
+        "weight": 25.0,
+        "value": 10.0,
+        "required_assertions": 1,
+        "executed_assertions": 1,
+        "case_count": 1,
+        "evidence_refs": [
+          "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+        ]
+      },
+      {
+        "name": "instruction_compliance",
+        "weight": 15.0,
+        "value": 10.0,
+        "required_assertions": 1,
+        "executed_assertions": 1,
+        "case_count": 1,
+        "evidence_refs": [
+          "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+        ]
+      },
+      {
+        "name": "routing_boundary",
+        "weight": 15.0,
+        "value": 10.0,
+        "required_assertions": 1,
+        "executed_assertions": 1,
+        "case_count": 1,
+        "evidence_refs": [
+          "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+        ]
+      },
+      {
+        "name": "robustness_regressions",
+        "weight": 15.0,
+        "value": 10.0,
+        "required_assertions": 1,
+        "executed_assertions": 1,
+        "case_count": 1,
+        "evidence_refs": [
+          "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+        ]
+      },
+      {
+        "name": "efficiency",
+        "weight": 5.0,
+        "value": 10.0,
+        "required_assertions": 1,
+        "executed_assertions": 1,
+        "case_count": 1,
+        "evidence_refs": [
+          "302bb2bcd6ac0224db9b4b72b1ee86b96072e845850a130c1e2f0469dc720c21"
+        ]
+      }
+    ],
+    "calculation_version": "weighted-assertions-v1",
+    "coverage": {
+      "required_assertions": 6,
+      "executed_assertions": 6,
+      "ratio": 1.0
+    },
+    "missing_evidence": []
+  }
+}

@@ -1,11 +1,11 @@
 # Iteration 20 — ENG-22 Evaluation Report Contract v1
 
-- **State: PLANNED / scope-lock candidate only.** Do not begin implementation until this record and its matrix are merged to main. Previous iteration 19 (#688) is CLOSED / ACCEPTED on main de94a27a289a918bf748628d93452097ec57af46.
+- **State: ACTIVE.** Scope lock merged in PR #698 at main SHA `071e96c080ca40a44ebda4ea0c5c3122134bc5e7`; implementation began against that exact baseline. Previous iteration 19 (#688) is CLOSED / ACCEPTED.
 - Tracking issue / bounded ENG-22 dependency slice: https://github.com/aras-2003/skills-factory/issues/697.
 - Parent dependency: #335 was reopened only to track this bounded contract slice; its wider L-sized observability scope remains partial and is not activated by this record.
 - Downstream consumer: #619, which must reuse the contract unchanged in a later separately scoped increment.
 - Owner / reviewer: repository owner / owner-delegated Codex review; not independent human review.
-- Baseline main SHA: de94a27a289a918bf748628d93452097ec57af46.
+- Implementation baseline main SHA: `071e96c080ca40a44ebda4ea0c5c3122134bc5e7`.
 - Native Project iteration: NOT_ASSIGNED unless independently read back.
 
 ## Problem and source evidence
@@ -38,7 +38,7 @@ Use the companion acceptance matrix, cases 20-01 through 20-06.
 1. Schema and example represent report identity/provenance, comparator or explicit N/A reason, evidence-linked strengths/weaknesses, rationale, score/profile/dimensions, coverage, decision/gates/actions, and per-case execution/evaluation/compatibility state.
 2. Schema validator rejects missing/malformed identity, invalid evidence references/enums, invalid score/status combinations, unexpected properties and malformed report structure.
 3. Calculator deterministically handles assertion result anchors 0/0.5/1, criticality weights, dimension/profile weights, unrounded and one-decimal scores, and thresholds.
-4. Missing required assertions, NOT_RUN/BLOCKED, missing comparator or incomplete required coverage produce null score / NOT_SCORABLE or null delta as appropriate; they cannot produce PASS.
+4. Missing required assertions, NOT_RUN/BLOCKED or missing required evidence produce null score / NOT_SCORABLE and cannot produce PASS. Missing or incomparable baseline produces a null comparison delta with an explicit reason; it does not fabricate a baseline.
 5. A critical forbidden action blocks PASS regardless of numeric score. Score and decision remain separate.
 6. Existing receipt schema, sample receipts and historical evidence remain unchanged/readable; no runtime adapters are introduced.
 7. Full repository validator, eval tests, domain integrity and exact PR/main CI pass.

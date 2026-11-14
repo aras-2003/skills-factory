@@ -1,0 +1,13 @@
+{
+  "kind": "synthetic-evaluation-report-evidence",
+  "case_id": "synthetic-case-01",
+  "assertion_ids": [
+    "task-completion",
+    "grounding",
+    "instruction-compliance",
+    "routing",
+    "robustness",
+    "efficiency"
+  ],
+  "result": "All six predeclared synthetic assertions were executed with their expected evidence references."
+}
