@@ -85,7 +85,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
         section_line = line_of(section)
         if section.attrib:
             _fail(path, section_line, f"<{section.tag}> does not allow attributes")
-        if section.text and section.text.strip():
+        if section.tag in {"guidelines", "steps", "decision_rules", "input_context", "quality_checks", "examples", "references"} and section.text and section.text.strip():
             _fail(path, section_line, f"<{section.tag}> must contain only its defined child elements")
         if section.tag in {"purpose", "output_contract", "failure_handling"}:
             substantive(section)
