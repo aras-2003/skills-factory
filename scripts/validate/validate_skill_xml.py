@@ -9,9 +9,20 @@ from pathlib import Path
 from common import repo_root_from, split_frontmatter
 
 ROOT = "skill_instructions"
-REQUIRED = ("purpose", "guidelines", "steps", "output_contract", "failure_handling")
-OPTIONAL = ("decision_rules", "input_context", "quality_checks", "examples", "references")
-ALLOWED = set(REQUIRED + OPTIONAL)
+ORDER = (
+    "purpose",
+    "guidelines",
+    "steps",
+    "decision_rules",
+    "input_context",
+    "output_contract",
+    "failure_handling",
+    "quality_checks",
+    "examples",
+    "references",
+)
+REQUIRED = {"purpose", "guidelines", "steps", "output_contract", "failure_handling"}
+ALLOWED = set(ORDER)
 PLACEHOLDER = re.compile(r"(?:\b(?:TODO|TBD|FIXME|PLACEHOLDER)\b|lorem ipsum|\.{3,})", re.I)
 
 
@@ -56,7 +67,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
     for tag in REQUIRED:
         if tags.count(tag) != 1:
             _fail(path, 1, f"required section <{tag}> must appear exactly once")
-    expected_order = [tag for tag in REQUIRED + OPTIONAL if tag in tags]
+    expected_order = [tag for tag in ORDER if tag in tags]
     if tags != expected_order:
         _fail(path, 1, "sections are out of order; use the order shown in the grammar")
 
