@@ -56,6 +56,8 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
         match = re.search(re.escape(token) + r"(?:\s|/|>)", body)
         return body[: match.start()].count("\n") + 1 if match else 1
 
+    if root.text and root.text.strip():
+        _fail(path, 1, f"<{ROOT}> must contain only its defined child sections")
     if len(root) > 32:
         _fail(path, 1, "too many top-level sections (maximum 32)")
     tags = [child.tag for child in root]
@@ -86,6 +88,8 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
 
     for section in root:
         section_line = line_of(section)
+        if section.tail and section.tail.strip():
+            _fail(path, section_line, f"text is not allowed between top-level sections after <{section.tag}>")
         if section.attrib:
             _fail(path, section_line, f"<{section.tag}> does not allow attributes")
         if section.tag in {"guidelines", "steps", "decision_rules", "input_context", "quality_checks", "examples", "references"} and section.text and section.text.strip():
