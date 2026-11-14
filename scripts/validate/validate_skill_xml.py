@@ -73,6 +73,8 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
 
     def substantive(el: ET.Element, line: int | None = None) -> None:
         line = line or line_of(el)
+        if el.attrib:
+            _fail(path, line, f"<{el.tag}> does not allow attributes")
         if len(el):
             _fail(path, line, f"<{el.tag}> must contain text, not nested elements")
         text = (el.text or "").strip()
@@ -81,6 +83,10 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
 
     for section in root:
         section_line = line_of(section)
+        if section.attrib:
+            _fail(path, section_line, f"<{section.tag}> does not allow attributes")
+        if section.text and section.text.strip():
+            _fail(path, section_line, f"<{section.tag}> must contain only its defined child elements")
         if section.tag in {"purpose", "output_contract", "failure_handling"}:
             substantive(section)
         elif section.tag in {"guidelines", "quality_checks"}:
@@ -104,6 +110,8 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"D[1-9][0-9]*", value) for value in ids):
                 _fail(path, 1, "rule IDs must be unique and use D1, D2, …")
             for rule in section:
+                if rule.text and rule.text.strip():
+                    _fail(path, line_of(rule), "<rule> must contain only its defined child elements")
                 children = [child.tag for child in rule]
                 if children not in (["when", "action"], ["when", "action", "otherwise"]):
                     _fail(path, 1, "each <rule> needs <when>, <action>, and optional <otherwise>, in that order")
@@ -132,6 +140,8 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"E[1-9][0-9]*", value) for value in ids):
                 _fail(path, 1, "example IDs must be unique and use E1, E2, …")
             for example in section:
+                if example.text and example.text.strip():
+                    _fail(path, line_of(example), "<example> must contain only its defined child elements")
                 children = list(example)
                 if [child.tag for child in children] != ["input", "expected_behavior", "expected_output"]:
                     _fail(path, 1, "each <example> needs input, expected_behavior, expected_output in order")

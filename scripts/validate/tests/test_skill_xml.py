@@ -39,6 +39,13 @@ class SkillXmlValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(XmlValidationError, "declarations are not allowed"):
             validate_xml_body((FIXTURES / "untrusted-entity.xml").read_text(encoding="utf-8"))
 
+    def test_unknown_structural_attributes_are_rejected(self) -> None:
+        xml = (FIXTURES / "valid.xml").read_text(encoding="utf-8").replace(
+            '<purpose>', '<purpose surprise="ignored">', 1
+        )
+        with self.assertRaisesRegex(XmlValidationError, "does not allow attributes"):
+            validate_xml_body(xml)
+
     def test_template_has_valid_frontmatter_and_xml(self) -> None:
         validate_skill_file(HERE.parents[3] / "templates" / "skill-template" / "SKILL.md")
 
