@@ -106,12 +106,12 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
             substantive(section)
         elif section.tag in {"guidelines", "quality_checks"}:
             item_tag = "guideline" if section.tag == "guidelines" else "check"
-            if not section or any(item.tag != item_tag or item.attrib for item in section):
+            if len(section) == 0 or any(item.tag != item_tag or item.attrib for item in section):
                 _fail(path, section_line, f"<{section.tag}> must contain one or more plain <{item_tag}> elements")
             for item in section:
                 substantive(item)
         elif section.tag == "steps":
-            if not section or any(item.tag != "step" or set(item.attrib) != {"id"} for item in section):
+            if len(section) == 0 or any(item.tag != "step" or set(item.attrib) != {"id"} for item in section):
                 _fail(path, section_line, "<steps> must contain one or more <step id=\"S1\"> elements")
             ids = [item.get("id", "") for item in section]
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"S[1-9][0-9]*", value) for value in ids):
@@ -119,7 +119,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
             for item in section:
                 substantive(item, allowed_attributes={"id"})
         elif section.tag == "decision_rules":
-            if not section or any(item.tag != "rule" or set(item.attrib) != {"id"} for item in section):
+            if len(section) == 0 or any(item.tag != "rule" or set(item.attrib) != {"id"} for item in section):
                 _fail(path, section_line, "<decision_rules> must contain one or more <rule id=\"D1\"> elements")
             ids = [item.get("id", "") for item in section]
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"D[1-9][0-9]*", value) for value in ids):
@@ -133,7 +133,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
                 for child in rule:
                     substantive(child)
         elif section.tag == "input_context":
-            if not section or any(item.tag != "field" for item in section):
+            if len(section) == 0 or any(item.tag != "field" for item in section):
                 _fail(path, section_line, "<input_context> must contain one or more <field> elements")
             names: set[str] = set()
             for field in section:
@@ -149,7 +149,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
                     _fail(path, line_of(field), f"field {name!r} requires required=true|false and trust=trusted|untrusted")
                 substantive(field, allowed_attributes={"name", "type", "required", "trust"})
         elif section.tag == "examples":
-            if not section or any(item.tag != "example" or set(item.attrib) != {"id"} for item in section):
+            if len(section) == 0 or any(item.tag != "example" or set(item.attrib) != {"id"} for item in section):
                 _fail(path, section_line, "<examples> must contain one or more <example id=\"E1\"> elements")
             ids = [item.get("id", "") for item in section]
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"E[1-9][0-9]*", value) for value in ids):
@@ -165,7 +165,7 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
                 for child in children:
                     substantive(child, allowed_attributes={"trust"} if child.tag == "input" else set())
         elif section.tag == "references":
-            if not section or any(item.tag != "reference" or set(item.attrib) != {"href"} for item in section):
+            if len(section) == 0 or any(item.tag != "reference" or set(item.attrib) != {"href"} for item in section):
                 _fail(path, section_line, "<references> must contain one or more <reference href=\"…\"> elements")
             for item in section:
                 if not item.get("href", "").strip():
