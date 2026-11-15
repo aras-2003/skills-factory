@@ -1,12 +1,12 @@
 schema_version: "1.0"
 generated_for: "AIS-21"
 owner: arkadiusz-kamrowski
-review_by: "2026-11-14"
+review_by: "2026-11-15"
 policy:
   note: "Lab candidates pending runtime validation are not production-ready and cannot be promoted without exact current-version runtime evidence."
   current_runtime_receipt_required: true
   historical_summary_is_not_current_receipt: true
-  temporary_exception_renewal_note: "Owner-authorized 2026-10-15 through 2026-11-14 pending evidence review; no runtime verification is implied."
+  temporary_exception_renewal_note: "Reviewed under owner direction on 2026-11-15; exact-version runtime evidence gaps remain pending. Exceptions expire on the last validation date and do not imply runtime verification, maturity uplift, or production promotion."
   no_exception_for_known_high_severity_failure: true
 components:
   - name: company-context-research
@@ -31,7 +31,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: problem-demand-validation
     kind: skill
     version: "1.1.0"
@@ -43,7 +43,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: unit-economics-review
     kind: skill
     version: "1.1.0"
@@ -55,7 +55,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: acquisition-fit-review
     kind: skill
     version: "1.1.0"
@@ -67,7 +67,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: competition-landscape-review
     kind: skill
     version: "1.1.1"
@@ -90,7 +90,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: market-transferability-review
     kind: skill
     version: "1.1.0"
@@ -102,7 +102,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: product-opportunity-discovery
     kind: skill
     version: "1.1.0"
@@ -114,7 +114,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: differentiation-review
     kind: skill
     version: "1.1.1"
@@ -181,7 +181,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: decision-bottleneck-analysis
     kind: skill
     version: "1.1.2"
@@ -215,7 +215,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: architecture-review
     kind: skill
     version: "1.0.0"
@@ -227,7 +227,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: capability-gap-analysis
     kind: skill
     version: "1.0.0"
@@ -239,7 +239,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: capability-map-review
     kind: skill
     version: "1.0.0"
@@ -251,7 +251,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: evidence-loop-review
     kind: skill
     version: "1.0.0"
@@ -263,7 +263,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: global-local-model-review
     kind: skill
     version: "1.0.0"
@@ -275,7 +275,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: operating-model-review
     kind: skill
     version: "1.1.0"
@@ -287,7 +287,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: portfolio-health-review
     kind: skill
     version: "1.0.0"
@@ -299,7 +299,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: portfolio-prioritization
     kind: skill
     version: "1.0.0"
@@ -311,7 +311,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: transformation-blueprint
     kind: skill
     version: "1.0.0"
@@ -323,7 +323,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: oaf-health-check
     kind: workflow
     version: "1.6.0"
@@ -346,7 +346,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: oaf-governance-redesign
     kind: workflow
     version: "1.0.0"
@@ -358,7 +358,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: oaf-transformation-design
     kind: workflow
     version: "1.0.0"
@@ -370,7 +370,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: oaf-enterprise-architecture-review
     kind: workflow
     version: "1.0.0"
@@ -382,7 +382,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: oaf-enterprise-change-review
     kind: workflow
     version: "1.0.0"
@@ -394,7 +394,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: commerce-product-deep-dive
     kind: workflow
     version: "1.0.0"
@@ -406,7 +406,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: commerce-opportunity-review
     kind: workflow
     version: "1.0.0"
@@ -418,7 +418,7 @@ components:
     evidence_gap: "No exact-version unassisted runtime receipt is recorded after AIS-20 isolation."
     limitation: "Do not treat historical narrative PASS/PASS++ as current-version proof."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
   - name: decision-journal-update
     kind: skill
     version: "0.1.1"
@@ -454,7 +454,7 @@ components:
     evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
     limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
 
   - name: investment-record-store
     kind: skill
@@ -563,7 +563,7 @@ components:
     evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
     limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
 
   - name: valuation-scenario-review
     kind: skill
@@ -660,5 +660,5 @@ components:
     evidence_gap: "Personal-beta static/package coverage exists; R10 exact-version runtime retest is pending after datastore/research-tooling migration."
     limitation: "Use as personal-beta decision support; treat outputs as reviewable and keep runtime evidence status explicit."
     exception_owner: arkadiusz-kamrowski
-    exception_expires: "2026-11-14"
+    exception_expires: "2026-11-15"
 
