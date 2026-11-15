@@ -153,7 +153,7 @@ def github_opener() -> Any:
     return urllib.request.build_opener(GitHubRedirectHandler())
 
 
-def fetch_github_source(repository: str, commit: str, subdir: str | None = None, *, opener: Any = None) -> tuple[dict[str, Any], dict[str, bytes]]:
+def fetch_github_source_with_modes(repository: str, commit: str, subdir: str | None = None, *, opener: Any = None) -> tuple[dict[str, Any], dict[str, bytes], dict[str, int | None]]:
     repository, commit, subdir = validate_github_identity(repository, commit, subdir)
     opener = opener or github_opener()
     owner, repo = repository.split("/", 1)
@@ -187,7 +187,7 @@ def fetch_github_source(repository: str, commit: str, subdir: str | None = None,
         expected_host="codeload.github.com",
         expected_path=f"/{owner}/{repo}/legacy.zip/{commit}",
     )
-    files = inventory_zip(archive_bytes, subdir=subdir, strip_github_root=True)
+    files, modes = inventory_zip_with_modes(archive_bytes, subdir=subdir, strip_github_root=True)
     source = {
         "type": "github_repository",
         "repository": repository,
@@ -197,6 +197,12 @@ def fetch_github_source(repository: str, commit: str, subdir: str | None = None,
         "source_digest": sha256(archive_bytes),
         "author": author,
     }
+    return source, files, modes
+
+
+def fetch_github_source(repository: str, commit: str, subdir: str | None = None, *, opener: Any = None) -> tuple[dict[str, Any], dict[str, bytes]]:
+    """Fetch a pinned source with the original v1-compatible return contract."""
+    source, files, _modes = fetch_github_source_with_modes(repository, commit, subdir, opener=opener)
     return source, files
 
 
@@ -226,7 +232,7 @@ def _validate_member_tree(paths: Iterable[tuple[str, bool]]) -> None:
             raise IntakeError("archive path has a file/directory conflict")
 
 
-def inventory_zip(archive_bytes: bytes, *, subdir: str | None = None, strip_github_root: bool = False) -> dict[str, bytes]:
+def inventory_zip_with_modes(archive_bytes: bytes, *, subdir: str | None = None, strip_github_root: bool = False) -> tuple[dict[str, bytes], dict[str, int | None]]:
     if len(archive_bytes) > MAX_ARCHIVE_BYTES:
         raise IntakeError("archive exceeds compressed-size limit")
     selected_subdir = normalize_relative_path(subdir) if subdir else None
@@ -239,7 +245,7 @@ def inventory_zip(archive_bytes: bytes, *, subdir: str | None = None, strip_gith
         infos = archive.infolist()
         if len(infos) > MAX_MEMBERS:
             raise IntakeError("archive exceeds member-count limit")
-        raw_names: list[tuple[zipfile.ZipInfo, str, bool]] = []
+        raw_names: list[tuple[zipfile.ZipInfo, str, bool, int | None]] = []
         roots: set[str] = set()
         for info in infos:
             is_dir = info.is_dir()
@@ -259,13 +265,13 @@ def inventory_zip(archive_bytes: bytes, *, subdir: str | None = None, strip_gith
                 raise IntakeError("archive member exceeds size limit")
             if info.file_size and (not info.compress_size or info.file_size / info.compress_size > MAX_COMPRESSION_RATIO):
                 raise IntakeError("archive member exceeds compression-ratio limit")
-            raw_names.append((info, path, is_dir))
+            raw_names.append((info, path, is_dir, stat.S_IMODE(mode) if member_type == stat.S_IFREG else None))
 
         if strip_github_root and (len(roots) != 1 or not raw_names):
             raise IntakeError("remote archive does not have one canonical repository root")
         root = next(iter(roots)) if strip_github_root else None
-        members: list[tuple[zipfile.ZipInfo, str, bool]] = []
-        for info, path, is_dir in raw_names:
+        members: list[tuple[zipfile.ZipInfo, str, bool, int | None]] = []
+        for info, path, is_dir, file_mode in raw_names:
             if root:
                 if path == root:
                     continue
@@ -274,12 +280,13 @@ def inventory_zip(archive_bytes: bytes, *, subdir: str | None = None, strip_gith
                 path = path[len(root) + 1 :]
             if not path:
                 continue
-            members.append((info, normalize_relative_path(path), is_dir))
-        _validate_member_tree((path, is_dir) for _, path, is_dir in members)
+            members.append((info, normalize_relative_path(path), is_dir, file_mode))
+        _validate_member_tree((path, is_dir) for _, path, is_dir, _ in members)
 
         total_size = 0
         output: dict[str, bytes] = {}
-        for info, path, is_dir in members:
+        modes: dict[str, int | None] = {}
+        for info, path, is_dir, file_mode in members:
             if is_dir:
                 continue
             total_size += info.file_size
@@ -300,10 +307,17 @@ def inventory_zip(archive_bytes: bytes, *, subdir: str | None = None, strip_gith
                 if not path:
                     continue
             output[path] = data
+            modes[path] = file_mode
         if not output:
             raise IntakeError("archive contains no files for the selected source path")
         _validate_file_paths(output)
-        return dict(sorted(output.items()))
+        return dict(sorted(output.items())), dict(sorted(modes.items()))
+
+
+def inventory_zip(archive_bytes: bytes, *, subdir: str | None = None, strip_github_root: bool = False) -> dict[str, bytes]:
+    """Inventory a ZIP without changing the long-standing files-only API."""
+    files, _modes = inventory_zip_with_modes(archive_bytes, subdir=subdir, strip_github_root=strip_github_root)
+    return files
 
 
 def _validate_file_paths(files: dict[str, bytes]) -> None:

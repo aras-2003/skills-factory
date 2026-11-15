@@ -64,3 +64,27 @@ Example reviewer record shape (create only after reviewing the exact receipt):
 ```
 
 The receipt schema is the file root; the manifest and review schemas are available at `$defs/manifest` and `$defs/review` in `scripts/validate/schemas/external-skill-intake.schema.json`. Replace synthetic digest examples with values from the exact receipt before validating a real review. A successful intake still requires security, license, provenance, compatibility, and human import reviews under the applicable workflow. It does not establish that content is safe or licensed for redistribution.
+
+## Review a pinned upstream update
+
+`external_skill_update.py` compares an already approved GitHub intake receipt with a proposed full-SHA commit. Supply the exact v1 receipt and its separate approved review record:
+
+```sh
+python scripts/security/external_skill_update.py \
+  --baseline-receipt .tmp/accepted-intake-receipt.json \
+  --baseline-review .tmp/accepted-intake-review.json \
+  --candidate-repository owner/repository \
+  --candidate-commit 0123456789abcdef0123456789abcdef01234567 \
+  --candidate-subdir path/to/skill \
+  --registry provenance/registry.yaml
+```
+
+The tool re-fetches the accepted and candidate commits through the bounded GitHub transport, then verifies the accepted archive, receipt, approval, inventory paths, sizes and hashes before comparison. It does not change the v1 intake receipt or manifest. The new update-impact v1 report is written to stdout and validated against `scripts/validate/schemas/external-skill-update-impact.schema.json`.
+
+If `--candidate-subdir` is omitted, the accepted baseline subdirectory is reused. Pass `--candidate-root` only when intentionally comparing the repository root.
+
+The report contains sorted path/size/hash changes, license evidence changes, permission-declaration fingerprints by skill path, bounded deprecation-marker count changes, resource changes, executable-bit evidence, and registered direct/transitive consumers. It does not copy candidate file contents into the report. Treat candidate bytes as untrusted; the tool never executes or installs them. Its status is `NOT_AUTHORIZED` regardless of comparison outcome. A changed source is `NOT_READY` for human review when the evidence is complete; missing lineage, permission or mode evidence, or a source fetch/digest failure is `BLOCKED`, never `UNCHANGED`.
+
+Consumer completeness requires a verified provenance record whose GitHub repository, subdirectory, full commit and `content_sha256` match the accepted receipt's inventory digest, plus complete verified dependency/component metadata. The current registry can therefore return known consumers while still marking the total impact `UNKNOWN`; an empty consumer list is not proof of no consumers. The v1 intake receipt does not contain executable mode bits: the update tool re-fetches the pinned baseline archive to compare them. If a source archive does not preserve those bits, mode status remains `UNKNOWN` and blocks a clean readiness result.
+
+The command is a manual review aid, not a scheduler, evaluator, importer, rollback mechanism, or release gate. A schema-valid report cannot approve an update, promote maturity, or authorize distribution.
