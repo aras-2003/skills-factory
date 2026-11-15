@@ -2,13 +2,27 @@
 from __future__ import annotations
 
 import argparse
-import importlib.util
+import importlib.metadata
 import os
 from pathlib import Path
 import subprocess
 import sys
+import re
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def dependency_errors(lock: Path) -> list[str]:
+    errors = []
+    for name, expected in re.findall(r"(?m)^([A-Za-z0-9_.-]+)==([^\s;\\]+)", lock.read_text()):
+        try:
+            actual = importlib.metadata.version(name)
+        except importlib.metadata.PackageNotFoundError:
+            errors.append(f"{name}: missing")
+            continue
+        if actual != expected:
+            errors.append(f"{name}: expected {expected}, installed {actual}")
+    return errors
 
 
 def main() -> int:
@@ -19,9 +33,9 @@ def main() -> int:
     temporary = ROOT / ".tmp" / "python-tests"
     temporary.mkdir(parents=True, exist_ok=True)
     if args.check:
-        missing = [n for n in ("yaml", "jsonschema") if importlib.util.find_spec(n) is None]
-        if missing:
-            print("Missing locked environment dependencies: " + ", ".join(missing))
+        errors = dependency_errors(ROOT / "requirements-dev.lock")
+        if errors:
+            print("Locked environment mismatch:\n" + "\n".join(errors))
             return 1
         print(f"Git and local dependencies: OK; run tests with TMPDIR={temporary.resolve()}")
         return 0

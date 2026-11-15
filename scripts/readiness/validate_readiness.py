@@ -160,7 +160,7 @@ def validate_record(
                     errors.append(f"{name}: pending exception expired on {expiry.isoformat()}")
                 if expiry > review_by:
                     errors.append(f"{name}: exception_expires must not exceed review_by")
-                if (expiry - today).days > MAX_EXCEPTION_DAYS:
+                if enforce_expiry and (expiry - today).days > MAX_EXCEPTION_DAYS:
                     errors.append(f"{name}: pending exception exceeds {MAX_EXCEPTION_DAYS}-day limit")
         elif disposition == "lab-candidate-pending-runtime-validation":
             if rec.get("candidate_channel") != "lab":

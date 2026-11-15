@@ -54,6 +54,8 @@ class ReadinessPolicyTests(unittest.TestCase):
             errors = validate_readiness.validate(root, today=today, target="production")
             self.assertTrue(any("expired" in e for e in errors))
             self.assertTrue(any("not production approval" in e for e in errors))
+            # Integration must also be independent of the clock before the review date.
+            self.assertEqual([], validate_readiness.validate(root, today=dt.date(2026, 1, 1), target="integration"))
 
     def test_unexpired_pending_does_not_become_production_pass(self):
         with tempfile.TemporaryDirectory() as td:
