@@ -2,14 +2,14 @@
 
 Follow [iteration delivery](../ITERATION-DELIVERY.md). This is a scope lock for the bounded U1 slice of #619, not acceptance of the parent issue.
 
-- State: PLANNED
+- State: ACTIVE
 - Owner / reviewer: arkadiusz-kamrowski / Codex delegated review (not independent)
-- Tracking Issue / native Project iteration: #619 / `31 | External Skills Supply Chain U1` (owner-selected; native iteration and field readback are pending)
+- Tracking Issue / native Project iteration: #619 / `31 | External Skills Supply Chain U1` (created and assigned in Skills Factory - Product & Engineering; dates Nov 26–Dec 09, 2027; field readback completed 2026-11-15 UTC)
 - Previous terminal iteration / closure link: Iteration 21, #704 accepted; [closeout record](iteration-21-xml-09a-grammar-validator-2026-11.md), [acceptance matrix](iteration-21-acceptance-matrix.md), merged closeout PR #707 and evidence reconciliation PR #708.
 - Baseline main SHA: `ebb9a8d00780cc7116bf94a21a6f0c18ee8264e0`
-- Lock commit SHA (record externally in tracking Issue): pending
-- Started at / closed at (UTC): not started / not closed
-- Scope lock reviewed by / at: pending owner review after exact diff
+- Lock commit SHA (record in tracking Issue): `48981677809419e7d014664cff1497d9af48ec1b`
+- Started at / closed at (UTC): 2026-11-15T23:39:22Z / not closed
+- Scope lock reviewed by / at: owner selected dedicated Iteration 31; exact scope diff is recorded in merged PR #709 (no independent review claimed)
 
 ## Frozen commitment
 
@@ -50,7 +50,7 @@ Required shared checks: targeted external-intake/update-impact tests; provenance
 - Last full runtime baseline candidate / behavior iterations since baseline: no runtime behavior changes in this slice; full runtime baseline is not applicable.
 - Planned distinct scenarios / executions by layer and required surface: 10 U1 deterministic scenarios plus 2 shared offline sentinels and 2 rotating source/package probes; each required offline suite once per PR and final-main candidate.
 - Critical stochastic scenarios repeated at least 3 times / instability history: N/A; no model or stochastic runtime behavior is changed.
-- PR CI / final-main checks and build / external runtime runs: pending.
+- Scope-lock PR #709 CI: PASS (Evaluation CI, Domain integrity, Validate skills at exact lock SHA); implementation candidate PR/final-main checks and build: pending; runtime N/A per reviewed scope.
 
 ## Defect intake and clarifications (append; intake always open)
 
@@ -67,7 +67,7 @@ Required shared checks: targeted external-intake/update-impact tests; provenance
 - Shared regression verdict: pending
 - Non-blocking findings and accepted impact: current repository lineage is incomplete (98 UNKNOWN records); U1 must report this gap explicitly.
 - Scope compared with lock commit: pending
-- Issue / Project / PR reconciliation: pending
+- Issue / Project / PR reconciliation: #619 remains open and In Progress; assigned to native Iteration 31; scope lock PR #709 merged as `a2833043c4422ed69593524b9639f1779faa4766`; implementation evidence pending.
 - Owner proposal / reviewer acceptance / decision timestamp: pending; Codex review is not independent.
 - If ABORTED: N/A
 - Next iteration eligibility: only after this increment is CLOSED or formally ABORTED. No automatic promotion or Site deployment.
