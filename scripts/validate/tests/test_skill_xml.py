@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 import unittest
+import warnings
 from pathlib import Path
 
 HERE = Path(__file__).resolve()
@@ -14,6 +15,12 @@ FIXTURES = HERE.parent / "fixtures" / "skill-xml"
 class SkillXmlValidationTests(unittest.TestCase):
     def test_valid_fixture(self) -> None:
         validate_xml_body((FIXTURES / "valid.xml").read_text(encoding="utf-8"))
+
+    def test_valid_fixture_does_not_use_deprecated_element_truthiness(self) -> None:
+        xml = (FIXTURES / "valid.xml").read_text(encoding="utf-8")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DeprecationWarning)
+            validate_xml_body(xml)
 
     def test_malformed_xml_reports_line(self) -> None:
         with self.assertRaisesRegex(XmlValidationError, r"malformed XML"):
