@@ -280,8 +280,8 @@ class ExternalSkillUpdateTests(unittest.TestCase):
         with self.assertRaisesRegex(update.UpdateError, "lacks a valid approval"):
             update.build_update_report(
                 baseline_receipt=receipt, baseline_review=bad_review, baseline_source=baseline_source,
-                baseline_files=BASE_FILES, baseline_modes={}, candidate_source=baseline_source,
-                candidate_files=BASE_FILES, candidate_modes={}, registry=registry_for(receipt),
+                baseline_files=BASE_FILES, baseline_modes={path: 0o644 for path in BASE_FILES}, candidate_source=baseline_source,
+                candidate_files=BASE_FILES, candidate_modes={path: 0o644 for path in BASE_FILES}, registry=registry_for(receipt),
             )
 
     def test_report_schema_is_valid_and_deterministic(self) -> None:
