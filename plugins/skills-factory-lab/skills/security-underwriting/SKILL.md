@@ -8,10 +8,10 @@ description: 'Underwrite one equity or ETF as an investment using structured equ
   '
 metadata:
   owner: arkadiusz-kamrowski
-  version: 0.5.3
+  version: 0.6.0
   maturity: production
   risk: high
-  last_reviewed: '2026-11-06'
+  last_reviewed: '2026-11-10'
 ---
 
 # Security Underwriting
@@ -69,7 +69,7 @@ Produce an evidence-backed investment case that can later be challenged, valued,
 12. Evaluate valuation relative to history, economically comparable peers and scenario economics. Show incompatible peers and metrics as exclusions/N/M; do not rank across different business models or sectors.
 13. Explicitly separate business-thesis strength, security attractiveness at the current price and priced-in expectations.
 14. State catalysts, risks, dependencies and variant perception.
-15. Form a compact thesis with explicit assumptions and kill criteria.
+15. Form a compact thesis with explicit assumptions and kill criteria. For each material assumption, complete the KPI trigger matrix below; do not leave material assumptions with an implied or unmeasurable invalidation rule.
 16. Hand off conviction challenge to thesis-challenge before portfolio action.
 
 ## Historical attribution
@@ -81,6 +81,16 @@ For material historical price/fundamental moves, separate:
 - **UNKNOWN** — when competing explanations cannot be distinguished.
 
 Do not write "the stock fell because X" merely because X happened nearby in time.
+
+## KPI trigger matrix and expectations bridge
+
+For every material thesis assumption, create one versioned row containing: assumption ID and exact claim; KPI name and definition; measurement basis and unit; last verified baseline with period and as-of date; source URL and publication timestamp; a predeclared threshold and comparator, or `NOT_SET`; rolling measurement window; review cadence; next verification event/date; and action class `MONITOR`, `REVIEW`, or `ESCALATE`. Label separately whether the row is an observation/review trigger or a formally approved thesis kill criterion. Thresholds and windows must be fixed before the evidence being evaluated; do not tune them after observing the result. If the evidence source, period, or definition is not verified and comparable, mark the trigger `UNVERIFIED` and do not claim it crossed.
+
+Use the matrix only against the exact, latest canonical `ACTIVE` thesis version. A missing/unavailable ACTIVE baseline blocks thesis-state conclusions; do not substitute a DRAFT, provider summary, or a newly invented persistence rule. A threshold crossing starts the specified review/escalation path; it never automatically invalidates the business thesis, changes a canonical record, or creates a buy/sell/trade instruction. A verified material breach of an explicitly approved kill criterion may be classified `ESCALATE` for a human decision. Price/valuation movement alone may change security attractiveness or trigger review, but does not prove that a business assumption failed.
+
+For earnings and guidance, build a dated, like-for-like expectations bridge when decision-relevant inputs are available. Keep separate rows for the latest pre-event consensus snapshot, any later consensus revision, the reported actual, and company guidance. For each row state source, publication/retrieval timestamp, fiscal period, metric definition, basis, unit/currency, and whether it was available at the selected as-of time. Never compare a quarterly actual with an annual/TTM estimate or silently mix GAAP and adjusted definitions. Missing, stale, conflicted, or unavailable consensus/guidance stays `UNKNOWN`/`N/M`; do not impute it.
+
+In a historical earnings-cycle replay, freeze the event-time inputs and thresholds using only information published by that decision timestamp. Later filings/results may be labelled as outcomes, never as decision-time inputs. Evaluate whether each original assumption was supported, contradicted, or unresolved and whether the updated business case remains economically attractive. Keep that assessment separate from valuation-multiple change and stock return. Record the price move as `OBSERVED`; describe a cause only as `INTERPRETATION` with confidence and supporting evidence. Without evidence that separates alternative causes, report `UNKNOWN` rather than causal certainty. Do not write to the canonical store unless the user explicitly authorized the exact write and a successful receipt is observed.
 
 ## Decision rules
 - Cheapness, low multiple or a large drawdown is never sufficient investment rationale by itself.
@@ -118,4 +128,8 @@ Financial Quality Audit detail: 3–5 FY plus latest/comparable YTD table; perio
 - [ ] An unresolved critical cash-flow input cannot produce an attractive final rating or FCF-based valuation.
 - [ ] Business thesis and security attractiveness are separate.
 - [ ] Kill criteria are falsifiable.
+- [ ] Every material assumption has a versioned KPI trigger row with source, basis, threshold/window, cadence and next verification.
+- [ ] Review triggers, approved kill criteria and trade decisions are distinct; a threshold crossing cannot auto-sell.
+- [ ] Consensus, actual and guidance are dated and like-for-like; missingness and no-lookahead are explicit.
+- [ ] Observed price movement is not presented as verified causal attribution without supporting evidence.
 - [ ] Lifecycle graphic or explicitly blocked fallback rendered from verified classifier output, with five phases and uncalibrated-affinity warning.
