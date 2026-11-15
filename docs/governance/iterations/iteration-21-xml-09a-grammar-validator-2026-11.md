@@ -1,6 +1,6 @@
 # Iteration 21 — canonical XML grammar and static skill-body validation
 
-- State: CLOSEOUT PROPOSED — implementation merged at main `fde66293d7c1285724017fa15e84e3c18d2571af`; final line-location hardening and iteration evidence await closeout PR review.
+- State: CLOSEOUT PROPOSED — implementation merged at main `fde66293d7c1285724017fa15e84e3c18d2571af`; line-location hardening is in PR #707. PR CI run `43656361340` passed XML validation and 104 tests, but the required domain/readiness/release job is blocked by expired readiness records. Owner review and final-main validation remain pending.
 - Owner / reviewer: repository owner / owner-delegated Codex review (not independent human review).
 - Tracking Issue / native Project iteration: #704 / `21 | Core extraction (provisional)`; assigned and read back after the scope lock merged.
 - Previous terminal iteration: Iteration 20 CLOSED / ACCEPTED at main `54ac64a3029923c788b828ce63acdc0b88f18872`.
@@ -26,7 +26,7 @@ The acceptance matrix is `iteration-21-acceptance-matrix.md`. Required checks ar
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
 | XML grammar and static validator, PR #706 | Main `fde66293d7c1285724017fa15e84e3c18d2571af` (PR head `9048301bfb7d1917affe9b4c3170c760fdd86657`) | Lab payload SHA-256 `923cbb284617ca188d6c187e4b28bef0d883948d63b4bcbeaf8975db9c728c86`; no Lab release was made. | PASS: all PR checks on the exact rebased head and all post-merge checks on final main. [PR validation](https://github.com/aras-2003/skills-factory/actions/runs/43654775145); [main validation](https://github.com/aras-2003/skills-factory/actions/runs/43655090657). | N/A for this static-only slice; no runtime artifacts or skill behavior are changed. | — |
-| Exact semantic error locations, closeout PR | Code commit `4df8222018c772924273385e2eccf8928d37a401`; PR head and final-main CI pending. | Same Lab payload as prior candidate; no packaged skill changes. | Focused local parser tests PASS; full repository checks pending on closeout PR. | N/A; no runtime artifacts or skill behavior change. | Adds 21-AC02-T02j; prior rows unchanged. |
+| Exact semantic error locations, closeout PR #707 | PR head `3e52552cd8ac53b142758e163aa4c524a53e662d`; final-main CI pending. | Same Lab payload as prior candidate; no packaged skill changes. | PASS: XML validator tests and full repository validator in [PR run 43656361340](https://github.com/aras-2003/skills-factory/actions/runs/43656361340). Repository-wide check remains blocked by expired readiness records in the separate domain/readiness/release job; no readiness dates or approvals changed. | N/A; no runtime artifacts or skill behavior change. | Adds 21-AC02-T02j; prior rows unchanged. |
 
 ## Regression selection and counts
 
@@ -36,7 +36,7 @@ The acceptance matrix is `iteration-21-acceptance-matrix.md`. Required checks ar
 - Last full runtime baseline candidate / behavior iterations since baseline (maximum 4): current Site Lab attestation is source `1d55767564bd092935c4d8a21fa0debc7a382db2`, older than this scope baseline. No runtime baseline claim is made; this tooling-only slice does not change runtime behavior.
 - Planned distinct scenarios / executions by layer and required surface: eleven parser/authoring fixture scenarios, five shared offline sentinels, two unchanged-skill probes, and full applicable offline CI; runtime surface N/A with the scope rationale above.
 - Critical stochastic scenarios repeated at least 3 times / instability history: N/A; this scope introduces no model behavior or stochastic runtime path.
-- PR CI / final-main checks and build / external runtime runs: PR validation passed on rebased head `9048301bfb7d1917affe9b4c3170c760fdd86657`; post-merge validation passed on main `fde66293d7c1285724017fa15e84e3c18d2571af`. The CI build generated Lab packages; no release or external runtime run was in scope.
+- PR CI / final-main checks and build / external runtime runs: PR #706 validation passed on rebased head `9048301bfb7d1917affe9b4c3170c760fdd86657`; post-merge validation passed on main `fde66293d7c1285724017fa15e84e3c18d2571af`. Closeout PR #707 run `43656361340` passed XML validation, the repository validator and XML unit tests, and artifact checks. Its domain/readiness/release job failed because the review date and 28 pending exceptions in `release/production-readiness.yaml` expired on 2026-11-14. These records were not altered. No final-main validation or external runtime run has occurred for PR #707.
 
 ## Defect intake and clarifications (append; intake always open)
 
@@ -51,11 +51,11 @@ The acceptance matrix is `iteration-21-acceptance-matrix.md`. Required checks ar
 - Outcome: PROPOSED CLOSED — ACCEPTED, pending owner review and merge of this closeout PR.
 - Final candidate / matrix and immutable evidence links: main `fde66293d7c1285724017fa15e84e3c18d2571af`; acceptance matrix in this directory; PR #706 merged as `fde66293d7c1285724017fa15e84e3c18d2571af`; PR and post-merge CI links above; line-location fix is in the closeout PR.
 - Committed Issues accepted / unresolved: #704 accepted; #682 remains open and partial for the five meta-skill migrations and runtime/channel compatibility.
-- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: 19 PASS, 2 NOT_RUN pending closeout PR CI, 1 reviewed N/A, 0 FAIL, 0 BLOCKED, 0 REVIEW_REQUIRED.
-- Shared regression verdict: prior implementation CI and post-merge main passed; final line-location hardening awaits closeout PR CI. Both rotating probes preserve their instruction bodies in the generated Lab package.
+- Required rows PASS / FAIL / NOT_RUN / BLOCKED / REVIEW_REQUIRED / reviewed N/A: 21 PASS, 0 NOT_RUN, 1 reviewed N/A, 0 FAIL, 0 BLOCKED, 0 REVIEW_REQUIRED. The PR-level repository-wide required check remains blocked by the expired-readiness gate; this is recorded separately from the scope rows.
+- Shared regression verdict: prior implementation PR and post-merge main checks passed; PR #707 XML validation and package checks passed. Both rotating probes preserve their instruction bodies in the generated Lab package. Required overall CI is not green because the domain/readiness/release check rejects expired records; the unchanged final-main behavior is not inferred.
 - Non-blocking findings and accepted impact (owner/reviewer + future Issue): runtime/model and channel compatibility remain explicitly deferred to #682; no runtime claim is made.
 - Scope compared with lock commit: no product/runtime scope expansion; the final matrix adds three strict-grammar regression cases and corrects the invalid second probe path.
-- Issue / Project / PR reconciliation: #705, #703 and #706 are merged; #704 issue and native Project Status closeout are linked to this record and remain subject to merging the closeout PR.
+- Issue / Project / PR reconciliation: #705, #703 and #706 are merged; #704 issue and native Project Status closeout remain pending owner review and PR #707. PR #707 has a required readiness CI blocker; no merge is proposed until it is resolved or explicitly accepted by the owner.
 - Owner proposal / reviewer acceptance / decision timestamp: owner approved #703 and #706 on 2026-11-14; owner review of this closeout record is requested through its PR.
 - If ABORTED: reason, partial evidence and complete unresolved-criterion mapping: N/A
 - Next iteration eligibility (no automatic start or production promotion): Iteration 21 is accepted; a separately scoped next increment may begin after GitHub issue and Project status reconciliation.
