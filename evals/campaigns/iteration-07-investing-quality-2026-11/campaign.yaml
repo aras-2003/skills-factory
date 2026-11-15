@@ -133,7 +133,7 @@ source_sha256:
   evals/routing/supplemental/investment-top-twenty-screen-en.rubric.yaml: fa08f2834fa5104c172e3b30a8a0e7a003dba4aefde59b567ec6cca7893989c2
   evals/routing/supplemental/investment-top-two-screen-pl.input.md: 7517ca4ddf83a15d188f1d560287934749f6c4038f81d82afd0d7f31d547fb2d
   evals/routing/supplemental/investment-top-two-screen-pl.rubric.yaml: 0ec7e8bf45911ec2fbe7113417e8b1ebc5dd335b6cd6d0e8f3b4687506f8a8e5
-  release/production-readiness.yaml: 9b34df093c9aae57642cd8a8e361a4a8d9da4b804c442eef372cf05e897bce00
+  release/production-readiness.yaml: 0e3cbaec1eac529f65120aef6caf0f5c9570e9d0fc7f98b6d24f26b703896a6c
   runtime/contracts/mcp-tools-v1.json: ebbc8f1bf8457b4ba4f19e4cb90f536a322856ac473d10ddf9741c4db177b4f9
   runtime/mcp/cloud_server.py: 8dca0e2a35c69e462bc70a43b07ac45cfc6da35cbfb375f2af71a971cac0b9dd
   runtime/mcp/server.py: 32b0fc3077bbf072b5f738beeccc3f6207048561b762ca744f3dc07ee85167c0
@@ -167,3 +167,4 @@ source_sha256:
   evals/campaigns/iteration-07-investing-quality-2026-11/sources/sec-reported-ytd-growth-2026-11-09.json: 9a580af7311bcc8d153d332a441ce8dcdcf28e37ee0552de3a4801be37a47c5b
   evals/campaigns/iteration-07-investing-quality-2026-11/sources/peer-comparability-amd-2026-11-09-input.json: 660e766a7a07d3d837408b882f693cc1327300c882ad04eafe2c0b2ad853b95d
   evals/campaigns/iteration-07-investing-quality-2026-11/sources/peer-comparability-mu-2026-11-09-input.json: ad1524a0107817629163f0bba8947256d859d6b8f2d41d0f57364cb6954457de
+# PR #707 owner-directed readiness metadata refresh (2026-11-15): hash updated for the reviewed governance file only; candidate/runtime pins and evidence remain unchanged.
