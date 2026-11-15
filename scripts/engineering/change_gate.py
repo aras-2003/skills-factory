@@ -53,7 +53,9 @@ def docs_only_path(path: str) -> bool:
     return path.startswith("docs/") and path.endswith(".md")
 
 
-def plan(change_class: str, changed_files: list[str]) -> dict:
+def plan(change_class: str, changed_files: list[str], *, architecture_impact: str = "UNKNOWN",
+         consumers: list[str] | None = None, graph_reviewed: bool = False,
+         security_sensitive: bool = False) -> dict:
     if change_class not in GATES:
         raise ValueError(f"unknown change class: {change_class}")
     errors = []
@@ -67,14 +69,35 @@ def plan(change_class: str, changed_files: list[str]) -> dict:
             if safe_path(name) and not docs_only_path(name):
                 errors.append(f"DOCS class cannot omit behavioral/resource tests for: {name}")
     checks = list(GATES[change_class])
+    consumers = sorted(set(consumers or []))
+    if architecture_impact is not None:
+        if architecture_impact not in {"A0", "A1", "A2", "A3", "A4", "UNKNOWN"}:
+            errors.append("Architecture Impact must use the native A0-A4 field or UNKNOWN")
+        if architecture_impact == "A0" and change_class != "DOCS":
+            errors.append("A0 cannot describe a runtime/contract change")
+        if any(not safe_path(path) for path in consumers):
+            errors.append("consumer paths must be canonical repository paths")
+        if architecture_impact in {"A3", "A4"} or security_sensitive:
+            checks += ["architecture_approval", "consumer_contract_regressions", "migration_rollback_review"]
+        elif architecture_impact == "A2":
+            checks += ["extension_boundary_review", "consumer_contract_regressions"]
+        elif architecture_impact == "A1":
+            checks += ["preserved_interface_regression"]
+        if architecture_impact in {"UNKNOWN", "A4"} or (change_class != "DOCS" and not graph_reviewed):
+            checks += ["full_affected_channel_baseline"]
+        if security_sensitive:
+            checks += ["negative_authorization_and_data_safety_tests", "reviewer_other_than_author"]
     return {
         "schema_version": "1.0",
         "scope": "static_change_planning_only",
         "change_class": change_class,
+        "architecture_impact": architecture_impact,
+        "consumer_paths": consumers,
+        "dependency_graph_reviewed": graph_reviewed,
         "changed_files": sorted(set(changed_files)),
         "status": "BLOCKED" if errors else "PLAN_READY",
         "blockers": errors,
-        "required_checks": checks,
+        "required_checks": list(dict.fromkeys(checks)),
         "early_test_design_required": change_class == "NEW",
         "runtime_case_execution": "NOT_RUN",
         "runtime_pass_claim": False,
@@ -91,9 +114,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--change-class", choices=CHANGE_CLASSES, required=True)
     parser.add_argument("--path", action="append", dest="paths", default=[])
+    parser.add_argument("--architecture-impact", choices=("A0", "A1", "A2", "A3", "A4", "UNKNOWN"), required=True)
+    parser.add_argument("--consumer", action="append", default=[])
+    parser.add_argument("--graph-reviewed", action="store_true")
+    parser.add_argument("--security-sensitive", action="store_true")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    report = plan(args.change_class, args.paths)
+    report = plan(args.change_class, args.paths, architecture_impact=args.architecture_impact,
+                  consumers=args.consumer, graph_reviewed=args.graph_reviewed,
+                  security_sensitive=args.security_sensitive)
     rendered = json.dumps(report, ensure_ascii=False, indent=2) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

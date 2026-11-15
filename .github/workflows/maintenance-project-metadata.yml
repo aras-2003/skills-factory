@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'scripts/governance/sync_project_metadata.py'
+      - 'scripts/governance/delivery_control.py'
       - 'tests/governance/test_project_metadata_sync.py'
       - '.github/workflows/maintenance-project-metadata.yml'
   issues:
@@ -17,7 +18,7 @@ permissions:
   contents: read
   issues: read
 concurrency:
-  group: project-metadata-${{ github.event.issue.number || inputs.issue_number }}
+  group: project-metadata-serialized
   cancel-in-progress: false
 jobs:
   test-mapping:
@@ -46,3 +47,5 @@ jobs:
             exit 1
           fi
           python3 scripts/governance/sync_project_metadata.py
+      - name: Audit native development WIP without changing Project data
+        run: python3 scripts/governance/delivery_control.py

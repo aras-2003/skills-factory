@@ -1,11 +1,11 @@
 # Iteration <id> — <single outcome>
 
-Template only: replace every placeholder before locking. Follow [iteration delivery](../ITERATION-DELIVERY.md).
+Optional grouping template: use only when a separate record adds value; task scope remains in the Issue. Replace placeholders before use. Follow [iteration delivery](../ITERATION-DELIVERY.md).
 
 - State: PLANNED
 - Owner / reviewer (state self-review explicitly):
 - Tracking Issue / native Project iteration:
-- Previous terminal iteration / closure link:
+- Dependencies / accepted evidence links (independent work need not wait):
 - Baseline main SHA:
 - Lock commit SHA (record externally in tracking Issue):
 - Started at / closed at (UTC):

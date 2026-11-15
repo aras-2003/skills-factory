@@ -31,6 +31,48 @@ class ReadinessPolicyTests(unittest.TestCase):
             "exception_expires": "2026-10-14",
         }
 
+    def _registry(self, root, *, high_severity=False):
+        import yaml
+        skill = root / "skills/demo/SKILL.md"
+        skill.parent.mkdir(parents=True)
+        skill.write_text('---\nname: demo\nmetadata:\n  maturity: production\n  version: "1.0.0"\n---\nExample\n')
+        (root / "workflows").mkdir()
+        (root / "workflows/runtime-registry.yaml").write_text("workflows: []\n")
+        rec = {**self._pending(), "name": "demo", "kind": "skill", "version": "1.0.0",
+               "source": "skills/demo/SKILL.md", "known_high_severity_failure": high_severity}
+        (root / "release").mkdir()
+        (root / "release/production-readiness.yaml").write_text(yaml.safe_dump({
+            "review_by": "2026-10-14", "policy": {f: True for f in validate_readiness.REQUIRED_POLICY_FLAGS},
+            "components": [rec]}))
+
+    def test_expired_unrelated_review_does_not_block_integration_but_still_blocks_production(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self._registry(root)
+            today = dt.date(2026, 11, 16)
+            self.assertEqual([], validate_readiness.validate(root, today=today, target="integration"))
+            errors = validate_readiness.validate(root, today=today, target="production")
+            self.assertTrue(any("expired" in e for e in errors))
+            self.assertTrue(any("not production approval" in e for e in errors))
+
+    def test_unexpired_pending_does_not_become_production_pass(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self._registry(root)
+            errors = validate_readiness.validate(root, today=self.today, target="production")
+            self.assertTrue(any("not production approval" in e for e in errors))
+
+    def test_integration_still_rejects_high_severity_and_malformed_dates(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self._registry(root, high_severity=True)
+            self.assertTrue(any("high-severity" in e for e in
+                                validate_readiness.validate(root, today=self.today, target="integration")))
+            path = root / "release/production-readiness.yaml"
+            path.write_text(path.read_text().replace("2026-10-14", "not-a-date"))
+            self.assertTrue(any("invalid ISO date" in e for e in
+                                validate_readiness.validate(root, today=self.today, target="integration")))
+
     def test_machine_policy_requires_all_non_negotiable_release_gates(self) -> None:
         policy = {
             "current_runtime_receipt_required": True,

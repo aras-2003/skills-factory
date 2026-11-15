@@ -29,7 +29,7 @@ A task is executable when an independent engineer can identify the present state
 
 ## Planning metadata — mandatory on open work
 
-Set the native GitHub Projects fields for **Priority**, **Size**, **Area**, **Status**, **Iteration**, and **Architecture Impact**. These are separate from the task narrative: a value in the Issue body is an input to synchronization, not proof that the Project field was updated. Confirm the Project field after synchronization. Leave **Iteration** unassigned until a versioned iteration record locks the scope; a roadmap package or proposed date is not an assignment.
+Set the native GitHub Projects fields for **Priority**, **Size**, **Area**, **Status**, **Iteration**, and **Architecture Impact**. These are separate from the task narrative: a value in the Issue body is an input to synchronization, not proof that the Project field was updated. Confirm the Project field after synchronization. Use **Iteration** as the native planning grouping; a roadmap package or proposed date is not proof of native assignment. A separate global scope-lock file is not a prerequisite for independent work under the adopted SDLC process.
 
 For human readability, use the short code followed by a plain-language explanation when recording metadata in an Issue or XML task definition. The code is the value used for filtering; the explanation tells a reader what it means.
 
@@ -38,8 +38,8 @@ For human readability, use the short code followed by a plain-language explanati
 | Priority | P0, P1, P2, P3 | **P0 Critical:** blocks a critical path or addresses a high-impact risk. **P1 High:** important dependency or outcome to deliver soon. **P2 Planned:** useful work that follows higher-priority dependencies. **P3 Optional:** exploratory or lower-priority work. Priority expresses importance, not observed severity. |
 | Size | XS, S, M, L, XL | **XS Extra small:** a tiny, isolated change. **S Small:** one focused change with narrow tests. **M Medium:** one bounded deliverable across a few related files. **L Large:** several components or a substantial migration. **XL Extra large:** multiple workstreams or an umbrella; split into bounded S/M delivery slices before locking an iteration. Size is effort, not priority. |
 | Area | Engineering, Runtime, E2E & Quality, Security, Commerce, Investing, OAF, Learning, Strategy, Other | The primary team or product area. Use **Other** for cross-domain work that has no clearer single owner. |
-| Status | Backlog, Discovery, Ready, In progress, In review, Verification, Done | **Backlog:** not started. **Discovery:** evidence or scope is still being clarified. **Ready:** acceptance, dependencies, owner and tests are clear and the work is in a locked active iteration. **In progress:** implementation is underway. **In review:** a change is awaiting review. **Verification:** required checks are still running or evidence is pending. **Done:** all required acceptance evidence passes. |
-| Iteration | Exact native Project iteration, or unassigned | Assign only when the matching versioned iteration record is committed and the Project value is read back. A planned iteration in a roadmap is not a native assignment. |
+| Status | Backlog, Discovery, Ready, In progress, In review, Verification, Done | **Backlog:** not started. **Discovery:** evidence or scope is still being clarified. **Ready:** acceptance, dependencies, owner and tests are clear and actual dependencies/WIP permit the bounded package to start. **In progress:** implementation is underway. **In review:** a change is awaiting review. **Verification:** required checks are still running or evidence is pending. **Done:** all required acceptance evidence passes. |
+| Iteration | Exact native Project iteration, or unassigned | Assign the explicit agreed planning grouping and read back the Project value; do not infer it from a date. A planned iteration in a roadmap is not a native assignment. |
 
 For **Architecture Impact**, set the native Project field to A0–A4. Keep its rationale in **Opis zmiany**. Use the lowest level that describes the actual planned effects: A0 no runtime or contract change; A1 internal change with external interfaces preserved; A2 compatible architecture or capability extension; A3 interface, ownership, dependency or cross-component flow change; A4 canonical domain boundary or runtime architecture redesign. The Project field is the canonical classification; the Issue body and XML carry the explanation, not a competing value.
 
@@ -145,3 +145,5 @@ gh workflow run maintenance-architecture-impact.yml -R aras-2003/skills-factory 
 ```
 
 The per-Issue authored descriptions in GitHub are updated separately from the native Project field; neither operation implies architecture review approval.
+
+For delivery use the adopted [SDLC process](SDLC-OPERATING-PROCESS.md). This contract does not reintroduce a global single-active-iteration restriction or require redundant Issue/Project metadata.
