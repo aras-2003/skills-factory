@@ -4,6 +4,7 @@ import argparse
 import re
 import sys
 import xml.etree.ElementTree as ET
+from xml.parsers import expat
 from pathlib import Path
 
 from common import repo_root_from, split_frontmatter
@@ -49,23 +50,30 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
         _fail(path, 1, f"root element must be <{ROOT}>")
     if root.attrib != {"version": "1.0"}:
         _fail(path, 1, '<skill_instructions> requires only version="1.0"')
+    source_lines: list[int] = []
+    line_parser = expat.ParserCreate()
+    line_parser.StartElementHandler = lambda _name, _attrs: source_lines.append(line_parser.CurrentLineNumber)
+    line_parser.Parse(body, True)
+    line_by_element = {
+        id(element): line
+        for element, line in zip(root.iter(), source_lines, strict=True)
+    }
+
     def line_of(el: ET.Element) -> int:
-        # ElementTree does not retain source positions; locate the element's
-        # opening tag in source order so semantic errors point to useful lines.
-        token = f"<{el.tag}"
-        match = re.search(re.escape(token) + r"(?:\s|/|>)", body)
-        return body[: match.start()].count("\n") + 1 if match else 1
+        return line_by_element.get(id(el), 1)
 
     if root.text and root.text.strip():
         _fail(path, 1, f"<{ROOT}> must contain only its defined child sections")
     if len(root) > 32:
         _fail(path, 1, "too many top-level sections (maximum 32)")
     tags = [child.tag for child in root]
-    for tag in tags:
-        if tag not in ALLOWED:
-            _fail(path, 1, f"unknown top-level section <{tag}>")
-        if tags.count(tag) > 1:
-            _fail(path, 1, f"duplicate top-level section <{tag}>")
+    seen: set[str] = set()
+    for child in root:
+        if child.tag not in ALLOWED:
+            _fail(path, line_of(child), f"unknown top-level section <{child.tag}>")
+        if child.tag in seen:
+            _fail(path, line_of(child), f"duplicate top-level section <{child.tag}>")
+        seen.add(child.tag)
     for tag in REQUIRED:
         if tags.count(tag) != 1:
             _fail(path, 1, f"required section <{tag}> must appear exactly once")
@@ -98,70 +106,70 @@ def validate_xml_body(body: str, path: str = "<body>") -> None:
             substantive(section)
         elif section.tag in {"guidelines", "quality_checks"}:
             item_tag = "guideline" if section.tag == "guidelines" else "check"
-            if not section or any(item.tag != item_tag or item.attrib for item in section):
+            if len(section) == 0 or any(item.tag != item_tag or item.attrib for item in section):
                 _fail(path, section_line, f"<{section.tag}> must contain one or more plain <{item_tag}> elements")
             for item in section:
                 substantive(item)
         elif section.tag == "steps":
-            if not section or any(item.tag != "step" or set(item.attrib) != {"id"} for item in section):
+            if len(section) == 0 or any(item.tag != "step" or set(item.attrib) != {"id"} for item in section):
                 _fail(path, section_line, "<steps> must contain one or more <step id=\"S1\"> elements")
             ids = [item.get("id", "") for item in section]
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"S[1-9][0-9]*", value) for value in ids):
-                _fail(path, 1, "step IDs must be unique and use S1, S2, …")
+                _fail(path, section_line, "step IDs must be unique and use S1, S2, …")
             for item in section:
                 substantive(item, allowed_attributes={"id"})
         elif section.tag == "decision_rules":
-            if not section or any(item.tag != "rule" or set(item.attrib) != {"id"} for item in section):
-                _fail(path, 1, "<decision_rules> must contain one or more <rule id=\"D1\"> elements")
+            if len(section) == 0 or any(item.tag != "rule" or set(item.attrib) != {"id"} for item in section):
+                _fail(path, section_line, "<decision_rules> must contain one or more <rule id=\"D1\"> elements")
             ids = [item.get("id", "") for item in section]
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"D[1-9][0-9]*", value) for value in ids):
-                _fail(path, 1, "rule IDs must be unique and use D1, D2, …")
+                _fail(path, section_line, "rule IDs must be unique and use D1, D2, …")
             for rule in section:
                 if rule.text and rule.text.strip():
                     _fail(path, line_of(rule), "<rule> must contain only its defined child elements")
                 children = [child.tag for child in rule]
                 if children not in (["when", "action"], ["when", "action", "otherwise"]):
-                    _fail(path, 1, "each <rule> needs <when>, <action>, and optional <otherwise>, in that order")
+                    _fail(path, line_of(rule), "each <rule> needs <when>, <action>, and optional <otherwise>, in that order")
                 for child in rule:
                     substantive(child)
         elif section.tag == "input_context":
-            if not section or any(item.tag != "field" for item in section):
-                _fail(path, 1, "<input_context> must contain one or more <field> elements")
+            if len(section) == 0 or any(item.tag != "field" for item in section):
+                _fail(path, section_line, "<input_context> must contain one or more <field> elements")
             names: set[str] = set()
             for field in section:
                 if set(field.attrib) != {"name", "type", "required", "trust"}:
-                    _fail(path, 1, "each <field> needs name, type, required, and trust attributes")
+                    _fail(path, line_of(field), "each <field> needs name, type, required, and trust attributes")
                 name = field.get("name", "")
                 if not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name in names:
-                    _fail(path, 1, "field names must be unique snake_case identifiers")
+                    _fail(path, line_of(field), "field names must be unique snake_case identifiers")
                 names.add(name)
                 if field.get("type") not in {"text", "string", "integer", "number", "boolean", "date", "url", "json"}:
-                    _fail(path, 1, f"field {name!r} has an unsupported type")
+                    _fail(path, line_of(field), f"field {name!r} has an unsupported type")
                 if field.get("required") not in {"true", "false"} or field.get("trust") not in {"trusted", "untrusted"}:
-                    _fail(path, 1, f"field {name!r} requires required=true|false and trust=trusted|untrusted")
+                    _fail(path, line_of(field), f"field {name!r} requires required=true|false and trust=trusted|untrusted")
                 substantive(field, allowed_attributes={"name", "type", "required", "trust"})
         elif section.tag == "examples":
-            if not section or any(item.tag != "example" or set(item.attrib) != {"id"} for item in section):
-                _fail(path, 1, "<examples> must contain one or more <example id=\"E1\"> elements")
+            if len(section) == 0 or any(item.tag != "example" or set(item.attrib) != {"id"} for item in section):
+                _fail(path, section_line, "<examples> must contain one or more <example id=\"E1\"> elements")
             ids = [item.get("id", "") for item in section]
             if len(set(ids)) != len(ids) or any(not re.fullmatch(r"E[1-9][0-9]*", value) for value in ids):
-                _fail(path, 1, "example IDs must be unique and use E1, E2, …")
+                _fail(path, section_line, "example IDs must be unique and use E1, E2, …")
             for example in section:
                 if example.text and example.text.strip():
                     _fail(path, line_of(example), "<example> must contain only its defined child elements")
                 children = list(example)
                 if [child.tag for child in children] != ["input", "expected_behavior", "expected_output"]:
-                    _fail(path, 1, "each <example> needs input, expected_behavior, expected_output in order")
+                    _fail(path, line_of(example), "each <example> needs input, expected_behavior, expected_output in order")
                 if set(children[0].attrib) != {"trust"} or children[0].get("trust") not in {"trusted", "untrusted"}:
-                    _fail(path, 1, "<input> requires trust=trusted or trust=untrusted")
+                    _fail(path, line_of(children[0]), "<input> requires trust=trusted or trust=untrusted")
                 for child in children:
                     substantive(child, allowed_attributes={"trust"} if child.tag == "input" else set())
         elif section.tag == "references":
-            if not section or any(item.tag != "reference" or set(item.attrib) != {"href"} for item in section):
-                _fail(path, 1, "<references> must contain one or more <reference href=\"…\"> elements")
+            if len(section) == 0 or any(item.tag != "reference" or set(item.attrib) != {"href"} for item in section):
+                _fail(path, section_line, "<references> must contain one or more <reference href=\"…\"> elements")
             for item in section:
                 if not item.get("href", "").strip():
-                    _fail(path, 1, "reference href must not be empty")
+                    _fail(path, line_of(item), "reference href must not be empty")
                 substantive(item, allowed_attributes={"href"})
 
 

@@ -97,7 +97,7 @@ source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/310-SEC.rubric.yaml: "08a121ebb1b669b2a6b3ddb22e04066ee98c3d69decdd37b8d6566ce43e527d1"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
-  release/production-readiness.yaml: "cc6312e2a9a37e309bbc74f634e225dda55a97eda9f2c53ed83d6c0434db1af3"
+  release/production-readiness.yaml: "0e3cbaec1eac529f65120aef6caf0f5c9570e9d0fc7f98b6d24f26b703896a6c"
   scripts/eval/campaign.py: "0bd1765f786b0d789d4c6040f29a84dd15df6ca6cdd0030b147d1d1ce177a4b4"
   scripts/eval/tests/test_runtime_campaign.py: "dd5a7d1493eaf041281daaef437bf19dd26975bc8485e7e5b1fbd15028e05c4a"
   skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"
@@ -108,3 +108,4 @@ source_sha256:
   skills/investing/valuation-scenario-review/tests/cases.yaml: "730b72d27f71209edcca1e8885eeb5ac50a6a8e06ea8a3f9a946693ace480d1c"
   workflows/investment-os-review/WORKFLOW.md: "1fcda42480b060baba283cb0509be76f302b3329398e3e2431f3584e1c242a2b"
   workflows/investment-os-review/tests/cases.yaml: "21ec30813444f85b9813cb77406087fc8dae40a470be6c9c823d3ce647f0818c"
+# PR #707 owner-directed readiness metadata refresh (2026-11-15): hash updated for the reviewed governance file only; candidate/runtime pins and evidence remain unchanged.
