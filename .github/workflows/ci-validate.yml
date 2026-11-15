@@ -15,6 +15,7 @@ concurrency:
 
 env:
   SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+  BASE_REVISION: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
 
 jobs:
   preflight:
@@ -96,7 +97,7 @@ jobs:
           python -m unittest discover -s tests/governance -p 'test_*.py'
           python -m unittest discover -s scripts/roadmap/tests -p 'test_*.py'
           python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
-          python scripts/engineering/change_gate.py --change-class DOCS --architecture-impact A0 --path docs/TESTING.md --output .tmp/docs-change-gate.json
+          python scripts/engineering/change_gate.py --change-class RESOURCE --architecture-impact UNKNOWN --base-revision "$BASE_REVISION" --source-revision "$SOURCE_REVISION" --output .tmp/sdlc/change-plan.json
           python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
           python scripts/engineering/audit_workflow_lifecycle.py --output .tmp/workflow-lifecycle-audit.json
       - name: Generate public-safe evidence index and candidate manifest

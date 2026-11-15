@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import unittest
+import yaml
 
 SPEC = importlib.util.spec_from_file_location("delivery_control", Path(__file__).resolve().parents[2] / "scripts/governance/delivery_control.py")
 control = importlib.util.module_from_spec(SPEC)
@@ -8,6 +9,12 @@ SPEC.loader.exec_module(control)
 
 
 class DeliveryTests(unittest.TestCase):
+    def test_serialized_metadata_events_keep_pending_issues_in_queue(self):
+        path = Path(__file__).resolve().parents[2] / ".github/workflows/maintenance-project-metadata.yml"
+        concurrency = yaml.safe_load(path.read_text())["concurrency"]
+        self.assertEqual("max", concurrency["queue"])
+        self.assertIs(False, concurrency["cancel-in-progress"])
+
     def test_two_independent_packages_are_allowed_without_iteration_lock(self):
         items = [{"id": "a", "status": "In progress"}, {"id": "b", "status": "Ready"}]
         self.assertEqual("PASS", control.check_wip(items, starting_item="b")["status"])

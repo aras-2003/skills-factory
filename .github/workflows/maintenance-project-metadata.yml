@@ -20,6 +20,7 @@ permissions:
 concurrency:
   group: project-metadata-serialized
   cancel-in-progress: false
+  queue: max
 jobs:
   test-mapping:
     name: Governance / Validate issue-to-project mapping

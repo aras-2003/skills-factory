@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 from pathlib import PurePosixPath, Path
 
 CHANGE_CLASSES = ("NEW", "ROUTING", "BEHAVIOR", "RESOURCE", "DOCS")
@@ -118,8 +119,18 @@ def main() -> int:
     parser.add_argument("--consumer", action="append", default=[])
     parser.add_argument("--graph-reviewed", action="store_true")
     parser.add_argument("--security-sensitive", action="store_true")
+    parser.add_argument("--base-revision", help="Compute actual changed paths instead of a caller-supplied list")
+    parser.add_argument("--source-revision", default="HEAD")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
+    if args.base_revision:
+        if args.paths:
+            parser.error("Use either actual Git diff or explicit --path inputs")
+        if args.base_revision == args.source_revision:
+            command = ["git", "ls-files", "-z"]  # Manual dispatch: conservative full-source plan.
+        else:
+            command = ["git", "diff", "--name-only", "-z", args.base_revision, args.source_revision, "--"]
+        args.paths = [p for p in subprocess.check_output(command).decode().split("\0") if p]
     report = plan(args.change_class, args.paths, architecture_impact=args.architecture_impact,
                   consumers=args.consumer, graph_reviewed=args.graph_reviewed,
                   security_sensitive=args.security_sensitive)

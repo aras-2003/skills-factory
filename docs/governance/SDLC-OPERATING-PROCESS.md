@@ -65,6 +65,9 @@ The Project field remains canonical; CLI inputs are projections, not proof of a
 Project update. Unknown impact expands rather than silently shrinking regression.
 During this pilot existing offline CI suites remain required; runtime selection is
 impact-scoped. Broader offline skipping needs a separately validated dependency map.
+CI records actual Git-diff paths and conservatively uses UNKNOWN until a reviewed
+native Project assessment is supplied through a trusted channel; it does not guess
+an A-level from filenames or silently skip tests based on untrusted PR prose.
 
 ## D1/D6: integration and release gates
 
