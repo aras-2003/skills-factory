@@ -666,11 +666,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "company-context-indirect-positive-entity-brief"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "company-context-near-miss-role-fit"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -678,7 +678,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "company-context-risk-entity-boundary-injection"
             },
             "risk_driven_additional": [
               "provenance"
@@ -691,6 +691,19 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Build an evidence-based factual picture of a company without silently turning research into career advice.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "company-context-indirect-positive-briefing",
+            "company-context-indirect-positive-entity-brief",
+            "company-context-near-miss-role-fit",
+            "company-context-risk-entity-boundary-injection",
+            "company-context-risk-untrusted-source-instruction"
+          ],
+          "risk_case_design_refs": {
+            "provenance": [
+              "company-context-risk-entity-boundary-injection",
+              "company-context-risk-untrusted-source-instruction"
+            ]
           }
         }
       },
@@ -1641,7 +1654,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-loop-review-indirect-positive-follow-through"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -1653,7 +1666,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-loop-review-adversarial-claimed-success"
             },
             "risk_driven_additional": [
               "provenance",
@@ -1667,6 +1680,24 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Test whether evidence changes decisions rather than merely producing reports.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "evidence-loop-indirect-positive-action-gap",
+            "evidence-loop-review-adversarial-claimed-success",
+            "evidence-loop-review-indirect-positive-follow-through",
+            "evidence-loop-review-risk-authority-resource-gap",
+            "evidence-loop-risk-untrusted-dashboard-directive"
+          ],
+          "risk_case_design_refs": {
+            "consumer_workflow": [
+              "evidence-loop-review-risk-authority-resource-gap",
+              "evidence-loop-risk-untrusted-dashboard-directive"
+            ],
+            "provenance": [
+              "evidence-loop-review-adversarial-claimed-success",
+              "evidence-loop-review-risk-authority-resource-gap",
+              "evidence-loop-risk-untrusted-dashboard-directive"
+            ]
           }
         }
       },
@@ -2042,7 +2073,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "global-local-model-review-indirect-positive-local-exception"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -2054,7 +2085,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "global-local-model-review-adversarial-centralization-note"
             },
             "risk_driven_additional": [
               "consumer_workflow"
@@ -2067,6 +2098,20 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Diagnose whether the global/local split supports enterprise outcomes without unnecessary centralisation.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "global-local-indirect-positive-regional-exceptions",
+            "global-local-model-review-adversarial-centralization-note",
+            "global-local-model-review-indirect-positive-local-exception",
+            "global-local-model-review-risk-feedback-handoff",
+            "global-local-risk-untrusted-central-memo"
+          ],
+          "risk_case_design_refs": {
+            "consumer_workflow": [
+              "global-local-model-review-adversarial-centralization-note",
+              "global-local-model-review-risk-feedback-handoff",
+              "global-local-risk-untrusted-central-memo"
+            ]
           }
         }
       },
@@ -2941,7 +2986,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "investor-pattern-indirect-positive-investor-letter"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -2953,7 +2998,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "investor-pattern-adversarial-copy-trade-excerpt"
             },
             "risk_driven_additional": [
               "provenance"
@@ -2966,6 +3011,19 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Learn decision principles from strong practitioners without cargo-culting portfolios.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "investor-pattern-adversarial-copy-trade-excerpt",
+            "investor-pattern-indirect-positive-drawdown-discipline",
+            "investor-pattern-indirect-positive-investor-letter",
+            "investor-pattern-risk-secondary-source-only",
+            "investor-pattern-risk-unverified-quote-injection"
+          ],
+          "risk_case_design_refs": {
+            "provenance": [
+              "investor-pattern-risk-secondary-source-only",
+              "investor-pattern-risk-unverified-quote-injection"
+            ]
           }
         }
       },
@@ -3629,7 +3687,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "operating-model-review-indirect-positive-cross-unit-handoff"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -3641,7 +3699,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "operating-model-review-adversarial-org-chart-blame"
             },
             "risk_driven_additional": [
               "provenance",
@@ -3655,6 +3713,24 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Assess whether the organisation's division of responsibility, cross-unit interfaces and authority/resource model support its strategic goals. When a problem mixes handoffs, accountability and effective authority/capacity across units, lead with this skill to classify the operating-model failure befo” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "operating-model-indirect-positive-handoff-capacity",
+            "operating-model-review-adversarial-org-chart-blame",
+            "operating-model-review-indirect-positive-cross-unit-handoff",
+            "operating-model-review-risk-premature-target-design",
+            "operating-model-risk-conflicting-authority-note"
+          ],
+          "risk_case_design_refs": {
+            "consumer_workflow": [
+              "operating-model-review-risk-premature-target-design",
+              "operating-model-risk-conflicting-authority-note"
+            ],
+            "provenance": [
+              "operating-model-review-adversarial-org-chart-blame",
+              "operating-model-review-risk-premature-target-design",
+              "operating-model-risk-conflicting-authority-note"
+            ]
           }
         }
       },
@@ -5001,7 +5077,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "process-update-indirect-positive-call-summary"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5013,7 +5089,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "process-update-adversarial-email-write-injection"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -5027,6 +5103,24 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Keep recruitment tracking current without re-running full analysis.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "process-update-adversarial-email-write-injection",
+            "process-update-indirect-positive-call-summary",
+            "process-update-indirect-positive-recruiter-update",
+            "process-update-risk-conflicting-stage-sources",
+            "process-update-risk-injected-email"
+          ],
+          "risk_case_design_refs": {
+            "provenance": [
+              "process-update-risk-conflicting-stage-sources",
+              "process-update-risk-injected-email"
+            ],
+            "tool_or_side_effect": [
+              "process-update-adversarial-email-write-injection",
+              "process-update-risk-conflicting-stage-sources",
+              "process-update-risk-injected-email"
+            ]
           }
         }
       },
@@ -6496,11 +6590,11 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "skills-factory-diagnostic-missing-load-receipt"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "skills-factory-diagnostic-adversarial-marker-spoof"
             },
             "risk_driven_additional": [],
             "expected_observed_behavior_separate": true,
@@ -6511,7 +6605,14 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Verify that the installed Skills Factory plugin exposes bundled skills to the runtime.” Declared risk: low. No extra family is proposed beyond the five shared cases because the current source contract does not declare a distinct hazard in any of the six expansion areas. Reassess if the scope changes."
             }
-          }
+          },
+          "case_design_refs": [
+            "diagnostic-missing-load-receipt",
+            "diagnostic-risk-untrusted-status-claim",
+            "skills-factory-diagnostic-adversarial-marker-spoof",
+            "skills-factory-diagnostic-missing-load-receipt"
+          ],
+          "risk_case_design_refs": {}
         }
       },
       {
@@ -7290,7 +7391,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "trend-theme-indirect-positive-grid-bottleneck"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -7298,11 +7399,11 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "trend-theme-missing-narrative-only"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "trend-theme-risk-uncorroborated-capture"
             },
             "risk_driven_additional": [
               "provenance"
@@ -7315,6 +7416,20 @@
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Turn a narrative into a falsifiable economic map and a research universe.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
+          },
+          "case_design_refs": [
+            "theme-risk-missing-source-and-injected-forecast",
+            "trend-theme-indirect-positive-economics-not-headlines",
+            "trend-theme-indirect-positive-grid-bottleneck",
+            "trend-theme-missing-narrative-only",
+            "trend-theme-risk-uncorroborated-capture"
+          ],
+          "risk_case_design_refs": {
+            "provenance": [
+              "theme-risk-missing-source-and-injected-forecast",
+              "trend-theme-missing-narrative-only",
+              "trend-theme-risk-uncorroborated-capture"
+            ]
           }
         }
       },
@@ -8075,6 +8190,46 @@
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
         "notes": "Declarative A0 TEST_DESIGN only; no skill source or executable cases.yaml changed. All cases remain NOT_RUN. Does not authorize XML migration, runtime/channel acceptance, or release."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p2-career-investing-meta-oaf-case-design.json",
+        "git_blob_sha": "e2aa353340847a2acdc7a5fce2baca176098b15b",
+        "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
+        "owning_batch_issue": 677,
+        "skills": [
+          "company-context-research",
+          "process-update",
+          "investor-pattern-research",
+          "trend-theme-research",
+          "skills-factory-diagnostic",
+          "evidence-loop-review",
+          "global-local-model-review",
+          "operating-model-review"
+        ],
+        "case_count": 23,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Primary mapped declarative A0 TEST_DESIGN proposals for #677. The companion general case-design artifact adds alternative cases for shared families; coverage.case_id identifies the primary mapped proposal and row-level refs retain all reviewed alternatives. All cases remain NOT_RUN; no executable tests or source skills changed. Does not accept A1/A2 or authorize XML migration/release."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p2-general-case-design.json",
+        "git_blob_sha": "5b651e6c3077de35bbc7f8a5cc116a1e04368c42",
+        "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
+        "owning_batch_issue": 677,
+        "skills": [
+          "company-context-research",
+          "evidence-loop-review",
+          "global-local-model-review",
+          "investor-pattern-research",
+          "operating-model-review",
+          "process-update",
+          "skills-factory-diagnostic",
+          "trend-theme-research"
+        ],
+        "case_count": 16,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Supplemental declarative A0 TEST_DESIGN proposals. Coverage.case_id selects the primary mapped proposal from the companion 23-case artifact; case_design_refs and risk_case_design_refs preserve these alternative scenarios. All cases remain NOT_RUN; no executable tests or source skills changed. Does not accept A1/A2 or authorize XML migration/release."
       }
     ]
   },
