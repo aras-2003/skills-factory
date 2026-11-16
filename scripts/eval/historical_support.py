@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 from pathlib import Path
+import re
 import subprocess
 
 ANCHOR = "ebb9a8d00780cc7116bf94a21a6f0c18ee8264e0"
@@ -17,13 +18,13 @@ SUPPORT_PATHS = frozenset({
 })
 
 
-def matches_support_pin(root: Path, path: str, expected: str) -> bool:
-    """Fail closed if the archived object is absent or the supplied pin is wrong."""
-    if path not in SUPPORT_PATHS:
+def matches_support_pin(root: Path, path: str, expected: str, revision: str = ANCHOR) -> bool:
+    """Verify an archived support pin against the immutable commit that recorded it."""
+    if path not in SUPPORT_PATHS or not re.fullmatch(r"[0-9a-f]{40}", revision):
         return False
     try:
         result = subprocess.run(
-            ["git", "-C", str(root), "show", f"{ANCHOR}:{path}"],
+            ["git", "-C", str(root), "show", f"{revision}:{path}"],
             capture_output=True, check=False, timeout=15,
         )
     except (OSError, subprocess.TimeoutExpired):
