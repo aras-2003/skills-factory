@@ -7983,7 +7983,7 @@
       },
       {
         "path": "evals/campaigns/xml-2026-11/a1-p1-external-creative-case-design.json",
-        "git_blob_sha": "312d996a85053c0e93754e5c88c107d543245297",
+        "git_blob_sha": "f772087667c2b965be4fd6cb6fed66cfb993f033",
         "source_revision": "4cd53e12ece73ec68831a19f4360c04a0c318233",
         "owning_batch_issue": 675,
         "skills": [
