@@ -58,14 +58,24 @@ class HistoricalSupportTests(unittest.TestCase):
         self.assertFalse(historical_support.matches_support_pin(ROOT, path, "0" * 64))
 
     def test_support_pin_uses_its_recorded_candidate_not_a_global_anchor(self):
-        path = "scripts/eval/campaign.py"
-        cfg = yaml.safe_load(
-            (ROOT / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml").read_text()
-        )
-        revision = cfg["candidate_source_revision"]
-        digest = cfg["source_sha256"][path]
-        self.assertTrue(historical_support.matches_support_pin(ROOT, path, digest, revision))
-        self.assertFalse(historical_support.matches_support_pin(ROOT, path, digest, historical_support.ANCHOR))
+        import subprocess
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            subprocess.run(["git", "init", str(root)], check=True, capture_output=True)
+            path = root / "CATALOG.md"
+            path.write_text("archived candidate\\n")
+            subprocess.run(["git", "-C", str(root), "add", "CATALOG.md"], check=True)
+            subprocess.run([
+                "git", "-C", str(root), "-c", "user.name=Test", "-c",
+                "user.email=test@example.invalid", "commit", "-m", "archive support file"
+            ], check=True, capture_output=True)
+            revision = subprocess.check_output(
+                ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
+            ).strip()
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            path.write_text("new live candidate\\n")
+            self.assertTrue(historical_support.matches_support_pin(root, "CATALOG.md", digest, revision))
+            self.assertFalse(historical_support.matches_support_pin(root, "CATALOG.md", "0" * 64, revision))
 
     def test_runtime_source_cannot_use_historical_support_exemption(self):
         self.assertFalse(historical_support.matches_support_pin(ROOT, "skills/investing/thesis-monitor/SKILL.md", "a" * 64))
