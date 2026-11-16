@@ -67,6 +67,32 @@ class ChangeGateTests(unittest.TestCase):
             with self.subTest(path=value):
                 self.assertEqual("BLOCKED", module.plan("DOCS", [value])["status"])
 
+    def test_test_design_is_scoped_to_versioned_campaigns_and_not_runtime(self):
+        report = module.plan("TEST_DESIGN", [
+            "evals/campaigns/es08-integrated-validation-2026-11/acceptance-matrix.md"
+        ], architecture_impact="A0")
+        self.assertEqual("PLAN_READY", report["status"])
+        self.assertEqual([
+            "case_ids_and_expected_results_review",
+            "coverage_and_channel_mapping_review",
+            "evidence_identity_and_state_review",
+        ], report["required_checks"])
+        self.assertEqual("NOT_RUN", report["runtime_case_execution"])
+        self.assertFalse(report["runtime_pass_claim"])
+        self.assertFalse(report["release_authorized"])
+        self.assertNotIn("full_affected_channel_baseline", report["required_checks"])
+
+    def test_test_design_cannot_hide_product_changes_or_executable_test_files(self):
+        for path in (
+            "skills/meta/skill-test-design/SKILL.md",
+            "evals/campaigns/new-campaign/runner.py",
+            "docs/governance/SDLC-OPERATING-PROCESS.md",
+        ):
+            with self.subTest(path=path):
+                report = module.plan("TEST_DESIGN", [path], architecture_impact="A0")
+                self.assertEqual("BLOCKED", report["status"])
+                self.assertTrue(report["blockers"])
+
     def test_routing_requires_positive_near_miss_and_competitor(self):
         report = module.plan("ROUTING", ["skills/career/job-discovery/SKILL.md"])
         self.assertEqual("PLAN_READY", report["status"])

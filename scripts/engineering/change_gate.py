@@ -7,8 +7,9 @@ import json
 import subprocess
 from pathlib import PurePosixPath, Path
 
-CHANGE_CLASSES = ("NEW", "ROUTING", "BEHAVIOR", "RESOURCE", "DOCS")
+CHANGE_CLASSES = ("NEW", "ROUTING", "BEHAVIOR", "RESOURCE", "TEST_DESIGN", "DOCS")
 DOCS_ONLY_ALLOWLIST = {"README.md", "CHANGELOG.md", "docs/roadmap/README.md"}
+TEST_DESIGN_ROOT = "evals/campaigns/"
 GATES = {
     "NEW": (
         "specification_and_reuse_check",
@@ -37,6 +38,11 @@ GATES = {
         "side_effect_and_security_review",
         "release_readiness",
     ),
+    "TEST_DESIGN": (
+        "case_ids_and_expected_results_review",
+        "coverage_and_channel_mapping_review",
+        "evidence_identity_and_state_review",
+    ),
     "DOCS": ("documentation_diff_review", "static_document_validation"),
 }
 
@@ -51,6 +57,11 @@ def safe_path(value: str) -> bool:
 def docs_only_path(path: str) -> bool:
     """Allow only explicitly reviewed editorial paths; other docs can define contracts."""
     return path in DOCS_ONLY_ALLOWLIST
+
+
+def test_design_path(path: str) -> bool:
+    """Keep standalone campaign designs separate from product and executable tests."""
+    return path.startswith(TEST_DESIGN_ROOT) and path.endswith((".md", ".yaml", ".yml", ".json"))
 
 
 def plan(change_class: str, changed_files: list[str], *, architecture_impact: str = "UNKNOWN",
@@ -70,12 +81,16 @@ def plan(change_class: str, changed_files: list[str], *, architecture_impact: st
         for name in changed_files:
             if safe_path(name) and not docs_only_path(name):
                 errors.append(f"DOCS class cannot omit behavioral/resource tests for: {name}")
+    if change_class == "TEST_DESIGN":
+        for name in changed_files:
+            if safe_path(name) and not test_design_path(name):
+                errors.append(f"TEST_DESIGN class is limited to versioned eval campaign definitions: {name}")
     checks = list(GATES[change_class])
     consumers = sorted(set(consumers or []))
     if architecture_impact is not None:
         if architecture_impact not in {"A0", "A1", "A2", "A3", "A4", "UNKNOWN"}:
             errors.append("Architecture Impact must use the native A0-A4 field or UNKNOWN")
-        if architecture_impact == "A0" and change_class != "DOCS":
+        if architecture_impact == "A0" and change_class not in {"DOCS", "TEST_DESIGN"}:
             errors.append("A0 cannot describe a runtime/contract change")
         if any(not safe_path(path) for path in consumers):
             errors.append("consumer paths must be canonical repository paths")
@@ -85,7 +100,7 @@ def plan(change_class: str, changed_files: list[str], *, architecture_impact: st
             checks += ["extension_boundary_review", "consumer_contract_regressions"]
         elif architecture_impact == "A1":
             checks += ["preserved_interface_regression"]
-        if architecture_impact in {"UNKNOWN", "A4"} or (change_class != "DOCS" and not graph_reviewed):
+        if architecture_impact in {"UNKNOWN", "A4"} or (change_class not in {"DOCS", "TEST_DESIGN"} and not graph_reviewed):
             checks += ["full_affected_channel_baseline"]
         if security_sensitive:
             checks += ["negative_authorization_and_data_safety_tests", "reviewer_other_than_author"]
