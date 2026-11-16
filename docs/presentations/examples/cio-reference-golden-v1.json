@@ -1,0 +1,237 @@
+{
+  "schema_version": "1.0",
+  "deck_id": "cio-transform-2026-illustrative",
+  "communicated_thesis": "Federated operating-model pilot is provisional pending evidence.",
+  "slides": [
+    {
+      "slide_id": "S01",
+      "role": "decision",
+      "action_title": "Authorize bounded federation pilot, not full-scale redesign",
+      "claims": [
+        {
+          "claim_id": "CLM-01",
+          "statement": "Authorize bounded federation pilot, not full-scale redesign",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S02",
+      "role": "options",
+      "action_title": "Three operating-model choices have different constraints",
+      "claims": [
+        {
+          "claim_id": "CLM-02",
+          "statement": "Three operating-model choices have different constraints",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S03",
+      "role": "capability",
+      "action_title": "Prioritize capability mapping before application retirement",
+      "claims": [
+        {
+          "claim_id": "CLM-03",
+          "statement": "Prioritize capability mapping before application retirement",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S04",
+      "role": "architecture",
+      "action_title": "Separate shared platform core from local adapters (hypothesis)",
+      "claims": [
+        {
+          "claim_id": "CLM-04",
+          "statement": "Separate shared platform core from local adapters (hypothesis)",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S05",
+      "role": "governance",
+      "action_title": "Decision rights require evidence and approved owner assignment",
+      "claims": [
+        {
+          "claim_id": "CLM-05",
+          "statement": "Decision rights require evidence and approved owner assignment",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S06",
+      "role": "roadmap",
+      "action_title": "Sequence discovery, pilot, scaling and retirement by gates",
+      "claims": [
+        {
+          "claim_id": "CLM-06",
+          "statement": "Sequence discovery, pilot, scaling and retirement by gates",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S07",
+      "role": "kpi",
+      "action_title": "Cost and lead-time values are targets, not achieved results",
+      "claims": [
+        {
+          "claim_id": "CLM-07",
+          "statement": "90-day average deployment baseline; 30-day management target.",
+          "epistemic_status": "USER_PROVIDED"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S08",
+      "role": "risks",
+      "action_title": "Transition risks must have stop conditions",
+      "claims": [
+        {
+          "claim_id": "CLM-08",
+          "statement": "Transition risks must have stop conditions",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S09",
+      "role": "value",
+      "action_title": "Value case remains unverified without financial baseline",
+      "claims": [
+        {
+          "claim_id": "CLM-09",
+          "statement": "Value case remains unverified without financial baseline",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    },
+    {
+      "slide_id": "S10",
+      "role": "handoff",
+      "action_title": "Trace objectives through processes, applications and KPIs",
+      "claims": [
+        {
+          "claim_id": "CLM-10",
+          "statement": "Trace objectives through processes, applications and KPIs",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED"
+    }
+  ]
+}

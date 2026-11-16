@@ -1,0 +1,32 @@
+name: Presentation Reference Lineage
+
+on:
+  pull_request:
+    paths:
+      - "docs/presentations/consulting-reference-patterns-v1.json"
+      - "docs/presentations/examples/cio-reference-golden-v1.json"
+      - "scripts/presentations/reference_style_bridge.py"
+      - "tests/presentations/test_reference_style_bridge.py"
+      - ".github/workflows/test-presentation-reference-lineage.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reference-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Run semantic reference lineage tests
+        run: python -m unittest discover -s tests/presentations -p 'test_reference_style_bridge.py' -v
+      - name: Produce CIO reference-to-slide plan
+        run: |
+          python scripts/presentations/reference_style_bridge.py \
+            docs/presentations/examples/cio-reference-golden-v1.json \
+            --out /tmp/cio-reference-plan.json
+          python -c "import json; x=json.load(open('/tmp/cio-reference-plan.json')); assert len(x['slides']) == 10; assert all(s['status'] == 'PLANNED_NOT_RENDERED' for s in x['slides']); assert x['render_status'] == 'NOT_RUN'"

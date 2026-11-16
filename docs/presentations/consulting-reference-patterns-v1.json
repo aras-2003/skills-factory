@@ -1,0 +1,336 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Reference-informed original executive exhibit selection; not redistribution or imitation of proprietary decks.",
+  "sources": [
+    {
+      "id": "SRC-STR-MCK",
+      "url": "https://github.com/callmeramzo/mckinsey_skills",
+      "revision": "5023cc979fa88dc4c64f804f12aa9682d330606f",
+      "archive_sha256": "fcc531bb6015d9482f40b3cd3e0b54b760f0a6acdb4e3b5477a32b7744f19285",
+      "rights": "REFERENCE_ONLY",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-STR-MBCG",
+      "url": "https://github.com/MichaelRochonnn/mckinsey-bcg-consulting",
+      "revision": "3ca573be6ae3b216c959cbb865c4eaf7d62fd0bb",
+      "archive_sha256": "d6365ef2783139227b2ef1301672cab78c958ffbfa920e9dcd6bd5230fdaba38",
+      "rights": "REFERENCE_ONLY",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-STR-BUS",
+      "url": "https://github.com/abinauv/business-consulting",
+      "revision": "8808ffb170bd4f8d8fadcc7e107cc9d124837570",
+      "archive_sha256": "e47518d78bd5d987b51f03159b7ad77973893dbe771acbcb3b9bef77ea609ea9",
+      "rights": "MIT_WITH_NOTICE",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-STR-CONS",
+      "url": "https://github.com/yoichiojima-2/consultant",
+      "revision": "9a1ea0e2dac27be0b7448677ac47db4b2044b4af",
+      "archive_sha256": "af3eb3252085b6c49d6f6aba4af5fe45ed00e676c82ce976c321ab5c401f76b7",
+      "rights": "MIT_WITH_NOTICE",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-ORIA-21",
+      "url": "https://www.oria.one/resources/21-strategy-skills-for-claude",
+      "revision": null,
+      "archive_sha256": "8a1c43d39328927ce58fba294010ab1f977e903fe2fe0f7e02c321e8c21a96b7",
+      "rights": "REFERENCE_ONLY",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-ORIA-T1",
+      "url": "https://www.oria.one/resources/tier-one-strategy-skills-for-claude",
+      "revision": null,
+      "archive_sha256": "fcc70c0a7460fdb421cdd2a384c47c4c6b453c3c99ce30c41fcacb6de0827e69",
+      "rights": "REFERENCE_ONLY",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-ORIA-XLS",
+      "url": "https://www.oria.one/resources/excel-inspired-claude-skills-strategy",
+      "revision": null,
+      "archive_sha256": "e7a2a8a12f4eb97f8e3e4ac042d499424917ae9ba57a3911e5ce73557574f221",
+      "rights": "REFERENCE_ONLY",
+      "official_brand_source": false,
+      "registry": "docs/strategy-os/external-source-register-2026-10-26.md"
+    },
+    {
+      "id": "SRC-OPENAI-SLIDES",
+      "url": "https://github.com/openai/skills/blob/e6afb0d74cc75d220df2faf3dd6c635c2dc6a108/skills/.curated/slides/SKILL.md",
+      "revision": "e6afb0d74cc75d220df2faf3dd6c635c2dc6a108",
+      "file_sha256": "57ee0941f872546029bc45b5b0bd58d4a02d88b84d4e8e4275c466da5451efa6",
+      "rights": "APACHE_2_WITH_NOTICE",
+      "official_brand_source": true,
+      "intake_state": "BLOCKED_TRANSPORT",
+      "registry": "GitHub issue #621"
+    },
+    {
+      "id": "SRC-MARP-UNCOVER",
+      "url": "https://github.com/marp-team/marp-core/blob/fb41436e1db5b43a9f93d288ed361b2550408a0b/themes/uncover.scss",
+      "revision": "fb41436e1db5b43a9f93d288ed361b2550408a0b",
+      "file_sha256": "20fff882f4043a377627a8d74349de667463b0c509d2e6dd89ca86293707086b",
+      "rights": "MIT_WITH_NOTICE",
+      "official_brand_source": true,
+      "intake_state": "CANDIDATE_NOT_ADOPTED",
+      "registry": "GitHub issue #621"
+    },
+    {
+      "id": "OFF-BCG-01",
+      "url": "https://www.bcg.com/publications/2023/operating-model-choices-facing-tech-companies",
+      "publisher": "BCG",
+      "published": "2023-03-15",
+      "source_anchor": "Key Takeaways / operating-model choices",
+      "reviewed_observation": "Decision logic: strategic priorities, central/local decision, processes",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-BCG-02",
+      "url": "https://www.bcg.com/publications/2022/bold-new-approach-technology-transformation",
+      "publisher": "BCG",
+      "published": "2022",
+      "source_anchor": "Business and Tech Operating Model / six dimensions exhibit",
+      "reviewed_observation": "Change logic: technology transformation must include operating model, people, architecture",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-BCG-03",
+      "url": "https://www.bcg.com/publications/2022/keys-to-scaling-digital-ability-and-value",
+      "publisher": "BCG",
+      "published": "2022",
+      "source_anchor": "Exhibit 9 / digital value scaling",
+      "reviewed_observation": "Visual implication: separate operating practices and value outcomes",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-MCK-01",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/toward-an-integrated-technology-operating-model",
+      "publisher": "McKinsey",
+      "published": "2017",
+      "source_anchor": "Exhibit 2 / integrated technology model",
+      "reviewed_observation": "Explain organizational interfaces with unified capability view",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-MCK-02",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/products-and-platforms-is-your-technology-operating-model-ready",
+      "publisher": "McKinsey",
+      "published": "2020",
+      "source_anchor": "Exhibit 2 / products and platforms",
+      "reviewed_observation": "Separate product teams, platforms and infrastructure in conceptual diagram",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-MCK-03",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/managing-the-forces-of-fragmentation-how-it-can-balance-local-needs-and-global-efficiency-in-a-multipolar-world",
+      "publisher": "McKinsey",
+      "published": "2023",
+      "source_anchor": "Exhibit 2 / federated model",
+      "reviewed_observation": "Show global common core vs selective local differentiation",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-ACN-01",
+      "url": "https://www.accenture.com/en/insights/technology/technology-trends-2025",
+      "publisher": "Accenture",
+      "published": "2025-01-07",
+      "source_anchor": "Four technology trends / in brief",
+      "reviewed_observation": "Editorial sections tie trend headlines to executive implications",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-ACN-02",
+      "url": "https://www.accenture.com/en/insights/high-tech/technology-vision",
+      "publisher": "Accenture",
+      "published": "2025-03-17",
+      "source_anchor": "In brief / technology vision",
+      "reviewed_observation": "Use short summary and consequence-first hierarchy, not invented metrics",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-ACN-03",
+      "url": "https://newsroom.accenture.com/news/2025/accenture-technology-vision-2025-new-age-of-ai-to-bring-unprecedented-autonomy-to-business",
+      "publisher": "Accenture",
+      "published": "2025-01-07",
+      "source_anchor": "Technology Vision 2025 release / scope",
+      "reviewed_observation": "Illustrate themed research narrative while preserving original quantitative provenance",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    }
+  ],
+  "patterns": [
+    {
+      "id": "LAYOUT-DECISION",
+      "role": "decision",
+      "design_principle": "Lead with a falsifiable recommendation, strongest counteroption and the explicit board decision; no imitation of trademarked layouts.",
+      "source_ids": [
+        "SRC-STR-MCK",
+        "SRC-STR-CONS",
+        "OFF-BCG-01"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-OPTIONS",
+      "role": "options",
+      "design_principle": "Compare genuinely distinct choices on common qualitative criteria; unknown evidence must remain visible.",
+      "source_ids": [
+        "SRC-STR-MBCG",
+        "SRC-STR-BUS",
+        "OFF-MCK-03"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-CAPABILITIES",
+      "role": "capability",
+      "design_principle": "Show capability group, verified gap, business consequence and priority; no fabricated maturity colors.",
+      "source_ids": [
+        "SRC-STR-MBCG",
+        "SRC-ORIA-T1",
+        "OFF-BCG-03"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-ARCHITECTURE",
+      "role": "architecture",
+      "design_principle": "Two-level view: executive projection + formal model identifier, with legible dependencies and traceable semantics.",
+      "source_ids": [
+        "SRC-STR-BUS",
+        "SRC-STR-CONS",
+        "OFF-MCK-02"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-ROADMAP",
+      "role": "roadmap",
+      "design_principle": "Render dependencies and continue/adjust/stop gates rather than a decorative calendar.",
+      "source_ids": [
+        "SRC-STR-MCK",
+        "SRC-ORIA-21",
+        "OFF-BCG-02"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-KPI",
+      "role": "kpi",
+      "design_principle": "Separate observed baseline from management aspiration and measured outcome; never imply target attainment.",
+      "source_ids": [
+        "SRC-STR-MBCG",
+        "SRC-ORIA-XLS",
+        "OFF-ACN-01"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-GOVERNANCE",
+      "role": "governance",
+      "design_principle": "Expose decision owner, advisor, executor, escalation and decision latency; avoid unverified RACI.",
+      "source_ids": [
+        "OFF-BCG-01",
+        "OFF-MCK-03"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-RISKS",
+      "role": "risks",
+      "design_principle": "One risk per row with cause, consequence, mitigation, decision gate and evidence status, no invented likelihood scores.",
+      "source_ids": [
+        "OFF-BCG-02",
+        "OFF-ACN-02"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-VALUE",
+      "role": "value",
+      "design_principle": "Separate hypothesized value drivers, costs, observed baseline and realization proof with explicit benefit confidence.",
+      "source_ids": [
+        "OFF-BCG-03",
+        "OFF-ACN-01"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-HANDOFF",
+      "role": "handoff",
+      "design_principle": "Show stable object IDs crossing strategy, architecture and delivery layers; surface unknown mappings.",
+      "source_ids": [
+        "OFF-MCK-01",
+        "OFF-MCK-02"
+      ],
+      "requires_evidence": true
+    }
+  ],
+  "implementation_boundary": "Nine official public pages were text-reviewed for editorial principles, not independently visually scored or cleared for reproduction. Audited community skill sources are not official firm materials and are reference-only unless permitted. A mapping is not evidence of original skill runtime execution.",
+  "quality_contract": {
+    "reference_lineage": "Each pattern includes official page anchors and audited community/reuse links. External content is review-only and not executed.",
+    "originality": "No third-party protected graphics, branded tokens, charts or slide structures copied",
+    "visual_benchmark": "NOT_RUN",
+    "independent_reviewer": "UNASSIGNED",
+    "client_render": "NOT_RUN",
+    "official_corpus_coverage": {
+      "BCG": 3,
+      "McKinsey": 3,
+      "Accenture": 3
+    }
+  }
+}
