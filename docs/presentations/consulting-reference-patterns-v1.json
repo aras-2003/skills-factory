@@ -84,6 +84,132 @@
       "official_brand_source": true,
       "intake_state": "CANDIDATE_NOT_ADOPTED",
       "registry": "GitHub issue #621"
+    },
+    {
+      "id": "OFF-BCG-01",
+      "url": "https://www.bcg.com/publications/2023/operating-model-choices-facing-tech-companies",
+      "publisher": "BCG",
+      "published": "2023-03-15",
+      "source_anchor": "Key Takeaways / operating-model choices",
+      "reviewed_observation": "Decision logic: strategic priorities, central/local decision, processes",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-BCG-02",
+      "url": "https://www.bcg.com/publications/2022/bold-new-approach-technology-transformation",
+      "publisher": "BCG",
+      "published": "2022",
+      "source_anchor": "Business and Tech Operating Model / six dimensions exhibit",
+      "reviewed_observation": "Change logic: technology transformation must include operating model, people, architecture",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-BCG-03",
+      "url": "https://www.bcg.com/publications/2022/keys-to-scaling-digital-ability-and-value",
+      "publisher": "BCG",
+      "published": "2022",
+      "source_anchor": "Exhibit 9 / digital value scaling",
+      "reviewed_observation": "Visual implication: separate operating practices and value outcomes",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-MCK-01",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/toward-an-integrated-technology-operating-model",
+      "publisher": "McKinsey",
+      "published": "2017",
+      "source_anchor": "Exhibit 2 / integrated technology model",
+      "reviewed_observation": "Explain organizational interfaces with unified capability view",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-MCK-02",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/products-and-platforms-is-your-technology-operating-model-ready",
+      "publisher": "McKinsey",
+      "published": "2020",
+      "source_anchor": "Exhibit 2 / products and platforms",
+      "reviewed_observation": "Separate product teams, platforms and infrastructure in conceptual diagram",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-MCK-03",
+      "url": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/managing-the-forces-of-fragmentation-how-it-can-balance-local-needs-and-global-efficiency-in-a-multipolar-world",
+      "publisher": "McKinsey",
+      "published": "2023",
+      "source_anchor": "Exhibit 2 / federated model",
+      "reviewed_observation": "Show global common core vs selective local differentiation",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-ACN-01",
+      "url": "https://www.accenture.com/en/insights/technology/technology-trends-2025",
+      "publisher": "Accenture",
+      "published": "2025-01-07",
+      "source_anchor": "Four technology trends / in brief",
+      "reviewed_observation": "Editorial sections tie trend headlines to executive implications",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-ACN-02",
+      "url": "https://www.accenture.com/en/insights/high-tech/technology-vision",
+      "publisher": "Accenture",
+      "published": "2025-03-17",
+      "source_anchor": "In brief / technology vision",
+      "reviewed_observation": "Use short summary and consequence-first hierarchy, not invented metrics",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
+    },
+    {
+      "id": "OFF-ACN-03",
+      "url": "https://newsroom.accenture.com/news/2025/accenture-technology-vision-2025-new-age-of-ai-to-bring-unprecedented-autonomy-to-business",
+      "publisher": "Accenture",
+      "published": "2025-01-07",
+      "source_anchor": "Technology Vision 2025 release / scope",
+      "reviewed_observation": "Illustrate themed research narrative while preserving original quantitative provenance",
+      "rights": "PUBLIC_REVIEW_ONLY",
+      "official_brand_source": true,
+      "usage": "ABSTRACT_PRINCIPLE_ONLY_NO_ASSET_COPY",
+      "visual_review": "NOT_RUN",
+      "source_status": "HTML_CONTENT_REVIEWED",
+      "license_statement": "No permission to reproduce layouts or graphics established"
     }
   ],
   "patterns": [
@@ -93,7 +219,8 @@
       "design_principle": "Lead with a falsifiable recommendation, strongest counteroption and the explicit board decision; no imitation of trademarked layouts.",
       "source_ids": [
         "SRC-STR-MCK",
-        "SRC-STR-CONS"
+        "SRC-STR-CONS",
+        "OFF-BCG-01"
       ],
       "requires_evidence": true
     },
@@ -103,7 +230,8 @@
       "design_principle": "Compare genuinely distinct choices on common qualitative criteria; unknown evidence must remain visible.",
       "source_ids": [
         "SRC-STR-MBCG",
-        "SRC-STR-BUS"
+        "SRC-STR-BUS",
+        "OFF-MCK-03"
       ],
       "requires_evidence": true
     },
@@ -113,7 +241,8 @@
       "design_principle": "Show capability group, verified gap, business consequence and priority; no fabricated maturity colors.",
       "source_ids": [
         "SRC-STR-MBCG",
-        "SRC-ORIA-T1"
+        "SRC-ORIA-T1",
+        "OFF-BCG-03"
       ],
       "requires_evidence": true
     },
@@ -123,7 +252,8 @@
       "design_principle": "Two-level view: executive projection + formal model identifier, with legible dependencies and traceable semantics.",
       "source_ids": [
         "SRC-STR-BUS",
-        "SRC-STR-CONS"
+        "SRC-STR-CONS",
+        "OFF-MCK-02"
       ],
       "requires_evidence": true
     },
@@ -133,7 +263,8 @@
       "design_principle": "Render dependencies and continue/adjust/stop gates rather than a decorative calendar.",
       "source_ids": [
         "SRC-STR-MCK",
-        "SRC-ORIA-21"
+        "SRC-ORIA-21",
+        "OFF-BCG-02"
       ],
       "requires_evidence": true
     },
@@ -143,10 +274,63 @@
       "design_principle": "Separate observed baseline from management aspiration and measured outcome; never imply target attainment.",
       "source_ids": [
         "SRC-STR-MBCG",
-        "SRC-ORIA-XLS"
+        "SRC-ORIA-XLS",
+        "OFF-ACN-01"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-GOVERNANCE",
+      "role": "governance",
+      "design_principle": "Expose decision owner, advisor, executor, escalation and decision latency; avoid unverified RACI.",
+      "source_ids": [
+        "OFF-BCG-01",
+        "OFF-MCK-03"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-RISKS",
+      "role": "risks",
+      "design_principle": "One risk per row with cause, consequence, mitigation, decision gate and evidence status, no invented likelihood scores.",
+      "source_ids": [
+        "OFF-BCG-02",
+        "OFF-ACN-02"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-VALUE",
+      "role": "value",
+      "design_principle": "Separate hypothesized value drivers, costs, observed baseline and realization proof with explicit benefit confidence.",
+      "source_ids": [
+        "OFF-BCG-03",
+        "OFF-ACN-01"
+      ],
+      "requires_evidence": true
+    },
+    {
+      "id": "LAYOUT-HANDOFF",
+      "role": "handoff",
+      "design_principle": "Show stable object IDs crossing strategy, architecture and delivery layers; surface unknown mappings.",
+      "source_ids": [
+        "OFF-MCK-01",
+        "OFF-MCK-02"
       ],
       "requires_evidence": true
     }
   ],
-  "implementation_boundary": "These are independently authored principles linked at repository/method level, NOT verified page-by-page visual observations or execution of external skill instructions. External candidates are not imported. Visual style benchmark against official BCG/McKinsey/Accenture publications is a separate NOT_RUN task."
+  "implementation_boundary": "Nine official public pages were text-reviewed for editorial principles, not independently visually scored or cleared for reproduction. Audited community skill sources are not official firm materials and are reference-only unless permitted. A mapping is not evidence of original skill runtime execution.",
+  "quality_contract": {
+    "reference_lineage": "Each pattern includes official page anchors and audited community/reuse links. External content is review-only and not executed.",
+    "originality": "No third-party protected graphics, branded tokens, charts or slide structures copied",
+    "visual_benchmark": "NOT_RUN",
+    "independent_reviewer": "UNASSIGNED",
+    "client_render": "NOT_RUN",
+    "official_corpus_coverage": {
+      "BCG": 3,
+      "McKinsey": 3,
+      "Accenture": 3
+    }
+  }
 }
