@@ -23,6 +23,11 @@ def plan(deck: dict[str, Any], registry: dict[str, Any]) -> dict[str, Any]:
         raise ContractError("Empty deck")
     patterns = {p["id"]: p for p in registry["patterns"]}
     sources = {s["id"]: s for s in registry["sources"]}
+    if len(patterns) != len(registry["patterns"]) or len(sources) != len(registry["sources"]):
+        raise ContractError("Duplicate pattern/source identifiers")
+    for p in registry["patterns"]:
+        if not p.get("source_ids") or any(s not in sources for s in p["source_ids"]):
+            raise ContractError("Pattern contains unresolved source references")
     seen = set()
     results = []
     for slide in deck["slides"]:
@@ -63,6 +68,16 @@ def plan(deck: dict[str, Any], registry: dict[str, Any]) -> dict[str, Any]:
             "source_ids": selection["source_ids"],
             "reference_revisions": {
                 i: sources[i].get("revision") or sources[i].get("archive_sha256")
+                   or sources[i].get("file_sha256")
+                for i in selection["source_ids"]
+            },
+            "reference_evidence": {
+                i: {"url": sources[i]["url"],
+                    "anchor": sources[i].get("source_anchor"),
+                    "rights": sources[i]["rights"],
+                    "official": sources[i].get("official_brand_source", False),
+                    "visual_review": sources[i].get("visual_review", "NOT_RUN"),
+                    "source_status": sources[i].get("source_status", "HISTORICAL_AUDIT")}
                 for i in selection["source_ids"]
             },
             "checks": checks,
@@ -73,6 +88,7 @@ def plan(deck: dict[str, Any], registry: dict[str, Any]) -> dict[str, Any]:
         "schema_version": "1.0",
         "deck_id": deck.get("deck_id"),
         "artifact_status": "SEMANTIC_PLAN_ONLY",
+        "reference_usage": "SEMANTIC_REFERENCE_ONLY",
         "render_status": "NOT_RUN",
         "editable_export_status": "NOT_RUN",
         "reference_registry": str(PATTERN_FILE.relative_to(PATTERN_FILE.parents[2])),
