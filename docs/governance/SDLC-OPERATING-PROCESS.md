@@ -69,6 +69,13 @@ CI records actual Git-diff paths and conservatively uses UNKNOWN until a reviewe
 native Project assessment is supplied through a trusted channel; it does not guess
 an A-level from filenames or silently skip tests based on untrusted PR prose.
 
+Standalone versioned campaign definitions use `TEST_DESIGN`, limited to declarative
+files under `evals/campaigns/`. That class plans review of case IDs/expected results,
+coverage/channel mapping and evidence identity/state; it does not claim to execute
+those cases or authorize release. Executable fixtures, runners, product contracts
+and other paths stay in their behavior, resource or architecture-impact class.
+Editorial `DOCS` remains restricted to its explicit allowlist.
+
 ## D1/D6: integration and release gates
 
 Integration validates readiness **structure and integrity**, not calendar production
