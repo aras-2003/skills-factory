@@ -110,6 +110,15 @@ those cases or authorize release. Executable fixtures, runners, product contract
 and other paths stay in their behavior, resource or architecture-impact class.
 Editorial `DOCS` remains restricted to its explicit allowlist.
 
+Review and approval boundary: a `TEST_DESIGN` record remains A0 only while it is
+strictly declarative and changes no executable gate, threshold, security or
+authorization policy, release decision, or runtime claim. The owner may explicitly
+accept such an A0 design after a coordinator's technical review without calling that
+review independent. Record any owner-authorized reviewer waiver against the exact
+PR, head SHA, and scope. This limited path does not waive another review for code,
+runtime, security, migration, or release-gate changes; it does not complete A1 or
+prove that cases ran; and it never authorizes A2 or production promotion.
+
 ## D1/D6: integration and release gates
 
 Integration validates readiness **structure and integrity**, not calendar production
