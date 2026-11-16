@@ -26,6 +26,14 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(1, control.check_wip(items)["development_wip"])
         self.assertEqual(1, control.check_wip(items, starting_item="c")["development_wip"])
 
+    def test_closed_issue_does_not_consume_development_wip_or_get_reopened_by_start(self):
+        items = [{"id": "closed", "status": "In progress", "state": "CLOSED"},
+                 {"id": "active", "status": "In progress", "state": "OPEN"}]
+        report = control.check_wip(items, starting_item="closed")
+        self.assertEqual("PASS", report["status"])
+        self.assertEqual(1, report["development_wip"])
+        self.assertEqual(["active"], report["active_items"])
+
     def test_unknown_native_stage_is_not_silently_treated_as_done(self):
         with self.assertRaises(ValueError):
             control.check_wip([{"id": "a", "status": "Validation"}])
@@ -35,10 +43,12 @@ class DeliveryTests(unittest.TestCase):
         def gql(query, variables):
             cursors.append(variables["cursor"])
             page = len(cursors)
-            node = {"id": str(page), "content": {"number": page, "repository": {"nameWithOwner": "o/r"},
+            node = {"id": str(page), "content": {"number": page, "state": "OPEN", "stateReason": None, "repository": {"nameWithOwner": "o/r"},
                     "labels": {"nodes": [], "pageInfo": {"hasNextPage": False}}},
                     "fieldValues": {"nodes": [{"name": "In progress", "field": {"name": "Status"}}]}}
             return {"user": {"projectV2": {"items": {"nodes": [node],
                     "pageInfo": {"hasNextPage": page == 1, "endCursor": "next"}}}}}
-        self.assertEqual(2, len(control.read_project_items(gql, "o", 1, "o/r")))
+        result = control.read_project_items(gql, "o", 1, "o/r")
+        self.assertEqual(2, len(result))
+        self.assertEqual("OPEN", result[0]["state"])
         self.assertEqual([None, "next"], cursors)
