@@ -40,7 +40,7 @@ Required shared checks: targeted external-intake/update-impact tests; provenance
 
 | Candidate | Main SHA | Lab release ID / payload digest | Build + offline CI | Observed runtime identity / smoke | Supersedes / invalidated rows |
 | --- | --- | --- | --- | --- | --- |
-| C1 | `e9ad5349276a6b94c4ff0dc2e638e7e32475e665` | Lab `1.38.554+e9ad5349276a`; payload `e292b1dbb9025b2ba39c6ca7358ec7bf3f77fea220f734f2afb364ee4a7b2b3a`; artifact ZIP `0c08dd3d137c3bf274c6bab4d9810d71a107acc9aa0a467a24071377a073b494` | PASS — Validate run `43783250083` (12 jobs, incl. 78 security tests; 0 scanner findings), Domain `43783250103`, Lab build `43783250073` | reviewed N/A; no runtime behavior change | R01 PASS; R02 BLOCKED (frozen source path 404) |
+| C1 | `e9ad5349276a6b94c4ff0dc2e638e7e32475e665` | Lab `1.38.554+e9ad5349276a`; payload `e292b1dbb9025b2ba39c6ca7358ec7bf3f77fea220f734f2afb364ee4a7b2b3a`; artifact ZIP `0c08dd3d137c3bf274c6bab4d9810d71a107acc9aa0a467a24071377a073b494` | PASS — Validate run `43783250083` (12 jobs, incl. 78 security tests; 0 scanner findings), Domain `43783250103`, Lab build `43783250073` | reviewed N/A; no runtime behavior change | R01 PASS; initial R02 404 preserved as history; amended portfolio-state-review source/package probe PASS |
 
 ## Regression selection and counts
 
@@ -50,7 +50,7 @@ Required shared checks: targeted external-intake/update-impact tests; provenance
 - Last full runtime baseline candidate / behavior iterations since baseline: no runtime behavior changes in this slice; full runtime baseline is not applicable.
 - Planned distinct scenarios / executions by layer and required surface: 10 U1 deterministic scenarios plus 2 shared offline sentinels and 2 rotating source/package probes; each required offline suite once per PR and final-main candidate.
 - Critical stochastic scenarios repeated at least 3 times / instability history: N/A; no model or stochastic runtime behavior is changed.
-- Scope-lock PR #709 CI: PASS (Evaluation CI, Domain integrity, Validate skills at exact lock SHA); implementation candidate PR/final-main checks and build: pending; runtime N/A per reviewed scope.
+- Scope-lock PR #709 CI: PASS (Evaluation CI, Domain integrity, Validate skills at exact lock SHA). Implementation candidate checks/build: PASS (Validate `43783250083`, Domain `43783250103`, Lab build `43783250073`). R02 documentation amendment is on main commit `665c1f3`; final count reconciliation is in PR review. Independent reviewer sign-off remains pending; runtime N/A per reviewed scope.
 
 ## Defect intake and clarifications (append; intake always open)
 
@@ -68,7 +68,7 @@ Required shared checks: targeted external-intake/update-impact tests; provenance
 - Rotating probe R01 passes: source and packaged `accessibility-gate` bodies match byte-for-byte after canonical YAML frontmatter normalization. Full-file hashes differ because packaging normalizes frontmatter.
 - At the initial validation, rotating probe R02 was blocked because `skills/investing/fundamental-intelligence/SKILL.md` was absent (404) at the candidate SHA. The subsequent evidence amendment below records a replacement probe.
 - Runtime row is reviewed N/A because the exact final diff is tool-only. This is not runtime acceptance.
-- No closure or maturity promotion is claimed while R02 and owner acceptance remain unresolved.
+- Technical acceptance evidence is complete for the amended scope; iteration closure and #619 U1 acceptance await independent reviewer sign-off. No runtime or production acceptance is claimed.
 
 ## R02 probe amendment and revalidation — 2026-11-16
 
