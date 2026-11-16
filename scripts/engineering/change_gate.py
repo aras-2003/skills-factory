@@ -8,6 +8,7 @@ import subprocess
 from pathlib import PurePosixPath, Path
 
 CHANGE_CLASSES = ("NEW", "ROUTING", "BEHAVIOR", "RESOURCE", "DOCS")
+DOCS_ONLY_ALLOWLIST = {"README.md", "CHANGELOG.md", "docs/roadmap/README.md"}
 GATES = {
     "NEW": (
         "specification_and_reuse_check",
@@ -48,10 +49,8 @@ def safe_path(value: str) -> bool:
 
 
 def docs_only_path(path: str) -> bool:
-    """Allow only obviously non-executable, non-contract editorial sources."""
-    if path in {"README.md", "CHANGELOG.md"}:
-        return True
-    return path.startswith("docs/") and path.endswith(".md")
+    """Allow only explicitly reviewed editorial paths; other docs can define contracts."""
+    return path in DOCS_ONLY_ALLOWLIST
 
 
 def plan(change_class: str, changed_files: list[str], *, architecture_impact: str = "UNKNOWN",
@@ -60,6 +59,8 @@ def plan(change_class: str, changed_files: list[str], *, architecture_impact: st
     if change_class not in GATES:
         raise ValueError(f"unknown change class: {change_class}")
     errors = []
+    if architecture_impact is None:
+        errors.append("Architecture Impact is required; use UNKNOWN when it is not assessed")
     if not changed_files:
         errors.append("changed file list is required; do not guess DOCS-only scope")
     for name in changed_files:
