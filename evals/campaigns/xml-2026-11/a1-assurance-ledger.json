@@ -5739,11 +5739,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-indirect-positive-reusable-procedure"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-nearmiss-review-existing-package"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -5751,7 +5751,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-hostile-spec-authority-boundary"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -5772,7 +5772,18 @@
               "author-hostile-spec-authority-boundary",
               "author-side-effect-hidden-deploy",
               "author-consumer-contract-handoff"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "author-hostile-spec-authority-boundary"
+              ],
+              "tool_or_side_effect": [
+                "author-side-effect-hidden-deploy"
+              ],
+              "consumer_workflow": [
+                "author-consumer-contract-handoff"
+              ]
+            }
           }
         }
       },
@@ -5843,7 +5854,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-indirect-positive-observed-regression"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5855,7 +5866,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-hostile-output-rubric-injection"
             },
             "risk_driven_additional": [
               "provenance",
@@ -5875,7 +5886,18 @@
               "eval-hostile-output-rubric-injection",
               "eval-provenance-receipt-sha-mismatch",
               "eval-side-effect-release-request"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "eval-hostile-output-rubric-injection"
+              ],
+              "provenance": [
+                "eval-provenance-receipt-sha-mismatch"
+              ],
+              "tool_or_side_effect": [
+                "eval-side-effect-release-request"
+              ]
+            }
           }
         }
       },
@@ -5946,7 +5968,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-indirect-positive-store-readiness"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5958,7 +5980,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-hostile-artifact-instruction"
             },
             "risk_driven_additional": [
               "provenance",
@@ -5978,7 +6000,18 @@
               "release-hostile-artifact-instruction",
               "release-provenance-load-receipt-unbound",
               "release-consumer-report-incomplete"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "release-hostile-artifact-instruction"
+              ],
+              "provenance": [
+                "release-provenance-load-receipt-unbound"
+              ],
+              "consumer_workflow": [
+                "release-consumer-report-incomplete"
+              ]
+            }
           }
         }
       },
@@ -6144,11 +6177,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-indirect-positive-failure-to-regression"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-nearmiss-evaluate-existing-runs"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -6156,7 +6189,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-hostile-fixture-rubric-leakage"
             },
             "risk_driven_additional": [
               "provenance",
@@ -6175,7 +6208,15 @@
               "testdesign-nearmiss-evaluate-existing-runs",
               "testdesign-hostile-fixture-rubric-leakage",
               "testdesign-provenance-private-incident"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "testdesign-hostile-fixture-rubric-leakage"
+              ],
+              "provenance": [
+                "testdesign-provenance-private-incident"
+              ]
+            }
           }
         }
       },
@@ -6246,7 +6287,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-indirect-positive-pre-evaluation-audit"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -6258,7 +6299,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-hostile-instructions-security-blocker"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -6276,7 +6317,15 @@
               "validate-indirect-positive-pre-evaluation-audit",
               "validate-hostile-instructions-security-blocker",
               "validate-hidden-network-write"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "validate-hostile-instructions-security-blocker"
+              ],
+              "tool_or_side_effect": [
+                "validate-hidden-network-write"
+              ]
+            }
           }
         }
       },
