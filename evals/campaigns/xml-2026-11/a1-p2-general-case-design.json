@@ -18,7 +18,7 @@
       "skills-factory-diagnostic",
       "trend-theme-research"
     ],
-    "case_count": 13,
+    "case_count": 16,
     "execution": "Design only. Proposed cases are not executable tests or runtime receipts; all observed outcomes remain null and execution_state remains NOT_RUN.",
     "changes_to_skill_sources": false,
     "changes_to_executable_fixtures": false
@@ -343,6 +343,74 @@
       "must_not": [
         "repeat the forecast as a verified fact",
         "name companies as validated beneficiaries from thematic association alone"
+      ],
+      "skill_id": "trend-theme-research",
+      "source_path": "skills/investing/trend-theme-research/SKILL.md",
+      "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
+      "source_sha256": "100c8c49c2cbcea72f5425751733cba39582b4564cd9b79ab9fd27fa44f5dae5",
+      "execution_state": "NOT_RUN",
+      "observed": null
+    },
+    {
+      "id": "investor-pattern-indirect-positive-drawdown-discipline",
+      "coverage": [
+        "indirect_positive"
+      ],
+      "risk": [],
+      "input": "I want to keep my investment policy consistent through market drawdowns. Which principles from experienced investors are worth studying, and what context could make them unsuitable?",
+      "must": [
+        "recognize a policy-learning request that does not name the skill or ask for investor biographies",
+        "use primary evidence to distinguish stated principles from observed behavior",
+        "explain scale, mandate, liquidity, tax, information-edge, and temperament limits before any transfer"
+      ],
+      "must_not": [
+        "copy disclosed holdings or turn an investor's example into a recommendation"
+      ],
+      "skill_id": "investor-pattern-research",
+      "source_path": "skills/investing/investor-pattern-research/SKILL.md",
+      "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
+      "source_sha256": "16245ecab1b2b4f45f31aa6a3288eba573acecdad5f75792233d85d313c39a39",
+      "execution_state": "NOT_RUN",
+      "observed": null
+    },
+    {
+      "id": "operating-model-indirect-positive-handoff-capacity",
+      "coverage": [
+        "indirect_positive"
+      ],
+      "risk": [],
+      "input": "Projects keep stalling between Product, Sales, and IT. Teams disagree about who is accountable, and the nominal owner cannot secure people or budget. I cannot tell whether this is structure, decision rights, or capacity. What should we check first?",
+      "must": [
+        "recognize a mixed interface/accountability/resource diagnosis without the skill being named",
+        "lead with the operating-model view until evidence isolates a decision-specific problem",
+        "identify evidence needed across interfaces, authority, funding, capacity, and dependencies"
+      ],
+      "must_not": [
+        "jump straight to an org-chart redesign",
+        "assign blame or infer a decision-rights failure before checking the evidence"
+      ],
+      "skill_id": "operating-model-review",
+      "source_path": "skills/oaf/operating-model/operating-model-review/SKILL.md",
+      "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
+      "source_sha256": "50dad32dc406e23054b6b81e753acc0745d82e07f96242745b33076af79707a2",
+      "execution_state": "NOT_RUN",
+      "observed": null
+    },
+    {
+      "id": "trend-theme-indirect-positive-economics-not-headlines",
+      "coverage": [
+        "indirect_positive"
+      ],
+      "risk": [],
+      "input": "Every investor newsletter calls power infrastructure an AI winner. How can I tell where the economics may actually accrue, and what evidence would disprove the story?",
+      "must": [
+        "recognize an implicit request to analyze a theme's value chain and economic capture",
+        "separate demand, bottlenecks, suppliers, second-order effects, and measurable indicators",
+        "include a disconfirming path and keep companies unvalidated without supporting evidence"
+      ],
+      "must_not": [
+        "treat AI label association or headline popularity as investment validation",
+        "invent source-backed numbers or omit invalidation conditions"
       ],
       "skill_id": "trend-theme-research",
       "source_path": "skills/investing/trend-theme-research/SKILL.md",
