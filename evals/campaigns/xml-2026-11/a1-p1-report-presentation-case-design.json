@@ -181,7 +181,7 @@
       "must": [
         "select a quantitative chart renderer documented and exposed by the host",
         "encode the supplied labels and values without aggregation or substitution",
-        "retain the unit, as-of date, source ID and uncertainty in the exhibit specification and text alternative",
+        "retain unit, as-of date, source ID and explicit uncertainty in the exhibit and text alternative; because the fixture has no supplied uncertainty value, label it NOT_PROVIDED without inventing a confidence range",
         "return the actual renderer status separately from client display"
       ],
       "must_not": [
@@ -206,7 +206,8 @@
           "src-synthetic-tickets-01"
         ],
         "renderer": "render_bar_chart",
-        "renderer_exposed": true
+        "renderer_exposed": true,
+        "uncertainty": null
       },
       "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
       "execution_state": "NOT_RUN",
@@ -353,9 +354,10 @@
       ],
       "input": "Using the approved 3-slide storyboard, evidence ledger and selected Google Slides destination, create the requested editable native deck.",
       "must": [
-        "preflight confirms the connected destination exposes documented create/edit actions and required permissions",
-        "create the native slides from the approved semantic storyboard and source-linked exhibits",
-        "return the actual deck ID/link and report editability only for elements verified in the artifact"
+        "preflight confirms the selected destination exposes documented create/edit actions and required permissions",
+        "call the documented native deck creation action only after preflight succeeds",
+        "inspect the returned artifact and report editability only for elements verified in that artifact",
+        "return the created deck ID/link only after the synthetic successful create response and artifact inspection are received"
       ],
       "must_not": [
         "claim a deck exists before a successful action returns a readable artifact identifier",
@@ -368,11 +370,20 @@
         "edit_capability": "AVAILABLE",
         "storyboard_id": "story-synthetic-03",
         "evidence_ledger_id": "evidence-synthetic-03",
-        "tool_result": {
-          "status": "success",
-          "file_id": "file-synthetic-03"
-        },
-        "artifact_inspected": true
+        "permissions": "VERIFIED_FOR_SELECTED_DESTINATION",
+        "expected_tool_responses": {
+          "create_native_deck": {
+            "status": "success",
+            "file_id": "file-synthetic-03"
+          },
+          "inspect_created_artifact": {
+            "status": "success",
+            "editable_elements": [
+              "text",
+              "shape"
+            ]
+          }
+        }
       },
       "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
       "execution_state": "NOT_RUN",
