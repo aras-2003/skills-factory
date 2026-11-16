@@ -157,6 +157,25 @@ class ExternalSkillUpdateTests(unittest.TestCase):
         self.assertEqual("UNCHANGED", report["comparison_status"])
         self.assertEqual("BLOCKED", report["status"])
 
+    def test_repository_registry_does_not_claim_complete_or_empty_impact_without_verified_lineage(self) -> None:
+        registry_path = Path(__file__).resolve().parents[3] / "provenance/registry.yaml"
+        registry = yaml.safe_load(registry_path.read_text(encoding="utf-8"))
+        receipt, review, baseline_source = receipt_and_review()
+        baseline_modes = {path: 0o644 for path in BASE_FILES}
+        report = update.build_update_report(
+            baseline_receipt=receipt, baseline_review=review,
+            baseline_source=baseline_source, baseline_files=BASE_FILES,
+            baseline_modes=baseline_modes, candidate_source=baseline_source,
+            candidate_files=BASE_FILES, candidate_modes=baseline_modes,
+            registry=registry,
+        )
+
+        self.assertEqual("UNKNOWN", report["consumer_impact"]["status"])
+        self.assertFalse(report["consumer_impact"]["complete"])
+        self.assertIn("ACCEPTED_LINEAGE_NOT_FOUND", report["blockers"])
+        self.assertIn("CONSUMER_LINEAGE_INCOMPLETE", report["blockers"])
+        self.assertEqual("BLOCKED", report["status"])
+
     def test_dependency_cycles_terminate_and_mark_impact_incomplete(self) -> None:
         receipt, _review, _source = receipt_and_review()
         registry = registry_for(receipt)
