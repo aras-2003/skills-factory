@@ -4274,7 +4274,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "brief-direct"
+              "case_id": "brief-incomplete"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4291,6 +4291,16 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Derive a decision-useful, audience-specific, sufficient brief. Presentation production does not begin with a default agenda or template.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-brief-risk-format-override",
+              "p678-brief-risk-critical-context"
+            ],
+            "risk_case_design_refs": {
+              "consumer_workflow": [
+                "p678-brief-risk-format-override",
+                "p678-brief-risk-critical-context"
+              ]
             }
           }
         }
@@ -4362,7 +4372,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-review-indirect-positive-editable-deck"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -4370,11 +4380,11 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "review-no-render"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-review-untrusted-slide-note"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4387,6 +4397,21 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Independently challenge whether this deck changes the intended audience's mind/decision with credible evidence and competent presentation design. Own presentation editorial/design review and fidelity to domain conclusions; **do not certify strategy quality** based on slide polish or replace domain s” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-review-indirect-positive-editable-deck",
+              "p678-review-missing-render",
+              "p678-review-untrusted-slide-note"
+            ],
+            "risk_case_design_refs": {
+              "visual_or_export": [
+                "p678-review-indirect-positive-editable-deck",
+                "p678-review-missing-render"
+              ],
+              "provenance": [
+                "p678-review-indirect-positive-editable-deck",
+                "p678-review-untrusted-slide-note"
+              ]
             }
           }
         }
@@ -4458,7 +4483,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-evidence-indirect-claim-map"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -4466,11 +4491,11 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-unavailable"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-evidence-injection"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4483,6 +4508,18 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Make every decision-relevant slide claim and factual exhibit traceable. This is a presentation-specific evidence and claim-to-slide mapping layer, **not** a replacement for shared CORE research/evidence controls or Strategy OS analytical decision work.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-evidence-indirect-claim-map",
+              "p678-evidence-missing-source",
+              "p678-evidence-injection"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "p678-evidence-indirect-claim-map",
+                "p678-evidence-missing-source",
+                "p678-evidence-injection"
+              ]
             }
           }
         }
@@ -4554,7 +4591,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-exhibit-indirect-two-series"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -4566,7 +4603,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-exhibit-untrusted-label"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4579,6 +4616,20 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Translate a supported claim and its evidence into a clear, editable exhibit specification. This skill does not invent analysis or perform the full deck narrative.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-exhibit-indirect-two-series",
+              "p678-exhibit-untrusted-label"
+            ],
+            "risk_case_design_refs": {
+              "visual_or_export": [
+                "p678-exhibit-indirect-two-series",
+                "p678-exhibit-untrusted-label"
+              ],
+              "provenance": [
+                "p678-exhibit-indirect-two-series",
+                "p678-exhibit-untrusted-label"
+              ]
             }
           }
         }
@@ -4650,7 +4701,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-export-indirect-receipt-reconcile"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -4662,7 +4713,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-export-untrusted-fake-receipt"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4676,6 +4727,23 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Establish what was **actually** created, rendered, exported and checked. Be precise about native deck quality, PPTX/PDF parity and editability rather than making export promises.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-export-indirect-receipt-reconcile",
+              "p678-export-untrusted-fake-receipt"
+            ],
+            "risk_case_design_refs": {
+              "visual_or_export": [
+                "p678-export-indirect-receipt-reconcile"
+              ],
+              "tool_or_side_effect": [
+                "p678-export-indirect-receipt-reconcile",
+                "p678-export-untrusted-fake-receipt"
+              ],
+              "provenance": [
+                "p678-export-indirect-receipt-reconcile",
+                "p678-export-untrusted-fake-receipt"
+              ]
             }
           }
         }
@@ -4868,7 +4936,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-story-indirect-accepted-option"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -4880,7 +4948,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-story-untrusted-reversal"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4893,6 +4961,19 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Turn a sufficient presentation brief and material claims into a coherent argument the audience can follow and act on. This skill owns **communication logic and ghost-deck narrative**, not substantive strategic analysis, option selection, domain research, rendering or layouts. STR-06/STR-10/STR-09 ow” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-story-indirect-accepted-option",
+              "p678-story-untrusted-reversal"
+            ],
+            "risk_case_design_refs": {
+              "consumer_workflow": [
+                "p678-story-indirect-accepted-option",
+                "p678-story-untrusted-reversal"
+              ],
+              "provenance": [
+                "p678-story-untrusted-reversal"
+              ]
             }
           }
         }
@@ -5395,7 +5476,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-report-architecture-untrusted-outline"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -5408,6 +5489,17 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Turn a sufficient report brief and a supplied/versioned evidence or domain result into a *reader-first document architecture* suitable for sustained reading. Own chapter/section hierarchy and argument allocation. Do not decide new strategy, validate an entire research domain, edit DOCX files or desi” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-report-architecture-untrusted-outline"
+            ],
+            "risk_case_design_refs": {
+              "consumer_workflow": [
+                "p678-report-architecture-untrusted-outline"
+              ],
+              "provenance": [
+                "p678-report-architecture-untrusted-outline"
+              ]
             }
           }
         }
@@ -5479,11 +5571,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-authoring-indirect-approved-model"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-authoring-near-miss-slide-deck"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -5491,7 +5583,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-authoring-untrusted-sharing-injection"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -5505,6 +5597,24 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Own the **execution and fidelity of actual external document production**, not research, domain recommendations, or the logic of an analytical report. Never pretend tool availability, export success, page rendering or font/editability parity.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-authoring-indirect-approved-model",
+              "p678-authoring-near-miss-slide-deck",
+              "p678-authoring-untrusted-sharing-injection"
+            ],
+            "risk_case_design_refs": {
+              "tool_or_side_effect": [
+                "p678-authoring-indirect-approved-model",
+                "p678-authoring-untrusted-sharing-injection"
+              ],
+              "provenance": [
+                "p678-authoring-indirect-approved-model",
+                "p678-authoring-untrusted-sharing-injection"
+              ],
+              "consumer_workflow": [
+                "p678-authoring-near-miss-slide-deck"
+              ]
             }
           }
         }
@@ -5576,11 +5686,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-review-indirect-rendered-report"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-review-near-miss-slide-only"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -5588,7 +5698,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "p678-review-untrusted-suppression-note"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -5601,6 +5711,23 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Independently identify fixable defects in the **written document and its real rendered artifact**, preserving domain source truth. This is not Strategy quality certification, report writing, or a slide-review skill.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "p678-review-indirect-rendered-report",
+              "p678-review-near-miss-slide-only",
+              "p678-review-untrusted-suppression-note"
+            ],
+            "risk_case_design_refs": {
+              "visual_or_export": [
+                "p678-review-indirect-rendered-report"
+              ],
+              "provenance": [
+                "p678-review-indirect-rendered-report",
+                "p678-review-untrusted-suppression-note"
+              ],
+              "consumer_workflow": [
+                "p678-review-near-miss-slide-only"
+              ]
             }
           }
         }
@@ -8184,6 +8311,27 @@
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
         "notes": "Declarative A0 TEST_DESIGN; no skill source or executable cases.yaml changed. All 23 cases remain NOT_RUN. Does not authorize migration, runtime/channel acceptance, or release."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p2-presentation-report-case-design.json",
+        "git_blob_sha": "a1d96c7b35df5a0af889f2e3825870428429088b",
+        "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
+        "owning_batch_issue": 678,
+        "skills": [
+          "presentation-brief",
+          "presentation-deck-review",
+          "presentation-evidence-review",
+          "presentation-exhibit-design",
+          "presentation-export-verification",
+          "presentation-storyline",
+          "report-document-architecture",
+          "report-document-authoring",
+          "report-document-review"
+        ],
+        "case_count": 21,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Declarative A0 TEST_DESIGN slice; no skill sources or executable fixtures changed. All 21 cases remain NOT_RUN. Does not authorize XML migration, runtime/channel acceptance, or release."
       }
     ]
   },
