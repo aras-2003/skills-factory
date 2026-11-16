@@ -12,8 +12,31 @@ spec.loader.exec_module(module)
 
 
 class ChangeGateTests(unittest.TestCase):
+    def test_architecture_level_expands_consumer_and_migration_checks(self):
+        report = module.plan("RESOURCE", ["scripts/example.py"], architecture_impact="A3",
+                             consumers=["workflows/example/WORKFLOW.md"], graph_reviewed=True)
+        self.assertIn("architecture_approval", report["required_checks"])
+        self.assertIn("consumer_contract_regressions", report["required_checks"])
+        self.assertIn("migration_rollback_review", report["required_checks"])
+        self.assertEqual(["workflows/example/WORKFLOW.md"], report["consumer_paths"])
+
+    def test_unknown_impact_or_missing_dependency_review_never_narrows_baseline(self):
+        for impact, reviewed in [("UNKNOWN", True), ("A1", False)]:
+            report = module.plan("RESOURCE", ["a.py"], architecture_impact=impact, graph_reviewed=reviewed)
+            self.assertIn("full_affected_channel_baseline", report["required_checks"])
+
+    def test_low_architecture_level_does_not_bypass_security(self):
+        report = module.plan("RESOURCE", ["a.py"], architecture_impact="A1", security_sensitive=True)
+        self.assertIn("negative_authorization_and_data_safety_tests", report["required_checks"])
+        self.assertIn("reviewer_other_than_author", report["required_checks"])
+        self.assertFalse(report["release_authorized"])
+
+    def test_a0_cannot_mask_runtime_and_unknown_levels_are_blocked(self):
+        self.assertEqual("BLOCKED", module.plan("BEHAVIOR", ["a.py"], architecture_impact="A0")["status"])
+        self.assertEqual("BLOCKED", module.plan("DOCS", ["README.md"], architecture_impact="LOW")["status"])
+
     def test_docs_only_requires_only_editorial_and_static_checks(self):
-        report = module.plan("DOCS", ["README.md", "docs/roadmap/README.md"])
+        report = module.plan("DOCS", ["README.md", "docs/roadmap/README.md"], architecture_impact="A0")
         self.assertEqual("PLAN_READY", report["status"])
         self.assertEqual(["documentation_diff_review", "static_document_validation"], report["required_checks"])
         self.assertEqual("NOT_RUN", report["runtime_case_execution"])
@@ -29,6 +52,8 @@ class ChangeGateTests(unittest.TestCase):
             "release/capability-contract.yaml",
             "evals/routing/registry.yaml",
             "docs/catalog.json",
+            "docs/governance/SDLC-OPERATING-PROCESS.md",
+            "docs/TESTING.md",
             ".github/workflows/ci-validate.yml",
         ):
             with self.subTest(path=path):
@@ -62,6 +87,11 @@ class ChangeGateTests(unittest.TestCase):
                 self.assertEqual("PLAN_READY", report["status"])
                 self.assertIn(check, report["required_checks"])
                 self.assertEqual("NOT_RUN", report["runtime_case_execution"])
+
+    def test_missing_architecture_impact_fails_closed(self):
+        report = module.plan("RESOURCE", ["scripts/example.py"], architecture_impact=None)
+        self.assertEqual("BLOCKED", report["status"])
+        self.assertIn("Architecture Impact is required", report["blockers"][0])
 
     def test_deterministic_and_unknown_class_fails_closed(self):
         self.assertEqual(module.plan("RESOURCE", ["a", "b"]), module.plan("RESOURCE", ["a", "b"]))

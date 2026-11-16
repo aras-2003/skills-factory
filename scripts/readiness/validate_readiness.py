@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -125,6 +126,7 @@ def validate_record(
     *,
     review_by: dt.date,
     today: dt.date,
+    enforce_expiry: bool = True,
 ) -> list[str]:
     errors: list[str] = []
     status = rec.get("current_runtime_receipt")
@@ -154,11 +156,11 @@ def validate_record(
                     errors.append(f"{name}: pending evidence requires {field}")
             expiry = _date(rec.get("exception_expires"), f"{name}: exception_expires", errors)
             if expiry is not None:
-                if expiry < today:
+                if enforce_expiry and expiry < today:
                     errors.append(f"{name}: pending exception expired on {expiry.isoformat()}")
                 if expiry > review_by:
                     errors.append(f"{name}: exception_expires must not exceed review_by")
-                if (expiry - today).days > MAX_EXCEPTION_DAYS:
+                if enforce_expiry and (expiry - today).days > MAX_EXCEPTION_DAYS:
                     errors.append(f"{name}: pending exception exceeds {MAX_EXCEPTION_DAYS}-day limit")
         elif disposition == "lab-candidate-pending-runtime-validation":
             if rec.get("candidate_channel") != "lab":
@@ -177,7 +179,9 @@ def validate_record(
     return errors
 
 
-def validate(root: Path, *, today: dt.date | None = None) -> list[str]:
+def validate(root: Path, *, today: dt.date | None = None, target: str = "production") -> list[str]:
+    if target not in {"integration", "production"}:
+        raise ValueError(f"unknown readiness target: {target}")
     errors: list[str] = []
     today = today or dt.datetime.now(dt.timezone.utc).date()
     path = root / "release" / "production-readiness.yaml"
@@ -190,7 +194,7 @@ def validate(root: Path, *, today: dt.date | None = None) -> list[str]:
     review_by = _date(data.get("review_by"), "review_by", errors)
     if review_by is None:
         review_by = today
-    elif review_by < today:
+    elif target == "production" and review_by < today:
         errors.append(f"review_by expired on {review_by.isoformat()}")
 
     actual = production_components(root)
@@ -224,17 +228,25 @@ def validate(root: Path, *, today: dt.date | None = None) -> list[str]:
             errors.append(f"{name}: version mismatch ({rec.get('version')} != {version})")
         if rec.get("source") != source:
             errors.append(f"{name}: source mismatch")
-        errors.extend(validate_record(root, name, version, rec, review_by=review_by, today=today))
+        errors.extend(validate_record(root, name, version, rec, review_by=review_by,
+                                      today=today, enforce_expiry=target == "production"))
+        if target == "production" and rec.get("current_runtime_receipt") == "pending":
+            errors.append(f"{name}: pending runtime evidence is not production approval")
     return errors
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate registry integrity separately from production eligibility.")
+    parser.add_argument("--target", choices=("integration", "production"), default="production")
+    args = parser.parse_args()
     root = HERE.parents[2]
-    errors = validate(root)
+    errors = validate(root, target=args.target)
     for error in errors:
         print(f"[BLOCKER] release/production-readiness.yaml: {error}")
     if not errors:
-        print("Production readiness registry: OK")
+        print(f"Readiness {args.target}: OK" +
+              (" (registry integrity only; runtime and production are not approved)"
+               if args.target == "integration" else ""))
     return 1 if errors else 0
 
 

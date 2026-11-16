@@ -18,6 +18,7 @@ if str(PACKAGE_DIR) not in sys.path:
     sys.path.insert(0, str(PACKAGE_DIR))
 
 from common import load_campaign_cases, load_supplemental_cases, sha256_file
+from historical_support import SUPPORT_PATHS, matches_support_pin
 import receipt
 import validate_routing
 import build_plugin
@@ -729,7 +730,9 @@ def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROO
         ):
             return set()
         for path, digest in hashes.items():
-            if hashlib.sha256((root / path).read_bytes()).hexdigest() != digest:
+            if (not matches_support_pin(root, path, digest, str(cfg.get("candidate_source_revision") or ""), rel)
+                    if path in SUPPORT_PATHS else
+                    hashlib.sha256((root / path).read_bytes()).hexdigest() != digest):
                 return set()
         if cfg.get("runtime_status") == "PASS":
             if (
@@ -898,10 +901,19 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             return set()
         iter08_cfg = yaml.safe_load((root / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text(encoding="utf-8")) or {}
         iter08_hashes = iter08_cfg.get("source_sha256") or {}
+        iter08_revision = str(iter08_cfg.get("candidate_source_revision") or "")
+        candidate_revision = str(cfg.get("candidate_source_revision") or "")
         for rel, digest in hashes.items():
             file_path = root / rel
             if not file_path.is_file():
                 return set()
+            if rel in SUPPORT_PATHS:
+                if not (matches_support_pin(root, rel, digest, candidate_revision,
+                            "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml") or
+                        matches_support_pin(root, rel, str(iter08_hashes.get(rel) or ""), iter08_revision,
+                            "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml")):
+                    return set()
+                continue
             actual_digest = hashlib.sha256(file_path.read_bytes()).hexdigest()
             if actual_digest != digest:
                 if iter08_hashes.get(rel) != actual_digest:

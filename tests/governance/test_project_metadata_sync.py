@@ -56,18 +56,18 @@ class MappingTest(unittest.TestCase):
 
     def test_explicit_project_status_body(self):
         result = mod.values("[ENG-01] review", "Historical status: PROPOSED\nProject status: In Progress", [])
-        self.assertEqual(result["Status"], "In Progress")
+        self.assertEqual(result["Status"], "In progress")
 
     def test_explicit_project_status_label(self):
         result = mod.values("[ENG-03] review", "", ["status:blocked"])
-        self.assertEqual(result["Status"], "Blocked")
+        self.assertNotIn("Status", result)
 
     def test_historical_status_not_taken_as_live_status(self):
         self.assertNotIn("Status", mod.values("[ENG-03] review", "historical status: PROPOSED", []))
 
     def test_conflicting_project_status_refuses_write(self):
         with self.assertRaises(ValueError):
-            mod.values("[ENG-03] review", "Project status: In Progress", ["status:blocked"])
+            mod.values("[ENG-03] review", "Project status: In Progress", ["status:done"])
 
     def test_graphql_failure_preserves_safe_cli_diagnostic(self):
         token = "ghp_" + "a" * 36
@@ -88,9 +88,14 @@ class MappingTest(unittest.TestCase):
         self.assertLessEqual(len(str(caught.exception)), 560)
 
     def test_project_valid_stages(self):
-        for stage in ("Discovery", "Validation", "In review"):
+        for stage in ("Discovery", "Verification", "In review"):
             with self.subTest(stage=stage):
                 self.assertEqual(mod.values("[ENG-03] review", "Project status: " + stage, [])["Status"], stage)
+
+    def test_invalid_or_obsolete_stage_is_not_silently_written(self):
+        for stage in ("Validation", "Blocked", "Almost done"):
+            with self.subTest(stage=stage), self.assertRaises(ValueError):
+                mod.values("Issue", "Project status: " + stage, [])
 
 
 class IterationSyncTest(unittest.TestCase):
@@ -111,7 +116,7 @@ class IterationSyncTest(unittest.TestCase):
                         {"id": "item", "project": {"id": "project"}}]}}}}}
         with patch.dict(mod.os.environ, {"GH_REPOSITORY": "owner/skills-factory",
                 "PROJECT_OWNER": "owner", "PROJECT_NUMBER": "1", "ISSUE_NUMBER": "2"}), \
-             patch.object(mod, "gql", side_effect=[data, {}]) as gql:
+             patch.object(mod, "gql", side_effect=[data, {}, {"node": {"fieldValues": {"nodes": [{"title": title, "field": {"name": "Iteration"}}]}}}]) as gql:
             mod.main()
         return gql.call_args_list
 
@@ -121,7 +126,7 @@ class IterationSyncTest(unittest.TestCase):
             {"project": "project", "item": "item", "field": "iteration-field", "iteration": "it3"}))
 
     def test_completed_iteration_can_be_selected(self):
-        self.assertEqual(len(self.run_sync("02 | Runtime", [{"id": "it2", "title": "02 | Runtime"}], completed=True)), 2)
+        self.assertEqual(len(self.run_sync("02 | Runtime", [{"id": "it2", "title": "02 | Runtime"}], completed=True)), 3)
 
     def test_numeric_or_case_mismatch_refuses_write(self):
         for title in ["03", "03 | lifecycle"]:
@@ -131,6 +136,23 @@ class IterationSyncTest(unittest.TestCase):
     def test_ambiguous_title_refuses_write(self):
         with self.assertRaises(RuntimeError):
             self.run_sync("Same", [{"id": "a", "title": "Same"}, {"id": "b", "title": "Same"}])
+
+    def test_readback_mismatch_prevents_success_claim(self):
+        original = mod.gql
+        def transport(query, variables):
+            return {"node": {"fieldValues": {"nodes": []}}}
+        # The mapper must verify the observed fields, not trust an empty mutation receipt.
+        with patch.object(mod, "READBACK", "query-readback"):
+            field = {"id": "iteration-field", "name": "Iteration", "configuration": {
+                "iterations": [{"id": "it3", "title": "03 | Lifecycle"}], "completedIterations": []}}
+            data = {"user": {"projectV2": {"id": "project", "fields": {"nodes": [field]}},
+                    "repository": {"issue": {"title": "Example", "body": "Project iteration: 03 | Lifecycle",
+                    "labels": {"nodes": []}, "projectItems": {"nodes": [{"id": "item", "project": {"id": "project"}}]}}}}}
+            with patch.dict(mod.os.environ, {"GH_REPOSITORY": "owner/skills-factory", "PROJECT_OWNER": "owner",
+                    "PROJECT_NUMBER": "1", "ISSUE_NUMBER": "2"}), \
+                 patch.object(mod, "gql", side_effect=[data, {}, transport(None, None)]):
+                with self.assertRaisesRegex(RuntimeError, "readback mismatch"):
+                    mod.main()
 
 
 if __name__ == "__main__":

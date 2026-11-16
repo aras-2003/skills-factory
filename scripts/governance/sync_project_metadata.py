@@ -17,7 +17,7 @@ PROJECT = """query($owner:String!, $project:Int!, $repo:String!, $issue:Int!) {
     }
     repository(name:$repo) {
       issue(number:$issue) {
-        title body labels(first:100) {nodes{name}}
+        title body state stateReason labels(first:100) {nodes{name}}
         projectItems(first:100) {nodes{id project{id number}}}
       }
     }
@@ -33,13 +33,18 @@ UPDATE = """mutation($project:ID!, $item:ID!, $field:ID!, $option:String!) {
 }"""
 PRIORITY = {"P0", "P1", "P2", "P3"}
 SIZE = {"XS", "S", "M", "L", "XL"}
-STATUS = {"In Progress", "Blocked", "Discovery", "Validation", "In review", "Done", "Ready", "Backlog"}
+STATUS = {"In progress", "Discovery", "Verification", "In review", "Done", "Ready", "Backlog"}
 AREA = {"Engineering", "Runtime", "E2E & Quality", "Security", "Commerce",
         "Investing", "OAF", "Learning", "Strategy", "Other"}
 PREFIX_AREA = {"ENG":"Engineering", "E2E":"E2E & Quality",
                "STR":"Strategy", "LEA":"Learning", "DOM":"Engineering",
                "PRO":"Other", "LIF":"Other", "CON":"Other", "WRI":"Other",
                "CORE":"Engineering", "EXI":"Engineering"}
+READBACK = """query($id:ID!){node(id:$id){... on ProjectV2Item{
+ fieldValues(first:100){nodes{
+ ... on ProjectV2ItemFieldSingleSelectValue {name field {... on ProjectV2FieldCommon {name}}}
+ ... on ProjectV2ItemFieldIterationValue {title field {... on ProjectV2FieldCommon {name}}}
+ }}}}}"""
 
 def gql(query, variables):
     """Use GitHub CLI for authenticated transport; never handle credentials here."""
@@ -109,7 +114,16 @@ def values(title, body, labels):
         result["Area"] = area_form
     # Only a dedicated Project status marker controls the live Project column.
     # Historical backlog status and narrative "Status" remain non-authoritative.
-    raw = re.findall(r"(?im)^\s*-?\s*Project status\s*:\s*\*{0,2}(In Progress|Blocked|Discovery|Validation|In review|Done|Ready|Backlog)\*{0,2}\s*$", body)
+    raw = re.findall(r"(?im)^\s*-?\s*Project status\s*:\s*\*{0,2}(.*?)\*{0,2}\s*$", body)
+    canonical = {value.casefold(): value for value in STATUS}
+    for value in raw:
+        if value.casefold() not in canonical:
+            raise ValueError(f"Invalid Project status: {value!r}; use native stages, with blocked as a label")
+    raw = [canonical[value.casefold()] for value in raw]
+    invalid_labels = [v for v in labels if v.startswith("status:") and v[7:] not in canonical
+                      and v != "status:blocked"]
+    if invalid_labels:
+        raise ValueError(f"Invalid Project status labels: {sorted(invalid_labels)}")
     selected_status = [v for v in STATUS if "status:" + v.lower() in labels]
     status_form = form_value("Project status", STATUS)
     if status_form:
@@ -155,6 +169,13 @@ def main():
     if len(items) != 1:
         raise RuntimeError("Ambiguous Project items")
     target = values(obj["title"], obj.get("body") or "", [n["name"] for n in obj["labels"]["nodes"]])
+    if target.get("Status") == "Done" and obj.get("stateReason") == "NOT_PLANNED":
+        raise RuntimeError("Cancelled/not_planned is not accepted Done; preserve the disposition")
+    if target.get("Status") in {"In progress", "In review"}:
+        from delivery_control import check_wip, read_project_items
+        wip = check_wip(read_project_items(gql, owner, number, repo), starting_item=items[0]["id"])
+        if wip["status"] != "PASS":
+            raise RuntimeError("Development WIP limit is 2; park blocked work or finish an active package")
     fields = {x["name"]:x for x in project["fields"]["nodes"] if x and x.get("name")}
     if not target:
         print("No explicit metadata; no changes")
@@ -184,7 +205,15 @@ def main():
         value_key = "iteration" if name == "Iteration" else "option"
         gql(mutation, {"project":project["id"], "item":items[0]["id"],
                        "field":field_id, value_key:option})
-        print(f"Set {name}={value} on Project #{number} Issue #{issue}")
+    if updates:
+        observed = gql(READBACK, {"id": items[0]["id"]})
+        rows = observed["node"]["fieldValues"]["nodes"]
+        for name, value, _, _ in updates:
+            actual = [v.get("name", v.get("title")) for v in rows
+                      if v and (v.get("field") or {}).get("name") == name]
+            if actual != [value]:
+                raise RuntimeError(f"Project {name} readback mismatch; do not report synchronization success")
+        print(f"Verified {len(updates)} Project fields on Issue #{issue}")
 
 if __name__ == "__main__":
     try: main()

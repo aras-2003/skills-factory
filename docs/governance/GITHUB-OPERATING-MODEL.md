@@ -2,7 +2,7 @@
 
 Status: Project is operational; full legacy backlog cutover remains tracked separately. Iteration delivery policy is submitted for review.
 
-For scope lock, one active iteration, branch flow, complete test coverage and closure decisions, follow [Iteration delivery and quality gates](ITERATION-DELIVERY.md).
+For scope lock, bounded parallel work, branch flow, complete test coverage and closure decisions, follow [Iteration delivery and quality gates](ITERATION-DELIVERY.md).
 
 ## System of record
 | Material | Home |
@@ -27,7 +27,7 @@ Name: **Skills Factory — Product & Engineering**. Current status options: Back
 7. Keep historical `BACKLOG.json` intact as read-only provenance. Do not delete it or overwrite receipts.
 
 ## Gate definitions
-- **Ready:** outcome, scope, dependencies, owner and testable acceptance criteria are explicit; implementation belongs to the single active locked iteration.
+- **Ready:** outcome, scope, dependencies, owner and testable acceptance criteria are explicit; Architecture Impact and scope are clear, dependencies allow execution and development WIP permits a pull; a global active-iteration lock is not required.
 - **In review:** diff and relevant checks are available; reviewer identified.
 - **Verification:** required runtime, E2E or integration checks/evidence are underway or pending on a specified candidate. Keep the Issue open and record concrete blockers; this status is not a PASS or a waiver of acceptance criteria.
 - **Done:** acceptance criteria satisfied with links for the final candidate, including required runtime tests on the primary surface selected by the scope. For Cloud Next behavior, ordinary Chat with Site MCP explicitly selected is primary; the actual MCP invocation and resulting host behavior must both be observed. Lab is supplemental unless Lab-specific behavior or Lab/Site parity is explicitly in scope. Record version lag and do not claim parity from mismatched identities. Production deployment is not required. A main merge moves runtime-bearing work to Verification, not Done. CI/static PASS alone does not imply runtime PASS. See [Runtime surface policy](ITERATION-DELIVERY.md#runtime-surface-policy).
@@ -35,3 +35,7 @@ Name: **Skills Factory — Product & Engineering**. Current status options: Back
 
 ## Wiki policy
 No independent duplication of technical specs. Wiki optional; for a public repo it can be a handbook containing links to canonical docs. Prefer GitHub Pages/catalog that already exists for generated content.
+
+## Approved SDLC process
+
+Follow [SDLC operating process](SDLC-OPERATING-PROCESS.md). The existing native stages and Architecture Impact field remain canonical. Scope-bound development/merge/private-Lab authorization does not imply production promotion. Readiness integrity runs at integration; expiry and runtime eligibility remain production gates.

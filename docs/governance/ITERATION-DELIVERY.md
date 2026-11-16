@@ -1,10 +1,10 @@
 # Iteration delivery and quality gates
 
-Status: operating policy submitted for review on 2026-10-12. Merge of this document adopts the policy; it does not start an iteration, authorize a merge/deployment, or prove runtime acceptance.
+Status: adopted; updated 2026-11-16 under owner-approved D1–D8. [SDLC operating process](SDLC-OPERATING-PROCESS.md) supersedes the global serial iteration rule and administrative expiry coupling. Historical acceptance requirements remain unchanged.
 
 ## Purpose and boundaries
 
-Deliver one coherent increment at a time: freeze scope, develop on short-lived branches, integrate after offline checks, test the complete candidate in runtime, close with evidence, then start the next increment. `main` is an offline-verified integration line; `production` remains a separately authorized runtime snapshot. A green PR is not a closed iteration.
+Deliver bounded coherent packages: freeze scope, develop on short-lived branches, integrate after offline checks, test the complete candidate in runtime, close with evidence; independent work may proceed within the approved WIP limit. `main` is an offline-verified integration line; `production` remains a separately authorized runtime snapshot. A green PR is not a closed iteration.
 
 This policy refines [Development and release model](../DEVELOPMENT-RELEASE-MODEL.md) and [Testing](../TESTING.md). It governs delivery; the historical backlog and existing campaign receipts remain immutable provenance.
 
@@ -19,23 +19,30 @@ Inspection baseline: main `46a2f0e4157feb3b4e4db5c00b6959e4e57bb6cb`.
 | Eval isolation, campaign lock, smoke, receipts and promotion validator | Reuse these; add an iteration-level acceptance matrix and final candidate identity. |
 | Project metadata sync | Dedicated `Project status:` and metadata labels sync; native Iteration and iteration gates do not. |
 | 30 native Project iterations and ticket packages | Scheduling queue, not 30 active commitments. Calendar “Current” is not permission to start. |
-| Governance docs / PR template | Need explicit scope lock, one active increment, merge-vs-Done semantics and close decision. |
+| Governance docs / PR template | Existing scope and acceptance are preserved; adopted SDLC controls use bounded packages and merge-vs-Done semantics. |
 
-There is currently no repository-wide automated check enforcing one active iteration, immutable scope, or complete case coverage at closure. Until that enforcement is implemented, the owner and reviewer apply the records and gates below. Do not describe this documentation as an automated control.
+The current automated controls and remaining manual boundaries are documented in
+[SDLC operating process](SDLC-OPERATING-PROCESS.md). Do not describe a planning report
+as runtime execution or a native Project transaction lock.
 
-## Iteration record and single-active rule
+## Iteration records and bounded work
 
-Maintain one versioned record per increment at `docs/governance/iterations/<id>.md`, created from [the template](templates/ITERATION-RECORD.md). The corresponding GitHub tracking Issue links this record and all included Issues. The record is the authoritative commitment; native Project Iteration is its scheduling mirror.
-
-Lifecycle: `PLANNED → ACTIVE → VALIDATING → CLOSED`. `BLOCKED` retains the active slot. `ABORTED` is a terminal outcome without acceptance. At most one record may be ACTIVE, VALIDATING or BLOCKED across the repository. The owner is accountable for the lock, candidate and close decision; a named reviewer verifies the evidence. If one person holds both roles, record that explicitly; never claim independent review.
-
-A date boundary does not start or close anything. No development, Ready-to-In-progress pull, or implementation PR for the next iteration until the active increment is CLOSED or formally ABORTED. Discovery that changes future scope also waits by default; backlog capture is allowed, but must not become parallel development.
+Keep existing versioned records and frozen acceptance for historical work. New task
+scope and acceptance live in the Issue; link a versioned design only when architecture
+or risk requires it. Do not create a duplicate record solely to obtain an active slot.
+Iterations group planned work; they do not globally prohibit independent development.
+Lifecycle labels PLANNED/ACTIVE/VALIDATING/CLOSED/ABORTED remain meaningful per record.
+Blocked work records cause, owner and resumption condition and can be parked.
 
 ### Start gate
 
-Start only when the previous increment is terminal, dependencies are accepted, scope fits one outcome, owner/reviewer are named, required runtime surfaces/tools are available or have an explicit booking, and every acceptance criterion has a planned test. Split L/XL work into bounded S/M slices before locking. Tracking umbrellas are not additional implementation scope.
-
-Record the baseline main SHA, fixed Issue list, explicit inclusions/exclusions, acceptance criteria, case IDs and applicability per surface. Commit this record before the first implementation PR. Record the lock commit SHA in the tracking Issue; that commit provides an immutable comparison point. Then mark ACTIVE and move only the first actionable work to Ready/In progress. Maximum implementation WIP is 2; validation uses one coordinated lane, not a second iteration.
+Use the native Ready stage only when outcome, scope, dependencies, owner, Architecture
+Impact and acceptance-to-test mapping are explicit. Check actual dependency readiness,
+not whether every other iteration is terminal. Split L/XL work into bounded packages.
+Maximum development WIP is 2 across In progress and In review; one shared Lab candidate
+is coordinated separately. Scope on a shared interface/migration requires integration
+ordering. Project synchronization enforces the active-stage WIP check and readback;
+manual Project edits require the same coordinator audit.
 
 ### Scope changes
 
@@ -51,19 +58,19 @@ Triage before closure: defects blocking frozen acceptance or critical regression
 
 A defect preventing an existing frozen criterion is corrective work within the same iteration: link a new defect Issue to the frozen parent and criterion, without increasing committed capability. The defect may use the same native iteration, but is identified as corrective rather than a new commitment. Strengthening a test for that defect is allowed; deleting a failed case, changing its expected result to permit the failure, or marking a required surface N/A is not.
 
-New requests go to a PLANNED increment. If necessary, create 3A with its own fixed scope and tests after 3 closes and before 4 starts. A blocker to 3's acceptance cannot be deferred to 3A to falsely close 3. If scope becomes infeasible, formally ABORT 3, retain partial evidence and map every unresolved criterion to replacement work before starting 3A. ABORTED is never PASS or Done.
+New requests go to a PLANNED increment. If necessary, create a dependent corrective package with its own fixed scope and tests. A blocker to 3's acceptance cannot be deferred to 3A to falsely close 3. If scope becomes infeasible, formally ABORT 3, retain partial evidence and map every unresolved criterion to replacement work before claiming acceptance for replacement work. ABORTED is never PASS or Done.
 
 ## Branches and candidate identity
 
-Use `iter-<id>/issue-<number>-<topic>` branches from current main. One scoped PR per slice; no long-lived iteration integration branch. Evidence-only closure PRs may use `iter-<id>/closure`. PRs link the locked record, parent Issue, criterion and change class (NEW/ROUTING/BEHAVIOR/RESOURCE/DOCS).
+Use `iter-<id>/issue-<number>-<topic>` branches from current main. One scoped PR per slice; no long-lived iteration integration branch. Evidence-only closure PRs may use `iter-<id>/closure`. PRs link the parent Issue, any existing locked record, Architecture Impact, criterion and change class (NEW/ROUTING/BEHAVIOR/RESOURCE/DOCS).
 
 Before each merge, validate the PR against current base, inspect the complete diff and required check results, and obtain review plus explicit merge authorization under repository policy. Offline CI may permit main integration with runtime NOT_RUN explicitly recorded. Use “Refs #…” rather than auto-closing syntax for work whose runtime acceptance is pending.
 
 After the final implementation merge, select the exact main SHA and its Lab artifact. Record source SHA, release ID, payload digest, Actions run/artifact URL, build checks and observed installation identity. The Lab packaging workflow alone does not establish post-merge Validate skills PASS; verify both. Domain integrity runs on pull requests, explicit workflow_dispatch and main pushes; verify the completed check on the exact integrated main SHA and record the run URL. PR-head checks alone are not post-merge evidence.
 
-Freeze behavior changes on main during validation. Evidence-only documentation may follow without changing the tested package; explicitly distinguish evidence commit from candidate source. Any changed behavior, packaging, tool contract, dependency, fixture or rubric creates a new candidate and invalidates affected verdicts. Preserve old runs, supersede them, and rerun the affected matrix plus shared smoke. If impact cannot be bounded, rerun the entire required iteration matrix. Never silently combine PASS from different packages/surfaces.
+Freeze the selected candidate during validation, not unrelated changes on main. Evidence-only documentation may follow without changing the tested package; explicitly distinguish evidence commit from candidate source. Any changed behavior, packaging, tool contract, dependency, fixture or rubric creates a new candidate and invalidates affected verdicts. Preserve old runs, supersede them, and rerun the affected matrix plus shared smoke. If impact cannot be bounded, rerun the entire required iteration matrix. Never silently combine PASS from different packages/surfaces.
 
-Security emergencies interrupt normal delivery: stop validation, record the incident, integrate the fix through review, then repin and revalidate the active iteration or formally abort it. They do not authorize concurrent iteration work or bypassed acceptance.
+Security emergencies interrupt normal delivery: stop validation, record the incident, integrate the fix through review, then repin and revalidate the active iteration or formally abort it. They do not authorize bypassed acceptance; independent safe work remains subject to the development WIP limit.
 
 ## Test strategy and evidence ledger
 
@@ -111,7 +118,7 @@ The campaign CLI currently selects R20 in code; it does not select an arbitrary 
 | --- | --- |
 | Backlog | Not started; future iteration assignment alone changes nothing. |
 | Discovery | Existing uncertainty being analyzed; no implied implementation. |
-| Ready | Frozen active scope, dependencies satisfied, owner and test plan explicit. |
+| Ready | Bounded scope, dependencies satisfied, owner, Architecture Impact and test plan explicit; capacity available. |
 | In progress | Actual implementation underway; WIP ≤2. |
 | In review | PR is ready for review with offline results. |
 | Verification | Required runtime/integration acceptance is being performed on the final candidate; an evidence gap remains open. |
@@ -140,15 +147,18 @@ No pass-rate threshold overrides a failed required criterion. Zero unresolved cr
 3. Verify matrix has no unaccepted required row and evidence is retrievable, unassisted and version/surface compatible.
 4. Reconcile open PRs/branches, Issue status/closure, native Iteration and tracking record. No acceptance work remains hidden under an umbrella.
 5. Record limitations/non-blocking findings, outcome, owner/reviewer, decision time and evidence links in closure PR and tracking Issue. Owner proposes CLOSED; reviewer accepts. A self-review is explicit, never simulated independence.
-6. Only after the closure record is accepted, release the active slot and start the next PLANNED increment (or 3A). Review actual throughput and readiness before changing future scope/dates.
+6. Release this package after accepted closure; independent packages need not wait for it. Review actual throughput, dependencies and WIP before pulling more work.
 
 Production promotion remains separate: a closed iteration is eligible for a promotion proposal, not permission to merge production or publish Cloud. Main and Sites are separate sources; follow the existing publishing runbook for any explicitly requested deployment.
 
-## Adoption and remaining enforcement work
+## Adoption and enforcement
 
-Adopt through this PR; link this policy from #233 and relevant governance Issues. The current calendar iteration is not deemed started by this PR. Before the first implementation, create its record and test matrix and verify all other records are PLANNED/terminal.
-
-Minimum manual process is usable immediately after adoption. Recommended next bounded governance increment: a deterministic validator for unique active state, locked-scope diff and matrix completeness, connected to PR CI; Project reconciliation with readback; durable evidence retention checks. Implement and test those controls separately, without replacing the existing campaign/promotion validators or expanding credentials implicitly. They are not delivered by this documentation change.
+Follow the adopted [SDLC operating process](SDLC-OPERATING-PROCESS.md) for native task
+states, bounded parallelism, architecture-informed test planning, derived evidence,
+integration-vs-production readiness and five-change pilot. Existing complete-coverage,
+security and production promotion requirements below remain applicable. Historical
+campaign support is checked at its immutable pre-adoption anchor, not rewritten when
+current administrative metadata changes.
 
 ## Minimum test inventory and run counts
 
@@ -172,7 +182,7 @@ Example: one changed skill on one required surface starts with 6 scoped + 5 shar
 
 ## Regression selection without executing the full runtime catalog
 
-Run all existing configured offline CI suites on each PR. Select external runtime cases by impact; reducing runtime scope is not permission to skip configured offline jobs.
+During the SDLC pilot, run all configured offline CI suites on each PR. Select external runtime cases by Architecture Impact A0–A4, reviewed direct/transitive consumers, risk and channel. Reducing runtime scope is not permission to skip configured offline jobs.
 
 Before implementation record changed paths/contracts and their consumers. Inspect workflow references, routing/catalog registrations, helper imports, schemas, permissions, packaging and campaigns. Follow direct consumers and transitive E2E paths until an unchanged contract boundary is demonstrated. Text searches help discover dependencies but do not prove their absence. Include negative routing neighbors and shared-state interactions.
 
@@ -207,4 +217,8 @@ Scoped regression cannot prove absence of distant defects. Sentinels detect shar
 | Closure | Evidence-only PR and completeness review | Compatible receipts, execution counts, locked scope, defect triage, no blocking rows. Ordinary green CI does not grant CLOSED. |
 | Production | `release-production-plugin.yml` and promotion validator | Existing provenance/runtime gates plus applicable full baseline; explicit merge/publish authorization. Sites publishing and observed deployed identity remain separate. |
 
-Required integration follow-up: add a deterministic `iteration-integrity` PR gate checking one active record, frozen commitment, bug-vs-idea classification, criterion-to-case completeness and planned counts. Closure checking must reconcile executed rows, final identity, severity and linked receipts, without equating receipt schema validity with behavioral PASS. Import existing runtime receipts rather than creating a competing format. Missing required rows must fail closed; retain artifacts durably. Configure a required branch-rule context only after this job is implemented and observed working. No workflow, permissions or branch protection change is delivered by this documentation PR; these controls remain explicit manual gates meanwhile.
+Enforcement boundary: the approved SDLC controls audit native WIP and Project writes,
+validate architecture-informed plans, preserve historical support pins and separate
+integration integrity from production eligibility. Runtime completeness, architectural
+approval, Lab-lane coordination and independent review remain explicit acceptance work;
+a generated index or green CI does not implement those observations automatically.

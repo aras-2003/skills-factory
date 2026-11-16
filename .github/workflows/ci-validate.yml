@@ -15,6 +15,7 @@ concurrency:
 
 env:
   SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+  BASE_REVISION: ${{ github.event.pull_request.base.sha || github.event.before || github.sha }}
 
 jobs:
   preflight:
@@ -96,9 +97,20 @@ jobs:
           python -m unittest discover -s tests/governance -p 'test_*.py'
           python -m unittest discover -s scripts/roadmap/tests -p 'test_*.py'
           python -m unittest discover -s scripts/engineering/tests -p 'test_*.py'
-          python scripts/engineering/change_gate.py --change-class DOCS --path docs/TESTING.md --output .tmp/docs-change-gate.json
+          python scripts/engineering/change_gate.py --change-class RESOURCE --architecture-impact UNKNOWN --base-revision "$BASE_REVISION" --source-revision "$SOURCE_REVISION" --output .tmp/sdlc/change-plan.json
           python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
           python scripts/engineering/audit_workflow_lifecycle.py --output .tmp/workflow-lifecycle-audit.json
+      - name: Generate public-safe evidence index and candidate manifest
+        run: |
+          python scripts/eval/evidence_index.py --output .tmp/sdlc/evidence-index.json
+          python scripts/eval/artifact_bundle.py pack --directory .tmp/sdlc --candidate "$SOURCE_REVISION"
+          python scripts/eval/artifact_bundle.py verify --directory .tmp/sdlc --candidate "$SOURCE_REVISION"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: sf-evidence-${{ env.SOURCE_REVISION }}
+          path: .tmp/sdlc/
+          if-no-files-found: error
+          retention-days: 90
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -126,7 +138,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_comfyui_local.py'
           python -m unittest discover -s scripts/readiness/tests -p 'test_*.py'
           python -m unittest discover -s scripts/release/tests -p 'test_*.py'
-          python scripts/readiness/validate_readiness.py
+          python scripts/readiness/validate_readiness.py --target integration
 
   eval-integrity:
     name: CI / Eval campaigns and packaging safety

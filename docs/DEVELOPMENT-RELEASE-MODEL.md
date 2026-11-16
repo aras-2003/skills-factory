@@ -62,4 +62,6 @@ Promote when there is a useful coherent increment, not for every edit. The expec
 
 ## Iteration delivery
 
-Follow [Iteration delivery and quality gates](governance/ITERATION-DELIVERY.md) for frozen scope, the single active increment, exact-candidate test coverage, corrective work, failure severity and closure before starting the next iteration. Main integration after offline checks remains separate from runtime acceptance and production promotion.
+Follow [Iteration delivery and quality gates](governance/ITERATION-DELIVERY.md) for frozen scope, bounded development WIP 2, exact-candidate test coverage, corrective work, failure severity and independent dependency-based delivery. Main integration after offline checks remains separate from runtime acceptance and production promotion.
+
+The adopted [SDLC operating process](governance/SDLC-OPERATING-PROCESS.md) defines native stages, Architecture Impact A0–A4, evidence ownership and integration/release separation.
