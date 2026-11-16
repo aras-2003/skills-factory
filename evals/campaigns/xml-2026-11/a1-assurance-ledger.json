@@ -1251,7 +1251,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "journal-entry"
+              "case_id": null
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4227,7 +4227,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "review-blocker"
+              "case_id": null
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4323,7 +4323,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "evidence-numeric"
+              "case_id": null
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6631,7 +6631,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "technical-structure-confirmed"
+              "case_id": null
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -7020,7 +7020,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "theme-direct"
+              "case_id": null
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
