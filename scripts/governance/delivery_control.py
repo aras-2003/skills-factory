@@ -11,7 +11,7 @@ ACTIVE = {"In progress", "In review"}
 PROJECT_ITEMS = """query($owner:String!, $project:Int!, $cursor:String) {
  user(login:$owner) {projectV2(number:$project) {items(first:100,after:$cursor) {
  pageInfo {hasNextPage endCursor} nodes {id isArchived
- content {... on Issue {number repository{nameWithOwner} labels(first:100){nodes{name} pageInfo{hasNextPage}}}}
+ content {... on Issue {number state stateReason repository{nameWithOwner} labels(first:100){nodes{name} pageInfo{hasNextPage}}}}
  fieldValues(first:100){nodes {... on ProjectV2ItemFieldSingleSelectValue {name field {... on ProjectV2FieldCommon {name}}}}}
  }}}}}
 """
@@ -20,7 +20,7 @@ PROJECT_ITEMS = """query($owner:String!, $project:Int!, $cursor:String) {
 def check_wip(items: list[dict], *, starting_item: str | None = None) -> dict:
     active = []
     for item in items:
-        if item.get("archived") or item.get("blocked"):
+        if item.get("archived") or item.get("blocked") or item.get("state") == "CLOSED":
             continue
         if item.get("status") not in STAGES:
             raise ValueError("Unknown Project stage; verify native field options")
@@ -47,6 +47,7 @@ def read_project_items(gql, owner: str, project: int, repository: str) -> list[d
                 raise ValueError("Incomplete or ambiguous Project metadata")
             labels = {v["name"].lower() for v in obj.get("labels", {}).get("nodes", [])}
             items.append({"id": node["id"], "status": values[0], "archived": node.get("isArchived", False),
+                          "state": obj.get("state"), "state_reason": obj.get("stateReason"),
                           "blocked": bool(labels & {"blocked", "status:blocked"})})
         info = connection["pageInfo"]
         if not info["hasNextPage"]:
