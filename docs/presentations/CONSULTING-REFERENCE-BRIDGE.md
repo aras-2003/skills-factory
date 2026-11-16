@@ -28,3 +28,25 @@ The `role` can be one of: `decision`, `options`, `capability`, `architecture`, `
 Source evidence: #450 / PR #508; external presentation candidates and intake blocker #621; parent Presentation OS #283; renderer reuse #608; theme #611; assets #612; cross-format QA #613; architecture IR #739.
 
 **Acceptance in this change:** semantic plan and source-lineage implementation delivered; test execution CI/host to verify; real deck/visual score NOT_RUN.
+
+## PRES-09 implementation addendum (2026-11-16)
+- **18 registered references**: seven archive-level Strategy OS sources with historical SHA, two separately pinned OpenAI/Marp candidates, and nine publicly accessible official BCG/McKinsey/Accenture HTML publications (three per firm). The official sources are recorded with source anchors and abstract editorial observations; source pages are *not* copied.
+- **Ten originally authored patterns**: decision, options, capability, architecture, governance, roadmap, KPI, risks, value, handoff. Each records source IDs and intended communication outcome; these are not firm-branded templates or certified consulting methods.
+- **CIO 10-slide fixture**: `docs/presentations/examples/cio-reference-golden-v1.json` keeps user-supplied baseline separate from proposed hypotheses. `reference_style_bridge.py` emits exact `slide_id → layout_id → source_id → source rights/revision/anchor` consumption record.
+- **Regressions**: ten unit tests cover evidence uncertainty, full fixture lineage, source-ID collisions, unknown references, rights coverage, duplicate slides and missing patterns. A dedicated read-only GitHub Actions job runs these and generates the fixture plan.
+- **Rights:** external community methods are historical reference sources, not officially affiliated consulting-firm assets; five unlicensed ZIPs are reference-only; MIT and Apache packages still require their own notice obligations if ever copied. `openai/skills` secure-intake remains blocked in #621 and must not be bypassed.
+- **Evidence categories:** source publication/section checked via public HTML; page screenshot/layout inspected = **NOT_RUN**; independent visual benchmark = **NOT_RUN**; native PPTX = **NOT_RUN**. This implementation can establish source-informed **semantic layout selection**, not executive-grade rendering.
+
+## Acceptance and follow-up
+| PRES-09 criterion | Current evidence | Result |
+|---|---|---|
+| Reuse #450 source archive register | Historical hashes, provenance and rights inherited without copying ZIPs | PASS: manifest-linked |
+| 3 official sources per firm | Nine public HTML links with anchors and original observations | PASS: editorial/source coverage; visual inspection NOT_RUN |
+| At least 8 original patterns | Ten roles with source links | PASS: registry |
+| Fixture demonstrates actual pattern consumption | CLI adapter + ten-slide canonical fixture + tests | CI pending / runtime NOT_RUN until green receipt |
+| Independent design reviewer | No reviewer assigned | NOT_RUN |
+| Quantified baseline vs improved visual output | No paired render/quality scores yet | NOT_RUN |
+| Third-party skill execution | OpenAI Slides intake blocked; no third-party execution claimed | BLOCKED |
+| Release into Presentation OS renderer | Intentionally not integrated with renderer | NOT_RUN |
+
+**Release decision:** do not mark #744 Done while visual inspection, review and baseline/candidate measurement remain missing. The adapter is a bounded proof of consumption, not the complete consulting-grade style system.
