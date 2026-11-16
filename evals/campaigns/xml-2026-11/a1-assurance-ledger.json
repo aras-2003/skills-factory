@@ -6051,7 +6051,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": "testdesign-positive-routing"
+              "case_id": null
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -6344,7 +6344,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "strategy-econ-profit-pool-golden"
+              "case_id": null
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
