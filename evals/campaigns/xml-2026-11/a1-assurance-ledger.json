@@ -116,7 +116,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Organize and review accessibility evidence for a specific interface, state and supported runtime. Find gaps that deterministic checks may miss and decide what evidence is still needed. This review does not certify legal or WCAG conformance.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Organize and review accessibility evidence for a specific interface, state and supported runtime. Find gaps that deterministic checks may miss and decide what evidence is still needed. This review does not certify legal or WCAG conformance.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -212,7 +212,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Test whether the product can be explained and sold efficiently through the intended acquisition channel.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Test whether the product can be explained and sold efficiently through the intended acquisition channel.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -308,7 +308,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Test whether organisational and technology architecture coherently supports strategic direction without assuming that organisational symptoms imply technology defects.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Test whether organisational and technology architecture coherently supports strategic direction without assuming that organisational symptoms imply technology defects.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -404,7 +404,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Identify which capabilities are insufficient for the target outcome and what dimension of each capability is weak.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Identify which capabilities are insufficient for the target outcome and what dimension of each capability is weak.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -497,7 +497,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Make a capability map useful for decisions rather than decorative taxonomy.” Declared source risk is low. No additional family is proposed beyond the five shared cases because this source contract declares no distinct tool/side-effect, multi-turn, visual/export, provenance, security-boundary, or downstream-consumer hazard. Reassess if its scope changes."
+              "rationale": "Source contract: “Make a capability map useful for decisions rather than decorative taxonomy.” Declared risk: low. No extra family is proposed beyond the five shared cases because the current source contract does not declare a distinct hazard in any of the six expansion areas. Reassess if the scope changes."
             }
           }
         }
@@ -594,7 +594,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Identify whether regulatory burden, product classification or claims risk can invalidate an otherwise attractive product thesis.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Identify whether regulatory burden, product classification or claims risk can invalidate an otherwise attractive product thesis.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -689,7 +689,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Build an evidence-based factual picture of a company without silently turning research into career advice.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Build an evidence-based factual picture of a company without silently turning research into career advice.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -784,7 +784,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Understand how customers currently solve the problem and where competitive pressure actually sits.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Understand how customers currently solve the problem and where competitive pressure actually sits.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -881,7 +881,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Create or transform an image or video with a local model runtime. This skill does not provide model weights, bypass model licensing, install extensions, or call hosted generation APIs.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Create or transform an image or video with a local model runtime. This skill does not provide model weights, bypass model licensing, install extensions, or call hosted generation APIs.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -977,7 +977,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Identify what is strong, weak, missing or merely under-evidenced before changing the CV.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Identify what is strong, weak, missing or merely under-evidenced before changing the CV.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1074,7 +1074,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Produce a role-specific CV variant that improves relevance without weakening factual integrity.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Produce a role-specific CV variant that improves relevance without weakening factual integrity.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1171,7 +1171,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Find the actual source of latency for an identified decision class rather than assuming governance is too heavy.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Find the actual source of latency for an identified decision class rather than assuming governance is too heavy. If the user says decisions circulate or escalate because nobody knows who has final decision authority, route first to `decision-rights-review`. Use this workflow later only if the owner/” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1268,7 +1268,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Create the learning loop required to distinguish skill from luck and identify recurring decision errors.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Create the learning loop required to distinguish skill from luck and identify recurring decision errors.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1365,7 +1365,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Clarify ownership and authority for identified important decisions and how those decisions actually move through the organisation.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Clarify ownership and authority for identified important decisions and how those decisions actually move through the organisation. If the initial problem spans interfaces, accountability and resource/capacity authority across units without a defined decision set, first use the operating-model diagno” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1460,7 +1460,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Review an existing interface artifact and help the owner decide which visual or interaction-design issues to fix first. Ground each finding in what the supplied artifact actually shows.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Review an existing interface artifact and help the owner decide which visual or interaction-design issues to fix first. Ground each finding in what the supplied artifact actually shows.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1555,7 +1555,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Determine why a customer should choose this offer rather than a cheaper or better-known alternative.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Determine why a customer should choose this offer rather than a cheaper or better-known alternative.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1651,7 +1651,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Test whether evidence changes decisions rather than merely producing reports.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Test whether evidence changes decisions rather than merely producing reports.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1747,7 +1747,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Evaluate the substance of an executive technology opportunity without confusing title, compensation or company prestige with mandate.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Evaluate the substance of an executive technology opportunity without confusing title, compensation or company prestige with mandate.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1843,7 +1843,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Select the smallest existing design capability for an explicit UI/UX task. This router does not create a new report, presentation, visualization or implementation architecture.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Select the smallest existing design capability for an explicit UI/UX task. This router does not create a new report, presentation, visualization or implementation architecture.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -1940,7 +1940,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Calculate a declared financial model reproducibly. Separate model architecture and interpretation from formula execution. This capability performs arithmetic; it does not source assumptions, certify a business case, or recommend investment.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Calculate a declared financial model reproducibly. Separate model architecture and interpretation from formula execution. This capability performs arithmetic; it does not source assumptions, certify a business case, or recommend investment.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2035,7 +2035,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Diagnose whether the global/local split supports enterprise outcomes without unnecessary centralisation.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Diagnose whether the global/local split supports enterprise outcomes without unnecessary centralisation.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2131,7 +2131,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Create the minimum governance needed to make defined decisions well and quickly.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Create the minimum governance needed to make defined decisions well and quickly.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2228,7 +2228,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Evaluate whether a defined, frozen investment decision rule would have changed outcomes on a supplied historical sample. This is an audit of past decisions, not a forecast or trade instruction.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Evaluate whether a defined, frozen investment decision rule would have changed outcomes on a supplied historical sample. This is an audit of past decisions, not a forecast or trade instruction.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2324,7 +2324,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Convert an approved interface concept and available product evidence into a precise handoff an engineer can implement and verify. This is a specification, not code or proof that the implementation works.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Convert an approved interface concept and available product evidence into a precise handoff an engineer can implement and verify. This is a specification, not code or proof that the implementation works.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2419,7 +2419,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn a concrete product or service need into a buildable, evidence-aware interface brief. Define what people need to understand and do before choosing visual treatment or writing implementation code.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn a concrete product or service need into a buildable, evidence-aware interface brief. Define what people need to understand and do before choosing visual treatment or writing implementation code.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2515,7 +2515,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Convert known role/company evidence into a practical interview preparation brief.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Convert known role/company evidence into a practical interview preparation brief.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2612,7 +2612,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Convert noisy new information into a decision-focused queue: what changed, whether it matters, where to look deeper, and why.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Convert noisy new information into a decision-focused queue: what changed, whether it matters, where to look deeper, and why.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2710,7 +2710,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Create an explicit policy that governs later research and portfolio decisions without pretending that one famous investor's style is universally optimal.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Create an explicit policy that governs later research and portfolio decisions without pretending that one famous investor's style is universally optimal.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2807,7 +2807,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Provide one durable, auditable persistence contract for Investment OS, with Supabase/Postgres as the target canonical store.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Provide one durable, auditable persistence contract for Investment OS, with Supabase/Postgres as the target canonical store.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2902,7 +2902,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Learn decision principles from strong practitioners without cargo-culting portfolios.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Learn decision principles from strong practitioners without cargo-culting portfolios.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -2997,7 +2997,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Find plausible senior/executive technology opportunities efficiently without doing expensive downstream analysis too early.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Find plausible senior/executive technology opportunities efficiently without doing expensive downstream analysis too early.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3092,7 +3092,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Prevent wasted effort on stale, withdrawn, duplicated or materially changed vacancies.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Prevent wasted effort on stale, withdrawn, duplicated or materially changed vacancies.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3187,7 +3187,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Assess whether an existing KPI set supports real decisions and learning.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Assess whether an existing KPI set supports real decisions and learning.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3282,7 +3282,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Use dated, sourced inputs to keep top-down TAM and bottom-up TAM separate, compare their difference, and calculate segment-derived SAM/SOM and uncovered serviceable value. The calculator requires an explicit as-of date, currency, source ID ” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Use dated, sourced inputs to keep top-down TAM and bottom-up TAM separate, compare their difference, and calculate segment-derived SAM/SOM and uncovered serviceable value. The calculator requires an explicit as-of date, currency, source ID and publication date for each number. It rejects future evid” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3378,7 +3378,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Reduce a broad investable universe to a small research queue by looking for meaningful change, not merely popular tickers.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Reduce a broad investable universe to a small research queue by looking for meaningful change, not merely popular tickers.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3473,7 +3473,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Test whether the reasons a product works in the source market exist in the target market.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Test whether the reasons a product works in the source market exist in the target market.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3569,7 +3569,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Assess whether the organisation's division of responsibility, cross-unit interfaces and authority/resource model support its strategic goals.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Assess whether the organisation's division of responsibility, cross-unit interfaces and authority/resource model support its strategic goals. When a problem mixes handoffs, accountability and effective authority/capacity across units, lead with this skill to classify the operating-model failure befo” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3664,7 +3664,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Diagnose where cross-boundary interfaces fail and why.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Diagnose where cross-boundary interfaces fail and why.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3760,7 +3760,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Diagnose whether the portfolio as a system can realistically deliver its intended outcomes.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Diagnose whether the portfolio as a system can realistically deliver its intended outcomes.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3856,7 +3856,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn competing initiatives into a transparent decision set without creating false precision.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn competing initiatives into a transparent decision set without creating false precision.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -3953,7 +3953,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn canonical holdings/history into a decision-useful portfolio state while preserving auditability.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn canonical holdings/history into a decision-useful portfolio state while preserving auditability.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4051,7 +4051,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Separate the decision to own an asset from the decision of how much risk to allocate.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Separate the decision to own an asset from the decision of how much risk to allocate.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4147,7 +4147,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Derive a decision-useful, audience-specific, sufficient brief. Presentation production does not begin with a default agenda or template.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Derive a decision-useful, audience-specific, sufficient brief. Presentation production does not begin with a default agenda or template.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4243,7 +4243,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Independently challenge whether this deck changes the intended audience's mind/decision with credible evidence and competent presentation design. Own presentation editorial/design review and fidelity to domain conclusions; **do not certify ” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Independently challenge whether this deck changes the intended audience's mind/decision with credible evidence and competent presentation design. Own presentation editorial/design review and fidelity to domain conclusions; **do not certify strategy quality** based on slide polish or replace domain s” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4339,7 +4339,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Make every decision-relevant slide claim and factual exhibit traceable. This is a presentation-specific evidence and claim-to-slide mapping layer, **not** a replacement for shared CORE research/evidence controls or Strategy OS analytical de” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Make every decision-relevant slide claim and factual exhibit traceable. This is a presentation-specific evidence and claim-to-slide mapping layer, **not** a replacement for shared CORE research/evidence controls or Strategy OS analytical decision work.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4435,7 +4435,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Translate a supported claim and its evidence into a clear, editable exhibit specification. This skill does not invent analysis or perform the full deck narrative.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Translate a supported claim and its evidence into a clear, editable exhibit specification. This skill does not invent analysis or perform the full deck narrative.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4532,7 +4532,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Establish what was **actually** created, rendered, exported and checked. Be precise about native deck quality, PPTX/PDF parity and editability rather than making export promises.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Establish what was **actually** created, rendered, exported and checked. Be precise about native deck quality, PPTX/PDF parity and editability rather than making export promises.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4629,7 +4629,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn an approved semantic story and evidence-backed exhibit plan into a native **editable** presentation, subject to the actual capabilities of the user's connected destination. This is not the strategy/evidence/QA authority.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn an approved semantic story and evidence-backed exhibit plan into a native **editable** presentation, subject to the actual capabilities of the user's connected destination. This is not the strategy/evidence/QA authority.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4725,7 +4725,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn a sufficient presentation brief and material claims into a coherent argument the audience can follow and act on. This skill owns **communication logic and ghost-deck narrative**, not substantive strategic analysis, option selection, do” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn a sufficient presentation brief and material claims into a coherent argument the audience can follow and act on. This skill owns **communication logic and ghost-deck narrative**, not substantive strategic analysis, option selection, domain research, rendering or layouts. STR-06/STR-10/STR-09 ow” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4821,7 +4821,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Determine whether a real problem creates credible willingness to act and pay.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Determine whether a real problem creates credible willingness to act and pay.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -4917,7 +4917,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Keep recruitment tracking current without re-running full analysis.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Keep recruitment tracking current without re-running full analysis.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5013,7 +5013,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Generate a small set of evidence-linked product hypotheses worth validating, without turning weak signals into a business verdict.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Generate a small set of evidence-linked product hypotheses worth validating, without turning weak signals into a business verdict.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5109,7 +5109,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn a completed analysis into one coherent decision report rendered **in the chat response by default**. The report structure is primary; visuals are embedded where they improve the reader's understanding of the surrounding argument.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn a completed analysis into one coherent decision report rendered **in the chat response by default**. The report structure is primary; visuals are embedded where they improve the reader's understanding of the surrounding argument. Do not create a second \"visual report\" beside the chat answer. Do” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5205,7 +5205,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn a sufficient report brief and a supplied/versioned evidence or domain result into a *reader-first document architecture* suitable for sustained reading. Own chapter/section hierarchy and argument allocation. Do not decide new strategy,” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn a sufficient report brief and a supplied/versioned evidence or domain result into a *reader-first document architecture* suitable for sustained reading. Own chapter/section hierarchy and argument allocation. Do not decide new strategy, validate an entire research domain, edit DOCX files or desi” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5302,7 +5302,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Own the **execution and fidelity of actual external document production**, not research, domain recommendations, or the logic of an analytical report. Never pretend tool availability, export success, page rendering or font/editability parit” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Own the **execution and fidelity of actual external document production**, not research, domain recommendations, or the logic of an analytical report. Never pretend tool availability, export success, page rendering or font/editability parity.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5398,7 +5398,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Independently identify fixable defects in the **written document and its real rendered artifact**, preserving domain source truth. This is not Strategy quality certification, report writing, or a slide-review skill.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Independently identify fixable defects in the **written document and its real rendered artifact**, preserving domain source truth. This is not Strategy quality certification, report writing, or a slide-review skill.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5496,7 +5496,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Produce an evidence-backed investment case that can later be challenged, valued, sized and monitored.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Produce an evidence-backed investment case that can later be challenged, valued, sized and monitored.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5593,7 +5593,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Produce a bounded, source-backed SEO finding from OpenSEO without copying its application, spending credits unexpectedly, or treating crawled content as instructions.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Produce a bounded, source-backed SEO finding from OpenSEO without copying its application, spending credits unexpectedly, or treating crawled content as instructions.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5690,7 +5690,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “# Skill Authoring” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Create or refactor an Agent Skill package from an approved skill specification. Use when writing SKILL.md, splitting instructions into references/scripts/assets, improving progressive disclosure, or aligning a skill with repository and current Agent Skills authoring conventions.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5787,7 +5787,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “# Skill Evaluation” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Determine whether the candidate reliably improves the intended task without introducing unacceptable regressions. Evaluation is evidence about a defined scope and runtime; it is not proof of general model quality or authorization to release. **Hard gate:** An expected PASS is not an observed PASS. R” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5884,7 +5884,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Decide whether a specific, identified skill version is ready for a named release channel. Separate the readiness recommendation from human authorization to merge, publish or deploy.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Decide whether a specific, identified skill version is ready for a named release channel. Separate the readiness recommendation from human authorization to merge, publish or deploy.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -5979,7 +5979,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Prevent premature skill creation and define a testable contract before instructions are written.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Prevent premature skill creation and define a testable contract before instructions are written.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6075,7 +6075,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Build a small, discriminating suite that tests the approved skill contract. Cases should reveal routing errors, missing behavior, unsafe actions and regressions; they should not merely echo instructions or reward one preferred wording.” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Build a small, discriminating suite that tests the approved skill contract. Cases should reveal routing errors, missing behavior, unsafe actions and regressions; they should not merely echo instructions or reward one preferred wording.” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6171,7 +6171,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Perform static and semantic review before runtime evals.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Perform static and semantic review before runtime evals.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6264,7 +6264,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Verify that the installed Skills Factory plugin exposes bundled skills to the runtime.” Declared source risk is low. No additional family is proposed beyond the five shared cases because this source contract declares no distinct tool/side-effect, multi-turn, visual/export, provenance, security-boundary, or downstream-consumer hazard. Reassess if its scope changes."
+              "rationale": "Source contract: “Verify that the installed Skills Factory plugin exposes bundled skills to the runtime.” Declared risk: low. No extra family is proposed beyond the five shared cases because the current source contract does not declare a distinct hazard in any of the six expansion areas. Reassess if the scope changes."
             }
           }
         }
@@ -6359,7 +6359,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Require an explicit as-of date, currency and source ID/publication date for each numeric input. Use `engine.py` for aggregate profit pools, sum/product driver-tree checks, exact price-volume-mix bridges and baseline-to-actual cost bridges. ” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Require an explicit as-of date, currency and source ID/publication date for each numeric input. Use `engine.py` for aggregate profit pools, sum/product driver-tree checks, exact price-volume-mix bridges and baseline-to-actual cost bridges. The PVM convention is volume, then mix at base prices, then ” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6455,7 +6455,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Find structural breaks between declared strategy and actual execution.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Find structural breaks between declared strategy and actual execution.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6551,7 +6551,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Separate attractive product economics from sourcing, quality and inventory reality.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Separate attractive product economics from sourcing, quality and inventory reality.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6648,7 +6648,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Describe observable swing structure and its conditions of confirmation or invalidation. This is a deterministic technical-state summary, not a return forecast, probability, or buy/sell instruction. OPS means the latest confirmed swing high;” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Describe observable swing structure and its conditions of confirmation or invalidation. This is a deterministic technical-state summary, not a return forecast, probability, or buy/sell instruction. OPS means the latest confirmed swing high; OPD means the latest confirmed swing low in this implementa” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6745,7 +6745,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Try to falsify the preferred investment case before capital or additional conviction is added.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Try to falsify the preferred investment case before capital or additional conviction is added.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6844,7 +6844,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Evaluate what changed versus the recorded thesis rather than summarizing news from scratch.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Evaluate what changed versus the recorded thesis rather than summarizing news from scratch.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -6940,7 +6940,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn validated diagnosis and target direction into a practical, evidence-gated change blueprint.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn validated diagnosis and target direction into a practical, evidence-gated change blueprint.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7035,7 +7035,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Turn a narrative into a falsifiable economic map and a research universe.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Turn a narrative into a falsifiable economic map and a research universe.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7131,7 +7131,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Determine whether an e-commerce offer can support its variable costs and acquisition while keeping inventory/cash exposure visible.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Determine whether an e-commerce offer can support its variable costs and acquisition while keeping inventory/cash exposure visible.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7229,7 +7229,7 @@
               "source_declared_risk": "high",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Make valuation assumptions visible and test sensitivity instead of producing false precision.” Declared source risk is high. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Make valuation assumptions visible and test sensitivity instead of producing false precision.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7325,7 +7325,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Connect an approved initiative portfolio to a dated benefit ledger and a human review decision. Reuse `evidence-loop-review` for the quality of the wider operating feedback system, `portfolio-prioritization` for comparing initiatives, `deci” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Connect an approved initiative portfolio to a dated benefit ledger and a human review decision. Reuse `evidence-loop-review` for the quality of the wider operating feedback system, `portfolio-prioritization` for comparing initiatives, `decision-rights-review` for authority, and `governance-design` f” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7421,7 +7421,7 @@
               "source_declared_risk": "low",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Select and render one evidence-backed exhibit for an already-defined local information need. This shared exhibit specialist is called by `report-composer` for chat, `report-document-architecture` for long-form documents, and” Declared source risk is low. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Select and render one evidence-backed exhibit for an already-defined local information need. This shared exhibit specialist is called by `report-composer` for chat, `report-document-architecture` for long-form documents, and `presentation-exhibit-design` for slides. It does not own the structure of ” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7517,7 +7517,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Identify meaningful visual changes between an approved baseline and a candidate rendering under comparable conditions. Report evidence and likely impact without treating every pixel difference as a defect.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Identify meaningful visual changes between an approved baseline and a candidate rendering under comparable conditions. Report evidence and likely impact without treating every pixel difference as a defect.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7614,7 +7614,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source purpose reviewed: “Review an existing website against its intended user task using rendered evidence and the project's existing deterministic checks. This is a read-only review, not a builder, code reviewer, security audit, or release approval.” Declared source risk is medium. Proposed families map to the explicit source boundaries; see family intents in the A1 contract."
+              "rationale": "Source contract: “Review an existing website against its intended user task using rendered evidence and the project's existing deterministic checks. This is a read-only review, not a builder, code reviewer, security audit, or release approval.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             }
           }
         }
@@ -7700,12 +7700,12 @@
       "explicit release decision separate from acceptance"
     ],
     "risk_expansion_family_intents": {
-      "tool_or_side_effect": "Verify declared tool allowlists, consent gates, and read/write or export limits; tool failure must not trigger an unauthorized fallback.",
-      "multi_turn": "Verify continuity of user constraints and state across turns; missing inputs require a focused clarification and partial work cannot masquerade as a final decision.",
-      "visual_or_export": "Inspect the actual rendered/exported artifact and target format; source text, successful build, or tool availability alone is not visual/export acceptance.",
+      "tool_or_side_effect": "Test the source-declared tool or effect boundary: enforce its allowlist and read/write/export limits, require consent only where the source requires it, and do not substitute unauthorized actions when a tool fails.",
+      "multi_turn": "Test continuity of user constraints and state across turns; missing inputs require a focused clarification, and partial work must not masquerade as a final decision.",
+      "visual_or_export": "When the source claims visual or export behavior, inspect the actual rendered/exported target artifact; source text, successful build, or tool availability alone is not acceptance.",
       "provenance": "Require dated source identity for material claims; missing, stale, conflicting, or future-dated evidence remains unresolved and cannot support PASS.",
-      "security_boundary": "Use hostile or boundary-pressure input to confirm that secrets, authority, scope, stop rules, and prohibited actions remain protected.",
-      "consumer_workflow": "Exercise the real downstream handoff; invalid or incomplete upstream outputs must be rejected or surfaced, never reported as accepted."
+      "security_boundary": "Use hostile or boundary-pressure input to verify that secrets, authority, scope, stop rules, and prohibited actions remain protected.",
+      "consumer_workflow": "Where a documented downstream consumer exists, exercise the actual handoff; invalid or incomplete upstream output must be rejected or surfaced, never reported as accepted."
     },
     "risk_expansion_review_rule": "Each row reads source metadata.risk at candidate revision. Additional families and rationale are coordinator proposals only; independent reviewer must accept or revise coverage and freeze case IDs, inputs, expected outcomes, rubric and holdouts before A2. Empty family arrays are allowed only with row-specific rationale."
   },
