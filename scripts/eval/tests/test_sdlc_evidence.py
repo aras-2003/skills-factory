@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+import yaml
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts/eval"))
@@ -55,6 +56,16 @@ class HistoricalSupportTests(unittest.TestCase):
         raw = subprocess.check_output(["git", "show", f"{historical_support.ANCHOR}:{path}"], cwd=ROOT)
         self.assertTrue(historical_support.matches_support_pin(ROOT, path, hashlib.sha256(raw).hexdigest()))
         self.assertFalse(historical_support.matches_support_pin(ROOT, path, "0" * 64))
+
+    def test_support_pin_uses_its_recorded_candidate_not_a_global_anchor(self):
+        path = "scripts/eval/campaign.py"
+        cfg = yaml.safe_load(
+            (ROOT / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml").read_text()
+        )
+        revision = cfg["candidate_source_revision"]
+        digest = cfg["source_sha256"][path]
+        self.assertTrue(historical_support.matches_support_pin(ROOT, path, digest, revision))
+        self.assertFalse(historical_support.matches_support_pin(ROOT, path, digest, historical_support.ANCHOR))
 
     def test_runtime_source_cannot_use_historical_support_exemption(self):
         self.assertFalse(historical_support.matches_support_pin(ROOT, "skills/investing/thesis-monitor/SKILL.md", "a" * 64))
