@@ -73,8 +73,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "4b2f0a2b2b32c57ec6626e987901cbb79c334cf33e4a32c87f54b2ae7b1cdc54",
+            "rubric_sha256": "7f358ecb1857d102215d0eeb0920857e70b000842d1f6fd47618b5f5a2d0baaa",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -87,7 +87,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "accessibility-gate-evidence-positive"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -95,7 +95,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "accessibility-gate-implementation-nearmiss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -170,8 +170,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "01efc7def68579e02fca2790eee7caaa7264f921f18e4d220edd7c568315fd10",
+            "rubric_sha256": "e8cf49b2688dbf1ada03dad47d86be5d8cd6e091c77cf41ce9a20e60607839c4",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -184,7 +184,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "acquisition-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -192,7 +192,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "acquisition-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -266,8 +266,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "76d9a4f88fd6c55523405b34aba97e13f6f45264225fe6d765861e9683443a4b",
+            "rubric_sha256": "15a793dfdba7719570510322104b756ccbe3f4e84e6bf558aa6000be610ed19b",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -280,7 +280,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "architecture-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -288,11 +288,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "architecture-review-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "architecture-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -362,8 +362,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "662bbb96aaad9e7b29617ca3f9c07cb9082b9a0c2d196393cd50de4f627e73e8",
+            "rubric_sha256": "98eb2ef3049e0f2d18f29132e6681084d9045cb51ad932454e7fd664b3b4cfd2",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -376,7 +376,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "capability-gap-analysis-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -384,11 +384,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-capability-gap-analysis"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "capability-gap-analysis-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -458,8 +458,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "880cf286d69618f4489202faa9c3b0fe31b3e071e02106aab6cae170a54ca752",
+            "rubric_sha256": "141c83c3d01b800958e515901440da92ab1e15953cf67cf4a7f387bc3aaef2f6",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -472,7 +472,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "capability-map-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -480,11 +480,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "capability-map-review-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "capability-map-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -551,8 +551,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "360534ae7b5b7f3c483830c2a076d6b4d0328963ec6396768b91bfba97fc4c88",
+            "rubric_sha256": "636edef890b788c8aac7bce51fe936e7e42d9b7357b1ed77476c0271437d81bc",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -565,7 +565,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "regulation-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -573,11 +573,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "regulation-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "regulation-001"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -648,8 +648,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "fbeae9a72df7efa2d790f3d81a2a976baf85f70eba61af70325abc94ba2d240e",
+            "rubric_sha256": "fc6abdb5d27ed8ea99daa9461796450bc963131b60bd657c8a840f665c9bd76e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -662,7 +662,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "company-context-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -674,7 +674,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "company-context-source-conflict"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -743,8 +743,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "e72de01952d8b00b25db6a644fa742538bc21ea85b7fb5eea4e17918c1d0c96a",
+            "rubric_sha256": "228e27e29d205f07542b6c7128ccb528b273975b98bd52fbf6553457114f1d0d",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -757,7 +757,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "competition-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -765,7 +765,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "competition-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -838,8 +838,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "19fe3cee5faef61a5e3a99b3a51a53b4f94ecfe2842d4c9df057a13454453509",
+            "rubric_sha256": "8063e1e9e9e40471a2b3c2768e41e09c938a9e97f60c5aeeabd805cd6951cc36",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -852,7 +852,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "local-image-generation"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -860,15 +860,15 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "normal-image-request-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "unknown-checkpoint-license"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "untrusted-workflow"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -935,8 +935,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "bd42d5749d65e55e2e52678c081aa40bde249c417ab8c4e231a928f49abbfcc6",
+            "rubric_sha256": "b886e29474d9c235d6781185c1a71ab50cdf81df584fbb70fb9960fc2916d487",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -949,7 +949,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "cv-gap-analysis-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -957,7 +957,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-cv-gap-analysis"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -1031,8 +1031,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "bd9ed1a1b7b5a11471d55ded42765e4c101b0fbf7267121c9e85b564559209d2",
+            "rubric_sha256": "dccd256bcf113eb465b771ad64e872af6df056cac89f2828a916f1efbc83c025",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1045,7 +1045,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "cv-tailoring-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1053,11 +1053,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-cv-tailoring"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "cv-tailoring-004-source-precedence"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1128,8 +1128,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "ebe18b6c4d30a32c233bf9f70bf0627af1069cce85d5186aa7db713e36abd772",
+            "rubric_sha256": "34144182e5ed9b178e0e111945913bf1e3e1e72127a0f008ff19dbfad41fc812",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1142,7 +1142,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "decision-bottleneck-analysis-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1150,11 +1150,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "decision-bottleneck-analysis-005"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "decision-bottleneck-analysis-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1225,8 +1225,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "a21f78a5621049fc05120a21b8d4ed913627415e3d4a08c641b5924d2a1066eb",
+            "rubric_sha256": "52056aed5a1170969748a8048e43156bc0f5323717fd93757f4fac561971383e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1239,7 +1239,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "journal-entry"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1247,7 +1247,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "journal-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -1322,8 +1322,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "3900c76f91633432b2130675ef4fb0e8ee69930ce1c9063cef2de211fd05573a",
+            "rubric_sha256": "c2fb20797080fef1a6d38620de8690d3c14c2135f37fc419906b550a88cb8854",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1336,7 +1336,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "decision-rights-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1344,11 +1344,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "decision-rights-review-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "decision-rights-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1419,8 +1419,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "b558af885a43f7e0afa63772c54ea268540e01bfd4cb5033323a8308079ebb68",
+            "rubric_sha256": "75df2298b3542caa343cd2c71ac092a1058d35c2374cc902e76c9b0c9af64aac",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1433,7 +1433,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "design-critique-comparative-fixture"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1441,7 +1441,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "design-critique-implementation-nearmiss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -1514,8 +1514,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "9bdd521c0bbe852fcc0165e02358dc65d4d45a89d8513f812675a1cf68206df5",
+            "rubric_sha256": "550ce3930fbf51ff787bf08a6a42ff23d0e3d7b15f58ae945767aba5d23198e7",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1528,7 +1528,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "differentiation-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1536,11 +1536,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "differentiation-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "differentiation-001"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1609,8 +1609,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "5975f3644937da91b99e9c1c1ecaacba3d0b7c3e1c8ecc7bd48a1759699943ac",
+            "rubric_sha256": "fe946ad9b11cd4b30ac0ac99a44c01ee6d752289ae4d5f028b69cb651c67d120",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1623,7 +1623,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-loop-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1631,11 +1631,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-loop-review-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-loop-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1705,8 +1705,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "484c496ec27239e5f485328fbb24e7e01b39e8a85e7da21bf5b16c40e2a5a6b0",
+            "rubric_sha256": "4802289fe8a040b77db6de19858be69334009c6b8f2743e625fe1c86bf70434e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1719,7 +1719,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "executive-role-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1731,7 +1731,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "executive-role-006"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1801,8 +1801,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "5dbc7cd7b6fa926126a65dddf17d65e62364e808e72778ef2f5c13e9b5d9ace7",
+            "rubric_sha256": "8629359507c50377a66191074665a35460709a465bf5eff3c52447315551c1ef",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1815,7 +1815,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "ux-route-design"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1823,11 +1823,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "ux-near-miss-report"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "ux-route-role-restricted-screen"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -1897,8 +1897,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "5fc2b7a5bebdf69f6f4657f208fc64892dc99e881f9b48e7552955a9acb580a9",
+            "rubric_sha256": "735e059323ffbd773c716dd0f739207cb72fab124a5c184e3bae2168b8ffce38",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -1911,7 +1911,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "finance-npv-golden"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -1919,15 +1919,15 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "finance-near-miss-report-format"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "finance-provenance-negative"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "finance-lookahead-adversarial"
             },
             "risk_driven_additional": [
               "provenance",
@@ -1994,8 +1994,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "1fbdafdb017dbc20cf676b3b1ad64d07124c58426f1c216038425c5649707b12",
+            "rubric_sha256": "78023317db4790f9ecc01987c58a8602e57ac5de1cca395900ae119c7c27afbf",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2008,7 +2008,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "global-local-model-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2016,11 +2016,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-global-local-model-review"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "global-local-model-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2089,8 +2089,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "ac032763786e7ebfbd00b2e3a010e9c01be69e9580e78544c26fe20d2b02a6b8",
+            "rubric_sha256": "8ff65adb88c4290c48e88e1fd4dbe4538422c3239e876eff745e38e8b3294bb8",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2103,7 +2103,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "governance-design-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2111,11 +2111,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "governance-design-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "governance-design-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2185,8 +2185,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "f4405971df10a8b24dc72673b52e48ab0538ff6d2b05cd0898bd900911cdb1eb",
+            "rubric_sha256": "76ed2a9c6d77d896f15607406106515eb42a595aba2fdbb5a7bdb667fc65116a",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2199,7 +2199,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "replay-no-lookahead"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2207,11 +2207,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "replay-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "replay-immutable-snapshots"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2282,8 +2282,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "cf14e450bf2d90ece6e2503d01a45b1d4e51884273cce020254676364866d46d",
+            "rubric_sha256": "f5e2767449b20acc104e3d1e1a501df9867f9a202df8f56720615844cfc82e5e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2296,7 +2296,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "implementation-brief-approved-design-positive"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2304,11 +2304,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "implementation-brief-implementation-request"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "implementation-brief-missing-approved-source"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2378,8 +2378,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "10f57204c0c8e6ea225d6d24ff6f287aa145626f58eea1361b70980b29c53076",
+            "rubric_sha256": "10605562b7d53ba22f10cca509db489993dbcb831d29cab2f8419623fc0e2f67",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2392,19 +2392,19 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "interface-design-direct-positive"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "interface-design-indirect-positive"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "interface-design-nearmiss-report-diagram"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "interface-design-explicit-placeholder-positive"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2473,8 +2473,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "40dc4fe55c75357a6158af2908e7e56bb785034a72c52ec5dfcd9c54ffe22904",
+            "rubric_sha256": "fc62bd344ab0efc7d88206d9dfa535175391b883b8aac5772754761fc25547ae",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2487,7 +2487,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "interview-brief-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2495,7 +2495,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-interview-brief"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -2569,8 +2569,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "8676cc2110f84ab0fe9aef5c4ca7407aa7f80f10d9cef132744333f5c8d1eafa",
+            "rubric_sha256": "1e6494b147524e58a0eb99c741d6bd83886fabdba6f5c7bae09bd5f08f01799e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2583,7 +2583,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "attention-acn-positive"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2591,11 +2591,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "attention-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "attention-missing-inputs"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2666,8 +2666,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "8d8acc5be471fc269d358b6a0fc2fb393b9112625c63d4ecc2e43ce5f22d1a2f",
+            "rubric_sha256": "5325590f61ffde384b69e3f7a65f2dfda289acb7f0b611275de34f539041653f",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2680,15 +2680,15 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "policy-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "policy-indirect"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "policy-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -2764,8 +2764,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "e9eb906eac3962f0e9b44d7a44e845f30c162acd567f0a2d900bd1fa1f823037",
+            "rubric_sha256": "e9d0637a91553f84f2e5cb3dc2a13d134238b1c770accc45637737f3328f5b92",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2778,7 +2778,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "store-supabase-read"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2786,11 +2786,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "store-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "store-no-silent-fallback"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2861,8 +2861,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "1cd8b66a1301f6add321c999c41ee9c0ac9201df1b383d5a9a39447b33a9d832",
+            "rubric_sha256": "a6036eb4374876ecab6f496d03a146798633b07cc30ef307e1c84305608f70f6",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2875,7 +2875,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "investor-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2883,11 +2883,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "investor-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "investor-primary-source-unavailable"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -2956,8 +2956,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "67f1affda86e7e8d59aea4b900f504ed32979419efe8f05d7629c6b242092c7f",
+            "rubric_sha256": "0b46017de5dd4600508522cc7545bff8247bcdaab52df959e694d55bb92c7f95",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -2970,7 +2970,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "job-discovery-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -2978,11 +2978,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-job-discovery"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "job-discovery-sources-unavailable"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3051,8 +3051,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "cfd7586084c37e011af4df76b81725c5fcbf5cbff51c5047199a2b1f4bc0a176",
+            "rubric_sha256": "7b34ff9698a0bfc066fa9b2e33b4c514fc86c6ddf0e4d404bd8985a4e1742d46",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3065,7 +3065,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "job-validity-check-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3073,11 +3073,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-job-validity-check"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "job-validity-primary-source-unavailable"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3146,8 +3146,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "9d7a6190401019d6564bcdfdf7a5041a28532b5dd87063ca70f9eacbef1adc7d",
+            "rubric_sha256": "cd0e10262cf0f68170d6ecc49bbd0027ac9e69a6f5c4e32122c2d87f8f53a4ca",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3160,7 +3160,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "kpi-quality-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3168,11 +3168,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-kpi-quality-review"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "kpi-quality-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3241,8 +3241,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "a9c2d75db235368e6546d80a6c9779526f6cf21e41b8b378711acf5b9e1a523a",
+            "rubric_sha256": "945b37dbbf9dc398a462885bfb6ba6a8d7922ec60d0e26515d0b249b4d8480d9",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3255,7 +3255,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "market-reconciliation-golden"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3263,15 +3263,15 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "market-competitor-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "market-whitespace-needs-demand-evidence"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "market-transferability-adversarial"
             },
             "risk_driven_additional": [
               "provenance"
@@ -3336,8 +3336,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "deeba3e1ee0785bf45874a1f6eb303e7d491f02a39fd621f98efbb2e69daa530",
+            "rubric_sha256": "eda30b0d470bd949fad5ccbcb876fe677b653cb5db81bcf0e0d7558dbb4b3287",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3350,7 +3350,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "scan-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3358,11 +3358,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "scan-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "scan-history-unavailable"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3432,8 +3432,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "e2c950f342ac734046083272c4b6eccd31be3a5485ebdec9d72700982843905a",
+            "rubric_sha256": "382472922be6fb2ff1825d274355662010b5c2ecd7334f17ccb3208446fb1149",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3446,7 +3446,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "transfer-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3454,11 +3454,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "transfer-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "transfer-002"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3527,8 +3527,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "a9785734866266b3152e4924b2017c4a5a28f21e1bc78828f3dd6bf50483e6ca",
+            "rubric_sha256": "221199a96f2fa580ffac6adb220dce5fc0fe0bc1ea26b9caad9f488e8a8d92ad",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3541,7 +3541,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "operating-model-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3549,11 +3549,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "operating-model-review-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "operating-model-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3623,8 +3623,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "bc9b3b904506d2f156b0aa5402998d75ff68ae7331d853feb6564e2f4eec081f",
+            "rubric_sha256": "f12e3dfc33d415d36d7e57428b91088dde4de22a8454a63ca2fb1006dc9eee22",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3637,7 +3637,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "organizational-interface-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3645,11 +3645,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-organizational-interface-review"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "organizational-interface-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3718,8 +3718,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "645d3831ce09f2c045ec2fff8e739b4555ba229739c2e247fd8f4e8cbdda5d52",
+            "rubric_sha256": "f61bba298d0750a3c23a3f0aacd25e0eee0744cde9ae8d6b1729e870c6e6a8e2",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3732,7 +3732,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-health-review-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3740,11 +3740,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-portfolio-health-review"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-health-review-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3814,8 +3814,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "0cb0ced8aec4914818745e2ffc8d12c0c9e73540c69c3be1ada097a7ad23f869",
+            "rubric_sha256": "38388ecbe7ba1b619eac2f408cad2a262437e9312096e22be0d4ff64383e5036",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3828,7 +3828,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-prioritization-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3836,11 +3836,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-prioritization-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-prioritization-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -3910,8 +3910,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "d2f38cd5047ec03d189dbab241a85f936db7d225e8f7013b91fb9d9efa5952a8",
+            "rubric_sha256": "932e1cf1831b089452568b16955d367a81faafa7a0718e6cbb2a62b06b9fe696",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -3924,7 +3924,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -3932,11 +3932,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "portfolio-missing-history"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4007,8 +4007,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "3a13ca2800cb05054560cbdbee3b35eb770ab4f61043f8072ba5bd06751aca50",
+            "rubric_sha256": "01d04771ef4d7bba5cb418b3499aa0507f5615063c46a76f159b9e345befa215",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4021,7 +4021,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "sizing-starter"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4029,11 +4029,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "sizing-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "sizing-no-context"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4105,8 +4105,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "b70688df385c6d8c7f9ec2d07cdb7fe926a2769a90aadf6b9f18b7fa82fbed78",
+            "rubric_sha256": "2318633125d559c86fd9c1e81dd1c5e675d6613320abcff595f887b6727b2bd5",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4119,23 +4119,23 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "brief-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "brief-indirect"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "brief-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "brief-direct"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "brief-adversarial"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4201,8 +4201,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "b595fc40ed935f00bb2185756464e748a7b4030c1673d35b6ff3879a9e79b8f9",
+            "rubric_sha256": "77345ef62cfc90a276f53ab05fa403e7e566db7ceea2c6f42750666179827dcd",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4215,7 +4215,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "review-board"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4223,7 +4223,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "review-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -4297,8 +4297,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "a9ee822d60ec51fa4682a3064b11d63994f76f664ac7f8a5f6d3f7be49064595",
+            "rubric_sha256": "880693889d80fa321a5c9df2500a823df291e28ac3614b1320ede9d87156b9e5",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4311,7 +4311,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-verification"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4319,7 +4319,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "evidence-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -4393,8 +4393,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "aa04679ff1f5281f1d11e6f26e3aa4d7c91cc99b49152abd7eea4dcda3cbf9c5",
+            "rubric_sha256": "29949e276e13ac4a0a383399c517afa197496f3045b558d7de69562cbdcbd68a",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4407,7 +4407,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "exhibit-ranked"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4415,11 +4415,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "exhibit-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "exhibit-architecture"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4489,8 +4489,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "742d743a5b48aba438e12dd65906cfa2d59d2d19f74674efb30e2044a4682023",
+            "rubric_sha256": "633aa1991164adbfea1e2f918f28417aa1ace8e03ff58765dd67e677c5e1bfe7",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4503,7 +4503,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "export-pptx"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4511,11 +4511,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "export-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "export-no-tool"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4586,8 +4586,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "791c1caa6f891c3da2bcceae5a82b69bc3b85612b0f44efb1f9e611b94e6aa9f",
+            "rubric_sha256": "cad4bc3517e52b599857b76883badb0cfe06e78ced1945e341a5f61a87729c5e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4600,7 +4600,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "authoring-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4608,11 +4608,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "authoring-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "authoring-no-tool"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4683,8 +4683,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "39762e1bc292879ceecfee43f5ed1adb9d61b486433a84ef1dbea80aff663cc4",
+            "rubric_sha256": "7f8688c970fbe99c90314f52b9e4441251bf416cfdb5c5647e5ef4c26ccf675d",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4697,7 +4697,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "story-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4705,11 +4705,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "story-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "story-evidence-gap"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4779,8 +4779,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "adab74ae5a27e0f30bc2b336503ab361d09e84a00721ab6bcc847429231d7f66",
+            "rubric_sha256": "ef0809e656a3d93c3ddeba7930b2b23185fa3b4ecd75af8fb521133960774b2d",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4801,11 +4801,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "demand-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "demand-001"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4875,8 +4875,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "9ce944b8f39bfdbcb1cdd6bef53d1e36f4542da41bfe5ef4a57f154ef2ccd169",
+            "rubric_sha256": "5f4c1623df9d779dc7a2bbfbe0c74c6c4914f1201967ad4bd0d54dd9196cf635",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4889,7 +4889,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "process-update-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4897,11 +4897,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-process-update"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "process-update-ambiguous-role-and-stage"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -4971,8 +4971,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "baa4905b2d38648fea01955bb3604bd2c386534d014df43b365e7d9e7b68416a",
+            "rubric_sha256": "b3bb0e034fc6d37ebacd02f95019d62523191e9c4cfd9419f61981f08bd61b43",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -4985,7 +4985,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "discovery-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -4993,11 +4993,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "discovery-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "discovery-002"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5067,8 +5067,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "8ffd9e329e3357ddfd16e71e31765fc53444ce0408b2b95bc3dc5519cf50e980",
+            "rubric_sha256": "4b0b40e776b0bdfcc15c2181d8a72991f562e1a91878d03091eb735779c680d2",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5081,7 +5081,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "cloud-next-inline-interactive-report"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5089,11 +5089,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-report-composer"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "integrated-investment-report"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5163,8 +5163,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "2e0e0757ece1d102e95878fa9b7755bf6e89a418166cf813c498e01078b463ac",
+            "rubric_sha256": "c98a7c79dd1cb1c28a08e274067b4a4e6246e6e5d029a18b04e82f797f94fce4",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5177,19 +5177,19 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-arch-01"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-arch-02"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-arch-04"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-arch-02"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5259,8 +5259,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "7f67c368842698789a77c8f2df30259763dc0cef586dfa2a55af21eff04dbe46",
+            "rubric_sha256": "c83a6a120747b3b3b7ed642ad785f5b388b16d2c237e1c15f652adf4c2c5604e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5273,7 +5273,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-auth-01"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5285,7 +5285,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-auth-05"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5356,8 +5356,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "05a401ab7a402a30868e307d567178528e5728ef9e29163cb3f2091fd82630da",
+            "rubric_sha256": "59a4ce73ec4570da8e9d6caa6780c1130b77a52f7730d43aa25534deb958c155",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5370,7 +5370,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-review-01"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5382,7 +5382,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "rep-review-05"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5452,8 +5452,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "a9d2e7c23027d9feae8044036fe544eaa3845e7723cdf7961ae5bf817b2e8638",
+            "rubric_sha256": "6667545c70137899492e60ea2143b50918e36b17f69cf55f666825c8b95d7e6d",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5466,7 +5466,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "underwriting-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5474,11 +5474,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "underwriting-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "underwriting-expectations-bridge-no-lookahead"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5550,8 +5550,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "d8e1a3e6b57ffd3a1f44a8a016b4ffef07f496ab1451bcebc085af23aae76537",
+            "rubric_sha256": "a2af49966f2e42ba5ff0e95505cd6ce6b63b3f7f7f5e4c344c17576db874c6b8",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5564,7 +5564,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "paid-keyword-call-without-approval"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5572,15 +5572,15 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "general-sitemap-definition-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "missing-connection-blocks"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "website-prompt-injection-is-untrusted"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -5647,8 +5647,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "eda7e7c556187c6419121ae08944e4ad5597b7a9a78ff07d19f825dbec473663",
+            "rubric_sha256": "0a0c5305451730ea9aec9f6acfb1c5e68ceb3ffc0166ef7c7145da75f3809dde",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5661,7 +5661,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5673,7 +5673,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-004"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5744,8 +5744,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "a5cdeb4542451eb988a61bcb4e8dec59c9da27313bd5cf3c8896571efff855ff",
+            "rubric_sha256": "9afa3d1f31b9ac3e4d496c73c71381101751d66e36b912d88c93b5cd9a826dc6",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5758,7 +5758,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-one-example"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5766,11 +5766,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-no-trigger-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-one-example"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5841,8 +5841,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "37e798fb6a3bf4e6e0ed39ef6768eaf9d1e141d94f330c0e0df50e1a17cfc956",
+            "rubric_sha256": "cd1fd4611f58df8b705744d2d0ed2cfde5e576557191c1a58682a201c1d8597b",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5855,7 +5855,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-candidate-evidence-match"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5863,11 +5863,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-negative-test-design"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-missing-target-channel"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -5938,8 +5938,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "57301c1677581e8439ff3927e3e3edcc0a162ac686ff30fa03d3bdc337958aad",
+            "rubric_sha256": "410dbccace6eb90e92b21db052ac396bb49d3284711bf93dbd1707885b758fa4",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -5952,7 +5952,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "spec-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -5960,7 +5960,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "spec-negative-test-design"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -6033,8 +6033,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "0f9878baf4209844ce250dd284d41a73d5bab8e33818f6b1a9277ccaf8242e0e",
+            "rubric_sha256": "7af35aa281b8a0f66fc88f03174af600630cc2b2dc0117de36b7f142ad55cc28",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6047,7 +6047,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-positive-routing"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6059,7 +6059,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-real-failure"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6129,8 +6129,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "3bc2ef2f60e44036c421f9e5cd47361749d1ec014947d4dee0b2909495a87fc2",
+            "rubric_sha256": "a11c2fc66d76f3fbe348ad4e5295cc2412ecf917e060a780212e2b910dd64647",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6143,7 +6143,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-002"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6151,11 +6151,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-negative-test-design"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-001"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6225,8 +6225,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "37646f241225cca8651e0953424c9255093a01c3bd7ce340490248a658b8aeb5",
+            "rubric_sha256": "bc4e693621ba4044c481818dc2ff38ede56b062ae77e3d705c3cf9fb184a473b",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6239,15 +6239,15 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "diagnostic-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-indirect-positive-skills-factory-diagnostic"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-skills-factory-diagnostic"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -6318,8 +6318,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "20556014e5bdb8ab12d38749c8441d73ea4e6e956e4b8ba6819f60217f89b236",
+            "rubric_sha256": "97394f184ed8e9e1dfc598569be9a18dba5f1b641f0150661ffe13942b3b0183",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6332,7 +6332,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-econ-profit-pool-golden"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6340,7 +6340,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-econ-competitor-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -6348,7 +6348,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-econ-pvm-adversarial"
             },
             "risk_driven_additional": [
               "provenance"
@@ -6413,8 +6413,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "12c7218fbaa8930ab26d1334c0c3f3cb56e0b4cd6051db45a478912574d75f5d",
+            "rubric_sha256": "d4945d7b8f330f7e68ba19f10ab3cf841e331d4ed0d4e515f27b0eaf830adab9",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6427,7 +6427,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-to-execution-diagnostic-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6435,11 +6435,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-to-execution-diagnostic-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-to-execution-diagnostic-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6509,8 +6509,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "b204fc8ae4bd9b51192b6f74115aff52a377577462f14871502cbfc0ef522456",
+            "rubric_sha256": "a66c9f6aa8136e716fac601db910e9a0f5c52bc404151f4b4b5c9150fba5b7bd",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6523,7 +6523,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "supplier-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6531,11 +6531,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "supplier-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "supplier-002"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6605,8 +6605,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "dd86eaea25c507dfb248bcda5721f5d4bd1629ab91e9efc9fa89b25b1a7cc516",
+            "rubric_sha256": "f1b36f7c70f10917d9c6f932e16b4bfa0c4b28f2536e496d88736d4ed1c6530e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6619,7 +6619,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "technical-structure-synthetic-known-answer"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6627,7 +6627,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "technical-structure-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -6702,8 +6702,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "5ed7120ffe4aff4d9b92843010dcc15e252888905f5dbb0ce297bf6cd569e3e0",
+            "rubric_sha256": "68043615ce9af31e160f2128742af1042e407a4db19f2faa97d1858066b522cf",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6716,7 +6716,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "challenge-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6724,11 +6724,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "challenge-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "challenge-missing-evidence-unresolved"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6799,8 +6799,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "9c995e954542e983f15aa70705d6431c5503a6b8865b369a40b0f584461eb6e4",
+            "rubric_sha256": "93ea043583cbde55627f6abfb84fea5518d0fdf8b7a252380a867a465928cf60",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6813,7 +6813,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "monitor-earnings"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6821,11 +6821,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "monitor-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "monitor-draft-only"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6898,8 +6898,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "5eb3387b3a99fd9ed963712887cb923410a353ad2fd43a83487a123d79d5fb92",
+            "rubric_sha256": "41635e510c5b4f3801a594502b8ff2b2641da6af9592c763a2572b7a4738dc80",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -6912,7 +6912,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "transformation-blueprint-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -6920,11 +6920,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "transformation-blueprint-002"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "transformation-blueprint-003"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6994,8 +6994,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "3ee58be27358ee6a21e8ee4346e84ec9fe1a710088808c360d23d3dea3ac9c19",
+            "rubric_sha256": "202b1742c6a05ffebe04f5d2cfcf80614821317a6076a84a36ab0489e792de0f",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7008,7 +7008,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "theme-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7016,7 +7016,7 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "theme-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -7089,8 +7089,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "27d439f1a1e5431109d4d442a01f283f5d97fca848790741118f978761a2b9ed",
+            "rubric_sha256": "317cc7204b03821cacc91d4bd9c9e64d0966706aa4a6353045c8dfdf6530f818",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7103,7 +7103,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "economics-001"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7111,11 +7111,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "economics-003"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "economics-002"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -7185,8 +7185,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "730b72d27f71209edcca1e8885eeb5ac50a6a8e06ea8a3f9a946693ace480d1c",
+            "rubric_sha256": "815970b9bc5c80b67853a3be62299f2f682c2b3e808c6ab8267bdfcac24018f1",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7199,7 +7199,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "valuation-direct"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7207,11 +7207,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "valuation-near-miss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "valuation-card-missing-critical-input"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -7283,8 +7283,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "3b42f46652321bd969ed52e2ce6bcd52fe474efd9d123ca35505ff48d37111dc",
+            "rubric_sha256": "f441a5499e8b38ba21c650e5bcbe1a462c2fbe582ecaa836a71e58ad5a0d1c61",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7297,7 +7297,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "value-realization-golden"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7305,15 +7305,15 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "value-realization-near-miss-finance-model"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "value-realization-negative"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "value-realization-adversarial"
             },
             "risk_driven_additional": [
               "provenance",
@@ -7379,8 +7379,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "c33c390697c88c09e6d2dd582f6804b8e19e151fc007e52e6080e2ea880af22b",
+            "rubric_sha256": "e8458ec4c20dfb5ae200ad0554885bdefa2e2f47d2639014885c2e361f0f589e",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7393,7 +7393,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-output-payload-client-not-observable"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7401,15 +7401,15 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "audit-near-miss-visual-output-design"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-output-chart"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-output-static-is-not-interactive"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -7475,8 +7475,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "9770f280f39aec16769a302a8a9058fc1c8d384533c2d62c9a37c82dbc125018",
+            "rubric_sha256": "c909e3b492c83f03e6ab8e7e5d262c20a17cb50a3aa161b33d46477cf3615fc5",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7489,7 +7489,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-regression-single-image"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7497,11 +7497,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-regression-implementation-nearmiss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-regression-single-image"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -7571,8 +7571,8 @@
             }
           },
           "evaluation_identity": {
-            "case_set_sha256": null,
-            "rubric_sha256": null,
+            "case_set_sha256": "45c5661b52c26526649e14054eece0b893a191d6e83c05cee339a37d51cebe68",
+            "rubric_sha256": "c70e9e601063c85ac064a7c4289733a3bc7d5d400515161ae4e7f7b32c2a2355",
             "profile_id": null,
             "calculator": "scripts/eval/evaluation_report.py",
             "calculator_version": "v1 per #697; verify exact revision at A2",
@@ -7585,7 +7585,7 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "website-review-rendered-positive"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
@@ -7593,11 +7593,11 @@
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "website-review-builder-nearmiss"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "website-review-missing-target"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -7707,7 +7707,11 @@
       "security_boundary": "Use hostile or boundary-pressure input to verify that secrets, authority, scope, stop rules, and prohibited actions remain protected.",
       "consumer_workflow": "Where a documented downstream consumer exists, exercise the actual handoff; invalid or incomplete upstream output must be rejected or surfaced, never reported as accepted."
     },
-    "risk_expansion_review_rule": "Each row reads source metadata.risk at candidate revision. Additional families and rationale are coordinator proposals only; independent reviewer must accept or revise coverage and freeze case IDs, inputs, expected outcomes, rubric and holdouts before A2. Empty family arrays are allowed only with row-specific rationale."
+    "risk_expansion_review_rule": "Each row reads source metadata.risk at candidate revision. Additional families and rationale are coordinator proposals only; independent reviewer must accept or revise coverage and freeze case IDs, inputs, expected outcomes, rubric and holdouts before A2. Empty family arrays are allowed only with row-specific rationale.",
+    "case_hashing": {
+      "case_set_sha256_method": "SHA-256 of the exact UTF-8 bytes of the skill's tests/cases.yaml file at candidate_revision.",
+      "rubric_sha256_method": "SHA-256 of compact UTF-8 JSON for the ordered array of {id, expected} from each case; recursively sort object keys lexicographically, preserve array order, and emit Unicode without ASCII escaping."
+    }
   },
   "d2_handoff": {
     "owner": "GitHub #683 owner",
