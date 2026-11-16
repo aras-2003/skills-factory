@@ -2971,7 +2971,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": "investor-single"
+              "case_id": "investor-pattern-indirect-positive-drawdown-discipline"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -2997,7 +2997,8 @@
               "rationale": "Source contract: “Learn decision principles from strong practitioners without cargo-culting portfolios.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             },
             "case_design_refs": [
-              "investor-pattern-risk-unverified-quote-injection"
+              "investor-pattern-risk-unverified-quote-injection",
+              "investor-pattern-indirect-positive-drawdown-discipline"
             ],
             "risk_case_design_refs": {
               "provenance": [
@@ -3667,7 +3668,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": "operating-model-review-004"
+              "case_id": "operating-model-indirect-positive-handoff-capacity"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -3694,7 +3695,8 @@
               "rationale": "Source contract: “Assess whether the organisation's division of responsibility, cross-unit interfaces and authority/resource model support its strategic goals. When a problem mixes handoffs, accountability and effective authority/capacity across units, lead with this skill to classify the operating-model failure befo” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             },
             "case_design_refs": [
-              "operating-model-risk-conflicting-authority-note"
+              "operating-model-risk-conflicting-authority-note",
+              "operating-model-indirect-positive-handoff-capacity"
             ],
             "risk_case_design_refs": {
               "provenance": [
@@ -7311,7 +7313,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": "theme-cyclical"
+              "case_id": "trend-theme-indirect-positive-economics-not-headlines"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -7337,7 +7339,8 @@
               "rationale": "Source contract: “Turn a narrative into a falsifiable economic map and a research universe.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
             },
             "case_design_refs": [
-              "theme-risk-missing-source-and-injected-forecast"
+              "theme-risk-missing-source-and-injected-forecast",
+              "trend-theme-indirect-positive-economics-not-headlines"
             ],
             "risk_case_design_refs": {
               "provenance": [
