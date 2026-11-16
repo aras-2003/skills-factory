@@ -8063,7 +8063,7 @@
       },
       {
         "path": "evals/campaigns/xml-2026-11/a1-p1-report-presentation-case-design.json",
-        "git_blob_sha": "71cff590d00d676794a85baddc831d8d3d125324",
+        "git_blob_sha": "ff1e9d3b133a11676a81c1fc48daaede8d6bf61a",
         "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
         "owning_batch_issue": 676,
         "skills": [
