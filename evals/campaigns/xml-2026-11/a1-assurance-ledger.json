@@ -4300,6 +4300,9 @@
               "consumer_workflow": [
                 "p678-brief-risk-format-override",
                 "p678-brief-risk-critical-context"
+              ],
+              "visual_or_export": [
+                "p678-brief-risk-format-override"
               ]
             }
           }
@@ -4498,7 +4501,6 @@
               "case_id": "p678-evidence-injection"
             },
             "risk_driven_additional": [
-              "visual_or_export",
               "provenance"
             ],
             "expected_observed_behavior_separate": true,
@@ -4507,7 +4509,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source contract: “Make every decision-relevant slide claim and factual exhibit traceable. This is a presentation-specific evidence and claim-to-slide mapping layer, **not** a replacement for shared CORE research/evidence controls or Strategy OS analytical decision work.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+              "rationale": "Source contract: “Make every decision-relevant slide claim and factual exhibit traceable. This is a presentation-specific evidence and claim-to-slide mapping layer, **not** a replacement for shared CORE research/evidence controls or Strategy OS analytical decision work.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review. Scope review: The source owns claim-to-source and factual-exhibit mapping, not rendered layout or export verification. Visual/layout and export receipts are owned by presentation-deck-review and presentation-export-verification; provenance remains in this skill's scope."
             },
             "case_design_refs": [
               "p678-evidence-indirect-claim-map",
@@ -4951,8 +4953,8 @@
               "case_id": "p678-story-untrusted-reversal"
             },
             "risk_driven_additional": [
-              "visual_or_export",
-              "consumer_workflow"
+              "consumer_workflow",
+              "provenance"
             ],
             "expected_observed_behavior_separate": true,
             "executor_holdouts": "UNASSIGNED",
@@ -4960,7 +4962,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source contract: “Turn a sufficient presentation brief and material claims into a coherent argument the audience can follow and act on. This skill owns **communication logic and ghost-deck narrative**, not substantive strategic analysis, option selection, domain research, rendering or layouts. STR-06/STR-10/STR-09 ow” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+              "rationale": "Source contract: “Turn a sufficient presentation brief and material claims into a coherent argument the audience can follow and act on. This skill owns **communication logic and ghost-deck narrative**, not substantive strategic analysis, option selection, domain research, rendering or layouts. STR-06/STR-10/STR-09 ow” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review. Scope review: The source explicitly excludes rendering and layouts. Visual/export checks are delegated to presentation-exhibit-design, presentation-deck-review and presentation-export-verification; this row covers narrative handoff and source/decision provenance."
             },
             "case_design_refs": [
               "p678-story-indirect-accepted-option",
@@ -5479,8 +5481,8 @@
               "case_id": "p678-report-architecture-untrusted-outline"
             },
             "risk_driven_additional": [
-              "visual_or_export",
-              "consumer_workflow"
+              "consumer_workflow",
+              "provenance"
             ],
             "expected_observed_behavior_separate": true,
             "executor_holdouts": "UNASSIGNED",
@@ -5488,7 +5490,7 @@
               "source_declared_risk": "medium",
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
-              "rationale": "Source contract: “Turn a sufficient report brief and a supplied/versioned evidence or domain result into a *reader-first document architecture* suitable for sustained reading. Own chapter/section hierarchy and argument allocation. Do not decide new strategy, validate an entire research domain, edit DOCX files or desi” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+              "rationale": "Source contract: “Turn a sufficient report brief and a supplied/versioned evidence or domain result into a *reader-first document architecture* suitable for sustained reading. Own chapter/section hierarchy and argument allocation. Do not decide new strategy, validate an entire research domain, edit DOCX files or desi” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review. Scope review: The source owns long-form hierarchy and argument allocation, not DOCX production, page rendering or export. Those checks belong to report-document-authoring and report-document-review; this row covers reader handoff and evidence provenance."
             },
             "case_design_refs": [
               "p678-report-architecture-untrusted-outline"
@@ -5588,7 +5590,8 @@
             "risk_driven_additional": [
               "visual_or_export",
               "tool_or_side_effect",
-              "provenance"
+              "provenance",
+              "consumer_workflow"
             ],
             "expected_observed_behavior_separate": true,
             "executor_holdouts": "UNASSIGNED",
@@ -5614,6 +5617,9 @@
               ],
               "consumer_workflow": [
                 "p678-authoring-near-miss-slide-deck"
+              ],
+              "visual_or_export": [
+                "p678-authoring-indirect-approved-model"
               ]
             }
           }
@@ -5702,7 +5708,8 @@
             },
             "risk_driven_additional": [
               "visual_or_export",
-              "provenance"
+              "provenance",
+              "consumer_workflow"
             ],
             "expected_observed_behavior_separate": true,
             "executor_holdouts": "UNASSIGNED",
@@ -8314,7 +8321,7 @@
       },
       {
         "path": "evals/campaigns/xml-2026-11/a1-p2-presentation-report-case-design.json",
-        "git_blob_sha": "a1d96c7b35df5a0af889f2e3825870428429088b",
+        "git_blob_sha": "a85821920333268432bf740cdc4efea50c9ff9f1",
         "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
         "owning_batch_issue": 678,
         "skills": [
