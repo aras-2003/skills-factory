@@ -4684,23 +4684,23 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": "authoring-direct"
+              "case_id": "presentation-slide-authoring-direct-positive-native-deck"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "presentation-slide-authoring-indirect-positive-outline-only"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": "authoring-near-miss"
+              "case_id": "presentation-slide-authoring-near-miss-export-unavailable"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "authoring-no-tool"
+              "case_id": "presentation-slide-authoring-missing-brief-evidence"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "presentation-slide-authoring-adversarial-confidential-upload"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -4714,6 +4714,30 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Turn an approved semantic story and evidence-backed exhibit plan into a native **editable** presentation, subject to the actual capabilities of the user's connected destination. This is not the strategy/evidence/QA authority.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "presentation-slide-authoring-direct-positive-native-deck",
+              "presentation-slide-authoring-indirect-positive-outline-only",
+              "presentation-slide-authoring-near-miss-export-unavailable",
+              "presentation-slide-authoring-missing-brief-evidence",
+              "presentation-slide-authoring-adversarial-confidential-upload"
+            ],
+            "risk_case_design_refs": {
+              "consumer_workflow": [
+                "presentation-slide-authoring-direct-positive-native-deck",
+                "presentation-slide-authoring-missing-brief-evidence"
+              ],
+              "visual_or_export": [
+                "presentation-slide-authoring-direct-positive-native-deck",
+                "presentation-slide-authoring-near-miss-export-unavailable"
+              ],
+              "provenance": [
+                "presentation-slide-authoring-missing-brief-evidence",
+                "presentation-slide-authoring-adversarial-confidential-upload"
+              ],
+              "security_boundary": [
+                "presentation-slide-authoring-adversarial-confidential-upload"
+              ]
             }
           }
         }
@@ -5165,11 +5189,11 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": "cloud-next-inline-interactive-report"
+              "case_id": "report-composer-direct-positive-inline-chart"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "report-composer-indirect-positive-concise-answer"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5177,11 +5201,11 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "integrated-investment-report"
+              "case_id": "report-composer-missing-input-causal-claim"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "report-composer-adversarial-source-text"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -5194,6 +5218,27 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Turn a completed analysis into one coherent decision report rendered **in the chat response by default**. The report structure is primary; visuals are embedded where they improve the reader's understanding of the surrounding argument. Do not create a second \"visual report\" beside the chat answer. Do” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "report-composer-direct-positive-inline-chart",
+              "report-composer-indirect-positive-concise-answer",
+              "report-composer-missing-input-causal-claim",
+              "report-composer-adversarial-source-text"
+            ],
+            "risk_case_design_refs": {
+              "visual_or_export": [
+                "report-composer-direct-positive-inline-chart"
+              ],
+              "consumer_workflow": [
+                "report-composer-direct-positive-inline-chart"
+              ],
+              "provenance": [
+                "report-composer-missing-input-causal-claim",
+                "report-composer-adversarial-source-text"
+              ],
+              "security_boundary": [
+                "report-composer-adversarial-source-text"
+              ]
             }
           }
         }
@@ -7626,23 +7671,23 @@
           "coverage": {
             "direct_positive": {
               "state": "NOT_RUN",
-              "case_id": "visual-output-payload-client-not-observable"
+              "case_id": "visual-output-design-direct-positive-source-chart"
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "visual-output-design-indirect-positive-omit-optional-visual"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": "audit-near-miss-visual-output-design"
+              "case_id": "visual-output-design-near-miss-interaction-unavailable"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "visual-output-chart"
+              "case_id": "visual-output-design-missing-provenance"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": "visual-output-static-is-not-interactive"
+              "case_id": "visual-output-design-adversarial-unknown-license"
             },
             "risk_driven_additional": [
               "visual_or_export",
@@ -7655,6 +7700,26 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Select and render one evidence-backed exhibit for an already-defined local information need. This shared exhibit specialist is called by `report-composer` for chat, `report-document-architecture` for long-form documents, and `presentation-exhibit-design` for slides. It does not own the structure of ” Declared risk: low. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "visual-output-design-direct-positive-source-chart",
+              "visual-output-design-indirect-positive-omit-optional-visual",
+              "visual-output-design-near-miss-interaction-unavailable",
+              "visual-output-design-missing-provenance",
+              "visual-output-design-adversarial-unknown-license"
+            ],
+            "risk_case_design_refs": {
+              "visual_or_export": [
+                "visual-output-design-direct-positive-source-chart",
+                "visual-output-design-near-miss-interaction-unavailable"
+              ],
+              "provenance": [
+                "visual-output-design-missing-provenance",
+                "visual-output-design-adversarial-unknown-license"
+              ],
+              "security_boundary": [
+                "visual-output-design-adversarial-unknown-license"
+              ]
             }
           }
         }
@@ -7995,6 +8060,21 @@
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
         "notes": "Declarative A0 TEST_DESIGN; no skill source or executable cases.yaml changed. Interface design emits written briefs only; rendered export is not applicable here. Does not authorize XML migration/release or establish runtime/channel compatibility."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p1-report-presentation-case-design.json",
+        "git_blob_sha": "64b25ac993ae91ceee688042f3563c036dad40e6",
+        "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
+        "owning_batch_issue": 676,
+        "skills": [
+          "report-composer",
+          "visual-output-design",
+          "presentation-slide-authoring"
+        ],
+        "case_count": 14,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Declarative A0 TEST_DESIGN only; no skill source or executable cases.yaml changed. All cases remain NOT_RUN. Does not authorize XML migration, runtime/channel acceptance, or release."
       }
     ]
   },
