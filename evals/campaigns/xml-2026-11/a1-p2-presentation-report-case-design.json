@@ -25,7 +25,7 @@
     "changes_to_executable_fixtures": false
   },
   "families": {
-    "risk_expansion": "The 21 synthetic proposals fill unmapped shared case families in #678 and add source-linked risk behavior for presentation/report boundaries. They distinguish briefs, narratives, evidence, exhibit specs, actual artifacts and render/export receipts. No migration, runtime, channel or release claim is made."
+    "risk_expansion": "Map each proposed family only to behavior the source skill owns. `visual_or_export` is removed from presentation-evidence-review, presentation-storyline, and report-document-architecture because their contracts exclude render/layout/export; downstream review and authoring skills own those checks. Format handoff remains in presentation-brief, actual exhibit specification in presentation-exhibit-design, artifact verification in presentation-export-verification, and native document creation/editability in report-document-authoring. The two visual-review cases name the rendered assets required at A2; this A0 package does not include binary renders and does not claim they ran."
   },
   "cases": [
     {
@@ -35,7 +35,8 @@
         "risk_driven_additional"
       ],
       "risk": [
-        "consumer_workflow"
+        "consumer_workflow",
+        "visual_or_export"
       ],
       "input": "Prepare a leave-behind for a technical audience. The user explicitly asks for an editable Figma Slides file, not PPTX. A stakeholder's old template defaults to PPTX.",
       "must": [
@@ -126,7 +127,16 @@
             "render_id": "render-syn-03"
           }
         ],
-        "domain_approval": "not supplied"
+        "domain_approval": "not supplied",
+        "render_assets": [
+          {
+            "render_id": "render-syn-03",
+            "format": "PNG",
+            "slide": 3,
+            "status": "REQUIRED_FOR_EXECUTION_NOT_INCLUDED",
+            "execution_requirement": "The A2 runner must supply the actual rendered pixels; the identifier alone is not visual evidence."
+          }
+        ]
       },
       "source_path": "skills/presentations/presentation-deck-review/SKILL.md",
       "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
@@ -251,6 +261,14 @@
             "id": "region-syn-03",
             "date": "2026-09-30",
             "finding": "two of five regions improved"
+          }
+        ],
+        "exhibit_claims": [
+          {
+            "slide": 2,
+            "render_id": "evidence-render-syn-02",
+            "status": "REQUIRED_FOR_EXECUTION_NOT_INCLUDED",
+            "execution_requirement": "Supply rendered pixels only if the runtime case claims visual inspection; this case's A0 evidence assertions concern claim-to-source mapping."
           }
         ]
       },
@@ -623,13 +641,15 @@
       ],
       "risk": [
         "tool_or_side_effect",
-        "provenance"
+        "provenance",
+        "visual_or_export"
       ],
       "input": "Produce a draft DOCX from the approved ReportModel, using the selected local document tool. Save it only to the approved draft folder, then verify the output receipt.",
       "must": [
         "confirm the ReportModel revision, output format and authorized local destination before writing",
         "create a new draft and verify actual path, format and source revision in the receipt",
-        "report any formatting or export limitations accurately"
+        "report any formatting or export limitations accurately",
+        "reopen the created DOCX and verify its native editability before claiming that requirement is met"
       ],
       "must_not": [
         "claim a document was created without an output receipt",
@@ -642,7 +662,8 @@
         "output_format": "DOCX",
         "tool": "local-docx-writer",
         "destination": "/workspace/drafts/report-syn-14.docx",
-        "write_authorized": true
+        "write_authorized": true,
+        "reopen_docx_supported": true
       },
       "source_path": "skills/reports/report-document-authoring/SKILL.md",
       "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
@@ -739,7 +760,20 @@
           7
         ],
         "source_appendix": "appendix-syn-02",
-        "domain_signoff": "separate"
+        "domain_signoff": "separate",
+        "render_assets": [
+          {
+            "render_id": "render-r5",
+            "format": "PNG",
+            "pages": [
+              1,
+              2,
+              7
+            ],
+            "status": "REQUIRED_FOR_EXECUTION_NOT_INCLUDED",
+            "execution_requirement": "The A2 runner must supply the actual rendered page pixels; a receipt ID alone cannot support page-layout findings."
+          }
+        ]
       },
       "source_path": "skills/reports/report-document-review/SKILL.md",
       "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
