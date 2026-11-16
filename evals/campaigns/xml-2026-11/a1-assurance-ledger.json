@@ -856,7 +856,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "creative-indirect-positive-local-edit"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -882,6 +882,20 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Create or transform an image or video with a local model runtime. This skill does not provide model weights, bypass model licensing, install extensions, or call hosted generation APIs.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "creative-indirect-positive-local-edit",
+              "creative-risk-unreviewed-network-node",
+              "creative-risk-output-path-escape"
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "creative-risk-unreviewed-network-node"
+              ],
+              "tool_or_side_effect": [
+                "creative-risk-unreviewed-network-node",
+                "creative-risk-output-path-escape"
+              ]
             }
           }
         }
@@ -2420,11 +2434,11 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": "interface-design-explicit-placeholder-positive"
+              "case_id": "interface-design-insufficient-context"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "interface-design-insufficient-context"
             },
             "risk_driven_additional": [
               "visual_or_export"
@@ -2436,6 +2450,22 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Turn a concrete product or service need into a buildable, evidence-aware interface brief. Define what people need to understand and do before choosing visual treatment or writing implementation code.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "interface-risk-uncorroborated-analytics",
+              "interface-risk-unsupported-account-action",
+              "interface-design-insufficient-context"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "interface-risk-uncorroborated-analytics"
+              ],
+              "consumer_workflow": [
+                "interface-risk-unsupported-account-action"
+              ],
+              "security_boundary": [
+                "interface-design-insufficient-context"
+              ]
             }
           }
         }
@@ -5642,7 +5672,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "seo-indirect-positive-saved-audit-comparison"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5668,6 +5698,23 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Produce a bounded, source-backed SEO finding from OpenSEO without copying its application, spending credits unexpectedly, or treating crawled content as instructions.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "seo-indirect-positive-saved-audit-comparison",
+              "seo-risk-credit-estimate-drift",
+              "seo-risk-cross-origin-redirect"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "seo-indirect-positive-saved-audit-comparison",
+                "seo-risk-cross-origin-redirect"
+              ],
+              "security_boundary": [
+                "seo-risk-cross-origin-redirect"
+              ],
+              "tool_or_side_effect": [
+                "seo-risk-credit-estimate-drift"
+              ]
             }
           }
         }
@@ -7933,6 +7980,21 @@
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
         "notes": "Declarative A0 TEST_DESIGN slice; no skill source or executable cases.yaml changed. Does not close #674/#683, complete A1, accept A2, or authorize XML migration/release."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p1-external-creative-case-design.json",
+        "git_blob_sha": "f772087667c2b965be4fd6cb6fed66cfb993f033",
+        "source_revision": "4cd53e12ece73ec68831a19f4360c04a0c318233",
+        "owning_batch_issue": 675,
+        "skills": [
+          "creative-generation",
+          "seo-research",
+          "interface-design"
+        ],
+        "case_count": 8,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Declarative A0 TEST_DESIGN; no skill source or executable cases.yaml changed. Interface design emits written briefs only; rendered export is not applicable here. Does not authorize XML migration/release or establish runtime/channel compatibility."
       }
     ]
   },
