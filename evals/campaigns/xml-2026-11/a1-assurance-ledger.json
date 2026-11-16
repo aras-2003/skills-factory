@@ -8072,6 +8072,26 @@
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
         "notes": "Declarative A0 TEST_DESIGN; no skill source or executable cases.yaml changed. Interface design emits written briefs only; rendered export is not applicable here. Does not authorize XML migration/release or establish runtime/channel compatibility."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p2-general-case-design.json",
+        "git_blob_sha": "c4edcbf14266c72a1abd81c57a884200f697cb12",
+        "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
+        "owning_batch_issue": 677,
+        "skills": [
+          "company-context-research",
+          "evidence-loop-review",
+          "global-local-model-review",
+          "investor-pattern-research",
+          "operating-model-review",
+          "process-update",
+          "skills-factory-diagnostic",
+          "trend-theme-research"
+        ],
+        "case_count": 16,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Declarative A0 TEST_DESIGN for #677. No skill source or executable cases.yaml changed; all outcomes remain NOT_RUN. Does not complete A1, accept A2, authorize migration, or establish runtime/channel behavior."
       }
     ]
   },
