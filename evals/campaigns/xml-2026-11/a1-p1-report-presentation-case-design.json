@@ -59,7 +59,7 @@
             "month": "2026-11",
             "value": 24,
             "unit": "sign-ups",
-            "as_of": "2026-11-30",
+            "as_of": "2026-11-15",
             "source_id": "src-synthetic-01"
           }
         ],
@@ -201,7 +201,7 @@
           7
         ],
         "unit": "tickets",
-        "as_of": "2026-11-30",
+        "as_of": "2026-11-15",
         "source_ids": [
           "src-synthetic-tickets-01"
         ],
