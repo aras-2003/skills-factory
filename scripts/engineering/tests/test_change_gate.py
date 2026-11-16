@@ -52,6 +52,8 @@ class ChangeGateTests(unittest.TestCase):
             "release/capability-contract.yaml",
             "evals/routing/registry.yaml",
             "docs/catalog.json",
+            "docs/governance/SDLC-OPERATING-PROCESS.md",
+            "docs/TESTING.md",
             ".github/workflows/ci-validate.yml",
         ):
             with self.subTest(path=path):
@@ -85,6 +87,11 @@ class ChangeGateTests(unittest.TestCase):
                 self.assertEqual("PLAN_READY", report["status"])
                 self.assertIn(check, report["required_checks"])
                 self.assertEqual("NOT_RUN", report["runtime_case_execution"])
+
+    def test_missing_architecture_impact_fails_closed(self):
+        report = module.plan("RESOURCE", ["scripts/example.py"], architecture_impact=None)
+        self.assertEqual("BLOCKED", report["status"])
+        self.assertIn("Architecture Impact is required", report["blockers"][0])
 
     def test_deterministic_and_unknown_class_fails_closed(self):
         self.assertEqual(module.plan("RESOURCE", ["a", "b"]), module.plan("RESOURCE", ["a", "b"]))
