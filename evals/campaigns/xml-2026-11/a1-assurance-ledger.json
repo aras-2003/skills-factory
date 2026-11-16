@@ -693,13 +693,16 @@
             }
           },
           "case_design_refs": [
+            "company-context-indirect-positive-briefing",
             "company-context-indirect-positive-entity-brief",
             "company-context-near-miss-role-fit",
-            "company-context-risk-entity-boundary-injection"
+            "company-context-risk-entity-boundary-injection",
+            "company-context-risk-untrusted-source-instruction"
           ],
           "risk_case_design_refs": {
             "provenance": [
-              "company-context-risk-entity-boundary-injection"
+              "company-context-risk-entity-boundary-injection",
+              "company-context-risk-untrusted-source-instruction"
             ]
           }
         }
@@ -1679,17 +1682,21 @@
             }
           },
           "case_design_refs": [
-            "evidence-loop-review-indirect-positive-follow-through",
+            "evidence-loop-indirect-positive-action-gap",
             "evidence-loop-review-adversarial-claimed-success",
-            "evidence-loop-review-risk-authority-resource-gap"
+            "evidence-loop-review-indirect-positive-follow-through",
+            "evidence-loop-review-risk-authority-resource-gap",
+            "evidence-loop-risk-untrusted-dashboard-directive"
           ],
           "risk_case_design_refs": {
+            "consumer_workflow": [
+              "evidence-loop-review-risk-authority-resource-gap",
+              "evidence-loop-risk-untrusted-dashboard-directive"
+            ],
             "provenance": [
               "evidence-loop-review-adversarial-claimed-success",
-              "evidence-loop-review-risk-authority-resource-gap"
-            ],
-            "consumer_workflow": [
-              "evidence-loop-review-risk-authority-resource-gap"
+              "evidence-loop-review-risk-authority-resource-gap",
+              "evidence-loop-risk-untrusted-dashboard-directive"
             ]
           }
         }
@@ -2093,14 +2100,17 @@
             }
           },
           "case_design_refs": [
-            "global-local-model-review-indirect-positive-local-exception",
+            "global-local-indirect-positive-regional-exceptions",
             "global-local-model-review-adversarial-centralization-note",
-            "global-local-model-review-risk-feedback-handoff"
+            "global-local-model-review-indirect-positive-local-exception",
+            "global-local-model-review-risk-feedback-handoff",
+            "global-local-risk-untrusted-central-memo"
           ],
           "risk_case_design_refs": {
             "consumer_workflow": [
               "global-local-model-review-adversarial-centralization-note",
-              "global-local-model-review-risk-feedback-handoff"
+              "global-local-model-review-risk-feedback-handoff",
+              "global-local-risk-untrusted-central-memo"
             ]
           }
         }
@@ -3003,13 +3013,16 @@
             }
           },
           "case_design_refs": [
-            "investor-pattern-indirect-positive-investor-letter",
             "investor-pattern-adversarial-copy-trade-excerpt",
-            "investor-pattern-risk-secondary-source-only"
+            "investor-pattern-indirect-positive-drawdown-discipline",
+            "investor-pattern-indirect-positive-investor-letter",
+            "investor-pattern-risk-secondary-source-only",
+            "investor-pattern-risk-unverified-quote-injection"
           ],
           "risk_case_design_refs": {
             "provenance": [
-              "investor-pattern-risk-secondary-source-only"
+              "investor-pattern-risk-secondary-source-only",
+              "investor-pattern-risk-unverified-quote-injection"
             ]
           }
         }
@@ -3702,17 +3715,21 @@
             }
           },
           "case_design_refs": [
-            "operating-model-review-indirect-positive-cross-unit-handoff",
+            "operating-model-indirect-positive-handoff-capacity",
             "operating-model-review-adversarial-org-chart-blame",
-            "operating-model-review-risk-premature-target-design"
+            "operating-model-review-indirect-positive-cross-unit-handoff",
+            "operating-model-review-risk-premature-target-design",
+            "operating-model-risk-conflicting-authority-note"
           ],
           "risk_case_design_refs": {
+            "consumer_workflow": [
+              "operating-model-review-risk-premature-target-design",
+              "operating-model-risk-conflicting-authority-note"
+            ],
             "provenance": [
               "operating-model-review-adversarial-org-chart-blame",
-              "operating-model-review-risk-premature-target-design"
-            ],
-            "consumer_workflow": [
-              "operating-model-review-risk-premature-target-design"
+              "operating-model-review-risk-premature-target-design",
+              "operating-model-risk-conflicting-authority-note"
             ]
           }
         }
@@ -5088,17 +5105,21 @@
             }
           },
           "case_design_refs": [
-            "process-update-indirect-positive-call-summary",
             "process-update-adversarial-email-write-injection",
-            "process-update-risk-conflicting-stage-sources"
+            "process-update-indirect-positive-call-summary",
+            "process-update-indirect-positive-recruiter-update",
+            "process-update-risk-conflicting-stage-sources",
+            "process-update-risk-injected-email"
           ],
           "risk_case_design_refs": {
+            "provenance": [
+              "process-update-risk-conflicting-stage-sources",
+              "process-update-risk-injected-email"
+            ],
             "tool_or_side_effect": [
               "process-update-adversarial-email-write-injection",
-              "process-update-risk-conflicting-stage-sources"
-            ],
-            "provenance": [
-              "process-update-risk-conflicting-stage-sources"
+              "process-update-risk-conflicting-stage-sources",
+              "process-update-risk-injected-email"
             ]
           }
         }
@@ -6586,8 +6607,10 @@
             }
           },
           "case_design_refs": [
-            "skills-factory-diagnostic-missing-load-receipt",
-            "skills-factory-diagnostic-adversarial-marker-spoof"
+            "diagnostic-missing-load-receipt",
+            "diagnostic-risk-untrusted-status-claim",
+            "skills-factory-diagnostic-adversarial-marker-spoof",
+            "skills-factory-diagnostic-missing-load-receipt"
           ],
           "risk_case_design_refs": {}
         }
@@ -7395,12 +7418,15 @@
             }
           },
           "case_design_refs": [
+            "theme-risk-missing-source-and-injected-forecast",
+            "trend-theme-indirect-positive-economics-not-headlines",
             "trend-theme-indirect-positive-grid-bottleneck",
             "trend-theme-missing-narrative-only",
             "trend-theme-risk-uncorroborated-capture"
           ],
           "risk_case_design_refs": {
             "provenance": [
+              "theme-risk-missing-source-and-injected-forecast",
               "trend-theme-missing-narrative-only",
               "trend-theme-risk-uncorroborated-capture"
             ]
@@ -8183,7 +8209,27 @@
         "case_count": 23,
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
-        "notes": "Declarative A0 TEST_DESIGN; no skill source or executable cases.yaml changed. All 23 cases remain NOT_RUN. Does not authorize migration, runtime/channel acceptance, or release."
+        "notes": "Primary mapped declarative A0 TEST_DESIGN proposals for #677. The companion general case-design artifact adds alternative cases for shared families; coverage.case_id identifies the primary mapped proposal and row-level refs retain all reviewed alternatives. All cases remain NOT_RUN; no executable tests or source skills changed. Does not accept A1/A2 or authorize XML migration/release."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p2-general-case-design.json",
+        "git_blob_sha": "4be3d27b7a9062171af518c99f14af165a317672",
+        "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
+        "owning_batch_issue": 677,
+        "skills": [
+          "company-context-research",
+          "evidence-loop-review",
+          "global-local-model-review",
+          "investor-pattern-research",
+          "operating-model-review",
+          "process-update",
+          "skills-factory-diagnostic",
+          "trend-theme-research"
+        ],
+        "case_count": 16,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Supplemental declarative A0 TEST_DESIGN proposals. Coverage.case_id selects the primary mapped proposal from the companion 23-case artifact; case_design_refs and risk_case_design_refs preserve these alternative scenarios. All cases remain NOT_RUN; no executable tests or source skills changed. Does not accept A1/A2 or authorize XML migration/release."
       }
     ]
   },
