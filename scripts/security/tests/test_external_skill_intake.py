@@ -110,6 +110,19 @@ class IntakeTests(unittest.TestCase):
             intake.inventory_zip(archive_path.read_bytes())
             self.assertFalse((Path(temp) / "bundle").exists())
 
+    def test_zip_modes_are_available_without_changing_files_only_inventory(self) -> None:
+        executable = zipfile.ZipInfo("bundle/run.sh")
+        executable.create_system = 3
+        executable.external_attr = (stat.S_IFREG | 0o755) << 16
+        regular = zipfile.ZipInfo("bundle/SKILL.md")
+        regular.create_system = 3
+        regular.external_attr = (stat.S_IFREG | 0o644) << 16
+        archive = zip_bytes([("bundle/run.sh", executable), ("bundle/SKILL.md", regular)])
+        files, modes = intake.inventory_zip_with_modes(archive)
+        self.assertEqual({"bundle/run.sh": b"link", "bundle/SKILL.md": b"link"}, files)
+        self.assertEqual({"bundle/run.sh": 0o755, "bundle/SKILL.md": 0o644}, modes)
+        self.assertEqual(files, intake.inventory_zip(archive))
+
     def test_remote_zip_root_and_subdirectory_are_canonicalized(self) -> None:
         data = zip_bytes([
             ("org-repo-deadbee/", b""),

@@ -730,7 +730,7 @@ def separately_validated_iteration08_investing_monitoring_paths(root: Path = ROO
         ):
             return set()
         for path, digest in hashes.items():
-            if (not matches_support_pin(root, path, digest, str(cfg.get("candidate_source_revision") or ""))
+            if (not matches_support_pin(root, path, digest, str(cfg.get("candidate_source_revision") or ""), rel)
                     if path in SUPPORT_PATHS else
                     hashlib.sha256((root / path).read_bytes()).hexdigest() != digest):
                 return set()
@@ -908,8 +908,10 @@ def separately_validated_iteration07_investing_quality_paths(root: Path = ROOT) 
             if not file_path.is_file():
                 return set()
             if rel in SUPPORT_PATHS:
-                if not (matches_support_pin(root, rel, digest, candidate_revision) or
-                        matches_support_pin(root, rel, str(iter08_hashes.get(rel) or ""), iter08_revision)):
+                if not (matches_support_pin(root, rel, digest, candidate_revision,
+                            "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml") or
+                        matches_support_pin(root, rel, str(iter08_hashes.get(rel) or ""), iter08_revision,
+                            "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml")):
                     return set()
                 continue
             actual_digest = hashlib.sha256(file_path.read_bytes()).hexdigest()

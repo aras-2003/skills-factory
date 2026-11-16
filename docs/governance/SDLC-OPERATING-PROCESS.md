@@ -108,9 +108,11 @@ ZIPs through the owner by default. Retain accepted artifacts before Actions expi
 90-day retention is not permanent archival. Copy public-safe release assets via the
 existing release procedure; do not automatically publish private logs.
 
-Historical support pins for Iterations 07/08 are verified at the reviewed pre-adoption
-anchor by `scripts/eval/historical_support.py`: readiness metadata, generated catalogs
-and the old evaluator. Their manifests/receipts remain byte-for-byte unchanged.
+Historical support pins for Iterations 07/08 are verified at the immutable commit
+recording their manifest by `scripts/eval/historical_support.py`: readiness metadata,
+generated catalogs and the old evaluator. This can postdate runtime execution;
+it is administrative provenance, not new runtime acceptance. Manifests/receipts are
+not rewritten by the validator.
 Behavior sources, fixtures, rubrics and receipts still require live matching identity.
 Archived administrative integrity does not approve current runtime or current release.
 Unavailable anchor or wrong pin fails closed; CI must fetch full history.

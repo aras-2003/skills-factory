@@ -50,6 +50,15 @@ class ArtifactTests(unittest.TestCase):
 
 
 class HistoricalSupportTests(unittest.TestCase):
+    def test_administrative_reconciliation_is_bound_to_manifest_commit_not_runtime(self):
+        manifest = "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml"
+        cfg = yaml.safe_load((ROOT / manifest).read_text())
+        path = "release/production-readiness.yaml"
+        expected = cfg["source_sha256"][path]
+        self.assertTrue(historical_support.matches_support_pin(
+            ROOT, path, expected, cfg["candidate_source_revision"], manifest))
+        self.assertFalse(historical_support.matches_support_pin(
+            ROOT, path, "0" * 64, cfg["candidate_source_revision"], manifest))
     def test_admin_changes_use_archived_pin_not_current_date(self):
         import subprocess
         path = "release/production-readiness.yaml"

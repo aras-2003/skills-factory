@@ -20,6 +20,7 @@ release_approved: false
 historical_r20_immutable: true
 status_note: >-
   Iteration 8 runtime acceptance passed for #308, #309 and #310 on the exact merged source 03ef9f554c395db6a1cc482ef2c6434424a250e9, privately deployed to owner-only Site v128 with verified attestation and Lab 1.38.481+03ef9f554c39. All 14 runtime cases passed their paired rubrics; five critical route prompts have three successful exact-Site attempts each. See runtime-evidence.md and acceptance-matrix.md. Synthetic KPI/earnings fixtures validate behavior and no-lookahead controls only; real-world retrieval/authentication is not claimed. Release remains unapproved. #306 is already closed via PR #600 and is not an Iteration 8 carry-forward.
+  Administrative date audit 2026-11-16: readiness dates aligned to latest CI validation attempt #43779930389; all 28 runtime evidence gaps remain pending. No historical runtime verdict, maturity, production readiness or release approval changed.
 behavior_case_suite: evals/campaigns/iteration-08-investing-monitoring-2026-11/cases.yaml
 required_case_ids:
   - iter08-kpi-trigger-boundaries
@@ -97,7 +98,7 @@ source_sha256:
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/310-SEC.rubric.yaml: "08a121ebb1b669b2a6b3ddb22e04066ee98c3d69decdd37b8d6566ce43e527d1"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-education.rubric.yaml: "435826ae6f90365ca2147b769a31f8d4579553ffc034d20e37cdec3d18134548"
   evals/campaigns/iteration-08-investing-monitoring-2026-11/runtime-rubrics/shared-portfolio.rubric.yaml: "aa90594a5a1834f69a4cbe6a851f5c57168922c8b84af007426da4f4bdf0806e"
-  release/production-readiness.yaml: "0e3cbaec1eac529f65120aef6caf0f5c9570e9d0fc7f98b6d24f26b703896a6c"
+  release/production-readiness.yaml: "ea7b45a6b577525074fb2ee09c630bfafb015086e85757d553ebbc97fbbd2f0b"
   scripts/eval/campaign.py: "0bd1765f786b0d789d4c6040f29a84dd15df6ca6cdd0030b147d1d1ce177a4b4"
   scripts/eval/tests/test_runtime_campaign.py: "dd5a7d1493eaf041281daaef437bf19dd26975bc8485e7e5b1fbd15028e05c4a"
   skills/investing/security-underwriting/SKILL.md: "70e7c578465cc708647f437b8f671e9dcb90ded66ab229444d60ddf0381ee5e9"

@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skills-factory:external-skill-update-impact:1",
+  "title": "Skills Factory external skill update impact review",
+  "type": "object",
+  "required": [
+    "schema_version", "tool_version", "status", "comparison_status", "review_required", "baseline", "candidate",
+    "registry_sha256", "inventory_diff", "permission_changes", "license_changes", "resource_changes",
+    "deprecation_signals", "executable_mode", "consumer_impact", "blockers", "authorization_state"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "tool_version": {"type": "string", "minLength": 1},
+    "status": {"enum": ["BLOCKED", "NOT_READY", "UNCHANGED"]},
+    "comparison_status": {"enum": ["BLOCKED", "REVIEW_REQUIRED", "UNCHANGED"]},
+    "review_required": {"type": "boolean"},
+    "baseline": {"$ref": "#/$defs/source_snapshot"},
+    "candidate": {"$ref": "#/$defs/candidate_snapshot"},
+    "registry_sha256": {"$ref": "#/$defs/sha256"},
+    "inventory_diff": {"$ref": "#/$defs/change_set"},
+    "permission_changes": {
+      "type": "object",
+      "required": ["changed_paths", "before", "after", "baseline_status", "candidate_status", "errors"],
+      "properties": {
+        "changed_paths": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "before": {"$ref": "#/$defs/permission_inventory"},
+        "after": {"$ref": "#/$defs/permission_inventory"},
+        "baseline_status": {"enum": ["KNOWN", "UNKNOWN"]},
+        "candidate_status": {"enum": ["KNOWN", "UNKNOWN"]},
+        "errors": {"type": "array", "maxItems": 20, "items": {"type": "string", "maxLength": 200}}
+      },
+      "additionalProperties": false
+    },
+    "license_changes": {
+      "type": "object",
+      "required": ["before", "after", "added", "removed", "changed", "decision"],
+      "properties": {
+        "before": {"$ref": "#/$defs/evidence_inventory"},
+        "after": {"$ref": "#/$defs/evidence_inventory"},
+        "added": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "removed": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "changed": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "decision": {"enum": ["APPROVED", "REVIEW_REQUIRED", "REJECTED", "UNKNOWN"]}
+      },
+      "additionalProperties": false
+    },
+    "resource_changes": {"$ref": "#/$defs/change_set"},
+    "deprecation_signals": {
+      "type": "array", "maxItems": 2000,
+      "items": {
+        "type": "object", "required": ["path", "before", "after"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "before": {"$ref": "#/$defs/marker_counts"},
+          "after": {"$ref": "#/$defs/marker_counts"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "executable_mode": {
+      "type": "object", "required": ["status", "added", "removed", "changed"],
+      "properties": {
+        "status": {"enum": ["COMPLETE", "UNKNOWN"]},
+        "added": {"type": "array", "maxItems": 2000, "items": {"$ref": "#/$defs/mode_entry"}},
+        "removed": {"type": "array", "maxItems": 2000, "items": {"$ref": "#/$defs/mode_entry"}},
+        "changed": {
+          "type": "array", "maxItems": 2000,
+          "items": {
+            "type": "object", "required": ["path", "before_mode", "after_mode", "before_executable", "after_executable"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "before_mode": {"type": "integer", "minimum": 0, "maximum": 4095},
+              "after_mode": {"type": "integer", "minimum": 0, "maximum": 4095},
+              "before_executable": {"type": "boolean"},
+              "after_executable": {"type": "boolean"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "consumer_impact": {
+      "type": "object", "required": ["status", "complete", "registry_sha256", "anchor_sources", "direct_consumers", "transitive_consumers", "unclassified_records", "errors"],
+      "properties": {
+        "status": {"enum": ["COMPLETE", "UNKNOWN"]},
+        "complete": {"type": "boolean"},
+        "registry_sha256": {"$ref": "#/$defs/sha256"},
+        "anchor_sources": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "direct_consumers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "transitive_consumers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "unclassified_records": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "errors": {"type": "array", "maxItems": 10, "items": {"type": "string", "maxLength": 200}}
+      },
+      "additionalProperties": false
+    },
+    "blockers": {"type": "array", "uniqueItems": true, "items": {"enum": ["REGISTRY_INVALID", "ACCEPTED_LINEAGE_NOT_FOUND", "CONSUMER_LINEAGE_INCOMPLETE", "BASELINE_SOURCE_UNAVAILABLE", "BASELINE_SOURCE_INVALID", "BASELINE_DIGEST_MISMATCH", "CANDIDATE_SOURCE_UNAVAILABLE", "TOOL_PERMISSION_PARSE_UNKNOWN", "EXECUTABLE_MODE_UNKNOWN"]}},
+    "candidate_fetch_error": {"type": "string", "maxLength": 100},
+    "authorization_state": {"const": "NOT_AUTHORIZED"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source_snapshot": {
+      "type": "object", "required": ["repository", "commit", "subdir", "source_digest", "inventory_sha256", "receipt_sha256", "review_sha256"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 3},
+        "commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "subdir": {"type": ["string", "null"]},
+        "source_digest": {"$ref": "#/$defs/sha256"},
+        "inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "review_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "candidate_snapshot": {
+      "type": "object", "required": ["repository", "commit", "subdir", "source_digest", "inventory_sha256"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 3},
+        "commit": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40}$"},
+        "subdir": {"type": ["string", "null"]},
+        "source_digest": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "inventory_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "file_entry": {
+      "type": "object", "required": ["path", "size_bytes", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "size_bytes": {"type": "integer", "minimum": 0, "maximum": 10000000}, "sha256": {"$ref": "#/$defs/sha256"}},
+      "additionalProperties": false
+    },
+    "change_set": {
+      "type": "object", "required": ["added", "removed", "changed"],
+      "properties": {
+        "added": {"type": "array", "maxItems": 2000, "items": {"$ref": "#/$defs/file_entry"}},
+        "removed": {"type": "array", "maxItems": 2000, "items": {"$ref": "#/$defs/file_entry"}},
+        "changed": {
+          "type": "array", "maxItems": 2000,
+          "items": {
+            "type": "object", "required": ["path", "before", "after"],
+            "properties": {"path": {"type": "string", "minLength": 1}, "before": {"$ref": "#/$defs/file_state"}, "after": {"$ref": "#/$defs/file_state"}},
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "file_state": {
+      "type": "object", "required": ["size_bytes", "sha256"],
+      "properties": {"size_bytes": {"type": "integer", "minimum": 0, "maximum": 10000000}, "sha256": {"$ref": "#/$defs/sha256"}},
+      "additionalProperties": false
+    },
+    "permission_inventory": {
+      "type": "array", "maxItems": 2000,
+      "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}, "additionalProperties": false}
+    },
+    "evidence_inventory": {
+      "type": "array", "maxItems": 2000,
+      "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}, "additionalProperties": false}
+    },
+    "marker_counts": {
+      "type": "object", "propertyNames": {"enum": ["DEPRECATED", "OBSOLETE", "REMOVED", "END_OF_LIFE", "SUNSET"]},
+      "additionalProperties": {"type": "integer", "minimum": 1, "maximum": 10000}
+    },
+    "mode_entry": {
+      "type": "object", "required": ["path", "executable"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "mode": {"type": ["integer", "null"], "minimum": 0, "maximum": 4095}, "executable": {"type": ["boolean", "null"]}},
+      "additionalProperties": false
+    }
+  }
+}
