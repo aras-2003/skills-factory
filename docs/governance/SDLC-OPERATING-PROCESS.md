@@ -23,6 +23,40 @@ and architecture impact, verification and evidence links. Use the existing Task
 Definition Contract; do not introduce another handoff or duplicate Project fields.
 Clarify a material ambiguity before implementation, not at closeout.
 
+## Change execution: context → plan → test first → implement → verify
+
+Before changing behavior or a shared contract, establish the exact source revision,
+linked Issues/PRs, current contract, direct and transitive consumers, existing tests,
+and baseline behavior. Record missing evidence as unknown; do not infer it from a
+catalog count, green CI, package build, or documentation. Decide whether to reuse,
+extend, compose, or create, and name the reason.
+
+For material changes, write a bounded plan before implementation: target behavior,
+in-scope paths and consumers, alternatives considered, dependencies, risks, rollback,
+and acceptance evidence. Use the native Architecture Impact field and apply its
+minimum checks below. A0/A1 changes may use a concise plan when interfaces and risk
+are understood; no extra approval forum is introduced. If impact or consumers remain
+unknown, Discovery or broader affected-channel checks are required before narrowing
+scope.
+
+Before changing behavior, map each acceptance criterion to a stable case ID, input or
+fixture, expected and forbidden behavior, test type, and evidence destination. For
+deterministic code, demonstrate the regression against the existing baseline (RED),
+make the smallest change that passes (GREEN), then refactor while keeping the suite
+green. Do not manufacture a failing test where there is no meaningful prior behavior.
+For LLM behavior, freeze the baseline and candidate, include positive, realistic
+near-miss, failure/missing-evidence, security and held-out cases as relevant, and use
+an independent rubric or oracle. Test design is not execution evidence.
+
+Implement in small, reviewable steps, then verify the selected tests and regressions
+for the changed behavior, architecture impact, direct/transitive consumers, routing
+neighbors, risk, and actual runtime channel. Shared-contract changes require contract
+and cross-consumer regression. Docs/metadata-only edits with no semantic effect may
+use the abbreviated static path; explicitly confirm that behavior and consumers are
+unchanged. Expand checks with risk and impact, not ceremony. Keep CI, evaluation, PR,
+source merge, runtime observation and production authorization as separate states;
+the author is not the sole grader, and no earlier state implies a later one.
+
 ## D2: bounded parallel work
 
 Maximum active development WIP is **2**, with one shared Lab candidate at a time.

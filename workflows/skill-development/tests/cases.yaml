@@ -1,4 +1,99 @@
 cases:
+  - id: material-change-plan-before-code
+    case: architecture-aware-material-change
+    input: "Add a compatible capability to an existing workflow that is used by three registered consumers."
+    expected:
+      should_trigger: true
+      must:
+        - "Inspect the exact source revision, current contract, direct and transitive consumers, existing tests, and baseline before editing."
+        - "Choose and explain REUSE, EXTEND, COMPOSE, or CREATE."
+        - "Write a bounded plan with alternatives, dependencies, risks, rollback, and acceptance evidence before implementation."
+        - "Use the native Architecture Impact classification and include cross-consumer regression for the shared capability."
+      must_not:
+        - "Do not infer runtime PASS from CI, package loading, catalog counts, or documentation."
+        - "Do not begin implementation while material impact or consumer facts are unknown."
+  - id: deterministic-regression-test-first
+    case: deterministic-contract-regression
+    input: "A deterministic parser regressed on an existing input; fix the smallest behavior change."
+    expected:
+      should_trigger: true
+      must:
+        - "Map the acceptance criterion to a stable case ID, fixture, expected and forbidden behavior, test type, and evidence destination before changing code."
+        - "Show the regression against the existing baseline, implement the smallest fix, then keep tests green through refactoring."
+      must_not:
+        - "Do not weaken the valid failing assertion to make the change pass."
+        - "Do not treat test design or a CI plan as execution evidence."
+  - id: llm-change-no-artificial-red
+    case: new-llm-capability-test-selection
+    input: "Add a new LLM capability with no meaningful prior implementation to regress against."
+    expected:
+      should_trigger: true
+      must:
+        - "Freeze the baseline and candidate and select positive, realistic near-miss, failure or missing-evidence, security, and held-out cases according to risk."
+        - "Define an independent rubric or oracle and record exact candidate and runtime identity for observed results."
+      must_not:
+        - "Do not invent an artificial RED test when no meaningful prior behavior exists."
+        - "Do not call unobserved cases PASS."
+  - id: shared-contract-consumer-regression
+    case: shared-contract-change
+    input: "Change a shared output contract while its direct and transitive consumers are known."
+    expected:
+      should_trigger: true
+      must:
+        - "Test the changed contract and the affected direct and transitive consumers."
+        - "Select verification from the union of behavior, architecture impact, consumers, routing neighbors, risk, and actual runtime channel."
+      must_not:
+        - "Do not limit verification to the edited component when the shared contract affects other consumers."
+  - id: metadata-only-abbreviated-path
+    case: non-semantic-metadata-update
+    input: "Update package metadata without changing behavior, contracts, routing, or consumers."
+    expected:
+      should_trigger: true
+      must:
+        - "Use the abbreviated static validation path and state why semantics and consumers are unchanged."
+      must_not:
+        - "Do not require a full behavioral/runtime campaign when no behavior or runtime changed."
+  - id: delivery-gates-remain-distinct
+    case: ci-does-not-imply-runtime-or-release
+    input: "All CI checks passed for a runtime-bearing change, but no runtime observation or production review exists."
+    expected:
+      should_trigger: true
+      must:
+        - "Report local validation, CI, evaluation, PR review, merge, runtime observation, and production authorization as distinct states."
+        - "State that runtime and production authorization remain unobserved or pending."
+      must_not:
+        - "Do not infer runtime PASS, production readiness, or release authorization from green CI."
+  - id: independent-heldout-can-reject
+    case: independent-evaluation-and-heldout
+    input: "The implementing agent's positive tests pass, but an independent held-out security case fails."
+    expected:
+      should_trigger: true
+      must:
+        - "Record the independent held-out failure and keep the candidate from acceptance until disposition."
+        - "Keep grader independence explicit; the author is not the sole evaluator."
+      must_not:
+        - "Do not override the held-out failure with the implementation agent's passing tests."
+  - id: evidence-identity-and-measurement
+    case: exact-evidence-and-pilot-comparison
+    input: "Prepare a handoff for a verified change and compare process time and cost with the existing pilot."
+    expected:
+      should_trigger: true
+      must:
+        - "Link actual receipts and record exact source commit, fixture, runner, and runtime identity relevant to each result."
+        - "Compare time and cost with the existing pilot only when observed evidence exists."
+      must_not:
+        - "Do not invent receipts, identities, time, cost, or a baseline."
+        - "Do not create a second manual evidence registry."
+  - id: governance-regressions-stay-in-force
+    case: status-wip-sync-and-production-gates
+    input: "A process change proposes skipping a blocked task's NOT_RUN case and weakening a production gate after green CI."
+    expected:
+      should_trigger: true
+      must:
+        - "Preserve status, WIP, Project sync, CI, and production-gate regressions."
+        - "Keep blocked, rejected, and NOT_RUN evidence from advancing to Done or runtime PASS."
+      must_not:
+        - "Do not waive a required gate or reinterpret blocked evidence as a pass."
   - id: routing-only-test-depth
     case: description-only-routing-change
     input: "A skill description changed; its procedure and output contract did not."
