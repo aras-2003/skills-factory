@@ -38,6 +38,53 @@ For a repeatable, local-only change-class plan, run `python scripts/engineering/
 
 This determines test depth. For a description-only `ROUTING` change, rerun positive, realistic near-miss and competing-skill routing cases; do not add output-format tests unless the contract also changed. `BEHAVIOR` changes require affected behavioral/regression cases. `RESOURCE` changes require direct resource/helper checks plus dependent flows. `DOCS` changes use static validation only unless implementation semantics changed.
 
+## Delivery sequence — context → plan → test first → implement → verify
+
+Apply this sequence to every material change. Keep it proportionate: a cosmetic or
+metadata-only edit with no semantic effect uses the abbreviated static path and states
+why behavior and consumers are unchanged. Do not create another approval forum.
+
+### Context
+
+Before editing, identify the exact source revision, linked Issues/PRs, current contract,
+direct and transitive consumers, relevant tests, and baseline behavior. Mark missing
+facts unknown. Choose and explain **REUSE**, **EXTEND**, **COMPOSE**, or **CREATE**.
+Package/catalog counts, successful loading, CI, and documentation are not runtime
+evidence.
+Reuse `skill-test-design` for test planning and existing `TEST_DESIGN` only where the
+change is a declarative campaign definition; do not create a duplicate skill, registry,
+or classification.
+
+### Plan (before code for material changes)
+
+State the target behavior, bounded paths and consumers, alternatives, dependencies,
+risks, rollback, and acceptance evidence. Use the existing native Architecture Impact
+A0–A4 classification. A0/A1 may use a short plan when impact and contracts are clear.
+Unknown impact or an incomplete consumer map broadens the check set; it does not imply
+PASS. Follow the operating process for A2 capability/reuse and consumer regression,
+and A3/A4 contract, migration, approval, and rollback expectations.
+
+### Test first
+
+Map each acceptance criterion to a stable case ID, input/fixture, expected and
+forbidden behavior, test type, and evidence destination before changing behavior.
+For deterministic code, show the regression on the existing baseline (RED), implement
+the smallest fix (GREEN), then refactor with tests still green. Do not force artificial
+RED for a new capability or a change without meaningful prior behavior. For LLM
+behavior, freeze baseline and candidate, and select positive, realistic near-miss,
+failure/missing-evidence, security, and held-out cases as the risk requires; define an
+independent rubric/oracle. The test map is design, not execution evidence.
+
+### Implement and verify
+
+Implement in small reviewable steps. Verify behavior and regressions using the union
+of change class, architecture impact, direct/transitive consumers, routing neighbors,
+risk, and actual runtime channel. Shared contracts require contract and cross-consumer
+regression. Report exact source/candidate identity and observed evidence. Keep local
+validation, CI, evaluation, PR review, merge, runtime observation, and production
+authorization distinct; the author is not the sole grader and an earlier gate never
+implies a later one.
+
 ## External candidate adaptation path (ES-03)
 
 Use this path only when the user supplies or asks to inspect an external skill for reuse, extension, or composition. It extends this workflow; it does not create a separate authoring lifecycle.
