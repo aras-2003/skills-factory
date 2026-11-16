@@ -50,7 +50,7 @@ Required shared checks: targeted external-intake/update-impact tests; provenance
 - Last full runtime baseline candidate / behavior iterations since baseline: no runtime behavior changes in this slice; full runtime baseline is not applicable.
 - Planned distinct scenarios / executions by layer and required surface: 10 U1 deterministic scenarios plus 2 shared offline sentinels and 2 rotating source/package probes; each required offline suite once per PR and final-main candidate.
 - Critical stochastic scenarios repeated at least 3 times / instability history: N/A; no model or stochastic runtime behavior is changed.
-- Scope-lock PR #709 CI: PASS (Evaluation CI, Domain integrity, Validate skills at exact lock SHA). Implementation candidate checks/build: PASS (Validate `43783250083`, Domain `43783250103`, Lab build `43783250073`). R02 documentation amendment is on main commit `665c1f3`; final count reconciliation is in PR review. Independent reviewer sign-off remains pending; runtime N/A per reviewed scope.
+- Scope-lock PR #709 CI: PASS (Evaluation CI, Domain integrity, Validate skills at exact lock SHA). Implementation candidate checks/build: PASS (Validate `43783250083`, Domain `43783250103`, Lab build `43783250073`). R02 documentation amendment is on main at commit `665c1f3`; count and narrative reconciliation merged via PR #718 as `871f2ee`. Independent reviewer sign-off remains pending; runtime N/A per reviewed scope.
 
 ## Defect intake and clarifications (append; intake always open)
 
