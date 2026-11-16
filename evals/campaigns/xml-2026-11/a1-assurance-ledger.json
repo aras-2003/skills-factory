@@ -8213,7 +8213,7 @@
       },
       {
         "path": "evals/campaigns/xml-2026-11/a1-p2-general-case-design.json",
-        "git_blob_sha": "4be3d27b7a9062171af518c99f14af165a317672",
+        "git_blob_sha": "5b651e6c3077de35bbc7f8a5cc116a1e04368c42",
         "source_revision": "62609ba97f70109bebd466268fdcfebb98691156",
         "owning_batch_issue": 677,
         "skills": [
