@@ -1915,7 +1915,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "finance-indirect-positive-decision-hurdle"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -1941,6 +1941,22 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Calculate a declared financial model reproducibly. Separate model architecture and interpretation from formula execution. This capability performs arithmetic; it does not source assumptions, certify a business case, or recommend investment.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "finance-indirect-positive-decision-hurdle",
+              "finance-risk-hostile-future-assumption",
+              "finance-risk-no-implicit-external-transfer"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "finance-risk-hostile-future-assumption"
+              ],
+              "security_boundary": [
+                "finance-risk-hostile-future-assumption"
+              ],
+              "tool_or_side_effect": [
+                "finance-risk-no-implicit-external-transfer"
+              ]
             }
           }
         }
@@ -2782,7 +2798,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "store-indirect-positive-auditable-history"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -2794,7 +2810,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "store-risk-untrusted-provider-delete"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -2808,6 +2824,22 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Provide one durable, auditable persistence contract for Investment OS, with Supabase/Postgres as the target canonical store.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "store-indirect-positive-auditable-history",
+              "store-risk-conflicting-broker-evidence",
+              "store-risk-untrusted-provider-delete"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "store-risk-conflicting-broker-evidence"
+              ],
+              "tool_or_side_effect": [
+                "store-risk-untrusted-provider-delete"
+              ],
+              "security_boundary": [
+                "store-risk-untrusted-provider-delete"
+              ]
             }
           }
         }
@@ -3259,7 +3291,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "market-econ-indirect-positive-segment-residual"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -3283,6 +3315,15 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Use dated, sourced inputs to keep top-down TAM and bottom-up TAM separate, compare their difference, and calculate segment-derived SAM/SOM and uncovered serviceable value. The calculator requires an explicit as-of date, currency, source ID and publication date for each number. It rejects future evid” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "market-econ-indirect-positive-segment-residual",
+              "market-econ-risk-conflicting-source-scope"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "market-econ-risk-conflicting-source-scope"
+              ]
             }
           }
         }
@@ -3354,7 +3395,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "scan-indirect-positive-watchlist-change"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -3366,7 +3407,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "scan-risk-point-in-time-universe-provenance"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -3379,6 +3420,19 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Reduce a broad investable universe to a small research queue by looking for meaningful change, not merely popular tickers.” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "scan-indirect-positive-watchlist-change",
+              "scan-risk-point-in-time-universe-provenance",
+              "scan-risk-research-does-not-authorize-write"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "scan-risk-point-in-time-universe-provenance"
+              ],
+              "tool_or_side_effect": [
+                "scan-risk-research-does-not-authorize-write"
+              ]
             }
           }
         }
@@ -5470,7 +5524,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "underwriting-indirect-positive-guidance-change"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5482,7 +5536,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "underwriting-risk-hostile-research-order"
             },
             "risk_driven_additional": [
               "provenance",
@@ -5497,6 +5551,26 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Produce an evidence-backed investment case that can later be challenged, valued, sized and monitored.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "underwriting-indirect-positive-guidance-change",
+              "underwriting-risk-period-basis-conflict",
+              "underwriting-risk-hostile-research-order",
+              "underwriting-risk-downstream-sizing-rejects-incomplete-thesis"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "underwriting-risk-period-basis-conflict"
+              ],
+              "security_boundary": [
+                "underwriting-risk-hostile-research-order"
+              ],
+              "tool_or_side_effect": [
+                "underwriting-risk-hostile-research-order"
+              ],
+              "consumer_workflow": [
+                "underwriting-risk-downstream-sizing-rejects-incomplete-thesis"
+              ]
             }
           }
         }
@@ -5665,11 +5739,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-indirect-positive-reusable-procedure"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-nearmiss-review-existing-package"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -5677,7 +5751,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "author-hostile-spec-authority-boundary"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -5698,7 +5772,18 @@
               "author-hostile-spec-authority-boundary",
               "author-side-effect-hidden-deploy",
               "author-consumer-contract-handoff"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "author-hostile-spec-authority-boundary"
+              ],
+              "tool_or_side_effect": [
+                "author-side-effect-hidden-deploy"
+              ],
+              "consumer_workflow": [
+                "author-consumer-contract-handoff"
+              ]
+            }
           }
         }
       },
@@ -5769,7 +5854,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-indirect-positive-observed-regression"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5781,7 +5866,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "eval-hostile-output-rubric-injection"
             },
             "risk_driven_additional": [
               "provenance",
@@ -5801,7 +5886,18 @@
               "eval-hostile-output-rubric-injection",
               "eval-provenance-receipt-sha-mismatch",
               "eval-side-effect-release-request"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "eval-hostile-output-rubric-injection"
+              ],
+              "provenance": [
+                "eval-provenance-receipt-sha-mismatch"
+              ],
+              "tool_or_side_effect": [
+                "eval-side-effect-release-request"
+              ]
+            }
           }
         }
       },
@@ -5872,7 +5968,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-indirect-positive-store-readiness"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -5884,7 +5980,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "release-hostile-artifact-instruction"
             },
             "risk_driven_additional": [
               "provenance",
@@ -5904,7 +6000,18 @@
               "release-hostile-artifact-instruction",
               "release-provenance-load-receipt-unbound",
               "release-consumer-report-incomplete"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "release-hostile-artifact-instruction"
+              ],
+              "provenance": [
+                "release-provenance-load-receipt-unbound"
+              ],
+              "consumer_workflow": [
+                "release-consumer-report-incomplete"
+              ]
+            }
           }
         }
       },
@@ -6070,11 +6177,11 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-indirect-positive-failure-to-regression"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-nearmiss-evaluate-existing-runs"
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
@@ -6082,7 +6189,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "testdesign-hostile-fixture-rubric-leakage"
             },
             "risk_driven_additional": [
               "provenance",
@@ -6101,7 +6208,15 @@
               "testdesign-nearmiss-evaluate-existing-runs",
               "testdesign-hostile-fixture-rubric-leakage",
               "testdesign-provenance-private-incident"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "testdesign-hostile-fixture-rubric-leakage"
+              ],
+              "provenance": [
+                "testdesign-provenance-private-incident"
+              ]
+            }
           }
         }
       },
@@ -6172,7 +6287,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-indirect-positive-pre-evaluation-audit"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -6184,7 +6299,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "validate-hostile-instructions-security-blocker"
             },
             "risk_driven_additional": [
               "tool_or_side_effect",
@@ -6202,7 +6317,15 @@
               "validate-indirect-positive-pre-evaluation-audit",
               "validate-hostile-instructions-security-blocker",
               "validate-hidden-network-write"
-            ]
+            ],
+            "risk_case_design_refs": {
+              "security_boundary": [
+                "validate-hostile-instructions-security-blocker"
+              ],
+              "tool_or_side_effect": [
+                "validate-hidden-network-write"
+              ]
+            }
           }
         }
       },
@@ -6366,7 +6489,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-econ-indirect-positive-bridge"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -6374,7 +6497,7 @@
             },
             "missing_input_failure": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "strategy-econ-missing-currency-period-stop"
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
@@ -6390,6 +6513,16 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Require an explicit as-of date, currency and source ID/publication date for each numeric input. Use `engine.py` for aggregate profit pools, sum/product driver-tree checks, exact price-volume-mix bridges and baseline-to-actual cost bridges. The PVM convention is volume, then mix at base prices, then ” Declared risk: medium. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "strategy-econ-indirect-positive-bridge",
+              "strategy-econ-missing-currency-period-stop",
+              "strategy-econ-risk-conflicting-units-and-future-source"
+            ],
+            "risk_case_design_refs": {
+              "provenance": [
+                "strategy-econ-risk-conflicting-units-and-future-source"
+              ]
             }
           }
         }
@@ -6847,7 +6980,7 @@
             },
             "indirect_positive": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "monitor-indirect-positive-recorded-thesis-delta"
             },
             "near_miss_competing_route": {
               "state": "NOT_RUN",
@@ -6859,7 +6992,7 @@
             },
             "untrusted_adversarial_input": {
               "state": "NOT_RUN",
-              "case_id": null
+              "case_id": "monitor-risk-untrusted-feed-and-future-evidence"
             },
             "risk_driven_additional": [
               "multi_turn",
@@ -6875,6 +7008,29 @@
               "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
               "status": "PROPOSED_FOR_INDEPENDENT_REVIEW",
               "rationale": "Source contract: “Evaluate what changed versus the recorded thesis rather than summarizing news from scratch.” Declared risk: high. Proposed extra families are limited to source-specific behavior beyond the five shared cases; their test intent is defined in the A1 contract and remains subject to independent review."
+            },
+            "case_design_refs": [
+              "monitor-indirect-positive-recorded-thesis-delta",
+              "monitor-risk-multi-turn-constraints-persist",
+              "monitor-risk-untrusted-feed-and-future-evidence",
+              "monitor-risk-invalid-store-handoff"
+            ],
+            "risk_case_design_refs": {
+              "multi_turn": [
+                "monitor-risk-multi-turn-constraints-persist"
+              ],
+              "provenance": [
+                "monitor-risk-untrusted-feed-and-future-evidence"
+              ],
+              "security_boundary": [
+                "monitor-risk-untrusted-feed-and-future-evidence"
+              ],
+              "tool_or_side_effect": [
+                "monitor-risk-invalid-store-handoff"
+              ],
+              "consumer_workflow": [
+                "monitor-risk-invalid-store-handoff"
+              ]
             }
           }
         }
@@ -7758,6 +7914,25 @@
         "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
         "execution_state": "NOT_RUN",
         "notes": "Declarative A0 TEST_DESIGN slice; no skill sources or executable fixtures changed. Owner acceptance is limited to this case design and does not complete A1, accept A2, or authorize migration/release."
+      },
+      {
+        "path": "evals/campaigns/xml-2026-11/a1-p1-investing-strategy-case-design.json",
+        "git_blob_sha": "030fcba9cc4234328048a224f44fefe576cfd6b9",
+        "source_revision": "3b2b4710f6840b381ab5f283b47033e8408e9d76",
+        "owning_batch_issue": 674,
+        "skills": [
+          "investment-record-store",
+          "market-opportunity-scan",
+          "security-underwriting",
+          "thesis-monitor",
+          "financial-modeling",
+          "market-economics",
+          "strategy-economics"
+        ],
+        "case_count": 22,
+        "status": "PROPOSED_FOR_OWNER_ACCEPTANCE",
+        "execution_state": "NOT_RUN",
+        "notes": "Declarative A0 TEST_DESIGN slice; no skill source or executable cases.yaml changed. Does not close #674/#683, complete A1, accept A2, or authorize XML migration/release."
       }
     ]
   },
