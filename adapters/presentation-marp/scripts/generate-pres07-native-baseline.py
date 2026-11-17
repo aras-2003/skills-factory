@@ -22,7 +22,7 @@ def frame(page,name,x,y,w,h,text,cls='outline'):
   p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'BodyP'}); p.text=line
  return f
 def rect(page,name,x,y,w,h,fill='#176b87'):
- st='shape'+str(len(list(page)))
+ st='shape'+str(len(list(auto)))
  sty=SubElement(auto,NS%D['style']+'style',{NS%D['style']+'name':st,NS%D['style']+'family':'graphic'}); SubElement(sty,NS%D['style']+'graphic-properties',{NS%D['draw']+'fill':'solid',NS%D['draw']+'fill-color':fill,NS%D['draw']+'stroke':'none'})
  SubElement(page,NS%D['draw']+'rect',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':st,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
 
