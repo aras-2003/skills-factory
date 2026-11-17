@@ -41,7 +41,7 @@ def validate(role, data):
         return value
     if role=="decision":
         for k in common[role]:
-            short(data[k],k,230 if k=="rationale" else 160)
+            short(data[k],k,230 if k=="rationale" else 90 if k=="board_ask" else 160)
     elif role=="options":
         rows=data["criterion_rows"]
         if not isinstance(rows,list) or not 3<=len(rows)<=4:
@@ -49,7 +49,7 @@ def validate(role, data):
         for idx,row in enumerate(rows):
             if not isinstance(row,dict) or set(row)!={"criterion","central","federated","local"}:
                 raise EditorialContractError(f"options row {idx}: invalid columns")
-            for k,v in row.items():short(v,f"row {idx}.{k}",58)
+            for k,v in row.items():short(v,f"row {idx}.{k}",18 if k=="criterion" else 35)
         short(data["recommendation"],"recommendation")
         short(data["decision_condition"],"decision_condition",230)
     elif role=="architecture":
@@ -80,7 +80,7 @@ def validate(role, data):
         for i,p in enumerate(phases):
             if not isinstance(p,dict) or set(p)!={"name","window","deliverable"}:
                 raise EditorialContractError(f"roadmap phase {i} invalid")
-            for k,v in p.items():short(v,f"phase {i}.{k}",100)
+            for k,v in p.items():short(v,f"phase {i}.{k}",70 if k=="deliverable" else 35)
         for i,g in enumerate(gates):short(g,f"gate {i}",90)
         short(data["decision_rule"],"decision_rule",210)
     return data
