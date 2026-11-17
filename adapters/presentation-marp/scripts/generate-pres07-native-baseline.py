@@ -10,7 +10,13 @@ for p,u in D.items(): register_namespace(p,u)
 root=Element('{%s}document-content'%D['office'],{'{%s}version'%D['office']:'1.3'})
 auto=SubElement(root,'{%s}automatic-styles'%D['office'])
 frame_style=SubElement(auto,'{%s}style'%D['style'],{'{%s}name'%D['style']:'fr1','{%s}family'%D['style']:'graphic'}); SubElement(frame_style,'{%s}graphic-properties'%D['style'],{'{%s}fill'%D['draw']:'none','{%s}stroke'%D['draw']:'none'})
-for name,size,color,weight in [('TitleP','24pt','#17243a','bold'),('BodyP','14pt','#52627a','normal'),('SmallP','10pt','#52627a','normal')]:
+EXEC_MODE = '--executive' in sys.argv[3:]
+style_specs = [('TitleP','23pt' if EXEC_MODE else '24pt','#17243a','bold'),
+ ('BodyP','16pt' if EXEC_MODE else '14pt','#52627a','normal'),
+ ('SmallP','12pt' if EXEC_MODE else '10pt','#52627a','normal')]
+if EXEC_MODE:
+ style_specs += [('CardP','17pt','#17243a','bold'),('MetricP','32pt','#176b87','bold')]
+for name,size,color,weight in style_specs:
  st=SubElement(auto,'{%s}style'%D['style'],{'{%s}name'%D['style']:name,'{%s}family'%D['style']:'paragraph'}); SubElement(st,'{%s}text-properties'%D['style'],{'{%s}font-family'%D['style']:'Liberation Sans','{%s}font-size'%D['fo']:size,'{%s}color'%D['fo']:color,'{%s}font-weight'%D['fo']:weight})
 page_layout=SubElement(auto,'{%s}page-layout'%D['style'],{'{%s}name'%D['style']:'PL1'}); SubElement(page_layout,'{%s}page-layout-properties'%D['style'],{'{%s}page-width'%D['fo']:'28.222cm','{%s}page-height'%D['fo']:'15.875cm'})
 body=SubElement(root,'{%s}body'%D['office']); pres=SubElement(body,'{%s}presentation'%D['office'])
@@ -19,7 +25,7 @@ def frame(page,name,x,y,w,h,text,cls='outline'):
  f=SubElement(page,NS%D['draw']+'frame',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':'fr1',NS%D['presentation']+'class':cls,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
  tb=SubElement(f,NS%D['draw']+'text-box')
  for line in str(text).split('\n'):
-  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'BodyP'}); p.text=line
+  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'CardP' if cls=='cardhead' else 'MetricP' if cls=='metric' else 'BodyP'}); p.text=line
  return f
 def rect(page,name,x,y,w,h,fill='#176b87'):
  st='shape'+str(len(list(auto)))
