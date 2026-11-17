@@ -28,7 +28,7 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
         rect(page, f"{sid} {name}", x, y, w, h, fill)
     def txt(name, x, y, w, h, value, kind="body"):
         assert x >= 0 and y >= 0 and x+w <= PAGE_W+.01 and y+h <= 15.875+.01
-        frame(page, f"{sid} {name}", x, y, w, h, value, "title" if kind=="title" else "small" if kind=="small" else "outline")
+        frame(page, f"{sid} {name}", x, y, w, h, value, "title" if kind=="title" else "small" if kind=="small" else "cardhead" if kind=="cardhead" else "metric" if kind=="metric" else "outline")
     box("canvas background",0,0,PAGE_W,15.875,BG)
     box("top ribbon",0,0,PAGE_W,.17,ACCENT)
     txt("eyebrow",1.0,.45,22,.55,"CIO TRANSFORMATION  /  EXECUTIVE DECISION   •   ILLUSTRATIVE", "small")
@@ -40,7 +40,7 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
 
     def card(n,x,y,w,h,header,detail,accent=LIGHT):
         box(n+" bg",x,y,w,h,accent)
-        txt(n+" heading",x+.28,y+.27,w-.56,.69,header)
+        txt(n+" heading",x+.28,y+.27,w-.56,.69,header,"cardhead")
         txt(n+" detail",x+.28,y+1.12,w-.56,h-1.33,detail,"small")
 
     if role=="decision":
