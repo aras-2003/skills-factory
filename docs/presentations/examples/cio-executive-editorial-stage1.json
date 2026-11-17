@@ -33,7 +33,7 @@
           "editorial_v2": {
             "recommendation": "Pilot a federated technology operating model",
             "rationale": "Preserve local delivery accountability while validating shared technology contracts. Commitment to an enterprise rollout is deferred until the evidence gate.",
-            "board_ask": "Approve a bounded discovery and pilot mandate. Name the accountable sponsor and establish explicit stop conditions.",
+            "board_ask": "Approve a bounded pilot, name its sponsor and set stop conditions.",
             "guardrail": "No savings, maturity gains or rollout outcomes have been demonstrated.",
             "evidence": "Baseline of demand, lead time, cost and reliability before funding scale."
           }
@@ -77,7 +77,7 @@
                 "local": "Local ownership"
               },
               {
-                "criterion": "Shared standards",
+                "criterion": "Standards",
                 "central": "Uniform",
                 "federated": "Common contracts",
                 "local": "Market defined"
