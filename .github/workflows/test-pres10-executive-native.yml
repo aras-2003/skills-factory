@@ -77,6 +77,35 @@ jobs:
           test "$(sed -n 's/^Pages:[[:space:]]*//p' .tmp/pres10/preview/pdfinfo.txt)" = "10"
           pdftoppm -png -r 100 .tmp/pres10/preview/native-baseline.pdf .tmp/pres10/preview/slide
           test "$(find .tmp/pres10/preview -name 'slide-*.png' | wc -l)" -eq 10
+      - name: Validate four Executive Editorial roles and fail-closed contracts
+        run: python -m unittest discover -s adapters/presentation-marp/scripts/tests -p 'test_*.py' -v
+      - name: Generate four-slide editorial stage-one preview with canonical renderer
+        run: |
+          mkdir -p .tmp/pres10/editorial-v2
+          python adapters/presentation-marp/scripts/generate-pres07-native-baseline.py \
+            docs/presentations/examples/cio-executive-editorial-stage1.json \
+            .tmp/pres10/editorial-v2 --executive
+          libreoffice -env:UserInstallation=file:///tmp/lo-ed2-$ --headless \
+            --convert-to pptx --outdir .tmp/pres10/editorial-v2 \
+            .tmp/pres10/editorial-v2/native-baseline.odp
+          python adapters/presentation-marp/scripts/verify-pres10-editorial-v2.py \
+            docs/presentations/examples/cio-executive-editorial-stage1.json \
+            .tmp/pres10/editorial-v2/executive-layout-manifest.json \
+            .tmp/pres10/editorial-v2/native-baseline.pptx \
+            .tmp/pres10/editorial-v2/structure-receipt.json
+      - name: Reopen four-slide editable PPTX and capture previews
+        run: |
+          mkdir -p .tmp/pres10/editorial-v2/preview
+          libreoffice -env:UserInstallation=file:///tmp/lo-ed2-reopen-$ --headless \
+            --convert-to pdf --outdir .tmp/pres10/editorial-v2/preview \
+            .tmp/pres10/editorial-v2/native-baseline.pptx
+          pdfinfo .tmp/pres10/editorial-v2/preview/native-baseline.pdf \
+            > .tmp/pres10/editorial-v2/preview/pdfinfo.txt
+          test "$(sed -n 's/^Pages:[[:space:]]*//p' .tmp/pres10/editorial-v2/preview/pdfinfo.txt)" = "4"
+          pdftoppm -png -r 110 \
+            .tmp/pres10/editorial-v2/preview/native-baseline.pdf \
+            .tmp/pres10/editorial-v2/preview/slide
+          test "$(find .tmp/pres10/editorial-v2/preview -name 'slide-*.png' | wc -l)" -eq 4
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
