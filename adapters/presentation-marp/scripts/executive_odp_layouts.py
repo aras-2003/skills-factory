@@ -13,7 +13,9 @@ LIGHT = "#d8e5ed"
 MUTED = "#52627a"
 WARM = "#eee1cb"
 
-def render(page, slide, ordinal, frame, rect, pattern, provenance):
+def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
+    if theme.get("canvas") != BG or theme.get("ink") != INK or theme.get("accent") != ACCENT:
+        raise ValueError("Executive layout tokens must match canonical sf-editorial theme")
     role = slide["role"].lower()
     sid = slide["slide_id"]
     title = slide["action_title"]
@@ -27,6 +29,7 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance):
     def txt(name, x, y, w, h, value, kind="body"):
         assert x >= 0 and y >= 0 and x+w <= PAGE_W+.01 and y+h <= 15.875+.01
         frame(page, f"{sid} {name}", x, y, w, h, value, "title" if kind=="title" else "small" if kind=="small" else "outline")
+    box("canvas background",0,0,PAGE_W,15.875,BG)
     box("top ribbon",0,0,PAGE_W,.17,ACCENT)
     txt("eyebrow",1.0,.45,22,.55,"CIO TRANSFORMATION  /  EXECUTIVE DECISION   •   ILLUSTRATIVE", "small")
     txt("action headline",1.0,1.18,26.2,1.7,title,"title")
