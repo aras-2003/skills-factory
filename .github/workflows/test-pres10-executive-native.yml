@@ -36,6 +36,29 @@ jobs:
           libreoffice -env:UserInstallation=file:///tmp/lo-pres10-$$ --headless \
             --convert-to pptx --outdir .tmp/pres10 .tmp/pres10/native-baseline.odp
           test -s .tmp/pres10/native-baseline.pptx
+      - name: Verify reusable roles use explicit content and block missing fields
+        run: |
+          python - <<'PY'
+          import json, pathlib, subprocess, sys
+          sys.path.insert(0, "adapters/presentation-marp/scripts")
+          from executive_odp_layouts import REQUIRED_COPY
+          root=pathlib.Path(".tmp/pres10")
+          original=json.load(open("docs/presentations/examples/cio-reference-golden-v1.json"))
+          slide=original["slides"][0]
+          slide["extensions"]={"executive":{"copy":{k:"Independent original source text" for k in REQUIRED_COPY["decision"]}}}
+          original["deck_id"]="one-slide-custom-executive"
+          original["slides"]=[slide]
+          root.joinpath("one-slide.json").write_text(json.dumps(original))
+          cmd=[sys.executable,"adapters/presentation-marp/scripts/generate-pres07-native-baseline.py",
+               str(root/"one-slide.json"),str(root/"custom"),"--executive"]
+          subprocess.run(cmd,check=True)
+          assert (root/"custom"/"native-baseline.odp").exists()
+          del slide["extensions"]["executive"]["copy"]["guardrail detail"]
+          root.joinpath("negative.json").write_text(json.dumps(original))
+          negative=subprocess.run([sys.executable,cmd[1],str(root/"negative.json"),
+               str(root/"negative"),"--executive"],capture_output=True,text=True)
+          assert negative.returncode!=0, "missing authored content must block output"
+          PY
       - name: Verify native object editability and reference-to-layout lineage
         run: |
           python adapters/presentation-marp/scripts/verify-pres10-native.py \
