@@ -140,7 +140,7 @@ def render(page, slide, frame:Callable, rect:Callable, editorial:dict):
         tx("zone heading",1.0,3.45,25.4,.57,"CONCEPTUAL LAYERS  /  FORMAL MODEL LINKAGE IS PROVISIONAL","small")
         # Three vertically stacked semantic layers, each with distinct native objects.
         layer_y=[4.32,7.53,10.75]
-        groups=[("MARKET EXPERIENCE",d["markets"],WHITE),("COMMON CONTRACTS",d["contracts"],"#d8e7e5"),("ENTERPRISE CORE",d["platforms"],WARM)]
+        groups=[("MARKETS",d["markets"],WHITE),("CONTRACTS",d["contracts"],"#d8e7e5"),("CORE PLATFORMS",d["platforms"],WARM)]
         for i,(label,values,color) in enumerate(groups):
             y=layer_y[i]
             tx(f"layer title {i}",1.0,y,5.1,.65,label,"cardhead")
