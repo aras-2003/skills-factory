@@ -98,11 +98,11 @@
     {
       "slide_id": "S05",
       "role": "governance",
-      "action_title": "Decision rights require evidence and approved owner assignment",
+      "action_title": "Assign accountable owners to material technology decisions",
       "claims": [
         {
           "claim_id": "CLM-05",
-          "statement": "Decision rights require evidence and approved owner assignment",
+          "statement": "Assign accountable owners to material technology decisions",
           "epistemic_status": "HYPOTHESIS"
         }
       ],
