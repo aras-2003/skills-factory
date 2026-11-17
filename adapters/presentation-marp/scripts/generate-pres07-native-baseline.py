@@ -39,6 +39,8 @@ if executive:
  bridge = module_from_spec(spec); spec.loader.exec_module(bridge)
  registry = json.loads((root_repo/'docs/presentations/consulting-reference-patterns-v1.json').read_text())
  plan = bridge.plan(deck,registry)
+ theme_registry = json.loads((root_repo/'adapters/presentation-marp/themes/registry.json').read_text())
+ executive_theme = next(t["tokens"] for t in theme_registry["themes"] if t["id"] == "sf-editorial")
  if len(deck['slides']) != 10:
   raise SystemExit('PRES-10 golden fixture must have exactly 10 slides')
  if any(item['status'] != 'PLANNED_NOT_RENDERED' for item in plan['slides']):
@@ -47,7 +49,7 @@ if executive:
 for i,slide in enumerate(deck['slides'],1):
  p=SubElement(pres,NS%D['draw']+'page',{NS%D['draw']+'name':f'Slide {i:02}',NS%D['draw']+'style-name':'dp1',NS%D['draw']+'master-page-name':'Default'})
  if executive:
-  render_executive(p,slide,i,frame,rect,plan['slides'][i-1],slide.get('provenance',{}))
+  render_executive(p,slide,i,frame,rect,plan['slides'][i-1],slide.get('provenance',{}),executive_theme)
   continue
  frame(p,'Action title',0.9,0.65,26.0,1.6,slide['action_title'],'title')
  frame(p,'Body',1.0,2.25,25.0,1.4,slide.get('body',''))
