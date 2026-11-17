@@ -91,8 +91,14 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
             if i<3:box(f"connector {i}",x+6.31,8.2,.45,.12,ACCENT)
         txt("gates",1.2,12.6,25.5,1,"Every transition requires evidence; calendar dates alone are not approval.","small")
     elif role=="kpi":
-        card("metric lead-time",1.0,4.0,12.6,8.4,"LEAD TIME","90 days • stated baseline\n30 days • management target\nAchieved result: UNKNOWN",LIGHT)
-        card("metric cost",14.0,4.0,13.1,8.4,"IT COST","−15% • management target\nSpend baseline: UNKNOWN\nRealized saving: UNKNOWN",WARM)
+        box("lead metric",1.0,4.0,12.6,8.4,LIGHT)
+        txt("lead label",1.45,4.32,10.3,.75,"LEAD TIME","cardhead")
+        txt("lead number",1.45,5.55,10.7,1.8,"90 → 30 days","metric")
+        txt("lead qualification",1.45,8.2,10.7,3.1,"Baseline → management target\\nMeasured outcome: UNKNOWN","small")
+        box("cost metric",14.0,4.0,13.1,8.4,WARM)
+        txt("cost label",14.45,4.32,10.3,.75,"IT COST","cardhead")
+        txt("cost number",14.45,5.55,10.7,1.8,"−15%","metric")
+        txt("cost qualification",14.45,8.2,10.7,3.1,"Management target\\nSpend baseline: UNKNOWN\\nSavings realized: UNKNOWN","small")
         txt("measurement note",1.2,12.7,24.7,.9,"Targets are not outcomes. Validate denominator and observation period.","small")
     elif role=="risks":
         for i,(head,detail) in enumerate([
