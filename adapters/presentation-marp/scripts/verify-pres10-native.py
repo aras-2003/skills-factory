@@ -38,6 +38,10 @@ with zipfile.ZipFile(pptx_file) as z:
   title=expected_slide["action_title"]
   if norm(title) not in norm(all_text):
    raise SystemExit(f"Slide {idx} native XML missing action title: {title!r}")
+  user_copy=expected_slide.get("extensions",{}).get("executive",{}).get("copy",{})
+  for key,val in user_copy.items():
+   if norm(val) not in norm(all_text):
+    raise SystemExit(f"Slide {idx} original content override not present: {key}")
   shapes=root.findall(".//p:sp",ns)
   if len(shapes)<8:
    raise SystemExit(f"Slide {idx} has only {len(shapes)} editable shapes")
