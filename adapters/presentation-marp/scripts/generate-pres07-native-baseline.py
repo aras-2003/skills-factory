@@ -15,7 +15,7 @@ style_specs = [('TitleP','23pt' if EXEC_MODE else '24pt','#17243a','bold'),
  ('BodyP','16pt' if EXEC_MODE else '14pt','#52627a','normal'),
  ('SmallP','12pt' if EXEC_MODE else '10pt','#52627a','normal')]
 if EXEC_MODE:
- style_specs += [('CardP','17pt','#17243a','bold'),('MetricP','32pt','#176b87','bold')]
+ style_specs += [('CardP','17pt','#17243a','bold'),('MetricP','32pt','#176b87','bold'),('LightHeadingP','15pt','#ffffff','bold')]
 for name,size,color,weight in style_specs:
  st=SubElement(auto,'{%s}style'%D['style'],{'{%s}name'%D['style']:name,'{%s}family'%D['style']:'paragraph'}); SubElement(st,'{%s}text-properties'%D['style'],{'{%s}font-family'%D['style']:'Liberation Sans','{%s}font-size'%D['fo']:size,'{%s}color'%D['fo']:color,'{%s}font-weight'%D['fo']:weight})
 page_layout=SubElement(auto,'{%s}page-layout'%D['style'],{'{%s}name'%D['style']:'PL1'}); SubElement(page_layout,'{%s}page-layout-properties'%D['style'],{'{%s}page-width'%D['fo']:'28.222cm','{%s}page-height'%D['fo']:'15.875cm'})
@@ -25,7 +25,7 @@ def frame(page,name,x,y,w,h,text,cls='outline'):
  f=SubElement(page,NS%D['draw']+'frame',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':'fr1',NS%D['presentation']+'class':cls,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
  tb=SubElement(f,NS%D['draw']+'text-box')
  for line in str(text).split('\n'):
-  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'CardP' if cls=='cardhead' else 'MetricP' if cls=='metric' else 'BodyP'}); p.text=line
+  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'CardP' if cls=='cardhead' else 'MetricP' if cls=='metric' else 'LightHeadingP' if cls=='headinglight' else 'BodyP'}); p.text=line
  return f
 def rect(page,name,x,y,w,h,fill='#176b87'):
  st='shape'+str(len(list(auto)))
@@ -36,6 +36,7 @@ deck=json.loads(src.read_text())
 executive = '--executive' in sys.argv[3:]
 if executive:
  from executive_odp_layouts import render as render_executive
+ from executive_editorial_v2 import render as render_editorial_v2
  from subprocess import check_output
  from pathlib import Path as _Path
  root_repo = _Path(__file__).resolve().parents[3]
@@ -56,7 +57,11 @@ for i,slide in enumerate(deck['slides'],1):
  p=SubElement(pres,NS%D['draw']+'page',{NS%D['draw']+'name':f'Slide {i:02}',NS%D['draw']+'style-name':'dp1',NS%D['draw']+'master-page-name':'Default'})
  if executive:
   slide = dict(slide, _deck_id=deck.get('deck_id'))
-  render_executive(p,slide,i,frame,rect,plan['slides'][i-1],slide.get('provenance',{}),executive_theme,len(deck['slides']))
+  if slide.get('extensions', {}).get('executive', {}).get('editorial_v2') is not None:
+   slide['layout_reference'] = plan['slides'][i-1]['layout_id']
+   render_editorial_v2(p,slide,frame,rect,slide['extensions']['executive']['editorial_v2'])
+  else:
+   render_executive(p,slide,i,frame,rect,plan['slides'][i-1],slide.get('provenance',{}),executive_theme,len(deck['slides']))
   continue
  frame(p,'Action title',0.9,0.65,26.0,1.6,slide['action_title'],'title')
  frame(p,'Body',1.0,2.25,25.0,1.4,slide.get('body',''))
