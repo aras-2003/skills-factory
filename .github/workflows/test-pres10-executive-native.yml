@@ -5,6 +5,10 @@ on:
     paths:
       - "adapters/presentation-marp/scripts/generate-pres07-native-baseline.py"
       - "adapters/presentation-marp/scripts/executive_odp_layouts.py"
+      - "adapters/presentation-marp/scripts/executive_editorial_v2.py"
+      - "adapters/presentation-marp/scripts/tests/**"
+      - "adapters/presentation-marp/scripts/verify-pres10-editorial-v2.py"
+      - "docs/presentations/examples/cio-executive-editorial-stage1.json"
       - "adapters/presentation-marp/scripts/verify-pres10-native.py"
       - "docs/presentations/examples/cio-reference-golden-v1.json"
       - "docs/presentations/consulting-reference-patterns-v1.json"
