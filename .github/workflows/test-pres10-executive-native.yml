@@ -1,0 +1,63 @@
+name: PRES-10 Executive Native Deck
+
+on:
+  pull_request:
+    paths:
+      - "adapters/presentation-marp/scripts/generate-pres07-native-baseline.py"
+      - "adapters/presentation-marp/scripts/executive_odp_layouts.py"
+      - "adapters/presentation-marp/scripts/verify-pres10-native.py"
+      - "docs/presentations/examples/cio-reference-golden-v1.json"
+      - "docs/presentations/consulting-reference-patterns-v1.json"
+      - ".github/workflows/test-pres10-executive-native.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-editable:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install LibreOffice native conversion and PDF inspect tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libreoffice-impress poppler-utils
+      - name: Render CIO executive fixture via existing editable ODP pathway
+        run: |
+          mkdir -p .tmp/pres10
+          python adapters/presentation-marp/scripts/generate-pres07-native-baseline.py \
+            docs/presentations/examples/cio-reference-golden-v1.json \
+            .tmp/pres10 --executive
+          libreoffice -env:UserInstallation=file:///tmp/lo-pres10-$$ --headless \
+            --convert-to pptx --outdir .tmp/pres10 .tmp/pres10/native-baseline.odp
+          test -s .tmp/pres10/native-baseline.pptx
+      - name: Verify native object editability and reference-to-layout lineage
+        run: |
+          python adapters/presentation-marp/scripts/verify-pres10-native.py \
+            docs/presentations/examples/cio-reference-golden-v1.json \
+            .tmp/pres10/executive-layout-manifest.json \
+            .tmp/pres10/native-baseline.pptx \
+            .tmp/pres10/native-baseline.odp \
+            .tmp/pres10/native-verification.json
+      - name: Reopen PPTX in LibreOffice and render every slide
+        run: |
+          mkdir -p .tmp/pres10/preview
+          libreoffice -env:UserInstallation=file:///tmp/lo-pres10-reopen-$$ --headless \
+            --convert-to pdf --outdir .tmp/pres10/preview .tmp/pres10/native-baseline.pptx
+          test -s .tmp/pres10/preview/native-baseline.pdf
+          pdfinfo .tmp/pres10/preview/native-baseline.pdf > .tmp/pres10/preview/pdfinfo.txt
+          test "$(sed -n 's/^Pages:[[:space:]]*//p' .tmp/pres10/preview/pdfinfo.txt)" = "10"
+          pdftoppm -png -r 100 .tmp/pres10/preview/native-baseline.pdf .tmp/pres10/preview/slide
+          test "$(find .tmp/pres10/preview -name 'slide-*.png' | wc -l)" -eq 10
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: pres10-native-deck-and-render-evidence
+          path: .tmp/pres10
+          if-no-files-found: error
+          retention-days: 14
