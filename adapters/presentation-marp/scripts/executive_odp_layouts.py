@@ -13,7 +13,20 @@ LIGHT = "#d8e5ed"
 MUTED = "#52627a"
 WARM = "#eee1cb"
 
-def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
+REQUIRED_COPY = {
+    "decision": ["recommendation message", "decision consequences", "mandate heading", "mandate detail", "guardrail heading", "guardrail detail"],
+    "options": [*(f"option {i} {field}" for i in range(3) for field in ("heading", "detail")), "decision condition"],
+    "capability": ["capability premise", *(f"capability {i} {field}" for i in range(4) for field in ("heading","detail"))],
+    "architecture": ["architecture subtitle", "local markets heading", "local markets detail", "contract heading", "contract detail", "core heading", "core detail", "model bound"],
+    "governance": [*(f"governance {i} {field}" for i in range(3) for field in ("heading", "detail")), "governance policy"],
+    "roadmap": [*(f"roadmap {i} {field}" for i in range(4) for field in ("heading", "detail")), "gates"],
+    "kpi": ["lead label", "lead number", "lead qualification", "cost label", "cost number", "cost qualification", "measurement note"],
+    "risks": [*(f"risk {i} {field}" for i in range(4) for field in ("heading", "detail"))],
+    "value": [*(f"value {i} {field}" for i in range(3) for field in ("heading", "detail")), "value disclaimer"],
+    "handoff": [*(f"trace {i} {field}" for i in range(6) for field in ("heading", "detail")), "trace warning"],
+}
+
+def render(page, slide, ordinal, frame, rect, pattern, provenance, theme, total):
     if theme.get("canvas") != BG or theme.get("ink") != INK or theme.get("accent") != ACCENT:
         raise ValueError("Executive layout tokens must match canonical sf-editorial theme")
     custom = slide.get("extensions", {}).get("executive", {})
@@ -22,6 +35,13 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
     copy = custom.get("copy", {})
     role = slide["role"].lower()
     sid = slide["slide_id"]
+    if role not in REQUIRED_COPY:
+        raise ValueError(f"Unsupported executive role: {role}")
+    if slide.get("_deck_id") != "cio-transform-2026-illustrative":
+        missing = [key for key in REQUIRED_COPY[role] if key not in copy]
+        if missing:
+            raise ValueError(f"{sid}: custom executive deck missing authored copy for {missing}")
+
     title = slide["action_title"]
     if not pattern or not pattern.get("layout_id"):
         raise ValueError(f"{sid}: no approved pattern selection")
@@ -44,7 +64,7 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
     box("divider",1.0,2.91,26.15,.045,MUTED)
     note = "SOURCE / METHOD: " + ", ".join(pattern["source_ids"][:3]) + "   |   " + sid + " / " + pattern["layout_id"]
     txt("source footer",1.0,14.86,26,.52,note,"small")
-    txt("page count",25.1,.39,2.15,.48,f"{ordinal:02d} / 10","small")
+    txt("page count",25.1,.39,2.15,.48,f"{ordinal:02d} / {total:02d}","small")
 
     def card(n,x,y,w,h,header,detail,accent=LIGHT):
         box(n+" bg",x,y,w,h,accent)
