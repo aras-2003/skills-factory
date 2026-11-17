@@ -19,7 +19,7 @@ def frame(page,name,x,y,w,h,text,cls='outline'):
  f=SubElement(page,NS%D['draw']+'frame',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':'fr1',NS%D['presentation']+'class':cls,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
  tb=SubElement(f,NS%D['draw']+'text-box')
  for line in str(text).split('\n'):
-  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'BodyP'}); p.text=line
+  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'BodyP'}); p.text=line
  return f
 def rect(page,name,x,y,w,h,fill='#176b87'):
  st='shape'+str(len(list(page)))
@@ -27,8 +27,28 @@ def rect(page,name,x,y,w,h,fill='#176b87'):
  SubElement(page,NS%D['draw']+'rect',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':st,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
 
 deck=json.loads(src.read_text())
+executive = '--executive' in sys.argv[3:]
+if executive:
+ from executive_odp_layouts import render as render_executive
+ from subprocess import check_output
+ from pathlib import Path as _Path
+ root_repo = _Path(__file__).resolve().parents[3]
+ from importlib.util import spec_from_file_location, module_from_spec
+ bridge_path = root_repo/'scripts/presentations/reference_style_bridge.py'
+ spec = spec_from_file_location('reference_style_bridge',bridge_path)
+ bridge = module_from_spec(spec); spec.loader.exec_module(bridge)
+ registry = json.loads((root_repo/'docs/presentations/consulting-reference-patterns-v1.json').read_text())
+ plan = bridge.plan(deck,registry)
+ if len(deck['slides']) != 10:
+  raise SystemExit('PRES-10 golden fixture must have exactly 10 slides')
+ if any(item['status'] != 'PLANNED_NOT_RENDERED' for item in plan['slides']):
+  raise SystemExit('PRES-10 evidence must be selected/reviewable before layout')
+ (out/'executive-layout-manifest.json').write_text(json.dumps(plan,indent=2)+'\n')
 for i,slide in enumerate(deck['slides'],1):
  p=SubElement(pres,NS%D['draw']+'page',{NS%D['draw']+'name':f'Slide {i:02}',NS%D['draw']+'style-name':'dp1',NS%D['draw']+'master-page-name':'Default'})
+ if executive:
+  render_executive(p,slide,i,frame,rect,plan['slides'][i-1],slide.get('provenance',{}))
+  continue
  frame(p,'Action title',0.9,0.65,26.0,1.6,slide['action_title'],'title')
  frame(p,'Body',1.0,2.25,25.0,1.4,slide.get('body',''))
  exhibits=slide.get('exhibits',[]); chart=next((e for e in exhibits if e.get('visual_type')=='bar_chart'),None); table=next((e for e in exhibits if e.get('visual_type')=='table'),None); diagram=next((e for e in exhibits if e.get('visual_type')=='architecture_diagram'),None)
