@@ -16,6 +16,10 @@ WARM = "#eee1cb"
 def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
     if theme.get("canvas") != BG or theme.get("ink") != INK or theme.get("accent") != ACCENT:
         raise ValueError("Executive layout tokens must match canonical sf-editorial theme")
+    custom = slide.get("extensions", {}).get("executive", {})
+    if not isinstance(custom, dict) or not isinstance(custom.get("copy", {}), dict):
+        raise ValueError("executive.copy must be an object of original content overrides")
+    copy = custom.get("copy", {})
     role = slide["role"].lower()
     sid = slide["slide_id"]
     title = slide["action_title"]
@@ -28,6 +32,10 @@ def render(page, slide, ordinal, frame, rect, pattern, provenance, theme):
         rect(page, f"{sid} {name}", x, y, w, h, fill)
     def txt(name, x, y, w, h, value, kind="body"):
         assert x >= 0 and y >= 0 and x+w <= PAGE_W+.01 and y+h <= 15.875+.01
+        if name not in {"action headline", "source footer", "epistemic status", "page count"}:
+            value = copy.get(name, value)
+        if not isinstance(value, str) or len(value) > 240:
+            raise ValueError(f"{sid}: invalid content override for {name}")
         frame(page, f"{sid} {name}", x, y, w, h, value, "title" if kind=="title" else "small" if kind=="small" else "cardhead" if kind=="cardhead" else "metric" if kind=="metric" else "outline")
     box("canvas background",0,0,PAGE_W,15.875,BG)
     box("top ribbon",0,0,PAGE_W,.17,ACCENT)
