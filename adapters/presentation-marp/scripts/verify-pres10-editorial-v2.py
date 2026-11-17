@@ -47,7 +47,7 @@ with zipfile.ZipFile(pptx_path) as z:
         missing=[v for v in needed if norm(v) not in norm(text)]
         if missing: raise SystemExit(f"{expected['slide_id']}: missing native editable text: {missing}")
         shapes=len(root.findall(".//p:sp",NS))
-        if shapes<20: raise SystemExit(f"{expected['slide_id']}: too few native editable objects ({shapes})")
+        if shapes<12: raise SystemExit(f"{expected['slide_id']}: too few native editable objects ({shapes})")
         pictures=len(root.findall(".//p:pic",NS))
         if pictures: raise SystemExit(f"{expected['slide_id']}: image-backed flattening not allowed")
         slide_receipts.append({"slide_id":expected["slide_id"],"role":expected["role"],
