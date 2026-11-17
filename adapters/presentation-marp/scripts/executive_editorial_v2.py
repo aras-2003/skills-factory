@@ -44,8 +44,8 @@ def validate(role, data):
             short(data[k],k,230 if k=="rationale" else 160)
     elif role=="options":
         rows=data["criterion_rows"]
-        if not isinstance(rows,list) or not 3<=len(rows)<=5:
-            raise EditorialContractError("options.criterion_rows requires 3..5 rows")
+        if not isinstance(rows,list) or not 3<=len(rows)<=4:
+            raise EditorialContractError("options.criterion_rows requires 3..4 rows")
         for idx,row in enumerate(rows):
             if not isinstance(row,dict) or set(row)!={"criterion","central","federated","local"}:
                 raise EditorialContractError(f"options row {idx}: invalid columns")
