@@ -21,14 +21,14 @@ No new SDLC, registry, release gate, evidence store, production deployment or ne
 6. If spawning is unavailable, mark delegated QA BLOCKED, still run safe CI checks and do not declare a required independent review complete. Do not needlessly escalate to Sol/Astra.
 
 ## New-chat smoke protocol (run on a checked-out PR branch)
-1. Open a **new Codex chat** in a trusted checkout of `aras-2003/skills-factory` at PR #748 head SHA. Select `gpt-6-luna` as primary if available. Do not assume configuration loaded until observed.
+1. Open a **new Codex chat** in a trusted checkout of `aras-2003/skills-factory` at the head SHA of the PR linked to issue #748. Select `gpt-6-luna` as primary if available. Do not assume configuration loaded until observed.
 2. Ask the coordinator to print the exact checked-out SHA and read `AGENTS.md`, this runbook, and the actual `.codex` TOML files. Confirm selected models or report unavailable/unknown.
 3. Have it **explicitly spawn** `sf-test-engineer`, giving only this PR's changed files and deterministic checks. Use `python3 -m unittest discover -s tests` only if the existing bootstrap and test layout support it; otherwise select the correct existing repository validator without inventing execution.
 4. Inspect the spawned thread in the host. Record child identity, visible model if shown, actions, exact candidate SHA, actual exit codes, tests and any evidence artifacts.
 5. **Negative smoke:** in the same test report ask what happens if the host cannot spawn `sf-independent-reviewer`. Expected: required review remains BLOCKED and CI alone cannot satisfy it. Do not fabricate an actual failed spawn.
 6. If appropriate, explicitly spawn `sf-independent-reviewer` against the same SHA; record substantive findings separate from implementation.
 7. Report final gate matrix: `CONFIG_PARSED`, `SUBAGENT_SPAWN`, `MODEL_IDENTITY`, `TEST_EXECUTION`, `REVIEW_INDEPENDENCE`, `CI`, `RUNTIME`. Use PASS/FAIL/NOT_RUN/BLOCKED per gate, with links to observed evidence. Report token/cost only if measured.
-8. Link the result to PR #748 and issue #748; use #712 solely as an optional comparable observation, without rewriting that pilot's frozen sample.
+8. Link the result to the implementation PR and issue #748; use #712 solely as an optional comparable observation, without rewriting that pilot's frozen sample.
 
 ## Acceptance criteria for this pilot
 - The config is valid TOML, both agent roles are discoverable and project-scoped.
