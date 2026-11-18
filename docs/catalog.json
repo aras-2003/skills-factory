@@ -18,7 +18,7 @@
     "source_workflow_count": 19,
     "registered_workflow_count": 19,
     "provenance_schema_version": 1,
-    "provenance_registry_sha256": "af0b66b1c142617dea43a6f85091bd6123d71526de923b540edf51b1e3931e27"
+    "provenance_registry_sha256": "db227d75079fab2cd107cdf0dfcbb677e64e044e89b32b094c8e73670f34ff10"
   },
   "skills": [
     {
@@ -2204,7 +2204,7 @@
         "schema_version": 1,
         "classification": "UNKNOWN",
         "source": "skills/presentations/presentation-slide-authoring/SKILL.md",
-        "source_sha256": "f1c209b96cfa9404c1bbb893b9fed1f4393c15b806ddb91e701e0166a8a9a2bf",
+        "source_sha256": "b54b09eed1d4cb6a27703c6b88d50d0f50f20c927ec5cad323dcea712688434c",
         "upstream": null,
         "components": [],
         "dependencies": [],
@@ -3658,7 +3658,7 @@
         "schema_version": 1,
         "classification": "UNKNOWN",
         "source": "workflows/presentation-production/WORKFLOW.md",
-        "source_sha256": "ca5da03e04277dd8e9d16b66b7202c9832971ca41a11e2303aa5e764b942ad61",
+        "source_sha256": "8bff22182c886894350551a7ba7f29512831f1a40945107b8cca2cb8a9d1db72",
         "upstream": null,
         "components": [],
         "dependencies": [],
