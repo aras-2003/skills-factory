@@ -113,6 +113,7 @@ def separately_validated_presentation_paths(root: Path = ROOT) -> set[str]:
         "workflows/presentation-production/WORKFLOW.md",
         "workflows/presentation-production/references/artifact-contract.md",
         "workflows/presentation-production/references/creative-direction.md",
+        "workflows/presentation-production/references/contextual-design-pack.md",
         "workflows/presentation-production/references/design-library-selection.md",
         "workflows/presentation-production/references/quality-standard.md",
         "skills/reports/report-document-architecture/SKILL.md",

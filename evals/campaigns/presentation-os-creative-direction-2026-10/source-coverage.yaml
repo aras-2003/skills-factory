@@ -12,6 +12,7 @@ out_of_scope_behavior_paths:
   - skills/reports/report-document-review/SKILL.md
   - workflows/presentation-production/WORKFLOW.md
   - workflows/presentation-production/references/artifact-contract.md
+  - workflows/presentation-production/references/contextual-design-pack.md
   - workflows/presentation-production/references/creative-direction.md
   - workflows/presentation-production/references/design-library-selection.md
   - workflows/presentation-production/references/quality-standard.md
@@ -27,6 +28,8 @@ case_suites:
       - pres-e2e-24
       - pres-e2e-25
       - pres-e2e-26
+      - pres-e2e-33
+      - pres-e2e-34
   - path: skills/presentations/presentation-deck-review/tests/cases.yaml
     required_case_ids:
       - review-high-impact-art-direction

@@ -295,6 +295,27 @@ cases:
         - "set route_status to RENDERED only after output exists"
       must_not:
         - "claim VERIFIED without reopen and inspection receipts"
+  - id: pres-e2e-33
+    case: context-isolated-generator-full-design-pack
+    input: "Generate a complete executive deck with the approved storyline and sources in an isolated GPT design tool. It has no access to our chat. Use a distinctive style within our brand and editable native PPTX."
+    expected:
+      should_trigger: true
+      must:
+        - "assemble a self-contained contextual Design Pack with global design tokens, approved slide IDs and per-slide art direction"
+        - "send the pack in the chosen generator's actual prompt, with hard facts and editability constraints separate from creative freedom"
+        - "retain provenance and require real native editability and render receipts"
+      must_not:
+        - "assume isolated generator can see prior chat or invent evidence"
+        - "present flattened art as native editable PPTX"
+  - id: pres-e2e-34
+    case: narrow-edit-reuses-approved-design-pack
+    input: "Fix one typo on slide 5 of the already-approved presentation. Keep the existing design and do not regenerate the full deck."
+    expected:
+      should_trigger: false
+      must:
+        - "reuse the approved Design Pack and apply only the narrow slide edit"
+      must_not:
+        - "regenerate the entire deck or replace its branding"
   - id: pres-e2e-32
     case: profile-does-not-select-format
     input: "Create an executive presentation, but leave the delivery format undecided."
