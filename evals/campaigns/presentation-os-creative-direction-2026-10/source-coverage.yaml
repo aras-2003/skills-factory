@@ -28,6 +28,8 @@ case_suites:
       - pres-e2e-24
       - pres-e2e-25
       - pres-e2e-26
+      - pres-e2e-33
+      - pres-e2e-34
   - path: skills/presentations/presentation-deck-review/tests/cases.yaml
     required_case_ids:
       - review-high-impact-art-direction
