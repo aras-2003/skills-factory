@@ -24,7 +24,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "recommendation message": "Pilot the federated model before committing to enterprise-wide change"
+          }
+        }
+      }
     },
     {
       "slide_id": "S02",
@@ -47,7 +54,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "option 1 detail": "Common platform control\nLocal product priorities\nProvisional preferred choice"
+          }
+        }
+      }
     },
     {
       "slide_id": "S03",
@@ -70,7 +84,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "capability premise": "Validate capabilities and ownership before proposing application retirement."
+          }
+        }
+      }
     },
     {
       "slide_id": "S04",
@@ -93,16 +114,23 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "architecture subtitle": "Conceptual boundaries for a five-country organization; topology unverified."
+          }
+        }
+      }
     },
     {
       "slide_id": "S05",
       "role": "governance",
-      "action_title": "Decision rights require evidence and approved owner assignment",
+      "action_title": "Assign accountable owners to material technology decisions",
       "claims": [
         {
           "claim_id": "CLM-05",
-          "statement": "Decision rights require evidence and approved owner assignment",
+          "statement": "Assign accountable owners to material technology decisions",
           "epistemic_status": "HYPOTHESIS"
         }
       ],
@@ -116,7 +144,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "governance policy": "Confirm accountable decision owners, advice and escalation paths."
+          }
+        }
+      }
     },
     {
       "slide_id": "S06",
@@ -139,7 +174,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "gates": "Advance only after evidence-based gates; dates are planning assumptions."
+          }
+        }
+      }
     },
     {
       "slide_id": "S07",
@@ -162,7 +204,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "measurement note": "90-day baseline and 30-day target were supplied; outcomes remain unverified."
+          }
+        }
+      }
     },
     {
       "slide_id": "S08",
@@ -185,7 +234,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "risk 0 detail": "Decision ambiguity\nMap owner and escalation threshold"
+          }
+        }
+      }
     },
     {
       "slide_id": "S09",
@@ -208,7 +264,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "value disclaimer": "Business case requires measured capacity, spend and transition costs."
+          }
+        }
+      }
     },
     {
       "slide_id": "S10",
@@ -231,7 +294,14 @@
       "provenance": {
         "source_ids": []
       },
-      "desired_editability": "PREFERRED"
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "trace warning": "ID chain shown for method; dependencies require independent model verification."
+          }
+        }
+      }
     }
   ]
 }

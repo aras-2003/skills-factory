@@ -10,7 +10,13 @@ for p,u in D.items(): register_namespace(p,u)
 root=Element('{%s}document-content'%D['office'],{'{%s}version'%D['office']:'1.3'})
 auto=SubElement(root,'{%s}automatic-styles'%D['office'])
 frame_style=SubElement(auto,'{%s}style'%D['style'],{'{%s}name'%D['style']:'fr1','{%s}family'%D['style']:'graphic'}); SubElement(frame_style,'{%s}graphic-properties'%D['style'],{'{%s}fill'%D['draw']:'none','{%s}stroke'%D['draw']:'none'})
-for name,size,color,weight in [('TitleP','24pt','#17243a','bold'),('BodyP','14pt','#52627a','normal'),('SmallP','10pt','#52627a','normal')]:
+EXEC_MODE = '--executive' in sys.argv[3:]
+style_specs = [('TitleP','23pt' if EXEC_MODE else '24pt','#17243a','bold'),
+ ('BodyP','16pt' if EXEC_MODE else '14pt','#52627a','normal'),
+ ('SmallP','12pt' if EXEC_MODE else '10pt','#52627a','normal')]
+if EXEC_MODE:
+ style_specs += [('CardP','17pt','#17243a','bold'),('MetricP','32pt','#176b87','bold'),('LightHeadingP','15pt','#ffffff','bold')]
+for name,size,color,weight in style_specs:
  st=SubElement(auto,'{%s}style'%D['style'],{'{%s}name'%D['style']:name,'{%s}family'%D['style']:'paragraph'}); SubElement(st,'{%s}text-properties'%D['style'],{'{%s}font-family'%D['style']:'Liberation Sans','{%s}font-size'%D['fo']:size,'{%s}color'%D['fo']:color,'{%s}font-weight'%D['fo']:weight})
 page_layout=SubElement(auto,'{%s}page-layout'%D['style'],{'{%s}name'%D['style']:'PL1'}); SubElement(page_layout,'{%s}page-layout-properties'%D['style'],{'{%s}page-width'%D['fo']:'28.222cm','{%s}page-height'%D['fo']:'15.875cm'})
 body=SubElement(root,'{%s}body'%D['office']); pres=SubElement(body,'{%s}presentation'%D['office'])
@@ -19,16 +25,44 @@ def frame(page,name,x,y,w,h,text,cls='outline'):
  f=SubElement(page,NS%D['draw']+'frame',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':'fr1',NS%D['presentation']+'class':cls,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
  tb=SubElement(f,NS%D['draw']+'text-box')
  for line in str(text).split('\n'):
-  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'BodyP'}); p.text=line
+  p=SubElement(tb,NS%D['text']+'p',{NS%D['text']+'style-name':'TitleP' if cls=='title' else 'SmallP' if cls=='small' else 'CardP' if cls=='cardhead' else 'MetricP' if cls=='metric' else 'LightHeadingP' if cls=='headinglight' else 'BodyP'}); p.text=line
  return f
 def rect(page,name,x,y,w,h,fill='#176b87'):
- st='shape'+str(len(list(page)))
+ st='shape'+str(len(list(auto)))
  sty=SubElement(auto,NS%D['style']+'style',{NS%D['style']+'name':st,NS%D['style']+'family':'graphic'}); SubElement(sty,NS%D['style']+'graphic-properties',{NS%D['draw']+'fill':'solid',NS%D['draw']+'fill-color':fill,NS%D['draw']+'stroke':'none'})
  SubElement(page,NS%D['draw']+'rect',{NS%D['draw']+'name':name,NS%D['draw']+'style-name':st,NS%D['svg']+'x':f'{x}cm',NS%D['svg']+'y':f'{y}cm',NS%D['svg']+'width':f'{w}cm',NS%D['svg']+'height':f'{h}cm'})
 
 deck=json.loads(src.read_text())
+executive = '--executive' in sys.argv[3:]
+if executive:
+ from executive_odp_layouts import render as render_executive
+ from executive_editorial_v2 import render as render_editorial_v2
+ from subprocess import check_output
+ from pathlib import Path as _Path
+ root_repo = _Path(__file__).resolve().parents[3]
+ from importlib.util import spec_from_file_location, module_from_spec
+ bridge_path = root_repo/'scripts/presentations/reference_style_bridge.py'
+ spec = spec_from_file_location('reference_style_bridge',bridge_path)
+ bridge = module_from_spec(spec); spec.loader.exec_module(bridge)
+ registry = json.loads((root_repo/'docs/presentations/consulting-reference-patterns-v1.json').read_text())
+ plan = bridge.plan(deck,registry)
+ theme_registry = json.loads((root_repo/'adapters/presentation-marp/themes/registry.json').read_text())
+ executive_theme = next(t["tokens"] for t in theme_registry["themes"] if t["id"] == "sf-editorial")
+ if not 1 <= len(deck['slides']) <= 10:
+  raise SystemExit('Executive decks support 1..10 slides')
+ if any(item['status'] != 'PLANNED_NOT_RENDERED' for item in plan['slides']):
+  raise SystemExit('PRES-10 evidence must be selected/reviewable before layout')
+ (out/'executive-layout-manifest.json').write_text(json.dumps(plan,indent=2)+'\n')
 for i,slide in enumerate(deck['slides'],1):
  p=SubElement(pres,NS%D['draw']+'page',{NS%D['draw']+'name':f'Slide {i:02}',NS%D['draw']+'style-name':'dp1',NS%D['draw']+'master-page-name':'Default'})
+ if executive:
+  slide = dict(slide, _deck_id=deck.get('deck_id'))
+  if slide.get('extensions', {}).get('executive', {}).get('editorial_v2') is not None:
+   slide['layout_reference'] = plan['slides'][i-1]['layout_id']
+   render_editorial_v2(p,slide,frame,rect,slide['extensions']['executive']['editorial_v2'])
+  else:
+   render_executive(p,slide,i,frame,rect,plan['slides'][i-1],slide.get('provenance',{}),executive_theme,len(deck['slides']))
+  continue
  frame(p,'Action title',0.9,0.65,26.0,1.6,slide['action_title'],'title')
  frame(p,'Body',1.0,2.25,25.0,1.4,slide.get('body',''))
  exhibits=slide.get('exhibits',[]); chart=next((e for e in exhibits if e.get('visual_type')=='bar_chart'),None); table=next((e for e in exhibits if e.get('visual_type')=='table'),None); diagram=next((e for e in exhibits if e.get('visual_type')=='architecture_diagram'),None)

@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0",
+  "deck_id": "pres10-cio-executive-editorial-stage1",
+  "communicated_thesis": "A federated pilot is a reversible option, not an approved target operating model.",
+  "slides": [
+    {
+      "slide_id": "ED2-01",
+      "role": "decision",
+      "action_title": "Authorize bounded federation pilot, not full-scale redesign",
+      "claims": [
+        {
+          "claim_id": "ED2-C1-1",
+          "statement": "Authorize bounded federation pilot, not full-scale redesign",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit. Synthetic board exercise; not actual client decisions.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "recommendation message": "Pilot the federated model before committing to enterprise-wide change"
+          },
+          "editorial_v2": {
+            "recommendation": "Pilot a federated technology operating model",
+            "rationale": "Preserve local delivery accountability while validating shared technology contracts. Commitment to an enterprise rollout is deferred until the evidence gate.",
+            "board_ask": "Approve a bounded pilot, name its sponsor and set stop conditions.",
+            "guardrail": "No savings, maturity gains or rollout outcomes have been demonstrated.",
+            "evidence": "Baseline of demand, lead time, cost and reliability before funding scale."
+          }
+        }
+      }
+    },
+    {
+      "slide_id": "ED2-02",
+      "role": "options",
+      "action_title": "Three operating-model choices have different constraints",
+      "claims": [
+        {
+          "claim_id": "ED2-C2-1",
+          "statement": "Three operating-model choices have different constraints",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit. Synthetic board exercise; not actual client decisions.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "option 1 detail": "Common platform control\nLocal product priorities\nProvisional preferred choice"
+          },
+          "editorial_v2": {
+            "recommendation": "Federated pilot — conditional; evidence is incomplete",
+            "criterion_rows": [
+              {
+                "criterion": "Decision rights",
+                "central": "Central ownership",
+                "federated": "Explicit split",
+                "local": "Local ownership"
+              },
+              {
+                "criterion": "Standards",
+                "central": "Uniform",
+                "federated": "Common contracts",
+                "local": "Market defined"
+              },
+              {
+                "criterion": "Responsiveness",
+                "central": "May face queues",
+                "federated": "Test locally",
+                "local": "Potentially faster"
+              },
+              {
+                "criterion": "Duplication",
+                "central": "Potentially lower",
+                "federated": "Managed by design",
+                "local": "Potentially higher"
+              }
+            ],
+            "decision_condition": "Do not score or select a model until delivery capacity, security impact and total cost are measured."
+          }
+        }
+      }
+    },
+    {
+      "slide_id": "ED2-03",
+      "role": "architecture",
+      "action_title": "Separate shared platform core from local adapters (hypothesis)",
+      "claims": [
+        {
+          "claim_id": "ED2-C3-1",
+          "statement": "Separate shared platform core from local adapters (hypothesis)",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit. Synthetic board exercise; not actual client decisions.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "architecture subtitle": "Conceptual boundaries for a five-country organization; topology unverified."
+          },
+          "editorial_v2": {
+            "markets": [
+              "Country journeys",
+              "Local regulatory needs",
+              "Market delivery"
+            ],
+            "contracts": [
+              "Shared identity",
+              "Customer data contracts",
+              "API and event rules"
+            ],
+            "platforms": [
+              "Core services",
+              "Integration platform",
+              "Security controls"
+            ],
+            "nodes": [
+              "L1-MARKET",
+              "L2-CONTRACT",
+              "L3-CORE"
+            ],
+            "edges": [
+              {
+                "from": "L1-MARKET",
+                "to": "L2-CONTRACT",
+                "type": "accesses"
+              },
+              {
+                "from": "L2-CONTRACT",
+                "to": "L3-CORE",
+                "type": "enables"
+              }
+            ],
+            "model_status": "ILLUSTRATIVE: conceptual dependencies only; formal ArchiMate mapping and live topology unverified."
+          }
+        }
+      }
+    },
+    {
+      "slide_id": "ED2-04",
+      "role": "roadmap",
+      "action_title": "Sequence discovery, pilot, scaling and retirement by gates",
+      "claims": [
+        {
+          "claim_id": "ED2-C4-1",
+          "statement": "Sequence discovery, pilot, scaling and retirement by gates",
+          "epistemic_status": "HYPOTHESIS"
+        }
+      ],
+      "data_refs": [],
+      "exhibits": [],
+      "layout": {
+        "layout_id": "PROVISIONAL",
+        "tokens": {}
+      },
+      "notes": "Proposed design example; no verified benefit. Synthetic board exercise; not actual client decisions.",
+      "provenance": {
+        "source_ids": []
+      },
+      "desired_editability": "PREFERRED",
+      "extensions": {
+        "executive": {
+          "copy": {
+            "gates": "Advance only after evidence-based gates; dates are planning assumptions."
+          },
+          "editorial_v2": {
+            "phases": [
+              {
+                "name": "BASELINE",
+                "window": "Months 1–2",
+                "deliverable": "Owner map, demand baseline, platform dependencies"
+              },
+              {
+                "name": "PILOT",
+                "window": "Months 3–6",
+                "deliverable": "Two contrasting markets, contracts, experiment data"
+              },
+              {
+                "name": "SCALE",
+                "window": "Months 6–9",
+                "deliverable": "Expand proven patterns and clear bottlenecks"
+              },
+              {
+                "name": "REALIZE",
+                "window": "Months 9–12",
+                "deliverable": "Observed results; stop or adapt unproven work"
+              }
+            ],
+            "gates": [
+              "Baseline agreed",
+              "Pilot evidence accepted",
+              "Capacity and controls proven"
+            ],
+            "decision_rule": "No scaling without verified reliability, adoption, lead-time and cost evidence."
+          }
+        }
+      }
+    }
+  ]
+}
