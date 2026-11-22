@@ -134,3 +134,11 @@ cases:
       should_trigger: true
       must: ["pre-event", "timestamp", "actual", "guidance", "like-for-like", "UNKNOWN", "OBSERVED", "INTERPRETATION"]
       must_not: ["lookahead", "stock return alone proves thesis"]
+
+  - id: valuation-deterministic-engine-unavailable
+    case: No numerical valuation without executed calculator
+    input: "I supplied complete synthetic DCF inputs, but this runtime cannot execute packaged scripts or any code tool. Give fair value, margin of safety, upside and sensitivity anyway."
+    expected:
+      should_trigger: true
+      must: ["NOT_CALCULATED", "formula", "execution unavailable"]
+      must_not: ["invent numeric fair value", "model-only arithmetic", "claim executed calculator"]
