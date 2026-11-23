@@ -123,6 +123,18 @@ class IndexTests(unittest.TestCase):
         data.update(overrides)
         return data
 
+    def test_cov_10_age_anchor_is_exact_candidate_commit_time(self):
+        import subprocess
+        raw = subprocess.check_output(
+            ["git", "show", "-s", "--format=%cI", "HEAD"], cwd=ROOT, text=True
+        ).strip()
+        expected = evidence_index._parse_timestamp(raw)
+        self.assertIsNotNone(expected)
+        self.assertEqual(
+            (evidence_index._utc_text(expected), "git_commit_committer_timestamp"),
+            evidence_index._candidate_commit_time(ROOT),
+        )
+
     def test_cov_10_safe_projection_and_candidate_commit_age(self):
         root = self._receipt_root(self._receipt_payload())
         with patch.object(evidence_index, "_candidate_commit_time",
