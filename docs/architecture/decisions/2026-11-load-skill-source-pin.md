@@ -5,7 +5,8 @@
 - Architecture Impact: A2 proposed for the shared tool contract; native project field not independently verified.
 - Decision: owner approved the optional source pin and the invalid and mismatch errors. The fail-closed unverifiable error is an engineering assumption, not an additional owner-approved case.
 - Baseline source SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
-- Candidate SHA: pending commit. This is source-only work; no publication, live runtime acceptance, or independent exact-SHA review is claimed here.
+- Implementation candidate SHA: `5cedbb53dfe3990a6465401f50ac0b3f875b449a`.
+- Review status: source-only checks pass; exact-SHA review and publication/runtime acceptance remain separate gates.
 
 ## Context and decision
 
