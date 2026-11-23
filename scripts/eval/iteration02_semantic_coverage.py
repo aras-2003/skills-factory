@@ -185,6 +185,7 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
     for ident, node in nodes.items():
         edges = []
         if node["kind"] == "workflow":
+            declared_targets: set[str] = set()
             deps = (node.get("registry") or {}).get("dependencies", {})
             for bucket in ("required", "optional"):
                 items = deps.get(bucket) if isinstance(deps, dict) else None
@@ -200,6 +201,7 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
                                       "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
                                       "edge_status": "MALFORMED_REFERENCE"})
                         continue
+                    declared_targets.add(target)
                     matches = names.get(target, [])
                     if len(matches) == 1 and matches[0] != ident:
                         edges.append({"target": matches[0], "target_name": target, "dependency": bucket,
@@ -213,6 +215,23 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
                         edges.append({"target": None, "target_name": target, "dependency": bucket,
                                       "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
                                       "edge_status": "UNKNOWN_TARGET"})
+            # Runtime registry edges are authoritative when declared. Also retain
+            # exact inline-code skill-name references from workflow source as
+            # unverified candidates; prose alone cannot establish an executable
+            # dependency, so these edges must block impact claims until reviewed.
+            source_path = _safe_existing_file(root, node["source"])
+            if source_path:
+                source_text = source_path.read_text(encoding="utf-8")
+                for line_number, line in enumerate(source_text.splitlines(), start=1):
+                    for token in re.findall(r"`([^`\n]+)`", line):
+                        candidate = token.strip()
+                        matches = names.get(candidate, [])
+                        if (candidate not in declared_targets and len(matches) == 1
+                                and matches[0].startswith("skill:")):
+                            edges.append({"target": None, "target_name": candidate,
+                                          "dependency": "source_reference_candidate",
+                                          "evidence": f"{node['source']}#L{line_number}",
+                                          "edge_status": "UNVERIFIED_SOURCE_REFERENCE"})
         graph[ident] = sorted(edges, key=lambda e: (e["target"] or "", e["target_name"] or "", e["dependency"]))
     return graph, nodes
 
@@ -251,6 +270,12 @@ def _affected_query(report: dict, stable_id: str) -> dict:
                 "regression_neighbors": [], "unresolved_edges": [], "runtime_execution": "NOT_RUN"}
     direct_ids = {edge.get("consumer") for edge in changed.get("direct_consumers", []) if isinstance(edge, dict)}
     transitive_ids = set(changed.get("transitive_consumers", []))
+    changed_name = changed.get("name") or stable_id.split(":", 1)[-1]
+    candidate_consumers = [{"stable_id": row["stable_id"], "edge": edge}
+                           for row in rows.values()
+                           for edge in row.get("dependency_edges", [])
+                           if edge.get("edge_status") != "RESOLVED"
+                           and edge.get("target_name") == changed_name]
     neighbors = []
     for neighbor_id in sorted((direct_ids | transitive_ids) - {None}):
         neighbor = rows.get(neighbor_id)
@@ -267,7 +292,10 @@ def _affected_query(report: dict, stable_id: str) -> dict:
                              "source_sha256": changed.get("source_sha256"),
                              "fixture_case_ids": changed.get("fixture_case_ids", []),
                              "evidence_gap": changed.get("evidence_gap", [])},
-            "regression_neighbors": neighbors, "unresolved_edges": global_unresolved,
+            "regression_neighbors": neighbors,
+            "unverified_consumer_candidates": sorted(candidate_consumers,
+                                                       key=lambda item: (item["stable_id"], item["edge"]["evidence"])),
+            "unresolved_edges": global_unresolved,
             "runtime_execution": "NOT_RUN"}
 
 

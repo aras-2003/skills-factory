@@ -66,6 +66,19 @@ This example is source grounded, but its runtime controls remain unavailable
 on the observed host surface; the decision cannot be interpreted as proof of
 least-privilege enforcement.
 
+### Migration and rollback for this example
+
+The selected extension adds project-local guidance and an explicit capability
+matrix while retaining the existing TOML keys, agent names, and two-thread
+limit. It has no runtime state migration. Before adopting it, validate the
+existing profile/config files and run the agent-team, handoff, and governance
+contract tests against the candidate SHA. If review finds a contract mismatch,
+revert the matrix, the two Developer instruction edits, and this workflow
+addition as one candidate change; then rerun those checks. No user data or host
+configuration needs restoration. Do not add a guessed `allowed_tools` or
+`path_scope` key as a rollback substitute: those keys remain unsupported on the
+observed spawn surface.
+
 ## Stable architecture test cases
 
 | Case | Input | Expected result | Forbidden result |

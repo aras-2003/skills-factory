@@ -172,6 +172,16 @@ class SemanticCoverageTests(unittest.TestCase):
         first, second = self.check(), self.check()
         self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
 
+    def test_cov_08_ci_packages_the_generated_crosswalk_with_candidate_evidence(self):
+        workflow = (ROOT / ".github/workflows/ci-validate.yml").read_text(encoding="utf-8")
+        generation = workflow.index(
+            "python scripts/eval/iteration02_semantic_coverage.py --output .tmp/sdlc/semantic-coverage.json")
+        packaging = workflow.index("python scripts/eval/artifact_bundle.py pack --directory .tmp/sdlc")
+        upload = workflow.index("name: sf-evidence-${{ env.SOURCE_REVISION }}")
+        self.assertLess(generation, packaging)
+        self.assertLess(packaging, upload)
+        self.assertIn("path: .tmp/sdlc/", workflow[upload:])
+
     def test_cov_09_count_drift_blocks_against_current_source_inventory(self):
         data = copy.deepcopy(self.skills)
         data["total_skills"] += 1
@@ -221,6 +231,39 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertEqual("missing-producer", edge["target_name"])
             self.assertEqual("UNKNOWN_TARGET", edge["edge_status"])
             self.assertTrue(edge["evidence"].startswith("workflows/runtime-registry.yaml#/"))
+
+    def test_cov_04_workflow_skill_mentions_are_unverified_consumer_candidates(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            skill = root / "skills" / "sample-skill" / "SKILL.md"
+            skill.parent.mkdir(parents=True)
+            skill.write_text("---\nname: sample-skill\ndescription: test\n---\n", encoding="utf-8")
+            workflow = root / "workflows" / "sample-flow" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "Use `sample-skill` when the request meets its trigger.\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample-flow\n    workflow: workflows/sample-flow/WORKFLOW.md\n"
+                "    dependencies:\n      required: []\n      optional: []\n", encoding="utf-8")
+
+            graph, _ = mod._declared_graph(root)
+            edge = graph["workflow:sample-flow"][0]
+            self.assertIsNone(edge["target"])
+            self.assertEqual("sample-skill", edge["target_name"])
+            self.assertEqual("UNVERIFIED_SOURCE_REFERENCE", edge["edge_status"])
+            self.assertEqual("workflows/sample-flow/WORKFLOW.md#L1", edge["evidence"])
+
+            report = {"components": [
+                {"stable_id": "skill:sample-skill", "dependency_edges": [],
+                 "direct_consumers": [], "transitive_consumers": []},
+                {"stable_id": "workflow:sample-flow", "dependency_edges": [edge],
+                 "direct_consumers": [], "transitive_consumers": []},
+            ]}
+            query = mod._affected_query(report, "skill:sample-skill")
+            self.assertEqual("BLOCKED_UNKNOWN_EDGES", query["status"])
+            self.assertEqual(["workflow:sample-flow"],
+                             [item["stable_id"] for item in query["unverified_consumer_candidates"]])
+            self.assertEqual([edge], [item["edge"] for item in query["unresolved_edges"]])
 
     def test_cov_04_malformed_dependency_buckets_are_preserved_as_unknown(self):
         with tempfile.TemporaryDirectory() as temp:
