@@ -35,15 +35,13 @@ def valid_input():
 
 
 class DelegationHandoffTests(unittest.TestCase):
-    def validate_result(self, result, *, expected_candidate_sha="b" * 40,
-                        expected_task_id=None, expected_role="sf-test-executor",
-                        expected_test_case_ids=None):
+    def validate_result(self, result, *, expected_task_id, expected_role,
+                        expected_test_case_ids, expected_candidate_sha="b" * 40):
         return handoff.validate_result(
             result,
-            expected_task_id=expected_task_id or result["task_id"],
+            expected_task_id=expected_task_id,
             expected_role=expected_role,
-            expected_test_case_ids=(expected_test_case_ids if expected_test_case_ids is not None
-                                    else [case["case_id"] for case in result["test_case_outcomes"]]),
+            expected_test_case_ids=expected_test_case_ids,
             expected_candidate_sha=expected_candidate_sha,
         )
 
@@ -70,7 +68,9 @@ class DelegationHandoffTests(unittest.TestCase):
             "material_findings": [], "residual_risks": [], "next_action": "review",
         }
         with self.assertRaisesRegex(ValueError, "candidate SHA mismatch"):
-            self.validate_result(result, expected_candidate_sha="c" * 40)
+            self.validate_result(result, expected_candidate_sha="c" * 40,
+                                 expected_task_id="task-1", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["AGENT-01"])
 
     def test_handoff_04_rejects_private_or_authority_transfer_fields(self):
         for field in ("transcript", "tool_logs", "rubric", "held_out_fixtures", "permissions", "approval"):
@@ -84,11 +84,13 @@ class DelegationHandoffTests(unittest.TestCase):
         result = {
             "task_id": "task-2", "role": "sf-test-executor", "status": "NOT_RUN",
             "candidate_sha": "b" * 40, "changed_paths": [],
-            "test_case_outcomes": [], "command_exit_codes": [], "evidence_refs": [],
+            "test_case_outcomes": [{"case_id": "HANDOFF-05", "status": "NOT_RUN"}],
+            "command_exit_codes": [], "evidence_refs": [],
             "material_findings": [], "residual_risks": ["host execution unavailable"],
             "next_action": "run in supported host",
         }
-        checked = self.validate_result(result)
+        checked = self.validate_result(result, expected_task_id="task-2", expected_role="sf-test-executor",
+                                       expected_test_case_ids=["HANDOFF-05"])
         self.assertIsNone(checked["usage"])
         self.assertEqual(checked["status"], "NOT_RUN")
 
@@ -104,7 +106,8 @@ class DelegationHandoffTests(unittest.TestCase):
             "material_findings": [], "residual_risks": [], "next_action": "review",
         }
         with self.assertRaisesRegex(ValueError, "forbidden field: rubric"):
-            self.validate_result(result)
+            self.validate_result(result, expected_task_id="task-3", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["AGENT-01"])
 
     def test_handoff_07_rejects_arbitrary_nested_payload_fields(self):
         result = {
@@ -121,7 +124,8 @@ class DelegationHandoffTests(unittest.TestCase):
             "next_action": "review",
         }
         with self.assertRaisesRegex(ValueError, "unknown fields: prompt"):
-            self.validate_result(result)
+            self.validate_result(result, expected_task_id="task-4", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["AGENT-01"])
 
     def test_handoff_08_restricts_architecture_impact_to_native_values(self):
         payload = valid_input()
@@ -143,6 +147,9 @@ class DelegationHandoffTests(unittest.TestCase):
         payload["test_case_ids"] = ["HANDOFF-09", "HANDOFF-10"]
         decoded = handoff.read_input(handoff.serialize_input(payload))
         self.assertEqual(decoded["test_case_ids"], payload["test_case_ids"])
+        payload["test_case_ids"] = []
+        with self.assertRaisesRegex(ValueError, "requires at least one test_case_id"):
+            handoff.serialize_input(payload)
 
     def test_handoff_10_rejects_duplicate_result_case_ids(self):
         for statuses in (("PASS", "PASS"), ("PASS", "FAIL")):
@@ -158,16 +165,19 @@ class DelegationHandoffTests(unittest.TestCase):
                     "material_findings": [], "residual_risks": [], "next_action": "review",
                 }
                 with self.assertRaisesRegex(ValueError, "test_case_outcomes must contain unique case IDs"):
-                    self.validate_result(result, expected_test_case_ids=["HANDOFF-10"])
+                    self.validate_result(result, expected_task_id="task-10", expected_role="sf-test-executor",
+                                         expected_test_case_ids=["HANDOFF-10"])
 
         unique_result = {
             "task_id": "task-10", "role": "sf-test-executor", "status": "PASS",
             "candidate_sha": "b" * 40, "changed_paths": [],
             "test_case_outcomes": [{"case_id": "HANDOFF-10", "status": "PASS"}],
-            "command_exit_codes": [], "evidence_refs": ["receipt://run/10"],
+            "command_exit_codes": [{"command": "python -m unittest", "exit_code": 0}],
+            "evidence_refs": ["receipt://run/10"],
             "material_findings": [], "residual_risks": [], "next_action": "review",
         }
-        checked = self.validate_result(unique_result)
+        checked = self.validate_result(unique_result, expected_task_id="task-10", expected_role="sf-test-executor",
+                                       expected_test_case_ids=["HANDOFF-10"])
         self.assertEqual([row["case_id"] for row in checked["test_case_outcomes"]], ["HANDOFF-10"])
 
     def test_handoff_11_binds_result_to_delegated_task_role_and_case_set(self):
@@ -182,17 +192,24 @@ class DelegationHandoffTests(unittest.TestCase):
             "evidence_refs": ["receipt://run/11"],
             "material_findings": [], "residual_risks": [], "next_action": "review",
         }
-        checked = self.validate_result(result, expected_task_id="task-11",
+        checked = self.validate_result(result, expected_task_id="task-11", expected_role="sf-test-executor",
                                        expected_test_case_ids=["HANDOFF-11A", "HANDOFF-11B"])
         self.assertEqual(checked["status"], "PASS")
+        reordered = self.validate_result(result, expected_task_id="task-11", expected_role="sf-test-executor",
+                                         expected_test_case_ids=["HANDOFF-11B", "HANDOFF-11A"])
+        self.assertEqual(reordered["status"], "PASS")
         with self.assertRaisesRegex(ValueError, "task ID mismatch"):
-            self.validate_result(result, expected_task_id="task-other",
+            self.validate_result(result, expected_task_id="task-other", expected_role="sf-test-executor",
                                  expected_test_case_ids=["HANDOFF-11A", "HANDOFF-11B"])
         with self.assertRaisesRegex(ValueError, "role mismatch"):
-            self.validate_result(result, expected_role="sf-independent-reviewer",
+            self.validate_result(result, expected_task_id="task-11", expected_role="sf-independent-reviewer",
                                  expected_test_case_ids=["HANDOFF-11A", "HANDOFF-11B"])
         with self.assertRaisesRegex(ValueError, "test case IDs do not match"):
-            self.validate_result(result, expected_test_case_ids=["HANDOFF-11A"])
+            self.validate_result(result, expected_task_id="task-11", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-11A"])
+        with self.assertRaisesRegex(ValueError, "unique case IDs"):
+            self.validate_result(result, expected_task_id="task-11", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-11A", "HANDOFF-11A"])
 
     def test_handoff_12_rejects_unsupported_pass_claims(self):
         result = {
@@ -204,13 +221,53 @@ class DelegationHandoffTests(unittest.TestCase):
             "next_action": "fix",
         }
         with self.assertRaisesRegex(ValueError, "PASS requires at least one evidence"):
-            self.validate_result(result)
+            self.validate_result(result, expected_task_id="task-12", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-12"])
         result["evidence_refs"] = ["receipt://run/12"]
         with self.assertRaisesRegex(ValueError, "non-PASS test case"):
-            self.validate_result(result)
+            self.validate_result(result, expected_task_id="task-12", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-12"])
         result["test_case_outcomes"][0]["status"] = "PASS"
         with self.assertRaisesRegex(ValueError, "nonzero command exit"):
-            self.validate_result(result)
+            self.validate_result(result, expected_task_id="task-12", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-12"])
+
+    def test_handoff_13_requires_executor_command_for_case_pass_and_maps_blocked_cases(self):
+        result = {
+            "task_id": "task-13", "role": "sf-test-executor", "status": "BLOCKED",
+            "candidate_sha": "b" * 40, "changed_paths": [],
+            "test_case_outcomes": [
+                {"case_id": "HANDOFF-13A", "status": "PASS"},
+                {"case_id": "HANDOFF-13B", "status": "BLOCKED"},
+            ],
+            "command_exit_codes": [{"command": "python -m unittest", "exit_code": 2}],
+            "evidence_refs": ["receipt://run/13"], "material_findings": [],
+            "residual_risks": ["one required case was blocked"], "next_action": "retry blocked case",
+        }
+        checked = self.validate_result(result, expected_task_id="task-13", expected_role="sf-test-executor",
+                                       expected_test_case_ids=["HANDOFF-13A", "HANDOFF-13B"])
+        self.assertEqual(checked["status"], "BLOCKED")
+        result["status"] = "PASS"
+        with self.assertRaisesRegex(ValueError, "non-PASS test case"):
+            self.validate_result(result, expected_task_id="task-13", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-13A", "HANDOFF-13B"])
+        result["status"] = "NOT_RUN"
+        result["test_case_outcomes"] = [
+            {"case_id": "HANDOFF-13A", "status": "NOT_RUN"},
+            {"case_id": "HANDOFF-13B", "status": "NOT_RUN"},
+        ]
+        checked = self.validate_result(result, expected_task_id="task-13", expected_role="sf-test-executor",
+                                       expected_test_case_ids=["HANDOFF-13A", "HANDOFF-13B"])
+        self.assertEqual(checked["status"], "NOT_RUN")
+        result["status"] = "PASS"
+        result["command_exit_codes"] = []
+        result["test_case_outcomes"] = [
+            {"case_id": "HANDOFF-13A", "status": "PASS"},
+            {"case_id": "HANDOFF-13B", "status": "PASS"},
+        ]
+        with self.assertRaisesRegex(ValueError, "requires at least one command exit record"):
+            self.validate_result(result, expected_task_id="task-13", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-13A", "HANDOFF-13B"])
 
 
 if __name__ == "__main__":

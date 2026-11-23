@@ -110,6 +110,8 @@ def validate_input(payload: Any) -> dict:
         _string_list(item[field], field)
     if len(set(item["test_case_ids"])) != len(item["test_case_ids"]):
         raise ValueError("test_case_ids must contain unique case IDs")
+    if item["role"] == "sf-test-executor" and not item["test_case_ids"]:
+        raise ValueError("Test Executor handoff requires at least one test_case_id")
     if not isinstance(item["dependencies"], list) or any(type(dep) is not int or dep < 1 for dep in item["dependencies"]):
         raise ValueError("dependencies must be positive issue numbers")
     if type(item["context_budget"]) is not int or not 128 <= item["context_budget"] <= 16_384:
@@ -208,6 +210,8 @@ def validate_result(
             raise ValueError("PASS cannot contain a non-PASS test case outcome")
         if any(execution["exit_code"] != 0 for execution in item["command_exit_codes"]):
             raise ValueError("PASS cannot contain a nonzero command exit code")
+        if expected_role == "sf-test-executor" and not item["command_exit_codes"]:
+            raise ValueError("Test Executor PASS requires at least one command exit record")
     usage = item.get("usage")
     if usage is not None:
         if not isinstance(usage, dict) or set(usage) - {"input_tokens", "output_tokens", "tool_calls"}:
