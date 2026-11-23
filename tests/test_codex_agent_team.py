@@ -84,6 +84,8 @@ class CodexAgentTeamContractTests(unittest.TestCase):
     def test_role_catalog_records_requested_model_routing_and_primary_limit(self):
         runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
         self.assertIn("Coordinator / primary chat | Luna High (selected in host; not set by project TOML)", runbook)
+        self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
+        self.assertIn("Select Luna High as the primary coordinator", runbook)
         for assignment in (
             "`sf-architect` | Sol High",
             "`sf-developer-high` | Terra High",
