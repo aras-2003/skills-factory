@@ -17,7 +17,7 @@ class SdlcDeepE2ECampaignTests(unittest.TestCase):
         self.assertEqual("A0", data["architecture_impact"])
         self.assertEqual(["E2E-01", "E2E-02", "E2E-03", "E2E-04", "E2E-05"],
                          [row["id"] for row in data["scenarios"]])
-        self.assertEqual({f"G{i}": "NOT_RUN" for i in range(7)} | {"G7": "N/A"} |
+        self.assertEqual({f"G{i}": "NOT_RUN" for i in range(8)} |
                          {f"G{i}": "NOT_RUN" for i in range(8, 11)}, data["gates"])
 
     def test_required_evidence_and_negative_path_fail_closed(self):

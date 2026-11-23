@@ -79,6 +79,37 @@ class DelegationHandoffTests(unittest.TestCase):
         self.assertIsNone(checked["usage"])
         self.assertEqual(checked["status"], "NOT_RUN")
 
+    def test_handoff_06_rejects_nested_private_fields(self):
+        result = {
+            "task_id": "task-3", "role": "sf-test-executor", "status": "FAIL",
+            "candidate_sha": "b" * 40, "changed_paths": [],
+            "test_case_outcomes": [{
+                "case_id": "AGENT-01", "status": "FAIL",
+                "rubric": "private evaluator content",
+            }],
+            "command_exit_codes": [], "evidence_refs": [],
+            "material_findings": [], "residual_risks": [], "next_action": "review",
+        }
+        with self.assertRaisesRegex(ValueError, "forbidden field: rubric"):
+            handoff.validate_result(result, expected_candidate_sha="b" * 40)
+
+    def test_handoff_07_rejects_arbitrary_nested_payload_fields(self):
+        result = {
+            "task_id": "task-4", "role": "sf-test-executor", "status": "FAIL",
+            "candidate_sha": "b" * 40, "changed_paths": [],
+            "test_case_outcomes": [{
+                "case_id": "AGENT-01", "status": "FAIL", "prompt": "private prompt",
+            }],
+            "command_exit_codes": [{
+                "command": "python -m unittest", "exit_code": 1,
+                "output": "raw tool output",
+            }],
+            "evidence_refs": [], "material_findings": [], "residual_risks": [],
+            "next_action": "review",
+        }
+        with self.assertRaisesRegex(ValueError, "unknown fields: prompt"):
+            handoff.validate_result(result, expected_candidate_sha="b" * 40)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -88,14 +88,18 @@ def _campaign_reference_candidates(root: Path, component_names: set[str]) -> dic
 
 def _fixture_summary(root: Path, source: str, kind: str, registry: dict) -> dict:
     if _safe_existing_file(root, source) is None:
-        return {"case_ids": [], "negative_case_ids": [], "competing_routes": [],
-                "fixture_paths": [], "declared": False}
+        return {"case_ids": [], "local_case_ids": [], "central_case_ids": [],
+                "negative_case_ids": [], "competing_routes": [],
+                "fixture_paths": [], "central_fixture_paths": [], "declared": False}
     parent = (root / source).parent
     local = parent / "tests" / "cases.yaml"
     ids: list[str] = []
+    local_ids: list[str] = []
+    central_ids: list[str] = []
     negatives: list[str] = []
     competitors: set[str] = set()
     fixture_paths: list[str] = []
+    central_paths: list[str] = []
     local_rel = local.relative_to(root).as_posix()
     safe_local = _safe_existing_file(root, local_rel)
     if safe_local:
@@ -106,6 +110,7 @@ def _fixture_summary(root: Path, source: str, kind: str, registry: dict) -> dict
             ident = case.get("id")
             if isinstance(ident, str) and SAFE_CASE.fullmatch(ident):
                 ids.append(ident)
+                local_ids.append(ident)
                 expected = case.get("expected")
                 if isinstance(expected, dict) and expected.get("should_trigger") is False:
                     negatives.append(ident)
@@ -116,18 +121,24 @@ def _fixture_summary(root: Path, source: str, kind: str, registry: dict) -> dict
         fixture_paths.append(local_rel)
     if kind == "workflow":
         central = _read_yaml(root / "evals/runtime-fixtures.yaml").get("targets", {})
-        targets = central.get(Path(source).parent.name, []) if isinstance(central, dict) else []
+        target_name = registry.get("name") if isinstance(registry, dict) else None
+        targets = central.get(target_name or Path(source).parent.name, []) if isinstance(central, dict) else []
         if isinstance(targets, list):
             for item in targets:
                 if isinstance(item, dict) and isinstance(item.get("id"), str) and SAFE_CASE.fullmatch(item["id"]):
                     ids.append(item["id"])
+                    central_ids.append(item["id"])
                     if isinstance(item.get("input"), str) and _safe_existing_file(root, item["input"]):
                         fixture_paths.append(item["input"])
+                        central_paths.append(item["input"])
                     if isinstance(item.get("rubric"), str) and _safe_existing_file(root, item["rubric"]):
                         fixture_paths.append(item["rubric"])
-    return {"case_ids": sorted(set(ids)), "negative_case_ids": sorted(set(negatives)),
+                        central_paths.append(item["rubric"])
+    return {"case_ids": sorted(set(ids)), "local_case_ids": sorted(set(local_ids)),
+            "central_case_ids": sorted(set(central_ids)), "negative_case_ids": sorted(set(negatives)),
             "competing_routes": sorted(competitors),
-            "fixture_paths": sorted(set(fixture_paths)), "declared": bool(ids)}
+            "fixture_paths": sorted(set(fixture_paths)), "central_fixture_paths": sorted(set(central_paths)),
+            "declared": bool(ids)}
 
 
 def _source_metadata(root: Path, source: str, kind: str) -> dict:
@@ -168,7 +179,9 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
             if not isinstance(row, dict) or not isinstance(row.get("name"), str) or not isinstance(row.get("workflow"), str):
                 continue
             nodes[f"workflow:{row['name']}"] = {"kind": "workflow", "name": row["name"], "source": row["workflow"], "registry": row}
-    names = {name: ident for ident, node in nodes.items() for name in (node["name"],)}
+    names: dict[str, list[str]] = {}
+    for ident, node in nodes.items():
+        names.setdefault(node["name"], []).append(ident)
     for ident, node in nodes.items():
         edges = []
         if node["kind"] == "workflow":
@@ -179,9 +192,22 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
                     continue
                 for item in items:
                     target = item.get("name") if isinstance(item, dict) else item
-                    if isinstance(target, str) and target in names and names[target] != ident:
-                        edges.append({"target": names[target], "dependency": bucket, "evidence": "runtime-registry.yaml"})
-        graph[ident] = sorted(edges, key=lambda e: (e["target"], e["dependency"]))
+                    if not isinstance(target, str):
+                        continue
+                    matches = names.get(target, [])
+                    if len(matches) == 1 and matches[0] != ident:
+                        edges.append({"target": matches[0], "target_name": target, "dependency": bucket,
+                                      "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
+                                      "edge_status": "RESOLVED"})
+                    elif target == node["name"]:
+                        edges.append({"target": None, "target_name": target, "dependency": bucket,
+                                      "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
+                                      "edge_status": "SELF_REFERENCE"})
+                    else:
+                        edges.append({"target": None, "target_name": target, "dependency": bucket,
+                                      "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
+                                      "edge_status": "UNKNOWN_TARGET"})
+        graph[ident] = sorted(edges, key=lambda e: (e["target"] or "", e["target_name"], e["dependency"]))
     return graph, nodes
 
 
@@ -201,6 +227,37 @@ def _consumer_maps(graph: dict[str, list[dict]]) -> tuple[dict[str, list[dict]],
             pending.extend(x["consumer"] for x in reverse.get(consumer, []))
         transitive[node] = sorted(seen)
     return reverse, transitive
+
+
+def _affected_query(report: dict, stable_id: str) -> dict:
+    rows = {row.get("stable_id"): row for row in report.get("components", []) if isinstance(row, dict)}
+    changed = rows.get(stable_id)
+    if changed is None:
+        return {"status": "BLOCKED_UNKNOWN_COMPONENT", "requested_stable_id": stable_id,
+                "regression_neighbors": [], "unresolved_edges": [], "runtime_execution": "NOT_RUN"}
+    direct_ids = {edge.get("consumer") for edge in changed.get("direct_consumers", []) if isinstance(edge, dict)}
+    transitive_ids = set(changed.get("transitive_consumers", []))
+    neighbors = []
+    for neighbor_id in sorted((direct_ids | transitive_ids) - {None}):
+        neighbor = rows.get(neighbor_id)
+        if neighbor is None:
+            continue
+        neighbors.append({"stable_id": neighbor_id,
+                          "relation": "DIRECT_AND_TRANSITIVE" if neighbor_id in direct_ids and neighbor_id in transitive_ids else
+                                     "DIRECT" if neighbor_id in direct_ids else "TRANSITIVE",
+                          "fixture_case_ids": neighbor.get("fixture_case_ids", []),
+                          "evidence_gap": neighbor.get("evidence_gap", [])})
+    unresolved = [{"consumer": row["stable_id"], "edge": edge, "scope": "GLOBAL_GRAPH"}
+                  for row in rows.values() for edge in row.get("dependency_edges", [])
+                  if edge.get("edge_status") != "RESOLVED"]
+    status = "BLOCKED_UNKNOWN_EDGES" if unresolved else "QUERY_COMPLETE"
+    return {"status": status, "requested_stable_id": stable_id,
+            "changed_node": {"stable_id": stable_id, "source_path": changed.get("source_path"),
+                             "source_sha256": changed.get("source_sha256"),
+                             "fixture_case_ids": changed.get("fixture_case_ids", []),
+                             "evidence_gap": changed.get("evidence_gap", [])},
+            "regression_neighbors": neighbors, "unresolved_edges": unresolved,
+            "runtime_execution": "NOT_RUN"}
 
 
 def _source_revision(root: Path) -> tuple[str, str]:
@@ -267,7 +324,7 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
             signals = []
             node_id = f"{kind}:{name}"
             source_info = _source_metadata(root, source, kind)
-            fixture = _fixture_summary(root, source, kind, {})
+            fixture = _fixture_summary(root, source, kind, {"name": name})
             if kind == "skill":
                 count = row.get("case_count")
                 positive, negative = row.get("positive_cases"), row.get("negative_cases")
@@ -306,6 +363,10 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                         signals.append("ALTERNATIVE_CAMPAIGN_REFERENCE_REVIEW_REQUIRED")
                     else:
                         signals.append("NO_ALTERNATIVE_CAMPAIGN_REFERENCE_FOUND")
+            unresolved_dependencies = [edge for edge in graph.get(node_id, [])
+                                       if edge.get("edge_status") != "RESOLVED"]
+            if unresolved_dependencies:
+                signals.append("DEPENDENCY_TARGET_UNRESOLVED")
             status = row.get("status")
             if status not in {"STATIC_BLOCKER", "REVIEW_REQUIRED", "STATIC_CHECKS_OK"}:
                 errors.append(f"{name}: invalid static audit status")
@@ -365,11 +426,15 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                 "runtime_status": "NOT_VERIFIED", "quality_status": "NOT_SCORED", "cost_status": "UNKNOWN",
                 "fixture_case_ids": fixture["case_ids"], "negative_cases": fixture["negative_case_ids"],
                 "fixture_paths": fixture["fixture_paths"], "fixture_sha256": {p: hashlib.sha256(file.read_bytes()).hexdigest() for p in fixture["fixture_paths"] if (file := _safe_existing_file(root, p))},
+                "central_fixture_paths": fixture["central_fixture_paths"],
+                "local_fixture_case_ids": fixture["local_case_ids"],
+                "central_fixture_case_ids": fixture["central_case_ids"],
                 "direct_consumers": direct, "transitive_consumers": transitive_consumers.get(node_id, []),
                 "competing_routes": {"explicit_refs": fixture["competing_routes"],
                                      "status": "EXPLICIT_FIXTURE_BOUNDARIES" if fixture["competing_routes"] else "NOT_MAPPED"},
                 "tool_dependencies": tool_dependencies,
                 "dependency_edges": graph.get(node_id, []),
+                "dependency_status": "UNKNOWN" if unresolved_dependencies else "DECLARED_RESOLVED",
                 "alternative_test_refs": campaign_refs.get(name, []),
                 "deterministic_owner_ref": sorted(set(REF.findall(source_info["text"]))),
                 "declared_channels": declared_channels, "verified_runtime_channels": [],
@@ -403,6 +468,32 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
     receipt_projection = json.dumps(receipts, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     input_digests["public_safe_receipt_index"] = hashlib.sha256(receipt_projection).hexdigest()
     rows_projection = json.dumps(components, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    workflow_reconciliation = []
+    for row in components:
+        if row["kind"] != "workflow" or row["local_fixture_case_ids"]:
+            continue
+        registry_row = nodes.get(row["stable_id"], {}).get("registry", {})
+        metadata = registry_row.get("metadata", {}) if isinstance(registry_row, dict) else {}
+        if row["central_fixture_case_ids"]:
+            follow_up_action = "REVIEW_CENTRAL_FIXTURES_FOR_WORKFLOW_BEHAVIOR"
+            follow_up_state = "RECONCILIATION_REQUIRED"
+        elif row["alternative_test_refs"]:
+            follow_up_action = "REVIEW_ALTERNATIVE_CAMPAIGN_REFERENCES"
+            follow_up_state = "RECONCILIATION_REQUIRED"
+        else:
+            follow_up_action = "ADD_VERSIONED_WORKFLOW_CASES"
+            follow_up_state = "CASE_DESIGN_REQUIRED"
+        workflow_reconciliation.append({
+            "workflow_id": row["stable_id"], "workflow_source": row["source_path"],
+            "workflow_source_sha256": row["source_sha256"], "local_cases_yaml": "MISSING",
+            "central_fixture_case_ids": row["central_fixture_case_ids"],
+            "central_fixture_hashes": {path: row["fixture_sha256"][path]
+                                        for path in row["central_fixture_paths"] if path in row["fixture_sha256"]},
+            "alternative_campaign_candidates": [{**ref, "verification": "UNVERIFIED_LEXICAL_CANDIDATE"}
+                                                 for ref in row["alternative_test_refs"]],
+            "owner": metadata.get("owner") if isinstance(metadata, dict) and metadata.get("owner") else "UNKNOWN",
+            "follow_up_state": follow_up_state, "follow_up_action": follow_up_action,
+        })
     return {
         "schema_version": "2.0", "kind": "skill_workflow_consumer_test_crosswalk",
         "status": "BLOCKED_SOURCE" if errors else "SOURCE_INVENTORY_REVIEW_REQUIRED",
@@ -410,6 +501,7 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
         "input_digests": input_digests,
         "crosswalk_sha256": hashlib.sha256(rows_projection).hexdigest(),
         "catalog_drift": catalog_state,
+        "workflow_fixture_reconciliation": sorted(workflow_reconciliation, key=lambda item: item["workflow_id"]),
         "skill_count": len([c for c in components if c["kind"] == "skill"]),
         "registered_workflow_count": len([c for c in components if c["kind"] == "workflow"]),
         "unregistered_source_workflow_count": len(sources_w) - len(w_rows),
@@ -419,7 +511,8 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
         "independent_evaluation": "NOT_RUN", "release_approved": False,
         "gap_prioritization": {"dimensions": ["risk", "impact", "execution_frequency"],
                                "frequency_source": "No reliable per-component execution telemetry in the existing public-safe evidence projection.",
-                               "policy": "Do not rank a numeric risk×impact×frequency score while any factor is UNKNOWN; prioritize only after frequency evidence is supplied."},
+                               "policy": "Do not rank a numeric risk×impact×frequency score while any factor is UNKNOWN; prioritize only after frequency evidence is supplied.",
+                               "residual_blocker": "EXECUTION_FREQUENCY_TELEMETRY_UNAVAILABLE"},
         "note": "Generated source crosswalk. Defined cases are not executed tests; recorded receipts do not prove compatible runtime without verified environment, fixture and channel identity. No overall coverage percentage is computed.",
     }
 
@@ -432,19 +525,22 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--root", type=Path, default=ROOT)
     p.add_argument("--output", type=Path)
+    p.add_argument("--affected", help="Return change-impact query for one stable ID, e.g. skill:skill-name")
     args = p.parse_args()
     try:
         report = build(args.root)
     except (OSError, ValueError, TypeError) as error:
         report = {"status": "BLOCKED_SOURCE", "errors": [type(error).__name__],
                   "runtime_execution": "NOT_RUN", "release_approved": False}
+    if args.affected:
+        report = _affected_query(report, args.affected)
     text = json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(text, encoding="utf-8")
     else:
         print(text, end="")
-    return int(report["status"] != "SOURCE_INVENTORY_REVIEW_REQUIRED")
+    return int(report["status"] not in {"SOURCE_INVENTORY_REVIEW_REQUIRED", "QUERY_COMPLETE"})
 
 
 if __name__ == "__main__":

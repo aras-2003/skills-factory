@@ -14,6 +14,7 @@ from typing import Any
 VERSION = "1"
 MAX_HANDOFF_BYTES = 16_384
 SHA1 = re.compile(r"^[0-9a-f]{40}$")
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
 INPUT_FIELDS = {
     "issue_id", "role", "objective", "acceptance_criteria", "source_base_sha",
     "candidate_sha", "architecture_impact", "readonly_paths", "writable_paths",
@@ -140,16 +141,39 @@ def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
     item = _required_object(payload, required, {"usage"}, "handoff result")
     for field in ("task_id", "role", "next_action"):
         _text(item[field], field)
-    if item["status"] not in STATUSES:
+    if not isinstance(item["status"], str) or item["status"] not in STATUSES:
         raise ValueError("status must be PASS, FAIL, NOT_RUN or BLOCKED")
     _sha(item["candidate_sha"], "candidate_sha")
     if item["candidate_sha"] != expected_candidate_sha:
         raise ValueError("candidate SHA mismatch; result is stale")
     for field in ("changed_paths", "evidence_refs", "material_findings", "residual_risks"):
         _string_list(item[field], field)
-    for field in ("test_case_outcomes", "command_exit_codes"):
-        if not isinstance(item[field], list) or any(not isinstance(entry, dict) for entry in item[field]):
-            raise ValueError(f"{field} must be a list of objects")
+    if not isinstance(item["test_case_outcomes"], list):
+        raise ValueError("test_case_outcomes must be a list")
+    for outcome in item["test_case_outcomes"]:
+        entry = _required_object(
+            outcome,
+            {"case_id", "status"},
+            {"fixture_sha256", "evidence_refs"},
+            "test case outcome",
+        )
+        _text(entry["case_id"], "test_case_outcomes.case_id")
+        if not isinstance(entry["status"], str) or entry["status"] not in STATUSES:
+            raise ValueError("test_case_outcomes.status must be PASS, FAIL, NOT_RUN or BLOCKED")
+        if "fixture_sha256" in entry and (
+            not isinstance(entry["fixture_sha256"], str)
+            or not SHA256.fullmatch(entry["fixture_sha256"])
+        ):
+            raise ValueError("test_case_outcomes.fixture_sha256 must be a lowercase SHA-256 digest")
+        if "evidence_refs" in entry:
+            _string_list(entry["evidence_refs"], "test_case_outcomes.evidence_refs")
+    if not isinstance(item["command_exit_codes"], list):
+        raise ValueError("command_exit_codes must be a list")
+    for execution in item["command_exit_codes"]:
+        entry = _required_object(execution, {"command", "exit_code"}, set(), "command exit record")
+        _text(entry["command"], "command_exit_codes.command")
+        if type(entry["exit_code"]) is not int:
+            raise ValueError("command_exit_codes.exit_code must be an integer")
     usage = item.get("usage")
     if usage is not None:
         if not isinstance(usage, dict) or set(usage) - {"input_tokens", "output_tokens", "tool_calls"}:

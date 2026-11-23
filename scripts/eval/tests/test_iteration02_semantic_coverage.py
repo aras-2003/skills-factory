@@ -194,6 +194,114 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertEqual(["current:skills/current/SKILL.md"], result["inventories"]["skill"]["missing"])
             self.assertEqual(["old:skills/old/SKILL.md"], result["inventories"]["skill"]["extra"])
 
+    def test_cov_03_reconciles_each_workflow_without_local_cases(self):
+        report = self.check()
+        rows = report["workflow_fixture_reconciliation"]
+        self.assertEqual(9, len(rows))
+        self.assertTrue(all(row["local_cases_yaml"] == "MISSING" for row in rows))
+        self.assertTrue(all(row["follow_up_state"] in {"RECONCILIATION_REQUIRED", "CASE_DESIGN_REQUIRED"}
+                            for row in rows))
+        self.assertTrue(all(row["follow_up_action"] for row in rows))
+        self.assertTrue(all(item.get("verification") == "UNVERIFIED_LEXICAL_CANDIDATE"
+                            for row in rows for item in row["alternative_campaign_candidates"]))
+
+    def test_cov_04_unresolved_dependency_edge_is_source_anchored(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "skills").mkdir()
+            workflow = root / "workflows" / "sample" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required:\n        - name: missing-producer\n      optional: []\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edge = graph["workflow:sample"][0]
+            self.assertIsNone(edge["target"])
+            self.assertEqual("missing-producer", edge["target_name"])
+            self.assertEqual("UNKNOWN_TARGET", edge["edge_status"])
+            self.assertTrue(edge["evidence"].startswith("workflows/runtime-registry.yaml#/"))
+
+    def test_cov_04_unresolved_edge_marks_workflow_dependency_status_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow_path = "workflows/sample/WORKFLOW.md"
+            workflow = root / workflow_path
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            registry = root / "workflows/runtime-registry.yaml"
+            registry.write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required:\n        - name: missing-producer\n      optional: []\n", encoding="utf-8")
+            (root / "docs").mkdir()
+            (root / "docs/catalog.json").write_text(json.dumps({"skills": [], "workflows": [
+                {"name": "sample", "source": workflow_path}]}), encoding="utf-8")
+            with patch.object(mod, "_receipt_rows", return_value=[]):
+                report = mod.assess({"total_skills": 0, "skills": []}, {
+                    "total": 1, "workflows": [{"name": "sample", "source": workflow_path,
+                        "status": "REVIEW_REQUIRED", "local_test_suite_present": False,
+                        "central_eval_case_count": 0}]}, root)
+            row = next(item for item in report["components"] if item["stable_id"] == "workflow:sample")
+            self.assertEqual("UNKNOWN", row["dependency_status"])
+            self.assertIn("DEPENDENCY_TARGET_UNRESOLVED", row["evidence_gap"])
+
+    def test_cov_06_affected_query_returns_regression_neighbors(self):
+        report = {"components": [
+            {"stable_id": "skill:producer", "source_path": "skills/producer/SKILL.md",
+             "source_sha256": "a" * 64, "fixture_case_ids": ["producer-001"], "evidence_gap": [],
+             "direct_consumers": [{"consumer": "workflow:middle"}],
+             "transitive_consumers": ["workflow:middle", "workflow:outer"], "dependency_edges": []},
+            {"stable_id": "workflow:middle", "fixture_case_ids": ["middle-001"], "evidence_gap": ["runtime gap"],
+             "dependency_edges": []},
+            {"stable_id": "workflow:outer", "fixture_case_ids": ["outer-001"], "evidence_gap": [],
+             "dependency_edges": []},
+        ]}
+        result = mod._affected_query(report, "skill:producer")
+        self.assertEqual("QUERY_COMPLETE", result["status"])
+        self.assertEqual({"workflow:middle", "workflow:outer"},
+                         {row["stable_id"] for row in result["regression_neighbors"]})
+        middle = next(row for row in result["regression_neighbors"] if row["stable_id"] == "workflow:middle")
+        self.assertEqual(["middle-001"], middle["fixture_case_ids"])
+        self.assertEqual(["runtime gap"], middle["evidence_gap"])
+
+    def test_cov_06_affected_query_fails_closed_for_unknown_id_or_edge(self):
+        self.assertEqual("BLOCKED_UNKNOWN_COMPONENT", mod._affected_query({"components": []}, "skill:missing")["status"])
+        report = {"components": [
+            {"stable_id": "workflow:sample", "source_path": "workflows/sample/WORKFLOW.md",
+             "source_sha256": "b" * 64, "fixture_case_ids": [], "evidence_gap": [],
+             "direct_consumers": [], "transitive_consumers": [],
+             "dependency_edges": [{"target": None, "target_name": "unknown", "edge_status": "UNKNOWN_TARGET",
+                                    "evidence": "workflows/runtime-registry.yaml#/dependencies/required"}]},
+        ]}
+        result = mod._affected_query(report, "workflow:sample")
+        self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
+        self.assertEqual("unknown", result["unresolved_edges"][0]["edge"]["target_name"])
+
+    def test_cov_06_affected_query_blocks_global_unknown_edge_naming_changed_component(self):
+        report = {"components": [
+            {"stable_id": "skill:producer", "name": "producer", "source_path": "skills/producer/SKILL.md",
+             "source_sha256": "c" * 64, "fixture_case_ids": [], "evidence_gap": [],
+             "direct_consumers": [], "transitive_consumers": [], "dependency_edges": []},
+            {"stable_id": "workflow:unrelated", "name": "unrelated", "fixture_case_ids": [],
+             "evidence_gap": ["DEPENDENCY_TARGET_UNRESOLVED"], "direct_consumers": [],
+             "transitive_consumers": [], "dependency_edges": [
+                 {"target": None, "target_name": "producer", "edge_status": "UNKNOWN_TARGET",
+                  "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/required"}]},
+        ]}
+        result = mod._affected_query(report, "skill:producer")
+        self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
+        self.assertEqual("workflow:unrelated", result["unresolved_edges"][0]["consumer"])
+        self.assertEqual("GLOBAL_GRAPH", result["unresolved_edges"][0]["scope"])
+        self.assertEqual("producer", result["unresolved_edges"][0]["edge"]["target_name"])
+
+    def test_cov_06_frequency_is_explicit_residual_blocker_without_numeric_score(self):
+        report = self.check()
+        self.assertEqual("EXECUTION_FREQUENCY_TELEMETRY_UNAVAILABLE",
+                         report["gap_prioritization"]["residual_blocker"])
+        self.assertTrue(all(row["execution_frequency"] == "UNKNOWN" and
+                            row["priority"] == "UNRANKED_FREQUENCY_UNKNOWN"
+                            for row in report["components"]))
+
 
 if __name__ == "__main__":
     unittest.main()
