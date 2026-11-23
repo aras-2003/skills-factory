@@ -268,6 +268,14 @@ class DelegationHandoffTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires at least one command exit record"):
             self.validate_result(result, expected_task_id="task-13", expected_role="sf-test-executor",
                                  expected_test_case_ids=["HANDOFF-13A", "HANDOFF-13B"])
+        with self.assertRaisesRegex(ValueError, "requires at least one expected test case"):
+            handoff.validate_result(
+                result,
+                expected_task_id="task-13",
+                expected_role="sf-test-executor",
+                expected_test_case_ids=[],
+                expected_candidate_sha="b" * 40,
+            )
 
 
 if __name__ == "__main__":

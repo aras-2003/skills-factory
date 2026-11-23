@@ -153,6 +153,8 @@ def validate_result(
     _text(expected_task_id, "expected_task_id")
     _text(expected_role, "expected_role")
     _string_list(expected_test_case_ids, "expected_test_case_ids")
+    if expected_role == "sf-test-executor" and not expected_test_case_ids:
+        raise ValueError("Test Executor result requires at least one expected test case")
     if len(set(expected_test_case_ids)) != len(expected_test_case_ids):
         raise ValueError("expected_test_case_ids must contain unique case IDs")
     _sha(expected_candidate_sha, "expected_candidate_sha")
