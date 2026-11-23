@@ -1,0 +1,16 @@
+schema_version: '1.0'
+id: commerce-product-deep-dive-gap-001
+target: commerce-product-deep-dive
+mode: explicit
+source_paths:
+- workflows/commerce-product-deep-dive/WORKFLOW.md
+criteria_text: 'Require a concrete product/concept, target market, and intended channel;
+  broad category ideas go to product-opportunity-discovery first.
+
+  '
+assertions:
+  must:
+  - State which deep-dive inputs are missing
+  - route to discovery or ask for the minimum framing needed.
+  must_not:
+  - No fabricated thesis, gate scores, unit economics, or market-test decision.

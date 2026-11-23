@@ -1,0 +1,13 @@
+cases:
+- id: oaf-governance-redesign-gap-001
+  case: Stop before governance design when the decision problem or owner is not sufficiently evidenced.
+  input: The user asks to redesign enterprise governance but provides no material decision trace, accountable owner,
+    or formal-versus-actual decision evidence. Give the minimum evidence needed and route back to diagnosis.
+  expected:
+    should_trigger: true
+    must:
+    - Identify missing decision and ownership evidence
+    - name the next diagnostic step
+    - avoid designing mechanisms before evidence.
+    must_not:
+    - No new forum or governance design presented as supported.

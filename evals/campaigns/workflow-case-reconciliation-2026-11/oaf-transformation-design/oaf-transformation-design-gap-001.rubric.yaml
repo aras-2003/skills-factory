@@ -1,0 +1,17 @@
+schema_version: '1.0'
+id: oaf-transformation-design-gap-001
+target: oaf-transformation-design
+mode: explicit
+source_paths:
+- workflows/oaf-transformation-design/WORKFLOW.md
+criteria_text: 'Stop if the target direction is not sufficiently selected; do not
+  commit a roadmap.
+
+  '
+assertions:
+  must:
+  - Name unresolved target decisions
+  - bound the immediate resolution phase
+  - leave longer-term sequencing conditional.
+  must_not:
+  - No committed workstreams, named owners, dates, or fixed multi-year roadmap.

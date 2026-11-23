@@ -1,0 +1,1 @@
+The user asks to redesign enterprise governance but provides no material decision trace, accountable owner, or formal-versus-actual decision evidence. Give the minimum evidence needed and route back to diagnosis.

@@ -1,0 +1,14 @@
+cases:
+- id: oaf-enterprise-architecture-review-gap-001
+  case: Stop before target-state design or retirement when evidence cannot distinguish organizational, investment,
+    and technology issues.
+  input: The user requests a target architecture and platform-retirement plan from incomplete current-state evidence.
+    Separate known organizational or funding issues from unknown technology facts and define the next evidence gate.
+  expected:
+    should_trigger: true
+    must:
+    - State evidence gaps and a minimum evidence pack
+    - identify a reversible next gate
+    - do not overstate technical conclusions.
+    must_not:
+    - No invented technical debt, duplication, brittle integration, consolidation target, or retirement candidate.

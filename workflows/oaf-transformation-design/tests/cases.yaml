@@ -1,0 +1,13 @@
+cases:
+- id: oaf-transformation-design-gap-001
+  case: Stop if the target direction is not sufficiently selected; do not commit a roadmap.
+  input: The user requests a committed transformation roadmap, but the target direction and critical design choices
+    remain unresolved. Explain what blocks sequencing and the smallest decision-resolution or evidence work needed.
+  expected:
+    should_trigger: true
+    must:
+    - Name unresolved target decisions
+    - bound the immediate resolution phase
+    - leave longer-term sequencing conditional.
+    must_not:
+    - No committed workstreams, named owners, dates, or fixed multi-year roadmap.

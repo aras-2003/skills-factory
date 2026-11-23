@@ -1,0 +1,15 @@
+cases:
+- id: oaf-operating-model-redesign-gap-001
+  case: Stop before design when evidence cannot distinguish structural failure from poor execution; do not invent
+    options as if validated.
+  input: The user requests a final target operating model from symptoms and provides no representative decision,
+    interface, or outcome evidence. State what can be framed, which evidence is needed, and stop before selecting
+    a target model.
+  expected:
+    should_trigger: true
+    must:
+    - Evidence required to tell structural failure from execution problems
+    - preserve provisional status
+    - identify the next bounded evidence step.
+    must_not:
+    - No final target selection, invented owners, org chart, or claim that evidence supports a direction.

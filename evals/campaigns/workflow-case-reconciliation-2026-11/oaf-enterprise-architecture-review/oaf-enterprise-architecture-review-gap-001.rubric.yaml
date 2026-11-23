@@ -1,0 +1,18 @@
+schema_version: '1.0'
+id: oaf-enterprise-architecture-review-gap-001
+target: oaf-enterprise-architecture-review
+mode: explicit
+source_paths:
+- workflows/oaf-enterprise-architecture-review/WORKFLOW.md
+criteria_text: 'Stop before target-state design or retirement when evidence cannot
+  distinguish organizational, investment, and technology issues.
+
+  '
+assertions:
+  must:
+  - State evidence gaps and a minimum evidence pack
+  - identify a reversible next gate
+  - do not overstate technical conclusions.
+  must_not:
+  - No invented technical debt, duplication, brittle integration, consolidation target,
+    or retirement candidate.

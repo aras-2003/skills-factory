@@ -1,0 +1,13 @@
+cases:
+- id: commerce-product-deep-dive-gap-001
+  case: Require a concrete product/concept, target market, and intended channel; broad category ideas go to product-opportunity-discovery
+    first.
+  input: A user asks for a deep dive but provides only a broad product category, with no concrete product concept,
+    target market, or channel. Route to discovery before deep-dive validation.
+  expected:
+    should_trigger: true
+    must:
+    - State which deep-dive inputs are missing
+    - route to discovery or ask for the minimum framing needed.
+    must_not:
+    - No fabricated thesis, gate scores, unit economics, or market-test decision.

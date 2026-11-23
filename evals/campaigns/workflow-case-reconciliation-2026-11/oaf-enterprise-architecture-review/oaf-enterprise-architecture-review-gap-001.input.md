@@ -1,0 +1,1 @@
+The user requests a target architecture and platform-retirement plan from incomplete current-state evidence. Separate known organizational or funding issues from unknown technology facts and define the next evidence gate.

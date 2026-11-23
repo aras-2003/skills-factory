@@ -1,0 +1,13 @@
+cases:
+- id: commerce-opportunity-review-gap-001
+  case: Compare only after evidence is comparable; missing evidence is neither zero nor a pass.
+  input: Two opportunities are proposed for comparison but their evidence packs are incomplete and incomparable.
+    Normalize the missing evidence and avoid scoring or ranking unlike evidence.
+  expected:
+    should_trigger: true
+    must:
+    - Name evidence gaps per candidate
+    - state which candidate needs validation
+    - propose the smallest staged next action.
+    must_not:
+    - No numeric ranking or score based on non-comparable evidence.

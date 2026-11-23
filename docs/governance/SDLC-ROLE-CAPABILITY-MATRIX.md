@@ -9,23 +9,23 @@ ledger. Re-check host behavior when the host or permission configuration changes
 
 Observation date: 2026-11-23. The inspected source configuration is pinned to
 `e0f613cbaf80cf4a278e713794662250dab2b8bc`. Host ID was `local`; the Codex
-Desktop build/version was not exposed. The available
-`collaboration.spawn_agent` interface accepts a task, optional model and
-reasoning effort, and an optional context-fork setting. It does not accept a
-named project profile, per-child tool allowlist, working directory, path scope,
-network scope, or child sandbox override. Project-profile loading and an actual
-invocation of a named project profile were not observed. A separate thread
-shares host permissions; behavioral instructions are not an OS sandbox. The
-source SHA pins the inspected profile files, not the host executable or proof
-that it loaded them.
+Desktop build/version was not exposed. The observed `collaboration.spawn_agent`
+interface accepts a task, optional model and reasoning effort, and an optional
+context-fork setting. It does not accept a named project profile, per-child
+tool allowlist, working directory, path scope, network scope, or child sandbox
+override. Generic child tasks for all nine role types were observed in a later
+pilot, including one bounded Developer write followed by separate execution
+and review. No invocation showed that a named project TOML profile was loaded
+or that a specific model/effort was selected. A separate thread shares host
+permissions; behavioral instructions are not an OS sandbox. The source SHA
+pins the inspected profile files, not the host executable or proof that it
+loaded them.
 
-Codex's documented custom-agent feature controls cover selected host features
-such as shell, apps, plugins, memories, permission requests and skills; they do
-not grant a child a narrower parent sandbox or arbitrary per-path filesystem
-ACL. MCP server enablement and tool filtering are host/server configuration,
-not per-role policy on the observed spawn call. See [custom agents](https://learn.chatgpt.com/docs/agent-configuration/subagents#custom-agent-file-schema),
-[configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference),
-and [agent approvals and security](https://learn.chatgpt.com/docs/agent-approvals-security).
+No versioned, authoritative Codex Desktop host documentation or build
+identifier was available for this observation. The classification below is
+therefore limited to the exposed spawn-tool schema and actual task traces in
+this session; it does not generalize to other Codex hosts or the separate OpenAI
+Agents API. Re-observe after a host/version/configuration change.
 
 ## Role contract
 

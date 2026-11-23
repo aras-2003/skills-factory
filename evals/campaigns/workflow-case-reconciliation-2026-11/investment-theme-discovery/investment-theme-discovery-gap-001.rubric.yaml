@@ -1,0 +1,17 @@
+schema_version: '1.0'
+id: investment-theme-discovery-gap-001
+target: investment-theme-discovery
+mode: explicit
+source_paths:
+- workflows/investment-theme-discovery/WORKFLOW.md
+criteria_text: 'Default to read-only; do not persist without explicit authorization
+  and identified canonical target.
+
+  '
+assertions:
+  must:
+  - Keep analysis conversational
+  - report NOT_WRITTEN and missing permission/target
+  - do not claim a canonical prior-state comparison without a verified baseline.
+  must_not:
+  - No write, SAVED claim, fabricated prior theme, or inferred investment decision.

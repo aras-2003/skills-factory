@@ -1,0 +1,1 @@
+The user requests a final target operating model from symptoms and provides no representative decision, interface, or outcome evidence. State what can be framed, which evidence is needed, and stop before selecting a target model.

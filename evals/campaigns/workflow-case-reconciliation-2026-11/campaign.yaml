@@ -1,0 +1,253 @@
+schema_version: '1.0'
+campaign: workflow-case-reconciliation-2026-11
+issue: 769
+kind: TEST_DESIGN
+design_base_sha: 834a58af13774d6e768c3baa184e66af0389e9b2
+purpose: Add one bounded local case for each previously untested registered workflow and bind its source, input,
+  rubric and local suite digests. Case definition is not execution evidence.
+source_pin_policy: Recompute all listed SHA-256 values at review and execution. Any changed source or fixture invalidates
+  the pin.
+cases:
+- workflow_id: oaf-operating-model-redesign
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/oaf-operating-model-redesign/WORKFLOW.md
+  workflow_source_sha256: cb1eaf3565b36bccf9305cfe7fb68806270048cb9bbe307e79b8f92264ec7ab9
+  case_file: workflows/oaf-operating-model-redesign/tests/cases.yaml
+  case_file_sha256: 9e04f037e9edb953bba7ac8d03a123355fa13d31153752c0185e90426e114702
+  case_id: oaf-operating-model-redesign-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-operating-model-redesign/oaf-operating-model-redesign-gap-001.input.md
+  input_sha256: 8c0a65ab82d7bb17893b6767e173a5efc2c91e8b1cdce5de7e508861fedc1ada
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-operating-model-redesign/oaf-operating-model-redesign-gap-001.rubric.yaml
+  rubric_sha256: 7702fb41cb52619cb833d236757a2844ecabe77f13ee8f9aa2f7e17053ae5861
+  coverage_limit: Central fixture tests option-design behavior; it does not establish workflow stop behavior or
+    full workflow report/handoff coverage.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-operating-model-redesign-001
+    input: evals/oaf/wave2/case-operating-model-redesign-001.input.md
+    input_sha256: 5fb07e8497f64195bc38f33a2b79e9c6c7ee662c120894bc629b8e5b27b084a2
+    rubric: evals/oaf/wave2/case-operating-model-redesign-001.rubric.yaml
+    rubric_sha256: f6da133f0c7cbb8e7857a43f7dee09ef1d84952aa8100b1558c6778a4d9ec665
+  stable_id: workflow:oaf-operating-model-redesign
+- workflow_id: oaf-governance-redesign
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/oaf-governance-redesign/WORKFLOW.md
+  workflow_source_sha256: 313993e6b4f8278467e4b860c7c8c92eb8755d481b6b299582a18a7bb68aca0f
+  case_file: workflows/oaf-governance-redesign/tests/cases.yaml
+  case_file_sha256: 08d01954641693b1f50f74ab39e8f318f89effa5d425b1c5d2c264035751f17c
+  case_id: oaf-governance-redesign-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-governance-redesign/oaf-governance-redesign-gap-001.input.md
+  input_sha256: 3ad70ebe84592aaf2a0c74f507ad73eee26f43f4f1c9c4ba25e368e02cd36e1e
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-governance-redesign/oaf-governance-redesign-gap-001.rubric.yaml
+  rubric_sha256: 9f6c9b947c60b19bdc1fbd8edfa47c353d602282441d78d2b8b82756f285038b
+  coverage_limit: Central fixture tests a positive redesign; it does not establish the workflow stop-before-design
+    or stop-before-rollout boundary.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-governance-redesign-001
+    input: evals/oaf/wave3/case-governance-redesign-001.input.md
+    input_sha256: d555eb0ad37b1b1e27de535bffc34b837eaf0ec3c686dedeb9c82abe0ddc4d2c
+    rubric: evals/oaf/wave3/case-governance-redesign-001.rubric.yaml
+    rubric_sha256: 0b4ade9a503f5a09f8fba30b9c84c1a41677435a60acc43111f06348e22b23be
+  stable_id: workflow:oaf-governance-redesign
+- workflow_id: oaf-transformation-design
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/oaf-transformation-design/WORKFLOW.md
+  workflow_source_sha256: 7bbbd3a1449defbbdb18b669e5978d7a3deb96bba2b11feb040c739b51f0a0f8
+  case_file: workflows/oaf-transformation-design/tests/cases.yaml
+  case_file_sha256: ded7b5dfbe3420ece3079db16b42a01e04d8a264ba2c3f6e7fe7133bb6b0e824
+  case_id: oaf-transformation-design-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-transformation-design/oaf-transformation-design-gap-001.input.md
+  input_sha256: 42c817ee3ba55551ac0c0409d2711cee709780f46d497cf51642214f20939721
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-transformation-design/oaf-transformation-design-gap-001.rubric.yaml
+  rubric_sha256: e56292675bb316491cd13e508fb6520930a3a7c10563a002f4d506decf012d77
+  coverage_limit: The workflow case covers bounded transformation planning; blueprint cases target the underlying
+    skill and do not establish workflow stop behavior when direction is unresolved.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-transformation-blueprint-001
+    input: evals/oaf/wave3/case-transformation-blueprint-001.input.md
+    input_sha256: 8dbb3b52695ed4bbe0539cb16e3fb429832dd13358575c1af55cb355197d4895
+    rubric: evals/oaf/wave3/case-transformation-blueprint-001.rubric.yaml
+    rubric_sha256: 9a971cd8641f101b2f525b687652180ad408fb40cd4ad372efcea404705a662e
+  - case_id: case-transformation-blueprint-stop-001
+    input: evals/oaf/wave3/case-transformation-blueprint-stop-001.input.md
+    input_sha256: c1bfa958cf456f903c924132bee97e0816cb78fccfe1a289bd455cae323af653
+    rubric: evals/oaf/wave3/case-transformation-blueprint-stop-001.rubric.yaml
+    rubric_sha256: 00301a9d6a665deaafa7e9c8d53efc3a26694e5099490b014b50f4829d80a188
+  - case_id: case-transformation-design-001
+    input: evals/oaf/wave3/case-transformation-design-001.input.md
+    input_sha256: 321d56bfb0ccbf67f0bc0a88bf0e4aa263fe69ba914514f429a8fc669f0a6d82
+    rubric: evals/oaf/wave3/case-transformation-design-001.rubric.yaml
+    rubric_sha256: 599e9bc6620a36e154daa0eebf5c6d669b06c2300e544532bf0f37c79344b2d9
+  stable_id: workflow:oaf-transformation-design
+- workflow_id: oaf-enterprise-architecture-review
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/oaf-enterprise-architecture-review/WORKFLOW.md
+  workflow_source_sha256: 6bdcbe830ed5303a87dbf7b988de6a59e267fd3d465551812486305901cc4dc2
+  case_file: workflows/oaf-enterprise-architecture-review/tests/cases.yaml
+  case_file_sha256: 7159d42655281ccbd6e6a5e6d5e5807b67ec4713c0462e65c67b42aff45f4721
+  case_id: oaf-enterprise-architecture-review-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-architecture-review/oaf-enterprise-architecture-review-gap-001.input.md
+  input_sha256: c9bd72563f4b090fc40a7fd030610a58dac7e1e9ebc522dff374b3a140d70420
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-architecture-review/oaf-enterprise-architecture-review-gap-001.rubric.yaml
+  rubric_sha256: 75da32b0c3ebceed9e32afd4c36659a966d5106e50d68852439233d3b02f6745
+  coverage_limit: Central workflow cases cover evidence-gated architecture decisions; the direct architecture-review
+    case tests the underlying skill and does not establish workflow routing/next-gate output.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-architecture-review-direct-001
+    input: evals/oaf/wave4/case-architecture-review-direct-001.input.md
+    input_sha256: 4b1263b6276c3cfcb6d0b1d4341eaf5b716a32c5baecd7d3aa0befb6b2f267e3
+    rubric: evals/oaf/wave4/case-architecture-review-direct-001.rubric.yaml
+    rubric_sha256: 09478515ba36c4ab70176276cfeee29a3ac0a02e73839936ba286048157cc4fa
+  - case_id: case-enterprise-architecture-review-001
+    input: evals/oaf/wave4/case-enterprise-architecture-review-001.input.md
+    input_sha256: 54d62ccf36d6d7360ed18841d4da18034654b395d759b18c5a2a402986968d0b
+    rubric: evals/oaf/wave4/case-enterprise-architecture-review-001.rubric.yaml
+    rubric_sha256: 7afed5478649dd722fc71446777d9845587ef4893c4212f6eeb4467060cc11f9
+  - case_id: case-enterprise-architecture-stop-001
+    input: evals/oaf/wave4/case-enterprise-architecture-stop-001.input.md
+    input_sha256: 6e661bd4e16b0d851478064951f64af0961da1cf120aa5d50b8ca088176c3b78
+    rubric: evals/oaf/wave4/case-enterprise-architecture-stop-001.rubric.yaml
+    rubric_sha256: e72dddc498e94fb2ce712c9fb848cfc1270bf5e9f718061baf956df3349b9acf
+  stable_id: workflow:oaf-enterprise-architecture-review
+- workflow_id: oaf-enterprise-change-review
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/oaf-enterprise-change-review/WORKFLOW.md
+  workflow_source_sha256: ef69a66a1337087bcebe838f822492e8555dd17c52b925fb48acfdf2717b708a
+  case_file: workflows/oaf-enterprise-change-review/tests/cases.yaml
+  case_file_sha256: 07af825c4cb01f3d2f7673e60d57e871dd8706baabb768a46397aaa678b993d5
+  case_id: oaf-enterprise-change-review-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-change-review/oaf-enterprise-change-review-gap-001.input.md
+  input_sha256: 449661395d3a682fed9d330683470e7a5b722841fc7f9799ab57bd6741505916
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-change-review/oaf-enterprise-change-review-gap-001.rubric.yaml
+  rubric_sha256: 5189fe3c9831b829100d90a3c13fc50821f64a1eadacfd7f7f60c485ae80577f
+  coverage_limit: Central case covers broad integrated change; it does not establish narrow-entry routing when one
+    specialist suffices.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-001-enterprise-change
+    input: evals/oaf/e2e/case-001-enterprise-change.input.md
+    input_sha256: bc3f7608b1fc7956a025b8fd13b9b266e0987c47088f94f3994a48cc1bcde03e
+    rubric: evals/oaf/e2e/case-001-enterprise-change.rubric.yaml
+    rubric_sha256: c4443243b6e8184fdc93d8ad4441fd2f0dcfea51ddda93dd70a9f28790ac6351
+  stable_id: workflow:oaf-enterprise-change-review
+- workflow_id: commerce-product-deep-dive
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/commerce-product-deep-dive/WORKFLOW.md
+  workflow_source_sha256: c8c1a7561f2970842df4c4874863a206c5991297b1a770903730836f1ea88d74
+  case_file: workflows/commerce-product-deep-dive/tests/cases.yaml
+  case_file_sha256: 7d632246dfdffceb706e811c740520407129487f20fabd6151d868425a115243
+  case_id: commerce-product-deep-dive-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-product-deep-dive/commerce-product-deep-dive-gap-001.input.md
+  input_sha256: 296a4fbe1f9d2bd91f47ab9d28dda3f04bb3dc6dae9cf9c1cefb71f1a1c2a3bd
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-product-deep-dive/commerce-product-deep-dive-gap-001.rubric.yaml
+  rubric_sha256: 3be3601195c235d52a31365a321584c3d41f4ed409d50c479c332539c6d0f8a9
+  coverage_limit: Central cases cover selected product gate outcomes; they do not establish the precondition route
+    from a broad category to discovery or the complete gate output contract.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-001-premium-vs-generic
+    input: evals/commerce/case-001-premium-vs-generic.input.md
+    input_sha256: 70213c5614ae7d11cce3997e9c8039d57e796dd3370821bb00ba84415847daba
+    rubric: evals/commerce/case-001-premium-vs-generic.rubric.yaml
+    rubric_sha256: 3d2729ab19dce0cb7902331cb453617009e3498b3937e59ccffa18af8ac6ef7b
+  - case_id: case-002-good-demand-bad-economics
+    input: evals/commerce/case-002-good-demand-bad-economics.input.md
+    input_sha256: f0206eba0acfb107466fba08dd97d7f6d7ff09d989d08a1f94ec430dbfd97e95
+    rubric: evals/commerce/case-002-good-demand-bad-economics.rubric.yaml
+    rubric_sha256: e0baafc35ee037fb7ba0e61779879f8693279b0ce967b75b7c066d7d46e782fe
+  - case_id: case-004-boring-winner
+    input: evals/commerce/case-004-boring-winner.input.md
+    input_sha256: a01c1667f1fe39dd97f4d3a4e016c9b71c6b00f9ad46cd500f0bc1ac906e7dbc
+    rubric: evals/commerce/case-004-boring-winner.rubric.yaml
+    rubric_sha256: da046f44744b3fadb97603511da90eb824f96527875c496b3b45054d12312768
+  stable_id: workflow:commerce-product-deep-dive
+- workflow_id: commerce-opportunity-review
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/commerce-opportunity-review/WORKFLOW.md
+  workflow_source_sha256: 7348378ce4e73881c58ef4a0f0412764596d4b621b2606ab3018e45aec0e1fac
+  case_file: workflows/commerce-opportunity-review/tests/cases.yaml
+  case_file_sha256: 709684e151d8c17b081bfcd65a21c244da401cd57587b1669571738bdbbb6b5b
+  case_id: commerce-opportunity-review-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-opportunity-review/commerce-opportunity-review-gap-001.input.md
+  input_sha256: 6b685a65b033eac1b9215c6ede187225c68f0937c4e90c22cb1cfad44192fe3a
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-opportunity-review/commerce-opportunity-review-gap-001.rubric.yaml
+  rubric_sha256: 203be51aac9d7cf67dbd5b4c32f1144210298f69c2de73a4c30dad5847a244b6
+  coverage_limit: Two central cases cover gate-specific behavior; product-discovery targets an underlying skill.
+    None establishes comparison behavior for incomplete, non-comparable evidence.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-003-viral-regulated
+    input: evals/commerce/case-003-viral-regulated.input.md
+    input_sha256: bec3e3cda32e51ec7d163b3f80240e5104a5b6849f1b327e89f9f9516c783df7
+    rubric: evals/commerce/case-003-viral-regulated.rubric.yaml
+    rubric_sha256: 97dc784e414e5213a97c5c42dd1f74c7397ac6444eeaafbafa322264a8f1f021
+  - case_id: case-005-false-us-pl-transfer
+    input: evals/commerce/case-005-false-us-pl-transfer.input.md
+    input_sha256: dd51eab58ad0162ee2df1a5fe1544bc5b7dd9e2d5533cc91e020472f0662f4d1
+    rubric: evals/commerce/case-005-false-us-pl-transfer.rubric.yaml
+    rubric_sha256: 862e16be92db483b547a877490031a31e3bf479fd60da9dfd726bf774af78268
+  - case_id: case-006-product-discovery
+    input: evals/commerce/case-006-product-discovery.input.md
+    input_sha256: ee939bf8b1e1e08af09354606912e349cc0f405e2cb0de3216790d4be5783aac
+    rubric: evals/commerce/case-006-product-discovery.rubric.yaml
+    rubric_sha256: ad2208fed47740d8eab9602443d60855c5cd528ad36c03c91b1891a02f9b9c2a
+  stable_id: workflow:commerce-opportunity-review
+- workflow_id: investment-portfolio-review
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/investment-portfolio-review/WORKFLOW.md
+  workflow_source_sha256: d24897dd84cc3fb5a293f5719f17f853736b00b13e357b97518de44368eff6db
+  case_file: workflows/investment-portfolio-review/tests/cases.yaml
+  case_file_sha256: 3446393a6949108d369e2bdbedf44ae83be0cf4f01b75c42fa23705563e204f3
+  case_id: investment-portfolio-review-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/investment-portfolio-review/investment-portfolio-review-gap-001.input.md
+  input_sha256: 5644a9947a9031d5441f9588ebc4e2d447f278b99e6870fa85f0c147d5a3668a
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/investment-portfolio-review/investment-portfolio-review-gap-001.rubric.yaml
+  rubric_sha256: 98a2709c572b145a2dfa4b388a30ebcdb59e1165afbe66d9cdfe1bfa2313021b
+  coverage_limit: Central case covers canonical retrieval, drift and persistence receipts; it does not establish
+    visual-slot blocked status or client-display observability.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-003-portfolio-review
+    input: evals/investing/case-003-portfolio-review.input.md
+    input_sha256: 43036c250453d2aa82f1fe53fe465879a37669cd6e51b3755c96afe04d4d7648
+    rubric: evals/investing/case-003-portfolio-review.rubric.yaml
+    rubric_sha256: 5a709caf6aa088486b3ef944f3727ace6d1cdfe223dfb6cc1660854479948991
+  stable_id: workflow:investment-portfolio-review
+- workflow_id: investment-theme-discovery
+  owner: arkadiusz-kamrowski
+  workflow_source: workflows/investment-theme-discovery/WORKFLOW.md
+  workflow_source_sha256: f6caf0cffb7a76d9cfa368e6c1b8b1428a02a6b5d363ce981f2b7135142bfbd0
+  case_file: workflows/investment-theme-discovery/tests/cases.yaml
+  case_file_sha256: f5a030e1ba04eee470b2ac323778078db481635e85995654cfac024b22a6f666
+  case_id: investment-theme-discovery-gap-001
+  input: evals/campaigns/workflow-case-reconciliation-2026-11/investment-theme-discovery/investment-theme-discovery-gap-001.input.md
+  input_sha256: 0194a9362d0a6b06e1e228f8e5e5f782b8a8131031efb706cba5d293ccff3fd2
+  rubric: evals/campaigns/workflow-case-reconciliation-2026-11/investment-theme-discovery/investment-theme-discovery-gap-001.rubric.yaml
+  rubric_sha256: 04a182c13550223da480a459117bde18434744e9448839b2e2a4c75f176558a0
+  coverage_limit: Central case covers theme mapping and research-queue behavior; it does not establish canonical
+    read-only default, write authorization, or persistence receipt behavior.
+  execution_state: NOT_RUN
+  runtime_pass: false
+  reused_central_cases:
+  - case_id: case-004-theme-discovery
+    input: evals/investing/case-004-theme-discovery.input.md
+    input_sha256: 5b87e8f9bebf43c409f70adcc0cde04ae9af8cce71a1c8935d540621e8d96f16
+    rubric: evals/investing/case-004-theme-discovery.rubric.yaml
+    rubric_sha256: 25f42aebceaeb0ca7f4cf67d5689e2af0643cdecd454a968c300bd0d43c270ce
+  stable_id: workflow:investment-theme-discovery
+historical_campaigns_mutated: false
+runtime_execution: NOT_RUN
+independent_evaluation: NOT_RUN
+release_approved: false
+evidence_status: DESIGN_ONLY

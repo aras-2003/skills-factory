@@ -1,0 +1,18 @@
+schema_version: '1.0'
+id: oaf-operating-model-redesign-gap-001
+target: oaf-operating-model-redesign
+mode: explicit
+source_paths:
+- workflows/oaf-operating-model-redesign/WORKFLOW.md
+criteria_text: 'Stop before design when evidence cannot distinguish structural failure
+  from poor execution; do not invent options as if validated.
+
+  '
+assertions:
+  must:
+  - Evidence required to tell structural failure from execution problems
+  - preserve provisional status
+  - identify the next bounded evidence step.
+  must_not:
+  - No final target selection, invented owners, org chart, or claim that evidence
+    supports a direction.

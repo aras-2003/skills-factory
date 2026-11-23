@@ -168,6 +168,81 @@ def _receipt_rows(root: Path) -> list[dict]:
     return build_index(root).get("receipts", [])
 
 
+def _workflow_reconciliation_design(root: Path, components: list[dict], nodes: dict) -> tuple[list[dict], dict | None, list[str]]:
+    """Validate the declarative workflow-gap campaign against current files."""
+    rel = "evals/campaigns/workflow-case-reconciliation-2026-11/campaign.yaml"
+    path = _safe_existing_file(root, rel)
+    if path is None:
+        return [], None, []
+    campaign = _read_yaml(path)
+    errors: list[str] = []
+    if campaign.get("kind") != "TEST_DESIGN" or campaign.get("runtime_execution") != "NOT_RUN":
+        errors.append("workflow reconciliation campaign must remain TEST_DESIGN / NOT_RUN")
+    by_id = {row["stable_id"]: row for row in components if row["kind"] == "workflow"}
+    reconciliation = []
+    cases = campaign.get("cases", [])
+    if not isinstance(cases, list):
+        return [], campaign, ["workflow reconciliation campaign cases malformed"]
+    seen = set()
+    for case in cases:
+        if not isinstance(case, dict):
+            errors.append("workflow reconciliation campaign contains malformed case")
+            continue
+        workflow_id = case.get("workflow_id")
+        stable_id = f"workflow:{workflow_id}"
+        if case.get("stable_id") != stable_id:
+            errors.append(f"workflow reconciliation stable ID mismatch: {workflow_id}")
+        component = by_id.get(stable_id)
+        if not component or workflow_id in seen:
+            errors.append(f"workflow reconciliation campaign has unknown/duplicate workflow {workflow_id}")
+            continue
+        seen.add(workflow_id)
+        for key, digest_key in (("workflow_source", "workflow_source_sha256"),
+                                ("case_file", "case_file_sha256"),
+                                ("input", "input_sha256"), ("rubric", "rubric_sha256")):
+            file = _safe_existing_file(root, case.get(key))
+            actual = hashlib.sha256(file.read_bytes()).hexdigest() if file else None
+            if not actual or actual != case.get(digest_key):
+                errors.append(f"workflow reconciliation pin mismatch: {workflow_id}:{key}")
+        if case.get("workflow_source") != component["source_path"] or case.get("workflow_source_sha256") != component["source_sha256"]:
+            errors.append(f"workflow source identity mismatch: {workflow_id}")
+        metadata = nodes.get(stable_id, {}).get("registry", {}).get("metadata", {})
+        owner = _task_owner(metadata)
+        if case.get("owner") != owner:
+            errors.append(f"workflow reconciliation owner mismatch: {workflow_id}")
+        suite = _read_yaml(root / case.get("case_file", ""))
+        suite_cases = [row for row in suite.get("cases", []) if isinstance(row, dict)]
+        local = next((row for row in suite_cases if row.get("id") == case.get("case_id")), None)
+        if local is None:
+            errors.append(f"workflow local case absent from suite: {workflow_id}")
+        input_file = _safe_existing_file(root, case.get("input"))
+        if local and input_file and local.get("input", "").rstrip() != input_file.read_text(encoding="utf-8").rstrip():
+            errors.append(f"workflow case input differs from pinned input: {workflow_id}")
+        reused_cases = case.get("reused_central_cases", [])
+        for reused in reused_cases if isinstance(reused_cases, list) else []:
+            for key, digest_key in (("input", "input_sha256"), ("rubric", "rubric_sha256")):
+                file = _safe_existing_file(root, reused.get(key) if isinstance(reused, dict) else None)
+                actual = hashlib.sha256(file.read_bytes()).hexdigest() if file else None
+                if not actual or actual != reused.get(digest_key):
+                    errors.append(f"reused central fixture pin mismatch: {workflow_id}:{reused.get('case_id')}:{key}")
+        if case.get("execution_state") != "NOT_RUN" or case.get("runtime_pass") is not False:
+            errors.append(f"workflow reconciliation case has runtime claim: {workflow_id}")
+        reconciliation.append({
+            "stable_id": stable_id, "workflow_id": workflow_id,
+            "workflow_source": case.get("workflow_source"),
+            "workflow_source_sha256": case.get("workflow_source_sha256"),
+            "local_cases_yaml": "PRESENT", "local_case_file": case.get("case_file"),
+            "local_case_file_sha256": case.get("case_file_sha256"),
+            "new_design_case_ids": [case.get("case_id")],
+            "central_fixture_case_ids": component["central_fixture_case_ids"],
+            "reused_central_case_ids": [item.get("case_id") for item in reused_cases if isinstance(item, dict)],
+            "coverage_limit": case.get("coverage_limit"), "owner": owner,
+            "follow_up_state": "RECONCILED_CASE_DESIGNED", "execution_state": "NOT_RUN",
+            "runtime_pass": False,
+        })
+    return reconciliation, campaign, errors
+
+
 def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]:
     registry = _read_yaml(root / "workflows/runtime-registry.yaml")
     nodes: dict[str, dict] = {}
@@ -449,6 +524,8 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
             if kind == "workflow" and isinstance(registry_row.get("metadata"), dict):
                 metadata = registry_row["metadata"]
             evidence = receipts_by_component.get(name, [])
+            historical_receipt_count = sum(1 for x in evidence
+                                           if x.get("receipt_validation") == "PASS" and x.get("case_id"))
             compatible_receipts = [x for x in evidence if x.get("receipt_validation") == "PASS" and
                                    x.get("component_identity_matches") is True]
             if any(x.get("recorded_status") == "FAIL" for x in evidence):
@@ -505,6 +582,8 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                 "routing_positive_cases": positive if kind == "skill" else None,
                 "routing_negative_cases": negative if kind == "skill" else None,
                 "risk": risk, "impact": impact, "execution_frequency": "UNKNOWN",
+                "historical_receipt_count_lower_bound": historical_receipt_count,
+                "historical_receipt_count_basis": "VALID_PUBLIC_SAFE_INDEXED_RECEIPTS" if historical_receipt_count else "NO_VALID_INDEXED_RECEIPT_FOUND",
                 "priority": priority, "review_signals": sorted(set(signals)),
                 "evidence_gap": sorted(set(signals)),
                 "next_test_action": "RUN_VERSION_BOUND_INDEPENDENT_SEMANTIC_CAMPAIGN",
@@ -527,50 +606,24 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
     receipt_projection = json.dumps(receipts, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     input_digests["public_safe_receipt_index"] = hashlib.sha256(receipt_projection).hexdigest()
     rows_projection = json.dumps(components, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    workflow_reconciliation = []
+    workflow_reconciliation, reconciliation_campaign, design_errors = _workflow_reconciliation_design(root, components, nodes)
+    errors.extend(design_errors)
+    reconciled_ids = {f"workflow:{item['workflow_id']}" for item in workflow_reconciliation}
     for row in components:
-        if row["kind"] != "workflow" or row["local_fixture_case_ids"]:
+        if row["kind"] != "workflow" or row["local_fixture_case_ids"] or row["stable_id"] in reconciled_ids:
             continue
-        registry_row = nodes.get(row["stable_id"], {}).get("registry", {})
-        metadata = registry_row.get("metadata", {}) if isinstance(registry_row, dict) else {}
-        if row["central_fixture_case_ids"]:
-            follow_up_action = "REVIEW_CENTRAL_FIXTURES_FOR_WORKFLOW_BEHAVIOR"
-            follow_up_state = "RECONCILIATION_REQUIRED"
-            case_design_request = None
-        elif row["alternative_test_refs"]:
-            follow_up_action = "REVIEW_ALTERNATIVE_CAMPAIGN_REFERENCES"
-            follow_up_state = "RECONCILIATION_REQUIRED"
-            case_design_request = None
-        else:
-            follow_up_action = "ADD_VERSIONED_WORKFLOW_CASES"
-            follow_up_state = "CASE_DESIGN_REQUIRED"
-            case_design_request = {
-                "status": "CASE_DESIGN_REQUIRED",
-                "owner": row["task_owner"],
-                "workflow_source": row["source_path"],
-                "workflow_source_sha256": row["source_sha256"],
-                "case_file": f"{Path(row['source_path']).parent.as_posix()}/tests/cases.yaml",
-                "max_case_ids": 3,
-                "case_ids": [],
-                "required_scenarios": [
-                    "PRIMARY_PATH",
-                    "HIGHEST_RISK_NEGATIVE_OR_MISSING_EVIDENCE",
-                ],
-                "execution_state": "NOT_RUN",
-                "defined_cases_are_not_executed": True,
-            }
-        workflow_reconciliation.append({
-            "workflow_id": row["stable_id"], "workflow_source": row["source_path"],
-            "workflow_source_sha256": row["source_sha256"], "local_cases_yaml": "MISSING",
-            "central_fixture_case_ids": row["central_fixture_case_ids"],
-            "central_fixture_hashes": {path: row["fixture_sha256"][path]
-                                        for path in row["central_fixture_paths"] if path in row["fixture_sha256"]},
-            "alternative_campaign_candidates": [{**ref, "verification": "UNVERIFIED_LEXICAL_CANDIDATE"}
-                                                 for ref in row["alternative_test_refs"]],
-            "owner": row["task_owner"],
-            "follow_up_state": follow_up_state, "follow_up_action": follow_up_action,
-            "case_design_request": case_design_request,
-        })
+        request = {"status": "CASE_DESIGN_REQUIRED", "owner": row["task_owner"],
+                   "workflow_source": row["source_path"], "workflow_source_sha256": row["source_sha256"],
+                   "case_file": f"{Path(row['source_path']).parent.as_posix()}/tests/cases.yaml",
+                   "max_case_ids": 3, "case_ids": [],
+                   "required_scenarios": ["PRIMARY_PATH", "HIGHEST_RISK_NEGATIVE_OR_MISSING_EVIDENCE"],
+                   "execution_state": "NOT_RUN", "defined_cases_are_not_executed": True}
+        workflow_reconciliation.append({"workflow_id": row["stable_id"],
+            "workflow_source": row["source_path"], "workflow_source_sha256": row["source_sha256"],
+            "local_cases_yaml": "MISSING", "central_fixture_case_ids": row["central_fixture_case_ids"],
+            "owner": row["task_owner"], "follow_up_state": "CASE_DESIGN_REQUIRED",
+            "follow_up_action": "ADD_VERSIONED_WORKFLOW_CASES", "case_design_request": request,
+            "execution_state": "NOT_RUN", "runtime_pass": False})
     return {
         "schema_version": "2.0", "kind": "skill_workflow_consumer_test_crosswalk",
         "status": "BLOCKED_SOURCE" if errors else "SOURCE_INVENTORY_REVIEW_REQUIRED",
@@ -579,6 +632,7 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
         "crosswalk_sha256": hashlib.sha256(rows_projection).hexdigest(),
         "catalog_drift": catalog_state,
         "workflow_fixture_reconciliation": sorted(workflow_reconciliation, key=lambda item: item["workflow_id"]),
+        "workflow_reconciliation_campaign": reconciliation_campaign,
         "skill_count": len([c for c in components if c["kind"] == "skill"]),
         "registered_workflow_count": len([c for c in components if c["kind"] == "workflow"]),
         "unregistered_source_workflow_count": len(sources_w) - len(w_rows),
@@ -587,8 +641,9 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
         "runtime_execution": "NOT_RUN", "model_behavior_verified": False,
         "independent_evaluation": "NOT_RUN", "release_approved": False,
         "gap_prioritization": {"dimensions": ["risk", "impact", "execution_frequency"],
-                               "frequency_source": "No reliable per-component execution telemetry in the existing public-safe evidence projection.",
-                               "policy": "Do not rank a numeric risk×impact×frequency score while any factor is UNKNOWN; prioritize only after frequency evidence is supplied.",
+                               "frequency_source": "Overall frequency remains unavailable; historical_receipt_count_lower_bound counts only valid public-safe indexed receipt records and is not a usage denominator.",
+                               "policy": "Do not rank a numeric risk×impact×frequency score while execution_frequency is UNKNOWN.",
+                               "historical_receipt_count_field": "historical_receipt_count_lower_bound",
                                "residual_blocker": "EXECUTION_FREQUENCY_TELEMETRY_UNAVAILABLE"},
         "note": "Generated source crosswalk. Defined cases are not executed tests; recorded receipts do not prove compatible runtime without verified environment, fixture and channel identity. No overall coverage percentage is computed.",
     }

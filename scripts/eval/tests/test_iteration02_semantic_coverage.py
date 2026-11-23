@@ -204,17 +204,44 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertEqual(["current:skills/current/SKILL.md"], result["inventories"]["skill"]["missing"])
             self.assertEqual(["old:skills/old/SKILL.md"], result["inventories"]["skill"]["extra"])
 
-    def test_cov_03_reconciles_each_workflow_without_local_cases(self):
+    def test_cov_03_reconciles_missing_workflows_with_versioned_cases(self):
         report = self.check()
         rows = report["workflow_fixture_reconciliation"]
         self.assertEqual(9, len(rows))
-        self.assertTrue(all(row["local_cases_yaml"] == "MISSING" for row in rows))
-        self.assertTrue(all(row["follow_up_state"] in {"RECONCILIATION_REQUIRED", "CASE_DESIGN_REQUIRED"}
+        self.assertEqual([], report["errors"])
+        self.assertEqual({"commerce-opportunity-review", "commerce-product-deep-dive",
+                          "investment-portfolio-review", "investment-theme-discovery",
+                          "oaf-enterprise-architecture-review", "oaf-enterprise-change-review",
+                          "oaf-governance-redesign", "oaf-operating-model-redesign",
+                          "oaf-transformation-design"}, {row["workflow_id"] for row in rows})
+        self.assertTrue(all(row["local_cases_yaml"] == "PRESENT" for row in rows))
+        self.assertTrue(all(row["follow_up_state"] == "RECONCILED_CASE_DESIGNED" for row in rows))
+        self.assertTrue(all(row["new_design_case_ids"] for row in rows))
+        self.assertTrue(all(row["owner"] != "UNKNOWN" and len(row["workflow_source_sha256"]) == 64
                             for row in rows))
-        self.assertTrue(all(row["follow_up_action"] for row in rows))
-        self.assertTrue(all(item.get("verification") == "UNVERIFIED_LEXICAL_CANDIDATE"
-                            for row in rows for item in row["alternative_campaign_candidates"]))
-        self.assertTrue(all(row["case_design_request"] is None for row in rows))
+        self.assertTrue(all(row["execution_state"] == "NOT_RUN" for row in rows))
+        self.assertTrue(all(row["runtime_pass"] is False for row in rows))
+
+    def test_cov_03_reconciliation_campaign_binds_exact_source_case_input_and_rubric(self):
+        report = self.check()
+        campaign = report["workflow_reconciliation_campaign"]
+        self.assertEqual("TEST_DESIGN", campaign["kind"])
+        self.assertEqual("NOT_RUN", campaign["runtime_execution"])
+        self.assertEqual(9, len(campaign["cases"]))
+        self.assertEqual("NOT_RUN", report["independent_evaluation"])
+        for case in campaign["cases"]:
+            self.assertEqual("NOT_RUN", case["execution_state"])
+            self.assertFalse(case["runtime_pass"])
+            for digest_key in ("workflow_source_sha256", "case_file_sha256", "input_sha256", "rubric_sha256"):
+                self.assertRegex(case[digest_key], r"^[0-9a-f]{64}$")
+
+    def test_cov_06_frequency_exposes_historical_receipt_lower_bound_without_ranking(self):
+        report = self.check()
+        components = report["components"]
+        self.assertTrue(all(isinstance(row["historical_receipt_count_lower_bound"], int)
+                            and row["historical_receipt_count_lower_bound"] >= 0 for row in components))
+        self.assertTrue(all(row["execution_frequency"] == "UNKNOWN" and
+                            row["priority"] == "UNRANKED_FREQUENCY_UNKNOWN" for row in components))
 
     def test_cov_03_component_task_owner_uses_existing_metadata(self):
         report = self.check()
