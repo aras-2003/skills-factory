@@ -1,98 +1,69 @@
-# `load_skill` source-pin decision example
-
-> This is a worked architecture example for issue #766, not an approved API
-> change. It evaluates a backward-compatible option against a breaking option
-> using the current repository contract.
-
-## Decision identity
+# `load_skill` source-pin decision
 
 - Issue: [#766 — Software architecture decision and contract-review capability for A2–A4](https://github.com/aras-2003/skills-factory/issues/766)
-- Numbered criteria: AC-02, AC-03, ARCH-02, ARCH-03, ARCH-05, ARCH-07
-- Architecture Impact: A2 (proposed for a shared public tool contract; project field not independently verified)
-- Status: `REVIEW_REQUIRED`
-- Baseline source SHA: `e0f613cbaf80cf4a278e713794662250dab2b8bc`
-- Candidate SHA: `NOT_CREATED` — this record does not authorize implementation or release.
-- Decision owner / independent reviewer: owner / `NOT_REVIEWED`
+- Criteria: AC-02, AC-03, ARCH-02, ARCH-03, ARCH-05, ARCH-07
+- Architecture Impact: A2 proposed for the shared tool contract; native project field not independently verified.
+- Decision: owner approved the optional source pin and the invalid and mismatch errors. The fail-closed unverifiable error is an engineering assumption, not an additional owner-approved case.
+- Baseline source SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
+- Candidate SHA: pending commit. This is source-only work; no publication, live runtime acceptance, or independent exact-SHA review is claimed here.
 
-## Context and source-backed consumers
+## Context and decision
 
-The canonical tool contract declares `load_skill` with one required input,
-`skill_name`, in `runtime/contracts/mcp-tools-v1.json#L6-L8`. The Python MCP
-server delegates that value to `runtime/mcp/skill_catalog.py`, which validates
-the name and reads instructions from the packaged Lab catalog
-(`runtime/mcp/server.py#L297-L303`, `runtime/mcp/skill_catalog.py#L237-L272`).
-The Cloud Next adapter has a separate strict Zod tool schema and loader
-(`adapters/skills-factory-cloud-next/src/cloud-tools.ts#L25-L29`,
-`#L182-L186`). These are two source-confirmed runtime consumers of the same
-logical interface. The Cloud Next tool declaration also exposes the current
-MCP input schema (`cloud-tools.ts#L128-L130`).
+`runtime/contracts/mcp-tools-v1.json` keeps `skill_name` as the only required
+input. Python MCP and Cloud Next expose the same optional
+`expected_source_revision`: a lowercase 40-character hexadecimal Git commit
+ID. An omitted value preserves existing calls. A supplied value is a
+comparison only and cannot select a Git ref, path, URL, or package. Unknown
+fields are rejected. Both adapters return these stable errors before returning
+instructions:
 
-Both loaders return the packaged canonical `source_revision`. Neither accepts
-an expected revision from a caller, so a caller can check the result after
-loading but cannot ask the tool to reject a stale package before returning the
-instructions. The Lab provenance is package data; the provider Site commit is
-a separate revision and must not be substituted for it.
+- `INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.`
+- `SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.`
 
-## Options and recommendation
+If package identity cannot be checked, a supplied pin fails closed with
+`SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.`
+The backends may wrap errors or add receipt metadata differently; the code and
+message are the logical contract. Errors do not disclose input or actual
+revision, paths, or instructions.
 
-**Safe extension:** add an optional `expected_source_revision` string to the
-input. Omission preserves current v1 calls. When supplied, each implementation
-first validates a lowercase 40-character hexadecimal SHA, compares it to the
-packaged canonical source revision, and returns a typed stale-source error on
-mismatch before loading content. The parameter is a comparison value only: it
-must not select a Git ref, filesystem path, URL, or remote package. Existing
-strict-object behavior remains in place for unknown fields.
+Python compares against the adjacent package manifest and verifies that the
+packaged `skills/` payload matches its digest before a matching pinned load.
+This unsigned manifest and digest demonstrate payload consistency, **not
+origin authentication or deployment attestation**. Cloud Next uses the
+embedded Lab release revision, generated from a digest-checked Lab package;
+the Site deployment mirror revision is a separate identity. Neither check
+establishes execution by a host model.
 
-**Breaking alternative:** make `expected_source_revision` required. Existing
-Python MCP clients, Cloud Next callers, and workflow instructions only send
-`skill_name`; they would fail validation until every caller and host schema is
-updated together. A synchronized breaking change would need a new contract
-version or a separately approved migration window. No current evidence
-requires that break.
+Requiring the field was considered and rejected: existing clients send only
+`skill_name`, and making it mandatory would require a coordinated versioned
+migration without evidence of a need for that break.
 
-**Recommendation:** if source pinning is implemented, use the optional
-extension and retain the current omitted-field behavior. Do not implement it
-until the two backends have parity tests and the owner accepts the error shape.
-This is design guidance, not authorization to change the MCP contract.
+## Source-grounded consumer map
 
-## Trust boundary, tests, and recovery
+- Python MCP registers and dispatches `load_skill` in
+  `runtime/mcp/server.py`, then reads the packaged catalog through
+  `runtime/mcp/skill_catalog.py`.
+- Cloud Next handles MCP calls in
+  `adapters/skills-factory-cloud-next/src/mcp-handler.ts`, dispatches through
+  `adapters/skills-factory-cloud-next/src/cloud-tools.ts`, and loads the
+  generated embedded `skill-catalog.ts` (created by
+  `adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py`).
+- These are source-confirmed adapter paths, not a complete external-client
+  inventory. Other consumers and their adoption state remain `UNKNOWN`.
 
-The caller-provided SHA is untrusted input. Strict format validation and exact
-equality against packaged provenance avoid path traversal and remote access.
-The check must use canonical Lab provenance, not Site mirror history. It must
-not expose evaluator fixtures, credentials, or permission data. No new tool
-permission is required.
+## Migration, verification, and rollback
 
-| Case | Expected behavior | Evidence required before acceptance |
-| --- | --- | --- |
-| `ARCH-02-A` | Existing `{skill_name}` call remains valid and returns the same packaged skill. | Python and TypeScript compatibility tests. |
-| `ARCH-02-B` | Matching optional SHA succeeds. | Python and TypeScript exact-source tests. |
-| `ARCH-02-C` | Malformed or stale SHA fails before instruction content is returned. | Negative tests in both backends, with output redaction checked. |
-| `ARCH-02-D` | Unknown fields remain rejected. | MCP schema/strict-object tests. |
-| `ARCH-03` | Any undocumented consumer remains `UNKNOWN`; test selection retains the full affected-channel baseline. | Source-pinned consumer review and `change_gate.py` output. |
-| `ARCH-05` | A changed baseline or material contract diff invalidates this record. | Independent review bound to the new candidate SHA. |
+Existing callers need no migration. Callers that need source pinning may adopt
+the field after both adapters are available and discoverable; they must handle
+the three source errors and must not interpret a successful unpinned call as a
+pin. Python stdio and Cloud Next MCP contract tests cover omitted, matching,
+malformed, stale, and unknown inputs; the Python test also corrupts the
+package digest. These are source-level checks, not live deployment evidence.
+Undocumented consumers remain unknown; independent review and affected-channel
+gates must be bound to the final candidate SHA.
 
-There is no persisted state migration. The contract rollback boundary is:
-
-## Rollback boundary
-
-- Before any caller sends `expected_source_revision`, rollback may remove the
-  optional field from both backend schemas and restore the existing one-field
-  contract.
-- After adoption, callers must stop sending the field and that absence must be
-  verified before both backends revert to the one-field schema. If caller
-  behavior cannot be verified, retain the compatible contract and fix forward.
-- The server must never silently ignore a supplied revision: doing so would
-  make a caller believe its source pin was checked when it was not.
-- The exact error shape for invalid or stale revisions remains owner-gated;
-  this decision does not approve that API behavior.
-
-If the error shape or provenance source cannot be made identical across both
-backends, stop before merge and keep the current contract.
-
-## Review state
-
-This example is pinned to the source used for analysis, but has no candidate
-implementation or independent approval. `ARCH-02` remains `NOT_RUN` and the
-decision remains `REVIEW_REQUIRED` until a real candidate, paired backend
-tests, and independent exact-SHA review exist.
+There is no persisted-state migration. Before callers adopt the field, both
+backends can revert to the one-field contract. After adoption, verify callers
+have stopped sending it before reverting both schemas; if adoption cannot be
+established, retain the contract and fix forward. Never silently ignore a
+supplied pin. Rollback or publication does not follow from this decision alone.

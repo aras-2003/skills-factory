@@ -11,11 +11,11 @@ AGENT_DIR = ROOT / ".codex" / "agents"
 EXPECTED = {
     "sf-architect": ("gpt-6.2-sol", "high"),
     "sf-developer-medium": ("gpt-6-luna", "medium"),
-    "sf-developer-high": ("gpt-6-luna", "high"),
-    "sf-test-designer": ("gpt-6-luna", "medium"),
+    "sf-developer-high": ("gpt-6.1-terra", "high"),
+    "sf-test-designer": ("gpt-6.1-terra", "medium"),
     "sf-test-executor": ("gpt-6-luna", "low"),
-    "sf-independent-reviewer": ("gpt-6-luna", "high"),
-    "sf-skill-evaluator": ("gpt-6-luna", "high"),
+    "sf-independent-reviewer": ("gpt-6.1-terra", "high"),
+    "sf-skill-evaluator": ("gpt-6.1-terra", "medium"),
     "sf-researcher-low": ("gpt-6-luna", "low"),
     "sf-researcher-medium": ("gpt-6-luna", "medium"),
     "sf-release-evidence": ("gpt-6-luna", "low"),
@@ -80,6 +80,23 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertIn("sf-developer-high", runbook)
         self.assertNotIn("sf-test-engineer", instructions)
         self.assertNotIn("sf-test-engineer", runbook)
+
+    def test_role_catalog_records_requested_model_routing_and_primary_limit(self):
+        runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
+        self.assertIn("Coordinator / primary chat | Luna High (selected in host; not set by project TOML)", runbook)
+        for assignment in (
+            "`sf-architect` | Sol High",
+            "`sf-developer-high` | Terra High",
+            "`sf-test-designer` | Terra Medium",
+            "`sf-independent-reviewer` | Terra High",
+            "`sf-skill-evaluator` | Terra Medium",
+            "`sf-test-executor` | Luna Low",
+            "`sf-researcher-low` | Luna Low",
+            "`sf-researcher-medium` | Luna Medium",
+            "`sf-release-evidence` | Luna Low",
+        ):
+            with self.subTest(assignment=assignment):
+                self.assertIn(assignment, runbook)
 
     def test_smoke_protocol_keeps_missing_delegation_blocked(self):
         runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")

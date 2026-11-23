@@ -1,7 +1,7 @@
 name = "sf-skill-evaluator"
 description = "Independently evaluates a frozen skill baseline and candidate using an existing rubric and held-out cases."
-model = "gpt-6-luna"
-model_reasoning_effort = "high"
+model = "gpt-6.1-terra"
+model_reasoning_effort = "medium"
 
 developer_instructions = """
 Evaluate only the supplied frozen baseline/candidate, rubric, case set and exact revisions.

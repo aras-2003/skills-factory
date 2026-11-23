@@ -25,7 +25,7 @@ const issuerPositionSchema = z.object({ position_id: z.string().min(1).max(120),
 export const schemas = {
   runtime_info: z.object({}).strict(),
   list_skills: z.object({}).strict(),
-  load_skill: z.object({ skill_name: z.string().trim().min(1).max(160) }).strict(),
+  load_skill: z.object({ skill_name: z.string().trim().min(1).max(160), expected_source_revision: z.unknown().optional() }).strict(),
   route_investment_request: z.object({ user_request: z.string().trim().min(1).max(8000) }).strict(),
   calculate_opportunity_scores: opportunityScoreInputSchema,
   compare_peer_comparability: peerComparabilityInputSchema,
@@ -126,7 +126,7 @@ const issuerExposureToolInputSchema = {
 export const TOOLS = [
   { name: "runtime_info", description: "Return this Site Worker's deployment attestation and the embedded Skills Factory Lab release. Missing platform identity is reported as unattested. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
   { name: "list_skills", description: "MANDATORY discovery step for this app: before answering any substantive user request, call list_skills. Select the closest matching capability and call load_skill for its exact packaged instructions before answering. Never answer a substantive request before these calls. If no capability fits, say so and answer only within the available scope. Lists every skill and workflow in the source-bound Lab artifact irrespective of maturity, including kind, version, maturity and content digests. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
-  { name: "load_skill", description: "Load the exact packaged SKILL.md instructions and allow-listed supporting references for one Lab skill or workflow by name, irrespective of maturity. Eval fixtures are excluded. The host model executes the loaded instructions; this MCP does not claim to perform model reasoning itself.", inputSchema: { type: "object", properties: { skill_name: { type: "string", minLength: 1, maxLength: 160 } }, required: ["skill_name"], additionalProperties: false }, annotations },
+  { name: "load_skill", description: "Load the exact packaged SKILL.md instructions and allow-listed supporting references for one Lab skill or workflow by name, irrespective of maturity. Eval fixtures are excluded. The host model executes the loaded instructions; this MCP does not claim to perform model reasoning itself.", inputSchema: { type: "object", properties: { skill_name: { type: "string", minLength: 1, maxLength: 160 }, expected_source_revision: { type: "string", minLength: 40, maxLength: 40, pattern: "^[0-9a-f]{40}$" } }, required: ["skill_name"], additionalProperties: false }, annotations },
   { name: "route_investment_request", description: "Call before substantive investment analysis to route a Polish or English request through Investment OS. Preserve the returned routing_receipt, then call load_skill for the exact child_workflow and execute its instructions. Routing alone does not execute a workflow, read portfolio data, trade or provide recommendations. Ambiguous requests return clarification_required: load the front door, then ask the clarification question before analysis; do not silently substitute another specialist.", inputSchema: { type: "object", properties: { user_request: { type: "string", minLength: 1, maxLength: 8000 } }, required: ["user_request"], additionalProperties: false }, annotations },
   { name: "calculate_opportunity_scores", description: "Deterministically score supplied candidates from dated, source-identified, already-normalized factor evidence using opportunity-score-v0.1-provisional. Evidence gates fail closed; weights are never renormalized. Returns provenance, confidence, completeness, comparability-aware ranks and score gaps. No source verification, research, probability, trade recommendation, retrieval or persistence. Use only after opportunity-hunter independently derives the supplied evidence.", inputSchema: opportunityScoreToolInputSchema, annotations },
   { name: "compare_peer_comparability", description: "Validate a caller-supplied dated peer set for issuer valuation review. Checks direct-fit evidence, source dates, metric definition/period/basis/horizon/currency compatibility, emits a structured target-and-peer table with provenance and N/M reasons, and reports core-metric peer counts. Requires 3 direct peers for a COMPARABLE status; adjacent businesses stay separately labeled. No retrieval, source verification, recommendations, rankings, or persistence.", inputSchema: peerComparabilityToolInputSchema, annotations },
@@ -179,7 +179,12 @@ export async function runtimeInfo(metadata?: SiteVersionMetadata) {
 export function listSkills() {
   return { evidence_boundary: { scope: "Packaged capabilities only; not historical backlog or GitHub Project membership/acceptance.", reconciliation: "For a source/backlog count mismatch, request the exact source revision and both ID sets. Report only verified set differences; counts alone cannot identify the missing ID. Keep source mapping, live Project fields/dependencies and runtime acceptance separate.", unverified_revision: "If a required source revision is unavailable, mark that comparison BLOCKED_SOURCE_REVISION and ask for it; never guess the authoritative version." }, ...RUNTIME_RELEASE, lab_release: LAB_RELEASE, draft_extension: DRAFT_RELEASE, skills: SKILL_CATALOG.map((skill) => { const { instructions, reference_files, ...metadata } = skill; void instructions; void reference_files; return metadata; }) };
 }
-export function loadSkill(skillName: string) {
+export function loadSkill(skillName: string, expectedSourceRevision?: unknown) {
+  if (expectedSourceRevision !== undefined) {
+    if (typeof expectedSourceRevision !== "string" || expectedSourceRevision.length !== 40 || !/^[0-9a-f]{40}$/.test(expectedSourceRevision)) throw new Error("INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.");
+    if (LAB_RELEASE.source_revision.length !== 40 || !/^[0-9a-f]{40}$/.test(LAB_RELEASE.source_revision) || LAB_RELEASE.payload_content_sha256.length !== 64 || !/^[0-9a-f]{64}$/.test(LAB_RELEASE.payload_content_sha256)) throw new Error("SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.");
+    if (expectedSourceRevision !== LAB_RELEASE.source_revision) throw new Error("SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.");
+  }
   if (!safeSkillName.test(skillName)) throw new Error("Invalid skill name");
   const skill = SKILL_CATALOG.find((item) => item.name === skillName);
   if (!skill) throw new Error("Unknown skill");
@@ -318,7 +323,12 @@ export function callTool(name: string, args: unknown, metadata?: SiteVersionMeta
   switch (name) {
     case "runtime_info": schemas.runtime_info.parse(args); return runtimeInfo(metadata);
     case "list_skills": schemas.list_skills.parse(args); return listSkills();
-    case "load_skill": return loadSkill(schemas.load_skill.parse(args).skill_name);
+    case "load_skill": {
+      if (args && typeof args === "object" && !Array.isArray(args) && Object.keys(args).some((key) => key !== "skill_name" && key !== "expected_source_revision")) throw new Error("INVALID_TOOL_ARGUMENTS: Invalid tool arguments.");
+      const parsed = schemas.load_skill.parse(args);
+      if (args && typeof args === "object" && Object.prototype.hasOwnProperty.call(args, "expected_source_revision") && parsed.expected_source_revision === undefined) throw new Error("INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.");
+      return loadSkill(parsed.skill_name, parsed.expected_source_revision);
+    }
     case "route_investment_request": return routeInvestment(schemas.route_investment_request.parse(args).user_request);
     case "calculate_opportunity_scores": return calculateOpportunityScores(schemas.calculate_opportunity_scores.parse(args));
     case "compare_peer_comparability": return comparePeerComparability(schemas.compare_peer_comparability.parse(args));
