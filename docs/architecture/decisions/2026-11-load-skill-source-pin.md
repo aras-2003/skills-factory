@@ -72,11 +72,23 @@ permission is required.
 | `ARCH-03` | Any undocumented consumer remains `UNKNOWN`; test selection retains the full affected-channel baseline. | Source-pinned consumer review and `change_gate.py` output. |
 | `ARCH-05` | A changed baseline or material contract diff invalidates this record. | Independent review bound to the new candidate SHA. |
 
-There is no persisted state migration. Rollback is to remove the optional
-field handling and restore the existing one-field schema; clients that omitted
-the optional value continue to work. If the error shape or provenance source
-cannot be made identical across both backends, stop before merge and keep the
-current contract.
+There is no persisted state migration. The contract rollback boundary is:
+
+## Rollback boundary
+
+- Before any caller sends `expected_source_revision`, rollback may remove the
+  optional field from both backend schemas and restore the existing one-field
+  contract.
+- After adoption, callers must stop sending the field and that absence must be
+  verified before both backends revert to the one-field schema. If caller
+  behavior cannot be verified, retain the compatible contract and fix forward.
+- The server must never silently ignore a supplied revision: doing so would
+  make a caller believe its source pin was checked when it was not.
+- The exact error shape for invalid or stale revisions remains owner-gated;
+  this decision does not approve that API behavior.
+
+If the error shape or provenance source cannot be made identical across both
+backends, stop before merge and keep the current contract.
 
 ## Review state
 

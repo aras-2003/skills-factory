@@ -23,6 +23,16 @@ def source_at(revision: str, path: str) -> str:
 
 
 class ArchitectureSourceExampleTests(unittest.TestCase):
+    def test_rollback_requires_caller_compatibility_before_reverting_v1_schema(self):
+        decision = DECISION.read_text(encoding="utf-8")
+        self.assertIn("## Rollback boundary", decision)
+        self.assertRegex(
+            decision,
+            r"(?is)rollback boundary.*?before any caller sends `expected_source_revision`.*?"
+            r"callers? must stop sending the field.*?server must never silently ignore.*?"
+            r"exact error shape for invalid or stale revisions remains owner-gated",
+        )
+
     def test_arch02_and_arch03_example_matches_two_pinned_backend_contracts(self):
         decision = DECISION.read_text(encoding="utf-8")
         match = BASELINE_RE.search(decision)
