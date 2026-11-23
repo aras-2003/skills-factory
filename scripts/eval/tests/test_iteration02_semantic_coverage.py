@@ -258,12 +258,33 @@ class SemanticCoverageTests(unittest.TestCase):
                  "direct_consumers": [], "transitive_consumers": []},
                 {"stable_id": "workflow:sample-flow", "dependency_edges": [edge],
                  "direct_consumers": [], "transitive_consumers": []},
-            ]}
+            ], "source_revision": "a" * 40, "crosswalk_sha256": "b" * 64}
             query = mod._affected_query(report, "skill:sample-skill")
             self.assertEqual("BLOCKED_UNKNOWN_EDGES", query["status"])
+            self.assertEqual("a" * 40, query["source_revision"])
+            self.assertEqual("b" * 64, query["crosswalk_sha256"])
             self.assertEqual(["workflow:sample-flow"],
                              [item["stable_id"] for item in query["unverified_consumer_candidates"]])
             self.assertEqual([edge], [item["edge"] for item in query["unresolved_edges"]])
+
+    def test_cov_04_plain_text_skill_reference_is_unverified(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            skill = root / "skills" / "position-sizing-review" / "SKILL.md"
+            skill.parent.mkdir(parents=True)
+            skill.write_text("---\nname: position-sizing-review\ndescription: test\n---\n", encoding="utf-8")
+            workflow = root / "workflows" / "sample-flow" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "For sizing, consult position-sizing-review when applicable.\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample-flow\n    workflow: workflows/sample-flow/WORKFLOW.md\n"
+                "    dependencies:\n      required: []\n      optional: []\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edge = graph["workflow:sample-flow"][0]
+            self.assertEqual("position-sizing-review", edge["target_name"])
+            self.assertEqual("UNVERIFIED_SOURCE_REFERENCE", edge["edge_status"])
+            self.assertEqual("workflows/sample-flow/WORKFLOW.md#L1", edge["evidence"])
 
     def test_cov_04_malformed_dependency_buckets_are_preserved_as_unknown(self):
         with tempfile.TemporaryDirectory() as temp:

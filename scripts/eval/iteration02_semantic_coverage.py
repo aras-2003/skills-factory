@@ -222,16 +222,23 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
             source_path = _safe_existing_file(root, node["source"])
             if source_path:
                 source_text = source_path.read_text(encoding="utf-8")
-                for line_number, line in enumerate(source_text.splitlines(), start=1):
-                    for token in re.findall(r"`([^`\n]+)`", line):
-                        candidate = token.strip()
-                        matches = names.get(candidate, [])
-                        if (candidate not in declared_targets and len(matches) == 1
-                                and matches[0].startswith("skill:")):
-                            edges.append({"target": None, "target_name": candidate,
-                                          "dependency": "source_reference_candidate",
-                                          "evidence": f"{node['source']}#L{line_number}",
-                                          "edge_status": "UNVERIFIED_SOURCE_REFERENCE"})
+                candidate_lines: dict[str, int] = {}
+                skill_names = sorted(name for name, matches in names.items()
+                                     if len(matches) == 1 and matches[0].startswith("skill:"))
+                if skill_names:
+                    names_pattern = re.compile(
+                        r"(?<![A-Za-z0-9_-])(" + "|".join(re.escape(name) for name in skill_names)
+                        + r")(?![A-Za-z0-9_-])")
+                    for line_number, line in enumerate(source_text.splitlines(), start=1):
+                        for match in names_pattern.finditer(line):
+                            candidate = match.group(1)
+                            if candidate not in declared_targets:
+                                candidate_lines.setdefault(candidate, line_number)
+                for candidate, line_number in candidate_lines.items():
+                    edges.append({"target": None, "target_name": candidate,
+                                  "dependency": "source_reference_candidate",
+                                  "evidence": f"{node['source']}#L{line_number}",
+                                  "edge_status": "UNVERIFIED_SOURCE_REFERENCE"})
         graph[ident] = sorted(edges, key=lambda e: (e["target"] or "", e["target_name"] or "", e["dependency"]))
     return graph, nodes
 
@@ -255,18 +262,20 @@ def _consumer_maps(graph: dict[str, list[dict]]) -> tuple[dict[str, list[dict]],
 
 
 def _affected_query(report: dict, stable_id: str) -> dict:
+    report_identity = {"source_revision": report.get("source_revision"),
+                       "crosswalk_sha256": report.get("crosswalk_sha256")}
     rows = {row.get("stable_id"): row for row in report.get("components", []) if isinstance(row, dict)}
     source_errors = report.get("errors", [])
     global_unresolved = [{"consumer": row["stable_id"], "edge": edge, "scope": "GLOBAL_GRAPH"}
                          for row in rows.values() for edge in row.get("dependency_edges", [])
                          if edge.get("edge_status") != "RESOLVED"]
     if report.get("status") == "BLOCKED_SOURCE" or source_errors:
-        return {"status": "BLOCKED_SOURCE", "requested_stable_id": stable_id,
+        return {**report_identity, "status": "BLOCKED_SOURCE", "requested_stable_id": stable_id,
                 "source_errors": source_errors, "regression_neighbors": [],
                 "unresolved_edges": global_unresolved, "runtime_execution": "NOT_RUN"}
     changed = rows.get(stable_id)
     if changed is None:
-        return {"status": "BLOCKED_UNKNOWN_COMPONENT", "requested_stable_id": stable_id,
+        return {**report_identity, "status": "BLOCKED_UNKNOWN_COMPONENT", "requested_stable_id": stable_id,
                 "regression_neighbors": [], "unresolved_edges": [], "runtime_execution": "NOT_RUN"}
     direct_ids = {edge.get("consumer") for edge in changed.get("direct_consumers", []) if isinstance(edge, dict)}
     transitive_ids = set(changed.get("transitive_consumers", []))
@@ -287,7 +296,7 @@ def _affected_query(report: dict, stable_id: str) -> dict:
                           "fixture_case_ids": neighbor.get("fixture_case_ids", []),
                           "evidence_gap": neighbor.get("evidence_gap", [])})
     status = "BLOCKED_UNKNOWN_EDGES" if global_unresolved else "QUERY_COMPLETE"
-    return {"status": status, "requested_stable_id": stable_id,
+    return {**report_identity, "status": status, "requested_stable_id": stable_id,
             "changed_node": {"stable_id": stable_id, "source_path": changed.get("source_path"),
                              "source_sha256": changed.get("source_sha256"),
                              "fixture_case_ids": changed.get("fixture_case_ids", []),
