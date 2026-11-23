@@ -36,7 +36,7 @@ Turn competing initiatives into a transparent decision set without creating fals
 4. If evidence is sufficient, define a small set of non-overlapping criteria and agreed weights.
 5. Separate factual inputs from judgment scores.
 6. Normalize scoring scales.
-7. Use deterministic calculation for weighted totals when available.
+7. Calculate weighted totals and sensitivity only through an actually executed deterministic calculator (a host code-execution tool is acceptable when formula, inputs and execution evidence are recorded). If execution is unavailable, return `NOT_CALCULATED` with the agreed criteria, weights, and qualitative constraints; do not generate numeric weighted scores, ranks derived from scores, or sensitivity values using model-only arithmetic.
 8. Surface dependencies, mandatory work and capacity constraints outside the score.
 9. Produce options and sensitivity, not a false single truth.
 

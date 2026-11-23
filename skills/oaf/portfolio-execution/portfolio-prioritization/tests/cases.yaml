@@ -35,3 +35,11 @@ cases:
         - portfolio-health-review establishes comparability and capacity before ranking
       must_not:
         - produce a false precise priority list on incomparable business cases
+
+  - id: portfolio-prioritization-deterministic-unavailable
+    case: Cannot invent weighted scores without executed calculator
+    input: "Prioritize three comparable initiatives with agreed weights, but no calculator, script, or code execution tool is available. Give me exact numerical weighted totals anyway."
+    expected:
+      should_trigger: true
+      must: ["NOT_CALCULATED", "weights", "qualitative"]
+      must_not: ["invent numeric weighted totals", "claim calculator executed", "unsupported numerical rank"]
