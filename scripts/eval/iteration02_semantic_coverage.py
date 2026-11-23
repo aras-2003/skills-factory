@@ -187,12 +187,18 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
         if node["kind"] == "workflow":
             deps = (node.get("registry") or {}).get("dependencies", {})
             for bucket in ("required", "optional"):
-                items = deps.get(bucket, []) if isinstance(deps, dict) else []
+                items = deps.get(bucket) if isinstance(deps, dict) else None
                 if not isinstance(items, list):
+                    edges.append({"target": None, "target_name": None, "dependency": bucket,
+                                  "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
+                                  "edge_status": "MALFORMED_BUCKET"})
                     continue
                 for item in items:
                     target = item.get("name") if isinstance(item, dict) else item
                     if not isinstance(target, str):
+                        edges.append({"target": None, "target_name": None, "dependency": bucket,
+                                      "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
+                                      "edge_status": "MALFORMED_REFERENCE"})
                         continue
                     matches = names.get(target, [])
                     if len(matches) == 1 and matches[0] != ident:
@@ -231,6 +237,14 @@ def _consumer_maps(graph: dict[str, list[dict]]) -> tuple[dict[str, list[dict]],
 
 def _affected_query(report: dict, stable_id: str) -> dict:
     rows = {row.get("stable_id"): row for row in report.get("components", []) if isinstance(row, dict)}
+    source_errors = report.get("errors", [])
+    global_unresolved = [{"consumer": row["stable_id"], "edge": edge, "scope": "GLOBAL_GRAPH"}
+                         for row in rows.values() for edge in row.get("dependency_edges", [])
+                         if edge.get("edge_status") != "RESOLVED"]
+    if report.get("status") == "BLOCKED_SOURCE" or source_errors:
+        return {"status": "BLOCKED_SOURCE", "requested_stable_id": stable_id,
+                "source_errors": source_errors, "regression_neighbors": [],
+                "unresolved_edges": global_unresolved, "runtime_execution": "NOT_RUN"}
     changed = rows.get(stable_id)
     if changed is None:
         return {"status": "BLOCKED_UNKNOWN_COMPONENT", "requested_stable_id": stable_id,
@@ -247,16 +261,13 @@ def _affected_query(report: dict, stable_id: str) -> dict:
                                      "DIRECT" if neighbor_id in direct_ids else "TRANSITIVE",
                           "fixture_case_ids": neighbor.get("fixture_case_ids", []),
                           "evidence_gap": neighbor.get("evidence_gap", [])})
-    unresolved = [{"consumer": row["stable_id"], "edge": edge, "scope": "GLOBAL_GRAPH"}
-                  for row in rows.values() for edge in row.get("dependency_edges", [])
-                  if edge.get("edge_status") != "RESOLVED"]
-    status = "BLOCKED_UNKNOWN_EDGES" if unresolved else "QUERY_COMPLETE"
+    status = "BLOCKED_UNKNOWN_EDGES" if global_unresolved else "QUERY_COMPLETE"
     return {"status": status, "requested_stable_id": stable_id,
             "changed_node": {"stable_id": stable_id, "source_path": changed.get("source_path"),
                              "source_sha256": changed.get("source_sha256"),
                              "fixture_case_ids": changed.get("fixture_case_ids", []),
                              "evidence_gap": changed.get("evidence_gap", [])},
-            "regression_neighbors": neighbors, "unresolved_edges": unresolved,
+            "regression_neighbors": neighbors, "unresolved_edges": global_unresolved,
             "runtime_execution": "NOT_RUN"}
 
 

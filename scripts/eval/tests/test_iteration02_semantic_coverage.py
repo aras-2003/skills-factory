@@ -222,6 +222,21 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertEqual("UNKNOWN_TARGET", edge["edge_status"])
             self.assertTrue(edge["evidence"].startswith("workflows/runtime-registry.yaml#/"))
 
+    def test_cov_04_malformed_dependency_buckets_are_preserved_as_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow = root / "workflows" / "sample" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required: malformed\n      optional: {}\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edges = graph["workflow:sample"]
+            self.assertEqual({"required", "optional"}, {edge["dependency"] for edge in edges})
+            self.assertTrue(all(edge["edge_status"] == "MALFORMED_BUCKET" for edge in edges))
+            self.assertTrue(all(edge["evidence"].startswith("workflows/runtime-registry.yaml#/") for edge in edges))
+
     def test_cov_04_unresolved_edge_marks_workflow_dependency_status_unknown(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -276,6 +291,20 @@ class SemanticCoverageTests(unittest.TestCase):
         result = mod._affected_query(report, "workflow:sample")
         self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
         self.assertEqual("unknown", result["unresolved_edges"][0]["edge"]["target_name"])
+
+    def test_cov_06_affected_query_fails_closed_for_blocked_source_or_errors(self):
+        partial = {"status": "BLOCKED_SOURCE", "errors": ["incomplete inventory"], "components": [
+            {"stable_id": "skill:producer", "direct_consumers": [{"consumer": "workflow:known"}],
+             "transitive_consumers": ["workflow:known"], "dependency_edges": []},
+            {"stable_id": "workflow:known", "fixture_case_ids": ["case-1"], "dependency_edges": []},
+        ]}
+        by_status = mod._affected_query(partial, "skill:producer")
+        self.assertEqual("BLOCKED_SOURCE", by_status["status"])
+        self.assertEqual([], by_status["regression_neighbors"])
+        partial["status"] = "SOURCE_INVENTORY_REVIEW_REQUIRED"
+        by_errors = mod._affected_query(partial, "skill:producer")
+        self.assertEqual("BLOCKED_SOURCE", by_errors["status"])
+        self.assertEqual(["incomplete inventory"], by_errors["source_errors"])
 
     def test_cov_06_affected_query_blocks_global_unknown_edge_naming_changed_component(self):
         report = {"components": [

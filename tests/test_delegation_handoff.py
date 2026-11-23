@@ -110,6 +110,15 @@ class DelegationHandoffTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unknown fields: prompt"):
             handoff.validate_result(result, expected_candidate_sha="b" * 40)
 
+    def test_handoff_08_restricts_architecture_impact_to_native_values(self):
+        payload = valid_input()
+        payload["architecture_impact"] = "banana"
+        with self.assertRaisesRegex(ValueError, "architecture_impact must be A0-A4 or UNKNOWN"):
+            handoff.serialize_input(payload)
+
+        payload["architecture_impact"] = "UNKNOWN"
+        self.assertEqual(handoff.read_input(handoff.serialize_input(payload))["architecture_impact"], "UNKNOWN")
+
 
 if __name__ == "__main__":
     unittest.main()

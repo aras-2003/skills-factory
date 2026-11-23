@@ -32,6 +32,7 @@ FORBIDDEN_FIELDS = {
     "authorization", "credentials", "secret",
 }
 STATUSES = {"PASS", "FAIL", "NOT_RUN", "BLOCKED"}
+ARCHITECTURE_IMPACTS = {"A0", "A1", "A2", "A3", "A4", "UNKNOWN"}
 
 
 def _bounded_json(value: Any) -> bytes:
@@ -94,6 +95,8 @@ def validate_input(payload: Any) -> dict:
         raise ValueError("issue_id must be a positive integer")
     for field in ("role", "objective", "architecture_impact", "tool_profile_ref", "output_contract_version"):
         _text(item[field], field)
+    if item["architecture_impact"] not in ARCHITECTURE_IMPACTS:
+        raise ValueError("architecture_impact must be A0-A4 or UNKNOWN")
     if item["output_contract_version"] != VERSION:
         raise ValueError("unsupported output_contract_version")
     if not isinstance(item["acceptance_criteria"], list) or not item["acceptance_criteria"]:
