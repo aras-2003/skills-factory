@@ -35,6 +35,20 @@ class DeveloperExecutionContractTests(unittest.TestCase):
                 ):
                     self.assertIn(required.lower(), instructions.lower())
 
+    def test_developer_profiles_reference_existing_engineering_scripts(self):
+        expected = (
+            "scripts/engineering/bootstrap.py",
+            "scripts/governance/delivery_control.py",
+            "scripts/engineering/change_gate.py",
+        )
+        for profile in ("sf-developer-medium.toml", "sf-developer-high.toml"):
+            path = ROOT / ".codex" / "agents" / profile
+            instructions = tomllib.loads(path.read_text(encoding="utf-8"))["developer_instructions"]
+            with self.subTest(profile=profile):
+                for script in expected:
+                    self.assertTrue((ROOT / script).is_file(), script)
+                    self.assertIn(script, instructions)
+
 
 if __name__ == "__main__":
     unittest.main()

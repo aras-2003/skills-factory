@@ -27,6 +27,13 @@ with their source paths, public schemas/interfaces, trust boundaries,
 Architecture Impact field as actually recorded, relevant tests, constraints,
 and required approval owners. Missing items are explicitly `UNKNOWN`.
 
+The `change_gate.py` CLI resolves the selected base/source revisions and checks
+that each named consumer exists in the selected source tree. A present file is
+not proof that the relationship is complete. `--graph-reviewed` records a
+caller claim only; absent a machine-verified complete graph, material changes
+retain the full affected-channel baseline. The pure `plan()` helper remains a
+static planner and cannot prove Git provenance by itself.
+
 The decision record contains:
 
 1. Issue, baseline/candidate SHA, impact and decision status.
@@ -65,6 +72,16 @@ documentation and an actual permission-negative test prove its behavior.
 This example is source grounded, but its runtime controls remain unavailable
 on the observed host surface; the decision cannot be interpreted as proof of
 least-privilege enforcement.
+
+## Shared typed-contract example
+
+`docs/architecture/decisions/2026-11-load-skill-source-pin.md` is a worked,
+source-pinned analysis of the Python MCP and Cloud Next `load_skill` consumers.
+It compares an optional expected-source input with a required breaking input,
+defines parity and stale-source cases, and records trust, migration, rollback,
+and review state. It is deliberately `REVIEW_REQUIRED` with no candidate SHA;
+the example demonstrates the review method and does not authorize a contract
+change.
 
 ### Migration and rollback for this example
 

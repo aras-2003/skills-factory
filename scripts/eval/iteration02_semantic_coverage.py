@@ -156,6 +156,11 @@ def _source_metadata(root: Path, source: str, kind: str) -> dict:
     return {"text": text, "metadata": metadata}
 
 
+def _task_owner(metadata: object) -> str:
+    owner = metadata.get("owner") if isinstance(metadata, dict) else None
+    return owner if isinstance(owner, str) and owner.strip() else "UNKNOWN"
+
+
 def _receipt_rows(root: Path) -> list[dict]:
     # Reuse the existing public-safe projection. Never read prompt/trace bodies here.
     sys.path.insert(0, str(root / "scripts/eval"))
@@ -504,7 +509,7 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                 "evidence_gap": sorted(set(signals)),
                 "next_test_action": "RUN_VERSION_BOUND_INDEPENDENT_SEMANTIC_CAMPAIGN",
                 "model_execution": "NOT_RUN", "runtime_behavioral_acceptance": "NOT_VERIFIED",
-                "independent_evaluator": "NOT_RUN", "task_owner": "UNASSIGNED",
+                "independent_evaluator": "NOT_RUN", "task_owner": _task_owner(metadata),
             })
     catalog_state = _catalog_drift(root, s_rows, w_rows)
     if catalog_state["status"] in {"BLOCKED", "DRIFT"}:
@@ -531,12 +536,29 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
         if row["central_fixture_case_ids"]:
             follow_up_action = "REVIEW_CENTRAL_FIXTURES_FOR_WORKFLOW_BEHAVIOR"
             follow_up_state = "RECONCILIATION_REQUIRED"
+            case_design_request = None
         elif row["alternative_test_refs"]:
             follow_up_action = "REVIEW_ALTERNATIVE_CAMPAIGN_REFERENCES"
             follow_up_state = "RECONCILIATION_REQUIRED"
+            case_design_request = None
         else:
             follow_up_action = "ADD_VERSIONED_WORKFLOW_CASES"
             follow_up_state = "CASE_DESIGN_REQUIRED"
+            case_design_request = {
+                "status": "CASE_DESIGN_REQUIRED",
+                "owner": row["task_owner"],
+                "workflow_source": row["source_path"],
+                "workflow_source_sha256": row["source_sha256"],
+                "case_file": f"{Path(row['source_path']).parent.as_posix()}/tests/cases.yaml",
+                "max_case_ids": 3,
+                "case_ids": [],
+                "required_scenarios": [
+                    "PRIMARY_PATH",
+                    "HIGHEST_RISK_NEGATIVE_OR_MISSING_EVIDENCE",
+                ],
+                "execution_state": "NOT_RUN",
+                "defined_cases_are_not_executed": True,
+            }
         workflow_reconciliation.append({
             "workflow_id": row["stable_id"], "workflow_source": row["source_path"],
             "workflow_source_sha256": row["source_sha256"], "local_cases_yaml": "MISSING",
@@ -545,8 +567,9 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                                         for path in row["central_fixture_paths"] if path in row["fixture_sha256"]},
             "alternative_campaign_candidates": [{**ref, "verification": "UNVERIFIED_LEXICAL_CANDIDATE"}
                                                  for ref in row["alternative_test_refs"]],
-            "owner": metadata.get("owner") if isinstance(metadata, dict) and metadata.get("owner") else "UNKNOWN",
+            "owner": row["task_owner"],
             "follow_up_state": follow_up_state, "follow_up_action": follow_up_action,
+            "case_design_request": case_design_request,
         })
     return {
         "schema_version": "2.0", "kind": "skill_workflow_consumer_test_crosswalk",

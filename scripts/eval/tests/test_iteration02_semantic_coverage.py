@@ -214,6 +214,67 @@ class SemanticCoverageTests(unittest.TestCase):
         self.assertTrue(all(row["follow_up_action"] for row in rows))
         self.assertTrue(all(item.get("verification") == "UNVERIFIED_LEXICAL_CANDIDATE"
                             for row in rows for item in row["alternative_campaign_candidates"]))
+        self.assertTrue(all(row["case_design_request"] is None for row in rows))
+
+    def test_cov_03_component_task_owner_uses_existing_metadata(self):
+        report = self.check()
+        by_id = {row["stable_id"]: row for row in report["components"]}
+        registry = mod._read_yaml(ROOT / "workflows/runtime-registry.yaml")
+        workflow_metadata = {row["name"]: row.get("metadata", {})
+                             for row in registry.get("workflows", []) if isinstance(row, dict)}
+
+        for row in report["components"]:
+            if row["kind"] == "skill":
+                metadata = mod._source_metadata(ROOT, row["source_path"], "skill")["metadata"]
+            else:
+                metadata = workflow_metadata.get(row["name"], {})
+            owner = metadata.get("owner") if isinstance(metadata, dict) else None
+            expected = owner if isinstance(owner, str) and owner.strip() else "UNKNOWN"
+            with self.subTest(stable_id=row["stable_id"]):
+                self.assertEqual(expected, by_id[row["stable_id"]]["task_owner"])
+
+    def test_cov_03_missing_workflow_cases_get_bounded_owner_pinned_request(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = "workflows/sample-flow/WORKFLOW.md"
+            workflow = root / source
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "skills").mkdir()
+            (root / "workflows/runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample-flow\n    workflow: workflows/sample-flow/WORKFLOW.md\n"
+                "    metadata:\n      owner: team-workflows\n"
+                "    dependencies:\n      required: []\n      optional: []\n", encoding="utf-8")
+            (root / "docs").mkdir()
+            (root / "docs/catalog.json").write_text(json.dumps({"skills": [], "workflows": [
+                {"name": "sample-flow", "source": source}]}), encoding="utf-8")
+            (root / "evals").mkdir()
+            (root / "evals/runtime-fixtures.yaml").write_text("targets: {}\n", encoding="utf-8")
+
+            with patch.object(mod, "_receipt_rows", return_value=[]):
+                report = mod.assess({"total_skills": 0, "skills": []}, {
+                    "total": 1, "workflows": [{"name": "sample-flow", "source": source,
+                        "status": "REVIEW_REQUIRED", "local_test_suite_present": False,
+                        "central_eval_case_count": 0}]}, root)
+
+        row = report["workflow_fixture_reconciliation"][0]
+        request = row["case_design_request"]
+        self.assertEqual("team-workflows", row["owner"])
+        self.assertEqual("team-workflows", request["owner"])
+        self.assertEqual(source, request["workflow_source"])
+        self.assertEqual(row["workflow_source_sha256"], request["workflow_source_sha256"])
+        self.assertEqual("workflows/sample-flow/tests/cases.yaml", request["case_file"])
+        self.assertEqual(3, request["max_case_ids"])
+        self.assertEqual([], request["case_ids"])
+        self.assertEqual(["PRIMARY_PATH", "HIGHEST_RISK_NEGATIVE_OR_MISSING_EVIDENCE"],
+                         request["required_scenarios"])
+        self.assertEqual("NOT_RUN", request["execution_state"])
+        self.assertTrue(request["defined_cases_are_not_executed"])
+
+    def test_cov_03_missing_or_non_text_owner_is_unknown(self):
+        self.assertEqual("UNKNOWN", mod._task_owner({}))
+        self.assertEqual("UNKNOWN", mod._task_owner({"owner": "  "}))
+        self.assertEqual("UNKNOWN", mod._task_owner({"owner": 42}))
 
     def test_cov_04_unresolved_dependency_edge_is_source_anchored(self):
         with tempfile.TemporaryDirectory() as temp:
