@@ -250,6 +250,24 @@ class SemanticCoverageTests(unittest.TestCase):
         self.assertIn("states portfolio implications", architecture_text)
         self.assertIn("names a specific next gate", architecture_text)
 
+    def test_cov_03_reconciliation_campaign_rejects_malformed_design_base_pin(self):
+        original_read_yaml = mod._read_yaml
+        campaign_path = ROOT / "evals/campaigns/workflow-case-reconciliation-2026-11/campaign.yaml"
+
+        def malformed_pin(path):
+            data = original_read_yaml(path)
+            if Path(path) == campaign_path:
+                data["design_base_sha"] = "not-a-commit"
+            return data
+
+        with patch.object(mod, "_read_yaml", side_effect=malformed_pin):
+            report = self.check()
+        self.assertEqual("BLOCKED_SOURCE", report["status"])
+        self.assertIn(
+            "workflow reconciliation campaign must pin a full lowercase 40-character design_base_sha",
+            report["errors"],
+        )
+
     def test_cov_06_frequency_exposes_historical_receipt_lower_bound_without_ranking(self):
         report = self.check()
         components = report["components"]

@@ -178,6 +178,8 @@ def _workflow_reconciliation_design(root: Path, components: list[dict], nodes: d
     errors: list[str] = []
     if campaign.get("kind") != "TEST_DESIGN" or campaign.get("runtime_execution") != "NOT_RUN":
         errors.append("workflow reconciliation campaign must remain TEST_DESIGN / NOT_RUN")
+    if not isinstance(campaign.get("design_base_sha"), str) or not HEX40.fullmatch(campaign["design_base_sha"]):
+        errors.append("workflow reconciliation campaign must pin a full lowercase 40-character design_base_sha")
     by_id = {row["stable_id"]: row for row in components if row["kind"] == "workflow"}
     reconciliation = []
     cases = campaign.get("cases", [])
