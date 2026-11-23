@@ -99,6 +99,114 @@ class HistoricalSupportTests(unittest.TestCase):
 
 
 class IndexTests(unittest.TestCase):
+    def _receipt_root(self, payload):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        directory = root / "evals/results"
+        directory.mkdir(parents=True)
+        if payload is not None:
+            (directory / "receipt.json").write_text(json.dumps(payload))
+        return root
+
+    def _receipt_payload(self, **overrides):
+        data = {
+            "case": {"id": "synthetic"},
+            "component": {"name": "demo", "version": "1", "content_sha256": "same"},
+            "evaluation": {"status": "NOT_RUN", "timestamp_utc": "2026-11-20T12:00:00Z"},
+            "source_revision": "a" * 40,
+            "evidence_scope": "historical",
+            "prompt": "PRIVATE_PROMPT_SENTINEL",
+            "output": "PRIVATE_OUTPUT_SENTINEL",
+            "tool_trace": "PRIVATE_TRACE_SENTINEL",
+        }
+        data.update(overrides)
+        return data
+
+    def test_cov_10_age_anchor_is_exact_candidate_commit_time(self):
+        import subprocess
+        raw = subprocess.check_output(
+            ["git", "show", "-s", "--format=%cI", "HEAD"], cwd=ROOT, text=True
+        ).strip()
+        expected = evidence_index._parse_timestamp(raw)
+        self.assertIsNotNone(expected)
+        self.assertEqual(
+            (evidence_index._utc_text(expected), "git_commit_committer_timestamp"),
+            evidence_index._candidate_commit_time(ROOT),
+        )
+
+    def test_cov_10_safe_projection_and_candidate_commit_age(self):
+        root = self._receipt_root(self._receipt_payload())
+        with patch.object(evidence_index, "_candidate_commit_time",
+                          return_value=("2026-11-23T12:00:00Z", "git_commit_committer_timestamp")), \
+             patch.object(evidence_index, "_candidate_source_revision", return_value="a" * 40), \
+             patch.object(evidence_index.receipt, "validate_receipt_data", return_value=[]), \
+             patch.object(evidence_index.receipt, "current_component_identity", return_value=("1", "same")):
+            report = evidence_index.build_index(root)
+        serialized = json.dumps(report)
+        for secret in ("PRIVATE_PROMPT_SENTINEL", "PRIVATE_OUTPUT_SENTINEL", "PRIVATE_TRACE_SENTINEL"):
+            self.assertNotIn(secret, serialized)
+        row = report["receipts"][0]
+        self.assertEqual("2026-11-20T12:00:00Z", row["evaluation_timestamp_utc"])
+        self.assertEqual("a" * 40, row["source_revision"])
+        self.assertEqual("historical", row["evidence_scope"])
+        self.assertEqual(3.0, row["age_days"])
+        self.assertEqual("KNOWN", row["age_state"])
+        self.assertEqual("2026-11-23T12:00:00Z", row["age_as_of_utc"])
+        self.assertEqual("git_commit_committer_timestamp", row["age_basis"])
+        self.assertEqual("NOT_RUN", row["recorded_status"])
+        self.assertFalse(report["runtime_pass_claim"])
+
+    def test_cov_11_unknown_timestamp_and_no_receipt_stay_explicit(self):
+        for timestamp, expected_state in ((None, "MISSING_TIMESTAMP"),
+                                          ("not-a-time", "MALFORMED_TIMESTAMP"),
+                                          ("2026-11-20T12:00:00", "MALFORMED_TIMESTAMP"),
+                                          ("2026-11-24T12:00:00Z", "FUTURE_TIMESTAMP")):
+            with self.subTest(timestamp=timestamp):
+                evaluation = {"status": "NOT_RUN"}
+                if timestamp is not None:
+                    evaluation["timestamp_utc"] = timestamp
+                root = self._receipt_root(self._receipt_payload(evaluation=evaluation))
+                with patch.object(evidence_index, "_candidate_commit_time",
+                                  return_value=("2026-11-23T12:00:00Z", "git_commit_committer_timestamp")), \
+                     patch.object(evidence_index, "_candidate_source_revision", return_value="a" * 40), \
+                     patch.object(evidence_index.receipt, "validate_receipt_data", return_value=[]), \
+                     patch.object(evidence_index.receipt, "current_component_identity", return_value=("1", "same")):
+                    row = evidence_index.build_index(root)["receipts"][0]
+                self.assertIsNone(row["age_days"])
+                self.assertEqual(expected_state, row["age_state"])
+
+        root = self._receipt_root(self._receipt_payload())
+        with patch.object(evidence_index, "_candidate_commit_time",
+                          return_value=(None, "CANDIDATE_COMMIT_TIME_UNAVAILABLE")), \
+             patch.object(evidence_index, "_candidate_source_revision", return_value=None), \
+             patch.object(evidence_index.receipt, "validate_receipt_data", return_value=[]), \
+             patch.object(evidence_index.receipt, "current_component_identity", return_value=("1", "same")):
+            row = evidence_index.build_index(root)["receipts"][0]
+        self.assertIsNone(row["age_days"])
+        self.assertEqual("AS_OF_UNAVAILABLE", row["age_state"])
+
+        unreadable_root = self._receipt_root(None)
+        (unreadable_root / "evals/results/receipt.json").write_text("not json")
+        unreadable = evidence_index.build_index(unreadable_root)["receipts"][0]
+        self.assertIsNone(unreadable["age_days"])
+        self.assertEqual("RECEIPT_UNREADABLE", unreadable["age_state"])
+
+        empty_root = self._receipt_root(None)
+        self.assertEqual([], evidence_index.build_index(empty_root)["receipts"])
+
+    def test_cov_12_source_and_identity_mismatch_remain_visible(self):
+        root = self._receipt_root(self._receipt_payload())
+        with patch.object(evidence_index, "_candidate_commit_time",
+                          return_value=("2026-11-23T12:00:00Z", "git_commit_committer_timestamp")), \
+             patch.object(evidence_index, "_candidate_source_revision", return_value="b" * 40), \
+             patch.object(evidence_index.receipt, "validate_receipt_data", return_value=["source mismatch"]), \
+             patch.object(evidence_index.receipt, "current_component_identity", return_value=("2", "new")):
+            row = evidence_index.build_index(root)["receipts"][0]
+        self.assertEqual("MISMATCH", row["source_revision_state"])
+        self.assertFalse(row["component_identity_matches"])
+        self.assertEqual("FAIL", row["receipt_validation"])
+
     def test_public_projection_never_copies_raw_prompt_or_promotes_old_pass(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td); directory = root / "evals/results"; directory.mkdir(parents=True)

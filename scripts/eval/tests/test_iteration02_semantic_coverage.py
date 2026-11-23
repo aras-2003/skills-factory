@@ -204,6 +204,52 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertEqual(["current:skills/current/SKILL.md"], result["inventories"]["skill"]["missing"])
             self.assertEqual(["old:skills/old/SKILL.md"], result["inventories"]["skill"]["extra"])
 
+    def test_cov_10_crosswalk_carries_safe_receipt_age_without_promotion(self):
+        name = self.skills["skills"][0]["name"]
+        receipt = {"component": name, "case_id": "case-1", "receipt_path": "evals/results/x.json",
+                   "receipt_sha256": "a" * 64, "receipt_validation": "PASS",
+                   "recorded_status": "NOT_RUN", "component_identity_matches": True,
+                   "compatibility": "NOT_VERIFIED", "evaluation_timestamp_utc": "2026-11-20T12:00:00Z",
+                   "age_days": 3.0, "age_state": "KNOWN", "age_as_of_utc": "2026-11-23T12:00:00Z",
+                   "age_basis": "git_commit_committer_timestamp", "source_revision": "a" * 40,
+                   "source_revision_state": "MISMATCH", "evidence_scope": "historical"}
+        with patch.object(mod, "_receipt_rows", return_value=[receipt]):
+            report = self.check()
+        row = next(item for item in report["components"] if item["name"] == name)
+        indexed = row["evaluation_receipts"][0]
+        self.assertEqual(3.0, indexed["age_days"])
+        self.assertEqual("MISMATCH", indexed["source_revision_state"])
+        self.assertEqual("historical", indexed["evidence_scope"])
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+        self.assertEqual("NOT_RUN", row["behavior_status"])
+        self.assertEqual("NOT_RUN", row["integration_status"])
+        self.assertEqual("NOT_VERIFIABLE_FROM_PUBLIC_INDEX", row["evidence_freshness"])
+
+    def test_cov_11_missing_receipt_keeps_unknown_evidence_and_not_run_states(self):
+        with patch.object(mod, "_receipt_rows", return_value=[]):
+            report = self.check()
+        row = report["components"][0]
+        self.assertEqual([], row["evaluation_receipts"])
+        self.assertEqual("NO_RECEIPT", row["evidence_freshness"])
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+        self.assertEqual("NOT_RUN", row["behavior_status"])
+        self.assertEqual("NOT_RUN", row["integration_status"])
+
+    def test_cov_12_identity_mismatch_does_not_become_current_evidence(self):
+        name = self.skills["skills"][0]["name"]
+        receipt = {"component": name, "case_id": "case-1", "receipt_path": "evals/results/x.json",
+                   "receipt_sha256": "b" * 64, "receipt_validation": "PASS",
+                   "recorded_status": "PASS", "component_identity_matches": False,
+                   "compatibility": "NOT_VERIFIED", "age_days": None,
+                   "age_state": "AS_OF_UNAVAILABLE", "age_as_of_utc": None,
+                   "age_basis": "CANDIDATE_COMMIT_TIME_UNAVAILABLE", "source_revision_state": "MISMATCH"}
+        with patch.object(mod, "_receipt_rows", return_value=[receipt]):
+            report = self.check()
+        row = next(item for item in report["components"] if item["name"] == name)
+        self.assertEqual("STALE_COMPONENT_IDENTITY", row["evidence_freshness"])
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+        self.assertIsNone(row["evaluation_receipts"][0]["age_days"])
+
     def test_cov_03_reconciles_missing_workflows_with_versioned_cases(self):
         report = self.check()
         rows = report["workflow_fixture_reconciliation"]

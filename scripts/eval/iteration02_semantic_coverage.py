@@ -584,7 +584,12 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                 "alternative_test_refs": campaign_refs.get(name, []),
                 "deterministic_owner_ref": sorted(set(REF.findall(source_info["text"]))),
                 "declared_channels": declared_channels, "verified_runtime_channels": [],
-                "evaluation_receipts": [{k: x.get(k) for k in ("receipt_path", "receipt_sha256", "case_id", "recorded_status", "receipt_validation", "component_identity_matches", "compatibility")} for x in evidence],
+                "evaluation_receipts": [{k: x.get(k) for k in (
+                    "receipt_path", "receipt_sha256", "case_id", "recorded_status",
+                    "evaluation_timestamp_utc", "age_days", "age_state", "age_as_of_utc", "age_basis",
+                    "source_revision", "source_revision_state", "evidence_scope",
+                    "receipt_validation", "component_identity_matches", "compatibility",
+                )} for x in evidence],
                 "evidence_freshness": ("INVALID_RECEIPT_PRESENT" if any(x.get("receipt_validation") == "FAIL" for x in evidence) else
                                         "NOT_VERIFIABLE_FROM_PUBLIC_INDEX" if compatible_receipts else
                                         "STALE_COMPONENT_IDENTITY" if evidence else "NO_RECEIPT"),
