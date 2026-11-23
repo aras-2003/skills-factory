@@ -80,3 +80,19 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertIn("sf-developer-high", runbook)
         self.assertNotIn("sf-test-engineer", instructions)
         self.assertNotIn("sf-test-engineer", runbook)
+
+    def test_smoke_protocol_keeps_missing_delegation_blocked(self):
+        runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
+        for expected in (
+            "Include a negative case",
+            "BLOCKED/NOT_RUN",
+            "CONFIG_PARSED",
+            "SUBAGENT_SPAWN",
+            "MODEL_IDENTITY",
+            "TEST_DESIGN",
+            "TEST_EXECUTION",
+            "REVIEW_INDEPENDENCE",
+            "RUNTIME",
+        ):
+            with self.subTest(contract=expected):
+                self.assertIn(expected, runbook)
