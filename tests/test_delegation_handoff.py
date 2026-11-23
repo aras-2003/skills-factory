@@ -1,6 +1,7 @@
 """Contract checks for compact, source-bound SDLC child handoffs."""
 
 import importlib.util
+import json
 from pathlib import Path
 import unittest
 
@@ -118,6 +119,44 @@ class DelegationHandoffTests(unittest.TestCase):
 
         payload["architecture_impact"] = "UNKNOWN"
         self.assertEqual(handoff.read_input(handoff.serialize_input(payload))["architecture_impact"], "UNKNOWN")
+
+    def test_handoff_09_rejects_duplicate_requested_case_ids(self):
+        payload = valid_input()
+        payload["test_case_ids"] = ["HANDOFF-09", "HANDOFF-09"]
+        with self.assertRaisesRegex(ValueError, "test_case_ids must contain unique case IDs"):
+            handoff.serialize_input(payload)
+        with self.assertRaisesRegex(ValueError, "test_case_ids must contain unique case IDs"):
+            handoff.read_input(json.dumps(payload))
+
+        payload["test_case_ids"] = ["HANDOFF-09", "HANDOFF-10"]
+        decoded = handoff.read_input(handoff.serialize_input(payload))
+        self.assertEqual(decoded["test_case_ids"], payload["test_case_ids"])
+
+    def test_handoff_10_rejects_duplicate_result_case_ids(self):
+        for statuses in (("PASS", "PASS"), ("PASS", "FAIL")):
+            with self.subTest(statuses=statuses):
+                result = {
+                    "task_id": "task-10", "role": "sf-test-executor", "status": "FAIL",
+                    "candidate_sha": "b" * 40, "changed_paths": [],
+                    "test_case_outcomes": [
+                        {"case_id": "HANDOFF-10", "status": statuses[0]},
+                        {"case_id": "HANDOFF-10", "status": statuses[1]},
+                    ],
+                    "command_exit_codes": [], "evidence_refs": [],
+                    "material_findings": [], "residual_risks": [], "next_action": "review",
+                }
+                with self.assertRaisesRegex(ValueError, "test_case_outcomes must contain unique case IDs"):
+                    handoff.validate_result(result, expected_candidate_sha="b" * 40)
+
+        unique_result = {
+            "task_id": "task-10", "role": "sf-test-executor", "status": "PASS",
+            "candidate_sha": "b" * 40, "changed_paths": [],
+            "test_case_outcomes": [{"case_id": "HANDOFF-10", "status": "PASS"}],
+            "command_exit_codes": [], "evidence_refs": [],
+            "material_findings": [], "residual_risks": [], "next_action": "review",
+        }
+        checked = handoff.validate_result(unique_result, expected_candidate_sha="b" * 40)
+        self.assertEqual([row["case_id"] for row in checked["test_case_outcomes"]], ["HANDOFF-10"])
 
 
 if __name__ == "__main__":

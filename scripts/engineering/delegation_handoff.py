@@ -108,6 +108,8 @@ def validate_input(payload: Any) -> dict:
     _sha(item.get("candidate_sha"), "candidate_sha", optional=True)
     for field in ("readonly_paths", "writable_paths", "selected_skill_refs", "test_case_ids", "stop_conditions"):
         _string_list(item[field], field)
+    if len(set(item["test_case_ids"])) != len(item["test_case_ids"]):
+        raise ValueError("test_case_ids must contain unique case IDs")
     if not isinstance(item["dependencies"], list) or any(type(dep) is not int or dep < 1 for dep in item["dependencies"]):
         raise ValueError("dependencies must be positive issue numbers")
     if type(item["context_budget"]) is not int or not 128 <= item["context_budget"] <= 16_384:
@@ -153,6 +155,7 @@ def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
         _string_list(item[field], field)
     if not isinstance(item["test_case_outcomes"], list):
         raise ValueError("test_case_outcomes must be a list")
+    case_ids = set()
     for outcome in item["test_case_outcomes"]:
         entry = _required_object(
             outcome,
@@ -161,6 +164,9 @@ def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
             "test case outcome",
         )
         _text(entry["case_id"], "test_case_outcomes.case_id")
+        if entry["case_id"] in case_ids:
+            raise ValueError("test_case_outcomes must contain unique case IDs")
+        case_ids.add(entry["case_id"])
         if not isinstance(entry["status"], str) or entry["status"] not in STATUSES:
             raise ValueError("test_case_outcomes.status must be PASS, FAIL, NOT_RUN or BLOCKED")
         if "fixture_sha256" in entry and (
