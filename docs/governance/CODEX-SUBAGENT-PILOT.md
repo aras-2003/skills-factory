@@ -35,7 +35,7 @@ The primary chat owns scope and integration. It may implement when appropriate, 
 
 ## Required handoff
 
-Each delegated task receives the issue/AC, exact source or candidate SHA, bounded paths, relevant baseline/consumers, case IDs and expected output. The child returns only findings and evidence needed by the coordinator: exact revision, action/command, real exit status, case or fixture identity, evidence reference, limitations and BLOCKED/NOT_RUN reason. Do not paste full thread logs into the main context.
+Each delegated task receives the issue/AC, exact source or candidate SHA, bounded paths, relevant baseline/consumers, case IDs and expected output. Treat the GitHub issue and source tree at that exact revision as the source of truth; exclude stale chat context. The child returns only findings and evidence needed by the coordinator: exact revision, action/command, real exit status, case or fixture identity, evidence reference, limitations and BLOCKED/NOT_RUN reason. Do not paste full thread logs into the main context.
 
 ## New-chat smoke protocol
 
