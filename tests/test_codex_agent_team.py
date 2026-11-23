@@ -92,6 +92,8 @@ class CodexAgentTeamContractTests(unittest.TestCase):
             "TEST_DESIGN",
             "TEST_EXECUTION",
             "REVIEW_INDEPENDENCE",
+            "GitHub issue and source tree at that exact revision as the source of truth",
+            "exclude stale chat context",
             "RUNTIME",
         ):
             with self.subTest(contract=expected):
