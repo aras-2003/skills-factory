@@ -21,11 +21,18 @@ permissions; behavioral instructions are not an OS sandbox. The source SHA
 pins the inspected profile files, not the host executable or proof that it
 loaded them.
 
-No versioned, authoritative Codex Desktop host documentation or build
-identifier was available for this observation. The classification below is
-therefore limited to the exposed spawn-tool schema and actual task traces in
-this session; it does not generalize to other Codex hosts or the separate OpenAI
-Agents API. Re-observe after a host/version/configuration change.
+Official [Codex subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+describes project-scoped custom agents under `.codex/agents/`, including their
+names, instructions, optional model/effort settings, and inheritance of the
+parent's permissions. The [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
+documents agent configuration and `config_file` selection. These docs are not
+version-pinned to the observed Desktop build, and this session did not expose a
+build identifier. They establish that Codex supports custom-agent configuration
+in general; they do not prove that this session loaded a named profile or that
+the observed spawn call enforced its instructions. Classifications below remain
+limited to the exposed spawn-tool schema and actual task traces in this session;
+they do not generalize to other Codex hosts or the separate OpenAI Agents API.
+Re-observe after a host/version/configuration change.
 
 ## Role contract
 
