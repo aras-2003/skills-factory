@@ -47,6 +47,8 @@ Treat the GitHub issue and source tree at that exact revision as the source of t
 
 Focused static verification: `python3 -m unittest discover -s tests -p 'test_delegation_handoff.py'`. This verifies field validation, round-trip readback, dispatch/task/role/case binding, stale SHA rejection, PASS evidence consistency, forbidden fields and UNKNOWN usage behavior. It does not satisfy the separate new-chat host smoke or prove that a host can restart and resume a child from serialized data.
 
+For Developer scope review, `scripts/engineering/developer_scope.py` offers `verify_candidate_scope(repo, base_sha=..., candidate_sha=..., writable_paths=..., reported_changed_paths=...)`. Supply the trusted dispatch grants and the reported paths independently. A grant without a trailing slash names one exact file; a trailing slash grants descendants of that directory. The verifier compares the committed Git diff with both lists and reports `PASS`, `FAIL`, or `BLOCKED`; changed symlinks and submodules fail closed. It requires the checkout HEAD to match the candidate and rejects tracked or untracked dirt. Git-ignored files are not inspected. A scope `PASS` only checks the observed committed diff; the caller must inspect evidence and must not treat it as host access control, proof of task completion, or protection from concurrent mutations.
+
 ## New-chat smoke protocol
 
 Run against the implementation PR head in a **new Codex chat** and trusted checkout:
