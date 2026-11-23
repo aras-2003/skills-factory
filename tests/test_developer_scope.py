@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from scripts.engineering.delegation_handoff import validate_developer_result
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,6 +171,69 @@ class DeveloperScopeTests(unittest.TestCase):
 
         self.assertEqual("BLOCKED", result["scope_status"])
         self.assertIn("candidate_not_descendant", result["violations"])
+
+    def test_dev_scope_09_developer_pass_requires_repository_bound_scope(self):
+        (self.repo / "allowed").mkdir()
+        (self.repo / "allowed" / "change.txt").write_text("change\n", encoding="utf-8")
+        candidate = self.commit_candidate()
+        payload = {
+            "task_id": "dev-1", "role": "sf-developer-high", "status": "PASS",
+            "candidate_sha": candidate, "changed_paths": ["allowed/change.txt"],
+            "test_case_outcomes": [{"case_id": "DEV-01", "status": "PASS"}],
+            "command_exit_codes": [{"command": "python -m unittest", "exit_code": 0}],
+            "evidence_refs": ["https://github.com/example/evidence"],
+            "material_findings": [], "residual_risks": [], "next_action": "review",
+        }
+
+        result = validate_developer_result(
+            payload, repo=self.repo, expected_task_id="dev-1",
+            expected_role="sf-developer-high", expected_test_case_ids=["DEV-01"],
+            expected_base_sha=self.base, writable_paths=["allowed/"],
+            expected_candidate_sha=candidate,
+        )
+
+        self.assertEqual("PASS", result["result"]["status"])
+        self.assertEqual("PASS", result["scope_verification"]["scope_status"])
+
+    def test_dev_scope_10_rejects_developer_pass_outside_scope(self):
+        (self.repo / "secret.txt").write_text("outside\n", encoding="utf-8")
+        candidate = self.commit_candidate()
+        payload = {
+            "task_id": "dev-1", "role": "sf-developer-high", "status": "PASS",
+            "candidate_sha": candidate, "changed_paths": ["secret.txt"],
+            "test_case_outcomes": [{"case_id": "DEV-01", "status": "PASS"}],
+            "command_exit_codes": [{"command": "python -m unittest", "exit_code": 0}],
+            "evidence_refs": ["https://github.com/example/evidence"],
+            "material_findings": [], "residual_risks": [], "next_action": "review",
+        }
+
+        with self.assertRaisesRegex(ValueError, "without a PASS scope verification"):
+            validate_developer_result(
+                payload, repo=self.repo, expected_task_id="dev-1",
+                expected_role="sf-developer-high", expected_test_case_ids=["DEV-01"],
+                expected_base_sha=self.base, writable_paths=["allowed/"],
+                expected_candidate_sha=candidate,
+            )
+
+    def test_dev_scope_11_rejects_developer_pass_when_checkout_is_dirty(self):
+        candidate = self.commit_candidate("empty candidate")
+        (self.repo / "untracked.txt").write_text("uncommitted\n", encoding="utf-8")
+        payload = {
+            "task_id": "dev-1", "role": "sf-developer-high", "status": "PASS",
+            "candidate_sha": candidate, "changed_paths": [],
+            "test_case_outcomes": [{"case_id": "DEV-01", "status": "PASS"}],
+            "command_exit_codes": [{"command": "python -m unittest", "exit_code": 0}],
+            "evidence_refs": ["https://github.com/example/evidence"],
+            "material_findings": [], "residual_risks": [], "next_action": "review",
+        }
+
+        with self.assertRaisesRegex(ValueError, "without a PASS scope verification"):
+            validate_developer_result(
+                payload, repo=self.repo, expected_task_id="dev-1",
+                expected_role="sf-developer-high", expected_test_case_ids=["DEV-01"],
+                expected_base_sha=self.base, writable_paths=[],
+                expected_candidate_sha=candidate,
+            )
 
 
 if __name__ == "__main__":

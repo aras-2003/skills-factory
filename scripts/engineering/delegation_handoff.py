@@ -7,6 +7,7 @@ permissions. The host remains responsible for actual child identity and access.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import re
 from typing import Any
 
@@ -225,3 +226,43 @@ def validate_result(
     result.setdefault("usage", None)
     _bounded_json(result)
     return result
+
+
+def validate_developer_result(
+    payload: Any,
+    *,
+    repo: str | Path,
+    expected_task_id: str,
+    expected_role: str,
+    expected_test_case_ids: list[str],
+    expected_base_sha: str,
+    writable_paths: list[str],
+    expected_candidate_sha: str,
+) -> dict:
+    """Validate a Developer handoff and bind its PASS to the observed Git diff.
+
+    The dispatcher's base SHA and writable grants must be supplied from trusted
+    task input, not copied from the result. This detects scope mismatches after
+    execution; it does not enforce host filesystem permissions.
+    """
+    if expected_role not in {"sf-developer-high", "sf-developer-medium"}:
+        raise ValueError("expected_role must identify a Developer profile")
+    result = validate_result(
+        payload,
+        expected_task_id=expected_task_id,
+        expected_role=expected_role,
+        expected_test_case_ids=expected_test_case_ids,
+        expected_candidate_sha=expected_candidate_sha,
+    )
+    from scripts.engineering.developer_scope import verify_candidate_scope
+
+    scope = verify_candidate_scope(
+        repo,
+        base_sha=expected_base_sha,
+        candidate_sha=expected_candidate_sha,
+        writable_paths=writable_paths,
+        reported_changed_paths=result["changed_paths"],
+    )
+    if result["status"] == "PASS" and scope["scope_status"] != "PASS":
+        raise ValueError("Developer PASS without a PASS scope verification")
+    return {"result": result, "scope_verification": scope}
