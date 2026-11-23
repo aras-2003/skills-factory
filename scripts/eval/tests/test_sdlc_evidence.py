@@ -126,7 +126,8 @@ class IndexTests(unittest.TestCase):
     def test_cov_10_safe_projection_and_candidate_commit_age(self):
         root = self._receipt_root(self._receipt_payload())
         with patch.object(evidence_index, "_candidate_commit_time",
-                          return_value=("2026-11-23T12:00:00Z", "candidate_commit_committer_time")), \
+                          return_value=("2026-11-23T12:00:00Z", "git_commit_committer_timestamp")), \
+             patch.object(evidence_index, "_candidate_source_revision", return_value="a" * 40), \
              patch.object(evidence_index.receipt, "validate_receipt_data", return_value=[]), \
              patch.object(evidence_index.receipt, "current_component_identity", return_value=("1", "same")):
             report = evidence_index.build_index(root)
@@ -140,13 +141,14 @@ class IndexTests(unittest.TestCase):
         self.assertEqual(3.0, row["age_days"])
         self.assertEqual("KNOWN", row["age_state"])
         self.assertEqual("2026-11-23T12:00:00Z", row["age_as_of_utc"])
-        self.assertEqual("candidate_commit_committer_time", row["age_basis"])
+        self.assertEqual("git_commit_committer_timestamp", row["age_basis"])
         self.assertEqual("NOT_RUN", row["recorded_status"])
         self.assertFalse(report["runtime_pass_claim"])
 
     def test_cov_11_unknown_timestamp_and_no_receipt_stay_explicit(self):
         for timestamp, expected_state in ((None, "MISSING_TIMESTAMP"),
                                           ("not-a-time", "MALFORMED_TIMESTAMP"),
+                                          ("2026-11-20T12:00:00", "MALFORMED_TIMESTAMP"),
                                           ("2026-11-24T12:00:00Z", "FUTURE_TIMESTAMP")):
             with self.subTest(timestamp=timestamp):
                 evaluation = {"status": "NOT_RUN"}
@@ -154,12 +156,29 @@ class IndexTests(unittest.TestCase):
                     evaluation["timestamp_utc"] = timestamp
                 root = self._receipt_root(self._receipt_payload(evaluation=evaluation))
                 with patch.object(evidence_index, "_candidate_commit_time",
-                                  return_value=("2026-11-23T12:00:00Z", "candidate_commit_committer_time")), \
+                                  return_value=("2026-11-23T12:00:00Z", "git_commit_committer_timestamp")), \
+                     patch.object(evidence_index, "_candidate_source_revision", return_value="a" * 40), \
                      patch.object(evidence_index.receipt, "validate_receipt_data", return_value=[]), \
                      patch.object(evidence_index.receipt, "current_component_identity", return_value=("1", "same")):
                     row = evidence_index.build_index(root)["receipts"][0]
                 self.assertIsNone(row["age_days"])
                 self.assertEqual(expected_state, row["age_state"])
+
+        root = self._receipt_root(self._receipt_payload())
+        with patch.object(evidence_index, "_candidate_commit_time",
+                          return_value=(None, "CANDIDATE_COMMIT_TIME_UNAVAILABLE")), \
+             patch.object(evidence_index, "_candidate_source_revision", return_value=None), \
+             patch.object(evidence_index.receipt, "validate_receipt_data", return_value=[]), \
+             patch.object(evidence_index.receipt, "current_component_identity", return_value=("1", "same")):
+            row = evidence_index.build_index(root)["receipts"][0]
+        self.assertIsNone(row["age_days"])
+        self.assertEqual("AS_OF_UNAVAILABLE", row["age_state"])
+
+        unreadable_root = self._receipt_root(None)
+        (unreadable_root / "evals/results/receipt.json").write_text("not json")
+        unreadable = evidence_index.build_index(unreadable_root)["receipts"][0]
+        self.assertIsNone(unreadable["age_days"])
+        self.assertEqual("RECEIPT_UNREADABLE", unreadable["age_state"])
 
         empty_root = self._receipt_root(None)
         self.assertEqual([], evidence_index.build_index(empty_root)["receipts"])
@@ -167,11 +186,12 @@ class IndexTests(unittest.TestCase):
     def test_cov_12_source_and_identity_mismatch_remain_visible(self):
         root = self._receipt_root(self._receipt_payload())
         with patch.object(evidence_index, "_candidate_commit_time",
-                          return_value=("2026-11-23T12:00:00Z", "candidate_commit_committer_time")), \
+                          return_value=("2026-11-23T12:00:00Z", "git_commit_committer_timestamp")), \
+             patch.object(evidence_index, "_candidate_source_revision", return_value="b" * 40), \
              patch.object(evidence_index.receipt, "validate_receipt_data", return_value=["source mismatch"]), \
              patch.object(evidence_index.receipt, "current_component_identity", return_value=("2", "new")):
             row = evidence_index.build_index(root)["receipts"][0]
-        self.assertFalse(row["source_revision_matches_candidate"])
+        self.assertEqual("MISMATCH", row["source_revision_state"])
         self.assertFalse(row["component_identity_matches"])
         self.assertEqual("FAIL", row["receipt_validation"])
 
