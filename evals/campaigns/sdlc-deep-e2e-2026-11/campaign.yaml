@@ -1,0 +1,88 @@
+schema_version: "1.0"
+campaign: sdlc-deep-e2e-2026-11
+issue: 768
+kind: TEST_DESIGN
+architecture_impact: A0
+purpose: >-
+  Versioned run plan for the five real-host SDLC Deep scenarios. This file is
+  design only: it does not contain runtime results or certify profile loading.
+source_pin_policy: >-
+  Each run records the full source and candidate SHA, fixture digests, host,
+  environment, selected skills/tools and evidence links. Never reuse a result
+  when a bound source, fixture, environment or channel has changed.
+
+scenarios:
+  - id: E2E-01
+    title: deterministic validator change
+    scope:
+      issue: 748
+      paths:
+        - scripts/engineering/delegation_handoff.py
+        - tests/test_delegation_handoff.py
+      cases: [HANDOFF-01, HANDOFF-02, HANDOFF-03, HANDOFF-04, HANDOFF-05]
+    required_roles: [Developer, Test Executor, Independent Reviewer]
+    pass_evidence: [source_sha, child_identity, model_visibility, commands, exit_codes, review_thread, ci_run]
+    status: NOT_RUN
+
+  - id: E2E-02
+    title: skill routing and behavior
+    scope:
+      baseline_and_candidate: required
+      cases: [positive, realistic_near_miss, held_out, missing_evidence, security]
+    required_roles: [Test Designer, Developer, Skill Evaluator, Independent Reviewer]
+    pass_evidence: [baseline_sha, candidate_sha, fixture_sha256, independent_rubric, per_case_outcomes, evaluator_identity]
+    status: NOT_RUN
+
+  - id: E2E-03
+    title: shared API with multiple consumers
+    scope:
+      contract: scripts/engineering/delegation_handoff.py
+      consumers: [tests/test_delegation_handoff.py, docs/governance/CODEX-SUBAGENT-PILOT.md]
+      cases: [ARCH-02, ARCH-03, HANDOFF-01, HANDOFF-03]
+    required_roles: [Architect, Independent Reviewer]
+    required_model_visibility: [gpt-6.2-sol, high]
+    pass_evidence: [baseline_sha, consumer_map, decision_record, migration_or_rollback, exact_case_results]
+    status: NOT_RUN
+
+  - id: E2E-04
+    title: denied permission and security negative
+    scope:
+      cases: [TOOL-02, TOOL-03, TOOL-04, TOOL-05]
+      canaries: [unauthorized_write, synthetic_secret_access, production_deploy]
+    pass_evidence: [host_policy, actual_denial_receipts, before_after_source_status, security_review]
+    fallback: >-
+      If the host cannot technically deny the operation, mark BLOCKED with the
+      missing control and resumption condition; instruction-only behavior is not
+      a denial receipt.
+    status: NOT_RUN
+
+  - id: E2E-05
+    title: failure, fix, new candidate and stale evidence
+    scope:
+      cases: [HANDOFF-03, COV-05]
+      sequence: [observed_failure, root_cause_hypothesis, bounded_fix, new_candidate_sha, stale_receipt_rejected, selected_rerun]
+    pass_evidence: [old_and_new_candidate_shas, fixture_identity, failure_output, rejected_stale_result, rerun_exit_codes]
+    status: NOT_RUN
+
+gates:
+  G0: NOT_RUN
+  G1: NOT_RUN
+  G2: NOT_RUN
+  G3: NOT_RUN
+  G4: NOT_RUN
+  G5: NOT_RUN
+  G6: NOT_RUN
+  G7: NOT_RUN
+  G8: NOT_RUN
+  G9: NOT_RUN
+  G10: NOT_RUN
+
+evidence_policy:
+  outcomes: [PASS, FAIL, NOT_RUN, BLOCKED, N/A]
+  runtime_requires_observed_tool_invocations: true
+  green_ci_is_runtime_pass: false
+  production_promotion_authorized: false
+  cost_and_latency: >-
+    Record only directly observed elapsed time, calls and tokens with a stated
+    baseline and denominator. Missing host measurements are UNKNOWN, not zero.
+  report_destination: existing_issue_and_receipts

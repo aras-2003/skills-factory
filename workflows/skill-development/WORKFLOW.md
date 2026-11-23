@@ -85,6 +85,18 @@ validation, CI, evaluation, PR review, merge, runtime observation, and productio
 authorization distinct; the author is not the sole grader and an earlier gate never
 implies a later one.
 
+### Delegated Developer execution (Issues #748/#767)
+
+The coordinator remains the integration owner. Before delegating implementation, provide the issue and numbered AC, approved architecture decision, exact base SHA, case/fixture IDs, dependency pins, stop conditions and writable path allowlist. Use a distinct worktree per independent package, created from the full base SHA; verify its root, branch and `HEAD` before editing. A worktree isolates checkout state, but does not restrict a child's host permissions. Never reset, clean or reuse the user's dirty checkout. Keep native Project development WIP at two using `scripts/governance/delivery_control.py`; assign one writer per shared contract and serialize overlapping paths.
+
+Run `python3 scripts/engineering/bootstrap.py` in the provisioned worktree, then `python3 scripts/engineering/bootstrap.py --check`. A lock mismatch or bootstrap error is an environment blocker, not a product failure; preserve the checkout and its files. Use the resulting `.venv` interpreter with `TMPDIR=<worktree>/.tmp/python-tests`. Run `scripts/engineering/change_gate.py` against the actual base-to-candidate diff and reviewed consumers. Its output is a plan, not proof that paths were host-denied or that tests ran.
+
+For deterministic existing behavior, record a meaningful failing regression before implementation, then the passing result after the smallest fix. New capabilities and LLM behavior use a frozen baseline/candidate and declared independent oracle; do not force an artificial RED. On rework, bind each failed case to candidate SHA, fixture identity and environment, write a root-cause hypothesis before the fix, and issue a new candidate SHA. Prior receipts remain historical; rerun selected cases whose candidate, fixture or environment binding became stale. Do not repeat the same failed inputs without a new hypothesis.
+
+Before handoff, inspect staged and unstaged changes plus the complete base-to-candidate diff. Report exact changed paths (including both rename endpoints), diff stats, commit SHA, commands, exit codes, case IDs, fixture/environment identity and evidence links. Out-of-scope paths are a scope violation to report; unless the host denied the write, do not call them access-control enforcement. Return concise findings rather than full logs. Runtime and independent review remain separate gates.
+
+The host acceptance cases for #767 are `DEV-01` clean scoped change, `DEV-02` independent worktrees, `DEV-03` shared-file serialization, `DEV-04` dirty-checkout preservation, `DEV-05` bootstrap failure classification, `DEV-06` meaningful RED/GREEN, `DEV-07` stale-receipt invalidation after rework, `DEV-08` unauthorized-path behavior, and `DEV-09` compact handoff. These cases require actual host observations; instructions and offline tests do not make them PASS. A missing named spawn, model visibility or host denial is `BLOCKED`/`NOT_RUN` with the observed limitation.
+
 ## External candidate adaptation path (ES-03)
 
 Use this path only when the user supplies or asks to inspect an external skill for reuse, extension, or composition. It extends this workflow; it does not create a separate authoring lifecycle.

@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import json
+import tempfile
+from unittest.mock import patch
 import unittest
 from pathlib import Path
 
@@ -94,6 +97,338 @@ class SemanticCoverageTests(unittest.TestCase):
         first = next(x for x in result["components"] if x["name"] == report["skills"][0]["name"])
         self.assertEqual("NOT_RUN", first["model_execution"])
         self.assertEqual("NOT_VERIFIED", first["runtime_behavioral_acceptance"])
+
+    def test_cov_01_rows_have_unique_stable_ids_and_source_hashes(self):
+        report = self.check()
+        ids = [row["stable_id"] for row in report["components"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(self.skills["total_skills"] + len(self.workflows["workflows"]), len(ids))
+        self.assertTrue(all(row["source_sha256"] and row["fixture_case_ids"] is not None for row in report["components"]))
+
+    def test_cov_02_duplicate_identity_blocks(self):
+        data = copy.deepcopy(self.skills)
+        data["skills"][1]["name"] = data["skills"][0]["name"]
+        result = self.check(skills=data)
+        self.assertEqual("BLOCKED_SOURCE", result["status"])
+        self.assertTrue(any("duplicate" in error for error in result["errors"]))
+
+    def test_cov_03_missing_workflow_fixture_is_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "workflows" / "sample" / "WORKFLOW.md"
+            source.parent.mkdir(parents=True)
+            source.write_text("# Sample\n", encoding="utf-8")
+            summary = mod._fixture_summary(root, "workflows/sample/WORKFLOW.md", "workflow", {})
+            self.assertFalse(summary["declared"])
+            self.assertEqual([], summary["case_ids"])
+
+    def test_cov_04_recorded_pass_never_becomes_runtime_pass(self):
+        name = self.skills["skills"][0]["name"]
+        receipt = {"component": name, "case_id": "case-1", "receipt_path": "evals/results/x.json",
+                   "receipt_sha256": "a" * 64, "receipt_validation": "PASS",
+                   "recorded_status": "PASS", "component_identity_matches": True,
+                   "compatibility": "NOT_VERIFIED"}
+        with patch.object(mod, "_receipt_rows", return_value=[receipt]):
+            report = self.check()
+        row = next(item for item in report["components"] if item["name"] == name)
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+        self.assertEqual("PASS", row["evaluation_receipts"][0]["recorded_status"])
+        self.assertEqual("NOT_VERIFIABLE_FROM_PUBLIC_INDEX", row["evidence_freshness"])
+
+    def test_cov_05_old_source_identity_is_not_current_evidence(self):
+        name = self.skills["skills"][0]["name"]
+        receipt = {"component": name, "case_id": "case-1", "receipt_path": "evals/results/x.json",
+                   "receipt_sha256": "b" * 64, "receipt_validation": "PASS",
+                   "recorded_status": "PASS", "component_identity_matches": False,
+                   "compatibility": "NOT_VERIFIED"}
+        with patch.object(mod, "_receipt_rows", return_value=[receipt]):
+            report = self.check()
+        row = next(item for item in report["components"] if item["name"] == name)
+        self.assertEqual("STALE_COMPONENT_IDENTITY", row["evidence_freshness"])
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+
+    def test_cov_06_dependency_graph_returns_transitive_consumers(self):
+        graph = {"workflow:a": [{"target": "workflow:b", "evidence": "registry", "dependency": "required"}],
+                 "workflow:b": [{"target": "skill:c", "evidence": "registry", "dependency": "required"}],
+                 "skill:c": []}
+        _, transitive = mod._consumer_maps(graph)
+        self.assertEqual(["workflow:a", "workflow:b"], transitive["skill:c"])
+
+    def test_cov_07_crosswalk_excludes_fixture_prompt_bodies(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "skills" / "private" / "SKILL.md"
+            source.parent.mkdir(parents=True)
+            source.write_text("---\nname: private\ndescription: private\n---\n", encoding="utf-8")
+            (source.parent / "tests").mkdir()
+            secret = "PRIVATE_PROMPT_SENTINEL_93812"
+            (source.parent / "tests" / "cases.yaml").write_text(
+                "cases:\n  - id: safe-id\n    input: " + secret + "\n    expected:\n      should_trigger: true\n", encoding="utf-8")
+            summary = mod._fixture_summary(root, "skills/private/SKILL.md", "skill", {})
+            self.assertEqual(["safe-id"], summary["case_ids"])
+            self.assertNotIn(secret, json.dumps(summary))
+
+    def test_cov_08_regeneration_is_deterministic(self):
+        first, second = self.check(), self.check()
+        self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
+
+    def test_cov_08_ci_packages_the_generated_crosswalk_with_candidate_evidence(self):
+        workflow = (ROOT / ".github/workflows/ci-validate.yml").read_text(encoding="utf-8")
+        generation = workflow.index(
+            "python scripts/eval/iteration02_semantic_coverage.py --output .tmp/sdlc/semantic-coverage.json")
+        packaging = workflow.index("python scripts/eval/artifact_bundle.py pack --directory .tmp/sdlc")
+        upload = workflow.index("name: sf-evidence-${{ env.SOURCE_REVISION }}")
+        self.assertLess(generation, packaging)
+        self.assertLess(packaging, upload)
+        self.assertIn("path: .tmp/sdlc/", workflow[upload:])
+
+    def test_cov_09_count_drift_blocks_against_current_source_inventory(self):
+        data = copy.deepcopy(self.skills)
+        data["total_skills"] += 1
+        result = self.check(skills=data)
+        self.assertEqual("BLOCKED_SOURCE", result["status"])
+        self.assertTrue(any("counts disagree" in error for error in result["errors"]))
+
+    def test_cov_09_catalog_source_drift_is_reported(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "docs").mkdir()
+            (root / "docs" / "catalog.json").write_text(json.dumps({
+                "skills": [{"name": "old", "source": "skills/old/SKILL.md"}],
+                "workflows": [],
+            }), encoding="utf-8")
+            result = mod._catalog_drift(root,
+                [{"name": "current", "source": "skills/current/SKILL.md"}],
+                [{"name": "flow", "source": "workflows/flow/WORKFLOW.md"}])
+            self.assertEqual("DRIFT", result["status"])
+            self.assertEqual(["current:skills/current/SKILL.md"], result["inventories"]["skill"]["missing"])
+            self.assertEqual(["old:skills/old/SKILL.md"], result["inventories"]["skill"]["extra"])
+
+    def test_cov_03_reconciles_each_workflow_without_local_cases(self):
+        report = self.check()
+        rows = report["workflow_fixture_reconciliation"]
+        self.assertEqual(9, len(rows))
+        self.assertTrue(all(row["local_cases_yaml"] == "MISSING" for row in rows))
+        self.assertTrue(all(row["follow_up_state"] in {"RECONCILIATION_REQUIRED", "CASE_DESIGN_REQUIRED"}
+                            for row in rows))
+        self.assertTrue(all(row["follow_up_action"] for row in rows))
+        self.assertTrue(all(item.get("verification") == "UNVERIFIED_LEXICAL_CANDIDATE"
+                            for row in rows for item in row["alternative_campaign_candidates"]))
+
+    def test_cov_04_unresolved_dependency_edge_is_source_anchored(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "skills").mkdir()
+            workflow = root / "workflows" / "sample" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required:\n        - name: missing-producer\n      optional: []\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edge = graph["workflow:sample"][0]
+            self.assertIsNone(edge["target"])
+            self.assertEqual("missing-producer", edge["target_name"])
+            self.assertEqual("UNKNOWN_TARGET", edge["edge_status"])
+            self.assertTrue(edge["evidence"].startswith("workflows/runtime-registry.yaml#/"))
+
+    def test_cov_04_workflow_skill_mentions_are_unverified_consumer_candidates(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            skill = root / "skills" / "sample-skill" / "SKILL.md"
+            skill.parent.mkdir(parents=True)
+            skill.write_text("---\nname: sample-skill\ndescription: test\n---\n", encoding="utf-8")
+            workflow = root / "workflows" / "sample-flow" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "Use `sample-skill` when the request meets its trigger.\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample-flow\n    workflow: workflows/sample-flow/WORKFLOW.md\n"
+                "    dependencies:\n      required: []\n      optional: []\n", encoding="utf-8")
+
+            graph, _ = mod._declared_graph(root)
+            edge = graph["workflow:sample-flow"][0]
+            self.assertIsNone(edge["target"])
+            self.assertEqual("sample-skill", edge["target_name"])
+            self.assertEqual("UNVERIFIED_SOURCE_REFERENCE", edge["edge_status"])
+            self.assertEqual("workflows/sample-flow/WORKFLOW.md#L1", edge["evidence"])
+
+            report = {"components": [
+                {"stable_id": "skill:sample-skill", "dependency_edges": [],
+                 "direct_consumers": [], "transitive_consumers": []},
+                {"stable_id": "workflow:sample-flow", "dependency_edges": [edge],
+                 "direct_consumers": [], "transitive_consumers": []},
+            ], "source_revision": "a" * 40, "crosswalk_sha256": "b" * 64,
+                "worktree_state": "CLEAN_CHECKOUT"}
+            query = mod._affected_query(report, "skill:sample-skill")
+            self.assertEqual("BLOCKED_UNKNOWN_EDGES", query["status"])
+            self.assertEqual("a" * 40, query["source_revision"])
+            self.assertEqual("b" * 64, query["crosswalk_sha256"])
+            self.assertEqual("CLEAN_CHECKOUT", query["worktree_state"])
+            self.assertEqual(["workflow:sample-flow"],
+                             [item["stable_id"] for item in query["unverified_consumer_candidates"]])
+            self.assertEqual([edge], [item["edge"] for item in query["unresolved_edges"]])
+
+    def test_cov_04_plain_text_skill_reference_is_unverified(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            skill = root / "skills" / "position-sizing-review" / "SKILL.md"
+            skill.parent.mkdir(parents=True)
+            skill.write_text("---\nname: position-sizing-review\ndescription: test\n---\n", encoding="utf-8")
+            workflow = root / "workflows" / "sample-flow" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text(
+                "For sizing, consult position-sizing-review when applicable.\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample-flow\n    workflow: workflows/sample-flow/WORKFLOW.md\n"
+                "    dependencies:\n      required: []\n      optional: []\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edge = graph["workflow:sample-flow"][0]
+            self.assertEqual("position-sizing-review", edge["target_name"])
+            self.assertEqual("UNVERIFIED_SOURCE_REFERENCE", edge["edge_status"])
+            self.assertEqual("workflows/sample-flow/WORKFLOW.md#L1", edge["evidence"])
+
+    def test_cov_04_malformed_dependency_buckets_are_preserved_as_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow = root / "workflows" / "sample" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required: malformed\n      optional: {}\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edges = graph["workflow:sample"]
+            self.assertEqual({"required", "optional"}, {edge["dependency"] for edge in edges})
+            self.assertTrue(all(edge["edge_status"] == "MALFORMED_BUCKET" for edge in edges))
+
+    def test_cov_04_mixed_malformed_and_unknown_refs_sort_safely(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow = root / "workflows" / "sample" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required: [9, missing-producer]\n      optional: []\n",
+                encoding="utf-8",
+            )
+            graph, _ = mod._declared_graph(root)
+            edges = graph["workflow:sample"]
+            self.assertEqual(["MALFORMED_REFERENCE", "UNKNOWN_TARGET"],
+                             [edge["edge_status"] for edge in edges])
+            self.assertTrue(all(edge["evidence"].startswith("workflows/runtime-registry.yaml#/") for edge in edges))
+
+    def test_cov_04_unresolved_edge_marks_workflow_dependency_status_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow_path = "workflows/sample/WORKFLOW.md"
+            workflow = root / workflow_path
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            registry = root / "workflows/runtime-registry.yaml"
+            registry.write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required:\n        - name: missing-producer\n      optional: []\n", encoding="utf-8")
+            (root / "docs").mkdir()
+            (root / "docs/catalog.json").write_text(json.dumps({"skills": [], "workflows": [
+                {"name": "sample", "source": workflow_path}]}), encoding="utf-8")
+            with patch.object(mod, "_receipt_rows", return_value=[]):
+                report = mod.assess({"total_skills": 0, "skills": []}, {
+                    "total": 1, "workflows": [{"name": "sample", "source": workflow_path,
+                        "status": "REVIEW_REQUIRED", "local_test_suite_present": False,
+                        "central_eval_case_count": 0}]}, root)
+            row = next(item for item in report["components"] if item["stable_id"] == "workflow:sample")
+            self.assertEqual("UNKNOWN", row["dependency_status"])
+            self.assertIn("DEPENDENCY_TARGET_UNRESOLVED", row["evidence_gap"])
+
+    def test_cov_06_affected_query_returns_regression_neighbors(self):
+        report = {"components": [
+            {"stable_id": "skill:producer", "source_path": "skills/producer/SKILL.md",
+             "source_sha256": "a" * 64, "fixture_case_ids": ["producer-001"], "evidence_gap": [],
+             "direct_consumers": [{"consumer": "workflow:middle"}],
+             "transitive_consumers": ["workflow:middle", "workflow:outer"], "dependency_edges": []},
+            {"stable_id": "workflow:middle", "fixture_case_ids": ["middle-001"], "evidence_gap": ["runtime gap"],
+             "dependency_edges": []},
+            {"stable_id": "workflow:outer", "fixture_case_ids": ["outer-001"], "evidence_gap": [],
+             "dependency_edges": []},
+        ], "worktree_state": "CLEAN_CHECKOUT", "source_revision": "c" * 40,
+            "crosswalk_sha256": "d" * 64}
+        result = mod._affected_query(report, "skill:producer")
+        self.assertEqual("QUERY_COMPLETE", result["status"])
+        self.assertEqual("CLEAN_CHECKOUT", result["worktree_state"])
+        self.assertEqual({"workflow:middle", "workflow:outer"},
+                         {row["stable_id"] for row in result["regression_neighbors"]})
+        middle = next(row for row in result["regression_neighbors"] if row["stable_id"] == "workflow:middle")
+        self.assertEqual(["middle-001"], middle["fixture_case_ids"])
+        self.assertEqual(["runtime gap"], middle["evidence_gap"])
+
+    def test_cov_06_affected_query_fails_closed_for_unknown_id_or_edge(self):
+        self.assertEqual("BLOCKED_UNKNOWN_COMPONENT", mod._affected_query(
+            {"components": [], "worktree_state": "CLEAN_CHECKOUT"}, "skill:missing")["status"])
+        report = {"components": [
+            {"stable_id": "workflow:sample", "source_path": "workflows/sample/WORKFLOW.md",
+             "source_sha256": "b" * 64, "fixture_case_ids": [], "evidence_gap": [],
+             "direct_consumers": [], "transitive_consumers": [],
+             "dependency_edges": [{"target": None, "target_name": "unknown", "edge_status": "UNKNOWN_TARGET",
+                                    "evidence": "workflows/runtime-registry.yaml#/dependencies/required"}]},
+        ], "worktree_state": "CLEAN_CHECKOUT"}
+        result = mod._affected_query(report, "workflow:sample")
+        self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
+        self.assertEqual("unknown", result["unresolved_edges"][0]["edge"]["target_name"])
+
+    def test_cov_06_affected_query_fails_closed_for_blocked_source_or_errors(self):
+        partial = {"status": "BLOCKED_SOURCE", "errors": ["incomplete inventory"], "components": [
+            {"stable_id": "skill:producer", "direct_consumers": [{"consumer": "workflow:known"}],
+             "transitive_consumers": ["workflow:known"], "dependency_edges": []},
+            {"stable_id": "workflow:known", "fixture_case_ids": ["case-1"], "dependency_edges": []},
+        ]}
+        by_status = mod._affected_query(partial, "skill:producer")
+        self.assertEqual("BLOCKED_SOURCE", by_status["status"])
+        self.assertEqual([], by_status["regression_neighbors"])
+        partial["status"] = "SOURCE_INVENTORY_REVIEW_REQUIRED"
+        by_errors = mod._affected_query(partial, "skill:producer")
+        self.assertEqual("BLOCKED_SOURCE", by_errors["status"])
+        self.assertEqual(["incomplete inventory"], by_errors["source_errors"])
+
+    def test_cov_06_affected_query_blocks_global_unknown_edge_naming_changed_component(self):
+        report = {"components": [
+            {"stable_id": "skill:producer", "name": "producer", "source_path": "skills/producer/SKILL.md",
+             "source_sha256": "c" * 64, "fixture_case_ids": [], "evidence_gap": [],
+             "direct_consumers": [], "transitive_consumers": [], "dependency_edges": []},
+            {"stable_id": "workflow:unrelated", "name": "unrelated", "fixture_case_ids": [],
+             "evidence_gap": ["DEPENDENCY_TARGET_UNRESOLVED"], "direct_consumers": [],
+             "transitive_consumers": [], "dependency_edges": [
+                 {"target": None, "target_name": "producer", "edge_status": "UNKNOWN_TARGET",
+                  "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/required"}]},
+        ], "worktree_state": "CLEAN_CHECKOUT"}
+        result = mod._affected_query(report, "skill:producer")
+        self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
+        self.assertEqual("workflow:unrelated", result["unresolved_edges"][0]["consumer"])
+        self.assertEqual("GLOBAL_GRAPH", result["unresolved_edges"][0]["scope"])
+        self.assertEqual("producer", result["unresolved_edges"][0]["edge"]["target_name"])
+
+    def test_cov_06_affected_query_blocks_dirty_or_unattested_worktree(self):
+        report = {"status": "SOURCE_INVENTORY_REVIEW_REQUIRED", "errors": [],
+                  "source_revision": "e" * 40, "crosswalk_sha256": "f" * 64,
+                  "components": [{"stable_id": "skill:producer", "name": "producer",
+                                  "direct_consumers": [], "transitive_consumers": [],
+                                  "dependency_edges": []}]}
+        for worktree_state in ("WORKTREE_DIRTY", "LOCAL_CHECKOUT_UNATTESTED", "REVISION_UNAVAILABLE", None):
+            with self.subTest(worktree_state=worktree_state):
+                candidate = {**report, "worktree_state": worktree_state}
+                result = mod._affected_query(candidate, "skill:producer")
+                self.assertEqual("BLOCKED_WORKTREE_STATE", result["status"])
+                self.assertEqual(worktree_state, result["worktree_state"])
+                self.assertEqual([], result["regression_neighbors"])
+
+    def test_cov_06_frequency_is_explicit_residual_blocker_without_numeric_score(self):
+        report = self.check()
+        self.assertEqual("EXECUTION_FREQUENCY_TELEMETRY_UNAVAILABLE",
+                         report["gap_prioritization"]["residual_blocker"])
+        self.assertTrue(all(row["execution_frequency"] == "UNKNOWN" and
+                            row["priority"] == "UNRANKED_FREQUENCY_UNKNOWN"
+                            for row in report["components"]))
 
 
 if __name__ == "__main__":

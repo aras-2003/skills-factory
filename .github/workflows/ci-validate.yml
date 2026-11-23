@@ -100,6 +100,7 @@ jobs:
           python scripts/engineering/change_gate.py --change-class RESOURCE --architecture-impact UNKNOWN --base-revision "$BASE_REVISION" --source-revision "$SOURCE_REVISION" --output .tmp/sdlc/change-plan.json
           python scripts/engineering/audit_skill_lifecycle.py --output .tmp/skill-lifecycle-audit.json --fail-on-structural-blockers
           python scripts/engineering/audit_workflow_lifecycle.py --output .tmp/workflow-lifecycle-audit.json
+          python scripts/eval/iteration02_semantic_coverage.py --output .tmp/sdlc/semantic-coverage.json
       - name: Generate public-safe evidence index and candidate manifest
         run: |
           python scripts/eval/evidence_index.py --output .tmp/sdlc/evidence-index.json
