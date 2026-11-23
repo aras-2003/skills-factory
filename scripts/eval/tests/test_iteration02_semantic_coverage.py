@@ -235,6 +235,22 @@ class SemanticCoverageTests(unittest.TestCase):
             edges = graph["workflow:sample"]
             self.assertEqual({"required", "optional"}, {edge["dependency"] for edge in edges})
             self.assertTrue(all(edge["edge_status"] == "MALFORMED_BUCKET" for edge in edges))
+
+    def test_cov_04_mixed_malformed_and_unknown_refs_sort_safely(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow = root / "workflows" / "sample" / "WORKFLOW.md"
+            workflow.parent.mkdir(parents=True)
+            workflow.write_text("# Sample\n", encoding="utf-8")
+            (root / "workflows" / "runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample\n    workflow: workflows/sample/WORKFLOW.md\n"
+                "    dependencies:\n      required: [9, missing-producer]\n      optional: []\n",
+                encoding="utf-8",
+            )
+            graph, _ = mod._declared_graph(root)
+            edges = graph["workflow:sample"]
+            self.assertEqual(["MALFORMED_REFERENCE", "UNKNOWN_TARGET"],
+                             [edge["edge_status"] for edge in edges])
             self.assertTrue(all(edge["evidence"].startswith("workflows/runtime-registry.yaml#/") for edge in edges))
 
     def test_cov_04_unresolved_edge_marks_workflow_dependency_status_unknown(self):

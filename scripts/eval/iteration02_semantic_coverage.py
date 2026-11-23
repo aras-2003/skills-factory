@@ -213,7 +213,7 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
                         edges.append({"target": None, "target_name": target, "dependency": bucket,
                                       "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
                                       "edge_status": "UNKNOWN_TARGET"})
-        graph[ident] = sorted(edges, key=lambda e: (e["target"] or "", e["target_name"], e["dependency"]))
+        graph[ident] = sorted(edges, key=lambda e: (e["target"] or "", e["target_name"] or "", e["dependency"]))
     return graph, nodes
 
 
