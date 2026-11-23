@@ -1,60 +1,79 @@
-# Luna-first independent assurance pilot — Issue #748
+# Luna-first context-efficient agent team — Issue #748
 
-## Scope and non-goals
-A single **Codex** primary chat carries discovery, scoped implementation and integration. Two short-lived custom agents can run bounded tests and independent review. This is a project-scoped **opt-in pilot**; it does not guarantee the same configuration in ordinary Chat, mobile Chat or every Work surface.
-No new SDLC, registry, release gate, evidence store, production deployment or new model spending is authorized. Reuse `AGENTS.md`, `docs/governance/SDLC-OPERATING-PROCESS.md`, `docs/TESTING.md`, `workflows/skill-development/WORKFLOW.md`, existing CI and receipts.
+## Scope and boundaries
 
-## Runtime/configuration
-- Project file `.codex/config.toml` enables up to two open subagent threads and sets default child model to `gpt-6-luna`, effort `medium`; it **does not pin the primary model**.
-- `.codex/agents/sf-test-engineer.toml`: Luna Medium; scoped test execution and objective receipts, no source edits.
-- `.codex/agents/sf-independent-reviewer.toml`: Luna High; independent risk-based review, no source edits.
-- Model access and whether these file settings are honored depend on the actual Codex host, trusted checkout and account. Read `https://learn.chatgpt.com/docs/agent-configuration/subagents`; inspect the child-thread activity and actual model where the host exposes it.
-- Custom-agent instructions cannot establish an OS-level no-write sandbox. The child inherits parent permissions; protected operations remain subject to host approvals.
-- An unobserved spawn, missing tool access or ignored model override is **NOT_RUN/BLOCKED**, not PASS. Do not substitute a same-thread simulation.
+One primary Codex chat coordinates context, planning, implementation, integration and reporting. Project-scoped custom agents provide short, bounded role work with compact handoffs and no duplicate write ownership. This is an opt-in Codex project pilot; it does not claim support in ordinary Chat, mobile Chat or every Work surface.
 
-## Delegation policy
-1. Default: main Luna does context, plan, implementation, fast developer checks, integration and reporting.
-2. A0 editorial-only: use static/CI checks without a child unless required by risk.
-3. Material changes A1/A2 or ROUTING/BEHAVIOR: spawn **sf-test-engineer** for independent selected regression evidence when available. Evaluate held-out cases with an independent oracle; child execution is not by itself proof of semantic independence.
-4. A3/A4, security, destructive data changes, release-gate/shared-contract changes: additionally spawn **sf-independent-reviewer** or obtain other genuinely independent review required by existing SDLC. The agent does not replace human authorization or external security controls.
-5. Validate exact commit, tests, fixtures and environment compatibility before reporting PASS; maintain CI, merge, runtime and production as different gates. Do not create a duplicate evidence ledger.
-6. If spawning is unavailable, mark delegated QA BLOCKED, still run safe CI checks and do not declare a required independent review complete. Do not needlessly escalate to Sol/Astra.
+Reuse `AGENTS.md`, `docs/governance/SDLC-OPERATING-PROCESS.md`, `docs/TESTING.md`, `workflows/skill-development/WORKFLOW.md`, `skill-test-design`, existing CI and receipts. Do not create a second SDLC, task registry, evidence store or release gate. No merge, deployment, production promotion, additional spend or credential change is implied.
 
-## New-chat smoke protocol (run on a checked-out PR branch)
-1. Open a **new Codex chat** in a trusted checkout of `aras-2003/skills-factory` at the head SHA of the PR linked to issue #748. Select `gpt-6-luna` as primary if available. Do not assume configuration loaded until observed.
-2. Ask the coordinator to print the exact checked-out SHA and read `AGENTS.md`, this runbook, and the actual `.codex` TOML files. Confirm selected models or report unavailable/unknown.
-3. Have it **explicitly spawn** `sf-test-engineer`, giving only this PR's changed files and deterministic checks. Use `python3 -m unittest discover -s tests` only if the existing bootstrap and test layout support it; otherwise select the correct existing repository validator without inventing execution.
-4. Inspect the spawned thread in the host. Record child identity, visible model if shown, actions, exact candidate SHA, actual exit codes, tests and any evidence artifacts.
-5. **Negative smoke:** in the same test report ask what happens if the host cannot spawn `sf-independent-reviewer`. Expected: required review remains BLOCKED and CI alone cannot satisfy it. Do not fabricate an actual failed spawn.
-6. If appropriate, explicitly spawn `sf-independent-reviewer` against the same SHA; record substantive findings separate from implementation.
-7. Report final gate matrix: `CONFIG_PARSED`, `SUBAGENT_SPAWN`, `MODEL_IDENTITY`, `TEST_EXECUTION`, `REVIEW_INDEPENDENCE`, `CI`, `RUNTIME`. Use PASS/FAIL/NOT_RUN/BLOCKED per gate, with links to observed evidence. Report token/cost only if measured.
-8. Link the result to the implementation PR and issue #748; use #712 solely as an optional comparable observation, without rewriting that pilot's frozen sample.
+Architecture impact is A1: project-local agent configuration, instructions and contract tests only. Skills Factory skill behavior, runtime, routing, stores, CI gates and production eligibility do not change.
 
-## Acceptance criteria for this pilot
-- The config is valid TOML, both agent roles are discoverable and project-scoped.
-- A real child agent thread is observed; a same-chat narrative is not enough.
-- Child produces at least one genuine exact-SHA test execution result or marks execution unavailable.
-- A required reviewer is independent of the author; its absence is not self-waived.
-- Model/cost claims are supported by host evidence; no default Sol/Astra calls.
-- No merge, production promotion or runtime PASS follows automatically from configuration or green CI.
+## Host and model configuration
+
+- `.codex/config.toml` enables agents, caps active child threads at two and selects the default child model/effort as Luna Medium.
+- Project configuration sets **subagent defaults**, not the main chat model. Select Luna Medium in the host for the primary coordinator when available; record unavailable or unknown if the host does not expose this control.
+- Agent files set bounded role-specific child model/effort. The project config does not prove the host loaded these files or honored a model override.
+- Agent instructions are behavioral; a child thread inherits host permissions. They do not establish a separate OS sandbox.
+- When the host cannot spawn a required role, cannot expose a required model or cannot run the requested test, report BLOCKED/NOT_RUN. Never substitute same-thread narration or infer runtime success from config parsing/CI.
+
+## Role catalogue and routing
+
+| Role | Model / effort | Responsibility and boundary |
+| --- | --- | --- |
+| `sf-architect` | Sol High | Risk-triggered A2–A4 architecture advice; no implementation. |
+| `sf-developer-medium` | Luna Medium | Bounded small/moderate implementation. |
+| `sf-developer-high` | Luna High | Explicitly escalated complex implementation. |
+| `sf-test-designer` | Luna Medium | Designs case IDs, fixtures and expected/forbidden outcomes before code; does not execute. |
+| `sf-test-executor` | Luna Low | Runs agreed exact-SHA checks; does not edit source/tests. |
+| `sf-independent-reviewer` | Luna High | Independent risk-based review; does not implement. |
+| `sf-skill-evaluator` | Luna High | Frozen baseline/candidate evaluation with existing rubrics and held-outs. |
+| `sf-researcher-low` | Luna Low | Bounded repository/primary-source fact collection. |
+| `sf-researcher-medium` | Luna Medium | Multi-source research only after explicit coordinator escalation. |
+| `sf-release-evidence` | Luna Low | Reconciles exact-source CI/eval/runtime evidence; cannot merge or release. |
+
+The primary chat owns scope and integration. It may implement when appropriate, but only one agent owns writes to a given shared interface at a time. Use the test designer before material behavior/shared-contract changes, then delegate execution separately when available. Use architecture advice for material A2–A4 decisions or security/shared-contract risk; do not call Sol for cosmetic A0 work. Use a reviewer for independent review when existing SDLC requires one. The evaluator does not set acceptance thresholds or approve release.
+
+## Required handoff
+
+Each delegated task receives the issue/AC, exact source or candidate SHA, bounded paths, relevant baseline/consumers, case IDs and expected output. Treat the GitHub issue and source tree at that exact revision as the source of truth; exclude stale chat context. The child returns only findings and evidence needed by the coordinator: exact revision, action/command, real exit status, case or fixture identity, evidence reference, limitations and BLOCKED/NOT_RUN reason. Do not paste full thread logs into the main context.
+
+## New-chat smoke protocol
+
+Run against the implementation PR head in a **new Codex chat** and trusted checkout:
+
+1. Read `AGENTS.md`, this runbook, `.codex/config.toml` and the role TOMLs at the exact PR head. Record checkout SHA and actual host/model visibility; do not infer them.
+2. Select Luna Medium for the primary coordinator if available. Confirm that the project config loaded only from observable host evidence.
+3. Explicitly spawn `sf-test-designer` to produce a bounded plan, then `sf-test-executor` to run one existing deterministic check on the same exact SHA. Record each child thread, visible model/effort, case IDs, command and real exit status.
+4. For a complex architecture case, explicitly route `sf-architect`; verify the advice is bounded and does not modify code. Test Medium/High developer routing with small and complex examples only if the host exposes the settings and the task is safe.
+5. For a risk-required review, spawn `sf-independent-reviewer` as a separate thread. A missing reviewer remains BLOCKED; do not count self-review or CI.
+6. Verify compact handoffs and observe source status before/after the executor; any attempted edits are a defect. This observation does not prove OS-level isolation.
+7. Include a negative case: if spawn/model/execution is unavailable, the result is BLOCKED/NOT_RUN, with no simulated receipt.
+8. Report gates separately: `CONFIG_PARSED`, `SUBAGENT_SPAWN`, `MODEL_IDENTITY`, `TEST_DESIGN`, `TEST_EXECUTION`, `DEVELOPER_ROUTING`, `ARCHITECTURE_ADVICE`, `REVIEW_INDEPENDENCE`, `CI`, `RUNTIME`. Report cost only when directly measured.
+
+## Offline acceptance
+
+- All ten role TOMLs parse; names, model IDs and effort values match the role matrix.
+- Project config parses, caps threads at two and does not set a primary session model.
+- Tests confirm design/execution separation, bounded write ownership, fail-closed missing evidence and no merge/release authority.
+- `AGENTS.md` and this runbook route to the same roles.
+- Run the focused contract test with `python3 -m unittest discover -s tests -p 'test_codex_agent_team.py'`; this proves static configuration contracts only.
 
 ## New-chat kickoff prompt
+
 ```text
-Run Skills Factory issue #748 as a Codex Luna-first multi-agent smoke test.
-Read AGENTS.md and docs/governance/CODEX-SUBAGENT-PILOT.md on the exact
-checked-out PR head. Do NOT change code, open/merge a PR, or deploy.
+Run Skills Factory issue #748 as a Codex multi-agent smoke test at this exact PR head.
+Read AGENTS.md and docs/governance/CODEX-SUBAGENT-PILOT.md. Do not change code,
+open/merge a PR, deploy or treat this prompt as proof that the project config loaded.
 
-Use the real project-scoped sf-test-engineer custom subagent for one
-bounded deterministic validation. Inspect its thread and report its actual
-model if visible. If the host cannot spawn the agent, mark the delegation
-gate BLOCKED; never simulate it in the main thread.
-
-Run only proportionate existing checks. For a risk-required review, spawn
-sf-independent-reviewer as a separate agent, or report BLOCKED. Produce a
-case-level matrix with candidate SHA, commands, real exit codes, evidence,
-model identity confidence, remaining gaps and next action. Do not call a
-CI PASS a runtime PASS. Report token/cost only if observed.
+Select Luna Medium as the primary coordinator if the host supports it; report actual
+model/effort visibility. Explicitly spawn sf-test-designer and sf-test-executor as
+separate child threads for one bounded existing deterministic check. Inspect the
+threads, exact candidate SHA, case IDs, command, real output and exit status. If
+required spawning/model/execution is unavailable, mark it BLOCKED/NOT_RUN; never
+simulate the child. Use sf-architect or sf-independent-reviewer only when the
+defined risk warrants them. Return the gate matrix and compact evidence links.
 ```
 
 ## Baseline and linked tasks
-#710 adopted SDLC, #724 delivered Dev Coordinator extension; #712 separately measures real delivery changes. This experiment does not re-open those tasks. Its first candidate is the implementation of #748 itself, not an unrelated production skill.
+
+#710 adopted the SDLC, #724 extended the coordinator, and #712 measures delivery outcomes separately. #749 supplied the initial two-role pilot; this extension completes the owner-directed role split. Keep the real new-chat smoke as independent host evidence. Do not rewrite #712's frozen sample or claim runtime acceptance from CI.
