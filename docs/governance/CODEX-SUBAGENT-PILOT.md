@@ -35,7 +35,11 @@ The primary chat owns scope and integration. It may implement when appropriate, 
 
 ## Required handoff
 
-Each delegated task receives the issue/AC, exact source or candidate SHA, bounded paths, relevant baseline/consumers, case IDs and expected output. Treat the GitHub issue and source tree at that exact revision as the source of truth; exclude stale chat context. The child returns only findings and evidence needed by the coordinator: exact revision, action/command, real exit status, case or fixture identity, evidence reference, limitations and BLOCKED/NOT_RUN reason. Do not paste full thread logs into the main context.
+Each delegated task receives the issue/AC, exact source or candidate SHA, bounded paths, relevant baseline/consumers, case IDs and expected output. The v1 logical fields are checked by `scripts/engineering/delegation_handoff.py`: input serialization is canonical UTF-8 JSON bounded by the declared `context_budget` (and 16 KiB hard maximum); result readback binds to the exact expected candidate SHA. Results without directly observed usage retain `usage: null` (UNKNOWN), never zero. The helper only validates references and size; it does not persist handoffs, spawn agents, enforce access or establish a security boundary.
+
+Treat the GitHub issue and source tree at that exact revision as the source of truth; exclude stale chat context. The child returns only findings and evidence needed by the coordinator: exact revision, action/command, real exit status, case or fixture identity, evidence reference, limitations and BLOCKED/NOT_RUN reason. Do not paste full thread logs into the main context. The validator rejects transcript/log, evaluator/held-out, credentials and permission/approval fields; it does not inspect free-text values for accidental sensitive content, so handoffs must still use source references rather than copied evidence.
+
+Focused static verification: `python3 -m unittest discover -s tests -p 'test_delegation_handoff.py'`. This verifies field validation, round-trip readback, stale SHA rejection, forbidden fields and UNKNOWN usage behavior. It does not satisfy the separate new-chat host smoke or prove that a host can restart and resume a child from serialized data.
 
 ## New-chat smoke protocol
 

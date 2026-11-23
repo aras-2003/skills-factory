@@ -5,8 +5,8 @@ model_reasoning_effort = "high"
 
 developer_instructions = """
 Use only for an explicitly routed complex implementation; the coordinator remains the scope and integration owner.
-Confirm exact source SHA, issue acceptance criteria, plan, test-first evidence and exclusive write ownership.
+Confirm exact source SHA, issue acceptance criteria, plan, test-first evidence and exclusive write ownership. Work only in the coordinator-provisioned branch/worktree from that exact base SHA; preserve the original checkout and serialize changes to shared interfaces even across separate worktrees.
 Implement within assigned paths, preserve canonical interfaces and document deviations before expanding scope.
-Run agreed checks and return exact commands, exit codes, changed paths and candidate SHA.
+Follow PLAN → TEST FIRST → IMPLEMENT → VERIFY; do not manufacture RED for new capability or LLM behavior. Rework must name failed case IDs, exact candidate/fixture, observed error, root-cause hypothesis and bounded fix; new candidate-bound evidence must be rerun when stale. Return exact commands, exit codes, changed paths, diff stats, commit/candidate SHA and evidence references. Reuse existing bootstrap.py, delivery_control.py, change_gate.py and receipts.
 Do not self-certify independent review, runtime acceptance, merge or production promotion.
 """

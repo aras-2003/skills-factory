@@ -1,0 +1,163 @@
+"""Validate the compact, source-bound handoff contract used by SDLC issue #748.
+
+This module validates serialized references; it does not spawn agents or grant
+permissions. The host remains responsible for actual child identity and access.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+from typing import Any
+
+
+VERSION = "1"
+MAX_HANDOFF_BYTES = 16_384
+SHA1 = re.compile(r"^[0-9a-f]{40}$")
+INPUT_FIELDS = {
+    "issue_id", "role", "objective", "acceptance_criteria", "source_base_sha",
+    "candidate_sha", "architecture_impact", "readonly_paths", "writable_paths",
+    "dependencies", "selected_skill_refs", "tool_profile_ref", "test_case_ids",
+    "stop_conditions", "context_budget", "output_contract_version",
+}
+RESULT_FIELDS = {
+    "task_id", "role", "status", "candidate_sha", "changed_paths",
+    "test_case_outcomes", "command_exit_codes", "evidence_refs",
+    "material_findings", "residual_risks", "next_action", "usage",
+}
+FORBIDDEN_FIELDS = {
+    "transcript", "tool_logs", "raw_tool_logs", "rubric", "evaluator_rubric",
+    "held_out_fixtures", "heldout_fixtures", "permissions", "approval",
+    "authorization", "credentials", "secret",
+}
+STATUSES = {"PASS", "FAIL", "NOT_RUN", "BLOCKED"}
+
+
+def _bounded_json(value: Any) -> bytes:
+    try:
+        encoded = json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise ValueError("handoff must be JSON serializable") from exc
+    if len(encoded) > MAX_HANDOFF_BYTES:
+        raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
+    return encoded
+
+
+def _check_forbidden(value: Any) -> None:
+    if isinstance(value, dict):
+        for key, nested in value.items():
+            if not isinstance(key, str):
+                raise ValueError("handoff object keys must be strings")
+            if key.lower() in FORBIDDEN_FIELDS:
+                raise ValueError(f"forbidden field: {key}")
+            _check_forbidden(nested)
+    elif isinstance(value, list):
+        for nested in value:
+            _check_forbidden(nested)
+
+
+def _required_object(value: Any, required: set[str], optional: set[str], name: str) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError(f"{name} must be an object")
+    _check_forbidden(value)
+    missing = required - value.keys()
+    unknown = value.keys() - required - optional
+    if missing:
+        raise ValueError(f"{name} missing fields: {', '.join(sorted(missing))}")
+    if unknown:
+        raise ValueError(f"{name} has unknown fields: {', '.join(sorted(unknown))}")
+    return value
+
+
+def _text(value: Any, field: str) -> None:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"{field} must be a non-empty string")
+
+
+def _string_list(value: Any, field: str) -> None:
+    if not isinstance(value, list) or any(not isinstance(item, str) or not item.strip() for item in value):
+        raise ValueError(f"{field} must be a list of non-empty strings")
+
+
+def _sha(value: Any, field: str, optional: bool = False) -> None:
+    if optional and value is None:
+        return
+    if not isinstance(value, str) or not SHA1.fullmatch(value):
+        raise ValueError(f"{field} must be a full lowercase 40-character Git SHA")
+
+
+def validate_input(payload: Any) -> dict:
+    required = INPUT_FIELDS - {"candidate_sha"}
+    item = _required_object(payload, required, {"candidate_sha"}, "handoff input")
+    if type(item["issue_id"]) is not int or item["issue_id"] < 1:
+        raise ValueError("issue_id must be a positive integer")
+    for field in ("role", "objective", "architecture_impact", "tool_profile_ref", "output_contract_version"):
+        _text(item[field], field)
+    if item["output_contract_version"] != VERSION:
+        raise ValueError("unsupported output_contract_version")
+    if not isinstance(item["acceptance_criteria"], list) or not item["acceptance_criteria"]:
+        raise ValueError("acceptance_criteria must be a non-empty numbered list")
+    for criterion in item["acceptance_criteria"]:
+        if not isinstance(criterion, str) or not re.match(r"^\d+\.", criterion.strip()):
+            raise ValueError("acceptance_criteria entries must be numbered strings")
+    _sha(item["source_base_sha"], "source_base_sha")
+    _sha(item.get("candidate_sha"), "candidate_sha", optional=True)
+    for field in ("readonly_paths", "writable_paths", "selected_skill_refs", "test_case_ids", "stop_conditions"):
+        _string_list(item[field], field)
+    if not isinstance(item["dependencies"], list) or any(type(dep) is not int or dep < 1 for dep in item["dependencies"]):
+        raise ValueError("dependencies must be positive issue numbers")
+    if type(item["context_budget"]) is not int or not 128 <= item["context_budget"] <= 16_384:
+        raise ValueError("context_budget must be between 128 and 16384 bytes")
+    if item["context_budget"] > MAX_HANDOFF_BYTES:
+        raise ValueError("context_budget exceeds maximum handoff size")
+    encoded = _bounded_json(item)
+    if len(encoded) > item["context_budget"]:
+        raise ValueError("serialized input exceeds declared context_budget")
+    return item
+
+
+def serialize_input(payload: Any) -> bytes:
+    return _bounded_json(validate_input(payload))
+
+
+def read_input(data: bytes | str) -> dict:
+    if isinstance(data, bytes):
+        if len(data) > MAX_HANDOFF_BYTES:
+            raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
+        data = data.decode("utf-8")
+    if not isinstance(data, str):
+        raise ValueError("serialized handoff must be bytes or text")
+    try:
+        payload = json.loads(data)
+    except (ValueError, TypeError) as exc:
+        raise ValueError("serialized handoff is not valid JSON") from exc
+    return validate_input(payload)
+
+
+def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
+    _sha(expected_candidate_sha, "expected_candidate_sha")
+    required = RESULT_FIELDS - {"usage"}
+    item = _required_object(payload, required, {"usage"}, "handoff result")
+    for field in ("task_id", "role", "next_action"):
+        _text(item[field], field)
+    if item["status"] not in STATUSES:
+        raise ValueError("status must be PASS, FAIL, NOT_RUN or BLOCKED")
+    _sha(item["candidate_sha"], "candidate_sha")
+    if item["candidate_sha"] != expected_candidate_sha:
+        raise ValueError("candidate SHA mismatch; result is stale")
+    for field in ("changed_paths", "evidence_refs", "material_findings", "residual_risks"):
+        _string_list(item[field], field)
+    for field in ("test_case_outcomes", "command_exit_codes"):
+        if not isinstance(item[field], list) or any(not isinstance(entry, dict) for entry in item[field]):
+            raise ValueError(f"{field} must be a list of objects")
+    usage = item.get("usage")
+    if usage is not None:
+        if not isinstance(usage, dict) or set(usage) - {"input_tokens", "output_tokens", "tool_calls"}:
+            raise ValueError("usage may contain only observed input_tokens, output_tokens and tool_calls")
+        for key, count in usage.items():
+            if type(count) is not int or count < 0:
+                raise ValueError(f"usage.{key} must be an observed non-negative integer")
+    result = dict(item)
+    result.setdefault("usage", None)
+    _bounded_json(result)
+    return result

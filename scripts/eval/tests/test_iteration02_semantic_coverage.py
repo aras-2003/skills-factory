@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import json
+import tempfile
+from unittest.mock import patch
 import unittest
 from pathlib import Path
 
@@ -94,6 +97,102 @@ class SemanticCoverageTests(unittest.TestCase):
         first = next(x for x in result["components"] if x["name"] == report["skills"][0]["name"])
         self.assertEqual("NOT_RUN", first["model_execution"])
         self.assertEqual("NOT_VERIFIED", first["runtime_behavioral_acceptance"])
+
+    def test_cov_01_rows_have_unique_stable_ids_and_source_hashes(self):
+        report = self.check()
+        ids = [row["stable_id"] for row in report["components"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(self.skills["total_skills"] + len(self.workflows["workflows"]), len(ids))
+        self.assertTrue(all(row["source_sha256"] and row["fixture_case_ids"] is not None for row in report["components"]))
+
+    def test_cov_02_duplicate_identity_blocks(self):
+        data = copy.deepcopy(self.skills)
+        data["skills"][1]["name"] = data["skills"][0]["name"]
+        result = self.check(skills=data)
+        self.assertEqual("BLOCKED_SOURCE", result["status"])
+        self.assertTrue(any("duplicate" in error for error in result["errors"]))
+
+    def test_cov_03_missing_workflow_fixture_is_unknown(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "workflows" / "sample" / "WORKFLOW.md"
+            source.parent.mkdir(parents=True)
+            source.write_text("# Sample\n", encoding="utf-8")
+            summary = mod._fixture_summary(root, "workflows/sample/WORKFLOW.md", "workflow", {})
+            self.assertFalse(summary["declared"])
+            self.assertEqual([], summary["case_ids"])
+
+    def test_cov_04_recorded_pass_never_becomes_runtime_pass(self):
+        name = self.skills["skills"][0]["name"]
+        receipt = {"component": name, "case_id": "case-1", "receipt_path": "evals/results/x.json",
+                   "receipt_sha256": "a" * 64, "receipt_validation": "PASS",
+                   "recorded_status": "PASS", "component_identity_matches": True,
+                   "compatibility": "NOT_VERIFIED"}
+        with patch.object(mod, "_receipt_rows", return_value=[receipt]):
+            report = self.check()
+        row = next(item for item in report["components"] if item["name"] == name)
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+        self.assertEqual("PASS", row["evaluation_receipts"][0]["recorded_status"])
+        self.assertEqual("NOT_VERIFIABLE_FROM_PUBLIC_INDEX", row["evidence_freshness"])
+
+    def test_cov_05_old_source_identity_is_not_current_evidence(self):
+        name = self.skills["skills"][0]["name"]
+        receipt = {"component": name, "case_id": "case-1", "receipt_path": "evals/results/x.json",
+                   "receipt_sha256": "b" * 64, "receipt_validation": "PASS",
+                   "recorded_status": "PASS", "component_identity_matches": False,
+                   "compatibility": "NOT_VERIFIED"}
+        with patch.object(mod, "_receipt_rows", return_value=[receipt]):
+            report = self.check()
+        row = next(item for item in report["components"] if item["name"] == name)
+        self.assertEqual("STALE_COMPONENT_IDENTITY", row["evidence_freshness"])
+        self.assertEqual("NOT_VERIFIED", row["runtime_status"])
+
+    def test_cov_06_dependency_graph_returns_transitive_consumers(self):
+        graph = {"workflow:a": [{"target": "workflow:b", "evidence": "registry", "dependency": "required"}],
+                 "workflow:b": [{"target": "skill:c", "evidence": "registry", "dependency": "required"}],
+                 "skill:c": []}
+        _, transitive = mod._consumer_maps(graph)
+        self.assertEqual(["workflow:a", "workflow:b"], transitive["skill:c"])
+
+    def test_cov_07_crosswalk_excludes_fixture_prompt_bodies(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "skills" / "private" / "SKILL.md"
+            source.parent.mkdir(parents=True)
+            source.write_text("---\nname: private\ndescription: private\n---\n", encoding="utf-8")
+            (source.parent / "tests").mkdir()
+            secret = "PRIVATE_PROMPT_SENTINEL_93812"
+            (source.parent / "tests" / "cases.yaml").write_text(
+                "cases:\n  - id: safe-id\n    input: " + secret + "\n    expected:\n      should_trigger: true\n", encoding="utf-8")
+            summary = mod._fixture_summary(root, "skills/private/SKILL.md", "skill", {})
+            self.assertEqual(["safe-id"], summary["case_ids"])
+            self.assertNotIn(secret, json.dumps(summary))
+
+    def test_cov_08_regeneration_is_deterministic(self):
+        first, second = self.check(), self.check()
+        self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
+
+    def test_cov_09_count_drift_blocks_against_current_source_inventory(self):
+        data = copy.deepcopy(self.skills)
+        data["total_skills"] += 1
+        result = self.check(skills=data)
+        self.assertEqual("BLOCKED_SOURCE", result["status"])
+        self.assertTrue(any("counts disagree" in error for error in result["errors"]))
+
+    def test_cov_09_catalog_source_drift_is_reported(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "docs").mkdir()
+            (root / "docs" / "catalog.json").write_text(json.dumps({
+                "skills": [{"name": "old", "source": "skills/old/SKILL.md"}],
+                "workflows": [],
+            }), encoding="utf-8")
+            result = mod._catalog_drift(root,
+                [{"name": "current", "source": "skills/current/SKILL.md"}],
+                [{"name": "flow", "source": "workflows/flow/WORKFLOW.md"}])
+            self.assertEqual("DRIFT", result["status"])
+            self.assertEqual(["current:skills/current/SKILL.md"], result["inventories"]["skill"]["missing"])
+            self.assertEqual(["old:skills/old/SKILL.md"], result["inventories"]["skill"]["extra"])
 
 
 if __name__ == "__main__":
