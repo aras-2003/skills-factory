@@ -227,6 +227,7 @@ class SemanticCoverageTests(unittest.TestCase):
         campaign = report["workflow_reconciliation_campaign"]
         self.assertEqual("TEST_DESIGN", campaign["kind"])
         self.assertEqual("NOT_RUN", campaign["runtime_execution"])
+        self.assertEqual("d8498e8a7e9140971b67f3567b5094b97b751ff9", campaign["design_base_sha"])
         self.assertEqual(9, len(campaign["cases"]))
         self.assertEqual("NOT_RUN", report["independent_evaluation"])
         for case in campaign["cases"]:
@@ -234,6 +235,20 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertFalse(case["runtime_pass"])
             for digest_key in ("workflow_source_sha256", "case_file_sha256", "input_sha256", "rubric_sha256"):
                 self.assertRegex(case[digest_key], r"^[0-9a-f]{64}$")
+
+        by_workflow = {case["workflow_id"]: case for case in campaign["cases"]}
+        governance = mod._read_yaml(ROOT / by_workflow["oaf-governance-redesign"]["rubric"])
+        product = mod._read_yaml(ROOT / by_workflow["commerce-product-deep-dive"]["rubric"])
+        architecture = mod._read_yaml(ROOT / by_workflow["oaf-enterprise-architecture-review"]["rubric"])
+        governance_text = " ".join(governance["assertions"]["must"])
+        product_text = " ".join(product["assertions"]["must"])
+        architecture_text = " ".join(architecture["assertions"]["must"])
+        self.assertIn("not authorize enterprise rollout before a bounded pilot", governance_text)
+        self.assertIn("user-supplied 300 PLN cap", product_text)
+        self.assertIn("KILL if the supplied differentiation failure condition occurs", product_text)
+        self.assertIn("states the relevant route and why", architecture_text)
+        self.assertIn("states portfolio implications", architecture_text)
+        self.assertIn("names a specific next gate", architecture_text)
 
     def test_cov_06_frequency_exposes_historical_receipt_lower_bound_without_ranking(self):
         report = self.check()

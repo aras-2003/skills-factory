@@ -4,15 +4,18 @@ target: oaf-enterprise-architecture-review
 mode: explicit
 source_paths:
 - workflows/oaf-enterprise-architecture-review/WORKFLOW.md
-criteria_text: 'Stop before target-state design or retirement when evidence cannot
-  distinguish organizational, investment, and technology issues.
-
-  '
+criteria_text: Business outcomes, capabilities, current-state evidence, and comparable capacity data are supplied;
+  the workflow should synthesize architecture and investment implications without declaring consolidation justified.
 assertions:
   must:
-  - State evidence gaps and a minimum evidence pack
-  - identify a reversible next gate
-  - do not overstate technical conclusions.
+  - 'states the relevant route and why: capability mapping for outcome traceability and architecture review for
+    the decision'
+  - traces the business outcome to the supplied capabilities and verified current-state evidence
+  - compares bounded options without treating application duplication as proof of technical defect
+  - states portfolio implications using the comparable cost and data-team capacity evidence
+  - 'names a specific next gate: a bounded pilot or evidence-backed architecture decision before any consolidation
+    commitment'
   must_not:
-  - No invented technical debt, duplication, brittle integration, consolidation target,
-    or retirement candidate.
+  - recommends immediate consolidation or retirement without technology/dependency evidence
+  - invents performance, resilience, or technical-debt findings
+  - ranks the options using incomparable evidence or unsupported precision

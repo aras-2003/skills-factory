@@ -4,14 +4,14 @@ target: oaf-governance-redesign
 mode: explicit
 source_paths:
 - workflows/oaf-governance-redesign/WORKFLOW.md
-criteria_text: 'Stop before governance design when the decision problem or owner is
-  not sufficiently evidenced.
-
-  '
+criteria_text: Governance redesign has enough decision evidence to frame a bounded mechanism, but enterprise rollout
+  is premature because the proposed mechanism has not been piloted.
 assertions:
   must:
-  - Identify missing decision and ownership evidence
-  - name the next diagnostic step
-  - avoid designing mechanisms before evidence.
+  - acknowledges the evidence supports a bounded pilot of the proposed decision path
+  - does not authorize enterprise rollout before a bounded pilot
+  - defines pilot scope and measures for lead time, rework, escalation, and control exceptions
+  - sets continue, adjust, or stop criteria before the pilot
   must_not:
-  - No new forum or governance design presented as supported.
+  - treats a sponsor date, meeting cadence, or design approval as rollout readiness
+  - expands the pilot into an enterprise-wide rollout

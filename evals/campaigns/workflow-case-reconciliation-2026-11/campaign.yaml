@@ -2,7 +2,7 @@ schema_version: '1.0'
 campaign: workflow-case-reconciliation-2026-11
 issue: 769
 kind: TEST_DESIGN
-design_base_sha: 834a58af13774d6e768c3baa184e66af0389e9b2
+design_base_sha: d8498e8a7e9140971b67f3567b5094b97b751ff9
 purpose: Add one bounded local case for each previously untested registered workflow and bind its source, input,
   rubric and local suite digests. Case definition is not execution evidence.
 source_pin_policy: Recompute all listed SHA-256 values at review and execution. Any changed source or fixture invalidates
@@ -35,14 +35,14 @@ cases:
   workflow_source: workflows/oaf-governance-redesign/WORKFLOW.md
   workflow_source_sha256: 313993e6b4f8278467e4b860c7c8c92eb8755d481b6b299582a18a7bb68aca0f
   case_file: workflows/oaf-governance-redesign/tests/cases.yaml
-  case_file_sha256: 08d01954641693b1f50f74ab39e8f318f89effa5d425b1c5d2c264035751f17c
+  case_file_sha256: 64fd625af99a983fc320a431cd5a501b9775890219d2d7f19c058a58f0e049d8
   case_id: oaf-governance-redesign-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-governance-redesign/oaf-governance-redesign-gap-001.input.md
-  input_sha256: 3ad70ebe84592aaf2a0c74f507ad73eee26f43f4f1c9c4ba25e368e02cd36e1e
+  input_sha256: d660f2327d987a4af22deb79f7bc559057edda396428657d59a6a8ac82c81aab
   rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-governance-redesign/oaf-governance-redesign-gap-001.rubric.yaml
-  rubric_sha256: 9f6c9b947c60b19bdc1fbd8edfa47c353d602282441d78d2b8b82756f285038b
-  coverage_limit: Central fixture tests a positive redesign; it does not establish the workflow stop-before-design
-    or stop-before-rollout boundary.
+  rubric_sha256: e3d462a4f4596cd18bb0f489544c85b56f322c835888be7563e8582343e0f19a
+  coverage_limit: Governance redesign has enough decision evidence to frame a bounded mechanism, but enterprise
+    rollout is premature because the proposed mechanism has not been piloted.
   execution_state: NOT_RUN
   runtime_pass: false
   reused_central_cases:
@@ -89,14 +89,14 @@ cases:
   workflow_source: workflows/oaf-enterprise-architecture-review/WORKFLOW.md
   workflow_source_sha256: 6bdcbe830ed5303a87dbf7b988de6a59e267fd3d465551812486305901cc4dc2
   case_file: workflows/oaf-enterprise-architecture-review/tests/cases.yaml
-  case_file_sha256: 7159d42655281ccbd6e6a5e6d5e5807b67ec4713c0462e65c67b42aff45f4721
+  case_file_sha256: aae67152476274c04d530275900d81ebf78d6e7296ad3555fd6c4740325b1734
   case_id: oaf-enterprise-architecture-review-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-architecture-review/oaf-enterprise-architecture-review-gap-001.input.md
-  input_sha256: c9bd72563f4b090fc40a7fd030610a58dac7e1e9ebc522dff374b3a140d70420
+  input_sha256: f063736e3a8c9b318bf2ee06a9d6138387e17499915e7c3712539b7aa7b0ed23
   rubric: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-architecture-review/oaf-enterprise-architecture-review-gap-001.rubric.yaml
-  rubric_sha256: 75da32b0c3ebceed9e32afd4c36659a966d5106e50d68852439233d3b02f6745
-  coverage_limit: Central workflow cases cover evidence-gated architecture decisions; the direct architecture-review
-    case tests the underlying skill and does not establish workflow routing/next-gate output.
+  rubric_sha256: dbe7024c2eddd2abef72c10f79ff5c6238e1371ea2d270c0e8e9eed3d8060a7c
+  coverage_limit: Business outcomes, capabilities, current-state evidence, and comparable capacity data are supplied;
+    the workflow should synthesize architecture and investment implications without declaring consolidation justified.
   execution_state: NOT_RUN
   runtime_pass: false
   reused_central_cases:
@@ -143,14 +143,14 @@ cases:
   workflow_source: workflows/commerce-product-deep-dive/WORKFLOW.md
   workflow_source_sha256: c8c1a7561f2970842df4c4874863a206c5991297b1a770903730836f1ea88d74
   case_file: workflows/commerce-product-deep-dive/tests/cases.yaml
-  case_file_sha256: 7d632246dfdffceb706e811c740520407129487f20fabd6151d868425a115243
+  case_file_sha256: a98bb6c72163e3c71eb9f1885ee7856a9c2dc87992e8b6a67ff085980f4a8018
   case_id: commerce-product-deep-dive-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-product-deep-dive/commerce-product-deep-dive-gap-001.input.md
-  input_sha256: 296a4fbe1f9d2bd91f47ab9d28dda3f04bb3dc6dae9cf9c1cefb71f1a1c2a3bd
+  input_sha256: 9aef888df451174cbcbc923c3a9467aecdf1a2f86999b578bf68335f63a467ea
   rubric: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-product-deep-dive/commerce-product-deep-dive-gap-001.rubric.yaml
-  rubric_sha256: 3be3601195c235d52a31365a321584c3d41f4ed409d50c479c332539c6d0f8a9
-  coverage_limit: Central cases cover selected product gate outcomes; they do not establish the precondition route
-    from a broad category to discovery or the complete gate output contract.
+  rubric_sha256: 21d5fed4877dc144095288cb241441b1004fa18657e38cfd7fc6bf79b6681a68
+  coverage_limit: The deep-dive preconditions are satisfied. The supplied calculations permit a bounded sample test
+    but paid acquisition remains gated by user-provided validation criteria.
   execution_state: NOT_RUN
   runtime_pass: false
   reused_central_cases:

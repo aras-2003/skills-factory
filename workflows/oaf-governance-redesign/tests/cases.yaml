@@ -1,13 +1,19 @@
 cases:
 - id: oaf-governance-redesign-gap-001
-  case: Stop before governance design when the decision problem or owner is not sufficiently evidenced.
-  input: The user asks to redesign enterprise governance but provides no material decision trace, accountable owner,
-    or formal-versus-actual decision evidence. Give the minimum evidence needed and route back to diagnosis.
+  case: Stop before enterprise rollout until the proposed governance mechanism has been tested with a bounded pilot
+    and evidence gates.
+  input: We reviewed 8 cross-functional funding decisions from the last quarter. The decision log identifies an
+    accountable owner for each; 5 decisions were sent through two overlapping committees, and 3 were escalated despite
+    being within the documented threshold. The proposed design assigns one decision owner, removes one duplicate
+    forum, and uses an asynchronous rule for routine decisions. No pilot has tested its latency, rework, or control
+    effects yet. The executive sponsor asks to roll it out company-wide next month. What is the next step?
   expected:
     should_trigger: true
     must:
-    - Identify missing decision and ownership evidence
-    - name the next diagnostic step
-    - avoid designing mechanisms before evidence.
+    - acknowledges the evidence supports a bounded pilot of the proposed decision path
+    - does not authorize enterprise rollout before a bounded pilot
+    - defines pilot scope and measures for lead time, rework, escalation, and control exceptions
+    - sets continue, adjust, or stop criteria before the pilot
     must_not:
-    - No new forum or governance design presented as supported.
+    - treats a sponsor date, meeting cadence, or design approval as rollout readiness
+    - expands the pilot into an enterprise-wide rollout
