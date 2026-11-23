@@ -8,6 +8,9 @@ ROOT = Path(__file__).resolve().parents[2]
 PROFILES = ROOT / "docs" / "governance" / "SDLC-ROLE-CAPABILITY-MATRIX.md"
 ARCHITECTURE = ROOT / "docs" / "architecture" / "SOFTWARE-ARCHITECTURE-DECISIONS.md"
 ADR_TEMPLATE = ROOT / "templates" / "architecture" / "software-decision.md"
+ARCHITECT_PROFILE = ROOT / ".codex" / "agents" / "sf-architect.toml"
+PILOT = ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md"
+WORKED_DECISION = ROOT / "docs" / "architecture" / "decisions" / "2026-11-load-skill-source-pin.md"
 
 
 class RoleCapabilityContractTests(unittest.TestCase):
@@ -34,7 +37,8 @@ class RoleCapabilityContractTests(unittest.TestCase):
             "rollback", "A0", "A1", "A2", "A3", "A4",
             "ARCH-02", "ARCH-03", "ARCH-05", "ARCH-07",
             "OAF", "implementation-brief", "skill-specification",
-            "changed shared contract",
+            "changed shared contract", "selected source tree",
+            "--graph-reviewed", "full affected-channel baseline",
         ):
             with self.subTest(contract=required):
                 self.assertIn(required, text)
@@ -50,6 +54,27 @@ class RoleCapabilityContractTests(unittest.TestCase):
         ):
             with self.subTest(contract=required):
                 self.assertIn(required, text)
+
+    def test_architect_role_routes_to_method_and_source_grounded_worked_decision(self):
+        profile = ARCHITECT_PROFILE.read_text(encoding="utf-8")
+        pilot = PILOT.read_text(encoding="utf-8")
+        decision = WORKED_DECISION.read_text(encoding="utf-8")
+        for path in (ARCHITECTURE.name, "templates/architecture/software-decision.md"):
+            with self.subTest(profile=path):
+                self.assertIn(path, profile)
+        self.assertIn("SOFTWARE-ARCHITECTURE-DECISIONS.md", pilot)
+        self.assertIn("2026-11-load-skill-source-pin.md", ARCHITECTURE.read_text(encoding="utf-8"))
+        for required in (
+            "e0f613cbaf80cf4a278e713794662250dab2b8bc",
+            "runtime/contracts/mcp-tools-v1.json",
+            "runtime/mcp/server.py",
+            "runtime/mcp/skill_catalog.py",
+            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+            "Safe extension", "Breaking alternative", "Trust boundary",
+            "Rollback", "REVIEW_REQUIRED", "NOT_RUN",
+        ):
+            with self.subTest(evidence=required):
+                self.assertIn(required, decision)
 
 
 if __name__ == "__main__":

@@ -33,6 +33,11 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 
 The primary chat owns scope and integration. It may implement when appropriate, but only one agent owns writes to a given shared interface at a time. Use the test designer before material behavior/shared-contract changes, then delegate execution separately when available. Use architecture advice for material A2–A4 decisions or security/shared-contract risk; do not call Sol for cosmetic A0 work. Use a reviewer for independent review when existing SDLC requires one. The evaluator does not set acceptance thresholds or approve release.
 
+For A2–A4 or incomplete consumer evidence, route the Architect through
+[`SOFTWARE-ARCHITECTURE-DECISIONS.md`](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md)
+and the [software decision template](../../templates/architecture/software-decision.md).
+This gives the role a concrete method without changing its host permissions.
+
 ## Required handoff
 
 Each delegated task receives the issue/AC, exact source or candidate SHA, bounded paths, relevant baseline/consumers, case IDs and expected output. The v1 logical fields are checked by `scripts/engineering/delegation_handoff.py`: input serialization is canonical UTF-8 JSON bounded by the declared `context_budget` (and 16 KiB hard maximum); result readback binds to the exact expected candidate SHA. Results without directly observed usage retain `usage: null` (UNKNOWN), never zero. The helper only validates references and size; it does not persist handoffs, spawn agents, enforce access or establish a security boundary.

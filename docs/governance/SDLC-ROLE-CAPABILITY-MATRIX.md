@@ -7,15 +7,17 @@ ledger. Re-check host behavior when the host or permission configuration changes
 
 ## Host observation
 
-Observation date: 2026-11-23. Source configuration: project `.codex/config.toml`
-and `.codex/agents/*.toml` at the candidate revision. The available Desktop
-`collaboration.spawn_agent` call accepts a task, optional model and reasoning
-effort, and optional context-fork setting. It does not accept a named project
-profile, per-child tool allowlist, working directory, path scope, network scope,
-or child sandbox override. The host daemon could not be opened in this session,
-so project-profile loading and an actual Codex child invocation were not
-observed. A separate thread shares host permissions; behavioral instructions
-are not an OS sandbox.
+Observation date: 2026-11-23. The inspected source configuration is pinned to
+`e0f613cbaf80cf4a278e713794662250dab2b8bc`. Host ID was `local`; the Codex
+Desktop build/version was not exposed. The available
+`collaboration.spawn_agent` interface accepts a task, optional model and
+reasoning effort, and an optional context-fork setting. It does not accept a
+named project profile, per-child tool allowlist, working directory, path scope,
+network scope, or child sandbox override. Project-profile loading and an actual
+invocation of a named project profile were not observed. A separate thread
+shares host permissions; behavioral instructions are not an OS sandbox. The
+source SHA pins the inspected profile files, not the host executable or proof
+that it loaded them.
 
 Codex's documented custom-agent feature controls cover selected host features
 such as shell, apps, plugins, memories, permission requests and skills; they do

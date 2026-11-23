@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -21,9 +26,13 @@ class ChangeGateTests(unittest.TestCase):
         self.assertEqual(["workflows/example/WORKFLOW.md"], report["consumer_paths"])
 
     def test_unknown_impact_or_missing_dependency_review_never_narrows_baseline(self):
-        for impact, reviewed in [("UNKNOWN", True), ("A1", False)]:
-            report = module.plan("RESOURCE", ["a.py"], architecture_impact=impact, graph_reviewed=reviewed)
-            self.assertIn("full_affected_channel_baseline", report["required_checks"])
+        for impact, reviewed in [("UNKNOWN", True), ("A1", False), ("A3", True)]:
+            with self.subTest(impact=impact, reviewed=reviewed):
+                report = module.plan("RESOURCE", ["a.py"], architecture_impact=impact, graph_reviewed=reviewed)
+                self.assertIn("full_affected_channel_baseline", report["required_checks"])
+                self.assertEqual("UNKNOWN", report["dependency_graph_status"])
+                self.assertFalse(report["dependency_graph_reviewed"])
+                self.assertEqual(reviewed, report["dependency_graph_review_claimed"])
 
     def test_low_architecture_level_does_not_bypass_security(self):
         report = module.plan("RESOURCE", ["a.py"], architecture_impact="A1", security_sensitive=True)
@@ -123,6 +132,88 @@ class ChangeGateTests(unittest.TestCase):
         self.assertEqual(module.plan("RESOURCE", ["a", "b"]), module.plan("RESOURCE", ["a", "b"]))
         with self.assertRaises(ValueError):
             module.plan("PUBLISH", ["README.md"])
+
+
+class ChangeGateRevisionTests(unittest.TestCase):
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.root = Path(directory.name)
+        self.env = {**os.environ, "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull}
+        self.git("init", "--quiet", "--template=")
+        (self.root / "old-consumer.md").write_text("old", encoding="utf-8")
+        self.base = self.commit("base")
+        (self.root / "old-consumer.md").unlink()
+        (self.root / "new-consumer.md").write_text("new", encoding="utf-8")
+        self.source = self.commit("candidate")
+        (self.root / "untracked.md").write_text("untracked", encoding="utf-8")
+
+    def git(self, *args):
+        return subprocess.check_output(["git", *args], cwd=self.root, env=self.env, text=True).strip()
+
+    def commit(self, message):
+        self.git("add", "-A")
+        self.git("-c", "user.name=Test", "-c", "user.email=test@example.test", "commit", "--quiet", "-m", message)
+        return self.git("rev-parse", "HEAD")
+
+    def report(self, *args, expected_exit=0):
+        result = subprocess.run(
+            [sys.executable, str(TARGET), "--change-class", "RESOURCE", "--architecture-impact", "A3", *args],
+            cwd=self.root, env=self.env, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(expected_exit, result.returncode, result.stderr or result.stdout)
+        return json.loads(result.stdout)
+
+    def test_consumer_evidence_uses_the_selected_commit(self):
+        report = self.report("--path", "changed.py", "--source-revision", self.base[:12], "--consumer", "old-consumer.md")
+        self.assertEqual(self.base, report["source_revision"])
+        self.assertEqual({
+            "status": "PRESENT",
+            "git_object_id": self.git("rev-parse", f"{self.base}:old-consumer.md"),
+            "git_object_type": "blob",
+            "git_mode": "100644",
+        }, report["consumer_path_evidence"]["old-consumer.md"])
+
+    def test_missing_or_untracked_consumer_cannot_claim_graph_completeness(self):
+        report = self.report("--path", "changed.py", "--consumer", "missing.md", "--consumer", "untracked.md",
+                             "--graph-reviewed", expected_exit=1)
+        self.assertEqual("BLOCKED", report["status"])
+        self.assertEqual(self.source, report["source_revision"])
+        for path in ("missing.md", "untracked.md"):
+            self.assertEqual({"status": "MISSING"}, report["consumer_path_evidence"][path])
+            self.assertTrue(any(path in blocker for blocker in report["blockers"]))
+        self.assertIn("full_affected_channel_baseline", report["required_checks"])
+
+    def test_current_worktree_presence_does_not_validate_a_stale_source(self):
+        report = self.report("--path", "changed.py", "--source-revision", self.base, "--consumer", "new-consumer.md",
+                             expected_exit=1)
+        self.assertEqual("BLOCKED", report["status"])
+        self.assertEqual(self.base, report["source_revision"])
+        self.assertEqual({"status": "MISSING"}, report["consumer_path_evidence"]["new-consumer.md"])
+
+    def test_unresolvable_source_or_base_is_blocked(self):
+        for label, args in (("source", ["--source-revision", "0" * 40, "--path", "changed.py"]),
+                            ("base", ["--base-revision", "0" * 40])):
+            with self.subTest(label=label):
+                report = self.report(*args, expected_exit=1)
+                self.assertEqual("BLOCKED", report["status"])
+                self.assertEqual(None if label == "source" else self.source, report["source_revision"])
+                self.assertTrue(any(f"{label} revision" in blocker for blocker in report["blockers"]))
+
+    def test_matching_revision_aliases_use_the_exact_tree_for_full_source_plan(self):
+        self.git("add", "untracked.md")
+        report = self.report("--base-revision", self.source, "--source-revision", "HEAD", "--consumer", "new-consumer.md",
+                             "--graph-reviewed")
+        self.assertEqual(self.source, report["source_revision"])
+        self.assertEqual(["new-consumer.md"], report["changed_files"])
+        self.assertIn("full_affected_channel_baseline", report["required_checks"])
+
+    def test_distinct_revisions_compute_the_diff_and_bind_consumer_evidence_to_source(self):
+        report = self.report("--base-revision", "HEAD^", "--source-revision", self.source, "--consumer", "new-consumer.md")
+        self.assertEqual(self.base, report["base_revision"])
+        self.assertEqual(self.source, report["source_revision"])
+        self.assertEqual(["new-consumer.md", "old-consumer.md"], report["changed_files"])
+        self.assertEqual("PRESENT", report["consumer_path_evidence"]["new-consumer.md"]["status"])
 
 
 if __name__ == "__main__":
