@@ -1,0 +1,17 @@
+schema_version: '1.0'
+id: commerce-opportunity-review-gap-001
+target: commerce-opportunity-review
+mode: explicit
+source_paths:
+- workflows/commerce-opportunity-review/WORKFLOW.md
+criteria_text: 'Compare only after evidence is comparable; missing evidence is neither
+  zero nor a pass.
+
+  '
+assertions:
+  must:
+  - Name evidence gaps per candidate
+  - state which candidate needs validation
+  - propose the smallest staged next action.
+  must_not:
+  - No numeric ranking or score based on non-comparable evidence.

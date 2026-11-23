@@ -204,17 +204,79 @@ class SemanticCoverageTests(unittest.TestCase):
             self.assertEqual(["current:skills/current/SKILL.md"], result["inventories"]["skill"]["missing"])
             self.assertEqual(["old:skills/old/SKILL.md"], result["inventories"]["skill"]["extra"])
 
-    def test_cov_03_reconciles_each_workflow_without_local_cases(self):
+    def test_cov_03_reconciles_missing_workflows_with_versioned_cases(self):
         report = self.check()
         rows = report["workflow_fixture_reconciliation"]
         self.assertEqual(9, len(rows))
-        self.assertTrue(all(row["local_cases_yaml"] == "MISSING" for row in rows))
-        self.assertTrue(all(row["follow_up_state"] in {"RECONCILIATION_REQUIRED", "CASE_DESIGN_REQUIRED"}
+        self.assertEqual([], report["errors"])
+        self.assertEqual({"commerce-opportunity-review", "commerce-product-deep-dive",
+                          "investment-portfolio-review", "investment-theme-discovery",
+                          "oaf-enterprise-architecture-review", "oaf-enterprise-change-review",
+                          "oaf-governance-redesign", "oaf-operating-model-redesign",
+                          "oaf-transformation-design"}, {row["workflow_id"] for row in rows})
+        self.assertTrue(all(row["local_cases_yaml"] == "PRESENT" for row in rows))
+        self.assertTrue(all(row["follow_up_state"] == "RECONCILED_CASE_DESIGNED" for row in rows))
+        self.assertTrue(all(row["new_design_case_ids"] for row in rows))
+        self.assertTrue(all(len(row["local_case_ids"]) == 2 and len(row["negative_case_ids"]) == 1
                             for row in rows))
-        self.assertTrue(all(row["follow_up_action"] for row in rows))
-        self.assertTrue(all(item.get("verification") == "UNVERIFIED_LEXICAL_CANDIDATE"
-                            for row in rows for item in row["alternative_campaign_candidates"]))
-        self.assertTrue(all(row["case_design_request"] is None for row in rows))
+        self.assertTrue(all(row["owner"] != "UNKNOWN" and len(row["workflow_source_sha256"]) == 64
+                            for row in rows))
+        self.assertTrue(all(row["execution_state"] == "NOT_RUN" for row in rows))
+        self.assertTrue(all(row["runtime_pass"] is False for row in rows))
+
+    def test_cov_03_reconciliation_campaign_binds_exact_source_case_input_and_rubric(self):
+        report = self.check()
+        campaign = report["workflow_reconciliation_campaign"]
+        self.assertEqual("TEST_DESIGN", campaign["kind"])
+        self.assertEqual("NOT_RUN", campaign["runtime_execution"])
+        self.assertEqual("d8498e8a7e9140971b67f3567b5094b97b751ff9", campaign["design_base_sha"])
+        self.assertEqual(9, len(campaign["cases"]))
+        self.assertEqual("NOT_RUN", report["independent_evaluation"])
+        for case in campaign["cases"]:
+            self.assertEqual("NOT_RUN", case["execution_state"])
+            self.assertFalse(case["runtime_pass"])
+            for digest_key in ("workflow_source_sha256", "case_file_sha256", "input_sha256", "rubric_sha256"):
+                self.assertRegex(case[digest_key], r"^[0-9a-f]{64}$")
+
+        by_workflow = {case["workflow_id"]: case for case in campaign["cases"]}
+        governance = mod._read_yaml(ROOT / by_workflow["oaf-governance-redesign"]["rubric"])
+        product = mod._read_yaml(ROOT / by_workflow["commerce-product-deep-dive"]["rubric"])
+        architecture = mod._read_yaml(ROOT / by_workflow["oaf-enterprise-architecture-review"]["rubric"])
+        governance_text = " ".join(governance["assertions"]["must"])
+        product_text = " ".join(product["assertions"]["must"])
+        architecture_text = " ".join(architecture["assertions"]["must"])
+        self.assertIn("not authorize enterprise rollout before a bounded pilot", governance_text)
+        self.assertIn("user-supplied 300 PLN cap", product_text)
+        self.assertIn("KILL if the supplied differentiation failure condition occurs", product_text)
+        self.assertIn("states the relevant route and why", architecture_text)
+        self.assertIn("states portfolio implications", architecture_text)
+        self.assertIn("names a specific next gate", architecture_text)
+
+    def test_cov_03_reconciliation_campaign_rejects_malformed_design_base_pin(self):
+        original_read_yaml = mod._read_yaml
+        campaign_path = ROOT / "evals/campaigns/workflow-case-reconciliation-2026-11/campaign.yaml"
+
+        def malformed_pin(path):
+            data = original_read_yaml(path)
+            if Path(path) == campaign_path:
+                data["design_base_sha"] = "not-a-commit"
+            return data
+
+        with patch.object(mod, "_read_yaml", side_effect=malformed_pin):
+            report = self.check()
+        self.assertEqual("BLOCKED_SOURCE", report["status"])
+        self.assertIn(
+            "workflow reconciliation campaign must pin a full lowercase 40-character design_base_sha",
+            report["errors"],
+        )
+
+    def test_cov_06_frequency_exposes_historical_receipt_lower_bound_without_ranking(self):
+        report = self.check()
+        components = report["components"]
+        self.assertTrue(all(isinstance(row["historical_receipt_count_lower_bound"], int)
+                            and row["historical_receipt_count_lower_bound"] >= 0 for row in components))
+        self.assertTrue(all(row["execution_frequency"] == "UNKNOWN" and
+                            row["priority"] == "UNRANKED_FREQUENCY_UNKNOWN" for row in components))
 
     def test_cov_03_component_task_owner_uses_existing_metadata(self):
         report = self.check()

@@ -1,0 +1,36 @@
+cases:
+- id: commerce-product-deep-dive-gap-001
+  case: For a concrete product with supplied economics, respect the user test cap, choose the cheapest differentiation
+    test before paid ads, and apply the supplied kill threshold.
+  input: 'Run a deep dive on a concrete product: a reusable pet-hair roller for Poland, sold through our own online
+    store and promoted with paid social. These are our supplied planning assumptions, not verified market facts:
+    net sales 121 PLN per order; product, fulfillment, payment, and returns allowance total 51 PLN; required post-ad
+    contribution is at least 30 PLN; expected CAC range is 28–38 PLN. I can spend at most 300 PLN on a sample-vs-generic
+    comparison with 10 target buyers. Proceed only if at least 7 prefer our sample and confirm they would pay 149
+    PLN. If that threshold fails, kill the product. Do not authorize paid ads unless the cheap test passes. Recommend
+    the next action, test budget and stop gate.'
+  expected:
+    should_trigger: true
+    must:
+    - recommends RESEARCH ONE BLOCKER with a sample-vs-generic test before paid acquisition
+    - keeps sample-test spend at or below the user-supplied 300 PLN cap
+    - uses the supplied threshold of at least 7 of 10 target buyers preferring the sample and confirming willingness
+      to pay
+    - KILL if the supplied differentiation failure condition occurs
+    - keeps the supplied economics explicitly labeled as assumptions
+    must_not:
+    - invent a larger spend cap, target CAC, or success threshold
+    - recommend paid ads before the cheap sample test passes
+    - continue broad research or paid testing after the supplied kill condition fails
+- id: commerce-product-deep-dive-nearmiss-001
+  case: Route broad-category exploration to product discovery; do not trigger a product deep dive.
+  input: I am exploring the broad category of compact home-organization products and want three evidence-linked
+    product hypotheses to validate before choosing a product, target market, or sales channel.
+  expected:
+    should_trigger: false
+    must:
+    - Route broad-category exploration to product discovery; do not trigger a product deep dive.
+    must_not:
+    - Do not trigger commerce-product-deep-dive for this adjacent request.
+    tags:
+    - route-to-product-opportunity-discovery

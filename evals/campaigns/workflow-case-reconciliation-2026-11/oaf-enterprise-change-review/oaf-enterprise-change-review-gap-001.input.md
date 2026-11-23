@@ -1,0 +1,1 @@
+A cross-domain enterprise issue is presented, but the user requests broad analysis without a concrete outcome decision; the evidence supports only a narrow operating-model diagnostic. Select the minimum useful path or stop/narrow explicitly.

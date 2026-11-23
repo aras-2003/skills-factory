@@ -1,0 +1,16 @@
+schema_version: '1.0'
+id: investment-portfolio-review-gap-001
+target: investment-portfolio-review
+mode: explicit
+source_paths:
+- workflows/investment-portfolio-review/WORKFLOW.md
+criteria_text: 'Do not close a substantial review without PAYLOAD_RENDERED or BLOCKED_NO_RENDERER;
+  client display stays NOT_OBSERVABLE unless observed.
+
+  '
+assertions:
+  must:
+  - Provide a truthful structured fallback
+  - explicitly record BLOCKED_NO_RENDERER and display NOT_OBSERVABLE.
+  must_not:
+  - No claim that a chart was rendered or displayed.

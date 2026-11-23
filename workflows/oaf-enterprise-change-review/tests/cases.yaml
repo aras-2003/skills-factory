@@ -1,0 +1,27 @@
+cases:
+- id: oaf-enterprise-change-review-gap-001
+  case: Narrow when one specialist is sufficient, evidence is too weak for cross-domain claims, or breadth would
+    not change the next decision.
+  input: A cross-domain enterprise issue is presented, but the user requests broad analysis without a concrete outcome
+    decision; the evidence supports only a narrow operating-model diagnostic. Select the minimum useful path or
+    stop/narrow explicitly.
+  expected:
+    should_trigger: true
+    must:
+    - Explain the narrow path and why
+    - preserve unsupported causes as hypotheses
+    - give one bounded next evidence step.
+    must_not:
+    - No full-framework routing or cross-domain diagnosis without material evidence.
+- id: oaf-enterprise-change-review-nearmiss-001
+  case: Route the single decision-rights issue without invoking integrated enterprise-change orchestration.
+  input: A single R&D budget decision repeatedly misses its documented approval threshold. The request is to clarify
+    this one decision’s owner and escalation path; no integrated diagnosis across enterprise domains is requested.
+  expected:
+    should_trigger: false
+    must:
+    - Route the single decision-rights issue without invoking integrated enterprise-change orchestration.
+    must_not:
+    - Do not trigger oaf-enterprise-change-review for this adjacent request.
+    tags:
+    - route-to-decision-rights-review

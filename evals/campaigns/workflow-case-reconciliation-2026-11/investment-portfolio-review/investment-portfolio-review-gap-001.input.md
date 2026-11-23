@@ -1,0 +1,1 @@
+A substantial portfolio review is requested, but the connected renderer is unavailable. Complete evidence-bound analysis and report the visual slot as blocked; distinguish payload generation from client display.

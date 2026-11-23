@@ -1,0 +1,17 @@
+schema_version: '1.0'
+id: oaf-enterprise-change-review-gap-001
+target: oaf-enterprise-change-review
+mode: explicit
+source_paths:
+- workflows/oaf-enterprise-change-review/WORKFLOW.md
+criteria_text: 'Narrow when one specialist is sufficient, evidence is too weak for
+  cross-domain claims, or breadth would not change the next decision.
+
+  '
+assertions:
+  must:
+  - Explain the narrow path and why
+  - preserve unsupported causes as hypotheses
+  - give one bounded next evidence step.
+  must_not:
+  - No full-framework routing or cross-domain diagnosis without material evidence.

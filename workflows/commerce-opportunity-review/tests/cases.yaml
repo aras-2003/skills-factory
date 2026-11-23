@@ -1,0 +1,26 @@
+cases:
+- id: commerce-opportunity-review-gap-001
+  case: Compare only after evidence is comparable; missing evidence is neither zero nor a pass.
+  input: Two opportunities are proposed for comparison but their evidence packs are incomplete and incomparable.
+    Normalize the missing evidence and avoid scoring or ranking unlike evidence.
+  expected:
+    should_trigger: true
+    must:
+    - Name evidence gaps per candidate
+    - state which candidate needs validation
+    - propose the smallest staged next action.
+    must_not:
+    - No numeric ranking or score based on non-comparable evidence.
+- id: commerce-opportunity-review-nearmiss-001
+  case: Route single known-product evaluation to the product deep-dive workflow, not opportunity orchestration.
+  input: Please deeply evaluate this one concrete foldable laptop stand for the Polish market and our own online
+    store. I want problem, differentiation, unit economics, supplier, regulation, acquisition, and a go/no-go decision.
+    There are no other candidates to compare.
+  expected:
+    should_trigger: false
+    must:
+    - Route single known-product evaluation to the product deep-dive workflow, not opportunity orchestration.
+    must_not:
+    - Do not trigger commerce-opportunity-review for this adjacent request.
+    tags:
+    - route-to-commerce-product-deep-dive

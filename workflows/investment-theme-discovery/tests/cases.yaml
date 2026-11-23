@@ -1,0 +1,25 @@
+cases:
+- id: investment-theme-discovery-gap-001
+  case: Default to read-only; do not persist without explicit authorization and identified canonical target.
+  input: The user requests theme analysis and mentions saving it, but has not explicitly authorized a write to an
+    identified canonical target. Perform read-only discovery and state persistence status.
+  expected:
+    should_trigger: true
+    must:
+    - Keep analysis conversational
+    - report NOT_WRITTEN and missing permission/target
+    - do not claim a canonical prior-state comparison without a verified baseline.
+    must_not:
+    - No write, SAVED claim, fabricated prior theme, or inferred investment decision.
+- id: investment-theme-discovery-nearmiss-001
+  case: Route a single-security underwriting request instead of theme discovery.
+  input: 'Review Microsoft as a single issuer: test the company thesis, valuation assumptions, and what evidence
+    would invalidate it. Do not build a sector theme or cross-industry research queue.'
+  expected:
+    should_trigger: false
+    must:
+    - Route a single-security underwriting request instead of theme discovery.
+    must_not:
+    - Do not trigger investment-theme-discovery for this adjacent request.
+    tags:
+    - route-to-investment-security-review

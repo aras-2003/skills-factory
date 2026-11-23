@@ -1,0 +1,42 @@
+cases:
+- id: oaf-enterprise-architecture-review-gap-001
+  case: Follow a positive evidence-backed architecture workflow path from outcome and capability evidence through
+    bounded options, comparable portfolio constraints, and a specific next gate.
+  input: 'Review this architecture decision. Business outcome: reduce order-fulfillment lead time across three Polish
+    distribution sites from 3 days to 1.5 days. The verified capability inventory maps order routing, inventory
+    visibility, and dispatch to accountable business owners. The verified current-state diagram shows three routing
+    applications, documented APIs between them, and different local operating constraints; no performance, resilience,
+    or technical-debt assessment has been done. The comparable portfolio pack shows two proposed initiatives competing
+    for the same data team: shared-routing pilot (8 engineer-weeks, 10-week lead time) and site-specific adapters
+    (6 engineer-weeks per site, 6-week lead time). Leadership asks whether to consolidate now. State the relevant
+    architecture route, portfolio implications, bounded options, and next gate. Do not assume the duplicate applications
+    are defects.'
+  expected:
+    should_trigger: true
+    must:
+    - 'states the relevant route and why: capability mapping for outcome traceability and architecture review for
+      the decision'
+    - traces the business outcome to the supplied capabilities and verified current-state evidence
+    - compares bounded options without treating application duplication as proof of technical defect
+    - states portfolio implications using the comparable cost and data-team capacity evidence
+    - 'names a specific next gate: a bounded pilot or evidence-backed architecture decision before any consolidation
+      commitment'
+    must_not:
+    - recommends immediate consolidation or retirement without technology/dependency evidence
+    - invents performance, resilience, or technical-debt findings
+    - ranks the options using incomparable evidence or unsupported precision
+- id: oaf-enterprise-architecture-review-nearmiss-001
+  case: Use the direct architecture-review skill for this single-system question, not the enterprise architecture
+    workflow.
+  input: One team reports slow page loads in a single application. We need a bounded application architecture review
+    of that service’s request path and performance evidence; there is no enterprise capability, investment portfolio,
+    or cross-system decision.
+  expected:
+    should_trigger: false
+    must:
+    - Use the direct architecture-review skill for this single-system question, not the enterprise architecture
+      workflow.
+    must_not:
+    - Do not trigger oaf-enterprise-architecture-review for this adjacent request.
+    tags:
+    - route-to-architecture-review

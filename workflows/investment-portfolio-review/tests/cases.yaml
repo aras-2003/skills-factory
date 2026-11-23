@@ -1,0 +1,25 @@
+cases:
+- id: investment-portfolio-review-gap-001
+  case: Do not close a substantial review without PAYLOAD_RENDERED or BLOCKED_NO_RENDERER; client display stays
+    NOT_OBSERVABLE unless observed.
+  input: A substantial portfolio review is requested, but the connected renderer is unavailable. Complete evidence-bound
+    analysis and report the visual slot as blocked; distinguish payload generation from client display.
+  expected:
+    should_trigger: true
+    must:
+    - Provide a truthful structured fallback
+    - explicitly record BLOCKED_NO_RENDERER and display NOT_OBSERVABLE.
+    must_not:
+    - No claim that a chart was rendered or displayed.
+- id: investment-portfolio-review-nearmiss-001
+  case: Route a single-security thesis question without triggering portfolio-wide review.
+  input: 'Review one holding, AMD: summarize company-specific thesis risks and what evidence would change the security
+    view. I am not asking to reconcile my portfolio, weights, overlap, or historical drift.'
+  expected:
+    should_trigger: false
+    must:
+    - Route a single-security thesis question without triggering portfolio-wide review.
+    must_not:
+    - Do not trigger investment-portfolio-review for this adjacent request.
+    tags:
+    - route-to-investment-security-review

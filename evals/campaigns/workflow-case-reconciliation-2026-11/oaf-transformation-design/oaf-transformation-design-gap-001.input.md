@@ -1,0 +1,1 @@
+The user requests a committed transformation roadmap, but the target direction and critical design choices remain unresolved. Explain what blocks sequencing and the smallest decision-resolution or evidence work needed.

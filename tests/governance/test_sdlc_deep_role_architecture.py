@@ -28,6 +28,9 @@ class RoleCapabilityContractTests(unittest.TestCase):
         self.assertIn("not an OS sandbox", text)
         self.assertIn("secret", text.lower())
         self.assertIn("production", text.lower())
+        self.assertIn("https://learn.chatgpt.com/docs/agent-configuration/subagents", text)
+        self.assertIn("not version-pinned", " ".join(text.split()))
+        self.assertIn("do not prove that this session loaded a named profile", text)
 
     def test_architecture_method_is_sha_bound_and_has_fail_closed_cases(self):
         text = ARCHITECTURE.read_text(encoding="utf-8")

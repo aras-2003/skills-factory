@@ -1,0 +1,20 @@
+schema_version: '1.0'
+id: commerce-product-deep-dive-gap-001
+target: commerce-product-deep-dive
+mode: explicit
+source_paths:
+- workflows/commerce-product-deep-dive/WORKFLOW.md
+criteria_text: The deep-dive preconditions are satisfied. The supplied calculations permit a bounded sample test
+  but paid acquisition remains gated by user-provided validation criteria.
+assertions:
+  must:
+  - recommends RESEARCH ONE BLOCKER with a sample-vs-generic test before paid acquisition
+  - keeps sample-test spend at or below the user-supplied 300 PLN cap
+  - uses the supplied threshold of at least 7 of 10 target buyers preferring the sample and confirming willingness
+    to pay
+  - KILL if the supplied differentiation failure condition occurs
+  - keeps the supplied economics explicitly labeled as assumptions
+  must_not:
+  - invent a larger spend cap, target CAC, or success threshold
+  - recommend paid ads before the cheap sample test passes
+  - continue broad research or paid testing after the supplied kill condition fails
