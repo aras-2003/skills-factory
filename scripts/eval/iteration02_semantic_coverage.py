@@ -214,6 +214,13 @@ def _workflow_reconciliation_design(root: Path, components: list[dict], nodes: d
             errors.append(f"workflow reconciliation owner mismatch: {workflow_id}")
         suite = _read_yaml(root / case.get("case_file", ""))
         suite_cases = [row for row in suite.get("cases", []) if isinstance(row, dict)]
+        local_case_ids = [row.get("id") for row in suite_cases if isinstance(row.get("id"), str)]
+        negative_case_ids = [row.get("id") for row in suite_cases
+                             if isinstance(row.get("id"), str) and
+                             isinstance(row.get("expected"), dict) and
+                             row["expected"].get("should_trigger") is False]
+        if case.get("case_ids") != local_case_ids or case.get("negative_case_ids") != negative_case_ids:
+            errors.append(f"workflow reconciliation case ID inventory mismatch: {workflow_id}")
         local = next((row for row in suite_cases if row.get("id") == case.get("case_id")), None)
         if local is None:
             errors.append(f"workflow local case absent from suite: {workflow_id}")
@@ -235,7 +242,8 @@ def _workflow_reconciliation_design(root: Path, components: list[dict], nodes: d
             "workflow_source_sha256": case.get("workflow_source_sha256"),
             "local_cases_yaml": "PRESENT", "local_case_file": case.get("case_file"),
             "local_case_file_sha256": case.get("case_file_sha256"),
-            "new_design_case_ids": [case.get("case_id")],
+            "local_case_ids": local_case_ids, "negative_case_ids": negative_case_ids,
+            "new_design_case_ids": local_case_ids,
             "central_fixture_case_ids": component["central_fixture_case_ids"],
             "reused_central_case_ids": [item.get("case_id") for item in reused_cases if isinstance(item, dict)],
             "coverage_limit": case.get("coverage_limit"), "owner": owner,

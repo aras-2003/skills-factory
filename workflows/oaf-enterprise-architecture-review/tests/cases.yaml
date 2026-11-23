@@ -25,3 +25,18 @@ cases:
     - recommends immediate consolidation or retirement without technology/dependency evidence
     - invents performance, resilience, or technical-debt findings
     - ranks the options using incomparable evidence or unsupported precision
+- id: oaf-enterprise-architecture-review-nearmiss-001
+  case: Use the direct architecture-review skill for this single-system question, not the enterprise architecture
+    workflow.
+  input: One team reports slow page loads in a single application. We need a bounded application architecture review
+    of that service’s request path and performance evidence; there is no enterprise capability, investment portfolio,
+    or cross-system decision.
+  expected:
+    should_trigger: false
+    must:
+    - Use the direct architecture-review skill for this single-system question, not the enterprise architecture
+      workflow.
+    must_not:
+    - Do not trigger oaf-enterprise-architecture-review for this adjacent request.
+    tags:
+    - route-to-architecture-review

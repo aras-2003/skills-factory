@@ -13,3 +13,16 @@ cases:
     - identify the next bounded evidence step.
     must_not:
     - No final target selection, invented owners, org chart, or claim that evidence supports a direction.
+- id: oaf-operating-model-redesign-nearmiss-001
+  case: Answer the single-decision-rights question without invoking operating-model redesign.
+  input: Our platform and regional teams disagree about who approves one customer-data retention exception. The
+    decision and evidence are known; map proposer, adviser, approver, and executor. Do not redesign the operating
+    model.
+  expected:
+    should_trigger: false
+    must:
+    - Answer the single-decision-rights question without invoking operating-model redesign.
+    must_not:
+    - Do not trigger oaf-operating-model-redesign for this adjacent request.
+    tags:
+    - route-to-decision-rights-review

@@ -17,3 +17,15 @@ cases:
     must_not:
     - treats a sponsor date, meeting cadence, or design approval as rollout readiness
     - expands the pilot into an enterprise-wide rollout
+- id: oaf-governance-redesign-nearmiss-001
+  case: Handle this as a single decision-rights clarification, not governance redesign.
+  input: For one proposed data-retention exception, clarify who proposes, advises, decides, and executes under the
+    existing policy. There is no recurring decision bottleneck or request to create or change governance mechanisms.
+  expected:
+    should_trigger: false
+    must:
+    - Handle this as a single decision-rights clarification, not governance redesign.
+    must_not:
+    - Do not trigger oaf-governance-redesign for this adjacent request.
+    tags:
+    - route-to-decision-rights-review

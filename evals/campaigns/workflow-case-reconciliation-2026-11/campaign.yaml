@@ -13,7 +13,7 @@ cases:
   workflow_source: workflows/oaf-operating-model-redesign/WORKFLOW.md
   workflow_source_sha256: cb1eaf3565b36bccf9305cfe7fb68806270048cb9bbe307e79b8f92264ec7ab9
   case_file: workflows/oaf-operating-model-redesign/tests/cases.yaml
-  case_file_sha256: 9e04f037e9edb953bba7ac8d03a123355fa13d31153752c0185e90426e114702
+  case_file_sha256: 5e111178f0c1bb44dc67f4e35fa4708fa7d47a49a6e1cda41f3e71e869f47ade
   case_id: oaf-operating-model-redesign-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-operating-model-redesign/oaf-operating-model-redesign-gap-001.input.md
   input_sha256: 8c0a65ab82d7bb17893b6767e173a5efc2c91e8b1cdce5de7e508861fedc1ada
@@ -30,12 +30,17 @@ cases:
     rubric: evals/oaf/wave2/case-operating-model-redesign-001.rubric.yaml
     rubric_sha256: f6da133f0c7cbb8e7857a43f7dee09ef1d84952aa8100b1558c6778a4d9ec665
   stable_id: workflow:oaf-operating-model-redesign
+  case_ids:
+  - oaf-operating-model-redesign-gap-001
+  - oaf-operating-model-redesign-nearmiss-001
+  negative_case_ids:
+  - oaf-operating-model-redesign-nearmiss-001
 - workflow_id: oaf-governance-redesign
   owner: arkadiusz-kamrowski
   workflow_source: workflows/oaf-governance-redesign/WORKFLOW.md
   workflow_source_sha256: 313993e6b4f8278467e4b860c7c8c92eb8755d481b6b299582a18a7bb68aca0f
   case_file: workflows/oaf-governance-redesign/tests/cases.yaml
-  case_file_sha256: 64fd625af99a983fc320a431cd5a501b9775890219d2d7f19c058a58f0e049d8
+  case_file_sha256: a6f89428fbdabb4e6646246f8b290c92ea0821f36feffb3ab8c548205d40378b
   case_id: oaf-governance-redesign-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-governance-redesign/oaf-governance-redesign-gap-001.input.md
   input_sha256: d660f2327d987a4af22deb79f7bc559057edda396428657d59a6a8ac82c81aab
@@ -52,12 +57,17 @@ cases:
     rubric: evals/oaf/wave3/case-governance-redesign-001.rubric.yaml
     rubric_sha256: 0b4ade9a503f5a09f8fba30b9c84c1a41677435a60acc43111f06348e22b23be
   stable_id: workflow:oaf-governance-redesign
+  case_ids:
+  - oaf-governance-redesign-gap-001
+  - oaf-governance-redesign-nearmiss-001
+  negative_case_ids:
+  - oaf-governance-redesign-nearmiss-001
 - workflow_id: oaf-transformation-design
   owner: arkadiusz-kamrowski
   workflow_source: workflows/oaf-transformation-design/WORKFLOW.md
   workflow_source_sha256: 7bbbd3a1449defbbdb18b669e5978d7a3deb96bba2b11feb040c739b51f0a0f8
   case_file: workflows/oaf-transformation-design/tests/cases.yaml
-  case_file_sha256: ded7b5dfbe3420ece3079db16b42a01e04d8a264ba2c3f6e7fe7133bb6b0e824
+  case_file_sha256: ed0ccf29f0628b44edf2a888432c482f66c0cd3869a4a1ada3f94c1c53c1a498
   case_id: oaf-transformation-design-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-transformation-design/oaf-transformation-design-gap-001.input.md
   input_sha256: 42c817ee3ba55551ac0c0409d2711cee709780f46d497cf51642214f20939721
@@ -84,12 +94,17 @@ cases:
     rubric: evals/oaf/wave3/case-transformation-design-001.rubric.yaml
     rubric_sha256: 599e9bc6620a36e154daa0eebf5c6d669b06c2300e544532bf0f37c79344b2d9
   stable_id: workflow:oaf-transformation-design
+  case_ids:
+  - oaf-transformation-design-gap-001
+  - oaf-transformation-design-nearmiss-001
+  negative_case_ids:
+  - oaf-transformation-design-nearmiss-001
 - workflow_id: oaf-enterprise-architecture-review
   owner: arkadiusz-kamrowski
   workflow_source: workflows/oaf-enterprise-architecture-review/WORKFLOW.md
   workflow_source_sha256: 6bdcbe830ed5303a87dbf7b988de6a59e267fd3d465551812486305901cc4dc2
   case_file: workflows/oaf-enterprise-architecture-review/tests/cases.yaml
-  case_file_sha256: aae67152476274c04d530275900d81ebf78d6e7296ad3555fd6c4740325b1734
+  case_file_sha256: 795df6085ffe9961a4f7010afddd09b54b100c5b03ef72094917f2e75eae4562
   case_id: oaf-enterprise-architecture-review-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-architecture-review/oaf-enterprise-architecture-review-gap-001.input.md
   input_sha256: f063736e3a8c9b318bf2ee06a9d6138387e17499915e7c3712539b7aa7b0ed23
@@ -116,12 +131,17 @@ cases:
     rubric: evals/oaf/wave4/case-enterprise-architecture-stop-001.rubric.yaml
     rubric_sha256: e72dddc498e94fb2ce712c9fb848cfc1270bf5e9f718061baf956df3349b9acf
   stable_id: workflow:oaf-enterprise-architecture-review
+  case_ids:
+  - oaf-enterprise-architecture-review-gap-001
+  - oaf-enterprise-architecture-review-nearmiss-001
+  negative_case_ids:
+  - oaf-enterprise-architecture-review-nearmiss-001
 - workflow_id: oaf-enterprise-change-review
   owner: arkadiusz-kamrowski
   workflow_source: workflows/oaf-enterprise-change-review/WORKFLOW.md
   workflow_source_sha256: ef69a66a1337087bcebe838f822492e8555dd17c52b925fb48acfdf2717b708a
   case_file: workflows/oaf-enterprise-change-review/tests/cases.yaml
-  case_file_sha256: 07af825c4cb01f3d2f7673e60d57e871dd8706baabb768a46397aaa678b993d5
+  case_file_sha256: 08e3256eaa632303814d0e2adf5d8222b04173d961ae37cefb567f5d930fcaab
   case_id: oaf-enterprise-change-review-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/oaf-enterprise-change-review/oaf-enterprise-change-review-gap-001.input.md
   input_sha256: 449661395d3a682fed9d330683470e7a5b722841fc7f9799ab57bd6741505916
@@ -138,12 +158,17 @@ cases:
     rubric: evals/oaf/e2e/case-001-enterprise-change.rubric.yaml
     rubric_sha256: c4443243b6e8184fdc93d8ad4441fd2f0dcfea51ddda93dd70a9f28790ac6351
   stable_id: workflow:oaf-enterprise-change-review
+  case_ids:
+  - oaf-enterprise-change-review-gap-001
+  - oaf-enterprise-change-review-nearmiss-001
+  negative_case_ids:
+  - oaf-enterprise-change-review-nearmiss-001
 - workflow_id: commerce-product-deep-dive
   owner: arkadiusz-kamrowski
   workflow_source: workflows/commerce-product-deep-dive/WORKFLOW.md
   workflow_source_sha256: c8c1a7561f2970842df4c4874863a206c5991297b1a770903730836f1ea88d74
   case_file: workflows/commerce-product-deep-dive/tests/cases.yaml
-  case_file_sha256: a98bb6c72163e3c71eb9f1885ee7856a9c2dc87992e8b6a67ff085980f4a8018
+  case_file_sha256: 38e9005f998f1cf835dcc6066f53d46f8b98c8eb31ce1cac0a5166d215858467
   case_id: commerce-product-deep-dive-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-product-deep-dive/commerce-product-deep-dive-gap-001.input.md
   input_sha256: 9aef888df451174cbcbc923c3a9467aecdf1a2f86999b578bf68335f63a467ea
@@ -170,12 +195,17 @@ cases:
     rubric: evals/commerce/case-004-boring-winner.rubric.yaml
     rubric_sha256: da046f44744b3fadb97603511da90eb824f96527875c496b3b45054d12312768
   stable_id: workflow:commerce-product-deep-dive
+  case_ids:
+  - commerce-product-deep-dive-gap-001
+  - commerce-product-deep-dive-nearmiss-001
+  negative_case_ids:
+  - commerce-product-deep-dive-nearmiss-001
 - workflow_id: commerce-opportunity-review
   owner: arkadiusz-kamrowski
   workflow_source: workflows/commerce-opportunity-review/WORKFLOW.md
   workflow_source_sha256: 7348378ce4e73881c58ef4a0f0412764596d4b621b2606ab3018e45aec0e1fac
   case_file: workflows/commerce-opportunity-review/tests/cases.yaml
-  case_file_sha256: 709684e151d8c17b081bfcd65a21c244da401cd57587b1669571738bdbbb6b5b
+  case_file_sha256: 16d546dd6fbf538bdb5853b8d9285d527df3724e107bfaf8ca32e6dfa3f424b6
   case_id: commerce-opportunity-review-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/commerce-opportunity-review/commerce-opportunity-review-gap-001.input.md
   input_sha256: 6b685a65b033eac1b9215c6ede187225c68f0937c4e90c22cb1cfad44192fe3a
@@ -202,12 +232,17 @@ cases:
     rubric: evals/commerce/case-006-product-discovery.rubric.yaml
     rubric_sha256: ad2208fed47740d8eab9602443d60855c5cd528ad36c03c91b1891a02f9b9c2a
   stable_id: workflow:commerce-opportunity-review
+  case_ids:
+  - commerce-opportunity-review-gap-001
+  - commerce-opportunity-review-nearmiss-001
+  negative_case_ids:
+  - commerce-opportunity-review-nearmiss-001
 - workflow_id: investment-portfolio-review
   owner: arkadiusz-kamrowski
   workflow_source: workflows/investment-portfolio-review/WORKFLOW.md
   workflow_source_sha256: d24897dd84cc3fb5a293f5719f17f853736b00b13e357b97518de44368eff6db
   case_file: workflows/investment-portfolio-review/tests/cases.yaml
-  case_file_sha256: 3446393a6949108d369e2bdbedf44ae83be0cf4f01b75c42fa23705563e204f3
+  case_file_sha256: bdac4b6641708adf752e3ddbf0f3eb3ac02e74b810a5e133fb9368e5089c2f59
   case_id: investment-portfolio-review-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/investment-portfolio-review/investment-portfolio-review-gap-001.input.md
   input_sha256: 5644a9947a9031d5441f9588ebc4e2d447f278b99e6870fa85f0c147d5a3668a
@@ -224,12 +259,17 @@ cases:
     rubric: evals/investing/case-003-portfolio-review.rubric.yaml
     rubric_sha256: 5a709caf6aa088486b3ef944f3727ace6d1cdfe223dfb6cc1660854479948991
   stable_id: workflow:investment-portfolio-review
+  case_ids:
+  - investment-portfolio-review-gap-001
+  - investment-portfolio-review-nearmiss-001
+  negative_case_ids:
+  - investment-portfolio-review-nearmiss-001
 - workflow_id: investment-theme-discovery
   owner: arkadiusz-kamrowski
   workflow_source: workflows/investment-theme-discovery/WORKFLOW.md
   workflow_source_sha256: f6caf0cffb7a76d9cfa368e6c1b8b1428a02a6b5d363ce981f2b7135142bfbd0
   case_file: workflows/investment-theme-discovery/tests/cases.yaml
-  case_file_sha256: f5a030e1ba04eee470b2ac323778078db481635e85995654cfac024b22a6f666
+  case_file_sha256: fe3b46a6df85fb614b129e928eda98a21943ca2ae1bb99fb34937a606cdca29e
   case_id: investment-theme-discovery-gap-001
   input: evals/campaigns/workflow-case-reconciliation-2026-11/investment-theme-discovery/investment-theme-discovery-gap-001.input.md
   input_sha256: 0194a9362d0a6b06e1e228f8e5e5f782b8a8131031efb706cba5d293ccff3fd2
@@ -246,6 +286,11 @@ cases:
     rubric: evals/investing/case-004-theme-discovery.rubric.yaml
     rubric_sha256: 25f42aebceaeb0ca7f4cf67d5689e2af0643cdecd454a968c300bd0d43c270ce
   stable_id: workflow:investment-theme-discovery
+  case_ids:
+  - investment-theme-discovery-gap-001
+  - investment-theme-discovery-nearmiss-001
+  negative_case_ids:
+  - investment-theme-discovery-nearmiss-001
 historical_campaigns_mutated: false
 runtime_execution: NOT_RUN
 independent_evaluation: NOT_RUN

@@ -22,3 +22,15 @@ cases:
     - invent a larger spend cap, target CAC, or success threshold
     - recommend paid ads before the cheap sample test passes
     - continue broad research or paid testing after the supplied kill condition fails
+- id: commerce-product-deep-dive-nearmiss-001
+  case: Route broad-category exploration to product discovery; do not trigger a product deep dive.
+  input: I am exploring the broad category of compact home-organization products and want three evidence-linked
+    product hypotheses to validate before choosing a product, target market, or sales channel.
+  expected:
+    should_trigger: false
+    must:
+    - Route broad-category exploration to product discovery; do not trigger a product deep dive.
+    must_not:
+    - Do not trigger commerce-product-deep-dive for this adjacent request.
+    tags:
+    - route-to-product-opportunity-discovery

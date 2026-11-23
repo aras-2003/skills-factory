@@ -217,6 +217,8 @@ class SemanticCoverageTests(unittest.TestCase):
         self.assertTrue(all(row["local_cases_yaml"] == "PRESENT" for row in rows))
         self.assertTrue(all(row["follow_up_state"] == "RECONCILED_CASE_DESIGNED" for row in rows))
         self.assertTrue(all(row["new_design_case_ids"] for row in rows))
+        self.assertTrue(all(len(row["local_case_ids"]) == 2 and len(row["negative_case_ids"]) == 1
+                            for row in rows))
         self.assertTrue(all(row["owner"] != "UNKNOWN" and len(row["workflow_source_sha256"]) == 64
                             for row in rows))
         self.assertTrue(all(row["execution_state"] == "NOT_RUN" for row in rows))

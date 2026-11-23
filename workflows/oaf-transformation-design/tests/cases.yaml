@@ -11,3 +11,15 @@ cases:
     - leave longer-term sequencing conditional.
     must_not:
     - No committed workstreams, named owners, dates, or fixed multi-year roadmap.
+- id: oaf-transformation-design-nearmiss-001
+  case: Route the bounded architecture decision without creating transformation workstreams or a roadmap.
+  input: We have selected our CRM and need an architecture review of the CRM-to-ERP integration contract, data ownership,
+    and reversible implementation options. No enterprise transformation plan is requested.
+  expected:
+    should_trigger: false
+    must:
+    - Route the bounded architecture decision without creating transformation workstreams or a roadmap.
+    must_not:
+    - Do not trigger oaf-transformation-design for this adjacent request.
+    tags:
+    - route-to-oaf-enterprise-architecture-review

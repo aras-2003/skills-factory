@@ -11,3 +11,16 @@ cases:
     - propose the smallest staged next action.
     must_not:
     - No numeric ranking or score based on non-comparable evidence.
+- id: commerce-opportunity-review-nearmiss-001
+  case: Route single known-product evaluation to the product deep-dive workflow, not opportunity orchestration.
+  input: Please deeply evaluate this one concrete foldable laptop stand for the Polish market and our own online
+    store. I want problem, differentiation, unit economics, supplier, regulation, acquisition, and a go/no-go decision.
+    There are no other candidates to compare.
+  expected:
+    should_trigger: false
+    must:
+    - Route single known-product evaluation to the product deep-dive workflow, not opportunity orchestration.
+    must_not:
+    - Do not trigger commerce-opportunity-review for this adjacent request.
+    tags:
+    - route-to-commerce-product-deep-dive
