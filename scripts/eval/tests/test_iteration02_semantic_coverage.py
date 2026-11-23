@@ -258,11 +258,13 @@ class SemanticCoverageTests(unittest.TestCase):
                  "direct_consumers": [], "transitive_consumers": []},
                 {"stable_id": "workflow:sample-flow", "dependency_edges": [edge],
                  "direct_consumers": [], "transitive_consumers": []},
-            ], "source_revision": "a" * 40, "crosswalk_sha256": "b" * 64}
+            ], "source_revision": "a" * 40, "crosswalk_sha256": "b" * 64,
+                "worktree_state": "CLEAN_CHECKOUT"}
             query = mod._affected_query(report, "skill:sample-skill")
             self.assertEqual("BLOCKED_UNKNOWN_EDGES", query["status"])
             self.assertEqual("a" * 40, query["source_revision"])
             self.assertEqual("b" * 64, query["crosswalk_sha256"])
+            self.assertEqual("CLEAN_CHECKOUT", query["worktree_state"])
             self.assertEqual(["workflow:sample-flow"],
                              [item["stable_id"] for item in query["unverified_consumer_candidates"]])
             self.assertEqual([edge], [item["edge"] for item in query["unresolved_edges"]])
@@ -350,9 +352,11 @@ class SemanticCoverageTests(unittest.TestCase):
              "dependency_edges": []},
             {"stable_id": "workflow:outer", "fixture_case_ids": ["outer-001"], "evidence_gap": [],
              "dependency_edges": []},
-        ]}
+        ], "worktree_state": "CLEAN_CHECKOUT", "source_revision": "c" * 40,
+            "crosswalk_sha256": "d" * 64}
         result = mod._affected_query(report, "skill:producer")
         self.assertEqual("QUERY_COMPLETE", result["status"])
+        self.assertEqual("CLEAN_CHECKOUT", result["worktree_state"])
         self.assertEqual({"workflow:middle", "workflow:outer"},
                          {row["stable_id"] for row in result["regression_neighbors"]})
         middle = next(row for row in result["regression_neighbors"] if row["stable_id"] == "workflow:middle")
@@ -360,14 +364,15 @@ class SemanticCoverageTests(unittest.TestCase):
         self.assertEqual(["runtime gap"], middle["evidence_gap"])
 
     def test_cov_06_affected_query_fails_closed_for_unknown_id_or_edge(self):
-        self.assertEqual("BLOCKED_UNKNOWN_COMPONENT", mod._affected_query({"components": []}, "skill:missing")["status"])
+        self.assertEqual("BLOCKED_UNKNOWN_COMPONENT", mod._affected_query(
+            {"components": [], "worktree_state": "CLEAN_CHECKOUT"}, "skill:missing")["status"])
         report = {"components": [
             {"stable_id": "workflow:sample", "source_path": "workflows/sample/WORKFLOW.md",
              "source_sha256": "b" * 64, "fixture_case_ids": [], "evidence_gap": [],
              "direct_consumers": [], "transitive_consumers": [],
              "dependency_edges": [{"target": None, "target_name": "unknown", "edge_status": "UNKNOWN_TARGET",
                                     "evidence": "workflows/runtime-registry.yaml#/dependencies/required"}]},
-        ]}
+        ], "worktree_state": "CLEAN_CHECKOUT"}
         result = mod._affected_query(report, "workflow:sample")
         self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
         self.assertEqual("unknown", result["unresolved_edges"][0]["edge"]["target_name"])
@@ -396,12 +401,26 @@ class SemanticCoverageTests(unittest.TestCase):
              "transitive_consumers": [], "dependency_edges": [
                  {"target": None, "target_name": "producer", "edge_status": "UNKNOWN_TARGET",
                   "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/required"}]},
-        ]}
+        ], "worktree_state": "CLEAN_CHECKOUT"}
         result = mod._affected_query(report, "skill:producer")
         self.assertEqual("BLOCKED_UNKNOWN_EDGES", result["status"])
         self.assertEqual("workflow:unrelated", result["unresolved_edges"][0]["consumer"])
         self.assertEqual("GLOBAL_GRAPH", result["unresolved_edges"][0]["scope"])
         self.assertEqual("producer", result["unresolved_edges"][0]["edge"]["target_name"])
+
+    def test_cov_06_affected_query_blocks_dirty_or_unattested_worktree(self):
+        report = {"status": "SOURCE_INVENTORY_REVIEW_REQUIRED", "errors": [],
+                  "source_revision": "e" * 40, "crosswalk_sha256": "f" * 64,
+                  "components": [{"stable_id": "skill:producer", "name": "producer",
+                                  "direct_consumers": [], "transitive_consumers": [],
+                                  "dependency_edges": []}]}
+        for worktree_state in ("WORKTREE_DIRTY", "LOCAL_CHECKOUT_UNATTESTED", "REVISION_UNAVAILABLE", None):
+            with self.subTest(worktree_state=worktree_state):
+                candidate = {**report, "worktree_state": worktree_state}
+                result = mod._affected_query(candidate, "skill:producer")
+                self.assertEqual("BLOCKED_WORKTREE_STATE", result["status"])
+                self.assertEqual(worktree_state, result["worktree_state"])
+                self.assertEqual([], result["regression_neighbors"])
 
     def test_cov_06_frequency_is_explicit_residual_blocker_without_numeric_score(self):
         report = self.check()

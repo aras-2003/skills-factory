@@ -216,9 +216,9 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
                                       "evidence": "workflows/runtime-registry.yaml#/workflows/dependencies/" + bucket,
                                       "edge_status": "UNKNOWN_TARGET"})
             # Runtime registry edges are authoritative when declared. Also retain
-            # exact inline-code skill-name references from workflow source as
-            # unverified candidates; prose alone cannot establish an executable
-            # dependency, so these edges must block impact claims until reviewed.
+            # exact skill-name references from workflow source as unverified
+            # candidates; prose alone cannot establish an executable dependency,
+            # so these edges must block impact claims until reviewed.
             source_path = _safe_existing_file(root, node["source"])
             if source_path:
                 source_text = source_path.read_text(encoding="utf-8")
@@ -263,7 +263,8 @@ def _consumer_maps(graph: dict[str, list[dict]]) -> tuple[dict[str, list[dict]],
 
 def _affected_query(report: dict, stable_id: str) -> dict:
     report_identity = {"source_revision": report.get("source_revision"),
-                       "crosswalk_sha256": report.get("crosswalk_sha256")}
+                       "crosswalk_sha256": report.get("crosswalk_sha256"),
+                       "worktree_state": report.get("worktree_state")}
     rows = {row.get("stable_id"): row for row in report.get("components", []) if isinstance(row, dict)}
     source_errors = report.get("errors", [])
     global_unresolved = [{"consumer": row["stable_id"], "edge": edge, "scope": "GLOBAL_GRAPH"}
@@ -273,6 +274,11 @@ def _affected_query(report: dict, stable_id: str) -> dict:
         return {**report_identity, "status": "BLOCKED_SOURCE", "requested_stable_id": stable_id,
                 "source_errors": source_errors, "regression_neighbors": [],
                 "unresolved_edges": global_unresolved, "runtime_execution": "NOT_RUN"}
+    if report.get("worktree_state") != "CLEAN_CHECKOUT":
+        return {**report_identity, "status": "BLOCKED_WORKTREE_STATE", "requested_stable_id": stable_id,
+                "block_reason": "Impact queries require a clean, revision-attested checkout.",
+                "regression_neighbors": [], "unresolved_edges": global_unresolved,
+                "runtime_execution": "NOT_RUN"}
     changed = rows.get(stable_id)
     if changed is None:
         return {**report_identity, "status": "BLOCKED_UNKNOWN_COMPONENT", "requested_stable_id": stable_id,
