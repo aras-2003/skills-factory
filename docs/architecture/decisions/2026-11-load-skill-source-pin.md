@@ -4,7 +4,7 @@
 - Criteria: AC-02, AC-03, ARCH-02, ARCH-03, ARCH-05, ARCH-07
 - Architecture Impact: A2 proposed for the shared tool contract; native project field not independently verified.
 - Decision: owner approved the optional source pin and the invalid and mismatch errors. The fail-closed unverifiable error is an engineering assumption, not an additional owner-approved case.
-- Baseline source SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
+- Implementation baseline SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
 - Implementation candidate SHA: `5cedbb5354913b9299818c048400b72a976fff17`.
 - Review status: source-only checks pass; exact-SHA review and publication/runtime acceptance remain separate gates.
 
@@ -68,3 +68,38 @@ backends can revert to the one-field contract. After adoption, verify callers
 have stopped sending it before reverting both schemas; if adoption cannot be
 established, retain the contract and fix forward. Never silently ignore a
 supplied pin. Rollback or publication does not follow from this decision alone.
+
+## Historical worked-example baseline
+
+This record retains the original pre-implementation source example because
+the repository governance tests bind the architecture review to that exact
+baseline. These entries describe the decision state before the later owner
+approval and implementation below; they are not the current implementation
+status.
+
+- Baseline source SHA: `e0f613cbaf80cf4a278e713794662250dab2b8bc`
+- Candidate SHA: `NOT_CREATED`.
+- Status: `REVIEW_REQUIRED`.
+- `ARCH-02` remains `NOT_RUN` at this historical baseline.
+
+At that baseline, `runtime/contracts/mcp-tools-v1.json#L6-L8` required only
+`skill_name`; `runtime/mcp/server.py#L297-L303` delegated that value to
+`runtime/mcp/skill_catalog.py#L237-L272`; and
+`adapters/skills-factory-cloud-next/src/cloud-tools.ts#L25-L29` plus
+`#L182-L186` defined the second strict adapter. The Cloud Next declaration
+was at `cloud-tools.ts#L128-L130`. Only these two source consumers were
+confirmed; other callers remained `UNKNOWN`.
+
+The original **Safe extension** kept the revision optional; the original
+**Breaking alternative** made it required. The initial **Trust boundary**
+prohibited using the caller value to select a path, URL, ref, or package.
+
+## Rollback boundary
+
+Before any caller sends `expected_source_revision`, both backends may revert
+the optional field; after adoption, callers must stop sending the field before both
+schemas are reverted; the server must never silently ignore a supplied field;
+and the exact error shape for invalid or stale revisions remains owner-gated.
+This was the original proposal state; the owner has since approved the stable
+logical code/message contract documented above; byte-for-byte envelope parity
+remains outside that approval.
