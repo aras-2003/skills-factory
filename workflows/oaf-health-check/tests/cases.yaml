@@ -58,3 +58,25 @@ cases:
       must_not:
         - force low confidence on directly evidenced findings
         - generalize beyond the reviewed initiative and decision sample
+
+  - id: oaf-health-check-reporting-loop-nearmiss-001
+    case: monthly-retention-review-routes-to-evidence-loop-review
+    setup:
+      required_capabilities:
+        - evidence-loop-review
+      note: Verify evidence-loop-review is exposed before scoring direct routing. If unavailable, expect the registry's reduced-scope/BLOCKED handling and do not score direct-route failure.
+    input: |
+      Podczas miesięcznego przeglądu retencji klientów omawiamy dashboard z trendami churnu.
+      Chcę ocenić, czy wnioski z tych przeglądów prowadzą do eksperymentów lub konkretnych
+      działań, i ustalić, jakich dowodów potrzebujemy, żeby to sprawdzić.
+    expected:
+      should_trigger: false
+      must:
+        - route directly to evidence-loop-review and stop broad diagnosis
+        - identify evidence needed to establish whether reporting leads to learning and follow-up
+        - distinguish missing review evidence from a confirmed failure of the learning loop
+      must_not:
+        - trigger oaf-health-check or cross-domain diagnosis
+        - infer broad organizational gaps such as absent owners, governance or an evaluation mechanism
+    tags:
+      - route-to-evidence-loop-review
