@@ -117,9 +117,13 @@ class BuildIntegrityTests(unittest.TestCase):
                 "def catalog_digest(): return 'c' * 64\n",
                 encoding="utf-8",
             )
+            from hashlib import sha256
+            payload = (mcp / "skill_catalog.py").read_bytes()
+            relative = b"mcp/skill_catalog.py"
+            digest = sha256(len(relative).to_bytes(4, "big") + relative + len(payload).to_bytes(8, "big") + payload).hexdigest()
             (artifact / "release-manifest.json").write_text(json.dumps({
                 "channel": "lab", "version": "0.37.0", "source_revision": "b" * 40,
-                "release_id": "0.37.0+test", "payload_content_sha256": "d" * 64,
+                "release_id": "0.37.0+test", "payload_content_sha256": digest,
                 "components": [{"name": "sample", "kind": "skill"}],
             }), encoding="utf-8")
             archive = root / "lab.zip"

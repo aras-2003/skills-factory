@@ -110,6 +110,8 @@ def validate_input(payload: Any) -> dict:
         _string_list(item[field], field)
     if len(set(item["test_case_ids"])) != len(item["test_case_ids"]):
         raise ValueError("test_case_ids must contain unique case IDs")
+    if item["role"] == "sf-test-executor" and not item["test_case_ids"]:
+        raise ValueError("Test Executor handoff requires at least one test_case_id")
     if not isinstance(item["dependencies"], list) or any(type(dep) is not int or dep < 1 for dep in item["dependencies"]):
         raise ValueError("dependencies must be positive issue numbers")
     if type(item["context_budget"]) is not int or not 128 <= item["context_budget"] <= 16_384:
@@ -140,12 +142,30 @@ def read_input(data: bytes | str) -> dict:
     return validate_input(payload)
 
 
-def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
+def validate_result(
+    payload: Any,
+    *,
+    expected_task_id: str,
+    expected_role: str,
+    expected_test_case_ids: list[str],
+    expected_candidate_sha: str,
+) -> dict:
+    _text(expected_task_id, "expected_task_id")
+    _text(expected_role, "expected_role")
+    _string_list(expected_test_case_ids, "expected_test_case_ids")
+    if expected_role == "sf-test-executor" and not expected_test_case_ids:
+        raise ValueError("Test Executor result requires at least one expected test case")
+    if len(set(expected_test_case_ids)) != len(expected_test_case_ids):
+        raise ValueError("expected_test_case_ids must contain unique case IDs")
     _sha(expected_candidate_sha, "expected_candidate_sha")
     required = RESULT_FIELDS - {"usage"}
     item = _required_object(payload, required, {"usage"}, "handoff result")
     for field in ("task_id", "role", "next_action"):
         _text(item[field], field)
+    if item["task_id"] != expected_task_id:
+        raise ValueError("task ID mismatch; result belongs to a different delegation")
+    if item["role"] != expected_role:
+        raise ValueError("role mismatch; result does not match the delegated role")
     if not isinstance(item["status"], str) or item["status"] not in STATUSES:
         raise ValueError("status must be PASS, FAIL, NOT_RUN or BLOCKED")
     _sha(item["candidate_sha"], "candidate_sha")
@@ -176,6 +196,8 @@ def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
             raise ValueError("test_case_outcomes.fixture_sha256 must be a lowercase SHA-256 digest")
         if "evidence_refs" in entry:
             _string_list(entry["evidence_refs"], "test_case_outcomes.evidence_refs")
+    if case_ids != set(expected_test_case_ids):
+        raise ValueError("test case IDs do not match the delegated test_case_ids")
     if not isinstance(item["command_exit_codes"], list):
         raise ValueError("command_exit_codes must be a list")
     for execution in item["command_exit_codes"]:
@@ -183,6 +205,15 @@ def validate_result(payload: Any, *, expected_candidate_sha: str) -> dict:
         _text(entry["command"], "command_exit_codes.command")
         if type(entry["exit_code"]) is not int:
             raise ValueError("command_exit_codes.exit_code must be an integer")
+    if item["status"] == "PASS":
+        if not item["evidence_refs"]:
+            raise ValueError("PASS requires at least one evidence reference")
+        if any(outcome["status"] != "PASS" for outcome in item["test_case_outcomes"]):
+            raise ValueError("PASS cannot contain a non-PASS test case outcome")
+        if any(execution["exit_code"] != 0 for execution in item["command_exit_codes"]):
+            raise ValueError("PASS cannot contain a nonzero command exit code")
+        if expected_role == "sf-test-executor" and not item["command_exit_codes"]:
+            raise ValueError("Test Executor PASS requires at least one command exit record")
     usage = item.get("usage")
     if usage is not None:
         if not isinstance(usage, dict) or set(usage) - {"input_tokens", "output_tokens", "tool_calls"}:

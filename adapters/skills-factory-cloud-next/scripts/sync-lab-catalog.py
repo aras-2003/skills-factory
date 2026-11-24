@@ -19,10 +19,17 @@ os.environ['PLUGIN_ROOT']=str(artifact)
 # The generated Site must not mutate the Lab artifact while loading its catalog.
 # Otherwise later archive hashes include interpreter-specific __pycache__ files.
 sys.dont_write_bytecode=True
+manifest=json.loads((artifact/'release-manifest.json').read_text())
+# Verify the artifact using the canonical verifier, not code supplied by the artifact.
+verifier_spec=importlib.util.spec_from_file_location('package_verifier',repo_root/'runtime/mcp/skill_catalog.py')
+verifier=importlib.util.module_from_spec(verifier_spec);verifier_spec.loader.exec_module(verifier)
+identity=verifier.packaged_release_identity()
+if not identity or verifier.packaged_payload_integrity(identity)['status'] != 'verified':
+    raise ValueError('Lab package identity or payload integrity is unverifiable')
+if not re.fullmatch(r'[0-9a-f]{40}', manifest['source_revision']):
+    raise ValueError('Lab source revision is invalid')
 spec=importlib.util.spec_from_file_location('catalog',artifact/'mcp/skill_catalog.py')
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
-manifest=json.loads((artifact/'release-manifest.json').read_text())
-assert len(manifest['source_revision'])==40
 canonical=json.loads(args.canonical_catalog.resolve().read_text(encoding='utf-8'))
 canonical_meta=canonical.get('metadata') or {}
 registry_digest=canonical_meta.get('provenance_registry_sha256')

@@ -1,0 +1,48 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { handleMcp } from "../src/mcp-handler";
+import { LAB_RELEASE, SKILL_CATALOG } from "../../../sites/skills-factory-site/lib/skills-factory-adapter/skill-catalog";
+
+const rpc = (method: string, params: unknown = {}) => new Request("https://example.test/mcp", {
+  method: "POST", headers: { "content-type": "application/json", "oai-authenticated-user-id": "test" },
+  body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+});
+
+test("source-pinned load_skill contract through canonical Cloud Next handler", async () => {
+  const list = await (await handleMcp(rpc("tools/list"))).json() as any;
+  const schema = list.result.tools.find((tool: any) => tool.name === "load_skill").inputSchema;
+  assert.deepEqual(schema.required, ["skill_name"]);
+  assert.equal(schema.properties.expected_source_revision.type, "string");
+  assert.equal(schema.properties.expected_source_revision.minLength, 40);
+  assert.equal(schema.properties.expected_source_revision.maxLength, 40);
+  assert.equal(schema.properties.expected_source_revision.pattern, "^[0-9a-f]{40}$");
+  assert.equal(schema.additionalProperties, false);
+  const skill = SKILL_CATALOG[0];
+  const siteRevision = LAB_RELEASE.source_revision === "f".repeat(40) ? "e".repeat(40) : "f".repeat(40);
+  const invoke = async (args: Record<string, unknown>) => (await (await handleMcp(
+    rpc("tools/call", { name: "load_skill", arguments: args }),
+    { tag: siteRevision },
+  )).json() as any).result;
+  for (const args of [{ skill_name: skill.name }, { skill_name: skill.name, expected_source_revision: LAB_RELEASE.source_revision }]) {
+    const result = await invoke(args);
+    assert.equal(result.isError, false);
+    assert.equal(result.structuredContent.source_revision, LAB_RELEASE.source_revision);
+    assert.equal(result.structuredContent.instructions, skill.instructions);
+  }
+  const failures: Array<[Record<string, unknown>, string]> = [
+    [{ skill_name: skill.name, expected_source_revision: siteRevision }, "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision."],
+    ...[LAB_RELEASE.source_revision + "\n", "A".repeat(40), null, 42].map((value): [Record<string, unknown>, string] => [{ skill_name: skill.name, expected_source_revision: value }, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."]),
+    [{ skill_name: skill.name, expected_source_revision: LAB_RELEASE.source_revision, unexpected: "do-not-echo" }, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."],
+  ];
+  for (const [args, message] of failures) {
+    const result = await invoke(args);
+    assert.equal(result.isError, true);
+    assert.equal(result.structuredContent.error, message);
+    assert.equal(JSON.parse(result.content[0].text).error, message);
+    const error = result.structuredContent.error;
+    assert.ok(!error.includes(skill.instructions));
+    assert.ok(!error.includes(LAB_RELEASE.source_revision));
+    assert.ok(!error.includes(siteRevision));
+    assert.ok(!error.includes("do-not-echo"));
+  }
+});

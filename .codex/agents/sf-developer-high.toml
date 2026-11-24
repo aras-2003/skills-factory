@@ -1,6 +1,6 @@
 name = "sf-developer-high"
 description = "Implements a bounded complex Skills Factory change when the coordinator explicitly routes high-complexity work."
-model = "gpt-6-luna"
+model = "gpt-6.1-terra"
 model_reasoning_effort = "high"
 
 developer_instructions = """
