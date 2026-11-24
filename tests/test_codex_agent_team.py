@@ -88,7 +88,7 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
         self.assertIn("Coordinator / primary chat | Luna High (project default; explicit host selection may override)", runbook)
         self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
-        self.assertIn("Select Luna High as the primary coordinator", runbook)
+        self.assertIn("Select Luna High for the primary coordinator", runbook)
         for assignment in (
             "`sf-architect` | Sol High",
             "`sf-developer-high` | Terra High",
