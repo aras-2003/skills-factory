@@ -52,12 +52,12 @@ source_sha256:
   adapters/skills-factory-cloud-next/scripts/check-contracts.mjs: 27688f57001b20fe82bb910d22eb1bb34d6204ccaf8c468c0c1f338910ac73f5
   adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py: fa2381f63a7058002542a5083e6bb59376c0cba9ecf71cf05a6011543902e37d
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 054b7c463c8e4367fdae018282c8cf0079f8d9f1d9155a116b193792bcde37ad
-  adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: e9d669f2984cc51bf0ea2933c772c1e5770b04d2e1548c64e7e37858b405a384
-  docs/architecture/decisions/2026-11-load-skill-source-pin.md: 08e94462ed2400399b2d5d4e8ab2fec90e4f75990d1f08a49c9a2d980335f0cc
+  adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 926f2edd7f8b3aa0e94cb62adf1c9bc34fd026ff0c0d98c651e2b271be3fa771
+  docs/architecture/decisions/2026-11-load-skill-source-pin.md: 9b0f0172c9d711e6ff9d37762bdba027f6a8b049e0f920362a4ec87a36020bbd
   docs/governance/CODEX-SUBAGENT-PILOT.md: 38916b53028d5ad38941985748c8614ee93cb514de894a38d53768e4b3a0218c
   runtime/mcp/server.py: b1e352ba1b82fc7832561f9f2364f1600f63a12bd4028ba66d4d9d8e09ebe487
-  runtime/mcp/skill_catalog.py: 14a64a66df79f8f9cfc2f0233e5d6d1a0053bbc15993260ed68cadc950ca7468
-  runtime/mcp/tests/test_load_skill_source_revision.py: 0aff58e75f89815842b5f4346cc6e93de8fb3051d0d919262a6ef901c7b6ab77
+  runtime/mcp/skill_catalog.py: 7c926c46f7cc7176da597f0d5c850489625e2c9363f4eb6b6b11cba1a0aca088
+  runtime/mcp/tests/test_load_skill_source_revision.py: bb364b6670bcac7e08467c3a1c20bca56a9c231eb41f6efba2d8ccbfe094bc98
   scripts/engineering/delegation_handoff.py: 6b2725248a10d73b48990c76c761b3cb51dc9c7d68353309dd5d0f901c282df1
   scripts/engineering/developer_scope.py: e771bb1ad3d0873a6e7f795c4ed2d86b7e5487f576884c9556c6d723098d22dc
   scripts/eval/campaign.py: aa195110825d5b7485a1d9292087adf43ca3234d73a199165862079527daf36c

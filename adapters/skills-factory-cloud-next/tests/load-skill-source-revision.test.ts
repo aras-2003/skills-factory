@@ -54,9 +54,12 @@ test("source-pinned load_skill contract through canonical Cloud Next handler", a
   const originalDigest = release.payload_content_sha256;
   try {
     release.payload_content_sha256 = null;
-    const result = await invoke({ skill_name: skill.name, expected_source_revision: LAB_RELEASE.source_revision });
-    assert.equal(result.isError, true);
-    assert.equal(result.structuredContent.error, "SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.");
+    for (const expected_source_revision of [LAB_RELEASE.source_revision, siteRevision]) {
+      const result = await invoke({ skill_name: skill.name, expected_source_revision });
+      assert.equal(result.isError, true);
+      assert.equal(result.structuredContent.error, "SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.");
+      assert.ok(!JSON.stringify(result).includes(skill.instructions));
+    }
   } finally {
     release.payload_content_sha256 = originalDigest;
   }
