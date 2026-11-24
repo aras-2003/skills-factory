@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -37,6 +38,185 @@ EXPECTED_INTERACTIVE_REPORT_EXHIBIT_PATHS = {
     "skills/meta/visual-output-design/SKILL.md",
     "skills/meta/visual-output-design/references/tool-routing.md",
 }
+
+ITER07_08_CONTINUATION_REL = Path(
+    "evals/campaigns/iteration-07-investing-quality-2026-11/"
+    "sdlc-source-compatibility-continuation.yaml"
+)
+ITER07_08_CONTINUATION_BASE = "1bc7677b6c63427a20b3e9f2595dce797905542b"
+ITER07_08_HISTORICAL_R20_PATHS = {
+    "skills/investing/security-underwriting/scripts/financial_quality.py",
+    "skills/investing/thesis-challenge/SKILL.md",
+    "skills/investing/thesis-monitor/SKILL.md",
+    "skills/investing/valuation-scenario-review/scripts/peer_comparison.py",
+    "skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py",
+}
+ITER07_08_REPLACED_SUPPORT_PATHS = {
+    "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+    "runtime/mcp/server.py",
+    "runtime/mcp/skill_catalog.py",
+}
+ITER07_08_BASELINE_DRIFT_SHA256 = {
+    "docs/catalog.json": "3532a555270b55b37c0e15f64a1f167180382986735180c492334e2d7099a3ce",
+}
+ITER07_08_HISTORICAL_MANIFEST_SHA256 = {
+    "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml":
+        "e453ebb7c65f30d0f56f34b8ef95f1b48e9cc06418b7ebc03b7e683aa0940783",
+    "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml":
+        "46b5e0302b15dc59c2e1b934361869c6cd814b969aadc36ec400f6355fed2292",
+}
+ITER07_08_CONTINUATION_SOURCE_PATHS = {
+    ".codex/agents/sf-developer-high.toml",
+    ".codex/agents/sf-independent-reviewer.toml",
+    ".codex/agents/sf-skill-evaluator.toml",
+    ".codex/agents/sf-test-designer.toml",
+    "adapters/skills-factory-cloud-next/scripts/check-contracts.mjs",
+    "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py",
+    "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+    "adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts",
+    "docs/architecture/decisions/2026-11-load-skill-source-pin.md",
+    "docs/governance/CODEX-SUBAGENT-PILOT.md",
+    "runtime/mcp/server.py",
+    "runtime/mcp/skill_catalog.py",
+    "runtime/mcp/tests/test_load_skill_source_revision.py",
+    "scripts/engineering/delegation_handoff.py",
+    "scripts/eval/campaign.py",
+    "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
+    "scripts/eval/tests/test_runtime_campaign.py",
+    "scripts/package/tests/test_build_integrity.py",
+    "tests/test_codex_agent_team.py",
+    "tests/test_delegation_handoff.py",
+}
+ITER07_08_CONTINUATION_DIFF_PATHS = (
+    ITER07_08_CONTINUATION_SOURCE_PATHS
+    | {ITER07_08_CONTINUATION_REL.as_posix()}
+)
+
+
+def candidate_iteration07_08_continuation(root: Path = ROOT) -> dict | None:
+    """Return source-only compatibility state without upgrading historical runtime PASS.
+
+    This narrowly permits integration of the exact #766 candidate while keeping
+    Iteration 07/08 manifests and receipts immutable. The new candidate remains
+    NOT_RUN until separately deployed and exercised in Lab.
+    """
+    path = root / ITER07_08_CONTINUATION_REL
+    try:
+        cfg = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        required = {
+            "schema_version", "continuation", "source_base_revision", "state",
+            "runtime_status", "release_approved", "historical_manifest_sha256",
+            "historical_r20_paths", "replaced_support_paths",
+            "historical_baseline_sha256", "expected_candidate_diff_paths", "source_sha256",
+        }
+        if set(cfg) != required:
+            return None
+        if (
+            cfg.get("schema_version") != "1.0"
+            or cfg.get("continuation") != "sdlc-deep-source-compatibility-2026-11"
+            or cfg.get("source_base_revision") != ITER07_08_CONTINUATION_BASE
+            or cfg.get("state") != "INTEGRATION_ISOLATED"
+            or cfg.get("runtime_status") != "NOT_RUN"
+            or cfg.get("release_approved") is not False
+            or cfg.get("historical_manifest_sha256") != ITER07_08_HISTORICAL_MANIFEST_SHA256
+            or cfg.get("historical_baseline_sha256") != ITER07_08_BASELINE_DRIFT_SHA256
+            or set(cfg.get("historical_r20_paths") or []) != ITER07_08_HISTORICAL_R20_PATHS
+            or set(cfg.get("replaced_support_paths") or []) != ITER07_08_REPLACED_SUPPORT_PATHS
+            or set(cfg.get("expected_candidate_diff_paths") or []) != ITER07_08_CONTINUATION_DIFF_PATHS
+            or len(cfg.get("expected_candidate_diff_paths") or []) != len(ITER07_08_CONTINUATION_DIFF_PATHS)
+            or set(cfg.get("source_sha256") or {}) != ITER07_08_CONTINUATION_SOURCE_PATHS
+        ):
+            return None
+
+        supplied_sha = os.environ.get("SOURCE_REVISION", "").strip()
+        head = subprocess.check_output(
+            ["git", "-C", str(root), "rev-parse", "--verify", "HEAD^{commit}"],
+            text=True, stderr=subprocess.DEVNULL,
+        ).strip()
+        if supplied_sha and supplied_sha != head:
+            return None
+        candidate_sha = supplied_sha or head
+        if not re.fullmatch(r"[0-9a-f]{40}", candidate_sha):
+            return None
+        subprocess.run(
+            ["git", "-C", str(root), "merge-base", "--is-ancestor", ITER07_08_CONTINUATION_BASE, candidate_sha],
+            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        if subprocess.check_output(
+            ["git", "-C", str(root), "diff", "--name-only", "-z", ITER07_08_CONTINUATION_BASE, candidate_sha, "--"],
+        ).split(b"\0")[:-1] != [item.encode("utf-8") for item in sorted(ITER07_08_CONTINUATION_DIFF_PATHS)]:
+            return None
+        if subprocess.check_output(
+            ["git", "-C", str(root), "status", "--porcelain=v1", "-z", "--untracked-files=all"],
+        ):
+            return None
+
+        for rel, digest in cfg["source_sha256"].items():
+            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+                return None
+            if sha256_file(root / rel) != digest:
+                return None
+        for rel, digest in ITER07_08_BASELINE_DRIFT_SHA256.items():
+            baseline_bytes = subprocess.check_output(
+                ["git", "-C", str(root), "show", f"{ITER07_08_CONTINUATION_BASE}:{rel}"],
+            )
+            if hashlib.sha256(baseline_bytes).hexdigest() != digest or sha256_file(root / rel) != digest:
+                return None
+
+        historical = {}
+        for rel, expected_digest in ITER07_08_HISTORICAL_MANIFEST_SHA256.items():
+            baseline_bytes = subprocess.check_output(
+                ["git", "-C", str(root), "show", f"{ITER07_08_CONTINUATION_BASE}:{rel}"],
+            )
+            if hashlib.sha256(baseline_bytes).hexdigest() != expected_digest:
+                return None
+            live_bytes = (root / rel).read_bytes()
+            if live_bytes != baseline_bytes:
+                return None
+            historical[rel] = yaml.safe_load(baseline_bytes) or {}
+            if historical[rel].get("runtime_status") != "PASS" or historical[rel].get("release_approved") is not False:
+                return None
+
+        iter07, iter08 = historical.values()
+        hashes07 = iter07.get("source_sha256") or {}
+        hashes08 = iter08.get("source_sha256") or {}
+        all_historical_behavior = (
+            set(iter07.get("in_scope_behavior_paths") or [])
+            | set(iter07.get("out_of_scope_behavior_paths") or [])
+            | set(iter08.get("in_scope_behavior_paths") or [])
+        )
+        if not ITER07_08_HISTORICAL_R20_PATHS.issubset(all_historical_behavior):
+            return None
+        for rel in all_historical_behavior - ITER07_08_REPLACED_SUPPORT_PATHS:
+            actual = sha256_file(root / rel)
+            # The exact continuation source map is the only permitted route for
+            # a changed candidate behavior byte; all unrelated drift fails closed.
+            if actual not in {hashes07.get(rel), hashes08.get(rel)} and rel not in ITER07_08_CONTINUATION_SOURCE_PATHS and rel not in ITER07_08_BASELINE_DRIFT_SHA256:
+                return None
+        for rel in ITER07_08_HISTORICAL_R20_PATHS:
+            actual = sha256_file(root / rel)
+            if actual not in {hashes07.get(rel), hashes08.get(rel)}:
+                return None
+        for rel in ITER07_08_REPLACED_SUPPORT_PATHS:
+            # Replaced support bytes must have been covered by source_sha256
+            # above; the historical pin remains immutable in each old manifest.
+            if rel not in ITER07_08_CONTINUATION_SOURCE_PATHS:
+                return None
+
+        return {
+            "state": "INTEGRATION_ISOLATED",
+            "runtime_status": "NOT_RUN",
+            "release_approved": False,
+            "candidate_sha": candidate_sha,
+            "candidate_tree_sha": subprocess.check_output(
+                ["git", "-C", str(root), "rev-parse", "--verify", "HEAD^{tree}"], text=True,
+            ).strip(),
+            "continuation_sha256": sha256_file(path),
+            "validated_historical_behavior_paths": sorted(all_historical_behavior),
+            "historical_r20_paths": sorted(ITER07_08_HISTORICAL_R20_PATHS),
+        }
+    except (OSError, ValueError, TypeError, KeyError, subprocess.SubprocessError, yaml.YAMLError):
+        return None
 
 
 def separately_validated_engineering_paths() -> set[str]:
@@ -1331,6 +1511,9 @@ def behavior_changes(pinned: str, *, require_commit: bool = False) -> list[str]:
     separate_meta_targets.update(separately_validated_investment_quality_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration07_investing_quality_paths(ROOT))
     separate_meta_targets.update(separately_validated_iteration08_investing_monitoring_paths(ROOT))
+    continuation = candidate_iteration07_08_continuation(ROOT)
+    if continuation is not None:
+        separate_meta_targets.update(continuation["historical_r20_paths"])
     separate_meta_targets.update(separately_validated_iteration01_paths(ROOT))
     separate_meta_targets.update(separately_validated_oaf_fallback_paths(ROOT))
     separate_meta_targets.update(separately_validated_systemic_risk_paths(ROOT))

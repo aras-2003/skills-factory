@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT / "scripts" / "eval") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts" / "eval"))
 
+import campaign
 from campaign import separately_validated_iteration07_investing_quality_paths
 
 peer_script = ROOT / "skills" / "investing" / "valuation-scenario-review" / "scripts"
@@ -46,7 +47,12 @@ class Iteration07InvestingQualityCoverageTests(unittest.TestCase):
             "runtime/mcp/cloud_server.py",
             "scripts/package/build_utils.py",
         }
-        self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
+        continuation = campaign.candidate_iteration07_08_continuation(ROOT)
+        if continuation is None:
+            self.assertEqual(expected, separately_validated_iteration07_investing_quality_paths(ROOT))
+        else:
+            self.assertEqual(set(), separately_validated_iteration07_investing_quality_paths(ROOT))
+            self.assertTrue(expected.issubset(set(continuation["validated_historical_behavior_paths"])))
 
     def test_behavior_suite_binds_runtime_evidence_and_acceptance_disposition(self):
         cfg = yaml.safe_load((ROOT / "evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml").read_text())

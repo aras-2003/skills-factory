@@ -1,0 +1,64 @@
+schema_version: "1.0"
+continuation: sdlc-deep-source-compatibility-2026-11
+source_base_revision: 1bc7677b6c63427a20b3e9f2595dce797905542b
+state: INTEGRATION_ISOLATED
+runtime_status: NOT_RUN
+release_approved: false
+historical_manifest_sha256:
+  evals/campaigns/iteration-07-investing-quality-2026-11/campaign.yaml: e453ebb7c65f30d0f56f34b8ef95f1b48e9cc06418b7ebc03b7e683aa0940783
+  evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml: 46b5e0302b15dc59c2e1b934361869c6cd814b969aadc36ec400f6355fed2292
+historical_baseline_sha256:
+  docs/catalog.json: 3532a555270b55b37c0e15f64a1f167180382986735180c492334e2d7099a3ce
+historical_r20_paths:
+  - skills/investing/security-underwriting/scripts/financial_quality.py
+  - skills/investing/thesis-challenge/SKILL.md
+  - skills/investing/thesis-monitor/SKILL.md
+  - skills/investing/valuation-scenario-review/scripts/peer_comparison.py
+  - skills/investing/valuation-scenario-review/scripts/peer_growth_plot.py
+replaced_support_paths:
+  - adapters/skills-factory-cloud-next/src/cloud-tools.ts
+  - runtime/mcp/server.py
+  - runtime/mcp/skill_catalog.py
+expected_candidate_diff_paths:
+  - .codex/agents/sf-developer-high.toml
+  - .codex/agents/sf-independent-reviewer.toml
+  - .codex/agents/sf-skill-evaluator.toml
+  - .codex/agents/sf-test-designer.toml
+  - adapters/skills-factory-cloud-next/scripts/check-contracts.mjs
+  - adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py
+  - adapters/skills-factory-cloud-next/src/cloud-tools.ts
+  - adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts
+  - docs/architecture/decisions/2026-11-load-skill-source-pin.md
+  - docs/governance/CODEX-SUBAGENT-PILOT.md
+  - evals/campaigns/iteration-07-investing-quality-2026-11/sdlc-source-compatibility-continuation.yaml
+  - runtime/mcp/server.py
+  - runtime/mcp/skill_catalog.py
+  - runtime/mcp/tests/test_load_skill_source_revision.py
+  - scripts/engineering/delegation_handoff.py
+  - scripts/eval/campaign.py
+  - scripts/eval/tests/test_iteration_07_investing_quality_coverage.py
+  - scripts/eval/tests/test_runtime_campaign.py
+  - scripts/package/tests/test_build_integrity.py
+  - tests/test_codex_agent_team.py
+  - tests/test_delegation_handoff.py
+source_sha256:
+  .codex/agents/sf-developer-high.toml: 0cc3486723b24f265929f4c4fa014049450af5c87d11aa787e6e11eabae5eaa3
+  .codex/agents/sf-independent-reviewer.toml: c1b9a18446d1eec5b9badaa967231ab18930fd77ef5b80e88efac0ecefa0f515
+  .codex/agents/sf-skill-evaluator.toml: 00513e948fb86d6ba39f31f611416ab42f04bef6eda3a1fe10cb8c920d0c456f
+  .codex/agents/sf-test-designer.toml: 0f8cd855f5eb535d52f2a25e4db2e53c35cc46166527caa0bfc25dc8ef5f13ea
+  adapters/skills-factory-cloud-next/scripts/check-contracts.mjs: 27688f57001b20fe82bb910d22eb1bb34d6204ccaf8c468c0c1f338910ac73f5
+  adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py: fa2381f63a7058002542a5083e6bb59376c0cba9ecf71cf05a6011543902e37d
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 946a1c661d88c96dc90db27b7eefa3c01e1b877ea90cbca6c3a9a08038a9277f
+  adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 4e57f8340c127268db6051b58621604c1753d9402d01880b987a6c39a9e52c72
+  docs/architecture/decisions/2026-11-load-skill-source-pin.md: 028861892f364d1a7d786b0adbbc2ba71000ee82759816979238318d6253b382
+  docs/governance/CODEX-SUBAGENT-PILOT.md: 32df05429b5492158fc971cc9dec4fffdcaac9eca0c984849f81a2feef72494a
+  runtime/mcp/server.py: 72ee1e3a56439ea0fc92e2fc158c67f4ffd8e90556f46021a5fa1feaa2d314b8
+  runtime/mcp/skill_catalog.py: 14a64a66df79f8f9cfc2f0233e5d6d1a0053bbc15993260ed68cadc950ca7468
+  runtime/mcp/tests/test_load_skill_source_revision.py: 0c0b12be81b09f2914883dd5c93cfd6b3628c28f2a7bd8c1cab6281b597dbc06
+  scripts/engineering/delegation_handoff.py: fcf43b11e850382d3393e7aa7077935102e22018a2476dbc80b716a9ec900373
+  scripts/eval/campaign.py: c273fc6ce6a708b52b938c93787faff981fdb6fa4c42d0d6e20277535201ffba
+  scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 69f5098958ca7c0d0b82b170a2b767114013879b3338e38e60addf6e0b33ca72
+  scripts/eval/tests/test_runtime_campaign.py: a6e99f180db42abf57ca55a6af792c4fe5aa40a5b696f23ec97738b785e5f3dc
+  scripts/package/tests/test_build_integrity.py: a81e56adf58420d276c79e95d180a357cfcf53c84df480c3d9b578e1bac0f313
+  tests/test_codex_agent_team.py: d691c239e44db239814c60d6965da72c7f0cbbe3dad3e85db6c7c5d110430845
+  tests/test_delegation_handoff.py: 138b9654d759d20082ee04d1af823a9a7c6b6259490d12c2dbccd6eb88975109

@@ -28,6 +28,49 @@ class RuntimeCampaignTests(unittest.TestCase):
     def setUp(self) -> None:
         (ROOT / ".tmp").mkdir(exist_ok=True)
 
+    def test_iteration_07_08_source_continuation_is_separate_from_runtime_pass(self) -> None:
+        import subprocess
+
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        with patch.dict(os.environ, {"SOURCE_REVISION": head}):
+            continuation = campaign.candidate_iteration07_08_continuation(ROOT)
+
+        self.assertIsNotNone(continuation)
+        self.assertEqual("INTEGRATION_ISOLATED", continuation["state"])
+        self.assertEqual("NOT_RUN", continuation["runtime_status"])
+        self.assertFalse(continuation["release_approved"])
+        self.assertEqual(head, continuation["candidate_sha"])
+        self.assertTrue(continuation["historical_r20_paths"])
+        self.assertEqual(set(), campaign.separately_validated_iteration07_investing_quality_paths(ROOT))
+        self.assertEqual(set(), campaign.separately_validated_iteration08_investing_monitoring_paths(ROOT))
+        self.assertEqual([], campaign.validate_campaign())
+
+    def test_iteration_07_08_source_continuation_fails_closed_on_identity_or_drift(self) -> None:
+        import subprocess
+
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        with patch.dict(os.environ, {"SOURCE_REVISION": "0" * 40}):
+            self.assertIsNone(campaign.candidate_iteration07_08_continuation(ROOT))
+
+        target = "runtime/mcp/server.py"
+        original_hash = campaign.sha256_file
+
+        def changed_support(path: Path) -> str:
+            digest = original_hash(path)
+            return "0" * 64 if path.as_posix().endswith(target) else digest
+
+        with patch.object(campaign, "sha256_file", changed_support), patch.dict(os.environ, {"SOURCE_REVISION": head}):
+            self.assertIsNone(campaign.candidate_iteration07_08_continuation(ROOT))
+
+        target = "skills/investing/thesis-monitor/SKILL.md"
+
+        def changed_behavior(path: Path) -> bytes:
+            digest = original_hash(path)
+            return "0" * 64 if path.as_posix().endswith(target) else digest
+
+        with patch.object(campaign, "sha256_file", changed_behavior), patch.dict(os.environ, {"SOURCE_REVISION": head}):
+            self.assertIsNone(campaign.candidate_iteration07_08_continuation(ROOT))
+
     def test_historical_campaign_without_optional_routing_registry_does_not_read_repo_directory(self) -> None:
         from unittest.mock import patch
         from common import load_campaign_cases
@@ -88,10 +131,15 @@ class RuntimeCampaignTests(unittest.TestCase):
             "workflows/investment-os-review/WORKFLOW.md",
             "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
         }
-        self.assertEqual(
-            expected,
-            campaign.separately_validated_iteration08_investing_monitoring_paths(ROOT),
-        )
+        continuation = campaign.candidate_iteration07_08_continuation(ROOT)
+        if continuation is None:
+            self.assertEqual(
+                expected,
+                campaign.separately_validated_iteration08_investing_monitoring_paths(ROOT),
+            )
+        else:
+            self.assertEqual(set(), campaign.separately_validated_iteration08_investing_monitoring_paths(ROOT))
+            self.assertTrue(expected.issubset(set(continuation["validated_historical_behavior_paths"])))
         cfg = yaml.safe_load(
             (ROOT / "evals/campaigns/iteration-08-investing-monitoring-2026-11/campaign.yaml").read_text()
         )
