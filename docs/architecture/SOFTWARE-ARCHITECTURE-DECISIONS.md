@@ -21,11 +21,13 @@ approve a merge or release.
 
 ## Role and model routing
 
-For A2–A4 software-repository decisions, and for an A1 change that affects a
-shared public contract or trust boundary, explicitly dispatch the Codex role
-profile `.codex/agents/sf-architect.toml` (`gpt-6.2-sol`, high). The profile is
-an advisory role; the coordinator retains scope and integration ownership.
-Do not routinely dispatch it for cosmetic A0 work.
+For A2, explicitly dispatch the Codex role profile
+`.codex/agents/sf-architect.toml` (`gpt-6.2-sol`, high) when a capability
+boundary, shared contract, or material dependency changes. A3/A4 decisions
+require this architecture advice. Also dispatch for an A1 change that affects
+a shared public contract or trust boundary. The profile is advisory; the
+coordinator retains scope and integration ownership. Do not routinely dispatch
+it for cosmetic A0 work or an A2 change without those material triggers.
 
 The OAF `architecture-review` skill and its parent workflow address enterprise
 or organisational architecture. Their `standard`/`strong` model-class guidance
