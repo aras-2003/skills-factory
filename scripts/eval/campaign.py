@@ -80,6 +80,7 @@ ITER07_08_CONTINUATION_SOURCE_PATHS = {
     "runtime/mcp/skill_catalog.py",
     "runtime/mcp/tests/test_load_skill_source_revision.py",
     "scripts/engineering/delegation_handoff.py",
+    "scripts/engineering/developer_scope.py",
     "scripts/eval/campaign.py",
     "scripts/eval/tests/test_iteration_07_investing_quality_coverage.py",
     "scripts/eval/tests/test_runtime_campaign.py",

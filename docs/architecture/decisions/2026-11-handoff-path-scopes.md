@@ -40,6 +40,7 @@ checker remains a separate post-execution consistency check.
 | `validate_repo_relative_path` | `verify_candidate_scope` in `developer_scope.py` | Writable grants and reported changed paths | `tests/test_developer_scope.py`, `DEV-SCOPE-01..14` |
 | `validate_input` | Serialization and readback callers | Reject malformed handoff before it is accepted | `serialize_input` and `read_input` tests |
 | Handoff v1 | Coordinator procedures and external consumers | Manual procedure is documented; external callers remain UNKNOWN | `docs/governance/CODEX-SUBAGENT-PILOT.md`; repository search |
+| Candidate continuation | Historical source compatibility gate | Changed pinned inputs require fresh hashes while historical manifests remain immutable | `scripts/eval/campaign.py`, continuation manifest, `scripts/eval/tests/test_runtime_campaign.py` |
 
 No source consumer besides the tests and documented coordinator procedure was
 found for the handoff serializer at the baseline. That does not prove there are
@@ -71,8 +72,8 @@ contract is `EXTEND`ed. No new skill or approval mechanism is introduced.
 3. On rollback, revalidate pending handoff scopes or suspend their dispatch until
    checked. Preserve historical receipts as immutable records.
 4. No filesystem or persisted-state migration occurs. Revert the validator,
-   shared grammar export, tests, coordinator procedure, and this decision
-   together if rollback is needed.
+   shared grammar export, tests, coordinator procedure, continuation pin update,
+   campaign source-map entry, and this decision together if rollback is needed.
 
 ## Verification and handoff
 
