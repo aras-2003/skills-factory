@@ -38,8 +38,7 @@ When you dispatch the Architect, use the
 [decision method](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md) for A2–A4
 and incomplete consumer evidence, and the [software decision
 template](../../templates/architecture/software-decision.md) for its output.
-The method does not require dispatch for every A2 and does not change the
-role's host permissions.
+The method does not require dispatch for every A2.
 This gives the role a concrete method without changing its host permissions.
 
 ## Required handoff
