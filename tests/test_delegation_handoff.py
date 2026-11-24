@@ -48,6 +48,88 @@ class DelegationHandoffTests(unittest.TestCase):
                                             else {case_id: None for case_id in expected_test_case_ids})
         return handoff.validate_result(result, **kwargs)
 
+
+    def _assert_rejected_by_both_inputs(self, payload):
+        with self.assertRaises(ValueError):
+            handoff.serialize_input(payload)
+        with self.assertRaises(ValueError):
+            handoff.read_input(json.dumps(payload))
+
+    def _assert_accepted_by_both_inputs(self, payload):
+        encoded = handoff.serialize_input(payload)
+        self.assertEqual(payload, handoff.read_input(encoded))
+        self.assertEqual(payload, handoff.read_input(json.dumps(payload)))
+
+    def test_handoff_path_01_accepts_valid_and_nested_read_write_scopes(self):
+        payload = valid_input()
+        payload["readonly_paths"] = ["src/", "docs/guide.md"]
+        payload["writable_paths"] = ["src/changed.py"]
+        encoded = handoff.serialize_input(payload)
+        self.assertEqual(payload, handoff.read_input(encoded))
+
+        payload["readonly_paths"] = []
+        payload["writable_paths"] = []
+        self.assertEqual(payload, handoff.read_input(handoff.serialize_input(payload)))
+
+    def test_handoff_path_02_rejects_malformed_paths_in_both_scopes(self):
+        invalid = ["/tmp/x", "../x", "a/../b", "./x", "a//b", "a\\\\b", "bad\x00path"]
+        for field in ("readonly_paths", "writable_paths"):
+            for path in invalid:
+                with self.subTest(field=field, path=path):
+                    payload = valid_input()
+                    payload[field] = [path]
+                    self._assert_rejected_by_both_inputs(payload)
+
+    def test_handoff_path_03_rejects_duplicate_paths_in_either_scope(self):
+        for field in ("readonly_paths", "writable_paths"):
+            with self.subTest(field=field):
+                payload = valid_input()
+                payload[field] = ["src/file.py", "src/file.py"]
+                self._assert_rejected_by_both_inputs(payload)
+
+    def test_handoff_path_04_rejects_conflicting_read_write_scopes(self):
+        conflicts = [
+            (["src/file.py"], ["src/file.py"]),
+            (["src/"], ["src/"]),
+            (["src/private.txt"], ["src/"]),
+        ]
+        for readonly, writable in conflicts:
+            with self.subTest(readonly=readonly, writable=writable):
+                payload = valid_input()
+                payload["readonly_paths"] = readonly
+                payload["writable_paths"] = writable
+                self._assert_rejected_by_both_inputs(payload)
+
+    def test_handoff_path_05_uses_component_boundaries_for_scopes(self):
+        payload = valid_input()
+        payload["readonly_paths"] = ["src/"]
+        payload["writable_paths"] = ["src-old/file.py"]
+        self._assert_accepted_by_both_inputs(payload)
+
+    def test_handoff_path_06_exact_file_and_directory_scopes_are_distinct(self):
+        for readonly, writable in ((["src"], ["src/"]), (["src/"], ["src"])):
+            with self.subTest(readonly=readonly, writable=writable):
+                payload = valid_input()
+                payload["readonly_paths"] = readonly
+                payload["writable_paths"] = writable
+                self._assert_accepted_by_both_inputs(payload)
+
+    def test_handoff_path_07_nested_directory_overlap_is_directional(self):
+        payload = valid_input()
+        payload["readonly_paths"] = ["src/a/"]
+        payload["writable_paths"] = ["src/"]
+        self._assert_rejected_by_both_inputs(payload)
+
+        payload["readonly_paths"] = ["src/"]
+        payload["writable_paths"] = ["src/a/"]
+        self._assert_accepted_by_both_inputs(payload)
+
+    def test_handoff_path_08_prefix_sibling_is_disjoint_from_write_directory(self):
+        payload = valid_input()
+        payload["readonly_paths"] = ["src-old/file.py"]
+        payload["writable_paths"] = ["src/"]
+        self._assert_accepted_by_both_inputs(payload)
+
     def test_handoff_01_requires_bounded_input_fields_and_references(self):
         payload = valid_input()
         encoded = handoff.serialize_input(payload)
