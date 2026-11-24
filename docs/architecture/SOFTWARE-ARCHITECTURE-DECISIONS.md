@@ -19,6 +19,23 @@ approve a merge or release.
 - UNKNOWN impact or incomplete consumer evidence: broaden discovery and tests;
   do not assume the graph is complete.
 
+## Role and model routing
+
+For A2–A4 software-repository decisions, and for an A1 change that affects a
+shared public contract or trust boundary, explicitly dispatch the Codex role
+profile `.codex/agents/sf-architect.toml` (`gpt-6.2-sol`, high). The profile is
+an advisory role; the coordinator retains scope and integration ownership.
+Do not routinely dispatch it for cosmetic A0 work.
+
+The OAF `architecture-review` skill and its parent workflow address enterprise
+or organisational architecture. Their `standard`/`strong` model-class guidance
+is not a Codex agent selection rule and does not override the software
+`sf-architect` role profile. Invoke OAF capabilities only when the request is
+actually about enterprise/organisational architecture. If the host cannot
+spawn the named role or expose its effective model, record that gate as
+`BLOCKED`/`UNKNOWN`; TOML values and a different model's answer are not runtime
+proof.
+
 ## Input and output contract
 
 Input must include the GitHub Issue and numbered acceptance criteria, exact baseline SHA,
