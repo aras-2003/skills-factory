@@ -51,11 +51,11 @@ source_sha256:
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 946a1c661d88c96dc90db27b7eefa3c01e1b877ea90cbca6c3a9a08038a9277f
   adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 4e57f8340c127268db6051b58621604c1753d9402d01880b987a6c39a9e52c72
   docs/architecture/decisions/2026-11-load-skill-source-pin.md: 028861892f364d1a7d786b0adbbc2ba71000ee82759816979238318d6253b382
-  docs/governance/CODEX-SUBAGENT-PILOT.md: 32df05429b5492158fc971cc9dec4fffdcaac9eca0c984849f81a2feef72494a
+  docs/governance/CODEX-SUBAGENT-PILOT.md: 2f884b58071b8fa431fd17ca0882e85da060e54705655a54c61e192fb5f1ac63
   runtime/mcp/server.py: 72ee1e3a56439ea0fc92e2fc158c67f4ffd8e90556f46021a5fa1feaa2d314b8
   runtime/mcp/skill_catalog.py: 14a64a66df79f8f9cfc2f0233e5d6d1a0053bbc15993260ed68cadc950ca7468
   runtime/mcp/tests/test_load_skill_source_revision.py: 0c0b12be81b09f2914883dd5c93cfd6b3628c28f2a7bd8c1cab6281b597dbc06
-  scripts/engineering/delegation_handoff.py: fcf43b11e850382d3393e7aa7077935102e22018a2476dbc80b716a9ec900373
+  scripts/engineering/delegation_handoff.py: dae52bc1d571d01f32a61a55b5e1dddf7ae29261f9b209fadcd00a4e48bfc13e
   scripts/eval/campaign.py: a5d251bfd5d3156a0825fc057847966ea1e42edd39049042894394c60022b680
   scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 69f5098958ca7c0d0b82b170a2b767114013879b3338e38e60addf6e0b33ca72
   scripts/eval/tests/test_runtime_campaign.py: e50d67ea9680915ac8085a9e9ebca235ea96454dbe1f5507229243779fee2afc
