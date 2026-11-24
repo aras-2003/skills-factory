@@ -91,16 +91,24 @@ class CodexAgentTeamContractTests(unittest.TestCase):
     def test_software_architecture_routing_selects_named_profile(self):
         instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
         decision_method = (ROOT / "docs" / "architecture" / "SOFTWARE-ARCHITECTURE-DECISIONS.md").read_text(encoding="utf-8")
+        runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
+        routing_contract = " ".join((instructions + decision_method + runbook).split())
         architect = load_toml(AGENT_DIR / "sf-architect.toml")
         for contract in (
-            "A2–A4 software-architecture advice",
+            "A2 decisions affecting a capability boundary, shared contract, or material dependency",
+            "required A3–A4 software-architecture advice",
             "A1 changes that affect a shared public contract or trust boundary",
-            "dispatch the named `sf-architect` profile",
+            "For A2, explicitly dispatch the Codex role profile",
+            "A3/A4 decisions require this architecture advice",
+            "or an A2 change without those material triggers",
+            "For A2, use architecture advice when a capability boundary, shared contract, or material dependency changes",
+            "require it for A3/A4",
+            "Do not call Sol for cosmetic A0 work or A2 changes without those material triggers",
             "`gpt-6.2-sol`, high",
             "does not select or override a Codex role profile",
         ):
             with self.subTest(contract=contract):
-                self.assertIn(contract, instructions + decision_method)
+                self.assertIn(contract, routing_contract)
         self.assertEqual(architect["name"], "sf-architect")
         self.assertEqual(architect["model"], "gpt-6.2-sol")
         self.assertEqual(architect["model_reasoning_effort"], "high")
