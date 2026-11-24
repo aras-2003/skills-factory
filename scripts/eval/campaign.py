@@ -94,10 +94,13 @@ ITER07_08_CONTINUATION_DIFF_PATHS = (
 
 
 def candidate_iteration07_08_continuation(root: Path = ROOT) -> dict | None:
-    """Return source-only compatibility state without upgrading historical runtime PASS.
+    """Return hash-bound source compatibility without upgrading historical runtime PASS.
 
-    This narrowly permits integration of the exact #766 candidate while keeping
-    Iteration 07/08 manifests and receipts immutable. The new candidate remains
+    Each accepted CI SOURCE_REVISION identifies a distinct candidate whose
+    support bytes are enumerated by the continuation manifest. Updating those
+    bytes and their hashes creates a new candidate; this function reports its
+    new SHA but grants neither review approval nor runtime acceptance. Iteration
+    07/08 manifests and receipts remain immutable, and each candidate remains
     NOT_RUN until separately deployed and exercised in Lab.
     """
     path = root / ITER07_08_CONTINUATION_REL
