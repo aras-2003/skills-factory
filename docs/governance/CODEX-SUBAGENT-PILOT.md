@@ -34,9 +34,12 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 
 The primary chat owns scope and integration. It may implement when appropriate, but only one agent owns writes to a given shared interface at a time. Use the test designer before material behavior/shared-contract changes, then delegate execution separately when available. For A2, use architecture advice when a capability boundary, shared contract, or material dependency changes; require it for A3/A4; also use it for A1 changes affecting a shared public contract or trust boundary. Do not call Sol for cosmetic A0 work or A2 changes without those material triggers. Use a reviewer for independent review when existing SDLC requires one. The evaluator does not set acceptance thresholds or approve release.
 
-For A2–A4 or incomplete consumer evidence, route the Architect through
-[`SOFTWARE-ARCHITECTURE-DECISIONS.md`](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md)
-and the [software decision template](../../templates/architecture/software-decision.md).
+When you dispatch the Architect, use the
+[decision method](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md) for A2–A4
+and incomplete consumer evidence, and the [software decision
+template](../../templates/architecture/software-decision.md) for its output.
+The method does not require dispatch for every A2 and does not change the
+role's host permissions.
 This gives the role a concrete method without changing its host permissions.
 
 ## Required handoff
