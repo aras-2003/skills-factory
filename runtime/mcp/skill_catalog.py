@@ -239,8 +239,6 @@ def verify_source_revision(expected: Any) -> str:
     if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{40}", expected):
         raise ValueError("INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.")
     identity = packaged_release_identity()
-    if identity and expected != identity["source_revision"]:
-        raise ValueError("SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.")
     try:
         packaged_root = _plugin_root() / "skills"
         verified = (identity and packaged_root.is_dir() and not packaged_root.is_symlink()
@@ -250,6 +248,8 @@ def verify_source_revision(expected: Any) -> str:
         verified = False
     if not verified:
         raise ValueError("SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.")
+    if expected != identity["source_revision"]:
+        raise ValueError("SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.")
     return identity["source_revision"]
 
 
