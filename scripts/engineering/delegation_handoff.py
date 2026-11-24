@@ -231,6 +231,8 @@ def validate_result(
             raise ValueError("PASS cannot contain a nonzero command exit code")
         if expected_role == "sf-test-executor" and not item["command_exit_codes"]:
             raise ValueError("Test Executor PASS requires at least one command exit record")
+        if expected_role in {"sf-developer-high", "sf-developer-medium"} and not item["command_exit_codes"]:
+            raise ValueError("Developer PASS requires at least one command exit record")
     usage = item.get("usage")
     if usage is not None:
         if not isinstance(usage, dict) or set(usage) - {"input_tokens", "output_tokens", "tool_calls"}:
