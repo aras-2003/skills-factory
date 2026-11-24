@@ -90,7 +90,7 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertIn("The top-level project config sets the Coordinator default to Luna High", runbook)
         self.assertNotIn("not the main chat model", runbook)
         self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
-        self.assertIn("Select Luna High for the primary coordinator", runbook)
+        self.assertIn("effective primary model is Luna High", runbook)
         for assignment in (
             "`sf-architect` | Sol High",
             "`sf-developer-high` | Terra High",
