@@ -88,6 +88,23 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertNotIn("sf-test-engineer", instructions)
         self.assertNotIn("sf-test-engineer", runbook)
 
+    def test_software_architecture_routing_selects_named_profile(self):
+        instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        decision_method = (ROOT / "docs" / "architecture" / "SOFTWARE-ARCHITECTURE-DECISIONS.md").read_text(encoding="utf-8")
+        architect = load_toml(AGENT_DIR / "sf-architect.toml")
+        for contract in (
+            "A2–A4 software-architecture advice",
+            "A1 changes that affect a shared public contract or trust boundary",
+            "dispatch the named `sf-architect` profile",
+            "`gpt-6.2-sol`, high",
+            "does not select or override a Codex role profile",
+        ):
+            with self.subTest(contract=contract):
+                self.assertIn(contract, instructions + decision_method)
+        self.assertEqual(architect["name"], "sf-architect")
+        self.assertEqual(architect["model"], "gpt-6.2-sol")
+        self.assertEqual(architect["model_reasoning_effort"], "high")
+
     def test_project_instructions_match_coordinator_default(self):
         instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
         self.assertIn("project default is Luna High", instructions)
