@@ -20,7 +20,7 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 
 | Role | Model / effort | Responsibility and boundary |
 | --- | --- | --- |
-| Coordinator / primary chat | Luna High (selected in host; not set by project TOML) | Owns scope, decisions and integration. |
+| Coordinator / primary chat | Luna High (project default; explicit host selection may override) | Owns scope, decisions and integration. |
 | `sf-architect` | Sol High | Risk-triggered A2–A4 architecture advice; no implementation. |
 | `sf-developer-medium` | Luna Medium | Bounded small/moderate implementation. |
 | `sf-developer-high` | Terra High | Explicitly escalated complex implementation. |
@@ -77,8 +77,8 @@ Run Skills Factory issue #748 as a Codex multi-agent smoke test at this exact PR
 Read AGENTS.md and docs/governance/CODEX-SUBAGENT-PILOT.md. Do not change code,
 open/merge a PR, deploy or treat this prompt as proof that the project config loaded.
 
-Select Luna High as the primary coordinator if the host supports it; report actual
-model/effort visibility. Explicitly spawn sf-test-designer and sf-test-executor as
+Use the project-configured Luna High default for the primary coordinator unless
+the host has an explicit model override; report actual model/effort visibility. Explicitly spawn sf-test-designer and sf-test-executor as
 separate child threads for one bounded existing deterministic check. Inspect the
 threads, exact candidate SHA, case IDs, command, real output and exit status. If
 required spawning/model/execution is unavailable, mark it BLOCKED/NOT_RUN; never
