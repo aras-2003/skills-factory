@@ -37,15 +37,15 @@ def valid_input():
 class DelegationHandoffTests(unittest.TestCase):
     def validate_result(self, result, *, expected_task_id, expected_role,
                         expected_test_case_ids, expected_candidate_sha="b" * 40,
-                        expected_fixture_sha256_by_case=None):
+                        fixture_policy_by_case=None):
         kwargs = {
             "expected_task_id": expected_task_id,
             "expected_role": expected_role,
             "expected_test_case_ids": expected_test_case_ids,
             "expected_candidate_sha": expected_candidate_sha,
         }
-        if expected_fixture_sha256_by_case is not None:
-            kwargs["expected_fixture_sha256_by_case"] = expected_fixture_sha256_by_case
+        kwargs["fixture_policy_by_case"] = (fixture_policy_by_case if fixture_policy_by_case is not None
+                                            else {case_id: None for case_id in expected_test_case_ids})
         return handoff.validate_result(result, **kwargs)
 
     def test_handoff_01_requires_bounded_input_fields_and_references(self):
@@ -78,24 +78,24 @@ class DelegationHandoffTests(unittest.TestCase):
             self.validate_result(result, expected_candidate_sha="c" * 40,
                                  expected_task_id="task-1", expected_role="sf-test-executor",
                                  expected_test_case_ids=["HANDOFF-03"],
-                                 expected_fixture_sha256_by_case=expected)
+                                 fixture_policy_by_case=expected)
 
         checked = self.validate_result(result, expected_task_id="task-1", expected_role="sf-test-executor",
                                        expected_test_case_ids=["HANDOFF-03"],
-                                       expected_fixture_sha256_by_case=expected)
+                                       fixture_policy_by_case=expected)
         self.assertEqual(fixture_sha256, checked["test_case_outcomes"][0]["fixture_sha256"])
 
         result["test_case_outcomes"][0]["fixture_sha256"] = "d" * 64
         with self.assertRaisesRegex(ValueError, "fixture SHA-256 mismatch"):
             self.validate_result(result, expected_task_id="task-1", expected_role="sf-test-executor",
                                  expected_test_case_ids=["HANDOFF-03"],
-                                 expected_fixture_sha256_by_case=expected)
+                                 fixture_policy_by_case=expected)
 
         del result["test_case_outcomes"][0]["fixture_sha256"]
         with self.assertRaisesRegex(ValueError, "fixture SHA-256 is required"):
             self.validate_result(result, expected_task_id="task-1", expected_role="sf-test-executor",
                                  expected_test_case_ids=["HANDOFF-03"],
-                                 expected_fixture_sha256_by_case=expected)
+                                 fixture_policy_by_case=expected)
 
     def test_handoff_04_rejects_private_or_authority_transfer_fields(self):
         for field in ("transcript", "tool_logs", "rubric", "held_out_fixtures", "permissions", "approval"):
@@ -299,7 +299,7 @@ class DelegationHandoffTests(unittest.TestCase):
                 expected_task_id="task-13",
                 expected_role="sf-test-executor",
                 expected_test_case_ids=[],
-                expected_candidate_sha="b" * 40,
+                expected_candidate_sha="b" * 40, fixture_policy_by_case={},
             )
 
     def test_handoff_14_binds_fixture_identity_to_trusted_dispatch(self):
@@ -313,7 +313,7 @@ class DelegationHandoffTests(unittest.TestCase):
             "material_findings": [], "residual_risks": [], "next_action": "review",
         }
         kwargs = dict(expected_task_id="task-14", expected_role="sf-test-executor",
-                      expected_test_case_ids=["HANDOFF-14"], expected_fixture_sha256_by_case=expected)
+                      expected_test_case_ids=["HANDOFF-14"], fixture_policy_by_case=expected)
         with self.assertRaisesRegex(ValueError, "fixture SHA-256 is required"):
             self.validate_result(result, **kwargs)
 
@@ -344,12 +344,113 @@ class DelegationHandoffTests(unittest.TestCase):
         }
         base = dict(expected_task_id="task-15", expected_role="sf-test-executor",
                     expected_test_case_ids=["HANDOFF-15"])
-        with self.assertRaisesRegex(ValueError, "unexpected test case"):
+        with self.assertRaisesRegex(ValueError, "exact test case IDs"):
             self.validate_result(result, **base,
-                                 expected_fixture_sha256_by_case={"OTHER": "c" * 64})
+                                 fixture_policy_by_case={"OTHER": "c" * 64})
         with self.assertRaisesRegex(ValueError, "lowercase SHA-256"):
             self.validate_result(result, **base,
-                                 expected_fixture_sha256_by_case={"HANDOFF-15": "C" * 64})
+                                 fixture_policy_by_case={"HANDOFF-15": "C" * 64})
+
+
+class FixturePolicyContractTests(unittest.TestCase):
+    def setUp(self):
+        self.payload = {
+            "task_id": "fixture-policy", "role": "sf-test-executor", "status": "PASS",
+            "candidate_sha": "b" * 40, "changed_paths": [],
+            "test_case_outcomes": [{"case_id": "CASE-1", "status": "PASS", "fixture_sha256": "c" * 64}],
+            "command_exit_codes": [{"command": "run CASE-1", "exit_code": 0}],
+            "evidence_refs": ["receipt://case-1"], "material_findings": [],
+            "residual_risks": [], "next_action": "review",
+        }
+        self.kwargs = dict(expected_task_id="fixture-policy", expected_role="sf-test-executor",
+                           expected_test_case_ids=["CASE-1"], expected_candidate_sha="b" * 40)
+
+    def test_policy_is_required_and_covers_exact_case_set(self):
+        with self.assertRaises(TypeError):
+            handoff.validate_result(self.payload, **self.kwargs)
+        with self.assertRaises(TypeError):
+            handoff.validate_result(self.payload, **self.kwargs,
+                                    expected_fixture_sha256_by_case={"CASE-1": "c" * 64})
+        for policy in (None, {}, {"OTHER": "c" * 64}, {"CASE-1": "c" * 64, "OTHER": None},
+                       {"CASE-1": "C" * 64}, {"CASE-1": 42}):
+            with self.subTest(policy=policy), self.assertRaises(ValueError):
+                handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case=policy)
+
+    def test_partial_multi_case_policy_rejected_for_pass_and_not_run(self):
+        self.kwargs["expected_test_case_ids"] = ["CASE-1", "CASE-2"]
+        self.payload["test_case_outcomes"].append({"case_id": "CASE-2", "status": "PASS"})
+        for status in ("PASS", "NOT_RUN"):
+            self.payload["status"] = status
+            for outcome in self.payload["test_case_outcomes"]:
+                outcome["status"] = status
+            with self.subTest(status=status), self.assertRaisesRegex(ValueError, "exact test case IDs"):
+                handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case={"CASE-1": "c" * 64})
+
+    def test_empty_case_set_requires_explicit_empty_policy(self):
+        self.payload.update(role="sf-independent-reviewer", status="NOT_RUN", test_case_outcomes=[])
+        self.kwargs.update(expected_role="sf-independent-reviewer", expected_test_case_ids=[])
+        self.assertEqual("NOT_RUN", handoff.validate_result(self.payload, **self.kwargs,
+                                                             fixture_policy_by_case={})["status"])
+        with self.assertRaises(ValueError):
+            handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case={"CASE-1": None})
+
+    def test_stale_candidate_and_changed_fixture_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "candidate SHA mismatch"):
+            handoff.validate_result(self.payload, **{**self.kwargs, "expected_candidate_sha": "a" * 40},
+                                    fixture_policy_by_case={"CASE-1": "c" * 64})
+        with self.assertRaisesRegex(ValueError, "fixture SHA-256 mismatch"):
+            handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case={"CASE-1": "d" * 64})
+
+    def test_unbound_accepts_executed_outcomes_only_without_digest(self):
+        outcome = self.payload["test_case_outcomes"][0]
+        for status in ("PASS", "FAIL"):
+            self.payload["status"] = status
+            outcome["status"] = status
+            outcome.pop("fixture_sha256", None)
+            self.assertEqual(status, handoff.validate_result(
+                self.payload, **self.kwargs, fixture_policy_by_case={"CASE-1": None})["status"])
+            outcome["fixture_sha256"] = "c" * 64
+            with self.assertRaisesRegex(ValueError, "unbound test case"):
+                handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case={"CASE-1": None})
+
+    def test_bound_and_unbound_fixture_policy(self):
+        policy = {"CASE-1": "c" * 64}
+        self.assertEqual("PASS", handoff.validate_result(self.payload, **self.kwargs,
+                                                          fixture_policy_by_case=policy)["status"])
+        outcome = self.payload["test_case_outcomes"][0]
+        for status in ("PASS", "FAIL"):
+            self.payload["status"] = status
+            outcome["status"] = status
+            for reported in (None, "d" * 64):
+                if reported is None:
+                    outcome.pop("fixture_sha256", None)
+                else:
+                    outcome["fixture_sha256"] = reported
+                with self.subTest(status=status, reported=reported), self.assertRaises(ValueError):
+                    handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case=policy)
+        self.payload["status"] = "FAIL"
+        outcome["status"] = "FAIL"
+        outcome["fixture_sha256"] = "c" * 64
+        self.assertEqual("FAIL", handoff.validate_result(self.payload, **self.kwargs,
+                                                          fixture_policy_by_case=policy)["status"])
+        for status in ("BLOCKED", "NOT_RUN"):
+            self.payload["status"] = status
+            outcome["status"] = status
+            outcome.pop("fixture_sha256", None)
+            self.assertEqual(status, handoff.validate_result(self.payload, **self.kwargs,
+                                                             fixture_policy_by_case=policy)["status"])
+            outcome["fixture_sha256"] = "c" * 64
+            self.assertEqual(status, handoff.validate_result(self.payload, **self.kwargs,
+                                                             fixture_policy_by_case=policy)["status"])
+            outcome["fixture_sha256"] = "d" * 64
+            with self.assertRaises(ValueError):
+                handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case=policy)
+        outcome["fixture_sha256"] = "c" * 64
+        with self.assertRaises(ValueError):
+            handoff.validate_result(self.payload, **self.kwargs, fixture_policy_by_case={"CASE-1": None})
+        outcome.pop("fixture_sha256")
+        self.assertEqual("NOT_RUN", handoff.validate_result(self.payload, **self.kwargs,
+                                                             fixture_policy_by_case={"CASE-1": None})["status"])
 
 
 if __name__ == "__main__":
