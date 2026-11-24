@@ -87,6 +87,7 @@ ITER07_08_CONTINUATION_SOURCE_PATHS = {
     "tests/test_codex_agent_team.py",
     "tests/test_delegation_handoff.py",
     "tests/test_developer_scope.py",
+    "tests/governance/test_sdlc_architecture_source_example.py",
 }
 ITER07_08_CONTINUATION_DIFF_PATHS = (
     ITER07_08_CONTINUATION_SOURCE_PATHS

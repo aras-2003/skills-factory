@@ -77,10 +77,98 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
         self.assertIn(f"{cloud_path}#L25-L29", decision)
         self.assertIn("#L182-L186", decision)
         self.assertIn("cloud-tools.ts#L128-L130", decision)
-
         self.assertIn("Status: `REVIEW_REQUIRED`", decision)
         self.assertIn("Candidate SHA: `NOT_CREATED`", decision)
         self.assertIn("`ARCH-02` remains `NOT_RUN`", decision)
+
+    def test_current_consumer_map_covers_runtime_ui_evidence_and_catalog_builders(self):
+        decision = DECISION.read_text(encoding="utf-8")
+        self.assertIn("## Reuse decision", decision)
+        self.assertIn("docs/architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md", decision)
+        self.assertIn("templates/architecture/software-decision.md", decision)
+        current_map = decision.split("## Current source consumer map", 1)[1].split(
+            "## Migration, verification, and rollback", 1
+        )[0]
+        expected_paths = (
+            "runtime/mcp/server.py",
+            "runtime/mcp/skill_catalog.py",
+            "runtime/mcp/cloud_server.py",
+            "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+            "sites/skills-factory-site/app/mcp/route.ts",
+            "sites/skills-factory-site/app/page.tsx",
+            "docs/REMOTE-MCP.md",
+            "scripts/eval/iteration02_flow_capture.py",
+            "scripts/eval/iteration02_route_evidence.py",
+            "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py",
+            "scripts/package/build_cloud_next_site.py",
+            "scripts/package/build_utils.py",
+            "scripts/package/build_plugin.py",
+            "plugins/skills-factory-lab/.codex-plugin/plugin.json",
+            "plugins/skills-factory-lab/.mcp.json",
+            "plugins/skills-factory-lab/release-manifest.json",
+            "plugins/skills-factory-lab/mcp/server.py",
+            "plugins/skills-factory-lab/mcp/skill_catalog.py",
+        )
+        for path in expected_paths:
+            with self.subTest(path=path):
+                self.assertIn(path, current_map)
+                self.assertTrue((ROOT / path).is_file())
+
+        browser = (ROOT / "sites/skills-factory-site/app/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("context.registerTool", browser)
+        self.assertIn("callTool(name, args)", browser)
+        self.assertIn("callTool(name, JSON.parse(input))", browser)
+        self.assertIn('load_skill: { skill_name: "skill-test-design" }', browser)
+        self.assertIn("TOOLS.find", browser)
+
+        python_server = (ROOT / "runtime/mcp/server.py").read_text(encoding="utf-8")
+        python_wrapper = (ROOT / "runtime/mcp/cloud_server.py").read_text(encoding="utf-8")
+        cloud_tools = (ROOT / "adapters/skills-factory-cloud-next/src/cloud-tools.ts").read_text(encoding="utf-8")
+        site_route = (ROOT / "sites/skills-factory-site/app/mcp/route.ts").read_text(encoding="utf-8")
+        cloud_handler = (ROOT / "adapters/skills-factory-cloud-next/src/mcp-handler.ts").read_text(encoding="utf-8")
+        site_builder = (ROOT / "scripts/package/build_cloud_next_site.py").read_text(encoding="utf-8")
+        self.assertIn('"load_skill"', python_server)
+        self.assertIn('transport="streamable-http"', python_wrapper)
+        self.assertIn("expected_source_revision", cloud_tools)
+        self.assertIn("handleMcp", site_route)
+        self.assertIn('request.method !== "POST"', cloud_handler)
+        self.assertIn("{ status: 405", cloud_handler)
+        self.assertIn("sync-lab-catalog.py", site_builder)
+        self.assertIn("app = mcp.streamable_http_app()", python_server)
+
+        flow_capture = (ROOT / "scripts/eval/iteration02_flow_capture.py").read_text(encoding="utf-8")
+        route_evidence = (ROOT / "scripts/eval/iteration02_route_evidence.py").read_text(encoding="utf-8")
+        self.assertIn('verify_call(provider, "load_skill", identity["source_revision"])', flow_capture)
+        self.assertIn('verify_call(child, "load_skill", receipt_source)', route_evidence)
+        self.assertIn("child model execution cannot be inferred from load_skill", route_evidence)
+
+        catalog_builder = (ROOT / "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py").read_text(encoding="utf-8")
+        self.assertIn("m.load_skill(entry['name'])", catalog_builder)
+        self.assertIn("expected_source_revision", current_map)
+        self.assertIn("External HTTP/MCP clients", current_map)
+        self.assertIn("tools/list", current_map)
+        self.assertIn("observed stale-pin rejection", current_map)
+        self.assertIn("do not send a pin", current_map)
+
+        plugin_manifest = json.loads((ROOT / "plugins/skills-factory-lab/.codex-plugin/plugin.json").read_text(encoding="utf-8"))
+        plugin_mcp = json.loads((ROOT / "plugins/skills-factory-lab/.mcp.json").read_text(encoding="utf-8"))
+        plugin_release = json.loads((ROOT / "plugins/skills-factory-lab/release-manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual("1.38.477", plugin_manifest["version"])
+        self.assertEqual("1.38.477+d43250f3982f", plugin_release["release_id"])
+        self.assertEqual("d43250f3982f9ea6ae7b5eb4112922135a7add05", plugin_release["source_revision"])
+        self.assertEqual("./.mcp.json", plugin_manifest["mcpServers"])
+        self.assertIn("${PLUGIN_ROOT}/mcp/server.py", plugin_mcp["mcpServers"]["skills-factory-runtime"]["args"])
+        stale_server = (ROOT / "plugins/skills-factory-lab/mcp/server.py").read_text(encoding="utf-8")
+        stale_catalog = (ROOT / "plugins/skills-factory-lab/mcp/skill_catalog.py").read_text(encoding="utf-8")
+        self.assertIn("def load_skill(skill_name: str, context: Context = None)", stale_server)
+        self.assertIn("def load_skill(skill_name: str)", stale_catalog)
+        self.assertNotIn("expected_source_revision", stale_server + stale_catalog)
+
+        build_utils = (ROOT / "scripts/package/build_utils.py").read_text(encoding="utf-8")
+        self.assertIn('source_dir = root / "runtime" / "mcp"', build_utils)
+        self.assertIn("shutil.copyfile(server_src, mcp_out / \"server.py\")", build_utils)
+        self.assertIn("shutil.copyfile(catalog_src, mcp_out / \"skill_catalog.py\")", build_utils)
 
 
 if __name__ == "__main__":
