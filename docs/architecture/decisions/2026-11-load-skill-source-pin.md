@@ -30,10 +30,15 @@ revision, paths, or instructions.
 
 Python compares against the adjacent package manifest and verifies that the
 packaged `skills/` payload matches its digest before a matching pinned load.
+After pin syntax validation, Python verifies identity and payload integrity
+before comparing revisions. A valid stale pin with a damaged payload therefore
+returns `SOURCE_REVISION_UNVERIFIABLE`; with an intact payload it returns
+`SOURCE_REVISION_MISMATCH`. This scans the packaged payload even for stale pins.
 This unsigned manifest and digest demonstrate payload consistency, **not
 origin authentication or deployment attestation**. Cloud Next uses the
 embedded Lab release revision, generated from a digest-checked Lab package;
-the Site deployment mirror revision is a separate identity. Neither check
+it checks embedded identity metadata at runtime, not the package bytes again.
+The Site deployment mirror revision is a separate identity. Neither check
 establishes execution by a host model.
 
 ### Server-owned classification of malformed calls
