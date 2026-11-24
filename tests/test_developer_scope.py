@@ -258,6 +258,42 @@ class DeveloperScopeTests(unittest.TestCase):
                 expected_fixture_sha256_by_case={"DEV-12": "c" * 64},
             )
 
+    def test_dev_scope_13_pass_requires_zero_exit_command_evidence(self):
+        candidate = self.commit_candidate("empty command-evidence candidate")
+        for role in ("sf-developer-high", "sf-developer-medium"):
+            with self.subTest(role=role):
+                payload = {
+                    "task_id": "dev-13", "role": role, "status": "PASS",
+                    "candidate_sha": candidate, "changed_paths": [],
+                    "test_case_outcomes": [{"case_id": "DEV-13", "status": "PASS"}],
+                    "command_exit_codes": [],
+                    "evidence_refs": ["receipt://dev-13"],
+                    "material_findings": [], "residual_risks": [], "next_action": "review",
+                }
+                kwargs = dict(
+                    repo=self.repo, expected_task_id="dev-13", expected_role=role,
+                    expected_test_case_ids=["DEV-13"], expected_base_sha=self.base,
+                    writable_paths=[], expected_candidate_sha=candidate,
+                )
+
+                with self.assertRaisesRegex(ValueError, "Developer PASS requires at least one command exit record"):
+                    validate_developer_result(payload, **kwargs)
+
+                payload["command_exit_codes"] = [
+                    {"command": "python -m unittest", "exit_code": 0},
+                ]
+                result = validate_developer_result(payload, **kwargs)
+                self.assertEqual("PASS", result["result"]["status"])
+
+                payload["command_exit_codes"][0]["exit_code"] = 1
+                with self.assertRaisesRegex(ValueError, "PASS cannot contain a nonzero command exit code"):
+                    validate_developer_result(payload, **kwargs)
+
+                payload["status"] = "FAIL"
+                payload["test_case_outcomes"][0]["status"] = "FAIL"
+                result = validate_developer_result(payload, **kwargs)
+                self.assertEqual("FAIL", result["result"]["status"])
+
 
 if __name__ == "__main__":
     unittest.main()
