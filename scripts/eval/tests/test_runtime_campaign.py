@@ -48,7 +48,8 @@ class RuntimeCampaignTests(unittest.TestCase):
                 self.assertTrue(continuation["historical_r20_paths"])
                 self.assertEqual(set(), campaign.separately_validated_iteration07_investing_quality_paths(candidate_root))
                 self.assertEqual(set(), campaign.separately_validated_iteration08_investing_monitoring_paths(candidate_root))
-                with patch.object(campaign, "ROOT", candidate_root), \
+                with patch.dict(os.environ, {"SOURCE_REVISION": head}), \
+                     patch.object(campaign, "ROOT", candidate_root), \
                      patch.object(campaign, "CONFIG", candidate_root / campaign.CONFIG_REL), \
                      patch.object(campaign, "config", lambda root=candidate_root: yaml.safe_load(
                          (root / campaign.CONFIG_REL).read_text(encoding="utf-8")
@@ -112,7 +113,8 @@ class RuntimeCampaignTests(unittest.TestCase):
                 self.assertEqual("INTEGRATION_ISOLATED", continuation["state"])
                 self.assertEqual("NOT_RUN", continuation["runtime_status"])
                 self.assertFalse(continuation["release_approved"])
-                with patch.object(campaign, "ROOT", candidate_root), \
+                with patch.dict(os.environ, {"SOURCE_REVISION": successor}), \
+                     patch.object(campaign, "ROOT", candidate_root), \
                      patch.object(campaign, "CONFIG", candidate_root / campaign.CONFIG_REL), \
                      patch.object(campaign, "config", lambda root=candidate_root: yaml.safe_load(
                          (root / campaign.CONFIG_REL).read_text(encoding="utf-8")
