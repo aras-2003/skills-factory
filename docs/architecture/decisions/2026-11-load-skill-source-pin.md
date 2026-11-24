@@ -43,19 +43,18 @@ Schema `type`, length, or pattern constraint. The server owns validation so
 malformed strings, JSON `null`, and numbers can reach both backends and receive
 the approved `INVALID_SOURCE_REVISION` code/message instead of connector-level
 schema diagnostics. `skill_name` remains required and string-typed, but its
-length is not constrained at discovery. Both handlers validate the supplied
-revision format and packaged identity before validating the skill name, so a
-bad pin takes precedence when both inputs are invalid.
-Unknown properties remain rejected before either value is inspected. This is
-an interoperability trade-off: clients must send the supplied pin unchanged,
-and connector compatibility with the deliberately permissive discovery schema
-must be verified on each deployed channel before callers rely on it.
+length is not constrained at discovery. Unknown properties remain rejected
+before either value is inspected. This is an interoperability trade-off:
+clients must send the supplied pin unchanged, and connector compatibility
+with the deliberately permissive discovery schema must be verified on each
+deployed channel before callers rely on it.
 
 For PR #786, a supplied revision is checked for format and packaged identity
 before semantic validation of an empty, string-typed `skill_name`. Thus a
 malformed or stale pin keeps its stable source-revision error when both string
-values are invalid. Missing or non-string names remain schema-level errors and
-are outside that precedence guarantee. Unknown properties still fail first.
+values are invalid. Missing or non-string names are outside the shared error
+precedence guarantee because backend schema boundaries can classify them
+differently. Unknown properties still fail first.
 Only the logical code/message is shared across adapters; MCP envelopes and
 receipts retain backend-specific metadata.
 
