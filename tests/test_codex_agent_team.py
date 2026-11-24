@@ -84,6 +84,12 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertNotIn("sf-test-engineer", instructions)
         self.assertNotIn("sf-test-engineer", runbook)
 
+    def test_project_instructions_match_coordinator_default(self):
+        instructions = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("project default is Luna High", instructions)
+        self.assertNotIn("select Luna Medium in the host", instructions)
+        self.assertNotIn("sets child-agent defaults only", instructions)
+
     def test_role_catalog_records_requested_model_routing_and_primary_limit(self):
         runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
         self.assertIn("Coordinator / primary chat | Luna High (project default; explicit host selection may override)", runbook)
