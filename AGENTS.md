@@ -10,7 +10,7 @@ For development, test scope, task states, WIP, evidence and release gates, follo
 
 ## Codex Luna-first delegation pilot (#748)
 
-For project-scoped Codex development in a trusted checkout, follow `docs/governance/CODEX-SUBAGENT-PILOT.md` and `.codex/config.toml`. The main chat is coordinator and implementation owner; select Luna Medium in the host when available. Project TOML sets child-agent defaults only and cannot prove or pin the main-chat model.
+For project-scoped Codex development in a trusted checkout, follow `docs/governance/CODEX-SUBAGENT-PILOT.md` and `.codex/config.toml`. The main chat is coordinator and implementation owner; the project default is Luna High, though explicit host selection may override it. The project config declares the primary default but cannot prove the effective host model.
 
 Use the role-specific agents: `sf-architect` for risk-triggered A2–A4 advice; `sf-developer-medium` or `sf-developer-high` for explicitly bounded implementation; `sf-test-designer` before implementation; `sf-test-executor` for bounded exact-SHA checks; `sf-independent-reviewer` for risk-required independent review; `sf-skill-evaluator` for frozen baseline/candidate evaluation; `sf-researcher-low` or `sf-researcher-medium` for assigned research; and `sf-release-evidence` for evidence reconciliation. Keep at most two child threads active. Assign one writer per shared contract and use compact, source-linked handoffs.
 
