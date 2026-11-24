@@ -93,6 +93,7 @@ class LoadSkillSourceRevisionTests(unittest.TestCase):
                             ({"skill_name": "sample", "expected_source_revision": None}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
                             ({"skill_name": "sample", "expected_source_revision": 42}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
                             ({"skill_name": "", "expected_source_revision": "A" * 40}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
+                            ({"skill_name": "", "expected_source_revision": STALE_REVISION}, "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision."),
                             ({"skill_name": "sample", "expected_source_revision": SOURCE_REVISION, "unexpected": "do-not-echo"}, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."),
                             ({"skill_name": "sample", "expected_source_revision": None, "unexpected": "do-not-echo"}, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."),
                         ]

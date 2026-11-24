@@ -37,6 +37,7 @@ test("source-pinned load_skill contract through canonical Cloud Next handler", a
     [{ skill_name: skill.name, expected_source_revision: LAB_RELEASE.source_revision, unexpected: "do-not-echo" }, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."],
     [{ skill_name: skill.name, expected_source_revision: null, unexpected: "do-not-echo" }, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."],
     [{ skill_name: "", expected_source_revision: "A".repeat(40) }, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."],
+    [{ skill_name: "", expected_source_revision: siteRevision }, "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision."],
   ];
   for (const [args, message] of failures) {
     const result = await invoke(args);

@@ -182,12 +182,13 @@ export function listSkills() {
 function validateExpectedSourceRevision(value: unknown): asserts value is string {
   if (typeof value !== "string" || value.length !== 40 || !/^[0-9a-f]{40}$/.test(value)) throw new Error("INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.");
 }
+function verifyExpectedSourceRevision(value: unknown): asserts value is string {
+  validateExpectedSourceRevision(value);
+  if (typeof LAB_RELEASE.source_revision !== "string" || LAB_RELEASE.source_revision.length !== 40 || !/^[0-9a-f]{40}$/.test(LAB_RELEASE.source_revision) || typeof LAB_RELEASE.payload_content_sha256 !== "string" || LAB_RELEASE.payload_content_sha256.length !== 64 || !/^[0-9a-f]{64}$/.test(LAB_RELEASE.payload_content_sha256)) throw new Error("SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.");
+  if (value !== LAB_RELEASE.source_revision) throw new Error("SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.");
+}
 export function loadSkill(skillName: string, expectedSourceRevision?: unknown) {
-  if (expectedSourceRevision !== undefined) {
-    validateExpectedSourceRevision(expectedSourceRevision);
-    if (typeof LAB_RELEASE.source_revision !== "string" || LAB_RELEASE.source_revision.length !== 40 || !/^[0-9a-f]{40}$/.test(LAB_RELEASE.source_revision) || typeof LAB_RELEASE.payload_content_sha256 !== "string" || LAB_RELEASE.payload_content_sha256.length !== 64 || !/^[0-9a-f]{64}$/.test(LAB_RELEASE.payload_content_sha256)) throw new Error("SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.");
-    if (expectedSourceRevision !== LAB_RELEASE.source_revision) throw new Error("SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.");
-  }
+  if (expectedSourceRevision !== undefined) verifyExpectedSourceRevision(expectedSourceRevision);
   if (!safeSkillName.test(skillName)) throw new Error("Invalid skill name");
   const skill = SKILL_CATALOG.find((item) => item.name === skillName);
   if (!skill) throw new Error("Unknown skill");
@@ -329,10 +330,10 @@ export function callTool(name: string, args: unknown, metadata?: SiteVersionMeta
     case "load_skill": {
       if (args && typeof args === "object" && !Array.isArray(args) && Object.keys(args).some((key) => key !== "skill_name" && key !== "expected_source_revision")) throw new Error("INVALID_TOOL_ARGUMENTS: Invalid tool arguments.");
       if (args && typeof args === "object" && !Array.isArray(args) && Object.prototype.hasOwnProperty.call(args, "expected_source_revision")) {
-        validateExpectedSourceRevision((args as Record<string, unknown>).expected_source_revision);
+        verifyExpectedSourceRevision((args as Record<string, unknown>).expected_source_revision);
       }
       const parsed = schemas.load_skill.parse(args);
-      return loadSkill(parsed.skill_name, parsed.expected_source_revision);
+      return loadSkill(parsed.skill_name);
     }
     case "route_investment_request": return routeInvestment(schemas.route_investment_request.parse(args).user_request);
     case "calculate_opportunity_scores": return calculateOpportunityScores(schemas.calculate_opportunity_scores.parse(args));

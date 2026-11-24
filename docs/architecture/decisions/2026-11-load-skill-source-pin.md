@@ -4,9 +4,10 @@
 - Criteria: AC-02, AC-03, AC-05, ARCH-02, ARCH-03, ARCH-05, ARCH-07
 - Architecture Impact: A2 proposed for the shared tool contract; native project field not independently verified.
 - Decision: owner approved the optional source pin and the invalid and mismatch errors. The fail-closed unverifiable error is an engineering assumption, not an additional owner-approved case.
-- Implementation baseline SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
-- Implementation candidate SHA: `5cedbb5354913b9299818c048400b72a976fff17`.
-- Review status: source-only checks pass; exact-SHA review and publication/runtime acceptance remain separate gates.
+- Historical implementation baseline SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
+- Historical implementation candidate SHA: `5cedbb5354913b9299818c048400b72a976fff17`.
+- Current validation follow-up: [PR #786](https://github.com/aras-2003/skills-factory/pull/786), based on canonical `main` `f10c7d17674a1e5095fcaead7b03cbec10707ad2`.
+- The original review status is historical; follow-up source review, CI, and deployed connector acceptance are tracked separately for PR #786.
 
 ## Context and decision
 
@@ -42,12 +43,20 @@ Schema `type`, length, or pattern constraint. The server owns validation so
 malformed strings, JSON `null`, and numbers can reach both backends and receive
 the approved `INVALID_SOURCE_REVISION` code/message instead of connector-level
 schema diagnostics. `skill_name` remains required and string-typed, but its
-length is not constrained at discovery; the handler validates it after the
-revision, preserving the same error precedence when both values are malformed.
+length is not constrained at discovery. Both handlers validate the supplied
+revision format and packaged identity before validating the skill name, so a
+bad pin takes precedence when both inputs are invalid.
 Unknown properties remain rejected before either value is inspected. This is
 an interoperability trade-off: clients must send the supplied pin unchanged,
 and connector compatibility with the deliberately permissive discovery schema
 must be verified on each deployed channel before callers rely on it.
+
+For PR #786, a supplied revision is checked for format and packaged identity
+before the server parses `skill_name`. This makes malformed and stale pins
+produce their stable source-revision errors even when the accompanying name is
+invalid. Unknown properties still fail first. Only the logical code/message is
+shared across adapters; MCP envelopes and receipts retain backend-specific
+metadata.
 
 Requiring the field was considered and rejected: existing clients send only
 `skill_name`, and making it mandatory would require a coordinated versioned
