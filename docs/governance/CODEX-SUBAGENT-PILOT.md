@@ -32,7 +32,7 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 | `sf-researcher-medium` | Luna Medium | Multi-source research only after explicit coordinator escalation. |
 | `sf-release-evidence` | Luna Low | Reconciles exact-source CI/eval/runtime evidence; cannot merge or release. |
 
-The primary chat owns scope and integration. It may implement when appropriate, but only one agent owns writes to a given shared interface at a time. Use the test designer before material behavior/shared-contract changes, then delegate execution separately when available. Use architecture advice for material A2–A4 decisions or security/shared-contract risk; do not call Sol for cosmetic A0 work. Use a reviewer for independent review when existing SDLC requires one. The evaluator does not set acceptance thresholds or approve release.
+The primary chat owns scope and integration. It may implement when appropriate, but only one agent owns writes to a given shared interface at a time. Use the test designer before material behavior/shared-contract changes, then delegate execution separately when available. For A2, use architecture advice when a capability boundary, shared contract, or material dependency changes; require it for A3/A4; also use it for A1 changes affecting a shared public contract or trust boundary. Do not call Sol for cosmetic A0 work or A2 changes without those material triggers. Use a reviewer for independent review when existing SDLC requires one. The evaluator does not set acceptance thresholds or approve release.
 
 For A2–A4 or incomplete consumer evidence, route the Architect through
 [`SOFTWARE-ARCHITECTURE-DECISIONS.md`](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md)
