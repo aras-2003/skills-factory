@@ -50,13 +50,13 @@ source_sha256:
   .codex/agents/sf-test-designer.toml: 0f8cd855f5eb535d52f2a25e4db2e53c35cc46166527caa0bfc25dc8ef5f13ea
   adapters/skills-factory-cloud-next/scripts/check-contracts.mjs: 27688f57001b20fe82bb910d22eb1bb34d6204ccaf8c468c0c1f338910ac73f5
   adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py: fa2381f63a7058002542a5083e6bb59376c0cba9ecf71cf05a6011543902e37d
-  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 946a1c661d88c96dc90db27b7eefa3c01e1b877ea90cbca6c3a9a08038a9277f
-  adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 4e57f8340c127268db6051b58621604c1753d9402d01880b987a6c39a9e52c72
-  docs/architecture/decisions/2026-11-load-skill-source-pin.md: b73702e3c1ffed4ba40c8d544ba8502058f85fa6331f1c70a62dd6e735c5b727
+  adapters/skills-factory-cloud-next/src/cloud-tools.ts: 05487ed918af24d5017cf1bc6bd84732f5a15e1751562942d8e0ef91d6450234
+  adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 22394ad20f1a9335646b0b8b19ea545b69a355b2dfc490e16982483c4c650609
+  docs/architecture/decisions/2026-11-load-skill-source-pin.md: bd4020a0367de3a178e793b67e7395610fbf4e4f2041639fbeaf734370a94be5
   docs/governance/CODEX-SUBAGENT-PILOT.md: 75f786d897b2d19fba33bccc8568289bbce202fe8ea3f9c1826e8ff8bb1c108e
-  runtime/mcp/server.py: 72ee1e3a56439ea0fc92e2fc158c67f4ffd8e90556f46021a5fa1feaa2d314b8
+  runtime/mcp/server.py: b1e352ba1b82fc7832561f9f2364f1600f63a12bd4028ba66d4d9d8e09ebe487
   runtime/mcp/skill_catalog.py: 14a64a66df79f8f9cfc2f0233e5d6d1a0053bbc15993260ed68cadc950ca7468
-  runtime/mcp/tests/test_load_skill_source_revision.py: 0c0b12be81b09f2914883dd5c93cfd6b3628c28f2a7bd8c1cab6281b597dbc06
+  runtime/mcp/tests/test_load_skill_source_revision.py: c45176b3ec1f5064b93616e947b7b6a1254fdd26f3c57cad94bdd1e25c3770ca
   scripts/engineering/delegation_handoff.py: 31d0760e896a9d351f802100e82fa27687dca7903546979df9d95adfffc10c26
   scripts/eval/campaign.py: 33d27de4ce05a940b705a45839b38164a50432c01205052d9a41010fc6ab850e
   scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 69f5098958ca7c0d0b82b170a2b767114013879b3338e38e60addf6e0b33ca72

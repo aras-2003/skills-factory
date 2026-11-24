@@ -12,10 +12,12 @@ test("source-pinned load_skill contract through canonical Cloud Next handler", a
   const list = await (await handleMcp(rpc("tools/list"))).json() as any;
   const schema = list.result.tools.find((tool: any) => tool.name === "load_skill").inputSchema;
   assert.deepEqual(schema.required, ["skill_name"]);
-  assert.equal(schema.properties.expected_source_revision.type, "string");
-  assert.equal(schema.properties.expected_source_revision.minLength, 40);
-  assert.equal(schema.properties.expected_source_revision.maxLength, 40);
-  assert.equal(schema.properties.expected_source_revision.pattern, "^[0-9a-f]{40}$");
+  assert.equal(schema.properties.expected_source_revision.type, undefined);
+  assert.equal(schema.properties.expected_source_revision.minLength, undefined);
+  assert.equal(schema.properties.expected_source_revision.maxLength, undefined);
+  assert.equal(schema.properties.expected_source_revision.pattern, undefined);
+  assert.equal(schema.properties.skill_name.minLength, undefined);
+  assert.equal(schema.properties.skill_name.maxLength, undefined);
   assert.equal(schema.additionalProperties, false);
   const skill = SKILL_CATALOG[0];
   const siteRevision = LAB_RELEASE.source_revision === "f".repeat(40) ? "e".repeat(40) : "f".repeat(40);
@@ -31,8 +33,10 @@ test("source-pinned load_skill contract through canonical Cloud Next handler", a
   }
   const failures: Array<[Record<string, unknown>, string]> = [
     [{ skill_name: skill.name, expected_source_revision: siteRevision }, "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision."],
-    ...[LAB_RELEASE.source_revision + "\n", "A".repeat(40), null, 42].map((value): [Record<string, unknown>, string] => [{ skill_name: skill.name, expected_source_revision: value }, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."]),
+    ...["", "a".repeat(39), "a".repeat(41), LAB_RELEASE.source_revision + "\n", "A".repeat(40), null, 42].map((value): [Record<string, unknown>, string] => [{ skill_name: skill.name, expected_source_revision: value }, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."]),
     [{ skill_name: skill.name, expected_source_revision: LAB_RELEASE.source_revision, unexpected: "do-not-echo" }, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."],
+    [{ skill_name: skill.name, expected_source_revision: null, unexpected: "do-not-echo" }, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."],
+    [{ skill_name: "", expected_source_revision: "A".repeat(40) }, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."],
   ];
   for (const [args, message] of failures) {
     const result = await invoke(args);
@@ -44,5 +48,15 @@ test("source-pinned load_skill contract through canonical Cloud Next handler", a
     assert.ok(!error.includes(LAB_RELEASE.source_revision));
     assert.ok(!error.includes(siteRevision));
     assert.ok(!error.includes("do-not-echo"));
+  }
+  const release = LAB_RELEASE as unknown as { payload_content_sha256: unknown };
+  const originalDigest = release.payload_content_sha256;
+  try {
+    release.payload_content_sha256 = null;
+    const result = await invoke({ skill_name: skill.name, expected_source_revision: LAB_RELEASE.source_revision });
+    assert.equal(result.isError, true);
+    assert.equal(result.structuredContent.error, "SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.");
+  } finally {
+    release.payload_content_sha256 = originalDigest;
   }
 });

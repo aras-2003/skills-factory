@@ -35,6 +35,20 @@ embedded Lab release revision, generated from a digest-checked Lab package;
 the Site deployment mirror revision is a separate identity. Neither check
 establishes execution by a host model.
 
+### Server-owned classification of malformed calls
+
+The optional `expected_source_revision` property is advertised without a JSON
+Schema `type`, length, or pattern constraint. The server owns validation so
+malformed strings, JSON `null`, and numbers can reach both backends and receive
+the approved `INVALID_SOURCE_REVISION` code/message instead of connector-level
+schema diagnostics. `skill_name` remains required and string-typed, but its
+length is not constrained at discovery; the handler validates it after the
+revision, preserving the same error precedence when both values are malformed.
+Unknown properties remain rejected before either value is inspected. This is
+an interoperability trade-off: clients must send the supplied pin unchanged,
+and connector compatibility with the deliberately permissive discovery schema
+must be verified on each deployed channel before callers rely on it.
+
 Requiring the field was considered and rejected: existing clients send only
 `skill_name`, and making it mandatory would require a coordinated versioned
 migration without evidence of a need for that break.
@@ -143,8 +157,11 @@ the field only after their actual installed artifact/channel supports it and
 is discoverable; they must handle
 the three source errors and must not interpret a successful unpinned call as a
 pin. Python stdio and Cloud Next MCP contract tests cover omitted, matching,
-malformed, stale, and unknown inputs; the Python test also corrupts the
-package digest. These are source-level checks, not live deployment evidence.
+malformed string and non-string pins, stale pins, malformed skill names,
+unknown fields, and unverifiable package metadata; the Python test also
+corrupts the package digest. The local raw MCP boundary verifies handler
+behavior, but does not prove that every deployed connector preserves the
+permissive schema. These are source-level checks, not live deployment evidence.
 Undocumented consumers remain unknown; independent review and affected-channel
 gates must be bound to the final candidate SHA.
 
