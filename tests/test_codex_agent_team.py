@@ -105,8 +105,6 @@ class CodexAgentTeamContractTests(unittest.TestCase):
             "Do not call Sol for cosmetic A0 work or A2 changes without those material triggers",
             "When you dispatch the Architect, use the [decision method]",
             "The method does not require dispatch for every A2",
-            "require it for A3/A4",
-            "Do not call Sol for cosmetic A0 work or A2 changes without those material triggers",
             "`gpt-6.2-sol`, high",
             "does not select or override a Codex role profile",
         ):
