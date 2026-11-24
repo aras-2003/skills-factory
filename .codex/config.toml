@@ -1,6 +1,9 @@
 # Issue #748 opt-in project-scoped Codex delegation pilot.
-# Do not pin the primary session model: the user selects Luna in their host.
-# Host/model availability and actual spawning must be verified in a new Codex chat.
+# Trusted project default for the Coordinator; explicit host selection may override it.
+# Host/model availability and effective settings must be verified in a new Codex chat.
+model = "gpt-6-luna"
+model_reasoning_effort = "high"
+
 [agents]
 enabled = true
 max_concurrent_threads_per_session = 2

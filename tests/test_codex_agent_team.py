@@ -28,8 +28,11 @@ def load_toml(path):
 
 
 class CodexAgentTeamContractTests(unittest.TestCase):
-    def test_project_config_bounds_child_threads_without_pinning_primary(self):
-        agents = load_toml(CONFIG)["agents"]
+    def test_project_config_sets_primary_model_and_bounds_child_threads(self):
+        config = load_toml(CONFIG)
+        self.assertEqual(config["model"], "gpt-6-luna")
+        self.assertEqual(config["model_reasoning_effort"], "high")
+        agents = config["agents"]
         self.assertIs(agents["enabled"], True)
         self.assertEqual(agents["max_concurrent_threads_per_session"], 2)
         self.assertEqual(agents["default_subagent_model"], "gpt-6-luna")
@@ -83,7 +86,7 @@ class CodexAgentTeamContractTests(unittest.TestCase):
 
     def test_role_catalog_records_requested_model_routing_and_primary_limit(self):
         runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
-        self.assertIn("Coordinator / primary chat | Luna High (selected in host; not set by project TOML)", runbook)
+        self.assertIn("Coordinator / primary chat | Luna High (project default; explicit host selection may override)", runbook)
         self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
         self.assertIn("Select Luna High as the primary coordinator", runbook)
         for assignment in (
