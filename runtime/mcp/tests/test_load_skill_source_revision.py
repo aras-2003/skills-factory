@@ -65,10 +65,13 @@ class LoadSkillSourceRevisionTests(unittest.TestCase):
                         self.assertEqual(schema["required"], ["skill_name"])
                         self.assertEqual(schema["additionalProperties"], False)
                         revision_schema = schema["properties"]["expected_source_revision"]
-                        self.assertEqual(revision_schema["type"], "string")
+                        self.assertNotIn("type", revision_schema)
                         self.assertNotIn("default", revision_schema)
-                        self.assertEqual((revision_schema["minLength"], revision_schema["maxLength"]), (40, 40))
-                        self.assertEqual(revision_schema["pattern"], "^[0-9a-f]{40}$")
+                        self.assertNotIn("minLength", revision_schema)
+                        self.assertNotIn("maxLength", revision_schema)
+                        self.assertNotIn("pattern", revision_schema)
+                        self.assertNotIn("minLength", schema["properties"]["skill_name"])
+                        self.assertNotIn("maxLength", schema["properties"]["skill_name"])
 
                         omitted = await session.call_tool("load_skill", {"skill_name": "sample"})
                         self.assertFalse(omitted.is_error)
@@ -82,11 +85,17 @@ class LoadSkillSourceRevisionTests(unittest.TestCase):
 
                         failures = [
                             ({"skill_name": "sample", "expected_source_revision": STALE_REVISION}, "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision."),
+                            ({"skill_name": "sample", "expected_source_revision": ""}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
+                            ({"skill_name": "sample", "expected_source_revision": "a" * 39}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
+                            ({"skill_name": "sample", "expected_source_revision": "a" * 41}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
                             ({"skill_name": "sample", "expected_source_revision": SOURCE_REVISION + "\n"}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
                             ({"skill_name": "sample", "expected_source_revision": "A" * 40}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
                             ({"skill_name": "sample", "expected_source_revision": None}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
                             ({"skill_name": "sample", "expected_source_revision": 42}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
+                            ({"skill_name": "", "expected_source_revision": "A" * 40}, "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID."),
+                            ({"skill_name": "", "expected_source_revision": STALE_REVISION}, "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision."),
                             ({"skill_name": "sample", "expected_source_revision": SOURCE_REVISION, "unexpected": "do-not-echo"}, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."),
+                            ({"skill_name": "sample", "expected_source_revision": None, "unexpected": "do-not-echo"}, "INVALID_TOOL_ARGUMENTS: Invalid tool arguments."),
                         ]
                         for arguments, code in failures:
                             with self.subTest(arguments=arguments, expected_code=code):

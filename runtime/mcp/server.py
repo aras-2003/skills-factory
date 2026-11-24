@@ -240,13 +240,20 @@ class StrictLoadSkillServer(MCPServer):
         tools = await super().list_tools()
         for tool in tools:
             if tool.name == "load_skill":
-                # The SDK permits extra fields and emits a null default for an
-                # omitted argument. Advertise the stricter raw-call contract.
+                # Let the server classify malformed revision values before an
+                # intermediary rejects them, while preserving strict fields.
                 schema = dict(tool.input_schema)
                 properties = dict(schema["properties"])
+                skill_name = dict(properties["skill_name"])
+                skill_name.pop("minLength", None)
+                skill_name.pop("maxLength", None)
+                properties["skill_name"] = skill_name
                 revision = dict(properties["expected_source_revision"])
                 revision.pop("default", None)
-                revision.update(minLength=40, maxLength=40, pattern="^[0-9a-f]{40}$")
+                revision.pop("type", None)
+                revision.pop("minLength", None)
+                revision.pop("maxLength", None)
+                revision.pop("pattern", None)
                 properties["expected_source_revision"] = revision
                 schema.update(properties=properties, additionalProperties=False)
                 tool.input_schema = schema
