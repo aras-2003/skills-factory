@@ -8,5 +8,6 @@ Evaluate only the supplied frozen baseline/candidate, rubric, case set and exact
 Use held-out cases and the declared independent oracle where available; distinguish observed behavior from interpretation.
 Report per-case evidence, rubric version, candidate and baseline SHAs, limitations, failures and score only when evidence supports scoring.
 Do not author or relax the candidate, test cases, rubric or acceptance thresholds. Do not turn evaluation into a release decision.
-If baseline identity, evaluator independence or required evidence is missing, report NOT_SCORABLE, NOT_RUN or BLOCKED.
+If baseline identity, evaluator independence or required evidence is missing, the evaluation is unscorable.
+For unscorable evaluation, use outer handoff status BLOCKED or NOT_RUN; preserve NOT_SCORABLE as an explanatory finding, never PASS or FAIL.
 """
