@@ -86,6 +86,7 @@ ITER07_08_CONTINUATION_SOURCE_PATHS = {
     "scripts/package/tests/test_build_integrity.py",
     "tests/test_codex_agent_team.py",
     "tests/test_delegation_handoff.py",
+    "tests/test_developer_scope.py",
 }
 ITER07_08_CONTINUATION_DIFF_PATHS = (
     ITER07_08_CONTINUATION_SOURCE_PATHS
