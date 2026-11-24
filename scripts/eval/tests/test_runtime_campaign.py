@@ -30,20 +30,33 @@ class RuntimeCampaignTests(unittest.TestCase):
 
     def test_iteration_07_08_source_continuation_is_separate_from_runtime_pass(self) -> None:
         import subprocess
+        import tempfile
 
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-        with patch.dict(os.environ, {"SOURCE_REVISION": head}):
-            continuation = campaign.candidate_iteration07_08_continuation(ROOT)
-
-        self.assertIsNotNone(continuation)
-        self.assertEqual("INTEGRATION_ISOLATED", continuation["state"])
-        self.assertEqual("NOT_RUN", continuation["runtime_status"])
-        self.assertFalse(continuation["release_approved"])
-        self.assertEqual(head, continuation["candidate_sha"])
-        self.assertTrue(continuation["historical_r20_paths"])
-        self.assertEqual(set(), campaign.separately_validated_iteration07_investing_quality_paths(ROOT))
-        self.assertEqual(set(), campaign.separately_validated_iteration08_investing_monitoring_paths(ROOT))
-        self.assertEqual([], campaign.validate_campaign())
+        with tempfile.TemporaryDirectory(prefix="sf-continuation-clean-") as temp_dir:
+            candidate_root = Path(temp_dir) / "repo"
+            subprocess.run(["git", "worktree", "add", "--detach", str(candidate_root), head], cwd=ROOT,
+                           check=True, capture_output=True, text=True)
+            try:
+                with patch.dict(os.environ, {"SOURCE_REVISION": head}):
+                    continuation = campaign.candidate_iteration07_08_continuation(candidate_root)
+                self.assertIsNotNone(continuation)
+                self.assertEqual("INTEGRATION_ISOLATED", continuation["state"])
+                self.assertEqual("NOT_RUN", continuation["runtime_status"])
+                self.assertFalse(continuation["release_approved"])
+                self.assertEqual(head, continuation["candidate_sha"])
+                self.assertTrue(continuation["historical_r20_paths"])
+                self.assertEqual(set(), campaign.separately_validated_iteration07_investing_quality_paths(candidate_root))
+                self.assertEqual(set(), campaign.separately_validated_iteration08_investing_monitoring_paths(candidate_root))
+                with patch.object(campaign, "ROOT", candidate_root), \
+                     patch.object(campaign, "CONFIG", candidate_root / campaign.CONFIG_REL), \
+                     patch.object(campaign, "config", lambda root=candidate_root: yaml.safe_load(
+                         (root / campaign.CONFIG_REL).read_text(encoding="utf-8")
+                     )):
+                    self.assertEqual([], campaign.validate_campaign())
+            finally:
+                subprocess.run(["git", "worktree", "remove", "--force", str(candidate_root)], cwd=ROOT,
+                               check=True, capture_output=True, text=True)
 
     def test_iteration_07_08_source_continuation_fails_closed_on_identity_or_drift(self) -> None:
         import subprocess
@@ -70,6 +83,44 @@ class RuntimeCampaignTests(unittest.TestCase):
 
         with patch.object(campaign, "sha256_file", changed_behavior), patch.dict(os.environ, {"SOURCE_REVISION": head}):
             self.assertIsNone(campaign.candidate_iteration07_08_continuation(ROOT))
+
+    def test_iteration_07_08_continuation_survives_unrelated_successor_as_not_run(self) -> None:
+        import subprocess
+        import tempfile
+
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        with tempfile.TemporaryDirectory(prefix="sf-continuation-successor-") as temp_dir:
+            candidate_root = Path(temp_dir) / "repo"
+            subprocess.run(["git", "worktree", "add", "--detach", str(candidate_root), head], cwd=ROOT,
+                           check=True, capture_output=True, text=True)
+            try:
+                subprocess.run(["git", "config", "user.name", "Continuation Test"], cwd=candidate_root, check=True)
+                subprocess.run(["git", "config", "user.email", "continuation-test@example.invalid"],
+                               cwd=candidate_root, check=True)
+                marker = candidate_root / "docs" / "sdlc-continuation-successor-smoke.md"
+                marker.write_text("Unrelated descendant source change.\n", encoding="utf-8")
+                subprocess.run(["git", "add", "--", "docs/sdlc-continuation-successor-smoke.md"],
+                               cwd=candidate_root, check=True)
+                subprocess.run(["git", "commit", "-m", "test: add unrelated continuation successor path"],
+                               cwd=candidate_root, check=True, capture_output=True, text=True)
+                successor = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=candidate_root,
+                                                    text=True).strip()
+                with patch.dict(os.environ, {"SOURCE_REVISION": successor}):
+                    continuation = campaign.candidate_iteration07_08_continuation(candidate_root)
+                self.assertIsNotNone(continuation)
+                self.assertEqual(successor, continuation["candidate_sha"])
+                self.assertEqual("INTEGRATION_ISOLATED", continuation["state"])
+                self.assertEqual("NOT_RUN", continuation["runtime_status"])
+                self.assertFalse(continuation["release_approved"])
+                with patch.object(campaign, "ROOT", candidate_root), \
+                     patch.object(campaign, "CONFIG", candidate_root / campaign.CONFIG_REL), \
+                     patch.object(campaign, "config", lambda root=candidate_root: yaml.safe_load(
+                         (root / campaign.CONFIG_REL).read_text(encoding="utf-8")
+                     )):
+                    self.assertEqual([], campaign.validate_campaign())
+            finally:
+                subprocess.run(["git", "worktree", "remove", "--force", str(candidate_root)], cwd=ROOT,
+                               check=True, capture_output=True, text=True)
 
     def test_historical_campaign_without_optional_routing_registry_does_not_read_repo_directory(self) -> None:
         from unittest.mock import patch

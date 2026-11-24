@@ -142,9 +142,11 @@ def candidate_iteration07_08_continuation(root: Path = ROOT) -> dict | None:
             ["git", "-C", str(root), "merge-base", "--is-ancestor", ITER07_08_CONTINUATION_BASE, candidate_sha],
             check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         )
-        if subprocess.check_output(
+        candidate_diff_paths = set(subprocess.check_output(
             ["git", "-C", str(root), "diff", "--name-only", "-z", ITER07_08_CONTINUATION_BASE, candidate_sha, "--"],
-        ).split(b"\0")[:-1] != [item.encode("utf-8") for item in sorted(ITER07_08_CONTINUATION_DIFF_PATHS)]:
+        ).split(b"\0")[:-1])
+        required_diff_paths = {item.encode("utf-8") for item in ITER07_08_CONTINUATION_DIFF_PATHS}
+        if not required_diff_paths.issubset(candidate_diff_paths):
             return None
         if subprocess.check_output(
             ["git", "-C", str(root), "status", "--porcelain=v1", "-z", "--untracked-files=all"],
