@@ -92,7 +92,7 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertIn("declares `max_concurrent_threads_per_session = 2`", runbook)
         self.assertIn("coordinator manually enforces a maximum of two active child threads", runbook)
         self.assertNotIn("caps active child threads at two", runbook)
-        self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
+        self.assertRegex(runbook, r"2\. Confirm whether the trusted project config loaded")
         self.assertIn("effective primary model is Luna High", runbook)
         for assignment in (
             "`sf-architect` | Sol High",
