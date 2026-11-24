@@ -69,7 +69,11 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         evaluator = load_toml(AGENT_DIR / "sf-skill-evaluator.toml")["developer_instructions"]
         release = load_toml(AGENT_DIR / "sf-release-evidence.toml")["developer_instructions"]
         self.assertIn("held-out cases", evaluator)
-        self.assertIn("NOT_SCORABLE", evaluator)
+        self.assertIn(
+            "For unscorable evaluation, use outer handoff status BLOCKED or NOT_RUN; "
+            "preserve NOT_SCORABLE as an explanatory finding, never PASS or FAIL.",
+            evaluator,
+        )
         self.assertIn("Do not alter status fields", release)
         self.assertIn("NOT_RUN/BLOCKED", release)
 
