@@ -89,6 +89,9 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertIn("Coordinator / primary chat | Luna High (project default; explicit host selection may override)", runbook)
         self.assertIn("The top-level project config sets the Coordinator default to Luna High", runbook)
         self.assertNotIn("not the main chat model", runbook)
+        self.assertIn("declares `max_concurrent_threads_per_session = 2`", runbook)
+        self.assertIn("coordinator manually enforces a maximum of two active child threads", runbook)
+        self.assertNotIn("caps active child threads at two", runbook)
         self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
         self.assertIn("effective primary model is Luna High", runbook)
         for assignment in (
