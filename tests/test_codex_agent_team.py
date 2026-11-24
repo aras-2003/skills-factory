@@ -11,11 +11,11 @@ AGENT_DIR = ROOT / ".codex" / "agents"
 EXPECTED = {
     "sf-architect": ("gpt-6.2-sol", "high"),
     "sf-developer-medium": ("gpt-6-luna", "medium"),
-    "sf-developer-high": ("gpt-6-luna", "high"),
-    "sf-test-designer": ("gpt-6-luna", "medium"),
+    "sf-developer-high": ("gpt-6.1-terra", "high"),
+    "sf-test-designer": ("gpt-6.1-terra", "medium"),
     "sf-test-executor": ("gpt-6-luna", "low"),
-    "sf-independent-reviewer": ("gpt-6-luna", "high"),
-    "sf-skill-evaluator": ("gpt-6-luna", "high"),
+    "sf-independent-reviewer": ("gpt-6.1-terra", "high"),
+    "sf-skill-evaluator": ("gpt-6.1-terra", "medium"),
     "sf-researcher-low": ("gpt-6-luna", "low"),
     "sf-researcher-medium": ("gpt-6-luna", "medium"),
     "sf-release-evidence": ("gpt-6-luna", "low"),
@@ -34,8 +34,11 @@ class CodexAgentTeamContractTests(unittest.TestCase):
         self.assertEqual(agents["max_concurrent_threads_per_session"], 2)
         self.assertEqual(agents["default_subagent_model"], "gpt-6-luna")
         self.assertEqual(agents["default_subagent_reasoning_effort"], "medium")
+        self.assertIn("Luna High", CONFIG.read_text(encoding="utf-8"))
         self.assertNotIn("model", agents)
         self.assertNotIn("primary_model", agents)
+        matrix = (ROOT / "docs" / "governance" / "SDLC-ROLE-CAPABILITY-MATRIX.md").read_text(encoding="utf-8")
+        self.assertIn("select Luna High in the host", matrix)
 
     def test_exact_role_inventory_and_model_effort(self):
         files = {path.stem: path for path in AGENT_DIR.glob("*.toml")}

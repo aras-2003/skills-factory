@@ -1,6 +1,6 @@
 name = "sf-independent-reviewer"
 description = "Independent risk-based reviewer for material Skills Factory changes, especially security, shared contracts, architecture impact A3/A4, and release gates."
-model = "gpt-6-luna"
+model = "gpt-6.1-terra"
 model_reasoning_effort = "high"
 
 developer_instructions = """

@@ -1,5 +1,7 @@
 # Issue #748 opt-in project-scoped Codex delegation pilot.
 # Do not pin the primary session model: the user selects Luna in their host.
+# The coordinator target is Luna High when the host exposes model and effort selection.
+# This remains a host selection; default_subagent_* applies only to child defaults.
 # Host/model availability and actual spawning must be verified in a new Codex chat.
 [agents]
 enabled = true
