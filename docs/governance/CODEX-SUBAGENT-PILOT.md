@@ -10,7 +10,7 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 
 ## Host and model configuration
 
-- `.codex/config.toml` enables project agents, caps active child threads at two, sets the child default to Luna Medium, and sets the trusted-project Coordinator default to `gpt-6-luna` / `high`.
+- `.codex/config.toml` enables project agents, declares `max_concurrent_threads_per_session = 2` and the Coordinator manually enforces a maximum of two active child threads because host enforcement is unverified; it sets the child default to Luna Medium, and sets the trusted-project Coordinator default to `gpt-6-luna` / `high`.
 - The top-level project config sets the Coordinator default to Luna High. An explicit host selection may override it; verify the loaded config and effective model from host evidence. If the host does not expose them, record `UNKNOWN`.
 - Agent files set bounded role-specific child model/effort. The project config does not prove the host loaded these files or honored a model override.
 - Agent instructions are behavioral; a child thread inherits host permissions. They do not establish a separate OS sandbox.
@@ -65,7 +65,7 @@ Run against the implementation PR head in a **new Codex chat** and trusted check
 ## Offline acceptance
 
 - All ten role TOMLs parse; names, model IDs and effort values match the role matrix.
-- Project config parses, caps threads at two, and declares Coordinator `gpt-6-luna` / `high` plus child defaults Luna Medium.
+- Project config parses, declares the two-thread limit without claiming host enforcement, and declares Coordinator `gpt-6-luna` / `high` plus child defaults Luna Medium.
 - Tests confirm design/execution separation, bounded write ownership, fail-closed missing evidence and no merge/release authority.
 - `AGENTS.md` and this runbook route to the same roles.
 - Run the focused contract test with `python3 -m unittest discover -s tests -p 'test_codex_agent_team.py'`; this proves static configuration contracts only.
