@@ -19,7 +19,7 @@ Return a compact `CreativeDirection` with:
 
 The creative thesis should shape the deck, not decorate it. Avoid stock consulting tropes (generic blue gradient, lightbulb, rocket, puzzle pieces, arbitrary 2×2s, generic skyscraper photography), repeated card grids and an opening agenda unless the audience needs it. Do not add decorative noise to manufacture impact. Use generated imagery for metaphor/atmosphere only; never to represent real people, clients, product truth or data. Use permitted user assets and record provenance.
 
-## Tool selection — inspect callable actions in this session
+## Tool selection — inspect callable actions in this session\n\nApply the separate intent/format/editability routing contract in [FORMAT-ROUTING.md](../../../docs/presentations/FORMAT-ROUTING.md). Audience profiles shape narrative and density; they do not imply a delivery format or renderer capability.
 Choose one primary authoring path based on output needs, then add a tool only for a clear gap. Tool names/capabilities below are selection guidance, not proof they are connected in a given run.
 
 | Need | Preferred path when callable | Best use and constraints |
