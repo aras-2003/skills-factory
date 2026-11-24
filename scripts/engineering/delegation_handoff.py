@@ -228,6 +228,7 @@ def validate_result(
     return result
 
 
+
 def validate_developer_result(
     payload: Any,
     *,
