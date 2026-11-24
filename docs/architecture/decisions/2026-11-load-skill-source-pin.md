@@ -52,11 +52,12 @@ and connector compatibility with the deliberately permissive discovery schema
 must be verified on each deployed channel before callers rely on it.
 
 For PR #786, a supplied revision is checked for format and packaged identity
-before the server parses `skill_name`. This makes malformed and stale pins
-produce their stable source-revision errors even when the accompanying name is
-invalid. Unknown properties still fail first. Only the logical code/message is
-shared across adapters; MCP envelopes and receipts retain backend-specific
-metadata.
+before semantic validation of an empty, string-typed `skill_name`. Thus a
+malformed or stale pin keeps its stable source-revision error when both string
+values are invalid. Missing or non-string names remain schema-level errors and
+are outside that precedence guarantee. Unknown properties still fail first.
+Only the logical code/message is shared across adapters; MCP envelopes and
+receipts retain backend-specific metadata.
 
 Requiring the field was considered and rejected: existing clients send only
 `skill_name`, and making it mandatory would require a coordinated versioned
