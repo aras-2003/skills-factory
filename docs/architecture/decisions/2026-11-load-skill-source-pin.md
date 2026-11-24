@@ -1,7 +1,7 @@
 # `load_skill` source-pin decision
 
 - Issue: [#766 — Software architecture decision and contract-review capability for A2–A4](https://github.com/aras-2003/skills-factory/issues/766)
-- Criteria: AC-02, AC-03, ARCH-02, ARCH-03, ARCH-05, ARCH-07
+- Criteria: AC-02, AC-03, AC-05, ARCH-02, ARCH-03, ARCH-05, ARCH-07
 - Architecture Impact: A2 proposed for the shared tool contract; native project field not independently verified.
 - Decision: owner approved the optional source pin and the invalid and mismatch errors. The fail-closed unverifiable error is an engineering assumption, not an additional owner-approved case.
 - Implementation baseline SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
@@ -39,23 +39,108 @@ Requiring the field was considered and rejected: existing clients send only
 `skill_name`, and making it mandatory would require a coordinated versioned
 migration without evidence of a need for that break.
 
-## Source-grounded consumer map
+## Reuse decision
 
-- Python MCP registers and dispatches `load_skill` in
-  `runtime/mcp/server.py`, then reads the packaged catalog through
-  `runtime/mcp/skill_catalog.py`.
-- Cloud Next handles MCP calls in
-  `adapters/skills-factory-cloud-next/src/mcp-handler.ts`, dispatches through
-  `adapters/skills-factory-cloud-next/src/cloud-tools.ts`, and loads the
-  generated embedded `skill-catalog.ts` (created by
-  `adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py`).
-- These are source-confirmed adapter paths, not a complete external-client
-  inventory. Other consumers and their adoption state remain `UNKNOWN`.
+`REUSE` the existing repository method in
+`docs/architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md` and
+`templates/architecture/software-decision.md`. This worked example strengthens
+that method with a source-confirmed consumer map; it does not introduce a
+separate software-architecture skill or duplicate approval workflow. Reconsider
+a reusable skill only if repeated cross-repository use demonstrates a distinct
+method from the existing enterprise architecture and skill-specification
+capabilities.
+
+## Current source consumer map
+
+This map was checked against the main tree at `02001acb4269cb74b4a3e39f095fe027663c21eb`.
+It separates runtime tool consumers from receipt validators and build-time
+catalog producers; finding a path does not imply that it sends the optional
+`expected_source_revision` pin.
+
+### Runtime and transport consumers
+
+- Python MCP registers `load_skill` in `runtime/mcp/server.py` and reads the
+  packaged catalog through `runtime/mcp/skill_catalog.py`. The compatibility
+  HTTP entry point `runtime/mcp/cloud_server.py` imports the same server and
+  starts Streamable HTTP; it is not a second implementation. The supported
+  ASGI deployment exposes the same `server.app` as documented in
+  `docs/REMOTE-MCP.md`, not a separately versioned handler.
+- Cloud Next receives MCP requests in
+  `adapters/skills-factory-cloud-next/src/mcp-handler.ts`, validates and
+  dispatches them through `adapters/skills-factory-cloud-next/src/cloud-tools.ts`,
+  and loads the generated embedded catalog. The Site `/mcp` route in
+  `sites/skills-factory-site/app/mcp/route.ts` exports POST/GET/DELETE to
+  that handler, but `mcp-handler.ts` accepts only POST and returns 405 for
+  GET/DELETE. `scripts/package/build_cloud_next_site.py` binds the generated
+  bundle's mirror identity to the canonical Skills Factory source revision.
+- The Site browser surface in `sites/skills-factory-site/app/page.tsx` imports
+  `callTool`; its WebMCP `document.modelContext.registerTool` callback and the
+  interactive console both call that adapter. Its sample `load_skill` request
+  sends `skill_name` only. The shared `TOOLS` schema is registered with
+  WebMCP, so pin availability depends on the generated bundle; the sample
+  itself does not demonstrate pin adoption.
+
+### Versioned Lab artifact and build producer
+
+- The tracked `plugins/skills-factory-lab/.codex-plugin/plugin.json` selects
+  `plugins/skills-factory-lab/.mcp.json`, which launches the local
+  `plugins/skills-factory-lab/mcp/server.py`. That checked-in release mirror
+  is version `1.38.477` (`release-manifest.json` identifies release
+  `1.38.477+d43250f3982f` in `plugins/skills-factory-lab/release-manifest.json`);
+  its `plugins/skills-factory-lab/mcp/server.py` and
+  `plugins/skills-factory-lab/mcp/skill_catalog.py` do not
+  implement `expected_source_revision`. Its older SDK's behavior for an extra
+  pin argument is not tested: it may reject or discard the unknown field, so
+  this edge is `UNKNOWN`. Treat it as a stale, distinct artifact, not a third
+  backend with the current pin contract. Whether any installed client still
+  uses it is also `UNKNOWN`.
+- A fresh package build takes the canonical server/catalog sources instead:
+  `scripts/package/build_utils.py` copies `runtime/mcp/server.py` and
+  `runtime/mcp/skill_catalog.py` into the Lab artifact. The build output uses
+  the new contract when built from a source revision that contains it; this
+  does not update the tracked `1.38.477` mirror or prove installation.
+- `scripts/package/build_plugin.py` and `scripts/package/build_utils.py`
+  generate local stdio, remote-HTTP, and skills-only plugin profiles. Local
+  stdio bundles use the packaged Python server; the remote profile contains
+  only an endpoint configuration, so support depends on that endpoint. The
+  skills-only profile has no MCP runtime. Do not generalize one channel's
+  contract to another installed artifact.
+
+### Evaluation receipt consumers
+
+- `scripts/eval/iteration02_flow_capture.py` checks observed provider calls,
+  including a `load_skill` receipt, against the Site identity revision.
+- `scripts/eval/iteration02_route_evidence.py` validates router and child
+  `load_skill` receipt identity and explicitly rejects an inference that a
+  loaded skill proves child model execution. These scripts consume evidence;
+  they are not runtime tool callers.
+
+### Build-time catalog producers
+
+- `adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py` loads each
+  packaged Lab entry to construct Site catalog metadata. That generator calls
+  the package loader without `expected_source_revision`; it is build-time
+  package inspection, not runtime adoption of the pin.
+- `scripts/package/build_cloud_next_site.py` invokes that generator while
+  building the Site. It is a producer in the packaging path, not a runtime
+  `load_skill` client.
+
+These paths are source-confirmed on the stated revision, not a complete
+consumer inventory. External HTTP/MCP clients and their optional-pin adoption
+remain `UNKNOWN`; no source listing proves host execution of loaded
+instructions or deployed API parity.
+
+Pin adoption must be gated on the actual installed artifact's `tools/list`
+schema and an observed stale-pin rejection against that same target. In
+particular, do not send a pin to the tracked `1.38.477` artifact until it is
+refreshed or its argument handling is tested; an ignored pin would defeat the
+comparison.
 
 ## Migration, verification, and rollback
 
 Existing callers need no migration. Callers that need source pinning may adopt
-the field after both adapters are available and discoverable; they must handle
+the field only after their actual installed artifact/channel supports it and
+is discoverable; they must handle
 the three source errors and must not interpret a successful unpinned call as a
 pin. Python stdio and Cloud Next MCP contract tests cover omitted, matching,
 malformed, stale, and unknown inputs; the Python test also corrupts the
