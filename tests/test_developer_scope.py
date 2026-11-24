@@ -236,5 +236,28 @@ class DeveloperScopeTests(unittest.TestCase):
             )
 
 
+    def test_dev_scope_12_forwards_trusted_fixture_binding_to_handoff_validation(self):
+        candidate = self.commit_candidate("empty fixture-bound candidate")
+        payload = {
+            "task_id": "dev-12", "role": "sf-developer-high", "status": "PASS",
+            "candidate_sha": candidate, "changed_paths": [],
+            "test_case_outcomes": [{
+                "case_id": "DEV-12", "status": "PASS", "fixture_sha256": "d" * 64,
+            }],
+            "command_exit_codes": [{"command": "python -m unittest DEV-12", "exit_code": 0}],
+            "evidence_refs": ["receipt://dev-12"],
+            "material_findings": [], "residual_risks": [], "next_action": "review",
+        }
+
+        with self.assertRaisesRegex(ValueError, "fixture SHA-256 mismatch"):
+            validate_developer_result(
+                payload, repo=self.repo, expected_task_id="dev-12",
+                expected_role="sf-developer-high", expected_test_case_ids=["DEV-12"],
+                expected_base_sha=self.base, writable_paths=[],
+                expected_candidate_sha=candidate,
+                expected_fixture_sha256_by_case={"DEV-12": "c" * 64},
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
