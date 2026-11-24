@@ -91,10 +91,12 @@ remain unavailable on the observed spawn surface.
 
 ### Migration and rollback for this example
 
-The optional parameter adds no persisted runtime state. Rollback must remove the
-parameter and matching checks from both Python MCP and Cloud Next in one contract
-change, regenerate the catalog/attestation, and rerun both backend contract suites.
-Do not add guessed `allowed_tools` or `path_scope` keys as an alternative:
+The optional parameter adds no persisted runtime state, but rollback is conditional.
+Before any caller adopts the parameter, both backends may remove it together. After
+adoption, prove callers have stopped sending it before reverting both schemas. While
+consumer adoption remains unknown, retain support and fix forward; never silently
+ignore a supplied pin. Regenerate the catalog/attestation and rerun both backend
+contract suites for a rollback. Do not add guessed `allowed_tools` or `path_scope` keys as an alternative:
 those remain unsupported on the observed spawn surface.
 
 ## Stable architecture test cases
