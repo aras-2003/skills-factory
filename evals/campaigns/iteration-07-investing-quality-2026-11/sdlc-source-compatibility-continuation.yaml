@@ -51,7 +51,7 @@ source_sha256:
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 946a1c661d88c96dc90db27b7eefa3c01e1b877ea90cbca6c3a9a08038a9277f
   adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 4e57f8340c127268db6051b58621604c1753d9402d01880b987a6c39a9e52c72
   docs/architecture/decisions/2026-11-load-skill-source-pin.md: 028861892f364d1a7d786b0adbbc2ba71000ee82759816979238318d6253b382
-  docs/governance/CODEX-SUBAGENT-PILOT.md: 600e540ed46b0f7be361cb2c01ed8d17cd239a00b4ef7da05d516d8711a29098
+  docs/governance/CODEX-SUBAGENT-PILOT.md: 08758a9c2963ed49badc5d5c1977c38faf4bf08d2d8df43ad33913718add3ac4
   runtime/mcp/server.py: 72ee1e3a56439ea0fc92e2fc158c67f4ffd8e90556f46021a5fa1feaa2d314b8
   runtime/mcp/skill_catalog.py: 14a64a66df79f8f9cfc2f0233e5d6d1a0053bbc15993260ed68cadc950ca7468
   runtime/mcp/tests/test_load_skill_source_revision.py: 0c0b12be81b09f2914883dd5c93cfd6b3628c28f2a7bd8c1cab6281b597dbc06
@@ -60,5 +60,5 @@ source_sha256:
   scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 69f5098958ca7c0d0b82b170a2b767114013879b3338e38e60addf6e0b33ca72
   scripts/eval/tests/test_runtime_campaign.py: e50d67ea9680915ac8085a9e9ebca235ea96454dbe1f5507229243779fee2afc
   scripts/package/tests/test_build_integrity.py: a81e56adf58420d276c79e95d180a357cfcf53c84df480c3d9b578e1bac0f313
-  tests/test_codex_agent_team.py: 4f4d71ff1448aa541a5996d5f604500a39d8ba7933ccd43a34944a018466ef36
+  tests/test_codex_agent_team.py: 972fbe58b982d1fba4092af32aa1cf5361168b4f0b6c246ebf41bd34adbfe8aa
   tests/test_delegation_handoff.py: 138b9654d759d20082ee04d1af823a9a7c6b6259490d12c2dbccd6eb88975109

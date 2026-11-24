@@ -87,8 +87,13 @@ class CodexAgentTeamContractTests(unittest.TestCase):
     def test_role_catalog_records_requested_model_routing_and_primary_limit(self):
         runbook = (ROOT / "docs" / "governance" / "CODEX-SUBAGENT-PILOT.md").read_text(encoding="utf-8")
         self.assertIn("Coordinator / primary chat | Luna High (project default; explicit host selection may override)", runbook)
-        self.assertRegex(runbook, r"2\. Select Luna High for the primary coordinator")
-        self.assertIn("Select Luna High for the primary coordinator", runbook)
+        self.assertIn("The top-level project config sets the Coordinator default to Luna High", runbook)
+        self.assertNotIn("not the main chat model", runbook)
+        self.assertIn("declares `max_concurrent_threads_per_session = 2`", runbook)
+        self.assertIn("Coordinator manually enforces a maximum of two active child threads", runbook)
+        self.assertNotIn("caps active child threads at two", runbook)
+        self.assertRegex(runbook, r"2\. Confirm whether the trusted project config loaded")
+        self.assertIn("effective primary model is Luna High", runbook)
         for assignment in (
             "`sf-architect` | Sol High",
             "`sf-developer-high` | Terra High",

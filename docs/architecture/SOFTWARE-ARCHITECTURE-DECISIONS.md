@@ -75,26 +75,29 @@ least-privilege enforcement.
 
 ## Shared typed-contract example
 
-`docs/architecture/decisions/2026-11-load-skill-source-pin.md` is a worked,
+`docs/architecture/decisions/2026-11-load-skill-source-pin.md` is the
 source-pinned analysis of the Python MCP and Cloud Next `load_skill` consumers.
-It compares an optional expected-source input with a required breaking input,
-defines parity and stale-source cases, and records trust, migration, rollback,
-and review state. It is deliberately `REVIEW_REQUIRED` with no candidate SHA;
-the example demonstrates the review method and does not authorize a contract
-change.
+The owner accepted an optional expected-source input with the same logical
+mismatch code/message across backends while allowing backend-specific receipt
+metadata. PR #777 implemented the contract and parity tests; it is present on
+canonical main `9b6fce4a5e08dc527309cccb5411ebb086269569`. The deployed Lab
+accepted an omitted or matching pin and rejected a stale pin without returning
+instructions. Python MCP contract tests cover malformed pins, unknown fields,
+and unverifiable packaged metadata.
+
+This decision binds returned instructions to a requested source revision. It
+does not establish per-role tool ACLs or host permission enforcement; those
+remain unavailable on the observed spawn surface.
 
 ### Migration and rollback for this example
 
-The selected extension adds project-local guidance and an explicit capability
-matrix while retaining the existing TOML keys, agent names, and two-thread
-limit. It has no runtime state migration. Before adopting it, validate the
-existing profile/config files and run the agent-team, handoff, and governance
-contract tests against the candidate SHA. If review finds a contract mismatch,
-revert the matrix, the two Developer instruction edits, and this workflow
-addition as one candidate change; then rerun those checks. No user data or host
-configuration needs restoration. Do not add a guessed `allowed_tools` or
-`path_scope` key as a rollback substitute: those keys remain unsupported on the
-observed spawn surface.
+The optional parameter adds no persisted runtime state, but rollback is conditional.
+Before any caller adopts the parameter, both backends may remove it together. After
+adoption, prove callers have stopped sending it before reverting both schemas. While
+consumer adoption remains unknown, retain support and fix forward; never silently
+ignore a supplied pin. Regenerate the catalog/attestation and rerun both backend
+contract suites for a rollback. Do not add guessed `allowed_tools` or `path_scope` keys as an alternative:
+those remain unsupported on the observed spawn surface.
 
 ## Stable architecture test cases
 

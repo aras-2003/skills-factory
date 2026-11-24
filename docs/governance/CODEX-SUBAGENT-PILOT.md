@@ -10,8 +10,8 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 
 ## Host and model configuration
 
-- `.codex/config.toml` enables agents, caps active child threads at two and selects the default child model/effort as Luna Medium.
-- Project configuration sets **subagent defaults**, not the main chat model. Select Luna High in the host for the primary coordinator when available; record unavailable or unknown if the host does not expose this control.
+- `.codex/config.toml` enables project agents, declares `max_concurrent_threads_per_session = 2` and the Coordinator manually enforces a maximum of two active child threads because host enforcement is unverified; it sets the child default to Luna Medium, and sets the trusted-project Coordinator default to `gpt-6-luna` / `high`.
+- The top-level project config sets the Coordinator default to Luna High. An explicit host selection may override it; verify the loaded config and effective model from host evidence. If the host does not expose them, record `UNKNOWN`.
 - Agent files set bounded role-specific child model/effort. The project config does not prove the host loaded these files or honored a model override.
 - Agent instructions are behavioral; a child thread inherits host permissions. They do not establish a separate OS sandbox.
 - When the host cannot spawn a required role, cannot expose a required model or cannot run the requested test, report BLOCKED/NOT_RUN. Never substitute same-thread narration or infer runtime success from config parsing/CI.
@@ -54,7 +54,7 @@ For Developer handoff acceptance, `scripts/engineering/delegation_handoff.py` of
 Run against the implementation PR head in a **new Codex chat** and trusted checkout:
 
 1. Read `AGENTS.md`, this runbook, `.codex/config.toml` and the role TOMLs at the exact PR head. Record checkout SHA and actual host/model visibility; do not infer them.
-2. Select Luna High for the primary coordinator if available. Confirm that the project config loaded only from observable host evidence.
+2. Confirm whether the trusted project config loaded and whether the effective primary model is Luna High. The project default is `gpt-6-luna` / `high`, unless an explicit host selection overrides it; report host-observed values and mark unavailable evidence `UNKNOWN`.
 3. Explicitly spawn `sf-test-designer` to produce a bounded plan, then `sf-test-executor` to run one existing deterministic check on the same exact SHA. Record each child thread, visible model/effort, case IDs, command and real exit status.
 4. For a complex architecture case, explicitly route `sf-architect`; verify the advice is bounded and does not modify code. Test Medium/High developer routing with small and complex examples only if the host exposes the settings and the task is safe.
 5. For a risk-required review, spawn `sf-independent-reviewer` as a separate thread. A missing reviewer remains BLOCKED; do not count self-review or CI.
@@ -65,7 +65,7 @@ Run against the implementation PR head in a **new Codex chat** and trusted check
 ## Offline acceptance
 
 - All ten role TOMLs parse; names, model IDs and effort values match the role matrix.
-- Project config parses, caps threads at two and does not set a primary session model.
+- Project config parses, declares the two-thread limit without claiming host enforcement, and declares Coordinator `gpt-6-luna` / `high` plus child defaults Luna Medium.
 - Tests confirm design/execution separation, bounded write ownership, fail-closed missing evidence and no merge/release authority.
 - `AGENTS.md` and this runbook route to the same roles.
 - Run the focused contract test with `python3 -m unittest discover -s tests -p 'test_codex_agent_team.py'`; this proves static configuration contracts only.
