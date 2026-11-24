@@ -189,7 +189,7 @@ class DeveloperScopeTests(unittest.TestCase):
             payload, repo=self.repo, expected_task_id="dev-1",
             expected_role="sf-developer-high", expected_test_case_ids=["DEV-01"],
             expected_base_sha=self.base, writable_paths=["allowed/"],
-            expected_candidate_sha=candidate,
+            expected_candidate_sha=candidate, fixture_policy_by_case={"DEV-01": None},
         )
 
         self.assertEqual("PASS", result["result"]["status"])
@@ -212,7 +212,7 @@ class DeveloperScopeTests(unittest.TestCase):
                 payload, repo=self.repo, expected_task_id="dev-1",
                 expected_role="sf-developer-high", expected_test_case_ids=["DEV-01"],
                 expected_base_sha=self.base, writable_paths=["allowed/"],
-                expected_candidate_sha=candidate,
+                expected_candidate_sha=candidate, fixture_policy_by_case={"DEV-01": None},
             )
 
     def test_dev_scope_11_rejects_developer_pass_when_checkout_is_dirty(self):
@@ -232,7 +232,7 @@ class DeveloperScopeTests(unittest.TestCase):
                 payload, repo=self.repo, expected_task_id="dev-1",
                 expected_role="sf-developer-high", expected_test_case_ids=["DEV-01"],
                 expected_base_sha=self.base, writable_paths=[],
-                expected_candidate_sha=candidate,
+                expected_candidate_sha=candidate, fixture_policy_by_case={"DEV-01": None},
             )
 
 
@@ -255,8 +255,28 @@ class DeveloperScopeTests(unittest.TestCase):
                 expected_role="sf-developer-high", expected_test_case_ids=["DEV-12"],
                 expected_base_sha=self.base, writable_paths=[],
                 expected_candidate_sha=candidate,
-                expected_fixture_sha256_by_case={"DEV-12": "c" * 64},
+                fixture_policy_by_case={"DEV-12": "c" * 64},
             )
+
+    def test_dev_scope_14_requires_and_forwards_complete_fixture_policy(self):
+        candidate = self.commit_candidate("fixture policy")
+        payload = {
+            "task_id": "dev-14", "role": "sf-developer-high", "status": "PASS",
+            "candidate_sha": candidate, "changed_paths": [],
+            "test_case_outcomes": [{"case_id": "DEV-14", "status": "PASS", "fixture_sha256": "c" * 64}],
+            "command_exit_codes": [{"command": "run DEV-14", "exit_code": 0}],
+            "evidence_refs": ["receipt://dev-14"], "material_findings": [],
+            "residual_risks": [], "next_action": "review",
+        }
+        kwargs = dict(repo=self.repo, expected_task_id="dev-14", expected_role="sf-developer-high",
+                      expected_test_case_ids=["DEV-14"], expected_base_sha=self.base,
+                      writable_paths=[], expected_candidate_sha=candidate)
+        with self.assertRaises(TypeError):
+            validate_developer_result(payload, **kwargs)
+        with self.assertRaises(ValueError):
+            validate_developer_result(payload, **kwargs, fixture_policy_by_case={"DEV-14": "d" * 64})
+        checked = validate_developer_result(payload, **kwargs, fixture_policy_by_case={"DEV-14": "c" * 64})
+        self.assertEqual("PASS", checked["scope_verification"]["scope_status"])
 
     def test_dev_scope_13_pass_requires_zero_exit_command_evidence(self):
         candidate = self.commit_candidate("empty command-evidence candidate")
@@ -274,6 +294,7 @@ class DeveloperScopeTests(unittest.TestCase):
                     repo=self.repo, expected_task_id="dev-13", expected_role=role,
                     expected_test_case_ids=["DEV-13"], expected_base_sha=self.base,
                     writable_paths=[], expected_candidate_sha=candidate,
+                    fixture_policy_by_case={"DEV-13": None},
                 )
 
                 with self.assertRaisesRegex(ValueError, "Developer PASS requires at least one command exit record"):

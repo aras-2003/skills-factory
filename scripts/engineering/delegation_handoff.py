@@ -150,7 +150,7 @@ def validate_result(
     expected_role: str,
     expected_test_case_ids: list[str],
     expected_candidate_sha: str,
-    expected_fixture_sha256_by_case: dict[str, str] | None = None,
+    fixture_policy_by_case: dict[str, str | None],
 ) -> dict:
     _text(expected_task_id, "expected_task_id")
     _text(expected_role, "expected_role")
@@ -159,14 +159,15 @@ def validate_result(
         raise ValueError("Test Executor result requires at least one expected test case")
     if len(set(expected_test_case_ids)) != len(expected_test_case_ids):
         raise ValueError("expected_test_case_ids must contain unique case IDs")
-    if expected_fixture_sha256_by_case is not None:
-        if not isinstance(expected_fixture_sha256_by_case, dict):
-            raise ValueError("expected_fixture_sha256_by_case must be an object")
-        for case_id, fixture_sha256 in expected_fixture_sha256_by_case.items():
-            if not isinstance(case_id, str) or case_id not in expected_test_case_ids:
-                raise ValueError("expected_fixture_sha256_by_case contains an unexpected test case")
-            if not isinstance(fixture_sha256, str) or not SHA256.fullmatch(fixture_sha256):
-                raise ValueError("expected_fixture_sha256_by_case values must be lowercase SHA-256 digests")
+    if not isinstance(fixture_policy_by_case, dict):
+        raise ValueError("fixture_policy_by_case must be an object")
+    if set(fixture_policy_by_case) != set(expected_test_case_ids):
+        raise ValueError("fixture_policy_by_case must match the exact test case IDs")
+    for fixture_sha256 in fixture_policy_by_case.values():
+        if fixture_sha256 is not None and (
+            not isinstance(fixture_sha256, str) or not SHA256.fullmatch(fixture_sha256)
+        ):
+            raise ValueError("fixture_policy_by_case values must be lowercase SHA-256 digests or None")
     _sha(expected_candidate_sha, "expected_candidate_sha")
     required = RESULT_FIELDS - {"usage"}
     item = _required_object(payload, required, {"usage"}, "handoff result")
@@ -204,8 +205,12 @@ def validate_result(
             or not SHA256.fullmatch(entry["fixture_sha256"])
         ):
             raise ValueError("test_case_outcomes.fixture_sha256 must be a lowercase SHA-256 digest")
-        expected_fixture_sha256 = (expected_fixture_sha256_by_case or {}).get(entry["case_id"])
+        if entry["case_id"] not in fixture_policy_by_case:
+            raise ValueError("test case IDs do not match the delegated test_case_ids")
+        expected_fixture_sha256 = fixture_policy_by_case[entry["case_id"]]
         reported_fixture_sha256 = entry.get("fixture_sha256")
+        if expected_fixture_sha256 is None and "fixture_sha256" in entry:
+            raise ValueError("unbound test case must not report a fixture SHA-256")
         if expected_fixture_sha256 is not None:
             if reported_fixture_sha256 is None and entry["status"] in {"PASS", "FAIL"}:
                 raise ValueError("test case fixture SHA-256 is required for an executed outcome")
@@ -257,7 +262,7 @@ def validate_developer_result(
     expected_base_sha: str,
     writable_paths: list[str],
     expected_candidate_sha: str,
-    expected_fixture_sha256_by_case: dict[str, str] | None = None,
+    fixture_policy_by_case: dict[str, str | None],
 ) -> dict:
     """Validate a Developer handoff and bind its PASS to the observed Git diff.
 
@@ -273,7 +278,7 @@ def validate_developer_result(
         expected_role=expected_role,
         expected_test_case_ids=expected_test_case_ids,
         expected_candidate_sha=expected_candidate_sha,
-        expected_fixture_sha256_by_case=expected_fixture_sha256_by_case,
+        fixture_policy_by_case=fixture_policy_by_case,
     )
     from scripts.engineering.developer_scope import verify_candidate_scope
 
