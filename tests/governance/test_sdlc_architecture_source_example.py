@@ -77,10 +77,60 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
         self.assertIn(f"{cloud_path}#L25-L29", decision)
         self.assertIn("#L182-L186", decision)
         self.assertIn("cloud-tools.ts#L128-L130", decision)
-
         self.assertIn("Status: `REVIEW_REQUIRED`", decision)
         self.assertIn("Candidate SHA: `NOT_CREATED`", decision)
         self.assertIn("`ARCH-02` remains `NOT_RUN`", decision)
+
+    def test_current_consumer_map_covers_runtime_ui_evidence_and_catalog_builders(self):
+        decision = DECISION.read_text(encoding="utf-8")
+        current_map = decision.split("## Current source consumer map", 1)[1].split(
+            "## Migration, verification, and rollback", 1
+        )[0]
+        expected_paths = (
+            "runtime/mcp/server.py",
+            "runtime/mcp/skill_catalog.py",
+            "runtime/mcp/cloud_server.py",
+            "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+            "sites/skills-factory-site/app/mcp/route.ts",
+            "sites/skills-factory-site/app/page.tsx",
+            "scripts/eval/iteration02_flow_capture.py",
+            "scripts/eval/iteration02_route_evidence.py",
+            "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py",
+            "scripts/package/build_cloud_next_site.py",
+        )
+        for path in expected_paths:
+            with self.subTest(path=path):
+                self.assertIn(path, current_map)
+                self.assertTrue((ROOT / path).is_file())
+
+        browser = (ROOT / "sites/skills-factory-site/app/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("context.registerTool", browser)
+        self.assertIn("callTool(name, args)", browser)
+        self.assertIn("callTool(name, JSON.parse(input))", browser)
+        self.assertNotIn("expected_source_revision", browser)
+
+        python_server = (ROOT / "runtime/mcp/server.py").read_text(encoding="utf-8")
+        python_wrapper = (ROOT / "runtime/mcp/cloud_server.py").read_text(encoding="utf-8")
+        cloud_tools = (ROOT / "adapters/skills-factory-cloud-next/src/cloud-tools.ts").read_text(encoding="utf-8")
+        site_route = (ROOT / "sites/skills-factory-site/app/mcp/route.ts").read_text(encoding="utf-8")
+        site_builder = (ROOT / "scripts/package/build_cloud_next_site.py").read_text(encoding="utf-8")
+        self.assertIn('"load_skill"', python_server)
+        self.assertIn('transport="streamable-http"', python_wrapper)
+        self.assertIn("expected_source_revision", cloud_tools)
+        self.assertIn("handleMcp", site_route)
+        self.assertIn("sync-lab-catalog.py", site_builder)
+
+        flow_capture = (ROOT / "scripts/eval/iteration02_flow_capture.py").read_text(encoding="utf-8")
+        route_evidence = (ROOT / "scripts/eval/iteration02_route_evidence.py").read_text(encoding="utf-8")
+        self.assertIn('verify_call(provider, "load_skill", identity["source_revision"])', flow_capture)
+        self.assertIn('verify_call(child, "load_skill", receipt_source)', route_evidence)
+        self.assertIn("child model execution cannot be inferred from load_skill", route_evidence)
+
+        catalog_builder = (ROOT / "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py").read_text(encoding="utf-8")
+        self.assertIn("m.load_skill(entry['name'])", catalog_builder)
+        self.assertIn("expected_source_revision", current_map)
+        self.assertIn("External HTTP/MCP clients", current_map)
 
 
 if __name__ == "__main__":

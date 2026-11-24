@@ -39,18 +39,64 @@ Requiring the field was considered and rejected: existing clients send only
 `skill_name`, and making it mandatory would require a coordinated versioned
 migration without evidence of a need for that break.
 
-## Source-grounded consumer map
+## Current source consumer map
 
-- Python MCP registers and dispatches `load_skill` in
-  `runtime/mcp/server.py`, then reads the packaged catalog through
-  `runtime/mcp/skill_catalog.py`.
-- Cloud Next handles MCP calls in
-  `adapters/skills-factory-cloud-next/src/mcp-handler.ts`, dispatches through
-  `adapters/skills-factory-cloud-next/src/cloud-tools.ts`, and loads the
-  generated embedded `skill-catalog.ts` (created by
-  `adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py`).
-- These are source-confirmed adapter paths, not a complete external-client
-  inventory. Other consumers and their adoption state remain `UNKNOWN`.
+This map was checked against the main tree at `02001acb4269cb74b4a3e39f095fe027663c21eb`.
+It separates runtime tool consumers from receipt validators and build-time
+catalog producers; finding a path does not imply that it sends the optional
+`expected_source_revision` pin.
+
+## Reuse decision
+
+`REUSE` the existing repository method in
+`docs/architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md` and
+`templates/architecture/software-decision.md`. This worked example strengthens
+that method with a source-confirmed consumer map; it does not introduce a
+separate software-architecture skill or duplicate approval workflow. Reconsider
+a reusable skill only if repeated cross-repository use demonstrates a distinct
+method from the existing enterprise architecture and skill-specification
+capabilities.
+
+### Runtime and transport consumers
+
+- Python MCP registers `load_skill` in `runtime/mcp/server.py` and reads the
+  packaged catalog through `runtime/mcp/skill_catalog.py`. The compatibility
+  HTTP entry point `runtime/mcp/cloud_server.py` imports the same server and
+  starts Streamable HTTP; it is not a second implementation.
+- Cloud Next receives MCP requests in
+  `adapters/skills-factory-cloud-next/src/mcp-handler.ts`, validates and
+  dispatches them through `adapters/skills-factory-cloud-next/src/cloud-tools.ts`,
+  and loads the generated embedded catalog. The Site `/mcp` route in
+  `sites/skills-factory-site/app/mcp/route.ts` delegates POST/GET/DELETE to
+  that handler.
+- The Site browser surface in `sites/skills-factory-site/app/page.tsx` imports
+  `callTool`; its WebMCP `document.modelContext.registerTool` callback and the
+  interactive console both call that adapter. Its sample `load_skill` request
+  sends `skill_name` only, so it does not demonstrate pin adoption.
+
+### Evaluation receipt consumers
+
+- `scripts/eval/iteration02_flow_capture.py` checks observed provider calls,
+  including a `load_skill` receipt, against the Site identity revision.
+- `scripts/eval/iteration02_route_evidence.py` validates router and child
+  `load_skill` receipt identity and explicitly rejects an inference that a
+  loaded skill proves child model execution. These scripts consume evidence;
+  they are not runtime tool callers.
+
+### Build-time catalog producers
+
+- `adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py` loads each
+  packaged Lab entry to construct Site catalog metadata. That generator calls
+  the package loader without `expected_source_revision`; it is build-time
+  package inspection, not runtime adoption of the pin.
+- `scripts/package/build_cloud_next_site.py` invokes that generator while
+  building the Site. It is a producer in the packaging path, not a runtime
+  `load_skill` client.
+
+These paths are source-confirmed on the stated revision, not a complete
+consumer inventory. External HTTP/MCP clients and their optional-pin adoption
+remain `UNKNOWN`; no source listing proves host execution of loaded
+instructions or deployed API parity.
 
 ## Migration, verification, and rollback
 
