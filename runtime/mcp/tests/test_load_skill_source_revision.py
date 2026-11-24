@@ -8,9 +8,11 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+from starlette.testclient import TestClient
 
 
 RUNTIME_DIR = Path(__file__).resolve().parents[1]
@@ -122,6 +124,119 @@ class LoadSkillSourceRevisionTests(unittest.TestCase):
                                     self.assertNotIn(secret, error_text)
 
             asyncio.run(run_calls())
+
+
+class LoadSkillSourceRevisionHTTPTests(unittest.TestCase):
+    def test_streamable_http_source_pin_contract(self):
+        with tempfile.TemporaryDirectory(prefix="sf-load-skill-http-") as tmp:
+            root = Path(tmp) / "package"
+            manifest_path = write_packaged_fixture(root)
+            with patch.dict(os.environ, {"PLUGIN_ROOT": str(root), "MPLCONFIGDIR": str(Path(tmp) / "mpl-cache")}):
+                sys.path.insert(0, str(RUNTIME_DIR))
+                try:
+                    import server as runtime_server
+                finally:
+                    sys.path.remove(str(RUNTIME_DIR))
+                self.assertEqual(Path(runtime_server.__file__).resolve(), RUNTIME_DIR / "server.py")
+
+                with TestClient(runtime_server.app, base_url="http://127.0.0.1:8000") as client:
+                    headers = {"Accept": "application/json, text/event-stream"}
+
+                    def rpc(method, params, request_id=1):
+                        response = client.post("/mcp", headers=headers, json={
+                            "jsonrpc": "2.0", "id": request_id, "method": method, "params": params,
+                        })
+                        self.assertEqual(response.status_code, 200, response.text)
+                        if response.headers.get("mcp-session-id"):
+                            headers["mcp-session-id"] = response.headers["mcp-session-id"]
+                        if response.headers.get("content-type", "").startswith("text/event-stream"):
+                            payloads = [line[5:].strip() for line in response.text.splitlines() if line.startswith("data:")]
+                            self.assertEqual(len(payloads), 1, response.text)
+                            result = json.loads(payloads[0])
+                        else:
+                            result = response.json()
+                        self.assertNotIn("error", result)
+                        return result["result"]
+
+                    initialize = rpc("initialize", {
+                        "protocolVersion": "2025-06-18", "capabilities": {},
+                        "clientInfo": {"name": "source-pin-http-test", "version": "1"},
+                    })
+                    self.assertIn("protocolVersion", initialize)
+                    self.assertIn("mcp-session-id", headers)
+                    notification = client.post("/mcp", headers=headers, json={
+                        "jsonrpc": "2.0", "method": "notifications/initialized", "params": {},
+                    })
+                    self.assertEqual(notification.status_code, 202)
+
+                    tools = rpc("tools/list", {})["tools"]
+                    schema = next(tool for tool in tools if tool["name"] == "load_skill")["inputSchema"]
+                    self.assertEqual(schema["required"], ["skill_name"])
+                    self.assertFalse(schema["additionalProperties"])
+                    self.assertNotIn("type", schema["properties"]["expected_source_revision"])
+
+                    def call(args):
+                        return rpc("tools/call", {"name": "load_skill", "arguments": args})
+
+                    with self.subTest(case_id="ARCH-PAR-HTTP-02-unpinned"):
+                        unpinned = call({"skill_name": "sample"})
+                        self.assertFalse(unpinned.get("isError", False))
+                        self.assertIn("Fixture instruction body.", json.dumps(unpinned))
+
+                    with self.subTest(case_id="ARCH-PAR-HTTP-03-matching"):
+                        matching = call({"skill_name": "sample", "expected_source_revision": SOURCE_REVISION})
+                        self.assertFalse(matching.get("isError", False))
+                        self.assertIn("Fixture instruction body.", json.dumps(matching))
+                        payloads = []
+                        for item in matching["content"]:
+                            if item["type"] != "text":
+                                continue
+                            try:
+                                payload = json.loads(item["text"])
+                            except ValueError:
+                                continue
+                            if isinstance(payload, dict) and "source_revision" in payload:
+                                payloads.append(payload)
+                        self.assertEqual(len(payloads), 1)
+                        self.assertEqual(payloads[0]["source_revision"], SOURCE_REVISION)
+
+                    def assert_failure(case_id, args, expected, *sensitive_values):
+                        with self.subTest(case_id=case_id):
+                            result = call(args)
+                            self.assertTrue(result["isError"])
+                            texts = [item["text"] for item in result["content"] if item["type"] == "text"]
+                            self.assertEqual(len(texts), 1)
+                            self.assertIn(texts[0], (expected, f"Error executing tool load_skill: {expected}"))
+                            response_json = json.dumps(result)
+                            for secret in ("Fixture instruction body.", SOURCE_REVISION, STALE_REVISION, str(root), *sensitive_values):
+                                self.assertNotIn(secret, response_json)
+
+                    assert_failure(
+                        "ARCH-PAR-HTTP-04-stale", {"skill_name": "sample", "expected_source_revision": STALE_REVISION},
+                        "SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.",
+                    )
+                    assert_failure(
+                        "ARCH-PAR-HTTP-05-null", {"skill_name": "sample", "expected_source_revision": None},
+                        "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.",
+                    )
+                    assert_failure(
+                        "ARCH-PAR-HTTP-06-number", {"skill_name": "sample", "expected_source_revision": 42},
+                        "INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.",
+                    )
+                    assert_failure(
+                        "ARCH-PAR-HTTP-07-unknown-field",
+                        {"skill_name": "sample", "expected_source_revision": SOURCE_REVISION, "unexpected": "do-not-echo"},
+                        "INVALID_TOOL_ARGUMENTS: Invalid tool arguments.", "do-not-echo",
+                    )
+
+                    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                    manifest["payload_content_sha256"] = "0" * 64
+                    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                    assert_failure(
+                        "ARCH-PAR-HTTP-08-corrupt-stale",
+                        {"skill_name": "sample", "expected_source_revision": STALE_REVISION},
+                        "SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.",
+                    )
 
 
 if __name__ == "__main__":
