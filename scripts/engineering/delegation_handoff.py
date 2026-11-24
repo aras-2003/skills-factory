@@ -109,6 +109,19 @@ def validate_input(payload: Any) -> dict:
     _sha(item.get("candidate_sha"), "candidate_sha", optional=True)
     for field in ("readonly_paths", "writable_paths", "selected_skill_refs", "test_case_ids", "stop_conditions"):
         _string_list(item[field], field)
+    # Share the Git scope check's lexical grammar without resolving paths or
+    # implying that declared scopes are enforced by the host.
+    from scripts.engineering.developer_scope import validate_repo_relative_path
+
+    for field in ("readonly_paths", "writable_paths"):
+        for path in item[field]:
+            validate_repo_relative_path(path, directory_allowed=True)
+        if len(set(item[field])) != len(item[field]):
+            raise ValueError(f"{field} must not contain duplicate paths")
+    for writable in item["writable_paths"]:
+        for readonly in item["readonly_paths"]:
+            if writable == readonly or (writable.endswith("/") and readonly.startswith(writable)):
+                raise ValueError("writable scope must not cover a readonly scope")
     if len(set(item["test_case_ids"])) != len(item["test_case_ids"]):
         raise ValueError("test_case_ids must contain unique case IDs")
     if item["role"] == "sf-test-executor" and not item["test_case_ids"]:

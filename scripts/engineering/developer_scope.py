@@ -37,7 +37,7 @@ def _git(repo: Path, *arguments: str) -> bytes:
     return result.stdout
 
 
-def _path(value: Any, *, directory_allowed: bool) -> str:
+def validate_repo_relative_path(value: Any, *, directory_allowed: bool) -> str:
     if not isinstance(value, str) or not value or "\0" in value or "\\" in value:
         raise ValueError("paths must be nonempty repository-relative paths")
     if value.startswith("/") or (value.endswith("/") and not directory_allowed):
@@ -123,8 +123,8 @@ def verify_candidate_scope(
         raise ValueError("candidate_sha must be a full lowercase 40-character Git SHA")
     if not isinstance(writable_paths, list) or not isinstance(reported_changed_paths, list):
         raise ValueError("writable_paths and reported_changed_paths must be lists")
-    grants = [_path(path, directory_allowed=True) for path in writable_paths]
-    reported = [_path(path, directory_allowed=False) for path in reported_changed_paths]
+    grants = [validate_repo_relative_path(path, directory_allowed=True) for path in writable_paths]
+    reported = [validate_repo_relative_path(path, directory_allowed=False) for path in reported_changed_paths]
     if len(set(grants)) != len(grants) or len(set(reported)) != len(reported):
         raise ValueError("paths must not contain duplicates")
 
