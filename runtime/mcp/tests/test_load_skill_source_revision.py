@@ -110,14 +110,16 @@ class LoadSkillSourceRevisionTests(unittest.TestCase):
                         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
                         manifest["payload_content_sha256"] = "0" * 64
                         manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
-                        unverifiable = await session.call_tool("load_skill", {
-                            "skill_name": "sample", "expected_source_revision": SOURCE_REVISION,
-                        })
-                        self.assertTrue(unverifiable.is_error)
-                        error_text = "\n".join(item.text for item in unverifiable.content if item.type == "text")
-                        self.assertEqual(error_text, "Error executing tool load_skill: SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.")
-                        self.assertNotIn(SOURCE_REVISION, error_text)
-                        self.assertNotIn("Fixture instruction body.", error_text)
+                        for pin in (SOURCE_REVISION, STALE_REVISION):
+                            with self.subTest(corrupt_payload_pin=pin):
+                                unverifiable = await session.call_tool("load_skill", {
+                                    "skill_name": "sample", "expected_source_revision": pin,
+                                })
+                                self.assertTrue(unverifiable.is_error)
+                                error_text = "\n".join(item.text for item in unverifiable.content if item.type == "text")
+                                self.assertEqual(error_text, "Error executing tool load_skill: SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.")
+                                for secret in (SOURCE_REVISION, STALE_REVISION, str(root), "Fixture instruction body."):
+                                    self.assertNotIn(secret, error_text)
 
             asyncio.run(run_calls())
 
