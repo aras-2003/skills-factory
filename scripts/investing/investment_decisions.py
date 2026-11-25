@@ -262,7 +262,8 @@ def synthesize_decision(decision_input: object, *, root: Path) -> dict[str, Any]
     g5_status = {"IN_POLICY": "PASS", "REVIEW_THRESHOLD": "WARN", "HARD_CAP_BREACH": "BLOCK", "UNRESOLVED": "UNRESOLVED", "NOT_APPLICABLE": "N/A"}[portfolio]
     g5_reason = {"IN_POLICY": "POLICY_IN_RANGE", "REVIEW_THRESHOLD": "POLICY_REVIEW_THRESHOLD", "HARD_CAP_BREACH": "POLICY_BREACH_REDUCTION_REVIEW", "UNRESOLVED": "PORTFOLIO_FIT_UNKNOWN", "NOT_APPLICABLE": "PORTFOLIO_NOT_APPLICABLE"}[portfolio]
     if position == "UNKNOWN" or not signals["portfolio"]["position_snapshot_complete"]:
-        g5_status, g5_reason = "UNRESOLVED", "POSITION_STATE_UNKNOWN"
+        g5_status = "UNRESOLVED"
+        g5_reason = "POSITION_STATE_UNKNOWN" if position == "UNKNOWN" else "POSITION_SNAPSHOT_INCOMPLETE"
     g5 = _gate("G5", g5_status, g5_reason, signals["portfolio"])
     if timing is None:
         g6 = _gate("G6", "N/A", "NO_TIMING_SIGNAL_REQUESTED")
@@ -275,7 +276,7 @@ def synthesize_decision(decision_input: object, *, root: Path) -> dict[str, Any]
     output["business_quality_state"] = quality
     output["valuation_state"] = valuation_state if g4["status"] == "PASS" else ("BLOCKED" if g4["status"] == "BLOCK" else "UNRESOLVED")
     output["security_attractiveness_state"] = attractiveness if g4["status"] == "PASS" else "UNRESOLVED"
-    output["portfolio_fit_state"] = portfolio
+    output["portfolio_fit_state"] = "UNRESOLVED" if g5_status == "UNRESOLVED" else portfolio
     output["timing_state"] = timing["state"] if timing else "N/A"
     output["source_result_refs"] = sorted({ref for gate in gates for ref in gate["source_result_refs"]})
     output["numeric_sizing_blocked"] = True
@@ -302,7 +303,7 @@ def synthesize_decision(decision_input: object, *, root: Path) -> dict[str, Any]
                 recommendation = "HOLD"
             elif position == "HELD" and portfolio == "REVIEW_THRESHOLD" and thesis != "INVALIDATED" and g5["status"] == "WARN":
                 recommendation = "TRIM_REVIEW"
-    if portfolio == "HARD_CAP_BREACH":
+    if portfolio == "HARD_CAP_BREACH" and g5_status == "BLOCK":
         recommendation = None
         reasons.append("POLICY_BREACH_REDUCTION_REVIEW")
     if quality != "PASS":

@@ -257,6 +257,8 @@ class InvestmentDecisionTests(unittest.TestCase):
             self.assertEqual("UNRESOLVED", result["gate_results"][5]["status"])
             self.assertIsNone(result["advisory_recommendation"])
             self.assertEqual("UNRESOLVED", result["portfolio_action"])
+            self.assertEqual("UNRESOLVED", result["portfolio_fit_state"])
+            self.assertNotIn("POLICY_BREACH_REDUCTION_REVIEW", result["reason_codes"])
 
     def test_signal_evidence_must_be_linked_to_each_referenced_claim(self):
         value = decision_input()
