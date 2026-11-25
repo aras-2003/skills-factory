@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skills-factory.local/schemas/investing/investment-decision-v1.schema.json",
+  "title": "Investment Decision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "instrument_id",
+    "as_of",
+    "horizon",
+    "decision_rule_version",
+    "position_state",
+    "research_state",
+    "thesis_state",
+    "business_quality_state",
+    "valuation_state",
+    "portfolio_fit_state",
+    "timing_state",
+    "gate_results",
+    "advisory_recommendation",
+    "reason_codes",
+    "uncertainties",
+    "conditions_to_upgrade",
+    "conditions_to_downgrade",
+    "owner_approval_required",
+    "owner_decision",
+    "execution_authorized",
+    "source_result_refs",
+    "numeric_sizing_blocked",
+    "security_attractiveness_state",
+    "portfolio_action",
+    "policy_version_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "analysis_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "instrument_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "horizon": {
+      "type": "object",
+      "required": [
+        "min_months",
+        "max_months",
+        "objective"
+      ],
+      "properties": {
+        "min_months": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_months": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision_rule_version": {
+      "const": "1.0"
+    },
+    "position_state": {
+      "enum": [
+        "HELD",
+        "NOT_HELD",
+        "UNKNOWN"
+      ]
+    },
+    "research_state": {
+      "enum": [
+        "RESEARCH",
+        "VERIFY",
+        "WATCH",
+        "REJECT",
+        "RESEARCHED"
+      ]
+    },
+    "thesis_state": {
+      "enum": [
+        "SURVIVES",
+        "WEAKENED",
+        "INVALIDATED",
+        "INSUFFICIENT_EVIDENCE",
+        "UNRESOLVED"
+      ]
+    },
+    "business_quality_state": {
+      "enum": [
+        "PASS",
+        "WARN",
+        "BLOCK",
+        "VERIFY",
+        "CONFLICTED",
+        "UNRESOLVED"
+      ]
+    },
+    "valuation_state": {
+      "enum": [
+        "READY",
+        "BLOCKED",
+        "UNRESOLVED"
+      ]
+    },
+    "portfolio_fit_state": {
+      "enum": [
+        "IN_POLICY",
+        "REVIEW_THRESHOLD",
+        "HARD_CAP_BREACH",
+        "UNRESOLVED",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "timing_state": {
+      "enum": [
+        "SUPPORTIVE",
+        "ADVERSE",
+        "NEUTRAL",
+        "UNRESOLVED",
+        "N/A"
+      ]
+    },
+    "gate_results": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gate_id",
+          "status",
+          "reason_codes",
+          "source_result_refs",
+          "evidence_ids",
+          "policy_rule_ref",
+          "claim_ids",
+          "conflict_ids"
+        ],
+        "properties": {
+          "gate_id": {
+            "enum": [
+              "G0",
+              "G1",
+              "G2",
+              "G3",
+              "G4",
+              "G5",
+              "G6"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "WARN",
+              "BLOCK",
+              "UNRESOLVED",
+              "N/A"
+            ]
+          },
+          "reason_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "source_result_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "policy_rule_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "conflict_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "advisory_recommendation": {
+      "enum": [
+        "BUY",
+        "ACCUMULATE",
+        "HOLD",
+        "WAIT",
+        "TRIM",
+        "TRIM_REVIEW",
+        "SELL",
+        "SELL_REVIEW",
+        "AVOID",
+        null
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "conditions_to_upgrade": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conditions_to_downgrade": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "owner_approval_required": {
+      "const": true
+    },
+    "owner_decision": {
+      "type": "null"
+    },
+    "execution_authorized": {
+      "const": false
+    },
+    "source_result_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "numeric_sizing_blocked": {
+      "const": true
+    },
+    "security_attractiveness_state": {
+      "enum": [
+        "ATTRACTIVE",
+        "FAIR",
+        "UNFAVORABLE",
+        "UNRESOLVED"
+      ]
+    },
+    "portfolio_action": {
+      "enum": [
+        "NONE",
+        "TRIM_REVIEW",
+        "REDUCTION_REVIEW",
+        "SELL_REVIEW",
+        "AVOID",
+        "UNRESOLVED"
+      ]
+    },
+    "policy_version_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

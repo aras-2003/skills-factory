@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "#754 decision synthesis architecture: independently review gate semantics and fail-closed output contract",
+  "source_revision": "HEAD:2d4d8595d10a49b1b29f9e5c9b9954d2e02ce8c0; branch codex/invarch-754-synthesis",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b3b923f80fe0282f2b447d650063cd126eebc048564ec99814de24267d724d6",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Issue #754 is A3: it adds a shared decision contract and ordered policy/evidence gates across multiple Investment OS producers and consumers; alternatives, immutable ownership, failure states, migration and rollback need architecture review.",
+    "timestamp": "2026-11-25T17:40:58Z"
+  },
+  "impact": "A3",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Explicit Architect dispatch per repository policy",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Explicit Architect dispatch per repository policy",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Role-specific repository profile",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host does not expose effective model for child threads."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host does not expose effective reasoning effort for child threads."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host does not expose automatic role profile loading."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "The Architect child returned the bounded offline design; the host exposes no exact dispatch timestamp.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-25T17:40:58Z",
+      "latest": "2026-11-25T17:44:23Z",
+      "evidence": "Decision was recorded and validated before invoking the Architect; response was observed before this coordinator update."
+    },
+    "time_unknown_reason": "Codex collaboration surface does not expose exact child dispatch time."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned an architecture recommendation and identified unapproved mappings and separate runtime gates.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-25T17:40:58Z",
+      "latest": "2026-11-25T17:44:23Z",
+      "evidence": "Invocation followed the recorded decision; result was observed before this update."
+    },
+    "started_time_unknown_reason": "Host does not expose worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-25T17:40:58Z",
+      "latest": "2026-11-25T17:44:23Z",
+      "evidence": "Architect result was observed by the coordinator before this update."
+    },
+    "ended_time_unknown_reason": "Host does not expose worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/invarch754-architect-result.md",
+    "sha256": "657db2081c44a73a3464c513107600eb25e05e3cd3f27239a6d9a822412b0e84",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-25T17:44:23Z",
+    "reason": "Adopt the offline deterministic design and keep unsupported label mappings/runtime claims visibly open."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Independent Reviewer",
+    "provenance": "Pre-decision record precedes dispatch; first implementation action has not yet occurred.",
+    "assessed_at": "2026-11-25T17:59:00Z",
+    "first_dependent_action_at": null,
+    "first_dependent_action_reference": "tests/investing/test_investment_decisions.py",
+    "no_qualifying_action_confirmed": null,
+    "reason": "The Architect response preceded the first dependent test/code action by conversation order; dispatch and first-action bounds overlap at the observed-response boundary, so strict timing is UNKNOWN.",
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-25T17:44:23Z",
+      "latest": "2026-11-25T17:59:00Z",
+      "evidence": "The first test file was added after the Architect final handoff observed by the coordinator; exact action time was not captured."
+    },
+    "first_dependent_action_time_unknown_reason": "No exact timestamp was recorded at the first test-file write."
+  },
+  "decision_id": "invarch754-architect-20261125",
+  "attempt_id": "invarch754-architect-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "https://github.com/aras-2003/skills-factory/issues/754",
+      "captured_at": "2026-11-25T17:40:58Z"
+    },
+    {
+      "reference": "https://github.com/aras-2003/skills-factory/pull/798",
+      "captured_at": "2026-11-25T17:40:58Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null
+}

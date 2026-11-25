@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skills-factory.local/schemas/investing/investment-decision-input-v1.schema.json",
+  "title": "Investment Decision Synthesis Input v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "context",
+    "results",
+    "position_state",
+    "signals"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "context": {
+      "type": "object"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "position_state": {
+      "enum": [
+        "HELD",
+        "NOT_HELD",
+        "UNKNOWN"
+      ]
+    },
+    "signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quality",
+        "eligibility",
+        "thesis",
+        "valuation",
+        "portfolio"
+      ],
+      "properties": {
+        "quality": {
+          "$ref": "#/$defs/quality"
+        },
+        "eligibility": {
+          "$ref": "#/$defs/eligibility"
+        },
+        "thesis": {
+          "$ref": "#/$defs/thesis"
+        },
+        "valuation": {
+          "$ref": "#/$defs/valuation"
+        },
+        "portfolio": {
+          "$ref": "#/$defs/portfolio"
+        },
+        "timing": {
+          "$ref": "#/$defs/timing"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "baseSignal": {
+      "type": "object",
+      "required": [
+        "state",
+        "producer_skill_id",
+        "result_id",
+        "claim_ids",
+        "evidence_ids"
+      ],
+      "properties": {
+        "producer_skill_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_ids": {
+          "$ref": "#/$defs/ids"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/ids"
+        },
+        "policy_rule_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "continuation_rule_ref": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "quality": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseSignal"
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "PASS",
+                "WARN",
+                "BLOCK",
+                "VERIFY",
+                "CONFLICTED",
+                "UNRESOLVED"
+              ]
+            },
+            "conflict_ids": {
+              "$ref": "#/$defs/ids"
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "state": {
+                    "const": "CONFLICTED"
+                  }
+                },
+                "required": [
+                  "state"
+                ]
+              },
+              "then": {
+                "required": [
+                  "conflict_ids"
+                ],
+                "properties": {
+                  "conflict_ids": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "eligibility": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseSignal"
+        },
+        {
+          "required": [
+            "policy_rule_ref"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "ELIGIBLE",
+                "INELIGIBLE",
+                "UNRESOLVED"
+              ]
+            },
+            "policy_rule_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "thesis": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseSignal"
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "SURVIVES",
+                "WEAKENED",
+                "INVALIDATED",
+                "INSUFFICIENT_EVIDENCE"
+              ]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "valuation": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseSignal"
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "READY",
+                "BLOCKED",
+                "UNRESOLVED"
+              ]
+            },
+            "security_attractiveness": {
+              "enum": [
+                "ATTRACTIVE",
+                "FAIR",
+                "UNFAVORABLE",
+                "UNRESOLVED"
+              ]
+            },
+            "asset_path": {
+              "enum": [
+                "EQUITY",
+                "ETF",
+                "BANK",
+                "GENERAL"
+              ]
+            }
+          },
+          "required": [
+            "security_attractiveness",
+            "asset_path"
+          ]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "portfolio": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseSignal"
+        },
+        {
+          "required": [
+            "policy_rule_ref",
+            "position_state",
+            "position_snapshot_complete"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "IN_POLICY",
+                "REVIEW_THRESHOLD",
+                "HARD_CAP_BREACH",
+                "UNRESOLVED",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "policy_rule_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "continuation_rule_ref": {
+              "type": ["string", "null"],
+              "minLength": 1
+            },
+            "position_state": {
+              "enum": [
+                "HELD",
+                "NOT_HELD",
+                "UNKNOWN"
+              ]
+            },
+            "position_snapshot_complete": {
+              "type": "boolean"
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "timing": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseSignal"
+        },
+        {
+          "properties": {
+            "state": {
+              "enum": [
+                "SUPPORTIVE",
+                "ADVERSE",
+                "NEUTRAL",
+                "UNRESOLVED",
+                "NOT_APPLICABLE"
+              ]
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}
