@@ -3652,7 +3652,10 @@
         "presentation-slide-authoring",
         "presentation-storyline"
       ],
-      "optional_dependencies": [],
+      "optional_dependencies": [
+        "report-composer",
+        "visual-output-design"
+      ],
       "capability_assessment": "UNASSESSED",
       "provenance": {
         "schema_version": 1,
@@ -3698,7 +3701,9 @@
         "report-document-authoring",
         "report-document-review"
       ],
-      "optional_dependencies": [],
+      "optional_dependencies": [
+        "visual-output-design"
+      ],
       "capability_assessment": "UNASSESSED",
       "provenance": {
         "schema_version": 1,

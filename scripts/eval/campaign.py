@@ -66,6 +66,11 @@ ITER07_08_HISTORICAL_MANIFEST_SHA256 = {
         "46b5e0302b15dc59c2e1b934361869c6cd814b969aadc36ec400f6355fed2292",
 }
 ITER07_08_CONTINUATION_SOURCE_PATHS = {
+    "docs/catalog.json",
+    "evals/campaigns/iteration-02-workflow-hardening-2026-10/source-reference-review.yaml",
+    "scripts/eval/iteration02_semantic_coverage.py",
+    "scripts/eval/tests/test_iteration02_semantic_coverage.py",
+    "workflows/runtime-registry.yaml",
     ".codex/agents/sf-developer-high.toml",
     ".codex/agents/sf-independent-reviewer.toml",
     ".codex/agents/sf-skill-evaluator.toml",
@@ -168,7 +173,10 @@ def candidate_iteration07_08_continuation(root: Path = ROOT) -> dict | None:
             baseline_bytes = subprocess.check_output(
                 ["git", "-C", str(root), "show", f"{ITER07_08_CONTINUATION_BASE}:{rel}"],
             )
-            if hashlib.sha256(baseline_bytes).hexdigest() != digest or sha256_file(root / rel) != digest:
+            if hashlib.sha256(baseline_bytes).hexdigest() != digest:
+                return None
+            # Current bytes are independently pinned in source_sha256.
+            if rel not in ITER07_08_CONTINUATION_SOURCE_PATHS and sha256_file(root / rel) != digest:
                 return None
 
         historical = {}

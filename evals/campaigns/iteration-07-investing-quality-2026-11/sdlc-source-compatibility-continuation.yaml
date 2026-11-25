@@ -20,6 +20,11 @@ replaced_support_paths:
   - runtime/mcp/server.py
   - runtime/mcp/skill_catalog.py
 expected_candidate_diff_paths:
+  - docs/catalog.json
+  - evals/campaigns/iteration-02-workflow-hardening-2026-10/source-reference-review.yaml
+  - scripts/eval/iteration02_semantic_coverage.py
+  - scripts/eval/tests/test_iteration02_semantic_coverage.py
+  - workflows/runtime-registry.yaml
   - .codex/agents/sf-developer-high.toml
   - .codex/agents/sf-independent-reviewer.toml
   - .codex/agents/sf-skill-evaluator.toml
@@ -45,6 +50,11 @@ expected_candidate_diff_paths:
   - tests/test_developer_scope.py
   - tests/governance/test_sdlc_architecture_source_example.py
 source_sha256:
+  docs/catalog.json: 44e7238f1e83110b76b4c5c0be629fe26fe69c98a0047d2f48efd2206060fd2b
+  evals/campaigns/iteration-02-workflow-hardening-2026-10/source-reference-review.yaml: 779f0adf8c83f0c3f97c46367ee6add0d304aee91329556b5e41eb1fda9828de
+  scripts/eval/iteration02_semantic_coverage.py: e7ba9d1b992e8fe9cd52eb71382fc3b1bd47fd8a5a276b16b3508ca726320a00
+  scripts/eval/tests/test_iteration02_semantic_coverage.py: 72dc25cd669561433a9af42f84090edafc9611f222ab97f2a83d61430a910455
+  workflows/runtime-registry.yaml: 30f30d792877878a80b2b0c62252d2d32b9365e51bfd0b7add099a9d5835525d
   .codex/agents/sf-developer-high.toml: 0cc3486723b24f265929f4c4fa014049450af5c87d11aa787e6e11eabae5eaa3
   .codex/agents/sf-independent-reviewer.toml: c1b9a18446d1eec5b9badaa967231ab18930fd77ef5b80e88efac0ecefa0f515
   .codex/agents/sf-skill-evaluator.toml: 4ec0e3e4986622b9128b33fdfc453ffc2f9e39d64670e522f74244f7c635ca48
@@ -60,9 +70,9 @@ source_sha256:
   runtime/mcp/tests/test_load_skill_source_revision.py: b743e9823783bb5bc64bf377c6e28bb51c8a407324ad26979255f197e38126ab
   scripts/engineering/delegation_handoff.py: 6b2725248a10d73b48990c76c761b3cb51dc9c7d68353309dd5d0f901c282df1
   scripts/engineering/developer_scope.py: e771bb1ad3d0873a6e7f795c4ed2d86b7e5487f576884c9556c6d723098d22dc
-  scripts/eval/campaign.py: aa195110825d5b7485a1d9292087adf43ca3234d73a199165862079527daf36c
+  scripts/eval/campaign.py: 8ed705f2a69738e5732572802226868b32857b9d20c2f38d0119afa38ee639dc
   scripts/eval/tests/test_iteration_07_investing_quality_coverage.py: 69f5098958ca7c0d0b82b170a2b767114013879b3338e38e60addf6e0b33ca72
-  scripts/eval/tests/test_runtime_campaign.py: e50d67ea9680915ac8085a9e9ebca235ea96454dbe1f5507229243779fee2afc
+  scripts/eval/tests/test_runtime_campaign.py: bb76cd46cd3d6a6c2e2b6bf32b28073343df6aa7f79b2a27b7a240d7d7198f66
   scripts/package/tests/test_build_integrity.py: a81e56adf58420d276c79e95d180a357cfcf53c84df480c3d9b578e1bac0f313
   tests/test_codex_agent_team.py: ccac3393fb531714a3f1f34cf45117b24ccd03f4ecc11566aa2aff44fe0964a5
   tests/test_delegation_handoff.py: 8082834967eb092ba06182b77e7fc4fb148edd3f1182be28daaba30b356ed3b9

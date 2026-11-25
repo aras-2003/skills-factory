@@ -86,6 +86,79 @@ class RuntimeCampaignTests(unittest.TestCase):
         with patch.object(campaign, "sha256_file", changed_behavior), patch.dict(os.environ, {"SOURCE_REVISION": head}):
             self.assertIsNone(campaign.candidate_iteration07_08_continuation(ROOT))
 
+    def test_iteration_07_08_catalog_pins_and_allowlist_fail_closed(self) -> None:
+        import subprocess
+
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        catalog = "docs/catalog.json"
+        with tempfile.TemporaryDirectory(prefix="sf-continuation-catalog-") as temp_dir:
+            candidate_root = Path(temp_dir) / "repo"
+            subprocess.run(["git", "worktree", "add", "--detach", str(candidate_root), head], cwd=ROOT,
+                           check=True, capture_output=True, text=True)
+            try:
+                with patch.dict(os.environ, {"SOURCE_REVISION": head}):
+                    control = campaign.candidate_iteration07_08_continuation(candidate_root)
+                    self.assertIsNotNone(control)
+                    self.assertEqual(("INTEGRATION_ISOLATED", "NOT_RUN", False),
+                                     (control["state"], control["runtime_status"], control["release_approved"]))
+
+                    real_check_output = subprocess.check_output
+                    baseline_command = ["git", "-C", str(candidate_root), "show",
+                                        f"{campaign.ITER07_08_CONTINUATION_BASE}:{catalog}"]
+                    baseline_calls = []
+
+                    def corrupt_baseline(command, *args, **kwargs):
+                        result = real_check_output(command, *args, **kwargs)
+                        if command == baseline_command:
+                            baseline_calls.append(command)
+                            return result + b"\nchanged historical bytes"
+                        return result
+
+                    with patch.object(campaign.subprocess, "check_output", side_effect=corrupt_baseline):
+                        self.assertIsNone(campaign.candidate_iteration07_08_continuation(candidate_root))
+                    self.assertEqual([baseline_command], baseline_calls)
+
+                    real_hash = campaign.sha256_file
+                    current_calls = []
+
+                    def corrupt_current(path):
+                        digest = real_hash(path)
+                        if path == candidate_root / catalog:
+                            current_calls.append(path)
+                            return "0" * 64
+                        return digest
+
+                    with patch.object(campaign, "sha256_file", side_effect=corrupt_current):
+                        self.assertIsNone(campaign.candidate_iteration07_08_continuation(candidate_root))
+                    self.assertEqual([candidate_root / catalog], current_calls)
+
+                manifest = candidate_root / campaign.ITER07_08_CONTINUATION_REL
+                cfg = yaml.safe_load(manifest.read_text(encoding="utf-8"))
+                cfg["source_sha256"].pop(catalog)
+                cfg["expected_candidate_diff_paths"].remove(catalog)
+                manifest.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+                subprocess.run(["git", "add", "--", campaign.ITER07_08_CONTINUATION_REL.as_posix()],
+                               cwd=candidate_root, check=True)
+                subprocess.run(["git", "-c", "user.name=Continuation Test", "-c",
+                                "user.email=continuation-test@example.invalid", "commit", "-m",
+                                "test: remove catalog source allowance"], cwd=candidate_root,
+                               check=True, capture_output=True, text=True)
+                successor = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=candidate_root,
+                                                    text=True).strip()
+                self.assertEqual("", subprocess.check_output(["git", "status", "--porcelain"],
+                                                             cwd=candidate_root, text=True))
+                source_paths = campaign.ITER07_08_CONTINUATION_SOURCE_PATHS - {catalog}
+                diff_paths = campaign.ITER07_08_CONTINUATION_DIFF_PATHS - {catalog}
+                with patch.dict(os.environ, {"SOURCE_REVISION": successor}), \
+                     patch.object(campaign, "ITER07_08_CONTINUATION_SOURCE_PATHS", source_paths), \
+                     patch.object(campaign, "ITER07_08_CONTINUATION_DIFF_PATHS", diff_paths), \
+                     patch.object(campaign, "sha256_file", wraps=campaign.sha256_file) as sha256_file:
+                    self.assertIsNone(campaign.candidate_iteration07_08_continuation(candidate_root))
+                    self.assertIn(((candidate_root / catalog,), {}), sha256_file.call_args_list)
+            finally:
+                subprocess.run(["git", "worktree", "remove", "--force", str(candidate_root)], cwd=ROOT,
+                               check=True, capture_output=True, text=True)
+
     def test_iteration_07_08_continuation_survives_unrelated_successor_as_not_run(self) -> None:
         import subprocess
         import tempfile
