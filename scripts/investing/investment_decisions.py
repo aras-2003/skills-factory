@@ -77,6 +77,11 @@ def _reference_errors(context: dict[str, Any], results: list[dict[str, Any]], si
         }
         if any(source_id not in claim_evidence for source_id in signal["evidence_ids"]):
             errors.append(f"{name} signal evidence is not linked to its referenced claims")
+        for claim_id in signal["claim_ids"]:
+            if claim_id in claims:
+                claim_sources = set(claims[claim_id]["evidence_ids"] + claims[claim_id]["counterevidence_ids"])
+                if not claim_sources.intersection(signal["evidence_ids"]):
+                    errors.append(f"{name} signal does not cite evidence for claim {claim_id}")
         if result["execution_status"] not in {"SUCCESS", "PARTIAL"}:
             errors.append(f"{name} signal producer did not return an executable result")
         if result["payload_type"] == "LEGACY_OPAQUE":

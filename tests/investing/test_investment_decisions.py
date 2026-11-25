@@ -261,10 +261,12 @@ class InvestmentDecisionTests(unittest.TestCase):
     def test_signal_evidence_must_be_linked_to_each_referenced_claim(self):
         value = decision_input()
         thesis_result = next(result for result in value["results"] if result["result_id"] == "result-thesis")
-        unrelated = dict(thesis_result["evidence_refs"][0], source_id="unrelated-source")
-        thesis_result["evidence_refs"].append(unrelated)
-        value["signals"]["thesis"]["evidence_ids"] = ["unrelated-source"]
-        thesis_result["payload"]["decision_signal_v1"]["evidence_ids"] = ["unrelated-source"]
+        second_source = dict(thesis_result["evidence_refs"][0], source_id="source-two")
+        thesis_result["evidence_refs"].append(second_source)
+        second_claim = dict(thesis_result["findings"][0], claim_id="claim-thesis-two", evidence_ids=["source-two"])
+        thesis_result["findings"].append(second_claim)
+        value["signals"]["thesis"]["claim_ids"].append("claim-thesis-two")
+        thesis_result["payload"]["decision_signal_v1"]["claim_ids"].append("claim-thesis-two")
         result = decisions.synthesize_decision(value, root=ROOT)
         self.assertEqual("BLOCK", result["gate_results"][0]["status"])
         self.assertIsNone(result["advisory_recommendation"])
