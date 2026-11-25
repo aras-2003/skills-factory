@@ -81,17 +81,21 @@ capabilities.
 
 ## Current source consumer map
 
-This map binds the 33 listed source files to reviewed commit
+This map binds the 34 listed source files to reviewed commit
 `242fe4762d2b2c6cc2c602720d222e1276c0cd17`. The governance regression verifies
-that each listed file is byte-identical at that commit and in the current
-checkout. It separates runtime tool consumers from ingress, evidence and
-release verifiers, and build-time producers; finding a path does not imply
+that listed files are byte-identical at that commit and in the current
+checkout. The continuation manifest permits only refreshed ADR and governance
+test digests, each checked against its current file; all other manifest bytes
+must match the reviewed source. It separates runtime tool consumers from
+ingress, evidence and release verifiers, and build-time producers; finding a path does not imply
 that it sends the optional `expected_source_revision` pin. This is a
 source-confirmed inventory of the listed paths, not proof that the repository
 consumer graph is complete.
 
 ### Runtime and transport consumers
 
+- `runtime/contracts/mcp-tools-v1.json` is the shared versioned tool schema,
+  a contract input for backend conformance, not a runtime caller.
 - Python MCP registers `load_skill` in `runtime/mcp/server.py` and reads the
   packaged catalog through `runtime/mcp/skill_catalog.py`. The compatibility
   HTTP entry point `runtime/mcp/cloud_server.py` imports the same server and

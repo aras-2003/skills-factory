@@ -1,5 +1,6 @@
 """Executable source checks for the worked #766 multi-consumer decision."""
 
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -15,7 +16,13 @@ CONSUMER_MAP_RE = re.compile(
     r"^- Current consumer-map source SHA: `([0-9a-f]{40})`\.$", re.MULTILINE
 )
 EXPECTED_CONSUMER_MAP = "242fe4762d2b2c6cc2c602720d222e1276c0cd17"
+CONTINUATION_PATH = "evals/campaigns/iteration-07-investing-quality-2026-11/sdlc-source-compatibility-continuation.yaml"
+REFRESHED_DIGEST_PATHS = (
+    "docs/architecture/decisions/2026-11-load-skill-source-pin.md",
+    "tests/governance/test_sdlc_architecture_source_example.py",
+)
 CONSUMER_MAP_PATHS = (
+    "runtime/contracts/mcp-tools-v1.json",
     "runtime/mcp/server.py",
     "runtime/mcp/skill_catalog.py",
     "runtime/mcp/cloud_server.py",
@@ -45,11 +52,27 @@ CONSUMER_MAP_PATHS = (
     "runtime/mcp/investment_runtime.py",
     "scripts/eval/iteration02_site_native_receipt.py",
     "scripts/eval/campaign.py",
-    "evals/campaigns/iteration-07-investing-quality-2026-11/sdlc-source-compatibility-continuation.yaml",
+    CONTINUATION_PATH,
     "scripts/eval/promptfoo/promptfooconfig.yaml",
     "scripts/eval/prepare_closure.py",
     "scripts/eval/release_bundle.py",
 )
+
+
+def normalize_continuation(current: bytes, reviewed: bytes, root: Path) -> bytes:
+    """Permit only exact, verified refreshes of the two self-referential digests."""
+    for path in REFRESHED_DIGEST_PATHS:
+        pattern = re.compile(rb"(?m)^  " + re.escape(path.encode()) + rb": ([0-9a-f]{64})$")
+        current_matches = list(pattern.finditer(current))
+        reviewed_matches = list(pattern.finditer(reviewed))
+        if len(current_matches) != 1 or len(reviewed_matches) != 1:
+            raise AssertionError(f"expected one digest entry for {path}")
+        digest = hashlib.sha256((root / path).read_bytes()).hexdigest().encode()
+        if current_matches[0].group(1) != digest:
+            raise AssertionError(f"continuation digest does not match source: {path}")
+        start, end = current_matches[0].span(1)
+        current = current[:start] + reviewed_matches[0].group(1) + current[end:]
+    return current
 
 
 def source_at(revision: str, path: str) -> str:
@@ -63,7 +86,7 @@ def source_at(revision: str, path: str) -> str:
 
 class ArchitectureSourceExampleTests(unittest.TestCase):
     def test_current_consumer_map_is_pinned_to_reviewed_source_bytes(self):
-        self.assertEqual(33, len(CONSUMER_MAP_PATHS))
+        self.assertEqual(34, len(CONSUMER_MAP_PATHS))
         self.assertEqual(len(CONSUMER_MAP_PATHS), len(set(CONSUMER_MAP_PATHS)))
         decision = DECISION.read_text(encoding="utf-8")
         matches = CONSUMER_MAP_RE.findall(decision)
@@ -93,11 +116,33 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
                     current_bytes = (ROOT / path).read_bytes()
                 except (OSError, subprocess.CalledProcessError) as error:
                     self.fail(f"consumer-map source could not be verified for {path}: {error}")
+                if path == CONTINUATION_PATH:
+                    current_bytes = normalize_continuation(current_bytes, reviewed_bytes, ROOT)
                 self.assertEqual(
                     reviewed_bytes,
                     current_bytes,
                     f"consumer-map source differs from reviewed commit: {path}",
                 )
+
+    def test_continuation_refresh_rejects_stale_digest_and_unrelated_changes(self):
+        baseline = subprocess.check_output(
+            ["git", "--no-replace-objects", "show", f"{EXPECTED_CONSUMER_MAP}:{CONTINUATION_PATH}"],
+            cwd=ROOT,
+        )
+        current = (ROOT / CONTINUATION_PATH).read_bytes()
+        self.assertEqual(baseline, normalize_continuation(current, baseline, ROOT))
+        first = REFRESHED_DIGEST_PATHS[0]
+        digest = hashlib.sha256((ROOT / first).read_bytes()).hexdigest().encode()
+        with self.assertRaises(AssertionError):
+            normalize_continuation(current.replace(digest, b"0" * 64, 1), baseline, ROOT)
+        with self.assertRaises(AssertionError):
+            normalize_continuation(current + b"  " + first.encode() + b": " + digest + b"\n", baseline, ROOT)
+        self.assertNotEqual(
+            baseline,
+            normalize_continuation(
+                current.replace(b"state: INTEGRATION_ISOLATED", b"state: ALTERED", 1), baseline, ROOT
+            ),
+        )
 
     def test_rollback_requires_caller_compatibility_before_reverting_v1_schema(self):
         decision = DECISION.read_text(encoding="utf-8")
