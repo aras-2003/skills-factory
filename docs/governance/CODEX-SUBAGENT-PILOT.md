@@ -21,7 +21,7 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 | Role | Model / effort | Responsibility and boundary |
 | --- | --- | --- |
 | Coordinator / primary chat | Luna High (project default; explicit host selection may override) | Owns scope, decisions and integration. |
-| `sf-architect` | Sol High | Risk-triggered A2–A4 architecture advice; no implementation. |
+| `sf-architect` | Sol High | Risk-triggered A1–A4 architecture advice for shared public-contract/trust-boundary changes and material A2+ decisions; no implementation. |
 | `sf-developer-medium` | Luna Medium | Bounded small/moderate implementation. |
 | `sf-developer-high` | Terra High | Explicitly escalated complex implementation. |
 | `sf-test-designer` | Terra Medium | Designs case IDs, fixtures and expected/forbidden outcomes before code; does not execute. |
@@ -35,7 +35,7 @@ Architecture impact is A1: project-local agent configuration, instructions and c
 The primary chat owns scope and integration. It may implement when appropriate, but only one agent owns writes to a given shared interface at a time. Use the test designer before material behavior/shared-contract changes, then delegate execution separately when available. For A2, use architecture advice when a capability boundary, shared contract, or material dependency changes; require it for A3/A4; also use it for A1 changes affecting a shared public contract or trust boundary. Do not call Sol for cosmetic A0 work or A2 changes without those material triggers. Use a reviewer for independent review when existing SDLC requires one. The evaluator does not set acceptance thresholds or approve release.
 
 When you dispatch the Architect, use the
-[decision method](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md) for A2–A4
+[decision method](../architecture/SOFTWARE-ARCHITECTURE-DECISIONS.md) for triggered A1–A4 decisions
 and incomplete consumer evidence, and the [software decision
 template](../../templates/architecture/software-decision.md) for its output.
 The method does not require dispatch for every A2.
