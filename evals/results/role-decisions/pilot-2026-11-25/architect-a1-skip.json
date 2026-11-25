@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "Codex pilot 2026-11-25: add contract tests for the role decision record validator; branch codex/sdlc-runtime-full",
+  "source_revision": "HEAD:c9df4974ae970bf75e4dbb4c512a01d0d44fce06; scoped_worktree_sha256:3e133b365b5497ccbee48c6f9ed35ac76e0e2401406263f74424f2871340a564",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:45513cfab74ed1bfac95ee73da444fe8a6b36b82a81339458f85b12607b5f94b",
+  "role": "Architect",
+  "decision": {
+    "value": "SKIP",
+    "reason": "Independent pre-action assessment classified tests-only work under the existing validator contract as A1.",
+    "timestamp": "2026-11-25T14:10:20Z"
+  },
+  "impact": "A1",
+  "requested": {
+    "model": {
+      "value": "NOT_REQUESTED",
+      "provenance": "Architect A1 routing policy",
+      "reason": "No Architect dispatch for this task."
+    },
+    "effort": {
+      "value": "NOT_REQUESTED",
+      "provenance": "Architect A1 routing policy",
+      "reason": "No Architect dispatch for this task."
+    },
+    "profile": {
+      "value": "NOT_REQUESTED",
+      "provenance": "Architect A1 routing policy",
+      "reason": "No Architect dispatch for this task."
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "No host call was made",
+      "reason": "The Architect was skipped by policy."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "No host call was made",
+      "reason": "The Architect was skipped by policy."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "No host call was made",
+      "reason": "The Architect was skipped by policy."
+    }
+  },
+  "dispatch": {
+    "status": "NOT_ATTEMPTED",
+    "timestamp": null,
+    "reason": "A1 policy skip.",
+    "coordinator_bounds": null,
+    "time_unknown_reason": null
+  },
+  "execution": {
+    "state": "NOT_STARTED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "No Architect was dispatched.",
+    "started_coordinator_bounds": null,
+    "started_time_unknown_reason": null,
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": null
+  },
+  "result": {
+    "reference": null,
+    "sha256": null,
+    "reference_kind": null
+  },
+  "coordinator_disposition": {
+    "value": "NOT_USED",
+    "timestamp": "2026-11-25T14:10:20Z",
+    "reason": "No Architect recommendation exists for this skip decision."
+  },
+  "timing_assessment": {
+    "value": "CORRECT_SKIP",
+    "assessor": "Independent Reviewer (pre-action assessment)",
+    "provenance": "Pre-action assessment in pre-assessment.md; post-pilot scope remained tests-only until the separately linked A2 timestamp gap.",
+    "assessed_at": "2026-11-25T14:34:26Z",
+    "first_dependent_action_at": null,
+    "first_dependent_action_reference": null,
+    "no_qualifying_action_confirmed": true,
+    "reason": "No architecture-dependent A2-A4 action occurred in this A1 phase; the later host timestamp gap was separately escalated before any contract change.",
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": null
+  },
+  "decision_id": "pilot-20261125-roleobs-architect-a1",
+  "attempt_id": null,
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "evals/results/role-decisions/pilot-2026-11-25/pre-assessment.md",
+      "captured_at": "2026-11-25T14:10:20Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null
+}

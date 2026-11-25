@@ -31,6 +31,8 @@ Use `receipt.py` to create or validate a record. `NOT_RUN` is a first-class stat
 
 A receipt binds evidence to input/rubric digests and a source revision. It also records runtime/model identity, reasoning setting, available catalog/tools, prompt, actual output and trace digests, reviewer, assisted/unassisted state, and separate source-component vs packaged runtime-artifact identity where available. Historical receipts can be validated against their recorded source revision.
 
+Codex role-routing evidence is a separate v1.1 sidecar (the validator also accepts legacy v1.0 records) governed by `docs/governance/CODEX-ROLE-OBSERVABILITY.md`. It records the trigger decision, requested profile, host-visible dispatch/execution, coordinator time bounds, and independent timing assessment. Its task reference links to the existing Issue/PR or evaluation receipt; do not replace an evaluation receipt's `execution.tool_trace_path`, which remains the actual tool trace. The sidecar does not replace an evaluation verdict or change its PASS rules. Validate stored sidecars with `python scripts/eval/role_decision_record.py validate`; the default scan is `evals/results/role-decisions/`. Unknown host model/effort values must include a reason and must not be inferred from requested settings. Exact host timestamps remain null when the host does not expose them; coordinator bounds are distinct evidence.
+
 New receipts record `outcome` (`passed`, `failed`, or `null`) separately from `execution_state` (`executed`, `blocked`, `awaiting_runner`, `no_steps`, or `not_executed`). `evaluation.status` remains as a compatibility field for existing tooling. A `NOT_RUN` receipt must have a null outcome, a non-executed state, and a reason; `PASS`, `FAIL`, and `REVIEW_REQUIRED` require `execution_state=executed`. The fields are optional when validating historical 1.0 receipts, but when either new field is present both are required and checked against the compatibility status.
 
 For example, record infrastructure deferrals with `--status NOT_RUN --execution-state awaiting_runner --execution-state-reason "No runner assigned"`. Do not encode a status mismatch or an inability to reach a page as `CLOSED`: use `FAIL` only when the executed test's stated requirement failed, and use `NOT_RUN` with the appropriate execution state when no verdict can be reached.
@@ -47,6 +49,7 @@ An assisted run cannot be recorded as PASS.
 - `python scripts/eval/campaign.py queue --include-supplemental`
 - `python scripts/eval/campaign.py validate-evidence`
 - `python scripts/eval/receipt.py validate evals/results/<record>.json`
+- `python scripts/eval/role_decision_record.py validate`
 
 Provider/runtime execution remains external to the offline harness. Exact-version smoke requires independently observed package release/source/payload/component identity; values copied from the lock are not evidence. A routing mismatch may be archived as `FAIL` or `REVIEW_REQUIRED`, but it blocks `PASS`. Offline synthetic regressions are not runtime evidence.
 

@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "Codex pilot 2026-11-25: add contract tests for scripts/eval/role_decision_record.py; branch codex/sdlc-runtime-full",
+  "source_revision": "HEAD:c9df4974ae970bf75e4dbb4c512a01d0d44fce06; scoped_worktree_sha256:3e133b365b5497ccbee48c6f9ed35ac76e0e2401406263f74424f2871340a564",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:45513cfab74ed1bfac95ee73da444fe8a6b36b82a81339458f85b12607b5f94b",
+  "role": "Developer High",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "A bounded test-authoring task is assigned to the Developer role as part of the user-requested runtime pilot.",
+    "timestamp": "2026-11-25T14:11:07Z"
+  },
+  "impact": "A1",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Explicit collaboration dispatch override",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Explicit collaboration dispatch override",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-developer-high",
+      "provenance": "Owner-approved role mapping; selected for this bounded coding task",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration tool response",
+      "reason": "The host does not expose the effective model identity for this child."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration tool response",
+      "reason": "The host does not expose the effective reasoning effort for this child."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration tool response",
+      "reason": "The host does not report automatic profile loading."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Codex collaboration tool returned a child reference; no host event timestamp was exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-25T14:11:07Z",
+      "latest": "2026-11-25T14:18:57Z",
+      "evidence": "Pre-dispatch receipt precedes the child call; final child response was observed before the later A2 gap decision."
+    },
+    "time_unknown_reason": "The host does not return an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The child returned a final result and the test file was present; exact worker start/end timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-25T14:11:07Z",
+      "latest": "2026-11-25T14:18:57Z",
+      "evidence": "Child execution occurred after dispatch and before the later A2 gap decision."
+    },
+    "started_time_unknown_reason": "The host does not expose worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-25T14:11:07Z",
+      "latest": "2026-11-25T14:18:57Z",
+      "evidence": "Final child result was observed before the later A2 gap decision."
+    },
+    "ended_time_unknown_reason": "The host does not expose worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/pilot-2026-11-25/developer-a1-result.md",
+    "sha256": "0cb987888085e156f441da179484d8c4b92943dddb11b24e47fcd606a5f1a910",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-25T14:38:25Z",
+    "reason": "The Developer-authored tests were run by the separate Test Executor; all 13 focused tests passed and the pilot record scan validated."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Independent Reviewer",
+    "provenance": "The child result and file presence are available; no exact action time or non-overlapping action bounds were captured.",
+    "assessed_at": "2026-11-25T14:34:26Z",
+    "first_dependent_action_at": null,
+    "first_dependent_action_reference": "scripts/eval/tests/test_role_decision_record.py",
+    "no_qualifying_action_confirmed": null,
+    "reason": "Dispatch-versus-first-edit ordering cannot be established from non-overlapping evidence.",
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-25T14:11:07Z",
+      "latest": "2026-11-25T14:18:57Z",
+      "evidence": "Test file creation occurred after the task dispatch and before the subsequent A2 timestamp-gap decision; exact edit time is unavailable."
+    },
+    "first_dependent_action_time_unknown_reason": "The host did not expose the first file-write event, and the bounds overlap the dispatch interval."
+  },
+  "decision_id": "pilot-20261125-roleobs-developer-a1",
+  "attempt_id": "pilot-validator-tests-child-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "User-requested pilot; bounded tests-only change in the existing eval validator",
+      "captured_at": "2026-11-25T14:11:07Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "pilot-20261125-roleobs-architect-a1",
+  "retry_resolution_reason": null
+}

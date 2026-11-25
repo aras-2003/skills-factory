@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "Codex pilot 2026-11-25: preserve v1.0 and implement v1.1 role-observability timestamps/bounds; branch codex/sdlc-runtime-full",
+  "source_revision": "HEAD:c9df4974ae970bf75e4dbb4c512a01d0d44fce06; scoped_worktree_sha256:95961e4d0b7f1fa63d574cbbf0c7fc8c15da9274f0709e1ac92bd452bf808e79",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:45513cfab74ed1bfac95ee73da444fe8a6b36b82a81339458f85b12607b5f94b",
+  "role": "Developer High",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Implement the Architect-approved v1.1 contract and validator changes; this alters a shared evidence schema and its CI interpretation.",
+    "timestamp": "2026-11-25T14:23:54Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Explicit collaboration dispatch override",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Explicit collaboration dispatch override",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-developer-high",
+      "provenance": "Owner-approved role mapping",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child model is not exposed."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child reasoning effort is not exposed."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Automatic profile loading is not exposed."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Codex collaboration tool returned the Developer child reference; no host event timestamp was exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-25T14:23:54Z",
+      "latest": "2026-11-25T14:32:35Z",
+      "evidence": "Pre-dispatch receipt precedes child call; code result was observed before Test Executor pre-dispatch record."
+    },
+    "time_unknown_reason": "The host does not return an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The child returned v1.1 schema, validator and test-file changes; exact worker start/end timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-25T14:23:54Z",
+      "latest": "2026-11-25T14:32:35Z",
+      "evidence": "Code result observed before Test Executor pre-dispatch record."
+    },
+    "started_time_unknown_reason": "The host does not expose worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-25T14:23:54Z",
+      "latest": "2026-11-25T14:32:35Z",
+      "evidence": "Code result observed before Test Executor pre-dispatch record."
+    },
+    "ended_time_unknown_reason": "The host does not expose worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/pilot-2026-11-25/developer-v11-a2-result.md",
+    "sha256": "521f96abbb31f237e51124f1109ff20a5b1e1a9ad44bdf478a6a19bf430bebc1",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-25T14:38:25Z",
+    "reason": "The v1.1 schema and validator changes were exercised by the focused suite; all 13 tests passed and the pilot record scan validated."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Independent Reviewer",
+    "provenance": "Developer result is available; exact first code-write event is not exposed.",
+    "assessed_at": "2026-11-25T14:34:26Z",
+    "first_dependent_action_at": null,
+    "first_dependent_action_reference": "scripts/eval/role_decision_record.py and scripts/eval/schemas/role-decision-record.schema.json",
+    "no_qualifying_action_confirmed": null,
+    "reason": "The non-overlapping evidence does not establish dispatch before first write.",
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-25T14:23:54Z",
+      "latest": "2026-11-25T14:32:35Z",
+      "evidence": "The changed files were present in the completed child result; exact first write event unavailable."
+    },
+    "first_dependent_action_time_unknown_reason": "Dispatch and first-write bounds overlap; strict order is not proven."
+  },
+  "decision_id": "pilot-20261125-roleobs-developer-v11-a2",
+  "attempt_id": "pilot-role-v11-developer-child-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "evals/results/role-decisions/pilot-2026-11-25/architect-a2-result.md",
+      "captured_at": "2026-11-25T14:23:54Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "pilot-20261125-roleobs-architect-a2",
+  "retry_resolution_reason": null
+}
