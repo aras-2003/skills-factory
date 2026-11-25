@@ -69,7 +69,7 @@ store behavior stays authoritative.
 
 ## Cloud Next fixture pilot
 
-`evaluate_investment_decision_fixture` is a Cloud Next-only additive tool. It
+`evaluate_investment_decision_fixture` is a Cloud Next-only additive MCP tool. It
 accepts a registered fixture ID and the exact canonical source revision. It
 resolves digest-pinned, synthetic inputs from the Worker bundle and recomputes
 a deliberately limited projection of gate statuses and recommendation fields
@@ -82,7 +82,9 @@ snapshot abstention, and hard-cap reduction review. It preserves the
 no-authorization, no-sizing, and owner-approval invariants. It does not execute
 the `investment-security-review` workflow or specialist agents. It cannot
 authenticate upstream evidence, source digests, policy, or host role/model
-execution. The production route/load/report path remains unchanged.
+execution. It is absent from the Site browser console and WebMCP discovery; the
+authenticated `/mcp` handler retains the tool and its receipt boundary. The
+production route/load/report path remains unchanged.
 
 The Python implementation now rejects non-TEST or write-scoped contexts,
 abstains when G5 is unresolved/not applicable, and rejects noncanonical or

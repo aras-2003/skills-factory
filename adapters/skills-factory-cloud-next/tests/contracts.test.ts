@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { callTool, routeInvestment, TOOLS, runtimeInfo } from "../../../sites/skills-factory-site/lib/skills-factory-adapter/cloud-tools";
+import { BROWSER_TOOLS, callTool, routeInvestment, TOOLS, runtimeInfo } from "../../../sites/skills-factory-site/lib/skills-factory-adapter/cloud-tools";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -470,6 +470,11 @@ test("MCP initialize, discover parity tools, authenticate and call", async () =>
     assert.ok(references["references/WORKFLOW.md"], `${workflow.name} workflow reference missing`);
     assert.ok(Object.keys(references).every((path) => !path.split("/").includes("evals")), `${workflow.name} leaked eval fixture`);
   }
+});
+test("fixture pilot is available through authenticated MCP but absent from browser console and WebMCP", () => {
+  assert.ok(TOOLS.some((tool) => tool.name === "evaluate_investment_decision_fixture"));
+  assert.ok(!BROWSER_TOOLS.some((tool) => tool.name === "evaluate_investment_decision_fixture"));
+  assert.deepEqual(BROWSER_TOOLS.map((tool) => tool.name), TOOLS.filter((tool) => tool.name !== "evaluate_investment_decision_fixture").map((tool) => tool.name));
 });
 test("runtime attestation identifies this Site release and exact tool contract", async () => {
   const metadata = { id: "worker-version-123", tag: "0123456789abcdef0123456789abcdef01234567", timestamp: "2026-10-07T10:00:00.000Z" };

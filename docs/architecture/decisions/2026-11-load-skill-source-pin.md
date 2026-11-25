@@ -83,10 +83,10 @@ capabilities.
 
 This map binds the 34 listed source files to reviewed commit
 `242fe4762d2b2c6cc2c602720d222e1276c0cd17`. The governance regression verifies
-that listed files are byte-identical at that commit and in the current
-checkout. The continuation manifest permits only refreshed ADR and governance
-test digests, each checked against its current file; all other manifest bytes
-must match the reviewed source. It separates runtime tool consumers from
+that listed files are byte-identical at that commit except for the exact
+successor deltas recorded below. The continuation manifest permits only
+refreshed digests for the approved source deltas, this ADR, and its governance
+test; each digest is checked against its current file. It separates runtime tool consumers from
 ingress, evidence and release verifiers, and build-time producers; finding a path does not imply
 that it sends the optional `expected_source_revision` pin. This is a
 source-confirmed inventory of the listed paths, not proof that the repository
@@ -269,3 +269,39 @@ and the exact error shape for invalid or stale revisions remains owner-gated.
 This was the original proposal state; the owner has since approved the stable
 logical code/message contract documented above; byte-for-byte envelope parity
 remains outside that approval.
+
+## Successor source deltas for PR #800
+
+PR [#800](https://github.com/aras-2003/skills-factory/pull/800) adds one
+four-fixture, Cloud Next-only Investment OS pilot. This is an append-only
+successor to the reviewed consumer map above. The code-source revision reviewed
+for these deltas is `b41be28afdd34aea0330eb7f7a33284b85fda08d`; the final PR
+candidate may add governance metadata and tests without changing these code
+hashes. This does not revise the historical #766 decision, baseline, or
+acceptance evidence. The exact allowed deltas to the 34 mapped consumer paths
+are:
+
+| Path | SHA-256 | Reason |
+| --- | --- | --- |
+| `runtime/contracts/mcp-tools-v1.json` | `972f2051373d3617d7d8229f1aeeaed7a23ecf960be87e09b7077a25b398d4b7` | Additive Cloud Next extension; shared `tools` contract remains unchanged. |
+| `adapters/skills-factory-cloud-next/src/cloud-tools.ts` | `96a304438bb9f2ce59ce875220ffc43329efcb15f84a7f866aa42377ad155d81` | Register the fixture-only tool on authenticated MCP. |
+| `sites/skills-factory-site/app/page.tsx` | `21999ae5739a635aca4877a2a2eb399707c8837c62596f8d6cadd6d7bbfed9cb` | Exclude the pilot from browser console and WebMCP discovery. |
+
+The contract check asserts the `tools` map is semantically unchanged and
+`load_skill` still requires only `skill_name`. Cloud Next MCP retains the
+additive extension and receipt path. The browser page excludes this pilot from
+its console and WebMCP registry; this does not claim the tool implementation
+is absent from browser assets. The existing `242fe476` source-map commit stays
+the historical ancestor and all other mapped source paths remain byte-identical.
+
+The source-contract test harness also changes outside that 34-path map:
+`adapters/skills-factory-cloud-next/scripts/check-contracts.mjs` is pinned in
+the continuation manifest to SHA-256
+`55591650298c304b8d5df8cd46390f8d2c1fff5b62264e67d360805380c2b699`. The
+governance test allows only that exact harness digest refresh and verifies it
+against the current file; it is not a fourth consumer-map delta.
+
+The PR candidate must be independently reviewed against these three exact
+hashes. After merge, a squash commit need not preserve the PR head as an
+ancestor: validation remains anchored to `242fe476` plus the successor source
+hashes and continuation manifest, not the ephemeral candidate commit ID.
