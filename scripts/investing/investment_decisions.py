@@ -69,6 +69,14 @@ def _reference_errors(context: dict[str, Any], results: list[dict[str, Any]], si
             errors.append(f"{name} signal has missing or dangling claim references")
         if not signal["evidence_ids"] or any(source_id not in evidence for source_id in signal["evidence_ids"]):
             errors.append(f"{name} signal has missing or dangling evidence references")
+        claim_evidence = {
+            evidence_id
+            for claim_id in signal["claim_ids"]
+            if claim_id in claims
+            for evidence_id in claims[claim_id]["evidence_ids"] + claims[claim_id]["counterevidence_ids"]
+        }
+        if any(source_id not in claim_evidence for source_id in signal["evidence_ids"]):
+            errors.append(f"{name} signal evidence is not linked to its referenced claims")
         if result["execution_status"] not in {"SUCCESS", "PARTIAL"}:
             errors.append(f"{name} signal producer did not return an executable result")
         if result["payload_type"] == "LEGACY_OPAQUE":
@@ -298,6 +306,8 @@ def synthesize_decision(decision_input: object, *, root: Path) -> dict[str, Any]
         recommendation = None
     if position == "UNKNOWN":
         recommendation = None
+    if position == "HELD" and g5["status"] not in {"PASS", "WARN", "BLOCK"}:
+        recommendation = None
     if recommendation is None and g1["status"] == "PASS" and g2["status"] == "PASS" and g3["status"] == "PASS" and g4["status"] == "PASS" and g5["status"] == "PASS":
         if attractiveness in {"ATTRACTIVE", "FAIR"} and position == "NOT_HELD":
             reasons.append("BUY_ACCUMULATE_MAPPING_NOT_APPROVED")
@@ -308,7 +318,7 @@ def synthesize_decision(decision_input: object, *, root: Path) -> dict[str, Any]
         "TRIM_REVIEW": "TRIM_REVIEW",
         "SELL_REVIEW": "SELL_REVIEW",
         "AVOID": "AVOID",
-    }.get(recommendation, "REDUCTION_REVIEW" if portfolio == "HARD_CAP_BREACH" else ("UNRESOLVED" if portfolio == "UNRESOLVED" or position == "UNKNOWN" else "NONE"))
+    }.get(recommendation, "REDUCTION_REVIEW" if portfolio == "HARD_CAP_BREACH" and g5["status"] == "BLOCK" else ("UNRESOLVED" if g5["status"] == "UNRESOLVED" else "NONE"))
     output["reason_codes"] = sorted(set(reasons))
     if recommendation in {"WAIT", "HOLD", "TRIM_REVIEW", "SELL_REVIEW"} or output["portfolio_action"] == "REDUCTION_REVIEW" or "BUY_ACCUMULATE_MAPPING_NOT_APPROVED" in reasons or "HOLD_REQUIRES_APPROVED_CONTINUATION_RULE" in reasons:
         output["research_state"] = "WATCH"

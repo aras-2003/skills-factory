@@ -247,6 +247,28 @@ class InvestmentDecisionTests(unittest.TestCase):
         self.assertEqual("UNRESOLVED", result["gate_results"][5]["status"])
         self.assertIsNone(result["advisory_recommendation"])
 
+    def test_incomplete_position_snapshot_blocks_sell_and_reduction_reviews(self):
+        for overrides in ({"thesis": "INVALIDATED"}, {"portfolio": "HARD_CAP_BREACH"}):
+            value = decision_input(position="HELD", **overrides)
+            value["signals"]["portfolio"]["position_snapshot_complete"] = False
+            portfolio_result = next(result for result in value["results"] if result["result_id"] == "result-portfolio")
+            portfolio_result["payload"]["decision_signal_v1"]["position_snapshot_complete"] = False
+            result = decisions.synthesize_decision(value, root=ROOT)
+            self.assertEqual("UNRESOLVED", result["gate_results"][5]["status"])
+            self.assertIsNone(result["advisory_recommendation"])
+            self.assertEqual("UNRESOLVED", result["portfolio_action"])
+
+    def test_signal_evidence_must_be_linked_to_each_referenced_claim(self):
+        value = decision_input()
+        thesis_result = next(result for result in value["results"] if result["result_id"] == "result-thesis")
+        unrelated = dict(thesis_result["evidence_refs"][0], source_id="unrelated-source")
+        thesis_result["evidence_refs"].append(unrelated)
+        value["signals"]["thesis"]["evidence_ids"] = ["unrelated-source"]
+        thesis_result["payload"]["decision_signal_v1"]["evidence_ids"] = ["unrelated-source"]
+        result = decisions.synthesize_decision(value, root=ROOT)
+        self.assertEqual("BLOCK", result["gate_results"][0]["status"])
+        self.assertIsNone(result["advisory_recommendation"])
+
     def test_malformed_root_and_unhashable_position_fail_closed(self):
         for value in (None, [], {"context": {}, "results": [], "position_state": []}):
             with self.subTest(value=value):
