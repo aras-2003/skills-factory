@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skills-factory.local/schemas/investing/specialist-result-v1.schema.json",
+  "title": "Investment SpecialistResult v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "result_id", "analysis_id", "producer", "instrument_id", "as_of", "execution_status", "applicability", "payload_type", "payload_schema_version", "payload", "evidence_refs", "findings", "metrics", "blockers", "handoff", "source_result_refs"],
+  "properties": {
+    "contract_version": {"const": "1.0"},
+    "result_id": {"$ref": "#/$defs/id"},
+    "analysis_id": {"$ref": "#/$defs/id"},
+    "producer": {"type": "object", "additionalProperties": false, "required": ["skill_id", "version", "source_sha"], "properties": {"skill_id": {"$ref": "#/$defs/id"}, "version": {"$ref": "#/$defs/id"}, "source_sha": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"}, "method_version": {"type": ["string", "null"]}, "code_receipt": {"type": ["string", "null"]}}},
+    "instrument_id": {"$ref": "#/$defs/id"},
+    "as_of": {"type": "string", "format": "date-time"},
+    "started_at": {"type": ["string", "null"], "format": "date-time"},
+    "completed_at": {"type": ["string", "null"], "format": "date-time"},
+    "execution_status": {"enum": ["SUCCESS", "PARTIAL", "BLOCKED", "FAILED", "NOT_RUN"]},
+    "applicability": {"enum": ["APPLICABLE", "NOT_APPLICABLE"]},
+    "evidence_refs": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "metrics": {"type": "array", "items": {"$ref": "#/$defs/metric"}},
+    "blockers": {"type": "array", "items": {"type": "string"}},
+    "handoff": {"type": "array", "items": {"type": "string"}},
+    "source_result_refs": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+    "payload_type": {"type": "string", "minLength": 1},
+    "payload_schema_version": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"},
+    "evidence_status": {"type": "object", "additionalProperties": {"enum": ["VERIFIED", "PROVISIONAL", "MISSING", "CONFLICTED", "STALE", "NOT_APPLICABLE", "UNKNOWN"]}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+    "evidence": {"type": "object", "additionalProperties": false, "required": ["source_id", "source_url", "published_at", "retrieved_at", "vendor", "license", "source_sha256", "locator", "allowed_as_of"], "properties": {"source_id": {"$ref": "#/$defs/id"}, "source_url": {"type": "string", "minLength": 1}, "published_at": {"type": "string", "format": "date-time"}, "retrieved_at": {"type": "string", "format": "date-time"}, "vendor": {"type": ["string", "null"]}, "license": {"type": ["string", "null"]}, "fiscal_basis": {"type": ["string", "null"]}, "source_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}, "locator": {"type": ["string", "null"]}, "allowed_as_of": {"type": "string", "format": "date-time"}, "archive_snapshot_ref": {"type": ["string", "null"]}}},
+    "finding": {"type": "object", "additionalProperties": false, "required": ["claim_id", "claim_kind", "text", "scope", "horizon", "evidence_ids", "counterevidence_ids", "evidence_status", "confidence", "confidence_rationale", "limitations", "invalidation"], "properties": {"claim_id": {"$ref": "#/$defs/id"}, "claim_kind": {"enum": ["DETERMINISTIC_VALUE", "INTERPRETATION", "CAUSAL_ATTRIBUTION"]}, "text": {"type": "string", "minLength": 1}, "scope": {"type": "string", "minLength": 1}, "horizon": {"type": "string", "minLength": 1}, "evidence_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}, "counterevidence_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}, "evidence_status": {"enum": ["VERIFIED", "PROVISIONAL", "MISSING", "CONFLICTED", "STALE", "NOT_APPLICABLE", "UNKNOWN"]}, "assessment": {"type": ["string", "null"]}, "confidence": {"enum": ["HIGH", "MEDIUM", "LOW", "UNDETERMINED"]}, "confidence_rationale": {"type": "string", "minLength": 1}, "limitations": {"type": "array", "items": {"type": "string"}}, "invalidation": {"type": "object", "additionalProperties": false, "required": ["metric", "operator", "threshold", "status", "window", "predeclared_at"], "properties": {"metric": {"type": ["string", "null"]}, "operator": {"type": ["string", "null"]}, "threshold": {}, "status": {"enum": ["SET", "NOT_SET"]}, "window": {"type": ["string", "null"]}, "predeclared_at": {"type": ["string", "null"], "format": "date-time"}}}}},
+    "metric": {"type": "object", "additionalProperties": false, "required": ["metric_id", "definition", "unit", "period_start", "period_end", "accounting_basis", "adjustment_basis", "source_ids", "published_at", "observed_at", "method_id", "method_version", "calc_receipt", "evidence_status"], "properties": {"metric_id": {"$ref": "#/$defs/id"}, "definition": {"type": "string", "minLength": 1}, "raw_value": {"type": ["number", "null"]}, "unit": {"type": ["string", "null"]}, "currency": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"}, "period_start": {"type": ["string", "null"], "format": "date"}, "period_end": {"type": ["string", "null"], "format": "date"}, "accounting_basis": {"type": ["string", "null"]}, "adjustment_basis": {"type": ["string", "null"]}, "corporate_action_basis": {"type": ["string", "null"]}, "source_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true}, "published_at": {"type": ["string", "null"], "format": "date-time"}, "observed_at": {"type": ["string", "null"], "format": "date-time"}, "method_id": {"type": ["string", "null"]}, "method_version": {"type": ["string", "null"]}, "calc_receipt": {"type": ["string", "null"]}, "evidence_status": {"enum": ["VERIFIED", "PROVISIONAL", "MISSING", "CONFLICTED", "STALE", "NOT_APPLICABLE", "UNKNOWN"]}}, "allOf": [{"if": {"properties": {"evidence_status": {"const": "VERIFIED"}}, "required": ["evidence_status"]}, "then": {"required": ["raw_value", "currency", "period_start", "period_end", "published_at", "observed_at", "method_id", "method_version", "calc_receipt"], "properties": {"raw_value": {"type": "number"}, "unit": {"type": "string", "minLength": 1}, "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}, "period_start": {"type": "string", "format": "date"}, "period_end": {"type": "string", "format": "date"}, "accounting_basis": {"type": "string", "minLength": 1}, "adjustment_basis": {"type": "string", "minLength": 1}, "corporate_action_basis": {"type": "string", "minLength": 1}, "source_ids": {"minItems": 1}, "published_at": {"type": "string", "format": "date-time"}, "observed_at": {"type": "string", "format": "date-time"}, "method_id": {"type": "string", "minLength": 1}, "method_version": {"type": "string", "minLength": 1}, "calc_receipt": {"type": "string", "minLength": 1}}}}]}
+  }
+}

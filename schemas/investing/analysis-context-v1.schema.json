@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skills-factory.local/schemas/investing/analysis-context-v1.schema.json",
+  "title": "Investment AnalysisContext v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "analysis_id", "instrument", "as_of", "horizon", "requested_skills", "context_mode", "evidence_snapshot_refs", "execution_mode", "write_scope"],
+  "properties": {
+    "contract_version": {"const": "1.0"},
+    "analysis_id": {"$ref": "#/$defs/id"},
+    "instrument": {"type": "object", "additionalProperties": false, "required": ["canonical_id", "type"], "properties": {"canonical_id": {"$ref": "#/$defs/id"}, "isin": {"type": ["string", "null"]}, "ticker": {"type": ["string", "null"]}, "exchange": {"type": ["string", "null"]}, "type": {"enum": ["EQUITY", "ETF", "BOND", "FUND", "OTHER"]}, "industry": {"type": ["string", "null"]}}},
+    "as_of": {"type": "string", "format": "date-time"},
+    "horizon": {"type": "object", "additionalProperties": false, "required": ["min_months", "max_months", "objective"], "properties": {"min_months": {"type": "integer", "minimum": 0}, "max_months": {"type": "integer", "minimum": 0}, "objective": {"type": "string", "minLength": 1}}},
+    "requested_skills": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "context_mode": {"enum": ["CANONICAL", "USER_SUPPLIED_CONTEXT"]},
+    "evidence_snapshot_refs": {"type": "array", "items": {"$ref": "#/$defs/id"}, "uniqueItems": true},
+    "policy_version_ref": {"type": ["string", "null"]},
+    "portfolio_snapshot_ref": {"type": ["string", "null"]},
+    "active_thesis_ref": {"type": ["string", "null"]},
+    "execution_mode": {"enum": ["LIVE", "HISTORICAL_REPLAY", "TEST"]},
+    "write_scope": {"$ref": "#/$defs/writeScope"},
+    "data_currency": {"type": ["string", "null"], "pattern": "^[A-Z]{3}$"},
+    "timezone": {"type": ["string", "null"], "minLength": 1}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"},
+    "writeScope": {"type": "object", "additionalProperties": false, "required": ["mode"], "properties": {"mode": {"enum": ["NONE", "EXPLICIT_OPERATION"]}, "operation": {"type": "string", "minLength": 1}, "target": {"type": "string", "minLength": 1}, "authorization_ref": {"type": "string", "minLength": 1}}, "allOf": [{"if": {"properties": {"mode": {"const": "NONE"}}, "required": ["mode"]}, "then": {"not": {"anyOf": [{"required": ["operation"]}, {"required": ["target"]}, {"required": ["authorization_ref"]}] }}, "else": {"required": ["operation", "target", "authorization_ref"]}}]}
+  }
+}
