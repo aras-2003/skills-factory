@@ -1,0 +1,632 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skills-factory.local/schemas/role-decision-record.schema.json",
+  "title": "Role decision record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_reference",
+    "source_revision",
+    "policy_revision",
+    "role",
+    "decision",
+    "impact",
+    "requested",
+    "host_observed",
+    "dispatch",
+    "execution",
+    "result",
+    "coordinator_disposition",
+    "timing_assessment",
+    "decision_id",
+    "attempt_id",
+    "retry_of",
+    "trigger_source",
+    "signal_evidence",
+    "supersedes_decision_id",
+    "parent_decision_id",
+    "retry_resolution_reason"
+  ],
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0",
+        "1.1"
+      ]
+    },
+    "task_reference": {
+      "$ref": "#/$defs/text"
+    },
+    "source_revision": {
+      "$ref": "#/$defs/text"
+    },
+    "policy_revision": {
+      "$ref": "#/$defs/text"
+    },
+    "role": {
+      "$ref": "#/$defs/text"
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "value",
+        "reason",
+        "timestamp"
+      ],
+      "properties": {
+        "value": {
+          "enum": [
+            "SKIP",
+            "INVOKE"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/text"
+        },
+        "timestamp": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false
+    },
+    "impact": {
+      "enum": [
+        "A0",
+        "A1",
+        "A2",
+        "A3",
+        "A4"
+      ]
+    },
+    "requested": {
+      "type": "object",
+      "required": [
+        "model",
+        "effort",
+        "profile"
+      ],
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/claimed_value"
+        },
+        "effort": {
+          "$ref": "#/$defs/claimed_value"
+        },
+        "profile": {
+          "$ref": "#/$defs/claimed_value"
+        }
+      },
+      "additionalProperties": false
+    },
+    "host_observed": {
+      "description": "Host-reported identity only; do not infer it from a request.",
+      "type": "object",
+      "required": [
+        "model",
+        "effort",
+        "profile"
+      ],
+      "properties": {
+        "model": {
+          "$ref": "#/$defs/claimed_value"
+        },
+        "effort": {
+          "$ref": "#/$defs/claimed_value"
+        },
+        "profile": {
+          "$ref": "#/$defs/claimed_value"
+        }
+      },
+      "additionalProperties": false
+    },
+    "dispatch": {
+      "type": "object",
+      "required": [
+        "status",
+        "timestamp",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_ATTEMPTED",
+            "ACCEPTED",
+            "REJECTED",
+            "BLOCKED",
+            "FAILED",
+            "UNKNOWN"
+          ]
+        },
+        "timestamp": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "coordinator_bounds": {
+          "$ref": "#/$defs/coordinator_bounds"
+        },
+        "time_unknown_reason": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "state",
+        "started_at",
+        "ended_at",
+        "reason"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "NOT_STARTED",
+            "RUNNING",
+            "COMPLETED",
+            "FAILED",
+            "CANCELLED",
+            "UNKNOWN"
+          ]
+        },
+        "started_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ended_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "started_coordinator_bounds": {
+          "$ref": "#/$defs/coordinator_bounds"
+        },
+        "started_time_unknown_reason": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ended_coordinator_bounds": {
+          "$ref": "#/$defs/coordinator_bounds"
+        },
+        "ended_time_unknown_reason": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "required": [
+        "reference",
+        "sha256",
+        "reference_kind"
+      ],
+      "properties": {
+        "reference": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "reference_kind": {
+          "enum": [
+            "REPO_FILE",
+            "EXTERNAL",
+            "PRIVATE",
+            null
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "coordinator_disposition": {
+      "type": "object",
+      "required": [
+        "value",
+        "timestamp",
+        "reason"
+      ],
+      "properties": {
+        "value": {
+          "enum": [
+            "PENDING",
+            "ACCEPTED",
+            "ADAPTED",
+            "REJECTED",
+            "NOT_USED",
+            "UNKNOWN"
+          ]
+        },
+        "timestamp": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "timing_assessment": {
+      "description": "Independent review. EARLY labels an accepted dispatch earlier than needed and before the first dependent action; it does not establish trigger accuracy.",
+      "type": "object",
+      "required": [
+        "value",
+        "assessor",
+        "provenance",
+        "assessed_at",
+        "first_dependent_action_at",
+        "reason",
+        "first_dependent_action_reference",
+        "no_qualifying_action_confirmed"
+      ],
+      "properties": {
+        "value": {
+          "enum": [
+            "EARLY",
+            "ON_TIME",
+            "LATE",
+            "MISSED",
+            "UNNECESSARY",
+            "CORRECT_SKIP",
+            "UNKNOWN"
+          ]
+        },
+        "assessor": {
+          "$ref": "#/$defs/text"
+        },
+        "provenance": {
+          "$ref": "#/$defs/text"
+        },
+        "assessed_at": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "first_dependent_action_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "first_dependent_action_reference": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "no_qualifying_action_confirmed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "first_dependent_action_coordinator_bounds": {
+          "$ref": "#/$defs/coordinator_bounds"
+        },
+        "first_dependent_action_time_unknown_reason": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "decision_id": {
+      "$ref": "#/$defs/text"
+    },
+    "attempt_id": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "retry_of": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "trigger_source": {
+      "enum": [
+        "NATURAL",
+        "USER_REQUEST"
+      ]
+    },
+    "signal_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "reference",
+          "captured_at"
+        ],
+        "properties": {
+          "reference": {
+            "$ref": "#/$defs/text"
+          },
+          "captured_at": {
+            "$ref": "#/$defs/timestamp"
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Sanitized evidence references available at decision time; no prompt, transcript, or secrets.",
+      "minItems": 1
+    },
+    "supersedes_decision_id": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "parent_decision_id": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "retry_resolution_reason": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}[Tt]\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:[Zz]|[+-]\\d{2}:\\d{2})$"
+    },
+    "claimed_value": {
+      "type": "object",
+      "required": [
+        "value",
+        "provenance",
+        "reason"
+      ],
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/text"
+        },
+        "provenance": {
+          "$ref": "#/$defs/text"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "coordinator_bounds": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "earliest",
+            "latest",
+            "evidence"
+          ],
+          "properties": {
+            "earliest": {
+              "$ref": "#/$defs/timestamp"
+            },
+            "latest": {
+              "$ref": "#/$defs/timestamp"
+            },
+            "evidence": {
+              "$ref": "#/$defs/text"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "dispatch": {
+            "required": [
+              "coordinator_bounds",
+              "time_unknown_reason"
+            ]
+          },
+          "execution": {
+            "required": [
+              "started_coordinator_bounds",
+              "started_time_unknown_reason",
+              "ended_coordinator_bounds",
+              "ended_time_unknown_reason"
+            ]
+          },
+          "timing_assessment": {
+            "required": [
+              "first_dependent_action_coordinator_bounds",
+              "first_dependent_action_time_unknown_reason"
+            ]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "dispatch": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "coordinator_bounds"
+                  ]
+                },
+                {
+                  "required": [
+                    "time_unknown_reason"
+                  ]
+                }
+              ]
+            }
+          },
+          "execution": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "started_coordinator_bounds"
+                  ]
+                },
+                {
+                  "required": [
+                    "started_time_unknown_reason"
+                  ]
+                },
+                {
+                  "required": [
+                    "ended_coordinator_bounds"
+                  ]
+                },
+                {
+                  "required": [
+                    "ended_time_unknown_reason"
+                  ]
+                }
+              ]
+            }
+          },
+          "timing_assessment": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "first_dependent_action_coordinator_bounds"
+                  ]
+                },
+                {
+                  "required": [
+                    "first_dependent_action_time_unknown_reason"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

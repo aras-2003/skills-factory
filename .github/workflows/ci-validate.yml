@@ -168,6 +168,7 @@ jobs:
           python -m unittest discover -s runtime/mcp/tests -p 'test_*.py'
           node --test scripts/eval/tests/test_iteration02_cua_capture.mjs
           python scripts/eval/campaign.py validate-evidence
+          python scripts/eval/role_decision_record.py validate
           python scripts/eval/iteration01_handoff.py validate
           python scripts/eval/iteration02_handoff.py validate
           python scripts/eval/iteration02_semantic_coverage.py --output .tmp/iteration02-semantic-coverage.json

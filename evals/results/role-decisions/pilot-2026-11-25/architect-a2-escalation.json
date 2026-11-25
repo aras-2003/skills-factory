@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "Codex pilot 2026-11-25: make role receipt represent missing host event times without fabrication; branch codex/sdlc-runtime-full",
+  "source_revision": "HEAD:c9df4974ae970bf75e4dbb4c512a01d0d44fce06; scoped_worktree_sha256:95961e4d0b7f1fa63d574cbbf0c7fc8c15da9274f0709e1ac92bd452bf808e79",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:45513cfab74ed1bfac95ee73da444fe8a6b36b82a81339458f85b12607b5f94b",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "The observed Codex host response has no event timestamps, while the new shared evidence contract requires them; change the contract to preserve unknowns and observed ordering honestly.",
+    "timestamp": "2026-11-25T14:18:57Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Explicit Architect dispatch override",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Explicit Architect dispatch override",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Owner-approved role mapping; explicit Architect role selection",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface does not report the effective model used by this child."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface does not report the effective reasoning effort used by this child."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface does not report automatic profile loading."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Codex collaboration tool returned the Architect child reference; no host event timestamp was exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-25T14:18:57Z",
+      "latest": "2026-11-25T14:23:54Z",
+      "evidence": "Pre-dispatch decision precedes the Architect call; Architect response was observed before the later Developer A2 decision."
+    },
+    "time_unknown_reason": "The host does not return an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned the v1.1 timestamp-bound contract design; exact worker start/end timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-25T14:18:57Z",
+      "latest": "2026-11-25T14:23:54Z",
+      "evidence": "Architect response observed before the later Developer A2 decision."
+    },
+    "started_time_unknown_reason": "The host does not expose worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-25T14:18:57Z",
+      "latest": "2026-11-25T14:23:54Z",
+      "evidence": "Architect response observed before the later Developer A2 decision."
+    },
+    "ended_time_unknown_reason": "The host does not expose worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/pilot-2026-11-25/architect-a2-result.md",
+    "sha256": "4ee5cb65c65315504f1f45293651754085057ecd3864f325e08e1091aba6b68c",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-25T14:23:54Z",
+    "reason": "The recommended v1.1 contract was accepted before the subsequent Developer A2 implementation decision."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Independent Reviewer",
+    "provenance": "Architect result was observed before Developer implementation planning; the first code-change time has not yet been bounded.",
+    "assessed_at": "2026-11-25T14:34:26Z",
+    "first_dependent_action_at": null,
+    "first_dependent_action_reference": null,
+    "no_qualifying_action_confirmed": null,
+    "reason": "The implementation action is pending; timing assessment follows after a bounded first-action observation.",
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": null
+  },
+  "decision_id": "pilot-20261125-roleobs-architect-a2",
+  "attempt_id": "pilot-timestamp-architect-child-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "evals/results/role-decisions/pilot-2026-11-25/host-timestamp-gap.md",
+      "captured_at": "2026-11-25T14:18:57Z"
+    }
+  ],
+  "supersedes_decision_id": "pilot-20261125-roleobs-architect-a1",
+  "parent_decision_id": null,
+  "retry_resolution_reason": null
+}

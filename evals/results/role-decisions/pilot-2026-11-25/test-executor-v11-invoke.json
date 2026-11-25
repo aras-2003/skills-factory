@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "Codex pilot 2026-11-25: execute role-decision-record contract tests and validate all pilot receipts; branch codex/sdlc-runtime-full",
+  "source_revision": "HEAD:c9df4974ae970bf75e4dbb4c512a01d0d44fce06; scoped_worktree_sha256:9d4d6234b7e90078a72d2baf7af463b0f567aef2148c19a906f461e6c7adf30a",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b3b923f80fe0282f2b447d650063cd126eebc048564ec99814de24267d724d6",
+  "role": "Test Executor",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Run the focused role-receipt contract suite and default sidecar scan after the v1.1 A2 implementation.",
+    "timestamp": "2026-11-25T14:32:35Z"
+  },
+  "impact": "A1",
+  "requested": {
+    "model": {
+      "value": "gpt-6-luna",
+      "provenance": "Owner-approved Test Executor mapping",
+      "reason": null
+    },
+    "effort": {
+      "value": "low",
+      "provenance": "Owner-approved Test Executor mapping",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-test-executor",
+      "provenance": "Owner-approved role mapping",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child model is not exposed."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child effort is not exposed."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Automatic profile loading is not exposed."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Codex collaboration tool returned the Test Executor child result; exact dispatch timestamp was not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-25T14:32:35Z",
+      "latest": "2026-11-25T14:38:25Z",
+      "evidence": "Pre-dispatch decision was recorded before the child call; test result was observed by 2026-11-25T14:38:25Z."
+    },
+    "time_unknown_reason": "The host does not return an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The child reported 13 passing contract tests and a successful role-record scan; exact worker start/end timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-25T14:32:35Z",
+      "latest": "2026-11-25T14:38:25Z",
+      "evidence": "Pre-dispatch decision was recorded before the child call; test result was observed by 2026-11-25T14:38:25Z."
+    },
+    "started_time_unknown_reason": "The host does not expose worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-25T14:32:35Z",
+      "latest": "2026-11-25T14:38:25Z",
+      "evidence": "Pre-dispatch decision was recorded before the child call; test result was observed by 2026-11-25T14:38:25Z."
+    },
+    "ended_time_unknown_reason": "The host does not expose worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/pilot-2026-11-25/test-executor-v11-result.md",
+    "sha256": "471ab9fe4d347f4082e90474b97020e1c1ee2179cd85143c97918138f7d59dd8",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-25T14:38:25Z",
+    "reason": "Focused contract suite passed (13 tests); default validator scan passed (5 role records)."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Test execution completed; collaboration surface exposes no exact child lifecycle events.",
+    "assessed_at": "2026-11-25T14:38:25Z",
+    "first_dependent_action_at": null,
+    "reason": "The dispatch and test-action coordinator bounds overlap; strict dispatch-before-action ordering is not proven.",
+    "first_dependent_action_reference": "scripts/eval/tests/test_role_decision_record.py test execution",
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-25T14:32:35Z",
+      "latest": "2026-11-25T14:38:25Z",
+      "evidence": "Pre-dispatch decision was recorded before the child call; test result was observed by 2026-11-25T14:38:25Z."
+    },
+    "first_dependent_action_time_unknown_reason": "Exact first test action time is not exposed and its coordinator bounds overlap the dispatch bounds."
+  },
+  "decision_id": "pilot-20261125-roleobs-test-executor-a1",
+  "attempt_id": "pilot-role-v11-test-executor-child-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Focused role-receipt tests and full role-decisions scan are required for the pilot; no runtime behavior changes in scope.",
+      "captured_at": "2026-11-25T14:32:35Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "pilot-20261125-roleobs-developer-v11-a2",
+  "retry_resolution_reason": null
+}
