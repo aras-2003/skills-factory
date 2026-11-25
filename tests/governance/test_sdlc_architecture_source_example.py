@@ -18,9 +18,22 @@ CONSUMER_MAP_RE = re.compile(
 EXPECTED_CONSUMER_MAP = "242fe4762d2b2c6cc2c602720d222e1276c0cd17"
 CONTINUATION_PATH = "evals/campaigns/iteration-07-investing-quality-2026-11/sdlc-source-compatibility-continuation.yaml"
 REFRESHED_DIGEST_PATHS = (
+    "adapters/skills-factory-cloud-next/scripts/check-contracts.mjs",
+    "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
     "docs/architecture/decisions/2026-11-load-skill-source-pin.md",
     "tests/governance/test_sdlc_architecture_source_example.py",
 )
+SUCCESSOR_DELTA_SHA256 = {
+    "runtime/contracts/mcp-tools-v1.json": "972f2051373d3617d7d8229f1aeeaed7a23ecf960be87e09b7077a25b398d4b7",
+    "adapters/skills-factory-cloud-next/src/cloud-tools.ts": "96a304438bb9f2ce59ce875220ffc43329efcb15f84a7f866aa42377ad155d81",
+    "sites/skills-factory-site/app/page.tsx": "21999ae5739a635aca4877a2a2eb399707c8837c62596f8d6cadd6d7bbfed9cb",
+}
+APPROVED_REFRESHED_SOURCE_SHA256 = {
+    "adapters/skills-factory-cloud-next/scripts/check-contracts.mjs": "55591650298c304b8d5df8cd46390f8d2c1fff5b62264e67d360805380c2b699",
+    "adapters/skills-factory-cloud-next/src/cloud-tools.ts": SUCCESSOR_DELTA_SHA256[
+        "adapters/skills-factory-cloud-next/src/cloud-tools.ts"
+    ],
+}
 CONSUMER_MAP_PATHS = (
     "runtime/contracts/mcp-tools-v1.json",
     "runtime/mcp/server.py",
@@ -70,6 +83,9 @@ def normalize_continuation(current: bytes, reviewed: bytes, root: Path) -> bytes
         digest = hashlib.sha256((root / path).read_bytes()).hexdigest().encode()
         if current_matches[0].group(1) != digest:
             raise AssertionError(f"continuation digest does not match source: {path}")
+        approved = APPROVED_REFRESHED_SOURCE_SHA256.get(path)
+        if approved is not None and digest.decode() != approved:
+            raise AssertionError(f"unapproved refreshed source digest: {path}")
         start, end = current_matches[0].span(1)
         current = current[:start] + reviewed_matches[0].group(1) + current[end:]
     return current
@@ -118,11 +134,19 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
                     self.fail(f"consumer-map source could not be verified for {path}: {error}")
                 if path == CONTINUATION_PATH:
                     current_bytes = normalize_continuation(current_bytes, reviewed_bytes, ROOT)
-                self.assertEqual(
-                    reviewed_bytes,
-                    current_bytes,
-                    f"consumer-map source differs from reviewed commit: {path}",
-                )
+                elif path in SUCCESSOR_DELTA_SHA256:
+                    self.assertEqual(SUCCESSOR_DELTA_SHA256[path], hashlib.sha256(current_bytes).hexdigest(),
+                                     f"unreviewed successor delta: {path}")
+                    continue
+                self.assertEqual(reviewed_bytes, current_bytes,
+                                 f"consumer-map source differs from reviewed commit: {path}")
+
+        contract = json.loads((ROOT / "runtime/contracts/mcp-tools-v1.json").read_text(encoding="utf-8"))
+        reviewed_contract = json.loads(source_at(revision, "runtime/contracts/mcp-tools-v1.json"))
+        self.assertEqual(reviewed_contract["tools"], contract["tools"], "shared MCP tool contract changed")
+        self.assertEqual(["skill_name"], contract["tools"]["load_skill"])
+        self.assertEqual({"evaluate_investment_decision_fixture": ["expected_source_revision", "fixture_id"]},
+                         contract.get("cloud_next_extensions"))
 
     def test_continuation_refresh_rejects_stale_digest_and_unrelated_changes(self):
         baseline = subprocess.check_output(

@@ -208,7 +208,13 @@ def _validate_and_trace(decision_input: object, root: Path) -> tuple[dict[str, A
     if not isinstance(results, list):
         errors.append("results must be an array")
         return output, errors
-    errors.extend(validate_exchange(context, results, root=root))
+    scope = context.get("write_scope") if isinstance(context, dict) else None
+    if not isinstance(context, dict) or context.get("execution_mode") != "TEST" or not isinstance(scope, dict) or scope.get("mode") != "NONE":
+        errors.append("decision synthesis fixtures require execution_mode TEST and write_scope NONE")
+    try:
+        errors.extend(validate_exchange(context, results, root=root))
+    except (TypeError, ValueError, OverflowError):
+        errors.append("exchange contains an invalid or non-canonical UTC timestamp")
     if errors:
         return output, errors
     signals = decision_input["signals"]
@@ -310,7 +316,7 @@ def synthesize_decision(decision_input: object, *, root: Path) -> dict[str, Any]
         recommendation = None
     if eligibility == "UNRESOLVED" or thesis == "INSUFFICIENT_EVIDENCE" or valuation_state == "UNRESOLVED" or portfolio == "UNRESOLVED":
         recommendation = None
-    if position == "UNKNOWN":
+    if position == "UNKNOWN" or g5["status"] in {"UNRESOLVED", "N/A"}:
         recommendation = None
     if position == "HELD" and g5["status"] not in {"PASS", "WARN", "BLOCK"}:
         recommendation = None

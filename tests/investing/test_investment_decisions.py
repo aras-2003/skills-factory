@@ -86,6 +86,15 @@ def decision_input(*, position="NOT_HELD", thesis="SURVIVES", valuation="ATTRACT
 
 
 class InvestmentDecisionTests(unittest.TestCase):
+    def test_malformed_write_scope_abstains_without_exception(self):
+        for scope in (None, [], "NONE"):
+            with self.subTest(scope=scope):
+                value = decision_input()
+                value["context"]["write_scope"] = scope
+                output = decisions.synthesize_decision(value, root=ROOT)
+                self.assertEqual("BLOCK", output["gate_results"][0]["status"])
+                self.assertIsNone(output["advisory_recommendation"])
+                self.assertFalse(output["execution_authorized"])
     def test_output_schema_is_draft_2020_12_and_positive_wait_is_advisory_only(self):
         value = decision_input(valuation="UNFAVORABLE")
         result = decisions.synthesize_decision(value, root=ROOT)
@@ -259,6 +268,32 @@ class InvestmentDecisionTests(unittest.TestCase):
             self.assertEqual("UNRESOLVED", result["portfolio_action"])
             self.assertEqual("UNRESOLVED", result["portfolio_fit_state"])
             self.assertNotIn("POLICY_BREACH_REDUCTION_REVIEW", result["reason_codes"])
+
+    def test_incomplete_new_position_snapshot_cannot_yield_avoid(self):
+        for overrides in ({"thesis": "INVALIDATED"}, {"eligibility": "INELIGIBLE"}):
+            value = decision_input(position="NOT_HELD", **overrides)
+            value["signals"]["portfolio"]["position_snapshot_complete"] = False
+            portfolio_result = next(result for result in value["results"] if result["result_id"] == "result-portfolio")
+            portfolio_result["payload"]["decision_signal_v1"]["position_snapshot_complete"] = False
+            result = decisions.synthesize_decision(value, root=ROOT)
+            self.assertEqual("UNRESOLVED", result["gate_results"][5]["status"])
+            self.assertIsNone(result["advisory_recommendation"])
+
+    def test_live_or_write_scoped_context_fails_closed(self):
+        for key, value_to_set in (("execution_mode", "LIVE"), ("write_scope", {"mode": "EXPLICIT_OPERATION", "operation": "write", "target": "record", "authorization_ref": "approval:1"})):
+            value = decision_input(valuation="UNFAVORABLE")
+            value["context"][key] = value_to_set
+            result = decisions.synthesize_decision(value, root=ROOT)
+            self.assertEqual("BLOCK", result["gate_results"][0]["status"])
+            self.assertIsNone(result["advisory_recommendation"])
+
+    def test_noncanonical_or_submicrosecond_utc_timestamps_fail_closed(self):
+        for timestamp in ("2026-11-25 12:00:00Z", "2026-11-25T12:00:00.0000001Z"):
+            value = decision_input()
+            value["context"]["as_of"] = timestamp
+            result = decisions.synthesize_decision(value, root=ROOT)
+            self.assertEqual("BLOCK", result["gate_results"][0]["status"])
+            self.assertIsNone(result["advisory_recommendation"])
 
     def test_signal_evidence_must_be_linked_to_each_referenced_claim(self):
         value = decision_input()
