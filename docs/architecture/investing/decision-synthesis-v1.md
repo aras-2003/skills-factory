@@ -1,6 +1,6 @@
-# Investment decision synthesis v1 (offline slice)
+# Investment decision synthesis v1 (offline slice and Cloud Next fixture pilot)
 
-Status: implementation candidate; exact-candidate independent review required.
+Status: Python offline slice merged; Cloud Next fixture-only pilot candidate in this branch; independent exact-candidate review and runtime acceptance required.
 Impact: A3. Owner: `investment-security-review`.
 Dependency: accepted #753 contract (main merge `2d4d8595d10a49b1b29f9e5c9b9954d2e02ce8c0`).
 
@@ -67,6 +67,30 @@ If future consumers persist decisions, stop new references first and retain the
 v1 reader or add an explicit adapter before removing it. Existing research and
 store behavior stays authoritative.
 
+## Cloud Next fixture pilot
+
+`evaluate_investment_decision_fixture` is a Cloud Next-only additive tool. It
+accepts a registered fixture ID and the exact canonical source revision. It
+resolves digest-pinned, synthetic inputs from the Worker bundle and recomputes
+a deliberately limited projection of gate statuses and recommendation fields
+on each call. It returns `PARITY_SUBSET_ONLY`; this is not a general synthesis
+API and does not accept caller-supplied evidence, live portfolio data, prompts,
+or arbitrary decision bundles. The Python MCP common tool contract is unchanged.
+
+The pilot covers four synthetic paths only: WAIT, HOLD, unresolved incomplete
+snapshot abstention, and hard-cap reduction review. It preserves the
+no-authorization, no-sizing, and owner-approval invariants. It does not execute
+the `investment-security-review` workflow or specialist agents. It cannot
+authenticate upstream evidence, source digests, policy, or host role/model
+execution. The production route/load/report path remains unchanged.
+
+The Python implementation now rejects non-TEST or write-scoped contexts,
+abstains when G5 is unresolved/not applicable, and rejects noncanonical or
+timestamps with finer than microsecond precision. These corrections do not authenticate caller
+assertions or resolve the source/policy trust gap. General or live synthesis
+remains blocked on those controls, broader parity, and accepted historical and
+runtime evidence.
+
 ## Verification boundaries
 
 Synthetic tests exercise all 36 combinations of held/new, three thesis states,
@@ -75,6 +99,11 @@ missing evidence, conflicts, late data, incompatible versions, dangling refs,
 opaque payload rejection, policy review versus cap breach, ETF-shaped input,
 optional timing, no-write guarantees and deterministic output. These tests do
 not satisfy the issue's matched authenticated historical archive requirement.
-Cloud Next currently proves existing route/load only; it has no Python execution
-capability for this module. Deployed #754 behavior remains `NOT_RUN` until a
-supported candidate invocation and independent grading exist.
+Cloud Next candidate tests invoke the TypeScript projection and compare the
+supported gates/recommendation fields against a freshly executed Python oracle.
+Those local checks do not prove the deployed version has been updated or that a
+host invoked the tool. Deployed runtime acceptance remains `NOT_RUN` until the
+merged source is published, attestation is reconciled, and a fresh Cloud Next
+conversation records successful calls for both a positive and abstaining
+fixture. Issue #754 remains open for its full live-data, trust, historical, and
+workflow acceptance scope; the fixture pilot alone does not close it.
