@@ -25,6 +25,8 @@ from audit_workflow_lifecycle import audit as audit_workflows  # noqa: E402
 
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 SAFE_CASE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,120}$")
+SOURCE_REFERENCE_REVIEW_REL = Path("evals/campaigns/iteration-02-workflow-hardening-2026-10/source-reference-review.yaml")
+RESOLVED_EDGE_STATUSES = {"RESOLVED", "REVIEWED_NON_DEPENDENCY"}
 REF = re.compile(r"\b(?:skills|workflows)/[A-Za-z0-9_./-]+\b")
 
 
@@ -255,6 +257,16 @@ def _workflow_reconciliation_design(root: Path, components: list[dict], nodes: d
 
 def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]:
     registry = _read_yaml(root / "workflows/runtime-registry.yaml")
+    try:
+        review_path = _safe_existing_file(root, SOURCE_REFERENCE_REVIEW_REL.as_posix())
+        review = _read_yaml(review_path) if review_path else {}
+        review_sha256 = hashlib.sha256(review_path.read_bytes()).hexdigest() if review_path else None
+    except (OSError, UnicodeDecodeError, yaml.YAMLError):
+        review = {}
+        review_sha256 = None
+    review_rows = review.get("references", []) if review.get("schema_version") == "1.0" else []
+    if not isinstance(review_rows, list):
+        review_rows = []
     nodes: dict[str, dict] = {}
     graph: dict[str, list[dict]] = {}
     skills = sorted(path for path in (root / "skills").rglob("SKILL.md")
@@ -312,7 +324,7 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
             source_path = _safe_existing_file(root, node["source"])
             if source_path:
                 source_text = source_path.read_text(encoding="utf-8")
-                candidate_lines: dict[str, int] = {}
+                candidate_lines: dict[str, list[int]] = {}
                 skill_names = sorted(name for name, matches in names.items()
                                      if len(matches) == 1 and matches[0].startswith("skill:"))
                 if skill_names:
@@ -323,12 +335,42 @@ def _declared_graph(root: Path) -> tuple[dict[str, list[dict]], dict[str, dict]]
                         for match in names_pattern.finditer(line):
                             candidate = match.group(1)
                             if candidate not in declared_targets:
-                                candidate_lines.setdefault(candidate, line_number)
-                for candidate, line_number in candidate_lines.items():
-                    edges.append({"target": None, "target_name": candidate,
-                                  "dependency": "source_reference_candidate",
-                                  "evidence": f"{node['source']}#L{line_number}",
-                                  "edge_status": "UNVERIFIED_SOURCE_REFERENCE"})
+                                lines = candidate_lines.setdefault(candidate, [])
+                                if not lines or lines[-1] != line_number:
+                                    lines.append(line_number)
+                for candidate, lines in candidate_lines.items():
+                    matching = [row for row in review_rows if isinstance(row, dict)
+                                and row.get("workflow") == node["name"]
+                                and row.get("target") == candidate]
+                    reviewed = {}
+                    if len(matching) == 1:
+                        record = matching[0]
+                        occurrences = record.get("occurrences")
+                        if (set(record) == {"workflow", "target", "source_path", "source_sha256", "occurrences"}
+                                and record.get("source_path") == node["source"]
+                                and record.get("source_sha256") == hashlib.sha256(source_path.read_bytes()).hexdigest()
+                                and isinstance(occurrences, list)
+                                and all(isinstance(item, dict)
+                                        and set(item) == {"line", "relation", "rationale"}
+                                        and type(item["line"]) is int
+                                        and isinstance(item["relation"], str)
+                                        and item["relation"] in {"ROUTE_AWAY", "SEMANTIC_REUSE"}
+                                        and isinstance(item["rationale"], str) and item["rationale"].strip()
+                                        for item in occurrences)
+                                and [item["line"] for item in occurrences] == lines
+                                and len(set(lines)) == len(lines)):
+                            reviewed = {item["line"]: item for item in occurrences}
+                    for line_number in lines:
+                        item = reviewed.get(line_number)
+                        edge = {"target": None, "target_name": candidate,
+                                "dependency": "source_reference_candidate",
+                                "evidence": f"{node['source']}#L{line_number}",
+                                "edge_status": "REVIEWED_NON_DEPENDENCY" if item else "UNVERIFIED_SOURCE_REFERENCE"}
+                        if item:
+                            edge.update({"relation": item["relation"], "rationale": item["rationale"],
+                                         "review_evidence": SOURCE_REFERENCE_REVIEW_REL.as_posix(),
+                                         "source_reference_review_sha256": review_sha256})
+                        edges.append(edge)
         graph[ident] = sorted(edges, key=lambda e: (e["target"] or "", e["target_name"] or "", e["dependency"]))
     return graph, nodes
 
@@ -359,7 +401,7 @@ def _affected_query(report: dict, stable_id: str) -> dict:
     source_errors = report.get("errors", [])
     global_unresolved = [{"consumer": row["stable_id"], "edge": edge, "scope": "GLOBAL_GRAPH"}
                          for row in rows.values() for edge in row.get("dependency_edges", [])
-                         if edge.get("edge_status") != "RESOLVED"]
+                         if edge.get("edge_status") not in RESOLVED_EDGE_STATUSES]
     if report.get("status") == "BLOCKED_SOURCE" or source_errors:
         return {**report_identity, "status": "BLOCKED_SOURCE", "requested_stable_id": stable_id,
                 "source_errors": source_errors, "regression_neighbors": [],
@@ -379,7 +421,7 @@ def _affected_query(report: dict, stable_id: str) -> dict:
     candidate_consumers = [{"stable_id": row["stable_id"], "edge": edge}
                            for row in rows.values()
                            for edge in row.get("dependency_edges", [])
-                           if edge.get("edge_status") != "RESOLVED"
+                           if edge.get("edge_status") not in RESOLVED_EDGE_STATUSES
                            and edge.get("target_name") == changed_name]
     neighbors = []
     for neighbor_id in sorted((direct_ids | transitive_ids) - {None}):
@@ -508,7 +550,7 @@ def assess(skills: object, workflows: object, root: Path) -> dict:
                     else:
                         signals.append("NO_ALTERNATIVE_CAMPAIGN_REFERENCE_FOUND")
             unresolved_dependencies = [edge for edge in graph.get(node_id, [])
-                                       if edge.get("edge_status") != "RESOLVED"]
+                                       if edge.get("edge_status") not in RESOLVED_EDGE_STATUSES]
             if unresolved_dependencies:
                 signals.append("DEPENDENCY_TARGET_UNRESOLVED")
             status = row.get("status")

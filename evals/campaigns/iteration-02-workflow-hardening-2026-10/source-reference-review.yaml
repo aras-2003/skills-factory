@@ -1,0 +1,21 @@
+schema_version: "1.0"
+references:
+  - workflow: report-production
+    target: report-composer
+    source_path: workflows/report-production/WORKFLOW.md
+    source_sha256: 40161af0f615656e4b3907a14b44aecf146e9b64d351069b3c0da4cbe46a61d0
+    occurrences:
+      - line: 13
+        relation: ROUTE_AWAY
+        rationale: Short chat-only reports route to the other capability instead of this file-production workflow.
+      - line: 37
+        relation: SEMANTIC_REUSE
+        rationale: The workflow reuses narrative principles without invoking the skill.
+  - workflow: investment-opportunity-hunter
+    target: position-sizing-review
+    source_path: workflows/investment-opportunity-hunter/WORKFLOW.md
+    source_sha256: e1bc76bce366b674e7f6b3dbf9d54b3adc236e90babc44fec670b5458d2f47ee
+    occurrences:
+      - line: 56
+        relation: ROUTE_AWAY
+        rationale: Position sizing is a subsequent portfolio action outside discovery.

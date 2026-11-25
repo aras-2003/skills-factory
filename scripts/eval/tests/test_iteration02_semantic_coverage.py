@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import sys
 import tempfile
 from unittest.mock import patch
 import unittest
@@ -104,6 +105,132 @@ class SemanticCoverageTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         self.assertEqual(self.skills["total_skills"] + len(self.workflows["workflows"]), len(ids))
         self.assertTrue(all(row["source_sha256"] and row["fixture_case_ids"] is not None for row in report["components"]))
+
+    def test_architect_reviewed_workflow_edges_resolve_and_queries_complete(self):
+        graph, _ = mod._declared_graph(ROOT)
+        expected = {
+            "workflow:presentation-production": {"report-composer", "visual-output-design"},
+            "workflow:report-production": {"visual-output-design"},
+        }
+        for workflow_id, expected_targets in expected.items():
+            optional = [edge for edge in graph[workflow_id] if edge["dependency"] == "optional"]
+            self.assertEqual(expected_targets, {edge["target_name"] for edge in optional})
+            self.assertTrue(all(edge["edge_status"] == "RESOLVED" for edge in optional))
+
+        report = self.check()
+        # Unit test graph logic independently of actual checkout attestation.
+        report["worktree_state"] = "CLEAN_CHECKOUT"
+        query = mod._affected_query(report, "skill:visual-output-design")
+        self.assertEqual("QUERY_COMPLETE", query["status"], query.get("unresolved_edges"))
+        self.assertTrue(
+            {"workflow:presentation-production", "workflow:report-production"}.issubset(
+                {row["stable_id"] for row in query["regression_neighbors"]})
+        )
+
+        report_workflow = next(row for row in report["components"]
+                               if row["stable_id"] == "workflow:report-production")
+        composer_mentions = [edge for edge in report_workflow["dependency_edges"]
+                             if edge.get("target_name") == "report-composer"]
+        self.assertEqual(
+            [(13, "ROUTE_AWAY"), (37, "SEMANTIC_REUSE")],
+            [(int(edge["evidence"].rsplit("#L", 1)[1]), edge.get("relation"))
+             for edge in composer_mentions],
+        )
+        self.assertTrue(all(edge["edge_status"] == "REVIEWED_NON_DEPENDENCY"
+                            for edge in composer_mentions))
+        review_digest = mod.hashlib.sha256((ROOT / mod.SOURCE_REFERENCE_REVIEW_REL).read_bytes()).hexdigest()
+        self.assertTrue(all(edge["rationale"] and edge["source_reference_review_sha256"] == review_digest
+                            for edge in composer_mentions))
+        hunter = next(row for row in report["components"]
+                      if row["stable_id"] == "workflow:investment-opportunity-hunter")
+        sizing = [edge for edge in hunter["dependency_edges"] if edge.get("target_name") == "position-sizing-review"]
+        self.assertEqual(1, len(sizing))
+        self.assertEqual(("REVIEWED_NON_DEPENDENCY", "ROUTE_AWAY"),
+                         (sizing[0]["edge_status"], sizing[0]["relation"]))
+
+    def test_new_optional_dependencies_disclose_missing_specialist(self):
+        sys.path.insert(0, str(ROOT / "scripts/package"))
+        self.addCleanup(sys.path.remove, str(ROOT / "scripts/package"))
+        from workflow_entrypoints import build_entrypoint, dependency_availability
+        registry = mod._read_yaml(ROOT / "workflows/runtime-registry.yaml")
+        workflows = {row["name"]: row for row in registry["workflows"]}
+        for workflow, targets in {
+            "presentation-production": {"report-composer", "visual-output-design"},
+            "report-production": {"visual-output-design"},
+        }.items():
+            item = workflows[workflow]
+            required = set(item["dependencies"]["required"])
+            for target in targets:
+                available = required | (targets - {target})
+                missing_required, missing_optional = dependency_availability(item, available)
+                self.assertEqual([], missing_required)
+                self.assertEqual([target], [entry["name"] for entry in missing_optional])
+                self.assertTrue(missing_optional[0]["on_missing"].strip())
+                with tempfile.TemporaryDirectory() as temp:
+                    build_entrypoint(ROOT, item, Path(temp), available)
+                    entrypoint = (Path(temp) / workflow / "SKILL.md").read_text(encoding="utf-8")
+                    self.assertIn("## Dependency availability", entrypoint)
+                    self.assertIn(f"- `{target}`: {missing_optional[0]['on_missing']}", entrypoint)
+                    for available_target in targets - {target}:
+                        self.assertNotIn(f"- `{available_target}`:", entrypoint)
+                    self.assertIn("Do not simulate or claim execution of the missing specialist", entrypoint)
+            with tempfile.TemporaryDirectory() as temp:
+                build_entrypoint(ROOT, item, Path(temp), required | targets)
+                entrypoint = (Path(temp) / workflow / "SKILL.md").read_text(encoding="utf-8")
+                self.assertNotIn("## Dependency availability", entrypoint)
+
+    def test_source_reference_review_is_bound_to_all_current_occurrences(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = "Route to sample-skill for the next stage.\nReuse sample-skill semantics only.\n"
+            source_path = root / "workflows/sample-flow/WORKFLOW.md"
+            source_path.parent.mkdir(parents=True)
+            source_path.write_text(source, encoding="utf-8")
+            skill = root / "skills/sample-skill/SKILL.md"
+            skill.parent.mkdir(parents=True)
+            skill.write_text("---\nname: sample-skill\ndescription: sample\n---\n", encoding="utf-8")
+            (root / "workflows/runtime-registry.yaml").write_text(
+                "workflows:\n  - name: sample-flow\n    workflow: workflows/sample-flow/WORKFLOW.md\n"
+                "    dependencies:\n      required: []\n      optional: []\n", encoding="utf-8")
+            review_path = root / mod.SOURCE_REFERENCE_REVIEW_REL
+            review_path.parent.mkdir(parents=True)
+            review_path.write_text(
+                "schema_version: '1.0'\nreferences:\n"
+                "  - workflow: sample-flow\n    target: sample-skill\n"
+                "    source_path: workflows/sample-flow/WORKFLOW.md\n"
+                f"    source_sha256: {mod.hashlib.sha256(source.encode()).hexdigest()}\n"
+                "    occurrences:\n"
+                "      - line: 1\n        relation: ROUTE_AWAY\n"
+                "        rationale: This step hands work to a downstream workflow.\n"
+                "      - line: 2\n        relation: SEMANTIC_REUSE\n"
+                "        rationale: The source reuses concepts without invoking the capability.\n",
+                encoding="utf-8",
+            )
+
+            graph, _ = mod._declared_graph(root)
+            edges = graph["workflow:sample-flow"]
+            self.assertEqual(2, len(edges))
+            self.assertTrue(all(edge["edge_status"] == "REVIEWED_NON_DEPENDENCY" for edge in edges))
+            review_digest = mod.hashlib.sha256(review_path.read_bytes()).hexdigest()
+            self.assertTrue(all(edge["rationale"] and edge["source_reference_review_sha256"] == review_digest
+                                for edge in edges))
+
+            valid_review = review_path.read_text(encoding="utf-8")
+            # An invalid relation, duplicate review or wrong digest cannot bless any occurrence.
+            for bad_review in (valid_review.replace("ROUTE_AWAY", "INVENTED"),
+                               valid_review.replace("ROUTE_AWAY", "[invalid]"),
+                               valid_review.replace(mod.hashlib.sha256(source.encode()).hexdigest(), "0" * 64),
+                               valid_review + valid_review.split("references:\n", 1)[1]):
+                review_path.write_text(bad_review, encoding="utf-8")
+                graph, _ = mod._declared_graph(root)
+                self.assertTrue(all(edge["edge_status"] == "UNVERIFIED_SOURCE_REFERENCE"
+                                    for edge in graph["workflow:sample-flow"]))
+            review_path.write_text(valid_review, encoding="utf-8")
+            source_path.write_text(source + "Execute sample-skill now.\n", encoding="utf-8")
+            graph, _ = mod._declared_graph(root)
+            edges = graph["workflow:sample-flow"]
+            self.assertEqual(3, len(edges))
+            self.assertTrue(all(edge["edge_status"] == "UNVERIFIED_SOURCE_REFERENCE" for edge in edges))
 
     def test_cov_02_duplicate_identity_blocks(self):
         data = copy.deepcopy(self.skills)

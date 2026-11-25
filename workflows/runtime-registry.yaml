@@ -691,7 +691,11 @@ workflows:
         - presentation-export-verification
         - presentation-slide-authoring
         - presentation-storyline
-      optional: []
+      optional:
+        - name: report-composer
+          on_missing: "Do not claim report restructuring ran; use the supplied report as-is or narrow the deck scope."
+        - name: visual-output-design
+          on_missing: "Disclose that specialist visual rendering did not run; use text/table fallback when acceptable or block a required visual."
     description: >
       Orchestrate an evidence-backed presentation from brief and story through art direction, native slide authoring, review and export verification.
       Use when a user requests a new or substantially rebuilt presentation artifact; do not use for a report, isolated chart or storyline-only request.
@@ -712,7 +716,9 @@ workflows:
         - report-document-architecture
         - report-document-authoring
         - report-document-review
-      optional: []
+      optional:
+        - name: visual-output-design
+          on_missing: "Disclose that specialist visual rendering did not run; use text/table fallback when acceptable or block a required visual."
     description: >
       Orchestrate a long-form report from brief and source analysis through document architecture, native authoring, review and export verification.
       Use when a user requests an external report artifact; do not use for a slide deck or a short response in chat.
