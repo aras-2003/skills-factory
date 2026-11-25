@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import json
 import math
+import re
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -33,7 +34,12 @@ def _schema_errors(value: object, schema: dict[str, Any]) -> list[str]:
     ]
 
 
+_UTC_INSTANT = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$")
+
+
 def _instant(value: str) -> datetime:
+    if not isinstance(value, str) or not _UTC_INSTANT.fullmatch(value):
+        raise ValueError("timestamp must be canonical UTC with at most microsecond precision")
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
@@ -131,7 +137,10 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
     if errors:
         return errors
 
-    cutoff = _instant(context["as_of"])
+    try:
+        cutoff = _instant(context["as_of"])
+    except (TypeError, ValueError):
+        return ["context as_of must be a canonical timestamp with at most microsecond precision"]
     if cutoff.utcoffset() != timezone.utc.utcoffset(cutoff):
         errors.append("context as_of must be expressed in UTC")
     horizon = context["horizon"]
@@ -164,8 +173,12 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
             errors.append(f"results/{index} analysis_id mismatch")
         if result["instrument_id"] != context["instrument"]["canonical_id"]:
             errors.append(f"results/{index} instrument_id mismatch")
-        if _instant(result["as_of"]) != cutoff:
-            errors.append(f"results/{index} as_of mismatch")
+        try:
+            result_as_of = _instant(result["as_of"])
+            if result_as_of != cutoff:
+                errors.append(f"results/{index} as_of mismatch")
+        except (TypeError, ValueError):
+            errors.append(f"results/{index} as_of must be a canonical timestamp with at most microsecond precision")
         local_evidence: set[str] = set()
         local_metric_ids: set[str] = set()
         for ref in result["evidence_refs"]:

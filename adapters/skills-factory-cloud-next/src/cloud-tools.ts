@@ -5,6 +5,7 @@ import { CHART_UI_URI } from "./chart-ui";
 import { calculateOpportunityScores, opportunityScoreInputSchema } from "./opportunity-score";
 import { calculateIssuerExposure, type IssuerExposureInput } from "./issuer-exposure";
 import { comparePeerComparability, peerComparabilityInputSchema, peerComparabilityToolInputSchema } from "./peer-comparability";
+import { calculateInvestmentDecisionFixture, FIXTURE_IDS } from "./investment-decision-pilot";
 
 export const SOURCE = {
   repository: "https://github.com/aras-2003/skills-factory",
@@ -27,6 +28,7 @@ export const schemas = {
   list_skills: z.object({}).strict(),
   load_skill: z.object({ skill_name: z.string().trim().min(1).max(160), expected_source_revision: z.unknown().optional() }).strict(),
   route_investment_request: z.object({ user_request: z.string().trim().min(1).max(8000) }).strict(),
+  evaluate_investment_decision_fixture: z.object({ fixture_id: z.enum(FIXTURE_IDS), expected_source_revision: z.string().regex(/^[a-f0-9]{40}$/) }).strict(),
   calculate_opportunity_scores: opportunityScoreInputSchema,
   compare_peer_comparability: peerComparabilityInputSchema,
   calculate_issuer_exposure: z.object({
@@ -128,6 +130,7 @@ export const TOOLS = [
   { name: "list_skills", description: "MANDATORY discovery step for this app: before answering any substantive user request, call list_skills. Select the closest matching capability and call load_skill for its exact packaged instructions before answering. Never answer a substantive request before these calls. If no capability fits, say so and answer only within the available scope. Lists every skill and workflow in the source-bound Lab artifact irrespective of maturity, including kind, version, maturity and content digests. Read-only; does not execute a skill.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations },
   { name: "load_skill", description: "Load the exact packaged SKILL.md instructions and allow-listed supporting references for one Lab skill or workflow by name, irrespective of maturity. Eval fixtures are excluded. The host model executes the loaded instructions; this MCP does not claim to perform model reasoning itself.", inputSchema: { type: "object", properties: { skill_name: { type: "string", description: "Packaged skill or workflow name; invalid values are rejected by the server." }, expected_source_revision: { description: "Optional lowercase 40-character Git commit ID. Any supplied value is validated by the server; invalid values return INVALID_SOURCE_REVISION." } }, required: ["skill_name"], additionalProperties: false }, annotations },
   { name: "route_investment_request", description: "Call before substantive investment analysis to route a Polish or English request through Investment OS. Preserve the returned routing_receipt, then call load_skill for the exact child_workflow and execute its instructions. Routing alone does not execute a workflow, read portfolio data, trade or provide recommendations. Ambiguous requests return clarification_required: load the front door, then ask the clarification question before analysis; do not silently substitute another specialist.", inputSchema: { type: "object", properties: { user_request: { type: "string", minLength: 1, maxLength: 8000 } }, required: ["user_request"], additionalProperties: false }, annotations },
+  { name: "evaluate_investment_decision_fixture", description: "Test-only: evaluate one of four fixed synthetic Investment OS fixtures and return a labeled subset of decision gates. Requires the exact canonical source revision. Never accepts user evidence or real portfolio data; no source verification, persistence, sizing or trade execution. This is a Cloud Next pilot only, not a general investment tool.", inputSchema: { type: "object", properties: { fixture_id: { type: "string", enum: [...FIXTURE_IDS] }, expected_source_revision: { type: "string", pattern: "^[a-f0-9]{40}$" } }, required: ["fixture_id", "expected_source_revision"], additionalProperties: false }, annotations },
   { name: "calculate_opportunity_scores", description: "Deterministically score supplied candidates from dated, source-identified, already-normalized factor evidence using opportunity-score-v0.1-provisional. Evidence gates fail closed; weights are never renormalized. Returns provenance, confidence, completeness, comparability-aware ranks and score gaps. No source verification, research, probability, trade recommendation, retrieval or persistence. Use only after opportunity-hunter independently derives the supplied evidence.", inputSchema: opportunityScoreToolInputSchema, annotations },
   { name: "compare_peer_comparability", description: "Validate a caller-supplied dated peer set for issuer valuation review. Checks direct-fit evidence, source dates, metric definition/period/basis/horizon/currency compatibility, emits a structured target-and-peer table with provenance and N/M reasons, and reports core-metric peer counts. Requires 3 direct peers for a COMPARABLE status; adjacent businesses stay separately labeled. No retrieval, source verification, recommendations, rankings, or persistence.", inputSchema: peerComparabilityToolInputSchema, annotations },
   { name: "calculate_issuer_exposure", description: "Calculate a deterministic, read-only issuer look-through preview from explicitly supplied positions and dated fund constituent snapshots. Requires account/instrument/ISIN/share-class and source identity; UCITS, US listings and accounts remain distinct by instrument_id/account_id. Partial constituents produce minimum known exposure, source coverage is separate from decomposition completeness, overlapping factors are never summed, and incomplete issuer decomposition blocks concentration metrics. PLN outputs require reconciled position and portfolio values. Optional prior snapshots are compared only when method, portfolio, currency and completeness match; post-trade positions produce a labelled preview only. User-defined factor shocks are separate non-additive scenario views, never probabilities. No database access, retrieval, actual trade, policy change or persistence.", inputSchema: issuerExposureToolInputSchema, annotations },
@@ -312,7 +315,7 @@ export function lineChart(a: LineChartData) {
   const description = `Line chart with ${a.series_names.length} series across ${a.x_labels.length} equally spaced categories; categories are not interpreted as dates. Exact values are available in each point's SVG tooltip.`;
   return chartResult("line", a.title, frame(a.title, a.unit, width, height, description, body), a);
 }
-export type ToolOutput = ReturnType<typeof listSkills> | ReturnType<typeof loadSkill> | ReturnType<typeof routeInvestment> | ReturnType<typeof barChart> | ReturnType<typeof lineChart> | ReturnType<typeof calculateOpportunityScores> | ReturnType<typeof calculateIssuerExposure> | ReturnType<typeof comparePeerComparability> | Awaited<ReturnType<typeof runtimeInfo>>;
+export type ToolOutput = ReturnType<typeof listSkills> | ReturnType<typeof loadSkill> | ReturnType<typeof routeInvestment> | ReturnType<typeof barChart> | ReturnType<typeof lineChart> | ReturnType<typeof calculateOpportunityScores> | ReturnType<typeof calculateIssuerExposure> | ReturnType<typeof comparePeerComparability> | Awaited<ReturnType<typeof calculateInvestmentDecisionFixture>> | Awaited<ReturnType<typeof runtimeInfo>>;
 export function callTool(name: "runtime_info", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof runtimeInfo>;
 export function callTool(name: "list_skills", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof listSkills>;
 export function callTool(name: "load_skill", args: unknown, metadata?: SiteVersionMetadata): ReturnType<typeof loadSkill>;
@@ -336,6 +339,12 @@ export function callTool(name: string, args: unknown, metadata?: SiteVersionMeta
       return loadSkill(parsed.skill_name);
     }
     case "route_investment_request": return routeInvestment(schemas.route_investment_request.parse(args).user_request);
+    case "evaluate_investment_decision_fixture": {
+      const parsed = schemas.evaluate_investment_decision_fixture.parse(args);
+      verifyExpectedSourceRevision(parsed.expected_source_revision);
+      if (CANONICAL_SOURCE_REVISION !== LAB_RELEASE.source_revision) throw new Error("SOURCE_REVISION_UNVERIFIABLE: Canonical and packaged revisions differ.");
+      return calculateInvestmentDecisionFixture(parsed.fixture_id, parsed.expected_source_revision);
+    }
     case "calculate_opportunity_scores": return calculateOpportunityScores(schemas.calculate_opportunity_scores.parse(args));
     case "compare_peer_comparability": return comparePeerComparability(schemas.compare_peer_comparability.parse(args));
     case "calculate_issuer_exposure": return calculateIssuerExposure(schemas.calculate_issuer_exposure.parse(args) as IssuerExposureInput);

@@ -1,0 +1,670 @@
+{
+  "hard-cap-reduction-review": {
+    "advisory_recommendation": null,
+    "analysis_id": "analysis-synthetic-001",
+    "as_of": "2026-11-25T12:00:00Z",
+    "business_quality_state": "PASS",
+    "conditions_to_downgrade": [],
+    "conditions_to_upgrade": [],
+    "decision_rule_version": "1.0",
+    "execution_authorized": false,
+    "gate_results": [
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G0",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "IDENTITY_CUTOFF_AND_LINEAGE_VALID"
+        ],
+        "source_result_refs": [],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-quality"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G1",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "CRITICAL_EVIDENCE_VERIFIED"
+        ],
+        "source_result_refs": [
+          "result-quality"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-eligibility"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G2",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_ELIGIBILITY_CONFIRMED"
+        ],
+        "source_result_refs": [
+          "result-eligibility"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-thesis"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G3",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "THESIS_SURVIVES"
+        ],
+        "source_result_refs": [
+          "result-thesis"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-valuation"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G4",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "SECURITY_ATTRACTIVENESS_ATTRACTIVE"
+        ],
+        "source_result_refs": [
+          "result-valuation"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-portfolio"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G5",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_BREACH_REDUCTION_REVIEW"
+        ],
+        "source_result_refs": [
+          "result-portfolio"
+        ],
+        "status": "BLOCK"
+      },
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G6",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "NO_TIMING_SIGNAL_REQUESTED"
+        ],
+        "source_result_refs": [],
+        "status": "N/A"
+      }
+    ],
+    "horizon": {
+      "max_months": 60,
+      "min_months": 36,
+      "objective": "synthetic research"
+    },
+    "instrument_id": "NASDAQ:TEST",
+    "numeric_sizing_blocked": true,
+    "owner_approval_required": true,
+    "owner_decision": null,
+    "policy_version_ref": "policy:synthetic:v1",
+    "portfolio_action": "REDUCTION_REVIEW",
+    "portfolio_fit_state": "HARD_CAP_BREACH",
+    "position_state": "HELD",
+    "reason_codes": [
+      "CRITICAL_EVIDENCE_VERIFIED",
+      "IDENTITY_CUTOFF_AND_LINEAGE_VALID",
+      "NO_TIMING_SIGNAL_REQUESTED",
+      "POLICY_BREACH_REDUCTION_REVIEW",
+      "POLICY_ELIGIBILITY_CONFIRMED",
+      "SECURITY_ATTRACTIVENESS_ATTRACTIVE",
+      "THESIS_SURVIVES"
+    ],
+    "research_state": "WATCH",
+    "schema_version": "1.0",
+    "security_attractiveness_state": "ATTRACTIVE",
+    "source_result_refs": [
+      "result-eligibility",
+      "result-portfolio",
+      "result-quality",
+      "result-thesis",
+      "result-valuation"
+    ],
+    "thesis_state": "SURVIVES",
+    "timing_state": "N/A",
+    "uncertainties": [
+      "CRITICAL_EVIDENCE_VERIFIED",
+      "IDENTITY_CUTOFF_AND_LINEAGE_VALID",
+      "NO_TIMING_SIGNAL_REQUESTED",
+      "POLICY_BREACH_REDUCTION_REVIEW",
+      "POLICY_ELIGIBILITY_CONFIRMED",
+      "SECURITY_ATTRACTIVENESS_ATTRACTIVE",
+      "THESIS_SURVIVES"
+    ],
+    "valuation_state": "READY"
+  },
+  "held-continuation-hold": {
+    "advisory_recommendation": "HOLD",
+    "analysis_id": "analysis-synthetic-001",
+    "as_of": "2026-11-25T12:00:00Z",
+    "business_quality_state": "PASS",
+    "conditions_to_downgrade": [
+      "policy or thesis owner review changes the referenced state"
+    ],
+    "conditions_to_upgrade": [],
+    "decision_rule_version": "1.0",
+    "execution_authorized": false,
+    "gate_results": [
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G0",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "IDENTITY_CUTOFF_AND_LINEAGE_VALID"
+        ],
+        "source_result_refs": [],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-quality"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G1",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "CRITICAL_EVIDENCE_VERIFIED"
+        ],
+        "source_result_refs": [
+          "result-quality"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-eligibility"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G2",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_ELIGIBILITY_CONFIRMED"
+        ],
+        "source_result_refs": [
+          "result-eligibility"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-thesis"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G3",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "THESIS_SURVIVES"
+        ],
+        "source_result_refs": [
+          "result-thesis"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-valuation"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G4",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "SECURITY_ATTRACTIVENESS_ATTRACTIVE"
+        ],
+        "source_result_refs": [
+          "result-valuation"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-portfolio"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G5",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_IN_RANGE"
+        ],
+        "source_result_refs": [
+          "result-portfolio"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G6",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "NO_TIMING_SIGNAL_REQUESTED"
+        ],
+        "source_result_refs": [],
+        "status": "N/A"
+      }
+    ],
+    "horizon": {
+      "max_months": 60,
+      "min_months": 36,
+      "objective": "synthetic research"
+    },
+    "instrument_id": "NASDAQ:TEST",
+    "numeric_sizing_blocked": true,
+    "owner_approval_required": true,
+    "owner_decision": null,
+    "policy_version_ref": "policy:synthetic:v1",
+    "portfolio_action": "NONE",
+    "portfolio_fit_state": "IN_POLICY",
+    "position_state": "HELD",
+    "reason_codes": [
+      "CRITICAL_EVIDENCE_VERIFIED",
+      "IDENTITY_CUTOFF_AND_LINEAGE_VALID",
+      "NO_TIMING_SIGNAL_REQUESTED",
+      "POLICY_ELIGIBILITY_CONFIRMED",
+      "POLICY_IN_RANGE",
+      "SECURITY_ATTRACTIVENESS_ATTRACTIVE",
+      "THESIS_SURVIVES"
+    ],
+    "research_state": "WATCH",
+    "schema_version": "1.0",
+    "security_attractiveness_state": "ATTRACTIVE",
+    "source_result_refs": [
+      "result-eligibility",
+      "result-portfolio",
+      "result-quality",
+      "result-thesis",
+      "result-valuation"
+    ],
+    "thesis_state": "SURVIVES",
+    "timing_state": "N/A",
+    "uncertainties": [],
+    "valuation_state": "READY"
+  },
+  "new-unfavorable-wait": {
+    "advisory_recommendation": "WAIT",
+    "analysis_id": "analysis-synthetic-001",
+    "as_of": "2026-11-25T12:00:00Z",
+    "business_quality_state": "PASS",
+    "conditions_to_downgrade": [],
+    "conditions_to_upgrade": [
+      "valuation specialist supplies an approved favorable valuation state at a later eligible as_of"
+    ],
+    "decision_rule_version": "1.0",
+    "execution_authorized": false,
+    "gate_results": [
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G0",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "IDENTITY_CUTOFF_AND_LINEAGE_VALID"
+        ],
+        "source_result_refs": [],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-quality"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G1",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "CRITICAL_EVIDENCE_VERIFIED"
+        ],
+        "source_result_refs": [
+          "result-quality"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-eligibility"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G2",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_ELIGIBILITY_CONFIRMED"
+        ],
+        "source_result_refs": [
+          "result-eligibility"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-thesis"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G3",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "THESIS_SURVIVES"
+        ],
+        "source_result_refs": [
+          "result-thesis"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-valuation"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G4",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "SECURITY_ATTRACTIVENESS_UNFAVORABLE"
+        ],
+        "source_result_refs": [
+          "result-valuation"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-portfolio"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G5",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_IN_RANGE"
+        ],
+        "source_result_refs": [
+          "result-portfolio"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G6",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "NO_TIMING_SIGNAL_REQUESTED"
+        ],
+        "source_result_refs": [],
+        "status": "N/A"
+      }
+    ],
+    "horizon": {
+      "max_months": 60,
+      "min_months": 36,
+      "objective": "synthetic research"
+    },
+    "instrument_id": "NASDAQ:TEST",
+    "numeric_sizing_blocked": true,
+    "owner_approval_required": true,
+    "owner_decision": null,
+    "policy_version_ref": "policy:synthetic:v1",
+    "portfolio_action": "NONE",
+    "portfolio_fit_state": "IN_POLICY",
+    "position_state": "NOT_HELD",
+    "reason_codes": [
+      "CRITICAL_EVIDENCE_VERIFIED",
+      "IDENTITY_CUTOFF_AND_LINEAGE_VALID",
+      "NO_TIMING_SIGNAL_REQUESTED",
+      "POLICY_ELIGIBILITY_CONFIRMED",
+      "POLICY_IN_RANGE",
+      "SECURITY_ATTRACTIVENESS_UNFAVORABLE",
+      "THESIS_SURVIVES"
+    ],
+    "research_state": "WATCH",
+    "schema_version": "1.0",
+    "security_attractiveness_state": "UNFAVORABLE",
+    "source_result_refs": [
+      "result-eligibility",
+      "result-portfolio",
+      "result-quality",
+      "result-thesis",
+      "result-valuation"
+    ],
+    "thesis_state": "SURVIVES",
+    "timing_state": "N/A",
+    "uncertainties": [],
+    "valuation_state": "READY"
+  },
+  "unresolved-new-snapshot-abstain": {
+    "advisory_recommendation": null,
+    "analysis_id": "analysis-synthetic-001",
+    "as_of": "2026-11-25T12:00:00Z",
+    "business_quality_state": "PASS",
+    "conditions_to_downgrade": [],
+    "conditions_to_upgrade": [],
+    "decision_rule_version": "1.0",
+    "execution_authorized": false,
+    "gate_results": [
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G0",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "IDENTITY_CUTOFF_AND_LINEAGE_VALID"
+        ],
+        "source_result_refs": [],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-quality"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G1",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "CRITICAL_EVIDENCE_VERIFIED"
+        ],
+        "source_result_refs": [
+          "result-quality"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-eligibility"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G2",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POLICY_ELIGIBILITY_CONFIRMED"
+        ],
+        "source_result_refs": [
+          "result-eligibility"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-thesis"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G3",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "THESIS_SURVIVES"
+        ],
+        "source_result_refs": [
+          "result-thesis"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-valuation"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G4",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "SECURITY_ATTRACTIVENESS_ATTRACTIVE"
+        ],
+        "source_result_refs": [
+          "result-valuation"
+        ],
+        "status": "PASS"
+      },
+      {
+        "claim_ids": [
+          "claim-portfolio"
+        ],
+        "conflict_ids": [],
+        "evidence_ids": [
+          "fixture-filing-001"
+        ],
+        "gate_id": "G5",
+        "policy_rule_ref": "policy-rule:synthetic:1",
+        "reason_codes": [
+          "POSITION_SNAPSHOT_INCOMPLETE"
+        ],
+        "source_result_refs": [
+          "result-portfolio"
+        ],
+        "status": "UNRESOLVED"
+      },
+      {
+        "claim_ids": [],
+        "conflict_ids": [],
+        "evidence_ids": [],
+        "gate_id": "G6",
+        "policy_rule_ref": null,
+        "reason_codes": [
+          "NO_TIMING_SIGNAL_REQUESTED"
+        ],
+        "source_result_refs": [],
+        "status": "N/A"
+      }
+    ],
+    "horizon": {
+      "max_months": 60,
+      "min_months": 36,
+      "objective": "synthetic research"
+    },
+    "instrument_id": "NASDAQ:TEST",
+    "numeric_sizing_blocked": true,
+    "owner_approval_required": true,
+    "owner_decision": null,
+    "policy_version_ref": "policy:synthetic:v1",
+    "portfolio_action": "UNRESOLVED",
+    "portfolio_fit_state": "UNRESOLVED",
+    "position_state": "NOT_HELD",
+    "reason_codes": [
+      "CRITICAL_EVIDENCE_VERIFIED",
+      "IDENTITY_CUTOFF_AND_LINEAGE_VALID",
+      "NO_TIMING_SIGNAL_REQUESTED",
+      "POLICY_ELIGIBILITY_CONFIRMED",
+      "POSITION_SNAPSHOT_INCOMPLETE",
+      "SECURITY_ATTRACTIVENESS_ATTRACTIVE",
+      "THESIS_SURVIVES"
+    ],
+    "research_state": "RESEARCH",
+    "schema_version": "1.0",
+    "security_attractiveness_state": "ATTRACTIVE",
+    "source_result_refs": [
+      "result-eligibility",
+      "result-portfolio",
+      "result-quality",
+      "result-thesis",
+      "result-valuation"
+    ],
+    "thesis_state": "SURVIVES",
+    "timing_state": "N/A",
+    "uncertainties": [
+      "CRITICAL_EVIDENCE_VERIFIED",
+      "IDENTITY_CUTOFF_AND_LINEAGE_VALID",
+      "NO_TIMING_SIGNAL_REQUESTED",
+      "POLICY_ELIGIBILITY_CONFIRMED",
+      "POSITION_SNAPSHOT_INCOMPLETE",
+      "SECURITY_ATTRACTIVENESS_ATTRACTIVE",
+      "THESIS_SURVIVES"
+    ],
+    "valuation_state": "READY"
+  }
+}

@@ -11,5 +11,8 @@
     "calculate_issuer_exposure": ["as_of", "base_currency", "fund_snapshots", "portfolio_id", "positions"],
     "render_bar_chart": ["expected_points", "horizontal", "labels", "title", "unit", "values"],
     "render_line_chart": ["expected_points_per_series", "expected_series", "expected_x_labels", "series_names", "series_values", "title", "unit", "x_labels"]
+  },
+  "cloud_next_extensions": {
+    "evaluate_investment_decision_fixture": ["expected_source_revision", "fixture_id"]
   }
 }

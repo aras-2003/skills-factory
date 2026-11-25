@@ -1,0 +1,2079 @@
+{
+  "fixtures": [
+    {
+      "fixture_id": "new-unfavorable-wait",
+      "input": {
+        "context": {
+          "analysis_id": "analysis-synthetic-001",
+          "as_of": "2026-11-25T12:00:00Z",
+          "context_mode": "USER_SUPPLIED_CONTEXT",
+          "contract_version": "1.0",
+          "evidence_snapshot_refs": [
+            "fixture-filing-001"
+          ],
+          "execution_mode": "TEST",
+          "horizon": {
+            "max_months": 60,
+            "min_months": 36,
+            "objective": "synthetic research"
+          },
+          "instrument": {
+            "canonical_id": "NASDAQ:TEST",
+            "exchange": "NASDAQ",
+            "industry": "technology",
+            "ticker": "TEST",
+            "type": "EQUITY"
+          },
+          "policy_version_ref": "policy:synthetic:v1",
+          "portfolio_snapshot_ref": "portfolio:synthetic:2026-11-25",
+          "requested_skills": [
+            "security-underwriting",
+            "investment-policy-design",
+            "thesis-challenge",
+            "valuation-scenario-review",
+            "portfolio-state-review",
+            "technical-structure"
+          ],
+          "write_scope": {
+            "mode": "NONE"
+          }
+        },
+        "position_state": "NOT_HELD",
+        "results": [
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-quality",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-quality"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "quality",
+                "state": "PASS"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "security-underwriting",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.6.0"
+            },
+            "result_id": "result-quality",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-eligibility",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-eligibility"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "signal_type": "eligibility",
+                "state": "ELIGIBLE"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "investment-policy-design",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.0"
+            },
+            "result_id": "result-eligibility",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-thesis",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-thesis"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "thesis",
+                "state": "SURVIVES"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "thesis-challenge",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.2"
+            },
+            "result_id": "result-thesis",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-valuation",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "asset_path": "EQUITY",
+                "claim_ids": [
+                  "claim-valuation"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "security_attractiveness": "UNFAVORABLE",
+                "signal_type": "valuation",
+                "state": "READY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "valuation-scenario-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.4.0"
+            },
+            "result_id": "result-valuation",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-portfolio",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-portfolio"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "position_snapshot_complete": true,
+                "position_state": "NOT_HELD",
+                "signal_type": "portfolio",
+                "state": "IN_POLICY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "portfolio-state-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.7.2"
+            },
+            "result_id": "result-portfolio",
+            "source_result_refs": []
+          }
+        ],
+        "schema_version": "1.0",
+        "signals": {
+          "eligibility": {
+            "claim_ids": [
+              "claim-eligibility"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "producer_skill_id": "investment-policy-design",
+            "result_id": "result-eligibility",
+            "state": "ELIGIBLE"
+          },
+          "portfolio": {
+            "claim_ids": [
+              "claim-portfolio"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "position_snapshot_complete": true,
+            "position_state": "NOT_HELD",
+            "producer_skill_id": "portfolio-state-review",
+            "result_id": "result-portfolio",
+            "state": "IN_POLICY"
+          },
+          "quality": {
+            "claim_ids": [
+              "claim-quality"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "security-underwriting",
+            "result_id": "result-quality",
+            "state": "PASS"
+          },
+          "thesis": {
+            "claim_ids": [
+              "claim-thesis"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "thesis-challenge",
+            "result_id": "result-thesis",
+            "state": "SURVIVES"
+          },
+          "valuation": {
+            "asset_path": "EQUITY",
+            "claim_ids": [
+              "claim-valuation"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "valuation-scenario-review",
+            "result_id": "result-valuation",
+            "security_attractiveness": "UNFAVORABLE",
+            "state": "READY"
+          }
+        }
+      }
+    },
+    {
+      "fixture_id": "held-continuation-hold",
+      "input": {
+        "context": {
+          "analysis_id": "analysis-synthetic-001",
+          "as_of": "2026-11-25T12:00:00Z",
+          "context_mode": "USER_SUPPLIED_CONTEXT",
+          "contract_version": "1.0",
+          "evidence_snapshot_refs": [
+            "fixture-filing-001"
+          ],
+          "execution_mode": "TEST",
+          "horizon": {
+            "max_months": 60,
+            "min_months": 36,
+            "objective": "synthetic research"
+          },
+          "instrument": {
+            "canonical_id": "NASDAQ:TEST",
+            "exchange": "NASDAQ",
+            "industry": "technology",
+            "ticker": "TEST",
+            "type": "EQUITY"
+          },
+          "policy_version_ref": "policy:synthetic:v1",
+          "portfolio_snapshot_ref": "portfolio:synthetic:2026-11-25",
+          "requested_skills": [
+            "security-underwriting",
+            "investment-policy-design",
+            "thesis-challenge",
+            "valuation-scenario-review",
+            "portfolio-state-review",
+            "technical-structure"
+          ],
+          "write_scope": {
+            "mode": "NONE"
+          }
+        },
+        "position_state": "HELD",
+        "results": [
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-quality",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-quality"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "quality",
+                "state": "PASS"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "security-underwriting",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.6.0"
+            },
+            "result_id": "result-quality",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-eligibility",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-eligibility"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "signal_type": "eligibility",
+                "state": "ELIGIBLE"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "investment-policy-design",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.0"
+            },
+            "result_id": "result-eligibility",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-thesis",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-thesis"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "thesis",
+                "state": "SURVIVES"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "thesis-challenge",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.2"
+            },
+            "result_id": "result-thesis",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-valuation",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "asset_path": "EQUITY",
+                "claim_ids": [
+                  "claim-valuation"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "security_attractiveness": "ATTRACTIVE",
+                "signal_type": "valuation",
+                "state": "READY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "valuation-scenario-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.4.0"
+            },
+            "result_id": "result-valuation",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-portfolio",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-portfolio"
+                ],
+                "continuation_rule_ref": "policy-rule:continue:synthetic",
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "position_snapshot_complete": true,
+                "position_state": "HELD",
+                "signal_type": "portfolio",
+                "state": "IN_POLICY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "portfolio-state-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.7.2"
+            },
+            "result_id": "result-portfolio",
+            "source_result_refs": []
+          }
+        ],
+        "schema_version": "1.0",
+        "signals": {
+          "eligibility": {
+            "claim_ids": [
+              "claim-eligibility"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "producer_skill_id": "investment-policy-design",
+            "result_id": "result-eligibility",
+            "state": "ELIGIBLE"
+          },
+          "portfolio": {
+            "claim_ids": [
+              "claim-portfolio"
+            ],
+            "continuation_rule_ref": "policy-rule:continue:synthetic",
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "position_snapshot_complete": true,
+            "position_state": "HELD",
+            "producer_skill_id": "portfolio-state-review",
+            "result_id": "result-portfolio",
+            "state": "IN_POLICY"
+          },
+          "quality": {
+            "claim_ids": [
+              "claim-quality"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "security-underwriting",
+            "result_id": "result-quality",
+            "state": "PASS"
+          },
+          "thesis": {
+            "claim_ids": [
+              "claim-thesis"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "thesis-challenge",
+            "result_id": "result-thesis",
+            "state": "SURVIVES"
+          },
+          "valuation": {
+            "asset_path": "EQUITY",
+            "claim_ids": [
+              "claim-valuation"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "valuation-scenario-review",
+            "result_id": "result-valuation",
+            "security_attractiveness": "ATTRACTIVE",
+            "state": "READY"
+          }
+        }
+      }
+    },
+    {
+      "fixture_id": "unresolved-new-snapshot-abstain",
+      "input": {
+        "context": {
+          "analysis_id": "analysis-synthetic-001",
+          "as_of": "2026-11-25T12:00:00Z",
+          "context_mode": "USER_SUPPLIED_CONTEXT",
+          "contract_version": "1.0",
+          "evidence_snapshot_refs": [
+            "fixture-filing-001"
+          ],
+          "execution_mode": "TEST",
+          "horizon": {
+            "max_months": 60,
+            "min_months": 36,
+            "objective": "synthetic research"
+          },
+          "instrument": {
+            "canonical_id": "NASDAQ:TEST",
+            "exchange": "NASDAQ",
+            "industry": "technology",
+            "ticker": "TEST",
+            "type": "EQUITY"
+          },
+          "policy_version_ref": "policy:synthetic:v1",
+          "portfolio_snapshot_ref": "portfolio:synthetic:2026-11-25",
+          "requested_skills": [
+            "security-underwriting",
+            "investment-policy-design",
+            "thesis-challenge",
+            "valuation-scenario-review",
+            "portfolio-state-review",
+            "technical-structure"
+          ],
+          "write_scope": {
+            "mode": "NONE"
+          }
+        },
+        "position_state": "NOT_HELD",
+        "results": [
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-quality",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-quality"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "quality",
+                "state": "PASS"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "security-underwriting",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.6.0"
+            },
+            "result_id": "result-quality",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-eligibility",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-eligibility"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "signal_type": "eligibility",
+                "state": "ELIGIBLE"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "investment-policy-design",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.0"
+            },
+            "result_id": "result-eligibility",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-thesis",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-thesis"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "thesis",
+                "state": "SURVIVES"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "thesis-challenge",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.2"
+            },
+            "result_id": "result-thesis",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-valuation",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "asset_path": "EQUITY",
+                "claim_ids": [
+                  "claim-valuation"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "security_attractiveness": "ATTRACTIVE",
+                "signal_type": "valuation",
+                "state": "READY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "valuation-scenario-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.4.0"
+            },
+            "result_id": "result-valuation",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-portfolio",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-portfolio"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "position_snapshot_complete": false,
+                "position_state": "NOT_HELD",
+                "signal_type": "portfolio",
+                "state": "IN_POLICY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "portfolio-state-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.7.2"
+            },
+            "result_id": "result-portfolio",
+            "source_result_refs": []
+          }
+        ],
+        "schema_version": "1.0",
+        "signals": {
+          "eligibility": {
+            "claim_ids": [
+              "claim-eligibility"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "producer_skill_id": "investment-policy-design",
+            "result_id": "result-eligibility",
+            "state": "ELIGIBLE"
+          },
+          "portfolio": {
+            "claim_ids": [
+              "claim-portfolio"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "position_snapshot_complete": false,
+            "position_state": "NOT_HELD",
+            "producer_skill_id": "portfolio-state-review",
+            "result_id": "result-portfolio",
+            "state": "IN_POLICY"
+          },
+          "quality": {
+            "claim_ids": [
+              "claim-quality"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "security-underwriting",
+            "result_id": "result-quality",
+            "state": "PASS"
+          },
+          "thesis": {
+            "claim_ids": [
+              "claim-thesis"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "thesis-challenge",
+            "result_id": "result-thesis",
+            "state": "SURVIVES"
+          },
+          "valuation": {
+            "asset_path": "EQUITY",
+            "claim_ids": [
+              "claim-valuation"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "valuation-scenario-review",
+            "result_id": "result-valuation",
+            "security_attractiveness": "ATTRACTIVE",
+            "state": "READY"
+          }
+        }
+      }
+    },
+    {
+      "fixture_id": "hard-cap-reduction-review",
+      "input": {
+        "context": {
+          "analysis_id": "analysis-synthetic-001",
+          "as_of": "2026-11-25T12:00:00Z",
+          "context_mode": "USER_SUPPLIED_CONTEXT",
+          "contract_version": "1.0",
+          "evidence_snapshot_refs": [
+            "fixture-filing-001"
+          ],
+          "execution_mode": "TEST",
+          "horizon": {
+            "max_months": 60,
+            "min_months": 36,
+            "objective": "synthetic research"
+          },
+          "instrument": {
+            "canonical_id": "NASDAQ:TEST",
+            "exchange": "NASDAQ",
+            "industry": "technology",
+            "ticker": "TEST",
+            "type": "EQUITY"
+          },
+          "policy_version_ref": "policy:synthetic:v1",
+          "portfolio_snapshot_ref": "portfolio:synthetic:2026-11-25",
+          "requested_skills": [
+            "security-underwriting",
+            "investment-policy-design",
+            "thesis-challenge",
+            "valuation-scenario-review",
+            "portfolio-state-review",
+            "technical-structure"
+          ],
+          "write_scope": {
+            "mode": "NONE"
+          }
+        },
+        "position_state": "HELD",
+        "results": [
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-quality",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-quality"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "quality",
+                "state": "PASS"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "security-underwriting",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.6.0"
+            },
+            "result_id": "result-quality",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-eligibility",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-eligibility"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "signal_type": "eligibility",
+                "state": "ELIGIBLE"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "investment-policy-design",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.0"
+            },
+            "result_id": "result-eligibility",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-thesis",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-thesis"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "signal_type": "thesis",
+                "state": "SURVIVES"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "thesis-challenge",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.1.2"
+            },
+            "result_id": "result-thesis",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-valuation",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "asset_path": "EQUITY",
+                "claim_ids": [
+                  "claim-valuation"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "security_attractiveness": "ATTRACTIVE",
+                "signal_type": "valuation",
+                "state": "READY"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "valuation-scenario-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.4.0"
+            },
+            "result_id": "result-valuation",
+            "source_result_refs": []
+          },
+          {
+            "analysis_id": "analysis-synthetic-001",
+            "applicability": "APPLICABLE",
+            "as_of": "2026-11-25T12:00:00Z",
+            "blockers": [
+              "synthetic evidence intentionally incomplete"
+            ],
+            "contract_version": "1.0",
+            "evidence_refs": [
+              {
+                "allowed_as_of": "2026-11-25T12:00:00Z",
+                "archive_snapshot_ref": "archive:synthetic-001",
+                "fiscal_basis": "FY",
+                "license": "synthetic",
+                "locator": "fixture:1",
+                "published_at": "2026-10-01T00:00:00Z",
+                "retrieved_at": "2026-11-25T11:00:00Z",
+                "source_id": "fixture-filing-001",
+                "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "source_url": "https://example.invalid/synthetic",
+                "vendor": "synthetic-fixture"
+              }
+            ],
+            "execution_status": "SUCCESS",
+            "findings": [
+              {
+                "assessment": "UNRESOLVED",
+                "claim_id": "claim-portfolio",
+                "claim_kind": "INTERPRETATION",
+                "confidence": "UNDETERMINED",
+                "confidence_rationale": "synthetic fixture only",
+                "counterevidence_ids": [],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "evidence_status": "VERIFIED",
+                "horizon": {
+                  "max_months": 60,
+                  "min_months": 36,
+                  "objective": "synthetic research"
+                },
+                "invalidation": {
+                  "metric": null,
+                  "operator": null,
+                  "predeclared_at": null,
+                  "status": "NOT_SET",
+                  "threshold": null,
+                  "window": null
+                },
+                "limitations": [
+                  "not real issuer evidence"
+                ],
+                "scope": "issuer",
+                "text": "Synthetic evidence is incomplete"
+              }
+            ],
+            "handoff": [],
+            "instrument_id": "NASDAQ:TEST",
+            "metrics": [],
+            "payload": {
+              "decision_signal_v1": {
+                "claim_ids": [
+                  "claim-portfolio"
+                ],
+                "evidence_ids": [
+                  "fixture-filing-001"
+                ],
+                "policy_rule_ref": "policy-rule:synthetic:1",
+                "position_snapshot_complete": true,
+                "position_state": "HELD",
+                "signal_type": "portfolio",
+                "state": "HARD_CAP_BREACH"
+              }
+            },
+            "payload_schema_version": "1.0",
+            "payload_type": "INVESTMENT_DECISION_SIGNAL",
+            "producer": {
+              "skill_id": "portfolio-state-review",
+              "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "version": "0.7.2"
+            },
+            "result_id": "result-portfolio",
+            "source_result_refs": []
+          }
+        ],
+        "schema_version": "1.0",
+        "signals": {
+          "eligibility": {
+            "claim_ids": [
+              "claim-eligibility"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "producer_skill_id": "investment-policy-design",
+            "result_id": "result-eligibility",
+            "state": "ELIGIBLE"
+          },
+          "portfolio": {
+            "claim_ids": [
+              "claim-portfolio"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "policy_rule_ref": "policy-rule:synthetic:1",
+            "position_snapshot_complete": true,
+            "position_state": "HELD",
+            "producer_skill_id": "portfolio-state-review",
+            "result_id": "result-portfolio",
+            "state": "HARD_CAP_BREACH"
+          },
+          "quality": {
+            "claim_ids": [
+              "claim-quality"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "security-underwriting",
+            "result_id": "result-quality",
+            "state": "PASS"
+          },
+          "thesis": {
+            "claim_ids": [
+              "claim-thesis"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "thesis-challenge",
+            "result_id": "result-thesis",
+            "state": "SURVIVES"
+          },
+          "valuation": {
+            "asset_path": "EQUITY",
+            "claim_ids": [
+              "claim-valuation"
+            ],
+            "evidence_ids": [
+              "fixture-filing-001"
+            ],
+            "producer_skill_id": "valuation-scenario-review",
+            "result_id": "result-valuation",
+            "security_attractiveness": "ATTRACTIVE",
+            "state": "READY"
+          }
+        }
+      }
+    }
+  ],
+  "schema_version": "1.0"
+}
