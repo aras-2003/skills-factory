@@ -50,6 +50,11 @@ def metric_comparability(left: dict[str, Any], right: dict[str, Any], *, as_of: 
     if not left.get("published_at") or not right.get("published_at"):
         differences.append("missing_publication_time")
     for label, metric in (("left", left), ("right", right)):
+        source_ids = metric.get("source_ids")
+        if not isinstance(source_ids, list) or not source_ids:
+            differences.append(f"{label}_missing_source_ids")
+        if not metric.get("observed_at"):
+            differences.append(f"{label}_missing_observation_time")
         if metric.get("evidence_status") != "VERIFIED":
             differences.append(f"{label}_evidence_{metric.get('evidence_status', 'UNKNOWN').lower()}")
     cutoff = _instant(as_of)
@@ -67,6 +72,11 @@ def metric_comparability(left: dict[str, Any], right: dict[str, Any], *, as_of: 
                 late.append(f"{label}_observation")
             if metric.get("period_end") and date.fromisoformat(metric["period_end"]) > cutoff.date():
                 late.append(f"{label}_period")
+            if metric.get("period_start") and metric.get("period_end"):
+                if date.fromisoformat(metric["period_start"]) > date.fromisoformat(metric["period_end"]):
+                    differences.append(f"{label}_invalid_period")
+            elif not metric.get("period_start") or not metric.get("period_end"):
+                differences.append(f"{label}_missing_period")
         except (TypeError, ValueError):
             differences.append(f"{label}_invalid_time")
     if late:
@@ -110,7 +120,6 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
     result_ids: set[str] = set()
     claim_ids: set[str] = set()
     evidence: dict[str, dict[str, Any]] = {}
-    metric_ids: set[str] = set()
     if set(context["requested_skills"]) & {"position-sizing-review", "portfolio-state-review"}:
         if context["context_mode"] == "CANONICAL" and not context.get("policy_version_ref"):
             errors.append("portfolio analysis requires an explicit policy_version_ref")
@@ -132,6 +141,7 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
         if _instant(result["as_of"]) != cutoff:
             errors.append(f"results/{index} as_of mismatch")
         local_evidence: set[str] = set()
+        local_metric_ids: set[str] = set()
         for ref in result["evidence_refs"]:
             source_id = ref["source_id"]
             if source_id in local_evidence:
@@ -149,18 +159,24 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
             if claim_id in claim_ids:
                 errors.append(f"duplicate claim_id: {claim_id}")
             claim_ids.add(claim_id)
+            if finding["horizon"] != context["horizon"]:
+                errors.append(f"finding {claim_id} horizon differs from AnalysisContext")
             if finding["evidence_status"] in {"VERIFIED", "PROVISIONAL"} and not finding["evidence_ids"]:
                 errors.append(f"finding {claim_id} has evidence status but no evidence ids")
             for source_id in finding["evidence_ids"] + finding["counterevidence_ids"]:
                 if source_id not in local_evidence:
                     errors.append(f"unresolved finding evidence id: {source_id}")
+                elif finding["evidence_status"] == "VERIFIED" and not _immutable_source(evidence[source_id]):
+                    errors.append(f"verified finding lacks immutable source locator: {claim_id}")
         for metric in result["metrics"]:
-            if metric["metric_id"] in metric_ids:
-                errors.append(f"duplicate metric_id: {metric['metric_id']}")
-            metric_ids.add(metric["metric_id"])
+            if metric["metric_id"] in local_metric_ids:
+                errors.append(f"duplicate metric_id within result: {metric['metric_id']}")
+            local_metric_ids.add(metric["metric_id"])
             for source_id in metric["source_ids"]:
                 if source_id not in local_evidence:
                     errors.append(f"unresolved metric source id: {source_id}")
+                elif metric["evidence_status"] == "VERIFIED" and not _immutable_source(evidence[source_id]):
+                    errors.append(f"verified metric lacks immutable source locator: {metric['metric_id']}")
             if metric["published_at"] and _instant(metric["published_at"]) > cutoff:
                 errors.append(f"metric published after as_of: {metric['metric_id']}")
             if metric["observed_at"] and _instant(metric["observed_at"]) > cutoff:
@@ -206,6 +222,10 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
         if source_id not in evidence:
             errors.append(f"unresolved context evidence snapshot: {source_id}")
     return errors
+
+
+def _immutable_source(ref: dict[str, Any]) -> bool:
+    return bool(ref.get("source_sha256") and ref.get("locator") and ref.get("archive_snapshot_ref"))
 
 
 def wrap_legacy_result(

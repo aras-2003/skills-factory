@@ -34,9 +34,9 @@ def result(*, instrument_id="NASDAQ:TEST", as_of=AS_OF):
         "producer": {"skill_id": "security-underwriting", "version": "1.0.0", "source_sha": "a" * 40},
         "instrument_id": instrument_id, "as_of": as_of, "execution_status": "PARTIAL",
         "applicability": "APPLICABLE",
-        "evidence_refs": [{"source_id": "filing-001", "source_url": "https://example.invalid/fixture", "published_at": "2026-10-01T00:00:00Z", "retrieved_at": "2026-11-25T11:00:00Z", "vendor": "synthetic", "license": "synthetic-fixture", "fiscal_basis": "FY", "source_sha256": "b" * 64, "locator": "fixture:1", "allowed_as_of": "2026-11-25T12:00:00Z"}],
+        "evidence_refs": [{"source_id": "filing-001", "source_url": "https://example.invalid/fixture", "published_at": "2026-10-01T00:00:00Z", "retrieved_at": "2026-11-25T11:00:00Z", "vendor": "synthetic", "license": "synthetic-fixture", "fiscal_basis": "FY", "source_sha256": "b" * 64, "locator": "fixture:1", "allowed_as_of": "2026-11-25T12:00:00Z", "archive_snapshot_ref": "archive:fixture-001"}],
         "payload_type": "SYNTHETIC_RESEARCH", "payload_schema_version": "1.0", "payload": {},
-        "findings": [{"claim_id": "claim-1", "claim_kind": "INTERPRETATION", "text": "Synthetic partial finding", "scope": "issuer", "horizon": "36-60m", "evidence_ids": ["filing-001"], "counterevidence_ids": [], "evidence_status": "PROVISIONAL", "assessment": "UNRESOLVED", "confidence": "UNDETERMINED", "confidence_rationale": "synthetic", "limitations": ["not real issuer evidence"], "invalidation": {"metric": None, "operator": None, "threshold": None, "status": "NOT_SET", "window": None, "predeclared_at": None}}],
+        "findings": [{"claim_id": "claim-1", "claim_kind": "INTERPRETATION", "text": "Synthetic partial finding", "scope": "issuer", "horizon": {"min_months": 36, "max_months": 60, "objective": "long-term research"}, "evidence_ids": ["filing-001"], "counterevidence_ids": [], "evidence_status": "PROVISIONAL", "assessment": "UNRESOLVED", "confidence": "UNDETERMINED", "confidence_rationale": "synthetic", "limitations": ["not real issuer evidence"], "invalidation": {"metric": None, "operator": None, "threshold": None, "status": "NOT_SET", "window": None, "predeclared_at": None}}],
         "metrics": [], "blockers": ["incomplete synthetic snapshot"], "handoff": [], "source_result_refs": [],
     }
 
@@ -125,6 +125,10 @@ class InvestmentContractsTests(unittest.TestCase):
         r = result(); r["analysis_id"] = "analysis-other"
         self.assertIn("results/0 analysis_id mismatch", contracts.validate_exchange(context(), [r], root=ROOT))
 
+    def test_finding_cannot_change_shared_analysis_horizon(self):
+        r = result(); r["findings"][0]["horizon"]["min_months"] = 1
+        self.assertTrue(any("horizon differs from AnalysisContext" in e for e in contracts.validate_exchange(context(), [r], root=ROOT)))
+
     def test_historical_replay_rejects_post_cutoff_evidence_and_metrics(self):
         r = result(); r["evidence_refs"][0]["published_at"] = "2026-11-25T12:00:01Z"
         self.assertTrue(any("published after as_of" in e for e in contracts.validate_exchange(context(mode="HISTORICAL_REPLAY"), [r], root=ROOT)))
@@ -161,7 +165,7 @@ class InvestmentContractsTests(unittest.TestCase):
         self.assertTrue(any("cannot carry findings or metrics" in e for e in contracts.validate_exchange(context(), [r], root=ROOT)))
 
     def test_metric_mismatches_are_preserved_but_never_compared(self):
-        left = {"metric_id": "fcf", "definition": "free cash flow", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 10, "published_at": "2026-02-01T00:00:00Z", "evidence_status": "VERIFIED"}
+        left = {"metric_id": "fcf", "definition": "free cash flow", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 10, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         right = dict(left, currency="PLN", raw_value=40)
         outcome = contracts.metric_comparability(left, right, as_of=AS_OF)
         self.assertEqual("NOT_COMPARABLE", outcome["status"])
@@ -169,22 +173,34 @@ class InvestmentContractsTests(unittest.TestCase):
         self.assertIn("currency", outcome["reason_codes"])
 
     def test_metric_comparison_requires_value_publication_and_verified_status(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": None, "published_at": None, "evidence_status": "UNKNOWN"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": None, "source_ids": [], "published_at": None, "observed_at": None, "evidence_status": "UNKNOWN"}
         outcome = contracts.metric_comparability(base, dict(base), as_of=AS_OF)
         self.assertEqual("NOT_COMPARABLE", outcome["status"])
         self.assertIn("missing_value", outcome["reason_codes"])
         self.assertIn("missing_publication_time", outcome["reason_codes"])
         self.assertIn("left_evidence_unknown", outcome["reason_codes"])
+        incomplete = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "published_at": "2026-02-01T00:00:00Z", "evidence_status": "VERIFIED"}
+        missing_trace = contracts.metric_comparability(incomplete, incomplete, as_of=AS_OF)
+        self.assertEqual("NOT_COMPARABLE", missing_trace["status"])
+        self.assertIn("left_missing_source_ids", missing_trace["reason_codes"])
+        self.assertIn("left_missing_observation_time", missing_trace["reason_codes"])
+
+    def test_metric_comparability_rejects_reversed_period_and_future_period(self):
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        reversed_period = dict(base, period_start="2025-12-31", period_end="2025-01-01")
+        self.assertIn("left_invalid_period", contracts.metric_comparability(reversed_period, base, as_of=AS_OF)["reason_codes"])
+        future_period = dict(base, period_end="2027-01-01")
+        self.assertEqual("NOT_COMPARABLE", contracts.metric_comparability(future_period, base, as_of=AS_OF)["status"])
 
     def test_metric_comparability_rejects_nonfinite_values(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         for value in (float("nan"), float("inf"), float("-inf")):
             with self.subTest(value=value):
                 other = dict(base, raw_value=value)
                 self.assertEqual("NOT_COMPARABLE", contracts.metric_comparability(base, other, as_of=AS_OF)["status"])
 
     def test_currency_period_basis_adjustment_action_and_missingness_each_block_comparison(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1, "published_at": "2026-02-01T00:00:00Z", "evidence_status": "VERIFIED"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         for field, value in (("currency", "PLN"), ("period_end", "2024-12-31"), ("accounting_basis", "IFRS"), ("adjustment_basis", "adjusted"), ("corporate_action_basis", "unadjusted"), ("currency", None)):
             with self.subTest(field=field, value=value):
                 other = dict(base); other[field] = value
@@ -209,6 +225,20 @@ class InvestmentContractsTests(unittest.TestCase):
         r = result()
         r["metrics"] = [{"metric_id": "fcf", "definition": "free cash flow", "raw_value": 1.0, "unit": None, "currency": None, "period_start": None, "period_end": None, "accounting_basis": None, "adjustment_basis": None, "source_ids": [], "published_at": None, "observed_at": None, "method_id": None, "method_version": None, "calc_receipt": None, "evidence_status": "VERIFIED"}]
         self.assertTrue(contracts.validate_exchange(context(), [r], root=ROOT))
+
+    def test_verified_findings_require_immutable_archive_source(self):
+        r = result(); r["findings"][0]["evidence_status"] = "VERIFIED"
+        self.assertEqual([], contracts.validate_exchange(context(), [r], root=ROOT))
+        r["evidence_refs"][0]["archive_snapshot_ref"] = None
+        self.assertTrue(any("lacks immutable source locator" in e for e in contracts.validate_exchange(context(), [r], root=ROOT)))
+
+    def test_metric_definition_id_can_repeat_across_results_for_comparison(self):
+        a, b = result(), result()
+        b["result_id"] = "result-2"; b["findings"][0]["claim_id"] = "claim-2"
+        metric = {"metric_id": "fcf", "definition": "free cash flow", "raw_value": 10, "unit": "amount", "currency": "USD", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "fcf", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
+        a["metrics"] = [metric]; b["metrics"] = [dict(metric, raw_value=12)]
+        self.assertEqual([], contracts.validate_exchange(context(), [a, b], root=ROOT))
+        self.assertEqual("COMPARABLE", contracts.metric_comparability(a["metrics"][0], b["metrics"][0], as_of=AS_OF)["status"])
 
 
 if __name__ == "__main__":
