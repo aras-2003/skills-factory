@@ -63,7 +63,7 @@ source_sha256:
   adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py: fa2381f63a7058002542a5083e6bb59376c0cba9ecf71cf05a6011543902e37d
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 054b7c463c8e4367fdae018282c8cf0079f8d9f1d9155a116b193792bcde37ad
   adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 926f2edd7f8b3aa0e94cb62adf1c9bc34fd026ff0c0d98c651e2b271be3fa771
-  docs/architecture/decisions/2026-11-load-skill-source-pin.md: 9b0f0172c9d711e6ff9d37762bdba027f6a8b049e0f920362a4ec87a36020bbd
+  docs/architecture/decisions/2026-11-load-skill-source-pin.md: aee861ef1bff8f0c856d00f06f04bb15657237848aabae154c1278d53c1ccf87
   docs/governance/CODEX-SUBAGENT-PILOT.md: 7ce505b43a57426c1c2ceb12ee5f3164ddb9e588cb57dd17a1ca49433eb09fbc
   runtime/mcp/server.py: b1e352ba1b82fc7832561f9f2364f1600f63a12bd4028ba66d4d9d8e09ebe487
   runtime/mcp/skill_catalog.py: 7c926c46f7cc7176da597f0d5c850489625e2c9363f4eb6b6b11cba1a0aca088
@@ -77,4 +77,4 @@ source_sha256:
   tests/test_codex_agent_team.py: ccac3393fb531714a3f1f34cf45117b24ccd03f4ecc11566aa2aff44fe0964a5
   tests/test_delegation_handoff.py: 8082834967eb092ba06182b77e7fc4fb148edd3f1182be28daaba30b356ed3b9
   tests/test_developer_scope.py: bb11211dff00b8ba239f81d7be21043ed4a8cbe35a613cda81d0580b5309d77b
-  tests/governance/test_sdlc_architecture_source_example.py: 7cccc2c52075d4b55dbd797622053faed14d17258fd863c4cede0cc49cc1962f
+  tests/governance/test_sdlc_architecture_source_example.py: 0762b4bf54a42ec6cab57655b011fa27ac58e2a6ad969a8df430843902723b5f
