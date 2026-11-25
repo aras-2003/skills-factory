@@ -260,6 +260,12 @@ class InvestmentContractsTests(unittest.TestCase):
         r["metrics"] = [metric]
         self.assertTrue(contracts.validate_exchange(context(), [r], root=ROOT))
 
+    def test_metric_comparability_rejects_contradictory_currency_applicability(self):
+        base = {"metric_id": "fcf", "definition": "free cash flow", "value_dimension": "MONETARY", "unit": "amount", "raw_value": 10, "currency": None, "currency_applicability": "NOT_APPLICABLE", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "corporate_action_applicability": "REQUIRED", "source_ids": ["s1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        outcome = contracts.metric_comparability(base, base, as_of=AS_OF)
+        self.assertEqual("NOT_COMPARABLE", outcome["status"])
+        self.assertIn("left_currency_applicability_mismatch", outcome["reason_codes"])
+
 
 if __name__ == "__main__":
     unittest.main()

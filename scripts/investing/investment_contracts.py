@@ -58,6 +58,24 @@ def metric_comparability(left: dict[str, Any], right: dict[str, Any], *, as_of: 
     if not left.get("published_at") or not right.get("published_at"):
         differences.append("missing_publication_time")
     for label, metric in (("left", left), ("right", right)):
+        dimension = metric.get("value_dimension")
+        if dimension not in {"MONETARY", "DIMENSIONLESS", "NON_MONETARY"}:
+            differences.append(f"{label}_unknown_value_dimension")
+        expected_currency = "REQUIRED" if dimension == "MONETARY" else "NOT_APPLICABLE"
+        if metric.get("currency_applicability") != expected_currency:
+            differences.append(f"{label}_currency_applicability_mismatch")
+        if expected_currency == "REQUIRED" and not metric.get("currency"):
+            differences.append(f"{label}_missing_currency")
+        if expected_currency == "NOT_APPLICABLE" and metric.get("currency") not in (None, ""):
+            differences.append(f"{label}_unexpected_currency")
+        action_applicability = metric.get("corporate_action_applicability")
+        action_basis = metric.get("corporate_action_basis")
+        if action_applicability not in {"REQUIRED", "NOT_APPLICABLE"}:
+            differences.append(f"{label}_unknown_corporate_action_applicability")
+        if action_applicability == "REQUIRED" and not action_basis:
+            differences.append(f"{label}_missing_corporate_action_basis")
+        if action_applicability == "NOT_APPLICABLE" and action_basis not in (None, ""):
+            differences.append(f"{label}_unexpected_corporate_action_basis")
         source_ids = metric.get("source_ids")
         if not isinstance(source_ids, list) or not source_ids:
             differences.append(f"{label}_missing_source_ids")
