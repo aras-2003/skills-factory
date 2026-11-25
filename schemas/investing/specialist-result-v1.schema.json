@@ -420,7 +420,9 @@
         "method_id",
         "method_version",
         "calc_receipt",
-        "evidence_status"
+        "evidence_status",
+        "currency_applicability",
+        "corporate_action_applicability"
       ],
       "properties": {
         "metric_id": {
@@ -530,6 +532,20 @@
             "NOT_APPLICABLE",
             "UNKNOWN"
           ]
+        },
+        "currency_applicability": {
+          "enum": [
+            "REQUIRED",
+            "NOT_APPLICABLE",
+            "UNKNOWN"
+          ]
+        },
+        "corporate_action_applicability": {
+          "enum": [
+            "REQUIRED",
+            "NOT_APPLICABLE",
+            "UNKNOWN"
+          ]
         }
       },
       "allOf": [
@@ -553,7 +569,9 @@
               "observed_at",
               "method_id",
               "method_version",
-              "calc_receipt"
+              "calc_receipt",
+              "currency_applicability",
+              "corporate_action_applicability"
             ],
             "properties": {
               "raw_value": {

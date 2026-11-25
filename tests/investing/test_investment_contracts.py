@@ -112,7 +112,7 @@ class InvestmentContractsTests(unittest.TestCase):
 
     def test_live_context_rejects_future_metric_observation_and_period(self):
         r = result()
-        r["metrics"] = [{"metric_id": "fcf", "definition": "free cash flow", "raw_value": 10, "unit": "USD", "currency": "USD", "period_start": "2026-01-01", "period_end": "2026-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "source_ids": ["filing-001"], "published_at": "2026-01-01T00:00:00Z", "observed_at": "2026-11-25T12:00:01Z", "method_id": "synthetic", "method_version": "1", "calc_receipt": "fixture", "evidence_status": "VERIFIED"}]
+        r["metrics"] = [{"metric_id": "fcf", "definition": "free cash flow", "raw_value": 10, "unit": "USD", "currency": "USD", "period_start": "2026-01-01", "period_end": "2026-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["filing-001"], "published_at": "2026-01-01T00:00:00Z", "observed_at": "2026-11-25T12:00:01Z", "method_id": "synthetic", "method_version": "1", "calc_receipt": "fixture", "evidence_status": "VERIFIED"}]
         errors = contracts.validate_exchange(context(mode="LIVE"), [r], root=ROOT)
         self.assertTrue(any("observed after as_of" in e for e in errors))
         self.assertTrue(any("period ends after as_of" in e for e in errors))
@@ -165,7 +165,7 @@ class InvestmentContractsTests(unittest.TestCase):
         self.assertTrue(any("cannot carry findings or metrics" in e for e in contracts.validate_exchange(context(), [r], root=ROOT)))
 
     def test_metric_mismatches_are_preserved_but_never_compared(self):
-        left = {"metric_id": "fcf", "definition": "free cash flow", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 10, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        left = {"metric_id": "fcf", "definition": "free cash flow", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 10, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         right = dict(left, currency="PLN", raw_value=40)
         outcome = contracts.metric_comparability(left, right, as_of=AS_OF)
         self.assertEqual("NOT_COMPARABLE", outcome["status"])
@@ -173,7 +173,7 @@ class InvestmentContractsTests(unittest.TestCase):
         self.assertIn("currency", outcome["reason_codes"])
 
     def test_metric_comparison_requires_value_publication_and_verified_status(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": None, "source_ids": [], "published_at": None, "observed_at": None, "evidence_status": "UNKNOWN"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": None, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": [], "published_at": None, "observed_at": None, "evidence_status": "UNKNOWN"}
         outcome = contracts.metric_comparability(base, dict(base), as_of=AS_OF)
         self.assertEqual("NOT_COMPARABLE", outcome["status"])
         self.assertIn("missing_value", outcome["reason_codes"])
@@ -186,21 +186,21 @@ class InvestmentContractsTests(unittest.TestCase):
         self.assertIn("left_missing_observation_time", missing_trace["reason_codes"])
 
     def test_metric_comparability_rejects_reversed_period_and_future_period(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         reversed_period = dict(base, period_start="2025-12-31", period_end="2025-01-01")
         self.assertIn("left_invalid_period", contracts.metric_comparability(reversed_period, base, as_of=AS_OF)["reason_codes"])
         future_period = dict(base, period_end="2027-01-01")
         self.assertEqual("NOT_COMPARABLE", contracts.metric_comparability(future_period, base, as_of=AS_OF)["status"])
 
     def test_metric_comparability_rejects_nonfinite_values(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1.0, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         for value in (float("nan"), float("inf"), float("-inf")):
             with self.subTest(value=value):
                 other = dict(base, raw_value=value)
                 self.assertEqual("NOT_COMPARABLE", contracts.metric_comparability(base, other, as_of=AS_OF)["status"])
 
     def test_currency_period_basis_adjustment_action_and_missingness_each_block_comparison(self):
-        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1, "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
+        base = {"metric_id": "m", "definition": "metric", "unit": "amount", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency": "USD", "raw_value": 1, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["source-1"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "evidence_status": "VERIFIED"}
         for field, value in (("currency", "PLN"), ("period_end", "2024-12-31"), ("accounting_basis", "IFRS"), ("adjustment_basis", "adjusted"), ("corporate_action_basis", "unadjusted"), ("currency", None)):
             with self.subTest(field=field, value=value):
                 other = dict(base); other[field] = value
@@ -209,12 +209,12 @@ class InvestmentContractsTests(unittest.TestCase):
     def test_schema_rejects_malformed_timezone_missing_currency_and_nonfinite_metric(self):
         r = result(); r["as_of"] = "2026-11-25"
         self.assertTrue(contracts.validate_exchange(context(), [r], root=ROOT))
-        r = result(); r["metrics"] = [{"metric_id": "m", "definition": "x", "raw_value": 1, "unit": "amount", "currency": "US", "period_start": None, "period_end": None, "accounting_basis": None, "adjustment_basis": None, "source_ids": [], "published_at": None, "observed_at": None, "method_id": None, "method_version": None, "calc_receipt": None, "evidence_status": "UNKNOWN"}]
+        r = result(); r["metrics"] = [{"metric_id": "m", "definition": "x", "raw_value": 1, "unit": "amount", "currency": "US", "period_start": None, "period_end": None, "accounting_basis": None, "adjustment_basis": None, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": [], "published_at": None, "observed_at": None, "method_id": None, "method_version": None, "calc_receipt": None, "evidence_status": "UNKNOWN"}]
         self.assertTrue(contracts.validate_exchange(context(), [r], root=ROOT))
 
     def test_optional_missing_metric_value_is_safe_and_nonfinite_value_fails(self):
         r = result()
-        metric = {"metric_id": "fcf-001", "definition": "free cash flow", "raw_value": 1.0, "unit": "amount", "currency": "USD", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "calc", "method_version": "1", "calc_receipt": "receipt-1", "evidence_status": "UNKNOWN"}
+        metric = {"metric_id": "fcf-001", "definition": "free cash flow", "raw_value": 1.0, "unit": "amount", "currency": "USD", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "calc", "method_version": "1", "calc_receipt": "receipt-1", "evidence_status": "UNKNOWN"}
         missing = dict(metric); missing.pop("raw_value")
         r["metrics"] = [missing]
         self.assertEqual([], contracts.validate_exchange(context(), [r], root=ROOT))
@@ -223,8 +223,14 @@ class InvestmentContractsTests(unittest.TestCase):
 
     def test_verified_metric_requires_trace_and_cutoff_metadata(self):
         r = result()
-        r["metrics"] = [{"metric_id": "fcf", "definition": "free cash flow", "raw_value": 1.0, "unit": None, "currency": None, "period_start": None, "period_end": None, "accounting_basis": None, "adjustment_basis": None, "source_ids": [], "published_at": None, "observed_at": None, "method_id": None, "method_version": None, "calc_receipt": None, "evidence_status": "VERIFIED"}]
+        r["metrics"] = [{"metric_id": "fcf", "definition": "free cash flow", "raw_value": 1.0, "unit": None, "currency": None, "period_start": None, "period_end": None, "accounting_basis": None, "adjustment_basis": None, "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": [], "published_at": None, "observed_at": None, "method_id": None, "method_version": None, "calc_receipt": None, "evidence_status": "VERIFIED"}]
         self.assertTrue(contracts.validate_exchange(context(), [r], root=ROOT))
+
+    def test_verified_monetary_metric_requires_currency(self):
+        r = result()
+        metric = {"metric_id": "fcf", "definition": "free cash flow", "raw_value": 1.0, "unit": "amount", "currency": None, "currency_applicability": "REQUIRED", "corporate_action_basis": "split-adjusted", "corporate_action_applicability": "REQUIRED", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "fcf", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
+        r["metrics"] = [metric]
+        self.assertTrue(any("missing required currency" in e for e in contracts.validate_exchange(context(), [r], root=ROOT)))
 
     def test_verified_findings_require_immutable_archive_source(self):
         r = result(); r["findings"][0]["evidence_status"] = "VERIFIED"
@@ -235,17 +241,17 @@ class InvestmentContractsTests(unittest.TestCase):
     def test_metric_definition_id_can_repeat_across_results_for_comparison(self):
         a, b = result(), result()
         b["result_id"] = "result-2"; b["findings"][0]["claim_id"] = "claim-2"
-        metric = {"metric_id": "fcf", "definition": "free cash flow", "raw_value": 10, "unit": "amount", "currency": "USD", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "fcf", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
+        metric = {"metric_id": "fcf", "definition": "free cash flow", "raw_value": 10, "unit": "amount", "currency": "USD", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": "split-adjusted", "currency_applicability": "REQUIRED", "corporate_action_applicability": "REQUIRED", "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "fcf", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
         a["metrics"] = [metric]; b["metrics"] = [dict(metric, raw_value=12)]
         self.assertEqual([], contracts.validate_exchange(context(), [a, b], root=ROOT))
         self.assertEqual("COMPARABLE", contracts.metric_comparability(a["metrics"][0], b["metrics"][0], as_of=AS_OF)["status"])
 
     def test_verified_dimensionless_metric_allows_inapplicable_currency_and_action_basis(self):
         r = result()
-        metric = {"metric_id": "margin", "definition": "operating margin", "raw_value": 0.2, "unit": "ratio", "currency": None, "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": None, "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "margin", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
+        metric = {"metric_id": "margin", "definition": "operating margin", "raw_value": 0.2, "unit": "ratio", "currency": None, "currency_applicability": "NOT_APPLICABLE", "corporate_action_applicability": "NOT_APPLICABLE", "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": None, "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "margin", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
         r["metrics"] = [metric]
         self.assertEqual([], contracts.validate_exchange(context(), [r], root=ROOT))
-        self.assertEqual("NOT_COMPARABLE", contracts.metric_comparability(metric, metric, as_of=AS_OF)["status"])
+        self.assertEqual("COMPARABLE", contracts.metric_comparability(metric, metric, as_of=AS_OF)["status"])
 
 
 if __name__ == "__main__":

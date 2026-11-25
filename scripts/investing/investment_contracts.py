@@ -45,6 +45,14 @@ def metric_comparability(left: dict[str, Any], right: dict[str, Any], *, as_of: 
     """
     differences = [field for field in COMPARISON_FIELDS if left.get(field) != right.get(field)]
     missing = [field for field in COMPARISON_FIELDS if left.get(field) in (None, "") or right.get(field) in (None, "")]
+    for basis, applicability in (
+        ("currency", "currency_applicability"),
+        ("corporate_action_basis", "corporate_action_applicability"),
+    ):
+        if left.get(applicability) != right.get(applicability):
+            differences.append(applicability)
+        if left.get(applicability) == right.get(applicability) == "NOT_APPLICABLE":
+            missing = [field for field in missing if field != basis]
     if left.get("raw_value") is None or right.get("raw_value") is None:
         differences.append("missing_value")
     if not left.get("published_at") or not right.get("published_at"):
@@ -177,6 +185,19 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
                     errors.append(f"unresolved metric source id: {source_id}")
                 elif metric["evidence_status"] == "VERIFIED" and not _immutable_source(evidence[source_id]):
                     errors.append(f"verified metric lacks immutable source locator: {metric['metric_id']}")
+            if metric["evidence_status"] == "VERIFIED":
+                for field, applicability_field in (
+                    ("currency", "currency_applicability"),
+                    ("corporate_action_basis", "corporate_action_applicability"),
+                ):
+                    applicability = metric[applicability_field]
+                    value = metric[field]
+                    if applicability == "REQUIRED" and value in (None, ""):
+                        errors.append(f"verified metric missing required {field}: {metric['metric_id']}")
+                    if applicability == "NOT_APPLICABLE" and value not in (None, ""):
+                        errors.append(f"verified metric has inapplicable {field}: {metric['metric_id']}")
+                    if applicability == "UNKNOWN":
+                        errors.append(f"verified metric has unknown {field} applicability: {metric['metric_id']}")
             if metric["published_at"] and _instant(metric["published_at"]) > cutoff:
                 errors.append(f"metric published after as_of: {metric['metric_id']}")
             if metric["observed_at"] and _instant(metric["observed_at"]) > cutoff:
