@@ -6,8 +6,9 @@
 - Decision: owner approved the optional source pin and the invalid and mismatch errors. The fail-closed unverifiable error is an engineering assumption, not an additional owner-approved case.
 - Historical implementation baseline SHA: `1bc7677b6c63427a20b3e9f2595dce797905542b`.
 - Historical implementation candidate SHA: `5cedbb5354913b9299818c048400b72a976fff17`.
-- Current validation follow-up: [PR #786](https://github.com/aras-2003/skills-factory/pull/786), based on canonical `main` `f10c7d17674a1e5095fcaead7b03cbec10707ad2`.
-- The original review status is historical; follow-up source review, CI, and deployed connector acceptance are tracked separately for PR #786.
+- Current consumer-map source SHA: `242fe4762d2b2c6cc2c602720d222e1276c0cd17`.
+- Historical validation follow-up: [PR #786](https://github.com/aras-2003/skills-factory/pull/786), based on canonical `main` `f10c7d17674a1e5095fcaead7b03cbec10707ad2` and merged as `337b2b6b44db18f0261d16441e4587f90febc40c`.
+- PR #786's review, CI, and deployed-channel checks apply to that historical candidate; they do not certify the later consumer map or later source changes.
 
 ## Context and decision
 
@@ -80,10 +81,14 @@ capabilities.
 
 ## Current source consumer map
 
-This map was checked against the main tree at `02001acb4269cb74b4a3e39f095fe027663c21eb`.
-It separates runtime tool consumers from receipt validators and build-time
-catalog producers; finding a path does not imply that it sends the optional
-`expected_source_revision` pin.
+This map binds the 33 listed source files to reviewed commit
+`242fe4762d2b2c6cc2c602720d222e1276c0cd17`. The governance regression verifies
+that each listed file is byte-identical at that commit and in the current
+checkout. It separates runtime tool consumers from ingress, evidence and
+release verifiers, and build-time producers; finding a path does not imply
+that it sends the optional `expected_source_revision` pin. This is a
+source-confirmed inventory of the listed paths, not proof that the repository
+consumer graph is complete.
 
 ### Runtime and transport consumers
 
@@ -107,6 +112,19 @@ catalog producers; finding a path does not imply that it sends the optional
   sends `skill_name` only. The shared `TOOLS` schema is registered with
   WebMCP, so pin availability depends on the generated bundle; the sample
   itself does not demonstrate pin adoption.
+
+### Site ingress and provenance
+
+- `sites/skills-factory-site/build/sites-worker.ts` is the deployed worker
+  ingress for `/mcp` and delegates to the Site adapter handler. The build
+  configuration in `sites/skills-factory-site/vite.config.ts` selects this
+  worker entry point; neither file defines another `load_skill` contract.
+- `sites/skills-factory-site/scripts/sync-site-source.mjs` synchronizes the
+  canonical source into the provider-managed Site workspace. It is a
+  publication/provenance step, not a runtime caller.
+- `adapters/skills-factory-cloud-next/src/tool-receipt.ts` formats tool
+  receipts and source identity metadata; it observes tool results and does not
+  itself invoke `load_skill` or prove host execution.
 
 ### Versioned Lab artifact and build producer
 
@@ -142,6 +160,8 @@ catalog producers; finding a path does not imply that it sends the optional
   `load_skill` receipt identity and explicitly rejects an inference that a
   loaded skill proves child model execution. These scripts consume evidence;
   they are not runtime tool callers.
+- `scripts/eval/iteration02_site_native_receipt.py` validates Site-native
+  receipt evidence. It is an evidence consumer, not a runtime caller.
 
 ### Build-time catalog producers
 
@@ -152,10 +172,36 @@ catalog producers; finding a path does not imply that it sends the optional
 - `scripts/package/build_cloud_next_site.py` invokes that generator while
   building the Site. It is a producer in the packaging path, not a runtime
   `load_skill` client.
+- `scripts/package/build_lab_plugin.py` builds the fresh Lab artifact and
+  packages the canonical runtime/catalog sources; it is a package producer,
+  not evidence that the tracked release mirror was refreshed or installed.
+- `docs/catalog.json` supplies catalog metadata, including optional
+  dependencies, which the generator returns with loaded entries. It is a
+  content input to the catalog/package path, not an MCP caller.
+- `workflows/runtime-registry.yaml` declares runtime workflow metadata, and
+  `runtime/mcp/investment_runtime.py` supplies the runtime integration for
+  investment workflows. These are workflow/runtime integration surfaces;
+  their presence does not demonstrate optional-pin adoption by a caller.
 
-These paths are source-confirmed on the stated revision, not a complete
-consumer inventory. External HTTP/MCP clients and their optional-pin adoption
-remain `UNKNOWN`; no source listing proves host execution of loaded
+### Source-evidence and evaluation inputs
+
+- `scripts/eval/campaign.py` reads and hashes the ADR, adapter, catalog, tests,
+  and other source evidence for campaign manifests. It is a source-evidence
+  manifest consumer, not a `load_skill` runtime client.
+- `evals/campaigns/iteration-07-investing-quality-2026-11/sdlc-source-compatibility-continuation.yaml`
+  carries the Iteration-07 continuation inputs. It is evaluation configuration,
+  not evidence of a direct tool call.
+- `scripts/eval/promptfoo/promptfooconfig.yaml` configures a host probe that
+  launches the stdio server and names `load_skill`. The prompt is a test input,
+  not a direct runtime caller or proof of optional-pin adoption.
+- `scripts/eval/prepare_closure.py` and `scripts/eval/release_bundle.py`
+  prepare and validate evaluation/closure artifacts and prompts referring to
+  runtime tools. They are evaluation producers/verifiers, not direct runtime
+  callers.
+
+These paths are source-confirmed at the pinned revision, but the inventory is
+not a completeness proof. External HTTP/MCP clients and their optional-pin
+adoption remain `UNKNOWN`; no source listing proves host execution of loaded
 instructions or deployed API parity.
 
 Pin adoption must be gated on the actual installed artifact's `tools/list`

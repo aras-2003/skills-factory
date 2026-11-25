@@ -11,6 +11,45 @@ ROOT = Path(__file__).resolve().parents[2]
 DECISION = ROOT / "docs/architecture/decisions/2026-11-load-skill-source-pin.md"
 BASELINE_RE = re.compile(r"^- Baseline source SHA: `([0-9a-f]{40})`$", re.MULTILINE)
 EXPECTED_BASELINE = "e0f613cbaf80cf4a278e713794662250dab2b8bc"
+CONSUMER_MAP_RE = re.compile(
+    r"^- Current consumer-map source SHA: `([0-9a-f]{40})`\.$", re.MULTILINE
+)
+EXPECTED_CONSUMER_MAP = "242fe4762d2b2c6cc2c602720d222e1276c0cd17"
+CONSUMER_MAP_PATHS = (
+    "runtime/mcp/server.py",
+    "runtime/mcp/skill_catalog.py",
+    "runtime/mcp/cloud_server.py",
+    "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
+    "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
+    "sites/skills-factory-site/app/mcp/route.ts",
+    "sites/skills-factory-site/app/page.tsx",
+    "docs/REMOTE-MCP.md",
+    "scripts/eval/iteration02_flow_capture.py",
+    "scripts/eval/iteration02_route_evidence.py",
+    "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py",
+    "scripts/package/build_cloud_next_site.py",
+    "scripts/package/build_utils.py",
+    "scripts/package/build_plugin.py",
+    "plugins/skills-factory-lab/.codex-plugin/plugin.json",
+    "plugins/skills-factory-lab/.mcp.json",
+    "plugins/skills-factory-lab/release-manifest.json",
+    "plugins/skills-factory-lab/mcp/server.py",
+    "plugins/skills-factory-lab/mcp/skill_catalog.py",
+    "sites/skills-factory-site/build/sites-worker.ts",
+    "sites/skills-factory-site/vite.config.ts",
+    "sites/skills-factory-site/scripts/sync-site-source.mjs",
+    "adapters/skills-factory-cloud-next/src/tool-receipt.ts",
+    "scripts/package/build_lab_plugin.py",
+    "docs/catalog.json",
+    "workflows/runtime-registry.yaml",
+    "runtime/mcp/investment_runtime.py",
+    "scripts/eval/iteration02_site_native_receipt.py",
+    "scripts/eval/campaign.py",
+    "evals/campaigns/iteration-07-investing-quality-2026-11/sdlc-source-compatibility-continuation.yaml",
+    "scripts/eval/promptfoo/promptfooconfig.yaml",
+    "scripts/eval/prepare_closure.py",
+    "scripts/eval/release_bundle.py",
+)
 
 
 def source_at(revision: str, path: str) -> str:
@@ -23,6 +62,43 @@ def source_at(revision: str, path: str) -> str:
 
 
 class ArchitectureSourceExampleTests(unittest.TestCase):
+    def test_current_consumer_map_is_pinned_to_reviewed_source_bytes(self):
+        self.assertEqual(33, len(CONSUMER_MAP_PATHS))
+        self.assertEqual(len(CONSUMER_MAP_PATHS), len(set(CONSUMER_MAP_PATHS)))
+        decision = DECISION.read_text(encoding="utf-8")
+        matches = CONSUMER_MAP_RE.findall(decision)
+        self.assertEqual(1, len(matches), "decision must carry one exact consumer-map source SHA")
+        revision = matches[0]
+        self.assertEqual(EXPECTED_CONSUMER_MAP, revision)
+        self.assertEqual(
+            revision,
+            subprocess.check_output(
+                ["git", "--no-replace-objects", "rev-parse", "--verify", "--end-of-options", f"{revision}^{{commit}}"],
+                cwd=ROOT,
+                text=True,
+            ).strip(),
+        )
+        subprocess.check_call(
+            ["git", "--no-replace-objects", "merge-base", "--is-ancestor", revision, "HEAD"],
+            cwd=ROOT,
+        )
+
+        for path in CONSUMER_MAP_PATHS:
+            with self.subTest(path=path):
+                try:
+                    reviewed_bytes = subprocess.check_output(
+                        ["git", "--no-replace-objects", "show", f"{revision}:{path}"],
+                        cwd=ROOT,
+                    )
+                    current_bytes = (ROOT / path).read_bytes()
+                except (OSError, subprocess.CalledProcessError) as error:
+                    self.fail(f"consumer-map source could not be verified for {path}: {error}")
+                self.assertEqual(
+                    reviewed_bytes,
+                    current_bytes,
+                    f"consumer-map source differs from reviewed commit: {path}",
+                )
+
     def test_rollback_requires_caller_compatibility_before_reverting_v1_schema(self):
         decision = DECISION.read_text(encoding="utf-8")
         self.assertIn("## Rollback boundary", decision)
@@ -89,28 +165,7 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
         current_map = decision.split("## Current source consumer map", 1)[1].split(
             "## Migration, verification, and rollback", 1
         )[0]
-        expected_paths = (
-            "runtime/mcp/server.py",
-            "runtime/mcp/skill_catalog.py",
-            "runtime/mcp/cloud_server.py",
-            "adapters/skills-factory-cloud-next/src/mcp-handler.ts",
-            "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
-            "sites/skills-factory-site/app/mcp/route.ts",
-            "sites/skills-factory-site/app/page.tsx",
-            "docs/REMOTE-MCP.md",
-            "scripts/eval/iteration02_flow_capture.py",
-            "scripts/eval/iteration02_route_evidence.py",
-            "adapters/skills-factory-cloud-next/scripts/sync-lab-catalog.py",
-            "scripts/package/build_cloud_next_site.py",
-            "scripts/package/build_utils.py",
-            "scripts/package/build_plugin.py",
-            "plugins/skills-factory-lab/.codex-plugin/plugin.json",
-            "plugins/skills-factory-lab/.mcp.json",
-            "plugins/skills-factory-lab/release-manifest.json",
-            "plugins/skills-factory-lab/mcp/server.py",
-            "plugins/skills-factory-lab/mcp/skill_catalog.py",
-        )
-        for path in expected_paths:
+        for path in CONSUMER_MAP_PATHS:
             with self.subTest(path=path):
                 self.assertIn(path, current_map)
                 self.assertTrue((ROOT / path).is_file())
