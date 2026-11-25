@@ -240,6 +240,13 @@ class InvestmentContractsTests(unittest.TestCase):
         self.assertEqual([], contracts.validate_exchange(context(), [a, b], root=ROOT))
         self.assertEqual("COMPARABLE", contracts.metric_comparability(a["metrics"][0], b["metrics"][0], as_of=AS_OF)["status"])
 
+    def test_verified_dimensionless_metric_allows_inapplicable_currency_and_action_basis(self):
+        r = result()
+        metric = {"metric_id": "margin", "definition": "operating margin", "raw_value": 0.2, "unit": "ratio", "currency": None, "period_start": "2025-01-01", "period_end": "2025-12-31", "accounting_basis": "GAAP", "adjustment_basis": "reported", "corporate_action_basis": None, "source_ids": ["filing-001"], "published_at": "2026-02-01T00:00:00Z", "observed_at": "2026-02-02T00:00:00Z", "method_id": "margin", "method_version": "1", "calc_receipt": "receipt", "evidence_status": "VERIFIED"}
+        r["metrics"] = [metric]
+        self.assertEqual([], contracts.validate_exchange(context(), [r], root=ROOT))
+        self.assertEqual("NOT_COMPARABLE", contracts.metric_comparability(metric, metric, as_of=AS_OF)["status"])
+
 
 if __name__ == "__main__":
     unittest.main()

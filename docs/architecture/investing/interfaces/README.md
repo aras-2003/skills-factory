@@ -14,7 +14,7 @@ establish a recommendation's quality.
 | `AnalysisContext` | `investment-os-review` / `investment-security-review` | Requested specialists | One canonical instrument ID, analysis ID, horizon and UTC cutoff are shared. Missing policy/portfolio is never inferred. |
 | `SpecialistResult` | The producing skill | `investment-security-review` synthesizer | Producer owns its method, formula, interpretation, limitations and claim IDs. Consumers hold immutable references. |
 | Evidence snapshot | Existing evidence retrieval/source owner | Producer and validator | Source ID and digest are identifiers/assertions. Source authenticity and license are not established by this offline validator. |
-| Investment decision | `investment-security-review` | Existing reporting adapter (#297) | Diagnostic/advisory output only. It cannot mutate producer results or authorize an action. |
+| Investment decision | `investment-security-review` | Proposed one-way #297 reporting mapping | Diagnostic/advisory output only. It cannot mutate producer results or authorize an action. |
 | Persisted thesis/portfolio state | `investment-record-store` | Authorized existing workflows | No access or write occurs through these contracts. A separate approved store operation remains mandatory. |
 
 `#297` (DomainResult) remains an output/reporting boundary. If the existing
@@ -44,6 +44,10 @@ producer-specific mapping is separately specified and tested.
   basis, corporate-action treatment, currency, publication time and method
   receipt. `metric_comparability` refuses direct comparison when a required
   dimension is missing or different. It never converts or normalizes values.
+  Currency and corporate-action treatment may be null for a dimensionless or
+  otherwise inapplicable metric; that does not make two observations comparable.
+  Monetary comparisons require explicit currency and applicable corporate-action
+  basis on both sides.
 - Missing, stale, conflicted, unavailable, and not-applicable states are
   explicit. None is encoded as numeric zero or neutral evidence.
 - `TEST` and `HISTORICAL_REPLAY` contexts have `write_scope.mode=NONE`.
