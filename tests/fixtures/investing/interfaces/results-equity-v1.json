@@ -1,0 +1,25 @@
+[
+  {
+    "contract_version": "1.0",
+    "result_id": "result-synthetic-001",
+    "analysis_id": "analysis-synthetic-001",
+    "producer": {"skill_id": "security-underwriting", "version": "1.0.0", "source_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "instrument_id": "NASDAQ:TEST",
+    "as_of": "2026-11-25T12:00:00Z",
+    "execution_status": "PARTIAL",
+    "applicability": "APPLICABLE",
+    "payload_type": "SYNTHETIC_RESEARCH",
+    "payload_schema_version": "1.0",
+    "payload": {},
+    "evidence_refs": [
+      {"source_id": "fixture-filing-001", "source_url": "https://example.invalid/synthetic", "published_at": "2026-10-01T00:00:00Z", "retrieved_at": "2026-11-25T11:00:00Z", "vendor": "synthetic-fixture", "license": "synthetic", "fiscal_basis": "FY", "source_sha256": null, "locator": "fixture:1", "allowed_as_of": "2026-11-25T12:00:00Z", "archive_snapshot_ref": null}
+    ],
+    "findings": [
+      {"claim_id": "claim-synthetic-001", "claim_kind": "INTERPRETATION", "text": "Synthetic evidence is incomplete", "scope": "issuer", "horizon": {"min_months": 36, "max_months": 60, "objective": "synthetic research"}, "evidence_ids": ["fixture-filing-001"], "counterevidence_ids": [], "evidence_status": "PROVISIONAL", "assessment": "UNRESOLVED", "confidence": "UNDETERMINED", "confidence_rationale": "synthetic fixture only", "limitations": ["not real issuer evidence"], "invalidation": {"metric": null, "operator": null, "threshold": null, "status": "NOT_SET", "window": null, "predeclared_at": null}}
+    ],
+    "metrics": [],
+    "blockers": ["synthetic evidence intentionally incomplete"],
+    "handoff": [],
+    "source_result_refs": []
+  }
+]
