@@ -16,7 +16,7 @@ SCHEMAS = {
     "result": Path("schemas/investing/specialist-result-v1.schema.json"),
 }
 COMPARISON_FIELDS = (
-    "metric_id", "definition", "unit", "period_start", "period_end",
+    "metric_id", "definition", "value_dimension", "unit", "period_start", "period_end",
     "accounting_basis", "adjustment_basis", "corporate_action_basis", "currency",
 )
 
@@ -186,6 +186,11 @@ def validate_exchange(context: object, results: object, *, root: Path) -> list[s
                 elif metric["evidence_status"] == "VERIFIED" and not _immutable_source(evidence[source_id]):
                     errors.append(f"verified metric lacks immutable source locator: {metric['metric_id']}")
             if metric["evidence_status"] == "VERIFIED":
+                expected_currency_applicability = "REQUIRED" if metric["value_dimension"] == "MONETARY" else "NOT_APPLICABLE"
+                if metric["value_dimension"] == "UNKNOWN":
+                    errors.append(f"verified metric has unknown value dimension: {metric['metric_id']}")
+                if metric["value_dimension"] != "UNKNOWN" and metric["currency_applicability"] != expected_currency_applicability:
+                    errors.append(f"verified metric currency applicability conflicts with value dimension: {metric['metric_id']}")
                 for field, applicability_field in (
                     ("currency", "currency_applicability"),
                     ("corporate_action_basis", "corporate_action_applicability"),

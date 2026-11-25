@@ -422,7 +422,10 @@
         "calc_receipt",
         "evidence_status",
         "currency_applicability",
-        "corporate_action_applicability"
+        "corporate_action_applicability",
+        "currency",
+        "corporate_action_basis",
+        "value_dimension"
       ],
       "properties": {
         "metric_id": {
@@ -546,6 +549,14 @@
             "NOT_APPLICABLE",
             "UNKNOWN"
           ]
+        },
+        "value_dimension": {
+          "enum": [
+            "MONETARY",
+            "DIMENSIONLESS",
+            "NON_MONETARY",
+            "UNKNOWN"
+          ]
         }
       },
       "allOf": [
@@ -571,7 +582,8 @@
               "method_version",
               "calc_receipt",
               "currency_applicability",
-              "corporate_action_applicability"
+              "corporate_action_applicability",
+              "value_dimension"
             ],
             "properties": {
               "raw_value": {

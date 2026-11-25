@@ -47,7 +47,11 @@ producer-specific mapping is separately specified and tested.
   Currency and corporate-action treatment may be null for a dimensionless or
   otherwise inapplicable metric; that does not make two observations comparable.
   Monetary comparisons require explicit currency and applicable corporate-action
-  basis on both sides.
+  basis on both sides. `value_dimension` and applicability fields are producer
+  assertions, not independently authenticated facts; consumers must compare them
+  as contract metadata and never treat them as proof of the reported value or its
+  source. The validator requires explicit nulls for N/A and rejects a verified
+  monetary metric declared without currency.
 - Missing, stale, conflicted, unavailable, and not-applicable states are
   explicit. None is encoded as numeric zero or neutral evidence.
 - `TEST` and `HISTORICAL_REPLAY` contexts have `write_scope.mode=NONE`.
