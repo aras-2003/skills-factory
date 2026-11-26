@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.1",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/801 — Scheduled Investment OS monitoring: server-side MCP execution and verified cutover",
+  "source_revision": "88cf9f314c90aa8c6d3a14c01c04ed64282e91c5",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b3b923f80fe0282f2b447d650063cd126eebc048564ec99814de24267d724d6",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Issue #801 is explicitly A3 and changes multiple components, server-side execution, scheduler cutover, receipts, concurrency and recovery; architecture advice is required before dependent implementation.",
+    "timestamp": "2026-11-26T10:14:49Z"
+  },
+  "impact": "A3",
+  "requested": {
+    "model": {"value": "gpt-6.2-sol", "provenance": "Repository sf-architect role profile and owner-approved role mapping", "reason": null},
+    "effort": {"value": "high", "provenance": "Repository sf-architect role profile and owner-approved role mapping", "reason": null},
+    "profile": {"value": "sf-architect", "provenance": "Repository .codex/agents/sf-architect.toml", "reason": null}
+  },
+  "host_observed": {
+    "model": {"value": "UNKNOWN", "provenance": "Codex collaboration surface", "reason": "The host does not expose the effective child model."},
+    "effort": {"value": "UNKNOWN", "provenance": "Codex collaboration surface", "reason": "The host does not expose the effective child reasoning effort."},
+    "profile": {"value": "UNKNOWN", "provenance": "Codex collaboration surface", "reason": "The host does not expose whether the named profile was loaded."}
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "The collaboration tool returned the Architect child reference and a completed result; no exact host dispatch timestamp was exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-26T10:14:49Z",
+      "latest": "2026-11-26T10:25:34Z",
+      "evidence": "Pre-dispatch decision at 10:14:49Z preceded the returned Architect result observed before 10:25:34Z."
+    },
+    "time_unknown_reason": "The collaboration surface provides no exact host dispatch event timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The Architect returned source-linked A3 advice; exact worker lifecycle timestamps are not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-26T10:14:49Z",
+      "latest": "2026-11-26T10:25:34Z",
+      "evidence": "Architect result was observed after the dispatch decision and before 10:25:34Z."
+    },
+    "started_time_unknown_reason": "The collaboration surface does not expose worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-26T10:14:49Z",
+      "latest": "2026-11-26T10:25:34Z",
+      "evidence": "The final Architect response was observed before 10:25:34Z."
+    },
+    "ended_time_unknown_reason": "The collaboration surface does not expose worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/issue-801/architect-result.md",
+    "sha256": "65a41f32407503dc68a0117b25e8b77bb8e456fbaeaa74efd355153e8507c067",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-26T10:25:34Z",
+    "reason": "Accepted EXTEND plus COMPOSE and the no-duplicate-ledger constraints. Adapted execution to remain in Discovery because native WIP is over its limit and live scheduler/source authority remains unverified; the architecture decision is still REVIEW_REQUIRED."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Independent Reviewer",
+    "provenance": "The downstream test design was saved after the Architect result; exact write time is unavailable.",
+    "assessed_at": "2026-11-26T10:32:41Z",
+    "first_dependent_action_at": null,
+    "reason": "Independent timing review is pending. The first downstream design artifact is test-design.md; its exact mutation time was not exposed.",
+    "first_dependent_action_reference": "evals/results/role-decisions/issue-801/test-design.md",
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-26T10:25:34Z",
+      "latest": "2026-11-26T10:32:41Z",
+      "evidence": "The test design artifact was saved after the final Architect response; the patch tool exposes no exact mutation time, and the latest coordinator bound is 10:32:41Z."
+    },
+    "first_dependent_action_time_unknown_reason": "The patch tool does not expose exact file mutation timestamps."
+  },
+  "decision_id": "issue-801-architect-a3",
+  "attempt_id": "issue-801-architect-a3-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {"reference": "https://github.com/aras-2003/skills-factory/issues/801", "captured_at": "2026-11-26T10:11:11Z"},
+    {"reference": "Cloud Next runtime_info receipt 2026-11-26T10:12:34.742Z; verified attestation for canonical SHA 88cf9f314c90aa8c6d3a14c01c04ed64282e91c5", "captured_at": "2026-11-26T10:12:34Z"}
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null
+}
