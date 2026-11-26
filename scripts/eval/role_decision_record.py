@@ -48,7 +48,9 @@ def validate_record(data: Any) -> list[str]:
     if errors:
         return errors
 
-    v11 = data["schema_version"] == "1.1"
+    version = data["schema_version"]
+    v11 = version in {"1.1", "1.2"}
+    v12 = version == "1.2"
 
     def require_reason(value: str, reason: str | None, field: str) -> None:
         if value == "UNKNOWN" and (not reason or not reason.strip()):
@@ -144,7 +146,42 @@ def validate_record(data: Any) -> list[str]:
     if disposition_at < decision_at or (end and disposition["value"] != "PENDING" and disposition_at < end):
         errors.append("coordinator disposition cannot precede the decision or terminal execution")
     assessment = timing["value"]
-    if (data["trigger_source"] == "NATURAL" and data["impact"] in {"A0", "A1"}
+    if v12:
+        trigger = data["architect_trigger"]["class"]
+        impact = data["impact"]
+        decision = data["decision"]["value"]
+        qualifying = {
+            "A0": set(),
+            "A1": {"A1_SHARED_PUBLIC_CONTRACT", "A1_TRUST_BOUNDARY"},
+            "A2": {"A2_CAPABILITY_BOUNDARY", "A2_SHARED_CONTRACT", "A2_MATERIAL_DEPENDENCY"},
+            "A3": {"A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS"},
+            "A4": {"A4_BROAD_IMPACT_OR_HARD_ROLLBACK"},
+        }
+        trigger_impacts = {
+            **{name: "A1" for name in qualifying["A1"]},
+            **{name: "A2" for name in qualifying["A2"]},
+            **{name: "A3" for name in qualifying["A3"]},
+            **{name: "A4" for name in qualifying["A4"]},
+        }
+        if trigger in trigger_impacts and trigger_impacts[trigger] != impact:
+            errors.append(f"trigger class {trigger} is incompatible with impact {impact}")
+        if trigger == "NONE" and impact in {"A3", "A4"}:
+            errors.append(f"NONE trigger is incompatible with impact {impact}")
+        if data["trigger_source"] == "NATURAL" and decision == "INVOKE" and impact in {"A0", "A1"}:
+            if trigger not in qualifying[impact] and assessment != "UNKNOWN" and (assessment != "UNNECESSARY" or not (timing["reason"] or "").strip()):
+                errors.append("NATURAL A0/A1 INVOKE without a qualifying trigger requires UNKNOWN or UNNECESSARY assessment with reviewer rationale")
+        if data["trigger_source"] == "NATURAL" and decision == "INVOKE" and impact in {"A2", "A3", "A4"}:
+            if trigger not in qualifying[impact] and trigger != "UNKNOWN":
+                errors.append(f"{impact} INVOKE requires a qualifying Architect trigger or UNKNOWN")
+        if data["trigger_source"] == "NATURAL" and decision == "INVOKE" and assessment == "UNNECESSARY" and trigger in qualifying[impact]:
+            errors.append("UNNECESSARY conflicts with a qualifying Architect trigger")
+        if data["trigger_source"] == "NATURAL" and decision == "SKIP" and trigger in qualifying[impact] and assessment == "CORRECT_SKIP":
+            errors.append("CORRECT_SKIP conflicts with a qualifying Architect trigger")
+        if data["trigger_source"] == "NATURAL" and decision == "SKIP" and trigger == "NONE" and assessment == "MISSED":
+            errors.append("MISSED conflicts with an explicit NONE Architect trigger")
+        if decision == "SKIP" and assessment == "CORRECT_SKIP" and trigger != "NONE":
+            errors.append("CORRECT_SKIP requires an explicit NONE Architect trigger")
+    elif (data["trigger_source"] == "NATURAL" and data["impact"] in {"A0", "A1"}
             and data["decision"]["value"] == "INVOKE"
             and assessment != "UNKNOWN"
             and (assessment != "UNNECESSARY" or not (timing["reason"] or "").strip())):
@@ -207,11 +244,11 @@ def validate_record(data: Any) -> list[str]:
         errors.append(f"{assessment} requires a SKIP decision")
     if assessment in {"EARLY", "ON_TIME", "LATE", "UNNECESSARY"} and data["decision"]["value"] != "INVOKE":
         errors.append(f"{assessment} requires an INVOKE decision")
-    if assessment == "CORRECT_SKIP" and data["impact"] in {"A2", "A3", "A4"}:
+    if assessment == "CORRECT_SKIP" and data["impact"] in {"A2", "A3", "A4"} and not (v12 and data["impact"] == "A2" and data["architect_trigger"]["class"] == "NONE"):
         errors.append("CORRECT_SKIP is inconsistent with impact A2-A4")
     if assessment == "UNNECESSARY" and data["impact"] in {"A2", "A3", "A4"} and not (timing["reason"] or "").strip():
         errors.append("UNNECESSARY for impact A2-A4 requires reviewer rationale")
-    if data["decision"]["value"] == "SKIP" and data["impact"] in {"A2", "A3", "A4"} and assessment not in {"MISSED", "UNKNOWN"}:
+    if data["decision"]["value"] == "SKIP" and data["impact"] in {"A2", "A3", "A4"} and assessment not in {"MISSED", "UNKNOWN"} and not (v12 and data["impact"] == "A2" and data["architect_trigger"]["class"] == "NONE" and assessment == "CORRECT_SKIP"):
         errors.append("SKIP for impact A2-A4 requires MISSED or UNKNOWN timing assessment")
     if assessed_at < decision_at or (action and assessed_at < action):
         errors.append("timing assessment cannot precede the events it assesses")
@@ -276,8 +313,10 @@ def main() -> int:
                 differences.append("decision.value")
             if _timestamp(data["decision"]["timestamp"]) != _timestamp(first["decision"]["timestamp"]):
                 differences.append("decision.timestamp")
-            if data["schema_version"] == "1.1" or first["schema_version"] == "1.1":
+            if data["schema_version"] in {"1.1", "1.2"} or first["schema_version"] in {"1.1", "1.2"}:
                 differences.extend(field for field in ("decision", "signal_evidence", "parent_decision_id", "supersedes_decision_id") if data[field] != first[field])
+            if data["schema_version"] == "1.2" or first["schema_version"] == "1.2":
+                differences.extend(field for field in ("architect_trigger",) if data.get(field) != first.get(field))
             if differences:
                 print(f"{record}: decision group differs in {', '.join(differences)}", file=sys.stderr)
                 failed = True
@@ -297,8 +336,10 @@ def main() -> int:
             differences.append("decision.value")
         if _timestamp(data["decision"]["timestamp"]) != _timestamp(original["decision"]["timestamp"]):
             differences.append("decision.timestamp")
-        if data["schema_version"] == "1.1" or original["schema_version"] == "1.1":
+        if data["schema_version"] in {"1.1", "1.2"} or original["schema_version"] in {"1.1", "1.2"}:
             differences.extend(field for field in ("decision", "signal_evidence", "parent_decision_id", "supersedes_decision_id") if data[field] != original[field])
+        if data["schema_version"] == "1.2" or original["schema_version"] == "1.2":
+            differences.extend(field for field in ("architect_trigger",) if data.get(field) != original.get(field))
         if differences:
             print(f"{record}: retry differs from target in {', '.join(differences)}", file=sys.stderr)
             failed = True

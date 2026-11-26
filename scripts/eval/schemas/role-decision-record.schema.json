@@ -31,7 +31,64 @@
     "schema_version": {
       "enum": [
         "1.0",
-        "1.1"
+        "1.1",
+        "1.2"
+      ]
+    },
+    "architect_trigger": {
+      "type": "object",
+      "required": [
+        "class",
+        "reason",
+        "evidence_reference"
+      ],
+      "properties": {
+        "class": {
+          "enum": [
+            "NONE",
+            "UNKNOWN",
+            "A1_SHARED_PUBLIC_CONTRACT",
+            "A1_TRUST_BOUNDARY",
+            "A2_CAPABILITY_BOUNDARY",
+            "A2_SHARED_CONTRACT",
+            "A2_MATERIAL_DEPENDENCY",
+            "A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS",
+            "A4_BROAD_IMPACT_OR_HARD_ROLLBACK"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/text"
+        },
+        "evidence_reference": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/text"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "class": {
+                "const": "UNKNOWN"
+              }
+            }
+          },
+          "then": {},
+          "else": {
+            "properties": {
+              "evidence_reference": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        }
       ]
     },
     "task_reference": {
@@ -537,7 +594,7 @@
       "if": {
         "properties": {
           "schema_version": {
-            "const": "1.1"
+            "enum": ["1.1", "1.2"]
           }
         }
       },
@@ -625,6 +682,27 @@
               ]
             }
           }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "1.2"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "architect_trigger"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "architect_trigger"
+          ]
         }
       }
     }
