@@ -5,7 +5,7 @@ Status: bounded, read-only catalog observation; not a complete DDL or code-path 
 - Canonical source baseline: `88cf9f314c90aa8c6d3a14c01c04ed64282e91c5`.
 - Target: existing Supabase project named `investment-os`; returned status `ACTIVE_HEALTHY`, PostgreSQL 17.11. Project identifiers and all row contents are intentionally omitted.
 - Observation window: completed no later than `2026-11-26T10:50:59Z`. Individual database MCP calls did not expose execution timestamps.
-- Method: Supabase MCP read-only `SELECT` queries over `information_schema`, `pg_class`, `pg_namespace`, `pg_indexes`, `pg_policies`, `pg_proc`, `pg_trigger`, `pg_roles`, and `information_schema.role_table_grants`. No table rows, holdings, portfolio identifiers, or secrets were read. No schema or data writes were performed.
+- Method: Supabase MCP read-only `SELECT` queries over `information_schema`, `pg_class`, `pg_namespace`, `pg_indexes`, `pg_policies`, `pg_proc`, `pg_trigger`, `pg_roles`, `information_schema.role_table_grants`, and the aggregate readiness view `public.market_free_data_readiness_v1`. No raw table/view rows, holdings, portfolio identifiers, or secrets were returned or retained; only aggregate readiness counts were returned. No schema or data writes were performed.
 - Evidence limit: tool output is unsigned and was returned in the current task context; this sanitized transcription is not a cryptographic database attestation.
 
 ## Observed schema facts
