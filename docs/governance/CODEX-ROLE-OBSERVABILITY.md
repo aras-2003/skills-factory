@@ -1,6 +1,6 @@
 # Codex role routing observability
 
-Status: v1 repository protocol for recording Architect routing decisions in Codex. New sidecars use contract v1.1; existing v1.0 records remain readable. This records evidence visible to the coordinator; it does not add host telemetry or claim that unavailable host values were observed.
+Status: v1 repository protocol for recording Architect routing decisions in Codex. New sidecars use contract v1.2; existing v1.0 and v1.1 records remain readable under their original rules. This records evidence visible to the coordinator; it does not add host telemetry or claim that unavailable host values were observed.
 
 ## Boundary
 
@@ -15,12 +15,16 @@ Evaluate the task after repository inspection and before the first architecture-
 | Impact | Operational rule | Architect |
 | --- | --- | --- |
 | A0: routine, low-impact, easy to reverse | Existing deterministic operation; no material design choice | Skip |
-| A1: local change using an established pattern and unchanged contracts | No material boundary, consumer, migration, security, or operations choice | Skip |
-| A2: choice changes a component boundary, public/shared contract, or material dependency | Need alternatives and compatibility consequences | Invoke |
+| A1: local change using an established pattern and unchanged contracts | Skip unless the observed signal is a shared public contract or trust boundary | Skip; invoke for the named material trigger |
+| A2: choice changes a component boundary, public/shared contract, or material dependency | Need alternatives and compatibility consequences | Invoke when that trigger is present; skip can be correct when a reviewer records `NONE` |
 | A3: multiple components, data shape, migration, security boundary, or operational behavior | Need producer/consumer, rollout, and failure analysis | Invoke |
 | A4: broad impact or hard rollback | Need explicit migration, rollback, and risk decision | Invoke |
 
 For A2–A4, request `gpt-6.2-sol` with `high` reasoning effort, subject to host support and authorization. These are requested settings. Record effective model/effort only when the host exposes evidence; otherwise use `UNKNOWN` with a reason. Do not infer an effective model from a profile file, tool argument, or the quality of the response.
+
+### Contract v1.2 trigger classification
+
+Each v1.2 record requires an `architect_trigger` object with `class`, a reviewer-readable `reason`, and a safe `evidence_reference` (or `null` when the class is `UNKNOWN`). Use only the schema's enumerated classes: `NONE`, `UNKNOWN`, the two A1 triggers, the three A2 triggers, the A3 multi-component/migration/security/operations trigger, and the A4 broad-impact/hard-rollback trigger. The class records why the Architect is or is not needed; `timing_assessment` remains a separate chronology judgment. In particular, an A1 material trigger may be `ON_TIME`, and A2 `CORRECT_SKIP` is valid only when the trigger is explicitly `NONE`. `UNKNOWN` never establishes that a route was correct. V1.0/v1.1 records must not be backfilled or reinterpreted; the validator retains their earlier contract rules.
 
 An escalation such as A1 → A3 creates a new linked decision at the newly observed signal; preserve the prior valid skip. A host refusal or unavailable role is a blocked/failed attempt, not a skip. Retries have unique attempt IDs linked to the original decision. A user-directed Architect invocation is labeled `USER_REQUEST` and is not counted as a natural-routing success.
 
@@ -32,7 +36,7 @@ An escalation such as A1 → A3 creates a new linked decision at the newly obser
 4. **Validate and link.** Validate the JSON sidecar with `python scripts/eval/role_decision_record.py validate`. Store it under `evals/results/role-decisions/` and link it from the relevant Issue/PR. Its `task_reference` may point to an existing evaluation receipt, but do not replace or repurpose that receipt's `execution.tool_trace_path`: that field remains the actual tool trace. A role sidecar is not a substitute for the trace and does not change evaluation PASS/FAIL rules. For a repository-local result artifact, validate the file digest; external/private references remain references unless their bytes are available to the validator.
 5. **Review timing independently.** A reviewer first labels expected trigger and timing window from the pre-decision evidence, before inspecting the actual dispatch and outcome. `ON_TIME` means an accepted dispatch is proven to precede the first dependent action; `EARLY` means that dispatch preceded the action but the reviewer judges it earlier than needed; `LATE` requires evidence that the action preceded the decision or dispatch request; an acknowledgment observed after an action does not prove late dispatch. `MISSED` means a qualifying action is proven to follow a `SKIP`; `UNNECESSARY` means the reviewer finds an invocation unnecessary; `CORRECT_SKIP` requires explicit confirmation and no evidence that a qualifying action occurred. Use strict exact times or non-overlapping coordinator bounds. Tied, overlapping, missing, or incomparable timing evidence is `UNKNOWN`; do not infer timing from the final answer.
 
-For natural A0/A1 work, an invocation assessed by an independent reviewer is `UNNECESSARY`; if that review has not happened or evidence is incomplete, use `UNKNOWN`. Do not treat the lack of a reviewer as a finding against the coordinator.
+For legacy v1.0/v1.1 records, retain the original natural A0/A1 rule: an invocation is `UNNECESSARY` when an independent reviewer confirms it, or `UNKNOWN` when review/evidence is incomplete. In v1.2, a qualifying A1 shared-public-contract or trust-boundary trigger can justify invocation; judge its timing separately, so a valid dispatch may be `ON_TIME`. `UNNECESSARY` contradicts a matching qualifying trigger because that label assesses whether the invocation was needed. Without a qualifying A0/A1 trigger, use `UNNECESSARY` only with independent reviewer rationale, otherwise `UNKNOWN`. A v1.2 natural `CORRECT_SKIP` requires trigger class `NONE`, and `NONE` cannot be assessed `MISSED`; `UNKNOWN` never proves the route correct. Do not treat the lack of a reviewer as a finding against the coordinator.
 
 ## Interpretation
 
@@ -44,8 +48,8 @@ The v1 pilot is useful when sampled tasks include both skips and invocations, in
 
 The validator and behavioral coverage must preserve these distinctions:
 
-- A0/A1 skip: `SKIP`, no dispatch attempt, no Architect execution, and a reviewable reason.
-- A2/A3/A4 invoke: decision recorded before the first dependent action; dispatch and completion proven separately.
+- Legacy v1.0/v1.1 A0/A1 skip and A2/A3/A4 invocation retain their recorded policy. In v1.2, A0 skip and A1 skip without a qualifying trigger use `NONE`; A1 shared-public-contract/trust-boundary triggers may invoke; A2 invokes for a material trigger and may skip with `NONE`; A3/A4 invoke for their matching trigger class. For every version, record missed/unknown decisions without converting missing evidence into a correct route.
+- Trigger appropriateness and chronology are separate: a qualifying v1.2 A1 invocation may be `ON_TIME`, while `UNNECESSARY` contradicts any matching qualifying invoke trigger. `CORRECT_SKIP` requires explicit `NONE`, and `MISSED` contradicts `NONE` for any natural skip impact; `UNKNOWN` cannot establish a correct skip. Dispatch and completion are still proven separately.
 - Escalation: preserve the initial decision and create a linked record at the new signal.
 - Unavailable/denied host or invisible effective profile: preserve `INVOKE`; record the attempt result and `UNKNOWN` host values with reasons.
 - Retry: one record per actual attempt, new attempt ID, same immutable decision ID and fields, explicit link to an earlier attempt; duplicate or conflicting terminal evidence is rejected.

@@ -177,6 +177,158 @@ class RoleDecisionRecordTests(unittest.TestCase):
                                          first_dependent_action_time_unknown_reason=None)
         return data
 
+    def v12(self, impact: str, invoke: bool, trigger: str) -> dict:
+        data = self.v11(invoke)
+        data["schema_version"] = "1.2"
+        data["architect_trigger"] = {
+            "class": trigger,
+            "reason": "reviewed trigger classification",
+            "evidence_reference": "test evidence",
+        }
+        if trigger != "UNKNOWN":
+            data["architect_trigger"]["evidence_reference"] = "test evidence"
+        data["impact"] = impact
+        return data
+
+    def test_v12_structured_architecture_trigger_separates_routing_from_timing(self) -> None:
+        # ROUTE-TRIGGER-01: qualifying A1 invocation can be chronologically ON_TIME.
+        invoke = self.v12("A1", True, "A1_SHARED_PUBLIC_CONTRACT")
+        invoke["timing_assessment"].update(value="ON_TIME", reason="reviewed",
+            first_dependent_action_at="2026-01-01T10:02:00Z", first_dependent_action_reference="action")
+        self.assertEqual([], records.validate_record(invoke))
+
+        # ROUTE-TRIGGER-02: impact A2 with explicit NONE may correctly skip.
+        skip = self.v12("A2", False, "NONE")
+        skip["timing_assessment"].update(value="CORRECT_SKIP", reason="no qualifying trigger",
+            no_qualifying_action_confirmed=True)
+        self.assertEqual([], records.validate_record(skip))
+
+        # A material A2 trigger still requires invocation.
+        material = self.v12("A2", True, "A2_MATERIAL_DEPENDENCY")
+        self.assertEqual([], records.validate_record(material))
+
+    def test_v12_trigger_missing_invalid_and_contradictory_fail_closed(self) -> None:
+        # ROUTE-TRIGGER-03/05: missing or contradictory trigger evidence must fail closed.
+        data = self.v12("A2", True, "A2_SHARED_CONTRACT")
+        del data["architect_trigger"]
+        self.assertTrue(records.validate_record(data))
+        data = self.v12("A2", True, "A2_SHARED_CONTRACT")
+        data["architect_trigger"]["class"] = "MADE_UP"
+        self.assertTrue(records.validate_record(data))
+        data = self.v12("A3", False, "NONE")
+        data["timing_assessment"].update(value="CORRECT_SKIP", reason="reviewed",
+            no_qualifying_action_confirmed=True)
+        self.assertError(data, "CORRECT_SKIP is inconsistent with impact A2-A4")
+        data = self.v12("A2", False, "NONE")
+        data["timing_assessment"].update(value="MISSED", reason="reviewed",
+            first_dependent_action_at="2026-01-01T10:02:00Z", first_dependent_action_reference="action")
+        self.assertError(data, "MISSED conflicts with an explicit NONE Architect trigger")
+
+    def test_v12_unknown_trigger_cannot_confirm_correct_skip(self) -> None:
+        # Independent review P1: UNKNOWN trigger must not establish a correct skip.
+        data = self.v12("A1", False, "UNKNOWN")
+        data["timing_assessment"].update(value="CORRECT_SKIP", reason="no trigger seen",
+            no_qualifying_action_confirmed=True)
+        self.assertError(data, "CORRECT_SKIP requires an explicit NONE Architect trigger")
+
+    def test_v12_none_trigger_cannot_be_assessed_missed_across_natural_skip_impacts(self) -> None:
+        # Independent review P2: NONE at the recorded decision conflicts with MISSED for any natural skip impact.
+        for impact in ("A0", "A1"):
+            with self.subTest(impact=impact):
+                data = self.v12(impact, False, "NONE")
+                data["timing_assessment"].update(value="MISSED", reason="later action",
+                    first_dependent_action_at="2026-01-01T10:02:00Z", first_dependent_action_reference="action")
+                self.assertError(data, "MISSED conflicts with an explicit NONE Architect trigger")
+
+    def test_v12_qualifying_natural_invoke_cannot_be_assessed_unnecessary(self) -> None:
+        # An UNNECESSARY verdict contradicts the qualifying trigger even when chronology is separate.
+        for impact, trigger in (
+            ("A1", "A1_SHARED_PUBLIC_CONTRACT"),
+            ("A2", "A2_SHARED_CONTRACT"),
+            ("A3", "A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS"),
+            ("A4", "A4_BROAD_IMPACT_OR_HARD_ROLLBACK"),
+        ):
+            with self.subTest(impact=impact, trigger=trigger):
+                data = self.v12(impact, True, trigger)
+                data["timing_assessment"].update(value="UNNECESSARY", reason="reviewer found invocation unnecessary")
+                self.assertError(data, "UNNECESSARY conflicts with a qualifying Architect trigger")
+
+    def test_v12_concrete_trigger_class_must_match_impact(self) -> None:
+        # Independent review P2: no concrete trigger class may contradict the impact class.
+        for impact, trigger in (("A1", "A2_SHARED_CONTRACT"), ("A0", "A4_BROAD_IMPACT_OR_HARD_ROLLBACK")):
+            with self.subTest(impact=impact, trigger=trigger):
+                data = self.v12(impact, False, trigger)
+                data["timing_assessment"].update(value="CORRECT_SKIP", reason="no qualifying action",
+                    no_qualifying_action_confirmed=True)
+                self.assertError(data, f"trigger class {trigger} is incompatible with impact {impact}")
+
+    def test_v12_natural_a0_a1_invoke_without_trigger_is_unnecessary_or_unknown(self) -> None:
+        # ROUTE-TRIGGER-04: no trigger needs UNKNOWN or reviewer-confirmed UNNECESSARY.
+        data = self.v12("A1", True, "NONE")
+        data["timing_assessment"].update(value="ON_TIME", reason="chronology was timely",
+            first_dependent_action_at="2026-01-01T10:02:00Z", first_dependent_action_reference="action")
+        self.assertError(data, "requires UNKNOWN or UNNECESSARY")
+        data["timing_assessment"].update(value="UNNECESSARY", reason="independent reviewer found no trigger",
+            first_dependent_action_at=None, first_dependent_action_reference=None)
+        self.assertEqual([], records.validate_record(data))
+
+    def test_v12_retry_cannot_change_architecture_trigger(self) -> None:
+        # ROUTE-TRIGGER-07: retry preserves the structural decision and its trigger.
+        original = self.v12("A2", True, "A2_SHARED_CONTRACT")
+        retry = copy.deepcopy(original)
+        retry.update(attempt_id="attempt-2", retry_of="attempt-1")
+        retry["dispatch"]["timestamp"] = "2026-01-01T10:02:00Z"
+        retry["architect_trigger"] = {
+            "class": "A2_MATERIAL_DEPENDENCY",
+            "reason": "changed after retry",
+            "evidence_reference": "other evidence",
+        }
+        status, output = self.run_chain(original, retry)
+        self.assertEqual(1, status, output)
+        self.assertIn("architect_trigger", output)
+
+    def test_v12_timing_bounds_preserve_unknown_when_order_overlaps(self) -> None:
+        # ROUTE-TRIGGER-06: preserving chronology constraints is separate from routing correctness.
+        data = self.v12("A1", True, "A1_SHARED_PUBLIC_CONTRACT")
+        data["dispatch"].update(timestamp=None, time_unknown_reason="host omitted time",
+            coordinator_bounds=self.bounds("2026-01-01T10:00:30Z", "2026-01-01T10:01:30Z"))
+        data["timing_assessment"].update(value="ON_TIME", reason="reviewed",
+            first_dependent_action_at=None, first_dependent_action_reference="action",
+            first_dependent_action_time_unknown_reason="host omitted time",
+            first_dependent_action_coordinator_bounds=self.bounds("2026-01-01T10:01:00Z", "2026-01-01T10:02:00Z"))
+        self.assertError(data, "requires accepted dispatch before")
+        data["timing_assessment"].update(value="UNKNOWN", reason="coordinator bounds overlap")
+        self.assertEqual([], records.validate_record(data))
+
+    def test_v10_v11_reject_v12_trigger_field(self) -> None:
+        # ROUTE-TRIGGER-08: legacy acceptance stays unchanged; v1.2 does not use v1.0 logic.
+        for version in ("1.0", "1.1"):
+            data = self.v11(invoke=True) if version == "1.1" else record("A1", invoke=True)
+            data["architect_trigger"] = {
+                "class": "A1_TRUST_BOUNDARY",
+                "reason": "test trigger",
+                "evidence_reference": "test evidence",
+            }
+            self.assertTrue(records.validate_record(data), version)
+
+    def test_default_cli_validates_historical_sidecars(self) -> None:
+        # ROUTE-TRIGGER-09: all stored historical sidecars are checked as a repository scan.
+        output = io.StringIO()
+        with patch.object(sys, "argv", ["role_decision_record.py", "validate"]), contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
+            status = records.main()
+        self.assertEqual(0, status, output.getvalue())
+
+    def test_v12_unknown_trigger_can_omit_evidence_but_specific_trigger_cannot(self) -> None:
+        # ROUTE-TRIGGER-05: UNKNOWN is explicitly unknown, but concrete classes need evidence.
+        unknown = self.v12("A2", True, "UNKNOWN")
+        unknown["architect_trigger"]["evidence_reference"] = None
+        self.assertEqual([], records.validate_record(unknown))
+        specific = self.v12("A2", True, "A2_SHARED_CONTRACT")
+        specific["architect_trigger"]["evidence_reference"] = None
+        self.assertTrue(records.validate_record(specific))
+        specific["architect_trigger"]["evidence_reference"] = "   "
+        self.assertTrue(records.validate_record(specific))
+
     @staticmethod
     def bounds(earliest: str, latest: str) -> dict:
         return {"earliest": earliest, "latest": latest, "evidence": "coordinator receipt"}
