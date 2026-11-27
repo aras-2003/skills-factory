@@ -11,7 +11,7 @@
     "experimental_api": true
   },
   "probe_source": {
-    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/app_server_acl_probe.py",
+    "reference": "evals/results/runtime-canaries/sdlc-deep-2026-11-27/app_server_acl_probe.py",
     "sha256": "579188b213e6aa8fce854025f74ddde9bb29c4c9d6946c9674b4779662c0817f"
   },
   "operation": {
