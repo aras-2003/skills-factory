@@ -22,6 +22,7 @@ REFRESHED_DIGEST_PATHS = (
     "adapters/skills-factory-cloud-next/scripts/check-contracts.mjs",
     "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
     "docs/architecture/decisions/2026-11-load-skill-source-pin.md",
+    "docs/governance/CODEX-SUBAGENT-PILOT.md",
     "scripts/engineering/delegation_handoff.py",
     "tests/governance/test_sdlc_architecture_source_example.py",
     "tests/test_delegation_handoff.py",
@@ -41,6 +42,7 @@ APPROVED_REFRESHED_SOURCE_SHA256 = {
         "adapters/skills-factory-cloud-next/src/cloud-tools.ts"
     ],
     "scripts/engineering/delegation_handoff.py": "05670e60c7f916367662a9e20c5cefc8699f7e0d1a411889fe5c9979927c926c",
+    "docs/governance/CODEX-SUBAGENT-PILOT.md": "bfc923d87c5a781331a113d639a004cebe45380ec0b4f5b25c13c4a085c3fff6",
     "tests/test_delegation_handoff.py": "6f4d95f015801f370d17c69beca982d64fdf0a3eeb3974dd4b6edba433c9ee4b",
 }
 CONSUMER_MAP_PATHS = (
@@ -208,6 +210,25 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
                 with patch.dict(APPROVED_REFRESHED_SOURCE_SHA256, {path: "0" * 64}):
                     with self.assertRaisesRegex(AssertionError, "unapproved refreshed source digest"):
                         normalize_continuation(current, baseline, ROOT)
+
+    def test_subagent_runbook_refresh_is_exact_and_approved(self):
+        baseline = subprocess.check_output(
+            ["git", "--no-replace-objects", "show", f"{EXPECTED_CONSUMER_MAP}:{CONTINUATION_PATH}"],
+            cwd=ROOT,
+        )
+        current = (ROOT / CONTINUATION_PATH).read_bytes()
+        path = "docs/governance/CODEX-SUBAGENT-PILOT.md"
+        digest = hashlib.sha256((ROOT / path).read_bytes()).hexdigest().encode()
+        pattern = re.compile(rb"(?m)^  " + re.escape(path.encode()) + rb": ([0-9a-f]{64})$")
+        matches = list(pattern.finditer(current))
+        self.assertEqual(1, len(matches))
+        stale = current[:matches[0].start(1)] + b"0" * 64 + current[matches[0].end(1):]
+        with self.assertRaisesRegex(AssertionError, "continuation digest does not match source"):
+            normalize_continuation(stale, baseline, ROOT)
+        self.assertEqual(APPROVED_REFRESHED_SOURCE_SHA256[path].encode(), digest)
+        with patch.dict(APPROVED_REFRESHED_SOURCE_SHA256, {path: "0" * 64}):
+            with self.assertRaisesRegex(AssertionError, "unapproved refreshed source digest"):
+                normalize_continuation(current, baseline, ROOT)
 
     def test_rollback_requires_caller_compatibility_before_reverting_v1_schema(self):
         decision = DECISION.read_text(encoding="utf-8")
