@@ -1,7 +1,7 @@
 # Frozen test plan — bounded handoff validator task
 
-Candidate C4: `6690ff6475b317774c845bc496da18a2c5928ece`  
-Baseline main-parent: `e4f96cc7c0e2b139c59f72d0b69bc880504b08a4`  
+Candidate C4: `6690ff6475b317774c845bc496da18a2c5928ece`
+Baseline main-parent: `e4f96cc7c0e2b139c59f72d0b69bc880504b08a4`
 Issue links: #748, #768
 
 | Case | Fixture and assertion | Result |
