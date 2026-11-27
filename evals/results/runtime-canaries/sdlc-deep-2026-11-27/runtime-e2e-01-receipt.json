@@ -76,6 +76,22 @@
     "private_prompts_or_transcripts_stored": false,
     "token_usage": "Observed for App Server worker turns where thread/tokenUsage/updated emitted; see role events."
   },
+  "host_schema_capability_snapshot": {
+    "generated_at": "2026-11-27",
+    "generator": "codex-cli 0.159.1: codex app-server generate-json-schema --experimental",
+    "schema_file": "v2/ThreadStartParams.json",
+    "schema_sha256": "80a40a7fac15b4bf70efb7f893fb353acc0a0d30c68f54aee4f01923deca85de",
+    "observed_top_level_fields": ["config", "dynamicTools", "permissions", "runtimeWorkspaceRoots", "sandbox"],
+    "permissions_description": "Named profile id; cannot be combined with sandbox.",
+    "dynamic_tools_shape": "Function or namespace function tool declarations; this is not evidence of a per-role MCP-server allowlist.",
+    "not_observed_as_top_level_fields": ["mcpServers", "parentThreadId"],
+    "scope_limitations": [
+      "The config field permits additional properties, so this schema alone cannot determine whether config overrides can scope MCP servers.",
+      "Schema shape does not prove the host honored any requested setting or that a forbidden MCP call is denied.",
+      "Applies only to Codex App Server 0.159.1 ThreadStartParams, not other host surfaces."
+    ],
+    "mcp_tool_acl_status": "NOT_PROVEN"
+  },
   "resume_probe": {
     "approval_field_rejected_before_dispatch": true,
     "approval_non_transfer": "NOT_RUN: stage A had no issued approval",

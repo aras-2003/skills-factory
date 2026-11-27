@@ -45,6 +45,21 @@ The first `workspaceWrite` probe used only a `tests/` writable root. Its effecti
 
 The corrected turn requested `excludeSlashTmp=true`, `excludeTmpdirEnvVar=true`, `runtimeWorkspaceRoots=tests/`, and a `tests/` write root. In the Developer role turn, the allowed test marker was created; the repository-root marker outside that grant failed with `PermissionError errno=1` and remained absent. The allowed marker was inspected and removed. **Filesystem ACL: PASS for this one bounded App Server turn.** The effective turn policy itself was not returned as host metadata; the actual command outcome is the denial evidence. This does not establish MCP, secret-read, deployment, or universal per-role ACLs.
 
+## App Server thread-start schema observation
+
+The schema was regenerated on 2026-11-27 with Codex CLI 0.159.1 using
+`codex app-server generate-json-schema --experimental`. The generated
+`v2/ThreadStartParams.json` SHA-256 was
+`80a40a7fac15b4bf70efb7f893fb353acc0a0d30c68f54aee4f01923deca85de`.
+It exposes top-level `sandbox`, `permissions`, `runtimeWorkspaceRoots`, and
+`dynamicTools`; the latter declares function or namespace function tools. It
+does not expose top-level `mcpServers` or `parentThreadId`. However, `config`
+allows additional properties, so this schema does not settle whether a config
+override can scope MCP servers. **MCP-tool ACL remains NOT_PROVEN** until a
+negative invocation is denied by the runtime or the host contract establishes
+an enforced per-role selector. This finding is specific to this App Server
+version and surface.
+
 ## Interruption and fresh-thread handoff
 
 Stage A’s Terra High Developer turn was interrupted while a bounded wait command was active. A distinct Luna Low Test Executor thread then received a 911-byte serialized handoff (SHA-256 `8caea92dee8fbf3e6c131236f376930ad0601b4ea39ac172652767c7e3e7b719`), reserialized it byte-identically, and rejected C1’s receipt against expected C4 with `candidate SHA mismatch`. An input containing `approval` was rejected by the serializer before dispatch.
