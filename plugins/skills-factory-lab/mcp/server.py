@@ -235,7 +235,43 @@ def _render_with_receipt(tool_name: str, arguments: dict[str, Any], render, cont
                     span.set_attribute(f"skills_factory.capability.{attribute}", str(result[key]))
         return _with_tool_receipt(tool_name, arguments, result, run_id)
 
-mcp = MCPServer(
+class StrictLoadSkillServer(MCPServer):
+    async def list_tools(self):
+        tools = await super().list_tools()
+        for tool in tools:
+            if tool.name == "load_skill":
+                # Let the server classify malformed revision values before an
+                # intermediary rejects them, while preserving strict fields.
+                schema = dict(tool.input_schema)
+                properties = dict(schema["properties"])
+                skill_name = dict(properties["skill_name"])
+                skill_name.pop("minLength", None)
+                skill_name.pop("maxLength", None)
+                properties["skill_name"] = skill_name
+                revision = dict(properties["expected_source_revision"])
+                revision.pop("default", None)
+                revision.pop("type", None)
+                revision.pop("minLength", None)
+                revision.pop("maxLength", None)
+                revision.pop("pattern", None)
+                properties["expected_source_revision"] = revision
+                schema.update(properties=properties, additionalProperties=False)
+                tool.input_schema = schema
+        return tools
+
+    async def call_tool(self, name, arguments, context=None):
+        # SDK argument models discard extras, so enforce this at the raw boundary.
+        if name == "load_skill":
+            if set(arguments) - {"skill_name", "expected_source_revision"}:
+                raise ToolError("INVALID_TOOL_ARGUMENTS: Invalid tool arguments.")
+            if "expected_source_revision" in arguments:
+                revision = arguments["expected_source_revision"]
+                if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}", revision):
+                    raise ToolError("INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.")
+        return await super().call_tool(name, arguments, context)
+
+
+mcp = StrictLoadSkillServer(
     "Skills Factory runtime",
     description="Unified Skills Factory runtime for investment routing and factual chart rendering.",
     instructions=SERVER_INSTRUCTIONS,
@@ -295,12 +331,19 @@ def list_skills(context: Context = None) -> dict:
 
 
 @mcp.tool()
-def load_skill(skill_name: str, context: Context = None) -> dict:
+def load_skill(skill_name: str, expected_source_revision: str = None, context: Context = None) -> dict:  # type: ignore[assignment]
     """Load packaged skill instructions and safe textual references for host-model execution."""
-    return execute_tool(
-        "load_skill", {"skill_name": skill_name}, lambda: _load_skill(skill_name), _with_tool_receipt,
-        request_meta=_request_meta(context),
-    )
+    def operation():
+        try:
+            return _load_skill(skill_name, expected_source_revision)
+        except ValueError as exc:
+            if str(exc).startswith(("INVALID_SOURCE_REVISION:", "SOURCE_REVISION_MISMATCH:", "SOURCE_REVISION_UNVERIFIABLE:")):
+                raise ToolError(str(exc)) from exc
+            raise
+    arguments = {"skill_name": skill_name}
+    if expected_source_revision is not None:
+        arguments["expected_source_revision"] = expected_source_revision
+    return execute_tool("load_skill", arguments, operation, _with_tool_receipt, request_meta=_request_meta(context))
 
 
 @mcp.tool()

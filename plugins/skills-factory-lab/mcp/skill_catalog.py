@@ -234,7 +234,27 @@ def list_skills() -> dict[str, Any]:
     }
 
 
-def load_skill(skill_name: str) -> dict[str, Any]:
+def verify_source_revision(expected: Any) -> str:
+    """Bind a pinned call to the digest-verified adjacent packaged catalog."""
+    if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{40}", expected):
+        raise ValueError("INVALID_SOURCE_REVISION: expected_source_revision must be a lowercase 40-character Git commit ID.")
+    identity = packaged_release_identity()
+    try:
+        packaged_root = _plugin_root() / "skills"
+        verified = (identity and packaged_root.is_dir() and not packaged_root.is_symlink()
+                    and skills_root() == packaged_root
+                    and packaged_payload_integrity(identity)["status"] == "verified")
+    except (OSError, RuntimeError):
+        verified = False
+    if not verified:
+        raise ValueError("SOURCE_REVISION_UNVERIFIABLE: Packaged source revision could not be verified.")
+    if expected != identity["source_revision"]:
+        raise ValueError("SOURCE_REVISION_MISMATCH: The packaged skill source does not match the requested revision.")
+    return identity["source_revision"]
+
+
+def load_skill(skill_name: str, expected_source_revision: str | None = None) -> dict[str, Any]:
+    verified_revision = verify_source_revision(expected_source_revision) if expected_source_revision is not None else None
     if not isinstance(skill_name, str) or not _SAFE_NAME.fullmatch(skill_name):
         raise ValueError("skill_name must be a simple packaged skill name")
     matches = [item for item in entries() if item["name"] == skill_name]
@@ -268,5 +288,5 @@ def load_skill(skill_name: str) -> dict[str, Any]:
         "reference_files": references + _declared_script_sources(skill_dir, instructions),
         "supporting_code_execution": "not_executed; a host code runner is required to run supplied scripts",
         "content_sha256": item["content_sha256"],
-        "source_revision": packaged_runtime_value("source_revision"),
+        "source_revision": verified_revision or packaged_runtime_value("source_revision"),
     }
