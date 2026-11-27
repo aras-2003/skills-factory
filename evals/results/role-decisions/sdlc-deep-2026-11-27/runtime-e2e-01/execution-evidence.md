@@ -37,7 +37,7 @@ The sanitized structured event data and output hashes are in `receipt.json` unde
 
 ## PR-head exact-SHA Test Executor rerun
 
-Before this dispatch, the `sf-test-executor` INVOKE decision was recorded in [`executor-post-ci-rerun-invoke.json`](../host-runtime-capability/executor-post-ci-rerun-invoke.json). A fresh App Server thread (`01a21eed-0b1d-7073-95fa-b303b21d3b8a`) ran read-only at exact PR head `6ab966064eb98f34b62fc23a52b742aafaefd138`; all commands exited 0: governance 7/7, focused fixture-policy 10/10, and handoff module 42/42. `thread/start` returned `gpt-6-luna` / `low`; the turn lifecycle omitted effective model/effort, so both remain UNKNOWN. Named profile activation remains UNKNOWN (`activePermissionProfile=null`). Token usage was observed; currency cost was not exposed. Structured event data and output hashes are stored in the runtime-canaries receipt.
+Before this dispatch, the `sf-test-executor` INVOKE decision was recorded in [`executor-post-ci-rerun-invoke.json`](../host-runtime-capability/executor-post-ci-rerun-invoke.json). A fresh App Server thread (`01a21eed-0b1d-7073-95fa-b303b21d3b8a`) ran read-only at exact PR head `6ab966064eb98f34b62fc23a52b742aafaefd138`; all commands exited 0: governance 7/7, focused fixture-policy 10/10, and handoff module 42/42. `thread/start` returned `gpt-6-luna` / `low`; the turn lifecycle omitted effective model/effort, so both remain UNKNOWN. Named profile activation remains UNKNOWN (`activePermissionProfile=null`). Token usage was observed; currency cost was not exposed. Structured event data and output hashes are stored in [`runtime-e2e-01-receipt.json`](../../../runtime-canaries/sdlc-deep-2026-11-27/runtime-e2e-01-receipt.json).
 
 ## Runtime permission check
 
