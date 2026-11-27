@@ -305,3 +305,22 @@ The PR candidate must be independently reviewed against these three exact
 hashes. After merge, a squash commit need not preserve the PR head as an
 ancestor: validation remains anchored to `242fe476` plus the successor source
 hashes and continuation manifest, not the ephemeral candidate commit ID.
+
+## Successor source deltas for PR #805
+
+PR [#805](https://github.com/aras-2003/skills-factory/pull/805) hardens the
+existing bounded handoff parser and its contract tests. These are source
+compatibility deltas, not changes to the Investment behavior evaluated by the
+historical Iteration 07/08 campaigns:
+
+| Path | SHA-256 | Reason |
+| --- | --- | --- |
+| `scripts/engineering/delegation_handoff.py` | `995e229e981d0b4810282c1933f0b4dc5a424c3343f18598542b00efdc42f0dc` | Enforce the bounded UTF-8 wire size consistently, reject duplicate decoded JSON keys, and redact untrusted unknown field names. |
+| `tests/test_delegation_handoff.py` | `45025985569b8e73e608813509fe97b31827f6b1234a64508385f0dc2352de72` | Bind the parser regression cases to the hardened wire and validation behavior. |
+
+The existing continuation manifest admits only these exact source digests and
+the governance test verifies both against current bytes. The frozen campaign
+manifests, historical receipts, baseline revisions, and expected behavior
+paths remain unchanged. The continuation remains `INTEGRATION_ISOLATED`,
+runtime `NOT_RUN`, and release approval `false`; this source delta does not
+claim Investment runtime acceptance or production release.
