@@ -39,8 +39,8 @@ ARCHITECTURE_IMPACTS = {"A0", "A1", "A2", "A3", "A4", "UNKNOWN"}
 def _bounded_json(value: Any) -> bytes:
     try:
         encoded = json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
-    except (TypeError, ValueError) as exc:
-        raise ValueError("handoff must be JSON serializable") from exc
+    except (TypeError, ValueError):
+        raise ValueError("handoff must be JSON serializable") from None
     if len(encoded) > MAX_HANDOFF_BYTES:
         raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
     return encoded
@@ -142,17 +142,36 @@ def serialize_input(payload: Any) -> bytes:
     return _bounded_json(validate_input(payload))
 
 
+def _unique_object(pairs: list[tuple[str, Any]]) -> dict:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("serialized handoff contains duplicate object keys")
+        result[key] = value
+    return result
+
+
 def read_input(data: bytes | str) -> dict:
     if isinstance(data, bytes):
         if len(data) > MAX_HANDOFF_BYTES:
             raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
-        data = data.decode("utf-8")
-    if not isinstance(data, str):
+        try:
+            data = data.decode("utf-8")
+        except UnicodeDecodeError:
+            raise ValueError("serialized handoff must be valid UTF-8") from None
+    elif isinstance(data, str):
+        try:
+            size = len(data.encode("utf-8"))
+        except UnicodeEncodeError:
+            raise ValueError("serialized handoff must be valid UTF-8") from None
+        if size > MAX_HANDOFF_BYTES:
+            raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
+    else:
         raise ValueError("serialized handoff must be bytes or text")
     try:
-        payload = json.loads(data)
-    except (ValueError, TypeError) as exc:
-        raise ValueError("serialized handoff is not valid JSON") from exc
+        payload = json.loads(data, object_pairs_hook=_unique_object)
+    except json.JSONDecodeError:
+        raise ValueError("serialized handoff is not valid JSON") from None
     return validate_input(payload)
 
 
