@@ -267,6 +267,8 @@ def validate_result(
         if type(entry["exit_code"]) is not int:
             raise ValueError("command_exit_codes.exit_code must be an integer")
     if item["status"] == "PASS":
+        if expected_role in {"sf-test-executor", "sf-independent-reviewer"} and item["changed_paths"]:
+            raise ValueError("Read-only role PASS cannot report changed paths")
         if not item["evidence_refs"]:
             raise ValueError("PASS requires at least one evidence reference")
         if any(outcome["status"] != "PASS" for outcome in item["test_case_outcomes"]):
