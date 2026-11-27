@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "Issue #748 / PR #824 \u2014 fresh read-only Test Executor rerun for SDLC runtime pilot",
+  "source_revision": "6ab966064eb98f34b62fc23a52b742aafaefd138",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Test Executor",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Run the frozen local regression suites through a fresh read-only App Server Test Executor thread at exact source revision 6ab966064eb98f34b62fc23a52b742aafaefd138. This verifies bounded test execution and sanitized receipt packaging only.",
+    "timestamp": "2026-11-27T21:31:27Z"
+  },
+  "impact": "A0",
+  "requested": {
+    "model": {
+      "value": "gpt-6-luna",
+      "provenance": ".codex/agents/sf-test-executor.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "low",
+      "provenance": ".codex/agents/sf-test-executor.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-test-executor",
+      "provenance": ".codex/agents/sf-test-executor.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "App Server turn/completed",
+      "reason": "thread/start echoed gpt-6-luna but turn/started and turn/completed omitted effective model."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "App Server turn/completed",
+      "reason": "thread/start echoed low but turn/started and turn/completed omitted effective reasoning effort."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "App Server thread/start",
+      "reason": "activePermissionProfile was null; named TOML profile activation was not observed."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "App Server accepted thread/start and turn/start; exact dispatch timestamp not included in the retained host receipt.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T21:31:27Z",
+      "latest": "2026-11-27T21:33:50Z",
+      "evidence": "Pre-dispatch record followed by completed App Server Test Executor turn in runtime-e2e-01-receipt.json."
+    },
+    "time_unknown_reason": "App Server did not expose exact dispatch time."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "App Server reported turn/completed status completed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T21:31:27Z",
+      "latest": "2026-11-27T21:33:50Z",
+      "evidence": "Bounded coordinator observation window for the turn."
+    },
+    "started_time_unknown_reason": "App Server turn lifecycle events had no timestamps.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T21:31:27Z",
+      "latest": "2026-11-27T21:33:50Z",
+      "evidence": "Completed turn was observed by the upper bound."
+    },
+    "ended_time_unknown_reason": "App Server turn lifecycle events had no timestamps."
+  },
+  "result": {
+    "reference": "evals/results/runtime-canaries/sdlc-deep-2026-11-27/runtime-e2e-01-receipt.json",
+    "sha256": "835152eed01850f40e946ac7cd5132e3d7615eb2d422953a053b70b4a2eab061",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-27T21:33:50Z",
+    "reason": "All three agreed test suites completed with exit 0 on exact candidate SHA 6ab966064eb98f34b62fc23a52b742aafaefd138; this is bounded executor evidence only."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "App Server role decision record; exact lifecycle timestamps were not exposed.",
+    "assessed_at": "2026-11-27T21:33:50Z",
+    "first_dependent_action_at": null,
+    "reason": "The task executed as dispatched, but the host event stream omitted timestamps needed to independently classify routing timing.",
+    "first_dependent_action_reference": "Test Executor command events in runtime-e2e-01-receipt.json",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T21:31:27Z",
+      "latest": "2026-11-27T21:33:50Z",
+      "evidence": "First command and completed turn observed within the coordinator bounds."
+    },
+    "first_dependent_action_time_unknown_reason": "App Server command event timestamps were not exposed."
+  },
+  "decision_id": "sdlcdeep-20261127-executor-rerun-d839",
+  "attempt_id": "sdlcdeep-20261127-executor-rerun-d839-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "PR #824 Validate skills workflow failed because the aggregate runtime receipt was placed under role-decisions but is not a v1.x decision sidecar; action requires moving it and retaining a valid role invocation record.",
+      "captured_at": "2026-11-27T21:31:27Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "NONE",
+    "reason": "This is a bounded test-only execution with no architecture, public contract, or trust-boundary decision.",
+    "evidence_reference": "Frozen test plan in evals/results/role-decisions/sdlc-deep-2026-11-27/runtime-e2e-01/test-plan.md"
+  }
+}

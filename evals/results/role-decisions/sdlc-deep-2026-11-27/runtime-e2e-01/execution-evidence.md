@@ -35,6 +35,10 @@ On candidate `d839d18441ca741fb2c85f1349909338ee4ce867`, a fresh App Server Test
 
 The sanitized structured event data and output hashes are in `receipt.json` under `role_execution.executor_rebased_candidate_d839`; no conversational response is retained. This establishes the bounded Test Executor task only, not end-to-end release acceptance.
 
+## PR-head exact-SHA Test Executor rerun
+
+Before this dispatch, the `sf-test-executor` INVOKE decision was recorded in [`executor-post-ci-rerun-invoke.json`](../host-runtime-capability/executor-post-ci-rerun-invoke.json). A fresh App Server thread (`01a21eed-0b1d-7073-95fa-b303b21d3b8a`) ran read-only at exact PR head `6ab966064eb98f34b62fc23a52b742aafaefd138`; all commands exited 0: governance 7/7, focused fixture-policy 10/10, and handoff module 42/42. `thread/start` returned `gpt-6-luna` / `low`; the turn lifecycle omitted effective model/effort, so both remain UNKNOWN. Named profile activation remains UNKNOWN (`activePermissionProfile=null`). Token usage was observed; currency cost was not exposed. Structured event data and output hashes are stored in the runtime-canaries receipt.
+
 ## Runtime permission check
 
 The first `workspaceWrite` probe used only a `tests/` writable root. Its effective thread roots also included `/private/tmp` and the host temp directory, so both the allowed and out-of-grant writes succeeded. Both synthetic markers were inspected and removed. This was an ACL failure.
@@ -53,4 +57,4 @@ The source-level change is A1 / EXTEND at `validate_result`; it preserves v1 fie
 
 The continuation remains `INTEGRATION_ISOLATED`, runtime `NOT_RUN`, and release approval `false`. No Site deployment occurred. Keep #748 and #768 open until native-child routing, MCP/tool ACL, approval non-transfer, complete role/profile evidence, and the remaining campaign gates are separately verified.
 
-Machine-readable sanitized receipt: [`receipt.json`](receipt.json). Test plan: [`test-plan.md`](test-plan.md).
+Machine-readable sanitized runtime receipt: [`runtime-e2e-01-receipt.json`](../../../runtime-canaries/sdlc-deep-2026-11-27/runtime-e2e-01-receipt.json). Test plan: [`test-plan.md`](test-plan.md).

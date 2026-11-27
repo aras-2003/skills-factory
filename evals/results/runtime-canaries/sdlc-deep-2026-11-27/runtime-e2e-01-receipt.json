@@ -1643,6 +1643,129 @@
         }
       ],
       "financial_cost": "UNKNOWN; App Server did not expose currency cost"
+    },
+    "executor_pr_ci_rerun_6ab": {
+      "source_candidate_sha": "6ab966064eb98f34b62fc23a52b742aafaefd138",
+      "thread_id": "01a21eed-0b1d-7073-95fa-b303b21d3b8a",
+      "role": "sf-test-executor",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "thread_start_returned_model": "gpt-6-luna",
+      "thread_start_returned_effort": "low",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed omitted model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed omitted effort"
+      },
+      "profile_activation": "UNKNOWN",
+      "active_permission_profile": null,
+      "sandbox": {
+        "type": "readOnly",
+        "networkAccess": false
+      },
+      "turn_status": "completed",
+      "commands": [
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "ce2f32358121ba8385ee56aa5b813383aa5fbbb731f67217093d989ca0cb92f4",
+          "summaries": []
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.governance.test_sdlc_architecture_source_example -q'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "d65901b06f9b319adf8dc38242e49cd06f870c4eb98270a46686bb5a2779efc3",
+          "summaries": [
+            "Ran 7 tests in 0.362s",
+            "OK"
+          ]
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -q'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "7f009373ff7d6e8d9d3870df8c665e1da2037377633b5e3be3a7cefaefca75dc",
+          "summaries": [
+            "Ran 10 tests in 0.001s",
+            "OK"
+          ]
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -q'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "af369437038d3f0488ae77d6c3ed16e08b2871345a05909ca407816ac1930bcf",
+          "summaries": [
+            "Ran 42 tests in 0.007s",
+            "OK"
+          ]
+        }
+      ],
+      "token_usage_observations": [
+        {
+          "total": {
+            "totalTokens": 19807,
+            "inputTokens": 19697,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 110,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19807,
+            "inputTokens": 19697,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 110,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        },
+        {
+          "total": {
+            "totalTokens": 39887,
+            "inputTokens": 39552,
+            "cachedInputTokens": 19456,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 335,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 20080,
+            "inputTokens": 19855,
+            "cachedInputTokens": 19456,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 225,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        },
+        {
+          "total": {
+            "totalTokens": 60319,
+            "inputTokens": 59797,
+            "cachedInputTokens": 39168,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 522,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 20432,
+            "inputTokens": 20245,
+            "cachedInputTokens": 19712,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 187,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      ],
+      "financial_cost": "UNKNOWN; App Server did not expose currency cost"
     }
   },
   "schema_version": "1.0",
