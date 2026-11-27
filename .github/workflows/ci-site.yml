@@ -77,8 +77,8 @@ jobs:
         run: pnpm --dir sites/skills-factory-site exec tsc --noEmit --incremental false
       - name: Test MCP contracts
         run: pnpm --dir sites/skills-factory-site exec node ../../adapters/skills-factory-cloud-next/scripts/check-contracts.mjs
-      - name: Test canonical source synchronization
-        run: pnpm --dir sites/skills-factory-site exec node --test tests/source-sync.test.mjs
+      - name: Test source synchronization and product intelligence
+        run: pnpm --dir sites/skills-factory-site exec node --test tests/source-sync.test.mjs tests/product-intelligence.test.mjs tests/product-intelligence-route.test.mjs
       - name: Lint Site
         run: pnpm --dir sites/skills-factory-site lint
       - name: Build Site Worker
