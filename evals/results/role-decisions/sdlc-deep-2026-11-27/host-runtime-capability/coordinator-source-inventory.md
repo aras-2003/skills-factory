@@ -1,0 +1,14 @@
+# Deterministic source inventory
+Source checkout: f51c4fad6aceeab545943812794f6f44132239fc
+Tree: b071afb1802aaa6b24422bcc52c8a2e5d06d27b7
+GitHub main merge commit: e161ac30314d720f1f2173312ca94bed9b9488bf; source tree was verified equal when PR #820 was created.
+
+7ce505b43a57426c1c2ceb12ee5f3164ddb9e588cb57dd17a1ca49433eb09fbc  docs/governance/CODEX-SUBAGENT-PILOT.md
+1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0  docs/governance/CODEX-ROLE-OBSERVABILITY.md
+75b7997d19b52965ae1c41208b52b1b6b01db11050d83c2975c8199bc7167b0a  .codex/config.toml
+c6708a86910503785a1b0c61f10f311ded0f906657e50429ba2deae0ca2b7e97  .codex/agents/sf-architect.toml
+b7069c444aeffc51b6160389e35a0f4eeb03440e4e3c0b23c60e47d49a6262e8  adapters/skills-factory-cloud-next/src/mcp-handler.ts
+96a304438bb9f2ce59ce875220ffc43329efcb15f84a7f866aa42377ad155d81  adapters/skills-factory-cloud-next/src/cloud-tools.ts
+70938a8d3da702f29c65dfba2c2967f6267ca25b9ff8765073fae1558363cc7c  scripts/engineering/delegation_handoff.py
+
+Repository inspection only; no model inference or permissions were exercised.

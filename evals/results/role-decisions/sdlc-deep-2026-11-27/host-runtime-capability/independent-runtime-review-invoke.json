@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — independent review of current-runtime role and ACL evidence",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Independent Reviewer",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "The bounded runtime ACL canary and role dispatch evidence touch a security boundary and must receive independent evidence-integrity review before the role/task disposition is updated.",
+    "timestamp": "2026-11-27T16:44:07Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-independent-reviewer profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-independent-reviewer profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-independent-reviewer",
+      "provenance": "Repository .codex/agents/sf-independent-reviewer.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration child response",
+      "reason": "Reviewer output did not state the effective model."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration child response",
+      "reason": "Reviewer output did not state the effective effort."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration surface",
+      "reason": "Automatic profile loading was not reported."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "The collaboration host returned a completed distinct reviewer child result; exact child thread ID and dispatch timestamp were not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T16:44:07Z",
+      "latest": "2026-11-27T16:48:40Z",
+      "evidence": "Pre-dispatch record preceded the independent reviewer result observed by 16:48:40Z."
+    },
+    "time_unknown_reason": "The collaboration host did not expose exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The reviewer returned an independent read-only evidence audit with findings and requirement dispositions.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T16:44:07Z",
+      "latest": "2026-11-27T16:48:40Z",
+      "evidence": "Pre-dispatch record preceded the reviewer response."
+    },
+    "started_time_unknown_reason": "Exact worker start time was not exposed.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T16:44:07Z",
+      "latest": "2026-11-27T16:48:40Z",
+      "evidence": "The final review result was observed by 16:48:40Z."
+    },
+    "ended_time_unknown_reason": "Exact worker completion time was not exposed."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/independent-runtime-review-round-1.md",
+    "sha256": "51cc467c1130b047b3af4cabdcd6f00c6f8ff0662935aa798b677736d3ff24fe",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T16:48:40Z",
+    "reason": "Accepted findings; narrowed resume claims and reran the ACL canary with a redacted error class/errno. Independent follow-up review is still required."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Distinct reviewer result is available, but collaboration lifecycle timestamps are not.",
+    "assessed_at": "2026-11-27T16:48:40Z",
+    "first_dependent_action_at": null,
+    "reason": "Exact dispatch-versus-first-review-action ordering is not exposed; no timing PASS is claimed.",
+    "first_dependent_action_reference": "Independent review of runtime-acl-canary.md and receipt",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T16:44:07Z",
+      "latest": "2026-11-27T16:48:40Z",
+      "evidence": "The reviewer task was dispatched after this pre-dispatch record and returned by 16:48:40Z."
+    },
+    "first_dependent_action_time_unknown_reason": "No first-read or first-review timestamp was returned."
+  },
+  "decision_id": "sdlcdeep-20261127-independent-runtime-evidence-review",
+  "attempt_id": "sdlcdeep-20261127-independent-runtime-evidence-review-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "runtime-acl-canary.md and runtime-acl-canary-receipt.json; exact candidate f51c4fad6aceeab545943812794f6f44132239fc.",
+      "captured_at": "2026-11-27T16:44:07Z"
+    },
+    {
+      "reference": "#820 merged implementation evidence; PR #820 and evals/results/role-decisions/sdlc-deep-2026-11-27/execution-evidence.md.",
+      "captured_at": "2026-11-27T16:44:07Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "Independent review is required for runtime filesystem sandbox denial and role-routing evidence at a capability boundary.",
+    "evidence_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/architect-runtime-review.md"
+  }
+}

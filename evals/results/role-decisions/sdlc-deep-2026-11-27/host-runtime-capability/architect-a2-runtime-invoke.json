@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — current-runtime role tool ACL, profile selection and bounded resume feasibility",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "MCP runtime exposes instruction loading and domain tools, while the Codex child surface lacks a per-role tool allowlist and the host permission boundary is shared. An A2 capability-boundary assessment is needed before proposing any host integration or assuming a repository-only implementation can enforce least privilege.",
+    "timestamp": "2026-11-27T15:21:05Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved sf-architect profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-architect profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Architect child reported its effective model in the completed host task result",
+      "reason": null
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host did not expose the effective reasoning effort."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host did not expose whether the named TOML profile was loaded."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Architect child accepted through Codex collaboration surface; exact host dispatch timestamp is unavailable.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T15:21:05Z",
+      "latest": "2026-11-27T15:22:20Z",
+      "evidence": "Pre-dispatch decision record preceded the child observed running at 15:22:20Z."
+    },
+    "time_unknown_reason": "Host did not expose exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned the bounded, source-linked A2/App Server runtime recommendation; lifecycle timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T15:21:05Z",
+      "latest": "2026-11-27T15:22:20Z",
+      "evidence": "Pre-dispatch decision preceded the child observed running."
+    },
+    "started_time_unknown_reason": "The host did not expose exact worker start time.",
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": "The completed response was observed before the Test Designer and runtime follow-up, but its exact timestamp was not recorded."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/architect-runtime-review.md",
+    "sha256": "f61d1e4e83ad2baaf5e234f7dd3fa9c66e8c5cf7346da7740ce2540cbf516d26",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T16:03:36Z",
+    "reason": "Used the recommended Codex App Server session/policy surface for a real positive/negative sandbox canary. Desktop per-child tool ACL and approval non-transfer remain unproven."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "The Architect result was observed before dependent testing; exact host completion and first-dependent-action timestamps were not retained.",
+    "assessed_at": "2026-11-27T16:03:36Z",
+    "first_dependent_action_at": null,
+    "reason": "Chronological ordering is supported, but exact or non-overlapping bounds for the completed review and first test-design action are unavailable.",
+    "first_dependent_action_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/test-design-cli-acl-canary.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "The first dependent test-design timestamp was not captured."
+  },
+  "decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "attempt_id": "sdlcdeep-20261127-runtime-a2-invoke-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Issue #748 acceptance and owner-approved role matrix; see task_reference.",
+      "captured_at": "2026-11-27T15:21:05Z"
+    },
+    {
+      "reference": "docs/governance/CODEX-SUBAGENT-PILOT.md; project role instructions state child instructions are behavioral and do not establish an OS sandbox.",
+      "captured_at": "2026-11-27T15:21:05Z"
+    },
+    {
+      "reference": "Cloud Next runtime_info observed 2026-11-27: canonical source 538d800534cf7f7eca32640592a90d252f6dbada; execution_mode host_model_executes_loaded_instructions; no spawn or ACL capability listed.",
+      "captured_at": "2026-11-27T15:21:05Z"
+    },
+    {
+      "reference": "Codex collaboration.spawn_agent and exec_command tool schemas inspected 2026-11-27; spawn exposes requested model/effort, not a per-child tool allowlist or sandbox selector.",
+      "captured_at": "2026-11-27T15:21:05Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "Reviewed routing trigger for this bounded activity.",
+    "evidence_reference": "Issue #748 and runtime/source evidence listed in signal_evidence."
+  }
+}

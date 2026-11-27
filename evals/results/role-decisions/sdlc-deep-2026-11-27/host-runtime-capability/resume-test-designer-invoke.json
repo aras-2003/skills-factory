@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "Issue #748 — Test Designer review of bounded interrupted-session resume canary design",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Test Designer",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "A fresh runtime resume canary requires precise host-observable interruption, handoff, read-only denial and stop criteria; the previous attempt exposed a test collector defect.",
+    "timestamp": "2026-11-27T19:02:38Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-test-designer profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "medium",
+      "provenance": "Owner-approved sf-test-designer profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-test-designer",
+      "provenance": ".codex/agents/sf-test-designer.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration follow-up request",
+      "reason": "The collaboration host does not expose the child model, effort or auto-loaded profile."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration follow-up request",
+      "reason": "The collaboration host does not expose the child model, effort or auto-loaded profile."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration follow-up request",
+      "reason": "The collaboration host does not expose the child model, effort or auto-loaded profile."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Follow-up accepted by the existing Test Designer child; exact child ID and dispatch time are not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T19:02:38Z",
+      "latest": "2026-11-27T19:03:58Z",
+      "evidence": "Pre-dispatch decision preceded returned read-only design review."
+    },
+    "time_unknown_reason": "Collaboration host does not expose exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The Test Designer returned a read-only design review; no canary was executed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T19:02:38Z",
+      "latest": "2026-11-27T19:03:58Z",
+      "evidence": "Pre-dispatch decision preceded returned design review."
+    },
+    "started_time_unknown_reason": "Exact child start time not exposed.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T19:02:38Z",
+      "latest": "2026-11-27T19:03:58Z",
+      "evidence": "Review result observed by 19:03:58Z."
+    },
+    "ended_time_unknown_reason": "Exact child completion time not exposed."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/resume-test-design-review.md",
+    "sha256": "23f7c763e5c46075467db23678f933ac149b0cebcc01ad0c7137e8fedbaa5afb",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-27T19:03:58Z",
+    "reason": "Accepted design constraints; this review does not constitute runtime evidence."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Returned review after pre-dispatch decision; exact first review time unavailable.",
+    "assessed_at": "2026-11-27T19:03:58Z",
+    "first_dependent_action_at": null,
+    "reason": "No qualifying dependent execution action occurred.",
+    "first_dependent_action_reference": null,
+    "no_qualifying_action_confirmed": true,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "No canary action occurred."
+  },
+  "decision_id": "sdlcdeep-20261127-test-designer-resume-canary",
+  "attempt_id": "sdlcdeep-20261127-test-designer-resume-canary-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "runtime-acl-canary.md CLI-RESUME-01 PARTIAL; resume-canary-attempt.md notes blocked runtime invocation and collector failure.",
+      "captured_at": "2026-11-27T19:02:38Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "The test design evaluates trust-boundary enforcement across interrupted and distinct runtime sessions.",
+    "evidence_reference": "architect-runtime-review.md"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "Issue #748 — fresh interrupted Developer handoff and read-only resumed continuation canary",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Developer High",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Test Designer revised the canary to require a validated checkpoint, correlated host interruption and B continuation of an explicit pending step at the same marker path.",
+    "timestamp": "2026-11-27T19:05:25Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-developer-high",
+      "provenance": "Repository .codex/agents/sf-developer-high.toml; instructions supplied explicitly to App Server",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Codex App Server thread/start response for thread 01a21dba-c577-7540-8c53-c3b4e372f0ca",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Codex App Server thread/start response reasoningEffort; turn/start requested high",
+      "reason": null
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex App Server thread/start response activePermissionProfile was null; role instructions were explicitly supplied from the TOML file",
+      "reason": "The host did not report automatic loading of the named repository profile."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "App Server accepted Developer High thread/turn start; exact dispatch time unavailable. This execution required explicit sandbox escalation for local Codex state initialization.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T19:05:25Z",
+      "latest": "2026-11-27T19:09:12Z",
+      "evidence": "Pre-dispatch decision preceded accepted A and B thread/turn responses by 19:09:12Z."
+    },
+    "time_unknown_reason": "Exact thread dispatch times are not exposed."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "A was host-interrupted; B completed a distinct readOnly turn. B denial details were not retained, so case remains partial.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T19:05:25Z",
+      "latest": "2026-11-27T19:09:12Z",
+      "evidence": "App Server thread/turn responses observed after pre-dispatch decision."
+    },
+    "started_time_unknown_reason": "Exact role start time not exposed.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T19:05:25Z",
+      "latest": "2026-11-27T19:09:12Z",
+      "evidence": "B turn-completion event was returned to the coordinator by 19:09:12Z."
+    },
+    "ended_time_unknown_reason": "Exact turn completion time not exposed."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/resume-canary-attempt-3.md",
+    "sha256": "a715c4668c082f559b541581035424699cb49039099dee5d15f21183739ede0a",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T19:09:12Z",
+    "reason": "Accepted partial interruption/handoff evidence; did not promote B exit-0 output hash to an ACL denial PASS."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "App Server responses prove sequence but exact action timestamps are absent.",
+    "assessed_at": "2026-11-27T19:09:12Z",
+    "first_dependent_action_at": null,
+    "reason": "No exact first command timestamp was retained.",
+    "first_dependent_action_reference": "resume-canary-attempt-3.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T19:05:25Z",
+      "latest": "2026-11-27T19:09:12Z",
+      "evidence": "A and B host command events occurred between dispatch and final B completion."
+    },
+    "first_dependent_action_time_unknown_reason": "App Server did not provide exact command timestamps."
+  },
+  "decision_id": "sdlcdeep-20261127-runtime-resume-canary-attempt-3",
+  "attempt_id": "sdlcdeep-20261127-runtime-resume-canary-attempt-3",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "resume-test-design-review.md; candidate and scratch state f51c4fad6aceeab545943812794f6f44132239fc.",
+      "captured_at": "2026-11-27T19:05:25Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": "Earlier retry after App Server initialization failure was executed without a pre-dispatch record; this record does not claim a direct retry link.",
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "The test exercises interruption, handoff integrity, and sandbox authority across isolated runtime sessions.",
+    "evidence_reference": "architect-runtime-review.md"
+  }
+}
