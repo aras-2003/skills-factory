@@ -324,3 +324,19 @@ manifests, historical receipts, baseline revisions, and expected behavior
 paths remain unchanged. The continuation remains `INTEGRATION_ISOLATED`,
 runtime `NOT_RUN`, and release approval `false`; this source delta does not
 claim Investment runtime acceptance or production release.
+
+## Successor source deltas for #748 recursion handling
+
+The bounded handoff validator now reports recursion failures as redacted
+`ValueError` at JSON decoding, structure traversal and serialization boundaries.
+Valid v1 wire format and the existing 16 KiB limit remain unchanged.
+
+| Path | SHA-256 |
+| --- | --- |
+| `scripts/engineering/delegation_handoff.py` | `70938a8d3da702f29c65dfba2c2967f6267ca25b9ff8765073fae1558363cc7c` |
+| `tests/test_delegation_handoff.py` | `cf96da0d8936f16456af4f16455c67ec924815d03ba0e4511c461519f5a7bb45` |
+
+These are exact source compatibility deltas; historical campaign manifests
+and receipts remain frozen. Continuation stays `INTEGRATION_ISOLATED`,
+runtime `NOT_RUN`, and release approval `false`. Roll back the parser, tests
+and coupled pins together; regenerate malformed pending handoffs.

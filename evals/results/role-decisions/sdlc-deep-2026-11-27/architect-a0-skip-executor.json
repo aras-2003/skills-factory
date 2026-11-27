@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — execute frozen HANDOFF regression plan",
+  "source_revision": "112f545796911f3c5b545d9dbb718fbf4dbce76b",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "SKIP",
+    "reason": "The upcoming deterministic regression execution follows the frozen case plan and requires no architecture decision. This skip applies only to that bounded test execution; it does not replace the A1 Architect invocation for the shared parser change.",
+    "timestamp": "2026-11-27T14:44:12Z"
+  },
+  "impact": "A0",
+  "requested": {
+    "model": {
+      "value": "NOT_REQUESTED",
+      "provenance": "A0 routing policy",
+      "reason": "The upcoming deterministic regression execution follows the frozen case plan and requires no architecture decision. This skip applies only to that bounded test execution; it does not replace the A1 Architect invocation for the shared parser change."
+    },
+    "effort": {
+      "value": "NOT_REQUESTED",
+      "provenance": "A0 routing policy",
+      "reason": "The upcoming deterministic regression execution follows the frozen case plan and requires no architecture decision. This skip applies only to that bounded test execution; it does not replace the A1 Architect invocation for the shared parser change."
+    },
+    "profile": {
+      "value": "NOT_REQUESTED",
+      "provenance": "A0 routing policy",
+      "reason": "The upcoming deterministic regression execution follows the frozen case plan and requires no architecture decision. This skip applies only to that bounded test execution; it does not replace the A1 Architect invocation for the shared parser change."
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child model, effort, and named profile loading are not exposed by collaboration metadata."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child model, effort, and named profile loading are not exposed by collaboration metadata."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective child model, effort, and named profile loading are not exposed by collaboration metadata."
+    }
+  },
+  "dispatch": {
+    "status": "NOT_ATTEMPTED",
+    "timestamp": null,
+    "reason": "Pre-dispatch record; host invocation has not yet been attempted.",
+    "coordinator_bounds": null,
+    "time_unknown_reason": null
+  },
+  "execution": {
+    "state": "NOT_STARTED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect task has not started.",
+    "started_coordinator_bounds": null,
+    "started_time_unknown_reason": null,
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": null
+  },
+  "result": {
+    "reference": null,
+    "sha256": null,
+    "reference_kind": null
+  },
+  "coordinator_disposition": {
+    "value": "PENDING",
+    "timestamp": "2026-11-27T14:44:12Z",
+    "reason": "Awaiting the route outcome."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Pre-dispatch evidence; no outcome inspected.",
+    "assessed_at": "2026-11-27T14:44:12Z",
+    "first_dependent_action_at": null,
+    "reason": "The exact host lifecycle and dependent-action chronology are not yet available.",
+    "first_dependent_action_reference": null,
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "No dependent action timestamp has been captured."
+  },
+  "decision_id": "sdlcdeep-20261127-handoff-a0-skip",
+  "attempt_id": null,
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "https://github.com/aras-2003/skills-factory/issues/748",
+      "captured_at": "2026-11-27T14:44:12Z"
+    },
+    {
+      "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/test-design.md sha256:a692621165a0c23589fe9a7e32067c415b4d3f7af15fbec0e1781f1873521f43",
+      "captured_at": "2026-11-27T14:44:12Z"
+    },
+    {
+      "reference": "Canonical main 112f545796911f3c5b545d9dbb718fbf4dbce76b; worktree clean before task branch",
+      "captured_at": "2026-11-27T14:44:12Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "NONE",
+    "reason": "reviewed trigger classification",
+    "evidence_reference": "test evidence"
+  }
+}
