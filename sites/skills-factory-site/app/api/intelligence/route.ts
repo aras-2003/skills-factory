@@ -340,6 +340,6 @@ export async function GET(request: Request) {
   if (!(await getChatGPTUser())) return json({ error: "Authenticated Site user required." }, 401);
   const versionEnvironment = env as unknown as Parameters<typeof resolveSiteVersionMetadata>[0];
   const versionMetadata = resolveSiteVersionMetadata(versionEnvironment);
-  const cacheScope = `${versionMetadata?.tag ?? SOURCE.github_main_revision}:${versionMetadata?.id ?? "unidentified-deployment"}`;
+  const cacheScope = JSON.stringify([SOURCE.github_main_revision, versionMetadata?.tag ?? null, versionMetadata?.id ?? null]);
   return json(await buildSnapshot(request, versionMetadata, cacheScope));
 }
