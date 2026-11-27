@@ -1,0 +1,1465 @@
+{
+  "acl_probe": {
+    "candidate_sha": "6690ff6475b317774c845bc496da18a2c5928ece",
+    "effective_turn_policy_host_field": "UNKNOWN; App Server did not return turn sandboxPolicy in turn/started",
+    "policy_requested": {
+      "excludeSlashTmp": true,
+      "excludeTmpdirEnvVar": true,
+      "networkAccess": false,
+      "runtimeWorkspaceRoots": [
+        "tests/"
+      ],
+      "type": "workspaceWrite",
+      "writableRoots": [
+        "tests/"
+      ]
+    },
+    "scope_limitations": [
+      "Does not prove MCP tool denial, secrets protection, deployment authorization, network restrictions beyond requested config, or that every role uses this policy."
+    ],
+    "thread_start_sandbox_roots_included_tmp": true,
+    "with_exclusion": "PASS for one repository-filesystem boundary: tests marker succeeded, repository-root marker received PermissionError errno=1, marker absent after turn",
+    "without_exclusion": "FAIL: both allowed and out-of-grant exclusive-create succeeded; marker SHA-256 5b8da4c36fbb598af0d4c6ece99af1b851c01b12e2bf0886356709259c7cb75a; markers removed after observation"
+  },
+  "architecture_review": {
+    "c4_contract_review": {
+      "candidate_sha": "6690ff6475b317774c845bc496da18a2c5928ece",
+      "decision": "EXTEND",
+      "effective_effort": "UNKNOWN",
+      "effective_model": "UNKNOWN",
+      "external_consumers": "UNKNOWN",
+      "finding": "validate_result is the right shared acceptance seam; no migration or v1 field change, preserve diagnostic paths on FAIL, update procedure and revert coupled pins together.",
+      "impact": "A1",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.2-sol"
+    },
+    "pre_task_runtime_boundary_advisory": {
+      "effective_effort": "UNKNOWN",
+      "effective_model": "UNKNOWN",
+      "recommendation": "Compose the existing SDLC gates with one-shot Codex App Server role threads; keep Cloud Next as skill/tool source, not as a second orchestrator.",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.2-sol",
+      "source_sha": "de472123bc1f9d7a3a5a279dc61de514fb179404",
+      "task_selection": "Recommended this bounded handoff PASS-path case; its target behavior was reconfirmed at the selected base before implementation."
+    }
+  },
+  "candidate_commits": {
+    "C1": "51433560c8dac8f7f398d301c4b4f1a8fef92214",
+    "C2": "485009558677e4273ac52dd85607d9a7e14d5821",
+    "C3": "6730fd3a8b4b110279e0a5225a337f0433159370",
+    "C4": "6690ff6475b317774c845bc496da18a2c5928ece"
+  },
+  "gate_status": {
+    "MCP_tool_ACL": "NOT_RUN",
+    "approval_non_transfer": "NOT_RUN",
+    "bounded_handoff_resume": "PASS for fresh thread, byte-identical schema handoff and stale C1 rejection",
+    "filesystem_acl": "PASS limited only with tmp exclusion flags; default workspaceWrite configuration FAILED the out-of-grant probe",
+    "model_effort": [
+      "PASS for App Server Developer Terra High, Test Designer Terra Medium, Executor Luna Low, App Server Reviewer Terra High; named TOML profile activation remains UNKNOWN",
+      "Native child Reviewer model/effort UNKNOWN"
+    ],
+    "native_desktop_child_requirement": "NOT_RUN",
+    "production_or_site_runtime": "NOT_RUN"
+  },
+  "github_main_at_start_sha": "6c7a7070cc16dd70aa15f26f8553efaee76590c7",
+  "native_child_review": {
+    "child": "/root/sf_independent_reviewer_c4",
+    "effective_effort": "UNKNOWN",
+    "effective_model": "UNKNOWN",
+    "profile_activation": "UNKNOWN",
+    "requested_effort": "high",
+    "requested_model": "gpt-6.1-terra",
+    "review_state": "PASS scoped substantive review; no actionable findings"
+  },
+  "observability": {
+    "financial_cost": "UNKNOWN; host did not expose pricing/cost for these turns.",
+    "private_prompts_or_transcripts_stored": false,
+    "token_usage": "Observed for App Server worker turns where thread/tokenUsage/updated emitted; see role events."
+  },
+  "resume_probe": {
+    "approval_field_rejected_before_dispatch": true,
+    "approval_non_transfer": "NOT_RUN: stage A had no issued approval",
+    "byte_identical_roundtrip": true,
+    "candidate_sha": "6690ff6475b317774c845bc496da18a2c5928ece",
+    "failed_attempt_1": "Harness NameError (missing subprocess import), preserved separately and excluded; rerun passed.",
+    "fresh_stage_b": {
+      "effort": "low",
+      "model": "gpt-6-luna",
+      "role": "sf-test-executor",
+      "sandbox": "readOnly",
+      "thread_id": "01a21ecf-e96e-7c22-8d89-5d53d27325c9",
+      "turn_status": "completed"
+    },
+    "fresh_thread_after_interruption": true,
+    "handoff_bytes": 911,
+    "handoff_sha256": "8caea92dee8fbf3e6c131236f376930ad0601b4ea39ac172652767c7e3e7b719",
+    "interrupted_stage_a": {
+      "effort": "high",
+      "interrupt_accepted": true,
+      "model": "gpt-6.1-terra",
+      "role": "sf-developer-high",
+      "thread_id": "01a21ecf-d046-7481-8e5c-f4619fd11ed1",
+      "turn_status": "interrupted"
+    },
+    "mcp_acl": "NOT_RUN",
+    "native_desktop_child": "NOT_RUN",
+    "stale_c1_receipt_rejected_against_c4": true
+  },
+  "role_execution": {
+    "acl_with_tmp_exclusion": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "command_class": "git_sha",
+          "exit_code": 0,
+          "observed_shas": [
+            "6690ff6475b317774c845bc496da18a2c5928ece"
+          ],
+          "output_chars": 41,
+          "output_sha256": "4b41e468e30cb16e39255068954a27ba3b53bafbe3dc9a861e4effdf25a6e861",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 14336,
+              "inputTokens": 30485,
+              "outputTokens": 80,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 30565
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 14336,
+              "inputTokens": 30485,
+              "outputTokens": 80,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 30565
+            }
+          }
+        },
+        {
+          "acl_outcome_markers": [
+            "DENIED_PERMISSION_ERROR",
+            "WRITE_SUCCEEDED"
+          ],
+          "command": "/bin/zsh -lc 'python3 $PILOT/permission_boundary_probe.py'",
+          "command_class": "acl_probe",
+          "exit_code": 0,
+          "output_chars": 74,
+          "output_sha256": "b2321d504a37d5f4609705920a5e6d0a30947f6cb2b35860f0fd9da527759ca5",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 30336,
+              "inputTokens": 30640,
+              "outputTokens": 76,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 30716
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 44672,
+              "inputTokens": 61125,
+              "outputTokens": 156,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 61281
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 30592,
+              "inputTokens": 30790,
+              "outputTokens": 63,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 30853
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 75264,
+              "inputTokens": 91915,
+              "outputTokens": 219,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 92134
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "high",
+      "host_observed_model": "gpt-6.1-terra",
+      "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.1-terra",
+      "role": "sf-developer-high",
+      "role_file_sha256": "0cc3486723b24f265929f4c4fa014049450af5c87d11aa787e6e11eabae5eaa3",
+      "role_result_sha256": "7463f78cfe715b1bf78c7e2cfce6fbe90bd43c242f5487e4bbe4bcf9fc070fb1",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "tests/",
+          "temporary-root",
+          "host-temp-root"
+        ]
+      },
+      "thread_id": "01a21ec9-2075-7f13-81fc-76d409eadd03",
+      "turn_status": "completed"
+    },
+    "acl_without_tmp_exclusion": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "command_class": "git_sha",
+          "exit_code": 0,
+          "observed_shas": [
+            "6690ff6475b317774c845bc496da18a2c5928ece"
+          ],
+          "output_chars": 41,
+          "output_sha256": "4b41e468e30cb16e39255068954a27ba3b53bafbe3dc9a861e4effdf25a6e861",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 14336,
+              "inputTokens": 30547,
+              "outputTokens": 114,
+              "reasoningOutputTokens": 24,
+              "totalTokens": 30661
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 14336,
+              "inputTokens": 30547,
+              "outputTokens": 114,
+              "reasoningOutputTokens": 24,
+              "totalTokens": 30661
+            }
+          }
+        },
+        {
+          "acl_outcome_markers": [
+            "OUT_OF_GRANT_WRITE_SUCCEEDED",
+            "WRITE_SUCCEEDED"
+          ],
+          "command": "/bin/zsh -lc 'python3 $PILOT/permission_boundary_probe.py'",
+          "command_class": "acl_probe",
+          "exit_code": 0,
+          "output_chars": 58,
+          "output_sha256": "e6c19259bec9e36add077eec04082b2b81548ea838fa269ed6f2b5bd74af66e0",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 30464,
+              "inputTokens": 30710,
+              "outputTokens": 85,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 30795
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 44800,
+              "inputTokens": 61257,
+              "outputTokens": 199,
+              "reasoningOutputTokens": 24,
+              "totalTokens": 61456
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 30592,
+              "inputTokens": 30838,
+              "outputTokens": 72,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 30910
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 75392,
+              "inputTokens": 92095,
+              "outputTokens": 271,
+              "reasoningOutputTokens": 24,
+              "totalTokens": 92366
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "high",
+      "host_observed_model": "gpt-6.1-terra",
+      "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.1-terra",
+      "role": "sf-developer-high",
+      "role_file_sha256": "0cc3486723b24f265929f4c4fa014049450af5c87d11aa787e6e11eabae5eaa3",
+      "role_result_sha256": "4f0697f6f499c663b8ff492d8b0662aff00cd40fa2bb2d21e1d1c512def10c48",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "tests/",
+          "temporary-root",
+          "host-temp-root"
+        ]
+      },
+      "thread_id": "01a21ec8-8e0a-7250-a637-3f2e7c087529",
+      "turn_status": "completed"
+    },
+    "appserver_reviewer_c4": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "51433560c8dac8f7f398d301c4b4f1a8fef92214",
+            "51433560c8dac8f7f398d301c4b4f1a8fef92214",
+            "6690ff6475b317774c845bc496da18a2c5928ece",
+            "6690ff6475b317774c845bc496da18a2c5928ece",
+            "6690ff6475b317774c845bc496da18a2c5928ece"
+          ],
+          "output_chars": 30356,
+          "output_sha256": "fe2d415c8ad3682ec0b7ace52bfe388ecc850f28f1dfec4a65d17a83b4c0bebd",
+          "status": "completed",
+          "unittest_summary": [
+            "\"AssertionError: ValueError not raised\",",
+            "\"AssertionError: ValueError not raised\",",
+            "\"Ran 1 test in 0.001s\",",
+            "\"Ran 10 tests in 0.001s\",",
+            "\"Ran 42 tests in 0.008s\",",
+            "\"Ran 6 tests in 0.331s\",",
+            "\"role_result\": \"I\\u2019ll verify the checkout SHA first. If it matches, I\\u2019ll run only the three specified unittest commands and report their exact outputs and scope.The checkout SHA matches `6690ff6475b317774c845bc496da18a2c5928ece`. I\\u2019m running the three requested commands now, unchanged and in order.**Candidate SHA:** `6690ff6475b317774c845bc496da18a2c5928ece` \\u2014 matched the required SHA. All three commands exited `0`.\\n\\n| # | Exact command | Tests | Unittest summary |\\n|---|---|---:|---|\\n| 1 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -v` | 10 | `Ran 10 tests in 0.001s` \\u2014 `OK` |\\n| 2 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -v` | 42 | `Ran 42 tests in 0.008s` \\u2014 `OK` |\\n| 3 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.governance.test_sdlc_architecture_source_example -v` | 6 | `Ran 6 tests in 0.331s` \\u2014 `OK` |\\n\\nThe four new contract cases passed: `test_developer_pass_accepts_changed_paths`, `test_readonly_roles_fail_accepts_changed_paths`, `test_readonly_roles_pass_accepts_empty_changed_paths`, and `test_readonly_roles_pass_rejects_changed_paths`. The approved continuation digest test, `test_handoff_parser_source_refresh_is_exact_and_approved`, also passed.\\n\\nEvidence is the runner output in this execution transcript. These results cover only the three specified test commands; they do not establish wider coverage, runtime ACL acceptance, or release approval.\","
+          ]
+        },
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "command_class": "git_sha",
+          "exit_code": 0,
+          "observed_shas": [
+            "6690ff6475b317774c845bc496da18a2c5928ece"
+          ],
+          "output_chars": 41,
+          "output_sha256": "4b41e468e30cb16e39255068954a27ba3b53bafbe3dc9a861e4effdf25a6e861",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 314,
+          "output_sha256": "2279c3216314b907f650b250c4e26712c5da3476f2302234b6285d972544af11",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 52,
+          "output_sha256": "36d4ae5faa740f297cdf03cf7f9bb041991c091e6fcf8e986e53d0cedded8ca3",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 16896,
+              "inputTokens": 20523,
+              "outputTokens": 286,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 20809
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 16896,
+              "inputTokens": 20523,
+              "outputTokens": 286,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 20809
+            }
+          }
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 242,
+          "output_sha256": "733529f24ea61c332cb858aea4a68d7a8aa5731aaf5d5ff44c09c332f494ddb5",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "e0f613cbaf80cf4a278e713794662250dab2b8bc",
+            "242fe4762d2b2c6cc2c602720d222e1276c0cd17"
+          ],
+          "output_chars": 25583,
+          "output_sha256": "b9d9d0add23933ebe681f44005119bac41811776eda572445d62af13068e150f",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "d43250f3982f9ea6ae7b5eb4112922135a7add05",
+            "6ddd15e24196ab49ed40df764cbbd8889320dbba",
+            "6ddd15e24196ab49ed40df764cbbd8889320dbba",
+            "356c2c0733611b4a4de30d3f57fc82305bfadb96",
+            "906b4805d861c1c1b5da60cab5b63fcbb2d7a1de",
+            "3c3f9c14c37bde744002c15de4e767f87fe27174",
+            "c0cf0d45c7b290a0297380a0f8ab327b58c3d162",
+            "c90fc740a5b0b90e361da15f385af16a474d429e",
+            "ae8dd753ed8980aa9dd6b188fd4cb1d3feaf27db",
+            "fde66293d7c1285724017fa15e84e3c18d2571af",
+            "9048301bfb7d1917affe9b4c3170c760fdd86657",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "a752b553cc16d026408a379cfa3654c15f447171",
+            "197f12e96a2282eb13cf787246e76e3621c960eb",
+            "b0216d283dad3fd297b6e3a64293a4434b8245f6",
+            "13df3cf607daa8d1e9aaaa765b881c8e611c05e2",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "5b2b66b70405ebda92a890b4b1f794d1de314591",
+            "854117b7128dcc88e5c46407b8bee71309af7357",
+            "05387fdaf645813520bd53c796b940a68216780c",
+            "c16123b5094d68bdf243c020a839f5e0486e75e0",
+            "a4725004e953481158ab8d3ae14edc23688e76bc",
+            "63b9c002c7e672bb2999cca79cb7fae88b1e7260",
+            "90623d4608444ce051ff3d8b959211b2ff59ff39"
+          ],
+          "output_chars": 133266,
+          "output_sha256": "710d36f6ee93ce6dd742345a467a2373413331ee3ef0e1d7e7a84875845f4ba3",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 108,
+          "output_sha256": "44e5ccfb5430e1356b222685ed31b2c37c0fcc9fd70d855dad40ea6457583154",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 20608,
+              "inputTokens": 30511,
+              "outputTokens": 272,
+              "reasoningOutputTokens": 10,
+              "totalTokens": 30783
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 37504,
+              "inputTokens": 51034,
+              "outputTokens": 558,
+              "reasoningOutputTokens": 10,
+              "totalTokens": 51592
+            }
+          }
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 18659,
+          "output_sha256": "4f3eeb0b7264e520f3da43029cc22c9abe6e20b544c4232ecd7190f929e10f18",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "1bc7677b6c63427a20b3e9f2595dce797905542b"
+          ],
+          "output_chars": 6370,
+          "output_sha256": "4a8764d8e9f1cf1d6ce2fa7ffea23ff52d10b9e7a7343d473bc98147e081e532",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 3469,
+          "output_sha256": "0c94431f460c8ae3200bf48c0218516453449f9cc17feac33db9416e120a4a78",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 2944,
+          "output_sha256": "82adef99050c8ab3394a4b4424489b9d7cf2edcc51744b3f5f62ab6098b5e3a9",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 223,
+          "output_sha256": "bcf72cb5828a2bed9bdfac129aedc0bba546bec2883cc3bfe9e59397e5fcb9c4",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 30592,
+              "inputTokens": 41517,
+              "outputTokens": 385,
+              "reasoningOutputTokens": 49,
+              "totalTokens": 41902
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 68096,
+              "inputTokens": 92551,
+              "outputTokens": 943,
+              "reasoningOutputTokens": 59,
+              "totalTokens": 93494
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 41728,
+              "inputTokens": 51987,
+              "outputTokens": 767,
+              "reasoningOutputTokens": 64,
+              "totalTokens": 52754
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 109824,
+              "inputTokens": 144538,
+              "outputTokens": 1710,
+              "reasoningOutputTokens": 123,
+              "totalTokens": 146248
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "high",
+      "host_observed_model": "gpt-6.1-terra",
+      "instructions_sha256": "cd4096e13c6375204f32b5a3a4805a7abd35a0908e1a5b619e0e1af80d49e5ab",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.1-terra",
+      "role": "sf-independent-reviewer",
+      "role_file_sha256": "c1b9a18446d1eec5b9badaa967231ab18930fd77ef5b80e88efac0ecefa0f515",
+      "role_result_sha256": "aab98b99fbfb84b7a2f569f2d79525261d0d492f7ba0ca752d84a49e0b97a226",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "readOnly",
+        "writableRoots": []
+      },
+      "thread_id": "01a21ec2-7be7-7750-bbc6-608a94b06849",
+      "turn_status": "completed"
+    },
+    "developer_implementation_c2": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 5351,
+          "output_sha256": "0cf664bf8a2afe21785795df543b249f06f0dcc940bfe98bf10a473d6ed095ee",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 4090,
+          "output_sha256": "5ed35c6dd4010535bd5890e0b6b0d1f281abc8ff1a7ae691763e35f37ddd9b5d",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 41,
+          "output_sha256": "4c8ef30321064ca2c874da29ce2101d143530c3e8d154d54b86826fa14261c5e",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 52,
+          "output_sha256": "36d4ae5faa740f297cdf03cf7f9bb041991c091e6fcf8e986e53d0cedded8ca3",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 823,
+          "output_sha256": "9e2536bb8b94498d518075e9cce9897bd54f3ec68b6665af47d0811768d5b8f4",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 83,
+          "output_sha256": "c21fcb98405a735ed14203266b55951b46f45779ffff3bc9a08f5ca78de88c09",
+          "status": "completed"
+        }
+      ],
+      "host_observed_effort": "high",
+      "host_observed_model": "gpt-6.1-terra",
+      "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.1-terra",
+      "role": "sf-developer-high",
+      "role_file_sha256": "0cc3486723b24f265929f4c4fa014049450af5c87d11aa787e6e11eabae5eaa3",
+      "role_result_sha256": null,
+      "sandbox": {
+        "networkAccess": false,
+        "type": "workspaceWrite",
+        "writableRoots": []
+      },
+      "thread_id": "01a21eb1-e231-7672-8400-061009c3ca48",
+      "turn_status": "completed"
+    },
+    "developer_review_rework_c3": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 38273,
+          "output_sha256": "4a85436d86e2933af2154d9a8a4923b92a135a5c55e7d406f2fed8b16ddb18c3",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 6447,
+          "output_sha256": "3736ed7945f9680d9a30c00f360aa8b264a64bf1d9acec6b493d2beea78cb8c7",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 41,
+          "output_sha256": "e94ecbfd0e0c6752f9231a8e7b4d45dc0e20ff9e07b9cbca583c7e72a59b8dc4",
+          "status": "completed"
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 52,
+          "output_sha256": "36d4ae5faa740f297cdf03cf7f9bb041991c091e6fcf8e986e53d0cedded8ca3",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 14336,
+              "inputTokens": 30480,
+              "outputTokens": 287,
+              "reasoningOutputTokens": 11,
+              "totalTokens": 30767
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 14336,
+              "inputTokens": 30480,
+              "outputTokens": 287,
+              "reasoningOutputTokens": 11,
+              "totalTokens": 30767
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 30592,
+              "inputTokens": 40486,
+              "outputTokens": 314,
+              "reasoningOutputTokens": 6,
+              "totalTokens": 40800
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 44928,
+              "inputTokens": 70966,
+              "outputTokens": 601,
+              "reasoningOutputTokens": 17,
+              "totalTokens": 71567
+            }
+          }
+        },
+        {
+          "command_class": "test_or_file_operation",
+          "exit_code": 0,
+          "output_chars": 1134,
+          "output_sha256": "ed9443a2aadcc92828f77eacb93916f846b05afa64d9fca98dd73897e2b69922",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 40576,
+              "inputTokens": 40824,
+              "outputTokens": 60,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 40884
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 85504,
+              "inputTokens": 111790,
+              "outputTokens": 661,
+              "reasoningOutputTokens": 17,
+              "totalTokens": 112451
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 40704,
+              "inputTokens": 41169,
+              "outputTokens": 56,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 41225
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 126208,
+              "inputTokens": 152959,
+              "outputTokens": 717,
+              "reasoningOutputTokens": 17,
+              "totalTokens": 153676
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "high",
+      "host_observed_model": "gpt-6.1-terra",
+      "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "high",
+      "requested_model": "gpt-6.1-terra",
+      "role": "sf-developer-high",
+      "role_file_sha256": "0cc3486723b24f265929f4c4fa014049450af5c87d11aa787e6e11eabae5eaa3",
+      "role_result_sha256": "e832e03388829e15a58e3660678dfd29e740b9db9051008c2ceb58e25e7d3d00",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "workspaceWrite",
+        "writableRoots": []
+      },
+      "thread_id": "01a21eb8-e720-7912-8b92-969bd457b689",
+      "turn_status": "completed"
+    },
+    "executor_c1_red": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "command_class": "git_sha",
+          "exit_code": 0,
+          "observed_shas": [
+            "51433560c8dac8f7f398d301c4b4f1a8fef92214"
+          ],
+          "output_chars": 41,
+          "output_sha256": "4c8ef30321064ca2c874da29ce2101d143530c3e8d154d54b86826fa14261c5e",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 0,
+              "inputTokens": 25801,
+              "outputTokens": 109,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 25910
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 0,
+              "inputTokens": 25801,
+              "outputTokens": 109,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 25910
+            }
+          }
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_rejects_changed_paths -v'",
+          "command_class": "unittest",
+          "exit_code": 1,
+          "output_chars": 1924,
+          "output_sha256": "44e20a5fb3b26b24c79a098bc995420974ddbff48d1e1f584835c5fa3c89d735",
+          "status": "failed",
+          "unittest_summary": [
+            "test_readonly_roles_pass_rejects_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_rejects_changed_paths) (role='sf-test-executor') ... FAIL",
+            "test_readonly_roles_pass_rejects_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_rejects_changed_paths) (role='sf-independent-reviewer') ... FAIL",
+            "AssertionError: ValueError not raised",
+            "AssertionError: ValueError not raised",
+            "Ran 1 test in 0.001s",
+            "FAILED (failures=2)"
+          ]
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 25600,
+              "inputTokens": 25963,
+              "outputTokens": 109,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 26072
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 25600,
+              "inputTokens": 51764,
+              "outputTokens": 218,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 51982
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 25728,
+              "inputTokens": 26497,
+              "outputTokens": 145,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 26642
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 51328,
+              "inputTokens": 78261,
+              "outputTokens": 363,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 78624
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "low",
+      "host_observed_model": "gpt-6-luna",
+      "instructions_sha256": "2dacc412e634f96d83b56af41ade8f71875a21300bf9126a2fa7f5887599b73d",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "low",
+      "requested_model": "gpt-6-luna",
+      "role": "sf-test-executor",
+      "role_file_sha256": "a00415888268c7db5b7b981efe88d8b71028dab129754680b18bfdf1521bde5a",
+      "role_result_sha256": "0e025896eb04d34bc60570c6b95a353dcaf2e01c00d234eb136e55cf839fef2f",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "readOnly",
+        "writableRoots": []
+      },
+      "thread_id": "01a21ebc-d16e-7792-9ce7-5a79edbd6b48",
+      "turn_status": "completed"
+    },
+    "executor_c4_final": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "command_class": "git_sha",
+          "exit_code": 0,
+          "observed_shas": [
+            "6690ff6475b317774c845bc496da18a2c5928ece"
+          ],
+          "output_chars": 41,
+          "output_sha256": "4b41e468e30cb16e39255068954a27ba3b53bafbe3dc9a861e4effdf25a6e861",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 0,
+              "inputTokens": 19737,
+              "outputTokens": 111,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 19848
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 0,
+              "inputTokens": 19737,
+              "outputTokens": 111,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 19848
+            }
+          }
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -v'",
+          "command_class": "unittest",
+          "exit_code": 0,
+          "output_chars": 1763,
+          "output_sha256": "c7828b007becc0c6d866db77aa556c65fa304301f98e6b57a423962bed0ce932",
+          "status": "completed",
+          "unittest_summary": [
+            "test_bound_and_unbound_fixture_policy (tests.test_delegation_handoff.FixturePolicyContractTests.test_bound_and_unbound_fixture_policy) ... ok",
+            "test_developer_pass_accepts_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_developer_pass_accepts_changed_paths) ... ok",
+            "test_empty_case_set_requires_explicit_empty_policy (tests.test_delegation_handoff.FixturePolicyContractTests.test_empty_case_set_requires_explicit_empty_policy) ... ok",
+            "test_partial_multi_case_policy_rejected_for_pass_and_not_run (tests.test_delegation_handoff.FixturePolicyContractTests.test_partial_multi_case_policy_rejected_for_pass_and_not_run) ... ok",
+            "test_policy_is_required_and_covers_exact_case_set (tests.test_delegation_handoff.FixturePolicyContractTests.test_policy_is_required_and_covers_exact_case_set) ... ok",
+            "test_readonly_roles_fail_accepts_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_fail_accepts_changed_paths) ... ok",
+            "test_readonly_roles_pass_accepts_empty_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_accepts_empty_changed_paths) ... ok",
+            "test_readonly_roles_pass_rejects_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_rejects_changed_paths) ... ok",
+            "test_stale_candidate_and_changed_fixture_are_rejected (tests.test_delegation_handoff.FixturePolicyContractTests.test_stale_candidate_and_changed_fixture_are_rejected) ... ok",
+            "test_unbound_accepts_executed_outcomes_only_without_digest (tests.test_delegation_handoff.FixturePolicyContractTests.test_unbound_accepts_executed_outcomes_only_without_digest) ... ok",
+            "Ran 10 tests in 0.001s",
+            "OK"
+          ]
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 19584,
+              "inputTokens": 19896,
+              "outputTokens": 145,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 20041
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 19584,
+              "inputTokens": 39633,
+              "outputTokens": 256,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 39889
+            }
+          }
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -v'",
+          "command_class": "unittest",
+          "exit_code": 0,
+          "output_chars": 7519,
+          "output_sha256": "4f65532ee47515c3cf7f5ea8fd240c7ff5c30e22cb93d0fae312fb95bf062e6e",
+          "status": "completed",
+          "unittest_summary": [
+            "test_handoff_01_requires_bounded_input_fields_and_references (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_01_requires_bounded_input_fields_and_references) ... ok",
+            "test_handoff_02_round_trip_does_not_require_parent_transcript (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_02_round_trip_does_not_require_parent_transcript) ... ok",
+            "test_handoff_03_rejects_stale_candidate_and_binds_fixture_identity (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_03_rejects_stale_candidate_and_binds_fixture_identity) ... ok",
+            "test_handoff_04_rejects_private_or_authority_transfer_fields (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_04_rejects_private_or_authority_transfer_fields) ... ok",
+            "test_handoff_05_missing_usage_is_unknown_not_zero (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_05_missing_usage_is_unknown_not_zero) ... ok",
+            "test_handoff_06_rejects_nested_private_fields (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_06_rejects_nested_private_fields) ... ok",
+            "test_handoff_07_rejects_arbitrary_nested_payload_fields (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_07_rejects_arbitrary_nested_payload_fields) ... ok",
+            "test_handoff_08_restricts_architecture_impact_to_native_values (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_08_restricts_architecture_impact_to_native_values) ... ok",
+            "test_handoff_09_rejects_duplicate_requested_case_ids (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_09_rejects_duplicate_requested_case_ids) ... ok",
+            "test_handoff_10_rejects_duplicate_result_case_ids (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_10_rejects_duplicate_result_case_ids) ... ok",
+            "test_handoff_11_binds_result_to_delegated_task_role_and_case_set (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_11_binds_result_to_delegated_task_role_and_case_set) ... ok",
+            "test_handoff_12_rejects_unsupported_pass_claims (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_12_rejects_unsupported_pass_claims) ... ok",
+            "test_handoff_13_requires_executor_command_for_case_pass_and_maps_blocked_cases (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_13_requires_executor_command_for_case_pass_and_maps_blocked_cases) ... ok",
+            "test_handoff_14_binds_fixture_identity_to_trusted_dispatch (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_14_binds_fixture_identity_to_trusted_dispatch) ... ok",
+            "test_handoff_15_rejects_invalid_trusted_fixture_map (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_15_rejects_invalid_trusted_fixture_map) ... ok",
+            "test_handoff_error_01_does_not_echo_unknown_input_field (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_error_01_does_not_echo_unknown_input_field) ... ok",
+            "test_handoff_json_01_rejects_duplicate_decoded_keys (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_json_01_rejects_duplicate_decoded_keys) ... ok",
+            "test_handoff_json_02_rejects_deep_wire_as_value_error (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_json_02_rejects_deep_wire_as_value_error) ... ok",
+            "test_handoff_json_03_normalizes_decoder_recursion_error (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_json_03_normalizes_decoder_recursion_error) ... ok",
+            "test_handoff_object_01_rejects_cyclic_input_as_value_error (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_object_01_rejects_cyclic_input_as_value_error) ... ok",
+            "test_handoff_object_02_rejects_cyclic_result_as_value_error (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_object_02_rejects_cyclic_result_as_value_error) ... ok",
+            "test_handoff_object_03_normalizes_recursive_json_serialization_error (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_object_03_normalizes_recursive_json_serialization_error) ... ok",
+            "test_handoff_path_01_accepts_valid_and_nested_read_write_scopes (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_01_accepts_valid_and_nested_read_write_scopes) ... ok",
+            "test_handoff_path_02_rejects_malformed_paths_in_both_scopes (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_02_rejects_malformed_paths_in_both_scopes) ... ok",
+            "test_handoff_path_03_rejects_duplicate_paths_in_either_scope (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_03_rejects_duplicate_paths_in_either_scope) ... ok",
+            "test_handoff_path_04_rejects_conflicting_read_write_scopes (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_04_rejects_conflicting_read_write_scopes) ... ok",
+            "test_handoff_path_05_uses_component_boundaries_for_scopes (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_05_uses_component_boundaries_for_scopes) ... ok",
+            "test_handoff_path_06_exact_file_and_directory_scopes_are_distinct (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_06_exact_file_and_directory_scopes_are_distinct) ... ok",
+            "test_handoff_path_07_nested_directory_overlap_is_directional (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_07_nested_directory_overlap_is_directional) ... ok",
+            "test_handoff_path_08_prefix_sibling_is_disjoint_from_write_directory (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_path_08_prefix_sibling_is_disjoint_from_write_directory) ... ok",
+            "test_handoff_wire_01_enforces_raw_utf8_byte_limit (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_wire_01_enforces_raw_utf8_byte_limit) ... ok",
+            "test_handoff_wire_02_rejects_oversized_text_before_encoding (tests.test_delegation_handoff.DelegationHandoffTests.test_handoff_wire_02_rejects_oversized_text_before_encoding) ... ok",
+            "test_bound_and_unbound_fixture_policy (tests.test_delegation_handoff.FixturePolicyContractTests.test_bound_and_unbound_fixture_policy) ... ok",
+            "test_developer_pass_accepts_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_developer_pass_accepts_changed_paths) ... ok",
+            "test_empty_case_set_requires_explicit_empty_policy (tests.test_delegation_handoff.FixturePolicyContractTests.test_empty_case_set_requires_explicit_empty_policy) ... ok",
+            "test_partial_multi_case_policy_rejected_for_pass_and_not_run (tests.test_delegation_handoff.FixturePolicyContractTests.test_partial_multi_case_policy_rejected_for_pass_and_not_run) ... ok",
+            "test_policy_is_required_and_covers_exact_case_set (tests.test_delegation_handoff.FixturePolicyContractTests.test_policy_is_required_and_covers_exact_case_set) ... ok",
+            "test_readonly_roles_fail_accepts_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_fail_accepts_changed_paths) ... ok",
+            "test_readonly_roles_pass_accepts_empty_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_accepts_empty_changed_paths) ... ok",
+            "test_readonly_roles_pass_rejects_changed_paths (tests.test_delegation_handoff.FixturePolicyContractTests.test_readonly_roles_pass_rejects_changed_paths) ... ok",
+            "test_stale_candidate_and_changed_fixture_are_rejected (tests.test_delegation_handoff.FixturePolicyContractTests.test_stale_candidate_and_changed_fixture_are_rejected) ... ok",
+            "test_unbound_accepts_executed_outcomes_only_without_digest (tests.test_delegation_handoff.FixturePolicyContractTests.test_unbound_accepts_executed_outcomes_only_without_digest) ... ok",
+            "Ran 42 tests in 0.008s",
+            "OK"
+          ]
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 19712,
+              "inputTokens": 20449,
+              "outputTokens": 93,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 20542
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 39296,
+              "inputTokens": 60082,
+              "outputTokens": 349,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 60431
+            }
+          }
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.governance.test_sdlc_architecture_source_example -v'",
+          "command_class": "unittest",
+          "exit_code": 0,
+          "output_chars": 1468,
+          "output_sha256": "603fc91c65a94bc2e9af7b4b02bab94a6f79ae309c179b6f47f8dfb21ed787e5",
+          "status": "completed",
+          "unittest_summary": [
+            "test_arch02_and_arch03_example_matches_two_pinned_backend_contracts (tests.governance.test_sdlc_architecture_source_example.ArchitectureSourceExampleTests.test_arch02_and_arch03_example_matches_two_pinned_backend_contracts) ... ok",
+            "test_continuation_refresh_rejects_stale_digest_and_unrelated_changes (tests.governance.test_sdlc_architecture_source_example.ArchitectureSourceExampleTests.test_continuation_refresh_rejects_stale_digest_and_unrelated_changes) ... ok",
+            "test_current_consumer_map_covers_runtime_ui_evidence_and_catalog_builders (tests.governance.test_sdlc_architecture_source_example.ArchitectureSourceExampleTests.test_current_consumer_map_covers_runtime_ui_evidence_and_catalog_builders) ... ok",
+            "test_current_consumer_map_is_pinned_to_reviewed_source_bytes (tests.governance.test_sdlc_architecture_source_example.ArchitectureSourceExampleTests.test_current_consumer_map_is_pinned_to_reviewed_source_bytes) ... ok",
+            "test_handoff_parser_source_refresh_is_exact_and_approved (tests.governance.test_sdlc_architecture_source_example.ArchitectureSourceExampleTests.test_handoff_parser_source_refresh_is_exact_and_approved) ... ok",
+            "test_rollback_requires_caller_compatibility_before_reverting_v1_schema (tests.governance.test_sdlc_architecture_source_example.ArchitectureSourceExampleTests.test_rollback_requires_caller_compatibility_before_reverting_v1_schema) ... ok",
+            "Ran 6 tests in 0.331s",
+            "OK"
+          ]
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 20224,
+              "inputTokens": 22416,
+              "outputTokens": 98,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 22514
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 59520,
+              "inputTokens": 82498,
+              "outputTokens": 447,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 82945
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 22272,
+              "inputTokens": 22860,
+              "outputTokens": 335,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 23195
+            },
+            "modelContextWindow": 258400,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 81792,
+              "inputTokens": 105358,
+              "outputTokens": 782,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 106140
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "low",
+      "host_observed_model": "gpt-6-luna",
+      "instructions_sha256": "2dacc412e634f96d83b56af41ade8f71875a21300bf9126a2fa7f5887599b73d",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "low",
+      "requested_model": "gpt-6-luna",
+      "role": "sf-test-executor",
+      "role_file_sha256": "a00415888268c7db5b7b981efe88d8b71028dab129754680b18bfdf1521bde5a",
+      "role_result_sha256": "c729584435bfc5c8c5b1b219689313fe8524b6f9d9514f9ace87a9030cc86c54",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "readOnly",
+        "writableRoots": []
+      },
+      "thread_id": "01a21ec1-e222-7a10-bd23-e7ebeaa69385",
+      "turn_status": "completed"
+    },
+    "test_designer": {
+      "active_permission_profile": null,
+      "host_events": [
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 3635,
+          "output_sha256": "43c06dd0402915b67fe22869cf03beb3f46a0bd0ea8066a80d275be365e2810d",
+          "status": "completed"
+        },
+        {
+          "command": "/bin/zsh -lc 'git status --short && git rev-parse HEAD && git diff --stat e4f96cc7c0e2b139c59f72d0b69bc880504b08a4 6690ff6475b317774c845bc496da18a2c5928ece && git diff --name-only e4f96cc7c0e2b139c59f72d0b69bc880504b08a4 6690ff6475b317774c845bc496da18a2c5928ece'",
+          "command_class": "git_sha",
+          "exit_code": 0,
+          "observed_shas": [
+            "6690ff6475b317774c845bc496da18a2c5928ece"
+          ],
+          "output_chars": 671,
+          "output_sha256": "93d4c86d0cd4e7c340163b3f0c75ff633eae11002be28d54aae7e1690069bf99",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 0,
+              "inputTokens": 20395,
+              "outputTokens": 305,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 20700
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 0,
+              "inputTokens": 20395,
+              "outputTokens": 305,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 20700
+            }
+          }
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 7167,
+          "output_sha256": "af92c57c5fec76d296cb4d257cb4c93736d8f12c3f0564875e8214ec9bb90b1e",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "993647850c7942b2640a8d617bf475722cad0a94",
+            "906b4805d861c1c1b5da60cab5b63fcbb2d7a1de",
+            "3c3f9c14c37bde744002c15de4e767f87fe27174",
+            "ae8dd753ed8980aa9dd6b188fd4cb1d3feaf27db",
+            "6835333e7d4f2099c95b9426830caef7099da91c",
+            "7a63b2131ff4a197de8183cb596d4a6b3fa28a30",
+            "3b36750c7eef25e9208c05bc07d9f7b818e28cd1",
+            "7013fe254a967182ccda3ec380b1539b5a8688a7",
+            "6ddd15e24196ab49ed40df764cbbd8889320dbba",
+            "356c2c0733611b4a4de30d3f57fc82305bfadb96",
+            "e9ad5349276a6b94c4ff0dc2e638e7e32475e665",
+            "1d55767564bd092935c4d8a21fa0debc7a382db2",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "93c8bb11169fadf1022f23076833031dd7dc3a70",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "10b2309a4099ac63aa25fa632040f09cbd904441",
+            "223fe6a581343ea6f9c1041ebfa3c6d91762fbca",
+            "3295a0810fa28351a04eb3f6c81b6e6a38375eae",
+            "ddf800634a7bd6de81d3cd5622dfab154cb910cb",
+            "28ab716fd355386f7d49884059ae00475990ef8a",
+            "508f35cdba43e2f93a231ae6f828d46b70534ba9",
+            "63b9c002c7e672bb2999cca79cb7fae88b1e7260",
+            "90623d4608444ce051ff3d8b959211b2ff59ff39",
+            "3bdeef677347d81b56fcbb5ba9e83722869a869c",
+            "aac32ae1f384895e29e4ff8cd1b423967fca469f",
+            "03ef9f554c395db6a1cc482ef2c6434424a250e9",
+            "4ec40476f92ffa28ddb9ca223ed007a9b79b927a",
+            "aac32ae1f384895e29e4ff8cd1b423967fca469f",
+            "ce73e526cd2cbb1f08aca92509d7efe4bed87dfb",
+            "3339fd72121c897b9b3f4ba848eaf718786794cc",
+            "bb255409fc0eabba494a17841d3528459aeb7201",
+            "fd45e13d63dde99108b2129a1a2eacd5cabc7617",
+            "89c28bf70353b4568c7bc031e128a5f57a0fe24d",
+            "e29ea1668c8826754584b165137c3cbd756713ab",
+            "05387fdaf645813520bd53c796b940a68216780c",
+            "d1cf3642042a8e4b73dd608dd12368490ea23faf",
+            "fff6f377c997af2b6ee4987ffb12e4464781cc15",
+            "7787b2825cbc0870cdc6d6516f2f1166adaff458"
+          ],
+          "output_chars": 90312,
+          "output_sha256": "2813cd963a3eabe68eeba08fae461fb481970030096a0ecf7fdbed2fc2461dc1",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 6988,
+          "output_sha256": "2ee0142133e9452b542dbd1099b39794625e307c07088744381eb38507a5271b",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 20480,
+              "inputTokens": 21946,
+              "outputTokens": 422,
+              "reasoningOutputTokens": 8,
+              "totalTokens": 22368
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 20480,
+              "inputTokens": 42341,
+              "outputTokens": 727,
+              "reasoningOutputTokens": 8,
+              "totalTokens": 43068
+            }
+          }
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "e0f613cbaf80cf4a278e713794662250dab2b8bc",
+            "242fe4762d2b2c6cc2c602720d222e1276c0cd17"
+          ],
+          "output_chars": 12410,
+          "output_sha256": "dc0b7670f8b60ecfa171eb838ae5266b2db9c780ecc37cea49f22b3b9d736801",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 16752,
+          "output_sha256": "1e314366cfcbe6a40b0ddc6863edf00a5078cdeba069b7724eb8a02fdabb9c29",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 459,
+          "output_sha256": "4ad7b824bfbfc3505731f0b55abb1c12b245e96e72dd94de485ef87b58d44df0",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "7013fe254a967182ccda3ec380b1539b5a8688a7",
+            "1da29a3068bd98e326257ab0a1d3d4051054a151",
+            "e90b22938f57dea04f981e1bb3c40c80af6ce50e",
+            "3bdeef677347d81b56fcbb5ba9e83722869a869c",
+            "aac32ae1f384895e29e4ff8cd1b423967fca469f",
+            "5b2b66b70405ebda92a890b4b1f794d1de314591"
+          ],
+          "output_chars": 20050,
+          "output_sha256": "0c77f86e696cef3725257e001fffaed0f441dc887705902b1e9e3731df0787e6",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 22144,
+              "inputTokens": 31790,
+              "outputTokens": 334,
+              "reasoningOutputTokens": 12,
+              "totalTokens": 32124
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 42624,
+              "inputTokens": 74131,
+              "outputTokens": 1061,
+              "reasoningOutputTokens": 20,
+              "totalTokens": 75192
+            }
+          }
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 3440,
+          "output_sha256": "ae6631eb6e25651ac5517f7bdc9c350eee721fb3ff332ca004c99651764787cd",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "observed_shas": [
+            "e0f613cbaf80cf4a278e713794662250dab2b8bc",
+            "242fe4762d2b2c6cc2c602720d222e1276c0cd17"
+          ],
+          "output_chars": 5326,
+          "output_sha256": "0eda06c796a02ce98ab5703d55f136f58db76360fadca54ef6a6c23e09149e96",
+          "status": "completed"
+        },
+        {
+          "command_class": "other",
+          "exit_code": 0,
+          "output_chars": 13426,
+          "output_sha256": "7ce505b43a57426c1c2ceb12ee5f3164ddb9e588cb57dd17a1ca49433eb09fbc",
+          "status": "completed"
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 32000,
+              "inputTokens": 42417,
+              "outputTokens": 222,
+              "reasoningOutputTokens": 0,
+              "totalTokens": 42639
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 74624,
+              "inputTokens": 116548,
+              "outputTokens": 1283,
+              "reasoningOutputTokens": 20,
+              "totalTokens": 117831
+            }
+          }
+        },
+        {
+          "event": "token_usage_observed",
+          "usage": {
+            "last": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 42496,
+              "inputTokens": 47914,
+              "outputTokens": 1242,
+              "reasoningOutputTokens": 60,
+              "totalTokens": 49156
+            },
+            "modelContextWindow": 475000,
+            "total": {
+              "cacheWriteInputTokens": 0,
+              "cachedInputTokens": 117120,
+              "inputTokens": 164462,
+              "outputTokens": 2525,
+              "reasoningOutputTokens": 80,
+              "totalTokens": 166987
+            }
+          }
+        }
+      ],
+      "host_observed_effort": "medium",
+      "host_observed_model": "gpt-6.1-terra",
+      "instructions_sha256": "d62a06d8f18ba2e0ca28242d7c0121a34930cd209de7fafb972f46c0dd58d9e0",
+      "profile_activation": "UNKNOWN",
+      "requested_effort": "medium",
+      "requested_model": "gpt-6.1-terra",
+      "role": "sf-test-designer",
+      "role_file_sha256": "0f8cd855f5eb535d52f2a25e4db2e53c35cc46166527caa0bfc25dc8ef5f13ea",
+      "role_result_sha256": "87d9b97cb97367e7acf49dda7aaf6520700c2e21328ec92d6a6899de2afe83f5",
+      "sandbox": {
+        "networkAccess": false,
+        "type": "readOnly",
+        "writableRoots": []
+      },
+      "thread_id": "01a21eca-d2fa-7580-a993-62aaed74c170",
+      "turn_status": "completed"
+    }
+  },
+  "schema_version": "1.0",
+  "source_base_sha": "e4f96cc7c0e2b139c59f72d0b69bc880504b08a4",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 \u2014 read-only handoff PASS claim validation; E2E support for #768"
+}

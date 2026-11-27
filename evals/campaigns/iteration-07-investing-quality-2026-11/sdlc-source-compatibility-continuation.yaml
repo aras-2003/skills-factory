@@ -64,7 +64,7 @@ source_sha256:
   adapters/skills-factory-cloud-next/src/cloud-tools.ts: 96a304438bb9f2ce59ce875220ffc43329efcb15f84a7f866aa42377ad155d81
   adapters/skills-factory-cloud-next/tests/load-skill-source-revision.test.ts: 926f2edd7f8b3aa0e94cb62adf1c9bc34fd026ff0c0d98c651e2b271be3fa771
   docs/architecture/decisions/2026-11-load-skill-source-pin.md: fafb0da30e54d25504712eab9055c69cee8830040134c4f9678abea3123b4780
-  docs/governance/CODEX-SUBAGENT-PILOT.md: 7ce505b43a57426c1c2ceb12ee5f3164ddb9e588cb57dd17a1ca49433eb09fbc
+  docs/governance/CODEX-SUBAGENT-PILOT.md: bfc923d87c5a781331a113d639a004cebe45380ec0b4f5b25c13c4a085c3fff6
   runtime/mcp/server.py: b1e352ba1b82fc7832561f9f2364f1600f63a12bd4028ba66d4d9d8e09ebe487
   runtime/mcp/skill_catalog.py: 7c926c46f7cc7176da597f0d5c850489625e2c9363f4eb6b6b11cba1a0aca088
   runtime/mcp/tests/test_load_skill_source_revision.py: b743e9823783bb5bc64bf377c6e28bb51c8a407324ad26979255f197e38126ab
