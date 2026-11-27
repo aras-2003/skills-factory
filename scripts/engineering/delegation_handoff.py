@@ -39,7 +39,7 @@ ARCHITECTURE_IMPACTS = {"A0", "A1", "A2", "A3", "A4", "UNKNOWN"}
 def _bounded_json(value: Any) -> bytes:
     try:
         encoded = json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, RecursionError):
         raise ValueError("handoff must be JSON serializable") from None
     if len(encoded) > MAX_HANDOFF_BYTES:
         raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
@@ -62,7 +62,10 @@ def _check_forbidden(value: Any) -> None:
 def _required_object(value: Any, required: set[str], optional: set[str], name: str) -> dict:
     if not isinstance(value, dict):
         raise ValueError(f"{name} must be an object")
-    _check_forbidden(value)
+    try:
+        _check_forbidden(value)
+    except RecursionError:
+        raise ValueError("handoff structure exceeds recursion limit") from None
     missing = required - value.keys()
     unknown = value.keys() - required - optional
     if missing:
@@ -174,6 +177,8 @@ def read_input(data: bytes | str) -> dict:
         payload = json.loads(data, object_pairs_hook=_unique_object)
     except json.JSONDecodeError:
         raise ValueError("serialized handoff is not valid JSON") from None
+    except RecursionError:
+        raise ValueError("serialized handoff exceeds recursion limit") from None
     return validate_input(payload)
 
 

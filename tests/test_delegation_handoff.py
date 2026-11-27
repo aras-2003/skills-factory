@@ -3,7 +3,9 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -112,6 +114,73 @@ class DelegationHandoffTests(unittest.TestCase):
             with self.subTest(kind=kind, keys="duplicate"):
                 with self.assertRaises(ValueError):
                     handoff.read_input(encode(duplicate))
+
+    def test_handoff_json_02_rejects_deep_wire_as_value_error(self):
+        wire = '{"objective":' + "[" * 300 + "0" + "]" * 300 + "}"
+        self.assertLess(len(wire.encode("utf-8")), handoff.MAX_HANDOFF_BYTES)
+        original_limit = sys.getrecursionlimit()
+        try:
+            sys.setrecursionlimit(250)
+            for kind, data in (("str", wire), ("bytes", wire.encode("utf-8"))):
+                with self.subTest(kind=kind):
+                    with self.assertRaises(ValueError) as error:
+                        handoff.read_input(data)
+                    self.assertNotIn(wire, str(error.exception))
+        finally:
+            sys.setrecursionlimit(original_limit)
+
+    def test_handoff_json_03_normalizes_decoder_recursion_error(self):
+        sentinel = "SENTINEL_DECODER_RECURSION_51"
+        wire = json.dumps({"objective": sentinel})
+        for kind, data in (("str", wire), ("bytes", wire.encode("utf-8"))):
+            with self.subTest(kind=kind):
+                with patch.object(handoff.json, "loads", side_effect=RecursionError(sentinel)):
+                    with self.assertRaises(ValueError) as error:
+                        handoff.read_input(data)
+                self.assertEqual("serialized handoff exceeds recursion limit", str(error.exception))
+                self.assertNotIn(sentinel, str(error.exception))
+                self.assertTrue(error.exception.__suppress_context__)
+
+    def test_handoff_object_01_rejects_cyclic_input_as_value_error(self):
+        sentinel = "SENTINEL_CYCLIC_INPUT_51"
+        cyclic = [sentinel]
+        cyclic.append(cyclic)
+        payload = valid_input()
+        payload["objective"] = cyclic
+        for name, call in (("validate_input", handoff.validate_input),
+                           ("serialize_input", handoff.serialize_input)):
+            with self.subTest(entry_point=name):
+                with self.assertRaises(ValueError) as error:
+                    call(payload)
+                self.assertNotIn(sentinel, str(error.exception))
+
+    def test_handoff_object_02_rejects_cyclic_result_as_value_error(self):
+        sentinel = "SENTINEL_CYCLIC_RESULT_51"
+        cyclic = [sentinel]
+        cyclic.append(cyclic)
+        result = {
+            "task_id": "task-2", "role": "sf-test-executor", "status": "NOT_RUN",
+            "candidate_sha": "b" * 40, "changed_paths": [],
+            "test_case_outcomes": [{"case_id": "HANDOFF-05", "status": "NOT_RUN"}],
+            "command_exit_codes": [], "evidence_refs": [],
+            "material_findings": cyclic, "residual_risks": ["host execution unavailable"],
+            "next_action": "run in supported host",
+        }
+        with self.assertRaises(ValueError) as error:
+            self.validate_result(result, expected_task_id="task-2", expected_role="sf-test-executor",
+                                 expected_test_case_ids=["HANDOFF-05"],
+                                 fixture_policy_by_case={"HANDOFF-05": None})
+        self.assertNotIn(sentinel, str(error.exception))
+
+    def test_handoff_object_03_normalizes_recursive_json_serialization_error(self):
+        sentinel = "SENTINEL_DEEP_SERIALIZATION_51"
+        # Inject the encoder failure: some Python JSON implementations do not
+        # raise RecursionError for deeply nested containers at this limit.
+        with patch.object(handoff.json, "dumps", side_effect=RecursionError(sentinel)):
+            with self.assertRaises(ValueError) as error:
+                handoff._bounded_json({"objective": sentinel})
+        self.assertNotIn(sentinel, str(error.exception))
+        self.assertTrue(error.exception.__suppress_context__)
 
     def test_handoff_path_01_accepts_valid_and_nested_read_write_scopes(self):
         payload = valid_input()

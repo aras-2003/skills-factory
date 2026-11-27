@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — shared handoff parser nesting and cycle failure",
+  "source_revision": "112f545796911f3c5b545d9dbb718fbf4dbce76b",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Test Designer identified a candidate unhandled RecursionError at the shared handoff contract boundary. Architect advice is required before deciding the compatibility-preserving fix. No code/test execution has started.",
+    "timestamp": "2026-11-27T14:44:12Z"
+  },
+  "impact": "A1",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved sf-architect profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-architect profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Host model metadata reported by Architect child",
+      "reason": null
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective reasoning effort was not exposed by host metadata."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Host did not expose whether the named TOML profile was loaded."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Architect child task accepted through Codex collaboration surface.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T14:44:12Z",
+      "latest": "2026-11-27T14:45:53Z",
+      "evidence": "Pre-dispatch decision record preceded the accepted Architect child observed running at 14:45:53Z."
+    },
+    "time_unknown_reason": "Host did not expose exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned the bounded source-linked A1 advisory. Exact lifecycle timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T14:44:12Z",
+      "latest": "2026-11-27T14:46:56Z",
+      "evidence": "Pre-dispatch decision preceded the returned Architect review observed by 14:46:56Z."
+    },
+    "started_time_unknown_reason": "Host did not expose exact worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T14:45:53Z",
+      "latest": "2026-11-27T14:46:56Z",
+      "evidence": "Architect was observed running at 14:45:53Z and the completed review was saved by 14:46:56Z."
+    },
+    "ended_time_unknown_reason": "Host did not expose exact worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/architect-review.md",
+    "sha256": "ef54f0e6be78aa6fc5de1021a1802ed67b9d28df5a5b5803cec92b28ad971870",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T14:46:56Z",
+    "reason": "Accepted the error-normalization scope and new unique test IDs; production exposure remains UNKNOWN. Implementation will stay bounded to parser and tests with exact coupled source pins."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Coordinator observation bounds; independent timing review not yet performed.",
+    "assessed_at": "2026-11-27T14:46:56Z",
+    "first_dependent_action_at": null,
+    "reason": "Architect result precedes implementation, but exact host dispatch/completion times are unavailable; no timing PASS is claimed.",
+    "first_dependent_action_reference": null,
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "Implementation/test action has not yet occurred."
+  },
+  "decision_id": "sdlcdeep-20261127-handoff-a1-invoke",
+  "attempt_id": "sdlcdeep-20261127-handoff-a1-invoke-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "https://github.com/aras-2003/skills-factory/issues/748",
+      "captured_at": "2026-11-27T14:44:12Z"
+    },
+    {
+      "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/test-design.md sha256:a692621165a0c23589fe9a7e32067c415b4d3f7af15fbec0e1781f1873521f43",
+      "captured_at": "2026-11-27T14:44:12Z"
+    },
+    {
+      "reference": "Canonical main 112f545796911f3c5b545d9dbb718fbf4dbce76b; worktree clean before task branch",
+      "captured_at": "2026-11-27T14:44:12Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A1_SHARED_PUBLIC_CONTRACT",
+    "reason": "reviewed trigger classification",
+    "evidence_reference": "test evidence"
+  }
+}
