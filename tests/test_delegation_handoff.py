@@ -60,6 +60,35 @@ class DelegationHandoffTests(unittest.TestCase):
         self.assertEqual(payload, handoff.read_input(encoded))
         self.assertEqual(payload, handoff.read_input(json.dumps(payload)))
 
+    def test_handoff_wire_01_enforces_raw_utf8_byte_limit(self):
+        payload = valid_input()
+        payload["objective"] = "Run checks for café."
+        formatted = json.dumps(payload, ensure_ascii=False, indent=2)
+        for size in (16_384, 16_385):
+            wire = formatted + " " * (size - len(formatted.encode("utf-8")))
+            self.assertEqual(size, len(wire.encode("utf-8")))
+            self.assertLess(len(wire), size)  # The non-ASCII character uses two bytes.
+            for kind, data in (("str", wire), ("bytes", wire.encode("utf-8"))):
+                with self.subTest(size=size, kind=kind):
+                    if size == 16_384:
+                        self.assertEqual(payload, handoff.read_input(data))
+                    else:
+                        with self.assertRaises(ValueError):
+                            handoff.read_input(data)
+
+    def test_handoff_json_01_rejects_duplicate_decoded_keys(self):
+        payload = valid_input()
+        unique = json.dumps(payload)
+        # The escaped spelling decodes to the same key as candidate_sha.
+        duplicate = unique[:-1] + ', "candidate_\\u0073ha": "' + "c" * 40 + '"}'
+        for kind, encode in (("str", lambda value: value),
+                             ("bytes", lambda value: value.encode("utf-8"))):
+            with self.subTest(kind=kind, keys="unique"):
+                self.assertEqual(payload, handoff.read_input(encode(unique)))
+            with self.subTest(kind=kind, keys="duplicate"):
+                with self.assertRaises(ValueError):
+                    handoff.read_input(encode(duplicate))
+
     def test_handoff_path_01_accepts_valid_and_nested_read_write_scopes(self):
         payload = valid_input()
         payload["readonly_paths"] = ["src/", "docs/guide.md"]
