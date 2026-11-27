@@ -60,6 +60,59 @@ class DelegationHandoffTests(unittest.TestCase):
         self.assertEqual(payload, handoff.read_input(encoded))
         self.assertEqual(payload, handoff.read_input(json.dumps(payload)))
 
+    def test_handoff_wire_01_enforces_raw_utf8_byte_limit(self):
+        payload = valid_input()
+        payload["objective"] = "Run checks for café."
+        formatted = json.dumps(payload, ensure_ascii=False, indent=2)
+        for size in (16_384, 16_385):
+            wire = formatted + " " * (size - len(formatted.encode("utf-8")))
+            self.assertEqual(size, len(wire.encode("utf-8")))
+            self.assertLess(len(wire), size)  # The non-ASCII character uses two bytes.
+            for kind, data in (("str", wire), ("bytes", wire.encode("utf-8"))):
+                with self.subTest(size=size, kind=kind):
+                    if size == 16_384:
+                        self.assertEqual(payload, handoff.read_input(data))
+                    else:
+                        with self.assertRaises(ValueError):
+                            handoff.read_input(data)
+
+    def test_handoff_wire_02_rejects_oversized_text_before_encoding(self):
+        class EncodeMustNotRun(str):
+            def encode(self, *args, **kwargs):
+                raise AssertionError("oversized text was encoded")
+
+        wire = EncodeMustNotRun("x" * (handoff.MAX_HANDOFF_BYTES + 1))
+        with self.assertRaisesRegex(ValueError, "byte context limit"):
+            handoff.read_input(wire)
+
+    def test_handoff_error_01_does_not_echo_unknown_input_field(self):
+        sentinel = "SENTINEL_PRIVATE_7f31"
+        payload = valid_input()
+        payload[sentinel] = "private"
+        wire = json.dumps(payload)
+        for name, call in (
+            ("validate_input", lambda: handoff.validate_input(payload)),
+            ("read_input(str)", lambda: handoff.read_input(wire)),
+            ("read_input(bytes)", lambda: handoff.read_input(wire.encode("utf-8"))),
+        ):
+            with self.subTest(entry_point=name):
+                with self.assertRaises(ValueError) as error:
+                    call()
+                self.assertNotIn(sentinel, str(error.exception))
+
+    def test_handoff_json_01_rejects_duplicate_decoded_keys(self):
+        payload = valid_input()
+        unique = json.dumps(payload)
+        # The escaped spelling decodes to the same key as candidate_sha.
+        duplicate = unique[:-1] + ', "candidate_\\u0073ha": "' + "c" * 40 + '"}'
+        for kind, encode in (("str", lambda value: value),
+                             ("bytes", lambda value: value.encode("utf-8"))):
+            with self.subTest(kind=kind, keys="unique"):
+                self.assertEqual(payload, handoff.read_input(encode(unique)))
+            with self.subTest(kind=kind, keys="duplicate"):
+                with self.assertRaises(ValueError):
+                    handoff.read_input(encode(duplicate))
+
     def test_handoff_path_01_accepts_valid_and_nested_read_write_scopes(self):
         payload = valid_input()
         payload["readonly_paths"] = ["src/", "docs/guide.md"]
@@ -217,11 +270,12 @@ class DelegationHandoffTests(unittest.TestCase):
                                  expected_test_case_ids=["AGENT-01"])
 
     def test_handoff_07_rejects_arbitrary_nested_payload_fields(self):
+        sentinel = "SENTINEL_PRIVATE_7f31"
         result = {
             "task_id": "task-4", "role": "sf-test-executor", "status": "FAIL",
             "candidate_sha": "b" * 40, "changed_paths": [],
             "test_case_outcomes": [{
-                "case_id": "AGENT-01", "status": "FAIL", "prompt": "private prompt",
+                "case_id": "AGENT-01", "status": "FAIL", sentinel: "private prompt",
             }],
             "command_exit_codes": [{
                 "command": "python -m unittest", "exit_code": 1,
@@ -230,9 +284,10 @@ class DelegationHandoffTests(unittest.TestCase):
             "evidence_refs": [], "material_findings": [], "residual_risks": [],
             "next_action": "review",
         }
-        with self.assertRaisesRegex(ValueError, "unknown fields: prompt"):
+        with self.assertRaisesRegex(ValueError, "unknown fields") as error:
             self.validate_result(result, expected_task_id="task-4", expected_role="sf-test-executor",
                                  expected_test_case_ids=["AGENT-01"])
+        self.assertNotIn(sentinel, str(error.exception))
 
     def test_handoff_08_restricts_architecture_impact_to_native_values(self):
         payload = valid_input()
