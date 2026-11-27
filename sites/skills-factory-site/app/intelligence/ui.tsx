@@ -20,11 +20,12 @@ type DashboardData = {
   metrics: { skills: number | null; workflows: number | null; domains: number | null; openIssues: number | null; mergedPullRequests: number | null };
   roadmap: RoadmapItem[] | null;
   events: ActivityEvent[];
+  eventCoverage: Record<ActivityEvent["type"], SourceState>;
   limitations: Record<string, string>;
 };
 
 type ActivityEvent = { id: string; sourceId: number; type: "issue_opened" | "issue_completed" | "pr_merged"; date: string; occurredAt: string; workArea: string; number: number; title: string; url: string };
-type HeatmapData = { bins: Array<{ key: string; label: string; from: string; to: string }>; types: ActivityEvent["type"][]; cells: Array<{ type: ActivityEvent["type"]; date: string; count: number }>; complete: boolean; state: SourceState };
+type HeatmapData = { bins: Array<{ key: string; label: string; from: string; to: string }>; types: ActivityEvent["type"][]; cells: Array<{ type: ActivityEvent["type"]; date: string; count: number }>; complete: boolean; completeByType: Record<ActivityEvent["type"], boolean>; state: SourceState };
 type WindowDays = 7 | 14 | 30;
 type Aggregation = "day" | "week" | "month";
 
@@ -36,7 +37,7 @@ const stateLabels: Record<SourceState, string> = {
 };
 const eventLabels: Record<ActivityEvent["type"], string> = {
   issue_opened: "Nowe Issues",
-  issue_completed: "Zamknięte jako ukończone",
+  issue_completed: "Obecnie zamknięte jako ukończone",
   pr_merged: "Zmergowane PR",
 };
 const periods: WindowDays[] = [7, 14, 30];
@@ -87,22 +88,35 @@ function dateWindow(days: WindowDays) {
   return { from: start.toISOString().slice(0, 10), to: endDay };
 }
 
-function Heatmap({ data, range, aggregation, selectedTypes, onSelect }: {
+function validDateRange(from: string, to: string) {
+  const validDay = (value: string) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const parsed = new Date(`${value}T00:00:00.000Z`);
+    return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+  };
+  if (!validDay(from) || !validDay(to) || from > to) return false;
+  return (Date.parse(`${to}T00:00:00.000Z`) - Date.parse(`${from}T00:00:00.000Z`)) / 86_400_000 < 90;
+}
+
+function Heatmap({ data, range, aggregation, selectedTypes, onSelect, historical }: {
   data: DashboardData;
   range: { from: string; to: string };
   aggregation: Aggregation;
   selectedTypes: ActivityEvent["type"][];
   onSelect: (from: string, to: string, type: ActivityEvent["type"] | null) => void;
+  historical: boolean;
 }) {
   const sourceDate = data.sources.github.asOf?.slice(0, 10) ?? data.asOf.slice(0, 10);
   const clippedTo = range.to > sourceDate ? sourceDate : range.to;
+  const eventCoverage = Object.fromEntries(Object.entries(data.eventCoverage).map(([type, state]) => [type, historical && state !== "UNAVAILABLE" ? "STALE" : state]));
   const heatmap: HeatmapData = buildHeatmap(data.events, {
     from: range.from,
     to: clippedTo,
-    sourceState: data.sources.github.state,
+    sourceState: historical && data.sources.github.state !== "UNAVAILABLE" ? "STALE" : data.sources.github.state,
+    sourceStates: eventCoverage,
     period: aggregation,
   });
-  if (!range.from || !range.to || range.from > range.to) return <div className="pi-empty" role="alert">Zakres dat jest nieprawidłowy. Data początkowa musi poprzedzać końcową.</div>;
+  if (!validDateRange(range.from, range.to)) return <div className="pi-empty" role="alert">Zakres musi być prawidłowy, chronologiczny i krótszy niż 90 dni.</div>;
   if (range.from > sourceDate) return <div className="pi-empty" role="status">Wybrany zakres zaczyna się po ostatnim odczycie źródła. Przyszłe daty nie są traktowane jako zero.</div>;
   if (data.sources.github.state === "UNAVAILABLE") {
     return <div className="pi-empty"><strong>Heatmapa niedostępna</strong><p>{data.sources.github.reason ?? "Źródło GitHub nie zwróciło danych."}</p></div>;
@@ -115,9 +129,9 @@ function Heatmap({ data, range, aggregation, selectedTypes, onSelect }: {
     <div className="pi-heatmap-grid" style={{ gridTemplateColumns: `150px repeat(${heatmap.bins.length}, minmax(22px, 1fr))` }} role="group" aria-label={`Aktywność GitHub ${aggregation === "day" ? "dzienna" : aggregation === "week" ? "tygodniowa" : "miesięczna"}, daty UTC`}>
       <span aria-hidden="true" />
       {heatmap.bins.map((bin) => <span className="pi-date-heading" key={bin.key} title={`${bin.from} – ${bin.to} UTC`}>{bin.label}</span>)}
-      {heatmap.types.filter((type) => selectedTypes.includes(type)).map((type) => <FragmentRow key={type} type={type} bins={heatmap.bins} counts={counts} max={max} complete={heatmap.complete} onSelect={onSelect} />)}
+      {heatmap.types.filter((type) => selectedTypes.includes(type)).map((type) => <FragmentRow key={type} type={type} bins={heatmap.bins} counts={counts} max={max} complete={heatmap.completeByType[type]} onSelect={onSelect} />)}
     </div>
-    <p className="pi-legend">Wartości liczą zdarzenia osobno. Puste przedziały pokazujemy jako zero wyłącznie przy zweryfikowanym, kompletnym odczycie. Wszystkie granice są w UTC. {range.to > sourceDate ? `Zakres przyszły został ograniczony do ostatniego odczytu ${sourceDate}.` : ""}</p>
+    <p className="pi-legend">Wartości liczą zdarzenia osobno. Puste przedziały pokazujemy jako zero wyłącznie przy zweryfikowanym, kompletnym odczycie danego typu. Zamknięcia oznaczają obecnie zamknięte Issues; bez historii ponownych otwarć ich pokrycie jest częściowe. Wszystkie granice są w UTC. {range.to > sourceDate ? `Zakres przyszły został ograniczony do ostatniego odczytu ${sourceDate}.` : ""}</p>
   </div>;
 }
 
@@ -126,18 +140,18 @@ function FragmentRow({ type, bins, counts, max, complete, onSelect }: {
   onSelect: (from: string, to: string, type: ActivityEvent["type"] | null) => void;
 }) {
   return <>
-    <span className="pi-row-label">{eventLabels[type]}</span>
+    <span className="pi-row-label">{eventLabels[type]}{complete ? "" : " · obserwowane"}</span>
     {bins.map((bin) => {
       const count = counts.get(`${type}:${bin.key}`);
-      if (count === undefined && !complete) return <span key={bin.key} className="pi-heat-cell pi-heat-unknown" aria-label={`${eventLabels[type]}: brak kompletnego odczytu dla ${bin.from}–${bin.to} UTC`} />;
+      if (count === undefined && !complete) return <span key={bin.key} role="img" className="pi-heat-cell pi-heat-unknown" aria-label={`${eventLabels[type]}: brak kompletnego odczytu dla ${bin.from}–${bin.to} UTC`} />;
       const value = count ?? 0;
       const level = value === 0 ? 0 : Math.min(4, Math.ceil((value / max) * 4));
       return <button
         key={bin.key}
         type="button"
         className={`pi-heat-cell pi-heat-${level}`}
-        aria-label={`${eventLabels[type]}: ${value} w zakresie ${bin.from}–${bin.to} UTC`}
-        title={`${bin.from}–${bin.to} UTC · ${eventLabels[type]}: ${value}`}
+        aria-label={`${eventLabels[type]}: ${complete ? value : `co najmniej ${value}`} w zakresie ${bin.from}–${bin.to} UTC`}
+        title={`${bin.from}–${bin.to} UTC · ${eventLabels[type]}: ${complete ? value : `co najmniej ${value}`}`}
         onClick={() => onSelect(bin.from, bin.to, type)}
       >{value || ""}</button>;
     })}
@@ -154,18 +168,28 @@ export default function IntelligenceDashboard() {
   const [range, setRange] = useState(() => dateWindow(30));
   const [aggregation, setAggregation] = useState<Aggregation>("day");
   const [selectedTypes, setSelectedTypes] = useState<ActivityEvent["type"][]>(["issue_opened", "issue_completed", "pr_merged"]);
+  const refreshSequence = useRef(0);
   const [eventFilter, setEventFilter] = useState<{ from: string; to: string; type: ActivityEvent["type"] | null } | null>(null);
   const [roadmapQuery, setRoadmapQuery] = useState("");
   const [workAreaFilter, setWorkAreaFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
 
   const refresh = useCallback(async (signal?: AbortSignal) => {
+    const requestId = ++refreshSequence.current;
     if (!dataRef.current) setLoading(true);
     else setRefreshing(true);
     try {
       const response = await fetch("/api/intelligence", { cache: "no-store", signal });
-      if (!response.ok) throw new Error(response.status === 401 ? "Sesja Site nie potwierdziła tożsamości." : "Nie udało się odczytać źródeł Product Intelligence.");
+      if (requestId !== refreshSequence.current) return;
+      if (response.status === 401 || response.status === 403) {
+        dataRef.current = null;
+        setData(null);
+        setHistorical(false);
+        throw new Error("Brak autoryzacji Site. Zaloguj się ponownie, aby odczytać Product Intelligence.");
+      }
+      if (!response.ok) throw new Error("Nie udało się odczytać źródeł Product Intelligence.");
       const next = await response.json() as DashboardData;
+      if (requestId !== refreshSequence.current) return;
       dataRef.current = next;
       setData(next);
       if (next.snapshotState === "STALE") {
@@ -177,12 +201,15 @@ export default function IntelligenceDashboard() {
       }
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === "AbortError") return;
+      if (requestId !== refreshSequence.current) return;
       const message = cause instanceof Error ? cause.message : "Nie udało się odczytać źródeł.";
       setError(message);
       if (dataRef.current) setHistorical(true);
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      if (requestId === refreshSequence.current) {
+        setLoading(false);
+        setRefreshing(false);
+      }
     }
   }, []);
 
@@ -212,8 +239,10 @@ export default function IntelligenceDashboard() {
 
   if (loading && !data) return <main className="pi-page"><header className="pi-header"><Link href="/" className="brand"><span className="mark">S</span><span>Skills Factory <strong>Cloud</strong></span></Link><span>Product Intelligence</span></header><div className="pi-loading" role="status">Odczytuję źródła…</div></main>;
 
-  const openIssueState = data?.sources.github.issues.state ?? "UNAVAILABLE";
-  const mergedPrState = data?.sources.github.pulls.state ?? "UNAVAILABLE";
+  const visibleGithubState = historical && data?.sources.github.state !== "UNAVAILABLE" ? "STALE" : data?.sources.github.state ?? "UNAVAILABLE";
+  const openIssueState = historical && data?.sources.github.issues.state !== "UNAVAILABLE" ? "STALE" : data?.sources.github.issues.state ?? "UNAVAILABLE";
+  const mergedPrState = historical && data?.sources.github.pulls.state !== "UNAVAILABLE" ? "STALE" : data?.sources.github.pulls.state ?? "UNAVAILABLE";
+  const visibleRuntimeState = historical && data?.sources.runtime.state !== "UNAVAILABLE" ? "STALE" : data?.sources.runtime.state ?? "UNAVAILABLE";
   const runtimeIdentity = data?.sources.runtime.identity;
   const runtimeAttestation = typeof runtimeIdentity?.attestationStatus === "string" ? runtimeIdentity.attestationStatus : "unknown";
 
@@ -231,7 +260,7 @@ export default function IntelligenceDashboard() {
       {error && <div className={`pi-alert ${historical ? "pi-alert-stale" : ""}`} role="status"><strong>{historical ? "Pokazuję poprzedni odczyt" : "Odczyt nie powiódł się"}</strong><span>{error}{historical && data ? ` Snapshot pochodzi z ${formatDate(data.asOf, true)} i jest utrzymywany tylko w cache serwera lub stanie tej karty.` : ""}</span></div>}
 
       <section className="pi-overview" aria-labelledby="overview-heading">
-        <div className="pi-section-head"><div><h2 id="overview-heading">Executive overview</h2><p>Ostatnia aktualizacja: {formatDate(data?.asOf, true)} · odczyty i grupowanie dat w UTC</p></div><StateBadge state={data?.sources.github.state ?? "UNAVAILABLE"} /></div>
+        <div className="pi-section-head"><div><h2 id="overview-heading">Executive overview</h2><p>Ostatnia aktualizacja: {formatDate(data?.asOf, true)} · odczyty i grupowanie dat w UTC</p></div><StateBadge state={visibleGithubState} /></div>
         <div className="pi-metrics">
           <MetricCard label="Skills" value={data?.metrics.skills ?? null} detail="Wersjonowany katalog MCP" />
           <MetricCard label="Workflows" value={data?.metrics.workflows ?? null} detail="Zadeklarowane w katalogu" />
@@ -243,8 +272,8 @@ export default function IntelligenceDashboard() {
       </section>
 
       <section className="pi-sources" aria-label="Stan źródeł danych">
-        <article className="pi-source-card"><div><h2>GitHub</h2><StateBadge state={data?.sources.github.state ?? "UNAVAILABLE"} /></div><p>Issues i Pull Requests repozytorium <a href="https://github.com/aras-2003/skills-factory" target="_blank" rel="noreferrer">aras-2003/skills-factory</a>.</p><small>Ostatni odczyt: {formatDate(data?.sources.github.asOf, true)}</small>{data?.sources.github.reason && <small className="pi-reason">{data.sources.github.reason}</small>}</article>
-        <article className="pi-source-card"><div><h2>Site MCP</h2><StateBadge state={data?.sources.runtime.state ?? "UNAVAILABLE"} /></div><p>Katalog jest odczytywany lokalnie w istniejącym runtime Site.</p><small>Tożsamość wdrożenia: {runtimeAttestation === "VERIFIED" ? "zweryfikowana" : "niepotwierdzona"}</small><small>Ostatni odczyt: {formatDate(data?.sources.runtime.asOf, true)}</small><RuntimeIdentity identity={runtimeIdentity} />{data?.sources.runtime.reason && <small className="pi-reason">{data.sources.runtime.reason}</small>}</article>
+        <article className="pi-source-card"><div><h2>GitHub</h2><StateBadge state={visibleGithubState} /></div><p>Issues i Pull Requests repozytorium <a href="https://github.com/aras-2003/skills-factory" target="_blank" rel="noreferrer">aras-2003/skills-factory</a>.</p><small>Issues: {stateLabels[openIssueState]} · {formatDate(data?.sources.github.issues.asOf, true)}</small><small>Pull Requests: {stateLabels[mergedPrState]} · {formatDate(data?.sources.github.pulls.asOf, true)}</small>{data?.sources.github.issues.reason && <small className="pi-reason">Issues: {data.sources.github.issues.reason}</small>}{data?.sources.github.pulls.reason && <small className="pi-reason">Pull Requests: {data.sources.github.pulls.reason}</small>}</article>
+        <article className="pi-source-card"><div><h2>Site MCP</h2><StateBadge state={visibleRuntimeState} /></div><p>Katalog jest odczytywany lokalnie w istniejącym runtime Site.</p><small>Tożsamość wdrożenia: {historical ? "historyczna" : runtimeAttestation === "VERIFIED" ? "zweryfikowana" : "niepotwierdzona"}</small><small>Ostatni odczyt: {formatDate(data?.sources.runtime.asOf, true)}</small><RuntimeIdentity identity={runtimeIdentity} />{data?.sources.runtime.reason && <small className="pi-reason">{data.sources.runtime.reason}</small>}</article>
         <article className="pi-source-card"><div><h2>Project V2 i operacje</h2><StateBadge state="UNAVAILABLE" /></div><p>{data?.limitations.projectV2}</p><small>{data?.limitations.workflowTelemetry}</small></article>
       </section>
 
@@ -257,7 +286,7 @@ export default function IntelligenceDashboard() {
           <label>Agregacja<select value={aggregation} onChange={(event) => setAggregation(event.target.value as Aggregation)}><option value="day">Dzienna</option><option value="week">Tygodniowa</option><option value="month">Miesięczna</option></select></label>
         </div>
         <div className="pi-event-filters" role="group" aria-label="Typy zdarzeń heatmapy">{Object.entries(eventLabels).map(([type, label]) => { const value = type as ActivityEvent["type"]; const checked = selectedTypes.includes(value); return <button key={type} type="button" aria-pressed={checked} onClick={() => setSelectedTypes((current) => checked ? current.filter((item) => item !== value) : [...current, value])}>{label}</button>; })}</div>
-        {data ? <Heatmap data={data} range={range} aggregation={aggregation} selectedTypes={selectedTypes} onSelect={(from, to, type) => setEventFilter({ from, to, type })} /> : <div className="pi-empty">Brak odczytu.</div>}
+        {data ? <Heatmap data={data} range={range} aggregation={aggregation} selectedTypes={selectedTypes} historical={historical} onSelect={(from, to, type) => setEventFilter({ from, to, type })} /> : <div className="pi-empty">Brak odczytu.</div>}
         <p className="pi-legend">Zmiany capabilities, deploymenty, testy runtime, workflow runs, błędy i regresje nie są dostępne w tym przyroście.</p>
       </section>
 

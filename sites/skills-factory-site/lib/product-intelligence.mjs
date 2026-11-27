@@ -1,8 +1,13 @@
 const EVENT_TYPES = Object.freeze(["issue_opened", "issue_completed", "pr_merged"]);
+const SOURCE_STATES = Object.freeze(["VERIFIED", "PARTIAL", "STALE", "UNAVAILABLE"]);
 const REPOSITORY_PATH = "/aras-2003/skills-factory/";
 
 function utcDate(value) {
   if (typeof value !== "string" || !value) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const parsedDay = new Date(`${value}T00:00:00.000Z`);
+    return Number.isFinite(parsedDay.getTime()) && parsedDay.toISOString().slice(0, 10) === value ? value : null;
+  }
   const parsed = new Date(value);
   return Number.isFinite(parsed.getTime()) ? parsed.toISOString().slice(0, 10) : null;
 }
@@ -73,7 +78,7 @@ export function buildGithubActivity(issues, pulls) {
     const record = validRecord(raw, "issues");
     if (!record) continue;
     add("issue_opened", record, record.row.created_at);
-    if (record.row.state === "closed" && record.row.state_reason !== "not_planned") {
+    if (record.row.state === "closed" && record.row.state_reason === "completed") {
       add("issue_completed", record, record.row.closed_at);
     }
   }
@@ -89,15 +94,17 @@ export function buildGithubActivity(issues, pulls) {
 
 /**
  * @param {Array<{type:string,date:string}>} events
- * @param {{from:string,to:string,sourceState?:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period?:"day"|"week"|"month"}} options
- * @returns {{bins:Array<{key:string,label:string,from:string,to:string}>,types:Array<"issue_opened"|"issue_completed"|"pr_merged">,cells:Array<{type:"issue_opened"|"issue_completed"|"pr_merged",date:string,count:number}>,complete:boolean,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period:string}}
+ * @param {{from:string,to:string,sourceState?:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",sourceStates?:Record<string,"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE">,period?:"day"|"week"|"month"}} options
+ * @returns {{bins:Array<{key:string,label:string,from:string,to:string}>,types:Array<"issue_opened"|"issue_completed"|"pr_merged">,cells:Array<{type:"issue_opened"|"issue_completed"|"pr_merged",date:string,count:number}>,complete:boolean,completeByType:Record<string,boolean>,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period:string}}
  */
-export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", period = "day" }) {
+export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", sourceStates = {}, period = "day" }) {
   const start = utcDate(from);
   const end = utcDate(to);
   const state = ["VERIFIED", "PARTIAL", "STALE", "UNAVAILABLE"].includes(sourceState) ? sourceState : "UNAVAILABLE";
-  if (!start || !end || start > end || state === "UNAVAILABLE" || !["day", "week", "month"].includes(period)) {
-    return { bins: [], types: [...EVENT_TYPES], cells: [], complete: false, state, period };
+  const completeByType = Object.fromEntries(EVENT_TYPES.map((type) => [type, (sourceStates[type] ?? state) === "VERIFIED"]));
+  const rangeDays = start && end ? (Date.parse(`${end}T00:00:00.000Z`) - Date.parse(`${start}T00:00:00.000Z`)) / 86_400_000 + 1 : Infinity;
+  if (!start || !end || start > end || rangeDays > 90 || state === "UNAVAILABLE" || !["day", "week", "month"].includes(period)) {
+    return { bins: [], types: [...EVENT_TYPES], cells: [], complete: false, completeByType, state, period };
   }
   const bins = [];
   const startDate = new Date(`${start}T00:00:00.000Z`);
@@ -146,7 +153,52 @@ export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", pe
     const split = key.indexOf(":");
     return { type: key.slice(0, split), date: key.slice(split + 1), count };
   }).sort((a, b) => a.date.localeCompare(b.date) || a.type.localeCompare(b.type));
-  return { bins, types: [...EVENT_TYPES], cells, complete: state === "VERIFIED", state, period };
+  return { bins, types: [...EVENT_TYPES], cells, complete: state === "VERIFIED", completeByType, state, period };
+}
+
+/** Validate GitHub REST rows before aggregating them; excluded rows make coverage partial. */
+export function normalizeGithubCollection(items, resource, initialState = "VERIFIED", initialReason = null) {
+  if (!Array.isArray(items)) return { items: null, state: "UNAVAILABLE", reason: initialReason ?? "Source did not return a record array." };
+  const normalized = [];
+  let invalid = 0;
+  for (const item of items) {
+    if (resource === "issues" && item?.pull_request) continue;
+    const expectedKind = resource === "issues" ? "issues" : "pull";
+    const number = Number(item?.number);
+    const valid = item && typeof item === "object" && !Array.isArray(item)
+      && Number.isSafeInteger(item.id) && item.id > 0
+      && Number.isSafeInteger(number) && number > 0
+      && typeof item.title === "string"
+      && repositoryUrl(item.html_url, expectedKind, number) !== null
+      && utcDate(item.created_at) !== null
+      && (resource !== "issues" || ["open", "closed"].includes(item.state))
+      && (resource !== "issues" || item.state !== "closed" || utcDate(item.closed_at) !== null)
+      && (resource !== "pulls" || item.merged_at == null || utcDate(item.merged_at) !== null)
+      && (item.milestone?.due_on == null || utcDate(item.milestone.due_on) !== null);
+    if (!valid) { invalid += 1; continue; }
+    normalized.push({
+      id: item.id,
+      number,
+      title: item.title.slice(0, 500),
+      html_url: item.html_url,
+      created_at: item.created_at,
+      ...(resource === "issues" ? {
+        state: item.state,
+        state_reason: ["completed", "not_planned", "duplicate"].includes(item.state_reason) ? item.state_reason : null,
+        closed_at: item.closed_at ?? null,
+      } : { merged_at: item.merged_at ?? null }),
+      labels: Array.isArray(item.labels) ? item.labels.map((label) => typeof label === "string" ? label : label?.name).filter((name) => typeof name === "string").map((name) => name.slice(0, 100)) : [],
+      ...(resource === "issues" && item.milestone ? {
+        milestone: {
+          title: typeof item.milestone.title === "string" ? item.milestone.title.slice(0, 200) : null,
+          due_on: item.milestone.due_on ?? null,
+        },
+      } : {}),
+    });
+  }
+  const partial = initialState !== "VERIFIED" || invalid > 0;
+  const reason = [initialReason, invalid ? `${invalid} malformed ${resource} record(s) were excluded.` : null].filter(Boolean).join(" ") || null;
+  return { items: normalized, state: partial ? "PARTIAL" : "VERIFIED", reason };
 }
 
 /**
@@ -160,6 +212,17 @@ export function sourceSnapshot({ state, items, asOf, reason = null }) {
     count: availableState && Array.isArray(items) ? items.length : null,
     asOf: typeof asOf === "string" ? asOf : null,
     reason: typeof reason === "string" && reason.length ? reason : null,
+  };
+}
+
+/** Historical issue reopen events are not available in the current Issues projection. */
+export function buildEventCoverage(issueState, pullState) {
+  const issues = SOURCE_STATES.includes(issueState) ? issueState : "UNAVAILABLE";
+  const pulls = SOURCE_STATES.includes(pullState) ? pullState : "UNAVAILABLE";
+  return {
+    issue_opened: issues,
+    issue_completed: issues === "UNAVAILABLE" ? "UNAVAILABLE" : issues === "STALE" ? "STALE" : "PARTIAL",
+    pr_merged: pulls,
   };
 }
 

@@ -2,8 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildGithubActivity,
+  buildEventCoverage,
   buildHeatmap,
   collectPages,
+  normalizeGithubCollection,
   priorityLabelFromLabels,
   repositoryUrl,
   sourceSnapshot,
@@ -134,6 +136,34 @@ test("roadmap source links accept only canonical GitHub issue URLs", () => {
   assert.equal(repositoryUrl("https://attacker.example/aras-2003/skills-factory/issues/42", "issues", 42), null);
   assert.equal(repositoryUrl("https://github.com/aras-2003/skills-factory/issues/42?redirect=1", "issues", 42), null);
   assert.equal(repositoryUrl("https://github.com/aras-2003/skills-factory/pull/42", "issues", 42), null);
+});
+
+test("malformed source rows downgrade collection completeness before aggregation", () => {
+  const result = normalizeGithubCollection([
+    issue(),
+    issue({ id: 11, number: 44, html_url: "https://attacker.example/issues/44" }),
+  ], "issues");
+  assert.equal(result.items.length, 1);
+  assert.equal(result.state, "PARTIAL");
+  assert.match(result.reason, /malformed/i);
+  const heatmap = buildHeatmap([], { from: "2026-11-01", to: "2026-11-02", sourceState: "PARTIAL" });
+  assert.equal(heatmap.completeByType.issue_opened, false);
+});
+
+test("event coverage is type-specific and heatmap date ranges are bounded and strict", () => {
+  const heatmap = buildHeatmap([], {
+    from: "2026-11-01",
+    to: "2026-11-03",
+    sourceState: "VERIFIED",
+    sourceStates: { issue_opened: "VERIFIED", issue_completed: "PARTIAL", pr_merged: "STALE" },
+  });
+  assert.deepEqual(heatmap.completeByType, { issue_opened: true, issue_completed: false, pr_merged: false });
+  assert.equal(buildHeatmap([], { from: "2026-01-01", to: "2026-04-01", sourceState: "VERIFIED" }).bins.length, 0);
+  assert.equal(buildHeatmap([], { from: "2026-02-31", to: "2026-03-02", sourceState: "VERIFIED" }).bins.length, 0);
+  assert.deepEqual(buildEventCoverage("VERIFIED", "PARTIAL"), {
+    issue_opened: "VERIFIED", issue_completed: "PARTIAL", pr_merged: "PARTIAL",
+  });
+  assert.equal(buildEventCoverage("STALE", "VERIFIED").issue_completed, "STALE");
 });
 
 

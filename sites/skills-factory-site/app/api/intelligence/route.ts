@@ -1,10 +1,12 @@
-import { callTool } from "@/lib/skills-factory-adapter/cloud-tools";
+import { callTool, SOURCE } from "@/lib/skills-factory-adapter/cloud-tools";
 import { getChatGPTUser } from "@/app/chatgpt-auth";
 import { env } from "cloudflare:workers";
-import type { SiteVersionMetadata } from "@/lib/skills-factory-adapter/cloud-tools";
+import { resolveSiteVersionMetadata, type SiteVersionMetadata } from "@/lib/site-version-metadata";
 import {
   buildGithubActivity,
+  buildEventCoverage,
   collectPages,
+  normalizeGithubCollection,
   parseGithubPage,
   priorityLabelFromLabels,
   repositoryUrl,
@@ -28,11 +30,11 @@ const SAFE_HEADERS = {
 };
 
 type SourceState = "VERIFIED" | "PARTIAL" | "STALE" | "UNAVAILABLE";
-type Collection = { items: unknown[] | null; state: Exclude<SourceState, "STALE">; reason: string | null };
-type CachedSnapshot = { savedAt: number; nextRetryAt?: number; data: Record<string, unknown> };
+type Collection = { items: unknown[] | null; state: SourceState; reason: string | null; asOf?: string | null };
+type CachedCollection = Collection & { savedAt: number; asOf: string | null; nextRetryAt?: number };
 
-let memorySnapshot: CachedSnapshot | null = null;
-let inFlightSnapshot: ReturnType<typeof buildSnapshot> | null = null;
+const memoryCollections = new Map<string, CachedCollection>();
+const inFlightCollections = new Map<string, Promise<CachedCollection>>();
 
 function json(data: unknown, status = 200) {
   return Response.json(data, { status, headers: SAFE_HEADERS });
@@ -77,7 +79,7 @@ async function fetchGithubPage(resource: "issues" | "pulls", page: number) {
   } catch {
     throw new Error("GitHub REST could not be reached from this Site runtime.");
   }
-  if (response.status === 403 || response.status === 429 || response.headers.get("x-ratelimit-remaining") === "0") {
+  if (response.status === 429 || (response.status === 403 && response.headers.get("x-ratelimit-remaining") === "0")) {
     const retryAt = retryTime(response);
     throw new Error(`GitHub rate limited the read. The bounded retry limit was reached${retryAt ? `; retry after ${retryAt}` : ""}.`);
   }
@@ -92,15 +94,9 @@ async function fetchGithubPage(resource: "issues" | "pulls", page: number) {
   }
 }
 
-async function loadCollection(resource: "issues" | "pulls"): Promise<Collection> {
-  return collectPages((page: number) => fetchGithubPage(resource, page), {
-    pageSize: PAGE_SIZE,
-    maxPages: MAX_PAGES,
-  }) as Promise<Collection>;
-}
-
-function combinedState(states: Collection["state"][]): Exclude<SourceState, "STALE"> {
+function combinedState(states: Collection["state"][]): SourceState {
   if (states.every((state) => state === "VERIFIED")) return "VERIFIED";
+  if (states.every((state) => state === "STALE" || state === "UNAVAILABLE")) return states.some((state) => state === "STALE") ? "STALE" : "UNAVAILABLE";
   if (states.some((state) => state !== "UNAVAILABLE")) return "PARTIAL";
   return "UNAVAILABLE";
 }
@@ -131,61 +127,109 @@ function edgeCache(): Cache | undefined {
   return (globalThis.caches as unknown as { default?: Cache } | undefined)?.default;
 }
 
-function cacheKey(request: Request) {
-  const url = new URL("/api/intelligence?__snapshot=github-v1", request.url);
+function cacheKey(request: Request, resource: "issues" | "pulls", layer: "current" | "verified", scope: string) {
+  const url = new URL("/api/intelligence-cache", request.url);
+  url.searchParams.set("schema", "github-source-v2");
+  url.searchParams.set("repository", `${OWNER}/${REPOSITORY}`);
+  url.searchParams.set("resource", resource);
+  url.searchParams.set("layer", layer);
+  url.searchParams.set("scope", scope);
   return new Request(url, { method: "GET" });
 }
 
-async function readCachedSnapshot(key: Request): Promise<CachedSnapshot | null> {
+async function readCachedCollection(key: Request): Promise<CachedCollection | null> {
+  const memory = memoryCollections.get(key.url);
   try {
     if (edgeCache()) {
       const response = await edgeCache()!.match(key);
       if (response) {
-        const entry = await response.json() as CachedSnapshot;
-        if (entry && Number.isFinite(entry.savedAt) && entry.data && typeof entry.data === "object") {
-          memorySnapshot = entry;
+        const entry = await response.json() as CachedCollection;
+        const validItems = Array.isArray(entry?.items) && ["VERIFIED", "PARTIAL", "STALE"].includes(entry.state)
+          || entry?.items === null && entry.state === "UNAVAILABLE";
+        const validAsOf = entry?.asOf === null || typeof entry?.asOf === "string" && Number.isFinite(Date.parse(entry.asOf));
+        if (entry && Number.isFinite(entry.savedAt) && validItems && validAsOf && ["VERIFIED", "PARTIAL", "STALE", "UNAVAILABLE"].includes(entry.state)) {
+          memoryCollections.set(key.url, entry);
           return entry;
         }
       }
     }
   } catch { /* Cache eviction or unavailability falls back to the current isolate only. */ }
-  return memorySnapshot;
+  return memory ?? null;
 }
 
-async function writeCachedSnapshot(key: Request, data: Record<string, unknown>, savedAt: number, nextRetryAt?: number) {
-  const entry = { savedAt, ...(nextRetryAt ? { nextRetryAt } : {}), data };
-  memorySnapshot = entry;
+async function writeCachedCollection(key: Request, entry: CachedCollection) {
+  memoryCollections.set(key.url, entry);
   try {
     if (edgeCache()) {
+      const maxAge = Math.floor((entry.state === "VERIFIED" && key.url.includes("layer=verified") ? LAST_KNOWN_GOOD_TTL_MS : CACHE_TTL_MS) / 1000);
       await edgeCache()!.put(key, Response.json(entry, {
-        headers: { "Cache-Control": `public, max-age=${Math.floor(LAST_KNOWN_GOOD_TTL_MS / 1000)}` },
+        headers: { "Cache-Control": `public, max-age=${maxAge}` },
       }));
     }
   } catch { /* A regional cache is best-effort; the API remains read-only. */ }
 }
 
-function staleSnapshot(snapshot: CachedSnapshot, reason: string) {
-  const previous = structuredClone(snapshot.data);
-  const sources = previous.sources as Record<string, Record<string, unknown>>;
-  const github = sources.github;
-  github.state = "STALE";
-  github.reason = reason;
-  for (const key of ["issues", "pulls"]) {
-    const source = github[key] as Record<string, unknown> | undefined;
-    if (source) source.state = "STALE";
+function retryAtFromReason(reason: string | null) {
+  const match = reason?.match(/retry after (\d{4}-\d{2}-\d{2}T[^ ;]+)/i);
+  const parsed = match ? Date.parse(match[1]) : NaN;
+  return Number.isFinite(parsed) ? parsed : Date.now() + CACHE_TTL_MS;
+}
+
+async function loadCollection(resource: "issues" | "pulls", request: Request, scope: string): Promise<CachedCollection> {
+  const currentKey = cacheKey(request, resource, "current", scope);
+  const verifiedKey = cacheKey(request, resource, "verified", scope);
+  const now = Date.now();
+  const current = await readCachedCollection(currentKey);
+  const verified = await readCachedCollection(verifiedKey);
+
+  const lastKnownGood = (reason: string): CachedCollection => verified?.state === "VERIFIED" && Array.isArray(verified.items) && now - verified.savedAt < LAST_KNOWN_GOOD_TTL_MS
+    ? { ...verified, state: "STALE", reason, asOf: verified.asOf }
+    : { items: null, state: "UNAVAILABLE", reason, asOf: null, savedAt: now };
+
+  if (current && now - current.savedAt < CACHE_TTL_MS && current.state !== "UNAVAILABLE") {
+    return current;
   }
-  const runtime = sources.runtime;
-  if (runtime) runtime.state = "STALE";
-  previous.snapshotState = "STALE";
-  previous.staleReason = reason;
-  return previous;
+  if (current?.state === "UNAVAILABLE" && current.nextRetryAt && now < current.nextRetryAt) {
+    return lastKnownGood(current.reason ?? "Current source read is waiting for the provider retry window.");
+  }
+
+  let pending = inFlightCollections.get(currentKey.url);
+  if (!pending) {
+    pending = (async () => {
+      const raw = await collectPages((page: number) => fetchGithubPage(resource, page), {
+        pageSize: PAGE_SIZE,
+        maxPages: MAX_PAGES,
+      }) as Collection;
+      const normalized = raw.items === null
+        ? { ...raw, asOf: null }
+        : { ...normalizeGithubCollection(raw.items, resource, raw.state, raw.reason), asOf: new Date().toISOString() };
+      const savedAt = Date.now();
+      const entry: CachedCollection = { ...normalized, savedAt };
+      if (entry.state === "VERIFIED") {
+        await writeCachedCollection(currentKey, entry);
+        await writeCachedCollection(verifiedKey, entry);
+        return entry;
+      }
+      if (entry.state === "PARTIAL") {
+        await writeCachedCollection(currentKey, entry);
+        return entry;
+      }
+      const unavailable: CachedCollection = {
+        ...entry,
+        nextRetryAt: retryAtFromReason(entry.reason),
+      };
+      await writeCachedCollection(currentKey, unavailable);
+      return lastKnownGood(entry.reason ?? "Current source read is unavailable.");
+    })();
+    inFlightCollections.set(currentKey.url, pending);
+  }
+  try { return await pending; }
+  finally {
+    if (inFlightCollections.get(currentKey.url) === pending) inFlightCollections.delete(currentKey.url);
+  }
 }
 
-function isReadFailure(collection: Collection) {
-  return collection.state === "UNAVAILABLE" || Boolean(collection.reason && !/safety limit|pages overlapped/i.test(collection.reason));
-}
-
-async function buildSnapshot() {
+async function buildSnapshot(request: Request, versionMetadata: SiteVersionMetadata | undefined, cacheScope: string) {
   let observedAt = "";
   let runtimeAsOf: string | null = null;
   let runtimeInfo: Record<string, unknown> | null = null;
@@ -193,7 +237,7 @@ async function buildSnapshot() {
   let runtimeReason: string | null = null;
   let catalogReason: string | null = null;
   const [runtimeResult, catalogResult] = await Promise.allSettled([
-    callTool("runtime_info", {}, env.CF_VERSION_METADATA as SiteVersionMetadata),
+    callTool("runtime_info", {}, versionMetadata),
     callTool("list_skills", {}),
   ]);
   runtimeAsOf = new Date().toISOString();
@@ -205,7 +249,10 @@ async function buildSnapshot() {
     catalogReason = "The packaged catalog did not return a skill list.";
   }
 
-  const [issues, pulls] = await Promise.all([loadCollection("issues"), loadCollection("pulls")]);
+  const [issues, pulls] = await Promise.all([
+    loadCollection("issues", request, cacheScope),
+    loadCollection("pulls", request, cacheScope),
+  ]);
   observedAt = new Date().toISOString();
   const issueItems = issues.items;
   const pullItems = pulls.items;
@@ -227,16 +274,17 @@ async function buildSnapshot() {
   const data = {
     asOf: observedAt,
     snapshotState: githubState === "UNAVAILABLE" ? "UNAVAILABLE" as SourceState
-      : githubState === "PARTIAL" || runtimeInfo?.attestationStatus !== "VERIFIED" ? "PARTIAL" as SourceState
+      : githubState === "STALE" ? "STALE" as SourceState
+      : githubState !== "VERIFIED" || runtimeInfo?.attestationStatus !== "VERIFIED" ? "PARTIAL" as SourceState
       : "VERIFIED" as SourceState,
     staleReason: null as string | null,
     sources: {
       github: {
         state: githubState as SourceState,
-        asOf: githubState === "UNAVAILABLE" ? null : observedAt,
+        asOf: [issues.asOf, pulls.asOf].filter((value): value is string => typeof value === "string").sort().at(-1) ?? null,
         reason: githubReason,
-        issues: sourceSnapshot({ state: issues.state, items: issueItems, asOf: (issues.items === null ? null : observedAt) as string | null, reason: issues.reason }),
-        pulls: sourceSnapshot({ state: pulls.state, items: pullItems, asOf: (pulls.items === null ? null : observedAt) as string | null, reason: pulls.reason }),
+        issues: sourceSnapshot({ state: issues.state, items: issueItems, asOf: issues.asOf ?? null, reason: issues.reason }),
+        pulls: sourceSnapshot({ state: pulls.state, items: pullItems, asOf: pulls.asOf ?? null, reason: pulls.reason }),
       },
       runtime: {
         state: skills === null ? "UNAVAILABLE" as SourceState : runtimeInfo?.attestationStatus === "VERIFIED" ? "VERIFIED" as SourceState : "PARTIAL" as SourceState,
@@ -272,6 +320,7 @@ async function buildSnapshot() {
       };
     }) ?? null,
     events,
+    eventCoverage: buildEventCoverage(issues.state, pulls.state),
     limitations: {
       projectV2: "UNAVAILABLE: native Project fields and iterations are not exposed by this source.",
       deployments: "UNAVAILABLE: no deployment event reader is enabled.",
@@ -279,49 +328,13 @@ async function buildSnapshot() {
       supabase: "UNAVAILABLE: no safe aggregate read endpoint was verified.",
     },
   };
-  return {
-    data,
-    readFailed: isReadFailure(issues) || isReadFailure(pulls),
-    readFailureReason: [issues, pulls].filter(isReadFailure).map((source) => source.reason).filter(Boolean).join(" ") || null,
-  };
+  return data;
 }
 
 export async function GET(request: Request) {
   if (!(await getChatGPTUser())) return json({ error: "Authenticated Site user required." }, 401);
-
-  const key = cacheKey(request);
-  const previous = await readCachedSnapshot(key);
-  const now = Date.now();
-  if (previous && now - previous.savedAt < CACHE_TTL_MS) return json(previous.data);
-  if (previous?.nextRetryAt && now < previous.nextRetryAt && now - previous.savedAt < LAST_KNOWN_GOOD_TTL_MS) {
-    const reason = `GitHub reads are paused until ${new Date(previous.nextRetryAt).toISOString()} UTC after the previous failure.`;
-    return json(previous.data.snapshotState === "UNAVAILABLE"
-      ? previous.data
-      : staleSnapshot(previous, reason));
-  }
-
-  const snapshotPromise = inFlightSnapshot ?? (inFlightSnapshot = buildSnapshot());
-  let current: Awaited<ReturnType<typeof buildSnapshot>>;
-  try { current = await snapshotPromise; }
-  finally {
-    if (inFlightSnapshot === snapshotPromise) inFlightSnapshot = null;
-  }
-
-  if (current.readFailed) {
-    const failureReason = current.readFailureReason ?? "Source read failed; last-known-good data is historical.";
-    const retryAtMatch = failureReason.match(/retry after (\d{4}-\d{2}-\d{2}T[^ ]+)/i);
-    const retryAt = retryAtMatch ? Date.parse(retryAtMatch[1]) : now + CACHE_TTL_MS;
-    const nextRetryAt = Number.isFinite(retryAt) ? retryAt : now + CACHE_TTL_MS;
-    if (previous && now - previous.savedAt < LAST_KNOWN_GOOD_TTL_MS) {
-      const historical = staleSnapshot(previous, failureReason);
-      await writeCachedSnapshot(key, previous.data, previous.savedAt, nextRetryAt);
-      return json(historical);
-    }
-    const currentData = current.data as unknown as Record<string, unknown>;
-    await writeCachedSnapshot(key, currentData, now, nextRetryAt);
-    return json(currentData);
-  }
-  const currentData = current.data as unknown as Record<string, unknown>;
-  await writeCachedSnapshot(key, currentData, now);
-  return json(currentData);
+  const versionEnvironment = env as unknown as Parameters<typeof resolveSiteVersionMetadata>[0];
+  const versionMetadata = resolveSiteVersionMetadata(versionEnvironment);
+  const cacheScope = `${versionMetadata?.tag ?? SOURCE.github_main_revision}:${versionMetadata?.id ?? "unidentified-deployment"}`;
+  return json(await buildSnapshot(request, versionMetadata, cacheScope));
 }
