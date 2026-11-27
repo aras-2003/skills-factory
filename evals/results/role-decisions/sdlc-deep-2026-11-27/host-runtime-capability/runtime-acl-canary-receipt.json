@@ -1,0 +1,66 @@
+{
+  "schema_version": "1",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "source_base_sha": "112f545796911f3c5b545d9dbb718fbf4dbce76b",
+  "runtime": {
+    "name": "Codex App Server",
+    "cli_version": "0.159.1",
+    "api": "JSON-RPC command/exec",
+    "transport": "stdio",
+    "experimental_api": true
+  },
+  "probe_source": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/app_server_acl_probe.py",
+    "sha256": "579188b213e6aa8fce854025f74ddde9bb29c4c9d6946c9674b4779662c0817f"
+  },
+  "operation": {
+    "executable": "python3",
+    "operation": "exclusive create of one synthetic marker in the disposable candidate worktree",
+    "path": ".sdlc-acl-canary-synthetic",
+    "content_sha256": "86bc18bec6ac4ec29e2955fdb9bcf6500a7feb5c08d25599e8736b3c9b57b373"
+  },
+  "positive_control": {
+    "sandbox_policy": "workspaceWrite",
+    "rpc_method": "command/exec",
+    "exit_code": 0,
+    "marker_exact": true,
+    "stdout_chars": 81,
+    "stdout_sha256": "caecb7bcb936a51a99b5e55cedb53c9e31f9a4af5ce84b6634b6ccaf9625f51b",
+    "denial_phrase_category": null,
+    "exception_type": null,
+    "os_errno": null,
+    "os_error_category": null
+  },
+  "negative_control": {
+    "sandbox_policy": "readOnly",
+    "rpc_method": "command/exec",
+    "exit_code": 1,
+    "denial_indicator_matched": true,
+    "stderr_chars": 780,
+    "stderr_sha256": "b46645649899c219c5c64c6d72a9ab71f5136bfcc0a3f6093ac1110863a32499",
+    "stdout_chars": 0,
+    "marker_absent": true,
+    "denial_phrase_category": "operation_not_permitted",
+    "exception_type": "PermissionError",
+    "os_errno": 1,
+    "os_error_category": "Operation not permitted",
+    "sandbox_context_indicator": true
+  },
+  "postconditions": {
+    "candidate_sha": "f51c4fad6aceeab545943812794f6f44132239fc",
+    "git_status_clean": true
+  },
+  "usage": {
+    "model_tokens": null,
+    "currency_cost": null,
+    "reason": "command/exec does not run a model; no billing cost is exposed by this receipt"
+  },
+  "limitations": [
+    "Does not verify MCP tool denial or server-side zero-call behavior.",
+    "Does not verify Desktop collaboration.spawn_agent per-child ACL.",
+    "Does not test one-time approval non-transfer.",
+    "sandbox_context_indicator is derived partly from the denial phrase itself and is not independent evidence of Seatbelt; the two policy cases used separate App Server processes."
+  ],
+  "replay_observed_at_utc": "2026-11-27T16:52:18Z"
+}

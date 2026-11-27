@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — verify Developer High role/model startup and native App Server session policy",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Developer High",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "A bounded runtime task must verify that the App Server starts the Developer High role with its owner-approved Terra High settings; the same capability boundary is under A2 Architect review.",
+    "timestamp": "2026-11-27T15:56:53Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-developer-high",
+      "provenance": "Repository .codex/agents/sf-developer-high.toml; instructions supplied explicitly to App Server",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Codex App Server thread/start response for thread 01a21dba-c577-7540-8c53-c3b4e372f0ca",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Codex App Server thread/start response reasoningEffort; turn/start requested high",
+      "reason": null
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex App Server thread/start response activePermissionProfile was null; role instructions were explicitly supplied from the TOML file",
+      "reason": "The host did not report automatic loading of the named repository profile."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "App Server thread/start returned a distinct thread ID; exact dispatch timestamp is not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T15:56:53Z",
+      "latest": "2026-11-27T16:03:36Z",
+      "evidence": "Pre-dispatch record preceded the returned thread and completed turn observed by 16:03:36Z."
+    },
+    "time_unknown_reason": "App Server does not expose an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The ephemeral Developer High thread completed its read-only command task; exact worker lifecycle timestamps were not returned.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T15:56:53Z",
+      "latest": "2026-11-27T16:03:36Z",
+      "evidence": "The pre-dispatch record preceded the App Server thread/turn response."
+    },
+    "started_time_unknown_reason": "App Server did not expose an exact worker start timestamp.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T15:56:53Z",
+      "latest": "2026-11-27T16:03:36Z",
+      "evidence": "The completed turn was observed by 16:03:36Z; the exact completion timestamp was not captured."
+    },
+    "ended_time_unknown_reason": "App Server turn notification omitted a timestamp."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/runtime-acl-canary.md",
+    "sha256": "14016b81023911bb380dea4278735434be6cbb83e1fa4412cd5d607dff68bb97",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ACCEPTED",
+    "timestamp": "2026-11-27T16:03:36Z",
+    "reason": "The App Server selected the requested Developer High model/effort and completed a bounded read-only source identity check. Named TOML profile auto-loading remains UNKNOWN."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "App Server response establishes ordering but not exact dispatch, start, or first command timestamps.",
+    "assessed_at": "2026-11-27T16:03:36Z",
+    "first_dependent_action_at": null,
+    "reason": "The accepted dispatch and first command occurred after the pre-dispatch record, but the available coordinator bounds overlap; no timing PASS is claimed.",
+    "first_dependent_action_reference": "runtime-acl-canary.md — Developer High App Server thread/turn",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T15:56:53Z",
+      "latest": "2026-11-27T16:03:36Z",
+      "evidence": "Pre-dispatch record preceded the accepted thread and completed turn observed by 16:03:36Z."
+    },
+    "first_dependent_action_time_unknown_reason": "The App Server did not expose the first command timestamp."
+  },
+  "decision_id": "sdlcdeep-20261127-developer-appserver-smoke",
+  "attempt_id": "sdlcdeep-20261127-developer-appserver-smoke-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Issue #748 runtime acceptance; task_reference.",
+      "captured_at": "2026-11-27T15:56:53Z"
+    },
+    {
+      "reference": ".codex/agents/sf-developer-high.toml owner-approved Terra High mapping.",
+      "captured_at": "2026-11-27T15:56:53Z"
+    },
+    {
+      "reference": "Architect A2 runtime capability review: evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/architect-runtime-review.md",
+      "captured_at": "2026-11-27T15:56:53Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "This runtime smoke exercises whether the Codex host can start a named Developer role with the requested model/effort and a bounded session policy.",
+    "evidence_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/architect-runtime-review.md"
+  }
+}

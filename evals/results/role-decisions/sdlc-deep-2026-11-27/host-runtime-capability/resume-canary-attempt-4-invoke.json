@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "Issue #748 — fresh interrupted Developer handoff and read-only resumed continuation canary",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Developer High",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Attempt 3 proved correlated interruption and B readOnly continuation, but retained only a hash of B output. A new bounded run will classify the output into exception/errno fields without retaining raw text; all earlier run events remain separate.",
+    "timestamp": "2026-11-27T19:09:12Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-developer-high",
+      "provenance": "Repository .codex/agents/sf-developer-high.toml; instructions supplied explicitly to App Server",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Codex App Server thread/start response for thread 01a21dba-c577-7540-8c53-c3b4e372f0ca",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Codex App Server thread/start response reasoningEffort; turn/start requested high",
+      "reason": null
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex App Server thread/start response activePermissionProfile was null; role instructions were explicitly supplied from the TOML file",
+      "reason": "The host did not report automatic loading of the named repository profile."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "App Server accepted two distinct Developer High threads and turns; explicit sandbox escalation was used only to initialize local Codex SQLite state.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T19:09:12Z",
+      "latest": "2026-11-27T19:11:39Z",
+      "evidence": "Pre-dispatch record preceded A and B turn responses returned by 19:11:39Z."
+    },
+    "time_unknown_reason": "Exact dispatch time unavailable."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "A interruption and B completion were observed, but tool output truncation prevented retention of B denial evidence.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T19:09:12Z",
+      "latest": "2026-11-27T19:11:39Z",
+      "evidence": "Two App Server threads and turn events returned after pre-dispatch."
+    },
+    "started_time_unknown_reason": "Exact start time unavailable.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T19:09:12Z",
+      "latest": "2026-11-27T19:11:39Z",
+      "evidence": "B turn completion and final postconditions were returned by 19:11:39Z."
+    },
+    "ended_time_unknown_reason": "Exact completion time unavailable."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/resume-canary-attempt-4.md",
+    "sha256": "a2290b6453cd73d7db672c4c0e42f62e31315ad7900fff7ac70f130f920dd5c7",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T19:11:39Z",
+    "reason": "Accepted correlated interruption/handoff/readOnly completion as partial; denial details were truncated and remain unproven."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Exact first action time is unavailable; correlated event ordering is observed.",
+    "assessed_at": "2026-11-27T19:11:39Z",
+    "first_dependent_action_at": null,
+    "reason": "Tool output did not retain first-action timestamp.",
+    "first_dependent_action_reference": "resume-canary-attempt-4.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T19:09:12Z",
+      "latest": "2026-11-27T19:11:39Z",
+      "evidence": "A and B command activity occurred after pre-dispatch and before B completion."
+    },
+    "first_dependent_action_time_unknown_reason": "No exact command time exposed."
+  },
+  "decision_id": "sdlcdeep-20261127-runtime-resume-canary-attempt-4",
+  "attempt_id": "sdlcdeep-20261127-runtime-resume-canary-attempt-4",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "resume-canary-attempt-3.md PARTIAL; Test Designer review specifies denial details and no raw output.",
+      "captured_at": "2026-11-27T19:09:12Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "The test exercises interruption, handoff integrity, and sandbox authority across isolated runtime sessions.",
+    "evidence_reference": "architect-runtime-review.md"
+  }
+}

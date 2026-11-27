@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "Issue #748 — independent review of App Server interruption and bounded handoff evidence, attempts 3–6",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Independent Reviewer",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "A2 capability-boundary runtime evidence now includes correlated host interruption, distinct readOnly continuation and a B command exit 1, but exact command identity and OS denial are incomplete. Independent review is needed before disposition.",
+    "timestamp": "2026-11-27T19:19:25Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-independent-reviewer profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-independent-reviewer profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-independent-reviewer",
+      "provenance": "Repository .codex/agents/sf-independent-reviewer.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration child response",
+      "reason": "Reviewer output did not state the effective model."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration child response",
+      "reason": "Reviewer output did not state the effective effort."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Collaboration surface",
+      "reason": "Automatic profile loading was not reported."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Read-only follow-up accepted by the existing independent reviewer; exact child/thread and dispatch time are not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T19:20:03Z",
+      "latest": "2026-11-27T19:20:14Z",
+      "evidence": "Pre-dispatch record preceded accepted follow-up, observed by 19:20:14Z."
+    },
+    "time_unknown_reason": "Collaboration host does not expose exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Independent reviewer returned read-only assessment: partial resume evidence, with exact command and OS denial unproven.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T19:20:03Z",
+      "latest": "2026-11-27T19:20:14Z",
+      "evidence": "Pre-dispatch record preceded reviewer result."
+    },
+    "started_time_unknown_reason": "Exact reviewer start time not exposed.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T19:20:03Z",
+      "latest": "2026-11-27T19:20:14Z",
+      "evidence": "Review message observed by 19:20:14Z."
+    },
+    "ended_time_unknown_reason": "Exact completion time not exposed."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/independent-resume-review.md",
+    "sha256": "aab98e7c807e1825fd8d18e434710fab0f8a3839ef6de4cb82d44815506a4d14",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T19:20:14Z",
+    "reason": "Accepted PARTIAL; no exact command, OS denial, native resume or delegated full-cycle claim."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Review returned after pre-dispatch record; first reviewer action time unavailable.",
+    "assessed_at": "2026-11-27T19:20:14Z",
+    "first_dependent_action_at": null,
+    "reason": "No exact first-read timestamp.",
+    "first_dependent_action_reference": "independent-resume-review.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T19:20:03Z",
+      "latest": "2026-11-27T19:20:14Z",
+      "evidence": "Review occurred after pre-dispatch decision and before returned result."
+    },
+    "first_dependent_action_time_unknown_reason": "Collaboration host does not expose the first action time."
+  },
+  "decision_id": "sdlcdeep-20261127-independent-resume-evidence-review",
+  "attempt_id": "sdlcdeep-20261127-independent-resume-evidence-review-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "runtime-acl-canary.md App Server handoff/resume canaries; attempt 6 compact receipt.",
+      "captured_at": "2026-11-27T19:19:25Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-independent-runtime-evidence-review",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "Independent review is required for runtime filesystem sandbox denial and role-routing evidence at a capability boundary.",
+    "evidence_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/architect-runtime-review.md"
+  }
+}

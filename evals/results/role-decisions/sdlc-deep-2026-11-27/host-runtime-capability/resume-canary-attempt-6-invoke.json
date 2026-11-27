@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "Issue #748 — fresh interrupted Developer handoff and read-only resumed continuation canary",
+  "source_revision": "f51c4fad6aceeab545943812794f6f44132239fc",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Developer High",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Attempt 5 confirmed A interruption and B readOnly handoff continuation, but the B command output did not establish that the literal write reached the OS. Final bounded replay requires the exact uncaught exclusive-create command so the runtime emits its native denial or the marker is visibly created.",
+    "timestamp": "2026-11-27T19:14:37Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-developer-high profile and .codex/agents/sf-developer-high.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-developer-high",
+      "provenance": "Repository .codex/agents/sf-developer-high.toml; instructions supplied explicitly to App Server",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.1-terra",
+      "provenance": "Codex App Server thread/start response for thread 01a21dba-c577-7540-8c53-c3b4e372f0ca",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Codex App Server thread/start response reasoningEffort; turn/start requested high",
+      "reason": null
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex App Server thread/start response activePermissionProfile was null; role instructions were explicitly supplied from the TOML file",
+      "reason": "The host did not report automatic loading of the named repository profile."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "App Server accepted A/B thread and turn starts. A bounded local-state escalation was necessary.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T19:14:37Z",
+      "latest": "2026-11-27T19:17:00Z",
+      "evidence": "Pre-dispatch record preceded accepted thread/turn responses and compact receipt by 19:17:00Z."
+    },
+    "time_unknown_reason": "Exact dispatch time unavailable."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "A interruption and B completion occurred; B denial details and exact operation identity were not retained.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T19:14:37Z",
+      "latest": "2026-11-27T19:17:00Z",
+      "evidence": "App Server role sessions ran after pre-dispatch record."
+    },
+    "started_time_unknown_reason": "Exact start time unavailable.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T19:14:37Z",
+      "latest": "2026-11-27T19:17:00Z",
+      "evidence": "B completion and sanitized receipt returned by 19:17:00Z."
+    },
+    "ended_time_unknown_reason": "Exact completion time unavailable."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/resume-canary-attempt-6.md",
+    "sha256": "35c32f2b08eddb8a9d00579727b10336384ce34fca15eefa1b7275e5b2d4b94d",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T19:17:00Z",
+    "reason": "Accepted partial interruption/handoff/readOnly evidence; kept write denial NOT_RUN because exact command and OS denial details are absent."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Runtime event order known; exact command timestamps unavailable.",
+    "assessed_at": "2026-11-27T19:17:00Z",
+    "first_dependent_action_at": null,
+    "reason": "No exact first-command timestamp captured.",
+    "first_dependent_action_reference": "resume-canary-attempt-6-receipt.json",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-27T19:14:37Z",
+      "latest": "2026-11-27T19:17:00Z",
+      "evidence": "A/B dependent command events occurred between dispatch and completed B turn."
+    },
+    "first_dependent_action_time_unknown_reason": "Exact action time unavailable."
+  },
+  "decision_id": "sdlcdeep-20261127-runtime-resume-canary-attempt-6",
+  "attempt_id": "sdlcdeep-20261127-runtime-resume-canary-attempt-6",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "resume-test-design-review.md; attempt 5 PARTIAL with no denial details.",
+      "captured_at": "2026-11-27T19:14:37Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": "sdlcdeep-20261127-runtime-a2-invoke",
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "The test exercises interruption, handoff integrity, and sandbox authority across isolated runtime sessions.",
+    "evidence_reference": "architect-runtime-review.md"
+  }
+}
