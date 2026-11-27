@@ -75,7 +75,7 @@
   },
   "result": {
     "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/runtime-acl-canary.md",
-    "sha256": "14016b81023911bb380dea4278735434be6cbb83e1fa4412cd5d607dff68bb97",
+    "sha256": "22d4639e9bb060658f693f075aa95208b6a8547f90595a428902c66ce33a5a2e",
     "reference_kind": "REPO_FILE"
   },
   "coordinator_disposition": {
