@@ -1,0 +1,62 @@
+# PIC P0 test design — all cases NOT_RUN
+
+Design supplied by the independent `sf-test-designer` against baseline `e161ac30314d720f1f2173312ca94bed9b9488bf`. Issue: #821. Architecture Impact A3 is proposed; native field readback remains unverified. Candidate SHA is UNKNOWN until the reviewed diff is committed. This document defines expected behavior, not test results.
+
+Reviewed candidate paths: `sites/skills-factory-site/app/api/intelligence/route.ts`, `app/intelligence/page.tsx`, `app/intelligence/ui.tsx`, `app/page.tsx`, `app/globals.css`, `lib/product-intelligence.mjs` and `tests/product-intelligence.test.mjs`. Existing consumers to preserve include `app/chatgpt-auth.ts`, the generated `lib/skills-factory-adapter/cloud-tools` runtime, Site home and the MCP transport. Transitive consumer completeness remains UNKNOWN. The P0 route reads public GitHub REST issues/pulls with at most three 100-record pages each and calls packaged `runtime_info`/`list_skills`; native Projects, Supabase and historical runtime telemetry are unavailable. Heatmap types are issue opened, issue completed and PR merged; UTC day/week/month. Roadmap filters use issue title/number and GitHub area/priority labels, not Project V2 fields. The following PIC-AC groupings are proposed test mappings and must be reconciled with #821's acceptance criteria.
+
+## Contract, fixtures and test channels
+
+| Criterion | Additional candidate-specific case | Expected / forbidden | Channel and evidence |
+|---|---|---|---|
+| PIC-AC1 source | **PIC-PAGE-01**: 100 + 100 + 99 distinct issue rows and the equivalent PR stream. Repeat with three full pages; repeat with an overlap at page boundary. | Short final page yields VERIFIED only when no overlap; full third page or overlap yields PARTIAL. Source IDs deduplicate without silently claiming completeness. | Deterministic adapter fixture; independent ordered ID set, request list, fixture digest and candidate SHA. |
+| PIC-AC1 source | **PIC-PAGE-02**: page one succeeds, page two times out, returns invalid JSON or rate-limits; repeat with page one failing and with a retry-after over two seconds. | Later failure preserves partial records and reason; first failure returns unavailable/null. Retry is bounded and a long reset is not waited out. No zero or VERIFIED for missing pages. | Mocked integration and route tests; attempts and response state. |
+| PIC-AC2 roadmap | **PIC-ROAD-03**: open/closed issues, PR-shaped issue, ambiguous and absent area/priority labels, milestone with/without due date, search/area/priority filters. | Only open issue rows appear; ambiguous labels are unassigned; Project fields remain UNAVAILABLE; filters return expected records and safe source links. No GitHub label is presented as native Project value. | Route and browser tests with explicit independent fixture and expected rows. |
+| PIC-AC3 activity | **PIC-HEAT-04**: issue opened before midnight UTC using negative offset; closed/completed and closed/not-planned issues; PR opened but not merged and PR merged; day/week/month intervals that clip at both ends. | Count discrete supported events on their actual UTC dates; not-planned closure is excluded; no event from unmerged PR; bins agree with hand-calculated counts. | Unit oracle and browser drill-down; record selected cell and matching event IDs. |
+| PIC-AC3 activity | **PIC-HEAT-05**: no event in VERIFIED, PARTIAL, STALE and UNAVAILABLE inputs; range extends after source as-of. | Verified empty cell is zero; incomplete/historical empty cell is unknown; unavailable is visibly unavailable; future range is clipped or marked unknown. No implied zero for unobserved intervals. | UI component/browser state matrix. |
+| PIC-AC4 freshness | **PIC-CACHE-01**: fake clock around 10-minute cache expiry, 24-hour last-known-good expiry and provider retry window; provider fails after successful snapshot. | Serve prior snapshot with original as-of and STALE on failure; retry remains bounded; expired LKG is not presented as current. Verify cached PARTIAL is never promoted to VERIFIED. | Route integration with controlled cache/clock; compare timestamps and source states. |
+| PIC-AC4 identity | **PIC-IDENT-01**: runtime identity with allowed fields plus sentinel unknown/private fields, malformed/oversized values and invalid SHAs. | Only allowlisted fields reach JSON/UI; invalid identity fields are null; no sentinel in response. Attestation is not health or workflow acceptance. | Route contract and bundle/response scan; sanitized output and candidate SHA. |
+| PIC-AC4 identity | **PIC-IDENT-02**: canonical SHA equals Lab SHA, with a different Site mirror SHA; then canonical differs from Lab. | Display all three with their distinct provenance; indicate canonical/Lab mismatch accurately. A mirror commit belongs to another repository and is not required to equal canonical SHA; do not present that normal difference alone as a mismatch. | UI oracle with independently supplied identities and runtime receipt. |
+| PIC-AC5 security | **PIC-AUTH-01**: direct page and API requests as owner, signed-out user and authenticated non-owner, including a warm shared cache; external spoofed identity headers. | Only authorized owner can access data. Unauthenticated API returns 401; non-owner and spoofed headers are rejected at the effective hosting boundary even with a warm cache. Authentication alone is not proof of owner authorization. | Deployed negative browser/API tests with actual Site audience policy, status, timestamp and no sensitive payload. Host-header trust and platform enforcement must be observed. |
+| PIC-AC5 security | **PIC-LINK-01**: malicious `html_url`, external origin and mismatched issue number in GitHub fixture, including roadmap rows. | No executable or external attacker-controlled link appears. Displayed issue/PR links resolve to the canonical repository and matching number. | Route/UI security fixture and browser inspection. |
+| PIC-AC6 release | **PIC-REL-02**: generate catalog and adapter from one canonical commit; build and deploy matching Site mirror via official workflow. | Capture source commit, generated artifact digest, mirror commit, Site saved version, deployment ID/status and attested canonical/Lab/mirror values independently. Recheck existing Site/MCP interactions and owner-only access. | Independent executor at exact candidate SHA, CI URLs, private deployment receipt and actual tool invocation. |
+
+The original case descriptions below remain as the broader coverage map. For the bounded implementation, apply the concrete source and event semantics above; native iterations, supplied estimates, business-domain heatmap and general workflow/deployment events are currently unavailable rather than tested features.
+
+| Case | Fixture / action | Required result; forbidden result | State |
+|---|---|---|---|
+| PIC-SRC-01 | Fixed GitHub issue/PR pages and MCP `runtime_info`, `list_skills` | Preserve source IDs, dates, links, source SHA and separate as-of values. Catalog count is not runtime acceptance or capability coverage. | NOT_RUN |
+| PIC-SRC-02 | Three pages with boundary overlap and empty terminal page | Return all unique records exactly once; stop at terminal page. | NOT_RUN |
+| PIC-SRC-03 | Repeated cursor, malformed page, 403, 429, timeout, partial response | Bounded retry; report PARTIAL/BLOCKED/UNAVAILABLE with reason and as-of. Never mark incomplete data complete or as zero. | NOT_RUN |
+| PIC-ROAD-01 | Issue with native iteration, issue without iteration, proposed grouping only | Only verified native iteration may be called native; missing is unassigned. No inferred Project state. | NOT_RUN |
+| PIC-ROAD-02 | Missing estimate, inconsistent dates and unknown Project status | Missing stays unavailable/unknown; inconsistent range is flagged. No guessed estimate/date/stage. | NOT_RUN |
+| PIC-HEAT-01 | Opened/closed issues and opened/merged PR across UTC day boundary | Separate event types; explicit timezone and interval; day/week/month outputs match independent hand calculation. | NOT_RUN |
+| PIC-HEAT-02 | Complete empty interval vs unavailable/partially paginated interval | Complete is zero; missing/partial is unknown with source state. | NOT_RUN |
+| PIC-HEAT-03 | Missing/ambiguous domain and duplicate event | Keep unassigned; deduplicate same event only; never merge unlike event types. | NOT_RUN |
+| PIC-FRESH-01 | Fresh, stale, future and unavailable source; last-known-good snapshot | Source SLA determines state; historical as-of stays visible; never mark stale data current or healthy. | NOT_RUN |
+| PIC-FRESH-02 | Canonical, embedded Lab and Site mirror SHA differ | Show each identity separately; only report a canonical/Lab mismatch when those two differ. A distinct mirror SHA is expected to belong to a separate repository and is not itself a mismatch. | NOT_RUN |
+| PIC-SEC-01 | Unauthenticated, non-owner and owner requests to page/data route | Preserve owner-only gate on page and data; unauthorized gets no private data. | NOT_RUN |
+| PIC-SEC-02 | Sentinel secret in server-only fixture | Sentinel absent from browser assets, response and logs; only allowlisted normalized fields reach UI. | NOT_RUN |
+| PIC-UI-01 | Filters, heatmap drilldown, links, keyboard and desktop/tablet/phone viewports | Counts and source links match fixture; keyboard labels and loading/empty/error states work. | NOT_RUN |
+| PIC-REL-01 | Canonical source → generated catalog → mirror → private deployment | Reconcile exact SHA, mirror, version and live `runtime_info`; preserve existing Site/MCP identity and private audience. | NOT_RUN |
+
+## Evidence plan and blocks
+
+- A meaningful baseline RED needs a frozen multi-page GitHub fixture, independently calculated expected records/heatmap, and the same intended data-route assertion on the baseline. Do not fabricate a provider failure or claim a deployed defect from an absent route.
+- Candidate tests must use the same deterministic fixture and oracle, then separately cover existing Site/MCP consumers affected by the diff.
+- Live Project V2 iterations/WIP require supported authenticated Project access. Supabase metrics require an approved read-only interface and authorization. Outbound GitHub access from deployed Site runtime needs an actual runtime observation.
+- Independent execution, review and deployed release evidence are separate gates; none is implied by CI or loading the page.
+
+## Candidate coverage gaps and execution commands
+
+The existing `tests/product-intelligence.test.mjs` contains deterministic cases for event normalization, UTC grouping, pagination overlap, a bounded retry and canonical roadmap URL validation. Its presence does not establish that those cases passed. By inspection, it does not exercise the actual route's auth, cache and fallback behavior, runtime identity allowlist, three-full-page limit, route projection of malicious roadmap links, browser filters/drill-down or deployed access. The baseline's missing route can support a meaningful RED for route behavior; it does not establish a production regression. Freeze case inputs and an independently calculated oracle before executing baseline and candidate. Record any candidate fixes and rerun against the resulting final SHA.
+
+After generated adapter/catalog output is prepared from the candidate commit, the independent executor can run from the Site directory:
+
+```sh
+node --test tests/product-intelligence.test.mjs tests/source-sync.test.mjs
+node node_modules/typescript/bin/tsc --noEmit --incremental false
+pnpm run lint
+pnpm run build
+```
+
+These commands are proposed, not executed here. Availability of dependencies and generated source must be checked on the executor's checkout. Add or use an independent route/browser harness for the missing cases above; the listed commands alone cannot establish owner-only access, host header protection, a live GitHub read, responsive rendering or a deployed MCP receipt. Run existing adapter contract tests and source-sync/package checks as selected by the actual diff and CI configuration. Capture command, exit code, exact full SHA, fixture digest, environment and observed output in the existing evidence destination. Separately record build, CI, source merge, mirror synchronization, deployment, runtime observation and acceptance. The deployable Site artifact must be built from the merged canonical commit required by the publishing runbook, with the canonical, Lab and mirror identities kept distinct.
