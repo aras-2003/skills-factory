@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import subprocess
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,7 +22,9 @@ REFRESHED_DIGEST_PATHS = (
     "adapters/skills-factory-cloud-next/scripts/check-contracts.mjs",
     "adapters/skills-factory-cloud-next/src/cloud-tools.ts",
     "docs/architecture/decisions/2026-11-load-skill-source-pin.md",
+    "scripts/engineering/delegation_handoff.py",
     "tests/governance/test_sdlc_architecture_source_example.py",
+    "tests/test_delegation_handoff.py",
 )
 SUCCESSOR_DELTA_SHA256 = {
     "runtime/contracts/mcp-tools-v1.json": "972f2051373d3617d7d8229f1aeeaed7a23ecf960be87e09b7077a25b398d4b7",
@@ -33,6 +36,8 @@ APPROVED_REFRESHED_SOURCE_SHA256 = {
     "adapters/skills-factory-cloud-next/src/cloud-tools.ts": SUCCESSOR_DELTA_SHA256[
         "adapters/skills-factory-cloud-next/src/cloud-tools.ts"
     ],
+    "scripts/engineering/delegation_handoff.py": "995e229e981d0b4810282c1933f0b4dc5a424c3343f18598542b00efdc42f0dc",
+    "tests/test_delegation_handoff.py": "45025985569b8e73e608813509fe97b31827f6b1234a64508385f0dc2352de72",
 }
 CONSUMER_MAP_PATHS = (
     "runtime/contracts/mcp-tools-v1.json",
@@ -167,6 +172,33 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
                 current.replace(b"state: INTEGRATION_ISOLATED", b"state: ALTERED", 1), baseline, ROOT
             ),
         )
+
+    def test_handoff_parser_source_refresh_is_exact_and_approved(self):
+        baseline = subprocess.check_output(
+            ["git", "--no-replace-objects", "show", f"{EXPECTED_CONSUMER_MAP}:{CONTINUATION_PATH}"],
+            cwd=ROOT,
+        )
+        current = (ROOT / CONTINUATION_PATH).read_bytes()
+        handoff_paths = (
+            "scripts/engineering/delegation_handoff.py",
+            "tests/test_delegation_handoff.py",
+        )
+
+        self.assertEqual(len(REFRESHED_DIGEST_PATHS), len(set(REFRESHED_DIGEST_PATHS)))
+        self.assertEqual(baseline, normalize_continuation(current, baseline, ROOT))
+        for path in handoff_paths:
+            with self.subTest(path=path):
+                digest = hashlib.sha256((ROOT / path).read_bytes()).hexdigest().encode()
+                pattern = re.compile(rb"(?m)^  " + re.escape(path.encode()) + rb": ([0-9a-f]{64})$")
+                matches = list(pattern.finditer(current))
+                self.assertEqual(1, len(matches))
+                stale = current[:matches[0].start(1)] + b"0" * 64 + current[matches[0].end(1):]
+                with self.assertRaisesRegex(AssertionError, "continuation digest does not match source"):
+                    normalize_continuation(stale, baseline, ROOT)
+                self.assertEqual(APPROVED_REFRESHED_SOURCE_SHA256[path].encode(), digest)
+                with patch.dict(APPROVED_REFRESHED_SOURCE_SHA256, {path: "0" * 64}):
+                    with self.assertRaisesRegex(AssertionError, "unapproved refreshed source digest"):
+                        normalize_continuation(current, baseline, ROOT)
 
     def test_rollback_requires_caller_compatibility_before_reverting_v1_schema(self):
         decision = DECISION.read_text(encoding="utf-8")
