@@ -29,7 +29,11 @@ REFRESHED_DIGEST_PATHS = (
 SUCCESSOR_DELTA_SHA256 = {
     "runtime/contracts/mcp-tools-v1.json": "972f2051373d3617d7d8229f1aeeaed7a23ecf960be87e09b7077a25b398d4b7",
     "adapters/skills-factory-cloud-next/src/cloud-tools.ts": "96a304438bb9f2ce59ce875220ffc43329efcb15f84a7f866aa42377ad155d81",
-    "sites/skills-factory-site/app/page.tsx": "21999ae5739a635aca4877a2a2eb399707c8837c62596f8d6cadd6d7bbfed9cb",
+    "sites/skills-factory-site/app/page.tsx": "d948900f4b75c4c4b28956442ba5788e0431e886ddf7f0464a8e9a5455eeac2c",
+    "sites/skills-factory-site/build/sites-worker.ts": "316c8a61ee8f319757638600a41a8ea03ed760b48a94670a427fd1d74e9a7f34",
+}
+SUCCESSOR_SUPPORT_SHA256 = {
+    "sites/skills-factory-site/lib/site-version-metadata.ts": "620c05cee291e0ebb3cdbef1e0b270f5c55db907df64e52feffb4dd3763759fa",
 }
 APPROVED_REFRESHED_SOURCE_SHA256 = {
     "adapters/skills-factory-cloud-next/scripts/check-contracts.mjs": "55591650298c304b8d5df8cd46390f8d2c1fff5b62264e67d360805380c2b699",
@@ -145,6 +149,11 @@ class ArchitectureSourceExampleTests(unittest.TestCase):
                     continue
                 self.assertEqual(reviewed_bytes, current_bytes,
                                  f"consumer-map source differs from reviewed commit: {path}")
+
+        for path, expected_digest in SUCCESSOR_SUPPORT_SHA256.items():
+            with self.subTest(successor_support=path):
+                self.assertEqual(expected_digest, hashlib.sha256((ROOT / path).read_bytes()).hexdigest(),
+                                 f"unreviewed successor support source: {path}")
 
         contract = json.loads((ROOT / "runtime/contracts/mcp-tools-v1.json").read_text(encoding="utf-8"))
         reviewed_contract = json.loads(source_at(revision, "runtime/contracts/mcp-tools-v1.json"))

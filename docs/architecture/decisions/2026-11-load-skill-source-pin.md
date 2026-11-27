@@ -340,3 +340,27 @@ These are exact source compatibility deltas; historical campaign manifests
 and receipts remain frozen. Continuation stays `INTEGRATION_ISOLATED`,
 runtime `NOT_RUN`, and release approval `false`. Roll back the parser, tests
 and coupled pins together; regenerate malformed pending handoffs.
+
+## Successor source deltas for PR #822
+
+PR [#822](https://github.com/aras-2003/skills-factory/pull/822) adds the
+owner-only Product Intelligence Center. This is an append-only successor to
+the reviewed consumer map and the earlier successor records above. The code
+source revision reviewed for these deltas is
+`85ed231942fbbbbea528d4814c8e03609ada85bb`; later governance-only edits do not
+change these source bytes. The exact allowed deltas to the 34 mapped consumer
+paths are:
+
+| Path | SHA-256 | Reason |
+| --- | --- | --- |
+| `sites/skills-factory-site/app/page.tsx` | `d948900f4b75c4c4b28956442ba5788e0431e886ddf7f0464a8e9a5455eeac2c` | Add the private Product Intelligence Center route and dashboard surface. |
+| `sites/skills-factory-site/build/sites-worker.ts` | `316c8a61ee8f319757638600a41a8ea03ed760b48a94670a427fd1d74e9a7f34` | Resolve Site identity metadata consistently for MCP provenance. |
+
+The worker now imports `sites/skills-factory-site/lib/site-version-metadata.ts`
+to share that resolver with the server-side dashboard. This helper is outside
+the historical 34-path consumer map and is independently pinned by the
+governance regression to SHA-256
+`620c05cee291e0ebb3cdbef1e0b270f5c55db907df64e52feffb4dd3763759fa` as a
+transitive source dependency of the worker delta. It is not a new runtime MCP
+consumer. The historical campaign path universe, manifests, receipts, and
+the `242fe476` source-map anchor remain unchanged.
