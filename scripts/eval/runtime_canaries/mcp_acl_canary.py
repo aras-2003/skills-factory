@@ -72,11 +72,13 @@ class Rpc:
         self.proc.stdin.flush()
         if notification:
             return None
-        import time
         deadline = time.monotonic() + self.timeout
         while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError(method + ' timed out')
             try:
-                line = self.lines.get(timeout=max(0, deadline - time.monotonic()))
+                line = self.lines.get(timeout=remaining)
             except queue.Empty as exc:
                 raise TimeoutError(method + ' timed out') from exc
             if line is None:
@@ -86,7 +88,75 @@ class Rpc:
                 return message
 
 
-def run_policy(binary, policy, timeout):
+def candidate_check(repo, candidate, timeout):
+    """Require exact HEAD and clean tracked index and worktree; ignore untracked files."""
+    try:
+        def git(*args):
+            return subprocess.run(['git', '-C', str(repo), *args], capture_output=True, text=True, timeout=timeout, env={'PATH': os.environ.get('PATH', os.defpath), 'LC_ALL': 'C', 'GIT_CONFIG_NOSYSTEM': '1', 'GIT_CONFIG_GLOBAL': os.devnull, 'GIT_OPTIONAL_LOCKS': '0'})
+        head = git('rev-parse', 'HEAD')
+        if head.returncode != 0 or head.stdout.strip() != candidate:
+            return False
+        return all(git(*args).returncode == 0 for args in (
+            ('diff', '--no-ext-diff', '--quiet', '--'), ('diff', '--no-ext-diff', '--cached', '--quiet', '--')))
+    except (OSError, subprocess.SubprocessError):
+        return False
+
+
+def group_exists(pid):
+    try:
+        os.killpg(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+
+
+def stop_group(proc, timeout):
+    """Reap the leader and stop the group, even if the leader exits first."""
+    def wait_absent():
+        deadline = time.monotonic() + timeout
+        while True:
+            proc.poll()  # reap the direct child promptly
+            if not group_exists(proc.pid):
+                return True
+            if time.monotonic() >= deadline:
+                return False
+            time.sleep(min(0.05, max(0, deadline - time.monotonic())))
+    for sig in (signal.SIGTERM, signal.SIGKILL):
+        try:
+            os.killpg(proc.pid, sig)
+        except ProcessLookupError:
+            pass
+        except OSError:
+            return False
+        if wait_absent():
+            return True
+    return False
+
+
+def process_exists(pid):
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+
+
+def apply_ingress(receipt, records, nonces, outcomes):
+    counts, unexpected = evaluate_ingress(records, nonces)
+    receipt['ingress'] = counts
+    receipt['fixture_calls'] = [{'tool': item.get('tool'), 'nonce': next((label for label, value in nonces.items() if value == item.get('nonce')), 'UNKNOWN')} for item in records if item.get('event') == 'call']
+    receipt['unexpected_ingress'] = unexpected
+    for case, label in (('BASELINE', 'B'), ('ALLOW', 'A'), ('DENY', 'X'), ('BARRIER', 'Q')):
+        expected = 0 if label == 'X' else 1
+        receipt['cases'][case] = 'PASS' if outcomes[label] and counts[label] == expected else 'FAIL'
+    receipt['status'] = 'PASS' if all(v == 'PASS' for v in receipt['cases'].values()) and not unexpected else 'FAIL'
+
+
+def run_policy(binary, policy, timeout, candidate):
     root = Path(tempfile.mkdtemp(prefix='mcp-acl-canary-'))
     log = root / 'fixture.jsonl'
     config = {'mcp_servers': {'canary': {'command': sys.executable, 'args': [str(FIXTURE), str(log)]}}}
@@ -94,7 +164,7 @@ def run_policy(binary, policy, timeout):
     restricted['mcp_servers']['canary'][policy] = ['allowed' if policy == 'enabled_tools' else 'forbidden']
     receipt = {'policy': policy, 'status': 'BLOCKED', 'cases': {}, 'requests': [], 'threads': {}, 'config_sha256': digest(json.dumps({'baseline': config, 'restricted': restricted}, sort_keys=True).encode())}
     proc = None
-    records = []
+    outcomes = None
     nonces = {label: secrets.token_hex(16) for label in ('B', 'A', 'X', 'Q')}
     def request(method, params):
         response = rpc.send(method, params)
@@ -109,6 +179,8 @@ def run_policy(binary, policy, timeout):
     try:
         env = isolated_environment(root, os.environ)
         Path(env['CODEX_HOME']).mkdir()
+        if not candidate_check(Path(__file__).resolve().parents[3], candidate, timeout):
+            raise RuntimeError('candidate mismatch or tracked changes')
         proc = subprocess.Popen([binary, 'app-server', '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, bufsize=1, env=env, cwd=root, start_new_session=True)
         rpc = Rpc(proc, timeout)
         if 'error' in request('initialize', {'clientInfo': {'name': 'mcp-acl-canary', 'version': '1'}, 'capabilities': {'experimentalApi': True}}):
@@ -137,66 +209,47 @@ def run_policy(binary, policy, timeout):
         a = call(restricted_id, 'allowed', 'A')
         x = call(restricted_id, 'forbidden', 'X')
         q = call(restricted_id, 'allowed', 'Q')
-        records = [json.loads(line) for line in log.read_text().splitlines()]
-        counts, unexpected = evaluate_ingress(records, nonces)
-        receipt['ingress'] = counts
-        receipt['fixture_calls'] = [{'tool': item.get('tool'), 'nonce': next((label for label, value in nonces.items() if value == item.get('nonce')), 'UNKNOWN')} for item in records if item.get('event') == 'call']
-        receipt['unexpected_ingress'] = unexpected
-        receipt['fixture_log_sha256'] = digest(log.read_bytes())
-        receipt['cases'].update({'BASELINE': 'PASS' if counts['B'] == 1 else 'FAIL', 'ALLOW': 'PASS' if success(a, 'allowed', nonces['A']) and counts['A'] == 1 else 'FAIL', 'DENY': 'PASS' if x.get('error', {}).get('message') == DENIAL and counts['X'] == 0 else 'FAIL', 'BARRIER': 'PASS' if success(q, 'allowed', nonces['Q']) and counts['Q'] == 1 else 'FAIL'})
-        receipt['status'] = 'PASS' if all(v == 'PASS' for v in receipt['cases'].values()) and not unexpected else 'FAIL'
+        outcomes = {'B': True, 'A': success(a, 'allowed', nonces['A']), 'X': x.get('error', {}).get('message') == DENIAL, 'Q': success(q, 'allowed', nonces['Q'])}
     except (OSError, ValueError, KeyError, TypeError, TimeoutError, RuntimeError, json.JSONDecodeError) as exc:
         receipt['reason'] = type(exc).__name__  # no raw runtime data
     finally:
+        safe_to_remove = True
         if proc:
-            try:
-                os.killpg(proc.pid, signal.SIGTERM)
-            except ProcessLookupError:
-                pass
-            try:
-                proc.wait(timeout=timeout)
-            except subprocess.TimeoutExpired:
-                os.killpg(proc.pid, signal.SIGKILL)
-                proc.wait(timeout=timeout)
+            stopped = stop_group(proc, timeout)
             receipt['app_server_exit'] = proc.returncode
-            # Group liveness includes all fixture descendants, even after the server exits.
-            try:
-                os.killpg(proc.pid, 0)
-                receipt['residual_process_group'] = proc.pid
-                receipt['status'] = 'BLOCKED'
-            except ProcessLookupError:
-                receipt['residual_process_group'] = None
+            receipt['residual_process_group'] = None if stopped else proc.pid
+            safe_to_remove = stopped
             if log.exists():
                 try:
-                    final_records = [json.loads(line) for line in log.read_text().splitlines()]
+                    final_bytes = log.read_bytes()
+                    final_records = [json.loads(line) for line in final_bytes.splitlines()]
                     started = {r['pid'] for r in final_records if r.get('event') == 'start'}
                     exited = {r['pid'] for r in final_records if r.get('event') == 'exit'}
-                    fixture_processes = []
-                    for pid in sorted(started):
-                        deadline = time.monotonic() + min(timeout, 2)
-                        while True:
-                            try:
-                                os.kill(pid, 0)
-                                alive = True
-                            except ProcessLookupError:
-                                alive = False
-                            if not alive or time.monotonic() >= deadline:
-                                break
-                            time.sleep(0.05)
-                        fixture_processes.append({'pid': pid, 'termination_handler_observed': pid in exited, 'process_absent': not alive})
-                    receipt['fixture_processes'] = fixture_processes
-                    if any(not p['process_absent'] for p in fixture_processes):
-                        receipt['status'] = 'BLOCKED'
-                except (OSError, ValueError, KeyError):
-                    receipt['fixture_processes'] = 'unavailable'
+                    receipt['fixture_processes'] = [{'pid': pid, 'termination_handler_observed': pid in exited, 'process_absent': not process_exists(pid)} for pid in sorted(started)]
+                    if not started or any(not p['process_absent'] for p in receipt['fixture_processes']):
+                        safe_to_remove = False
+                    if safe_to_remove and outcomes is not None:
+                        receipt['fixture_log_sha256'] = digest(final_bytes)
+                        apply_ingress(receipt, final_records, nonces, outcomes)
+                except (OSError, ValueError, KeyError, TypeError):
+                    receipt['reason'] = 'fixture log unavailable or invalid'
                     receipt['status'] = 'BLOCKED'
-            for stream in (proc.stdin, proc.stdout):
-                if stream:
-                    stream.close()
-        try:
-            shutil.rmtree(root)
-            receipt['residual_path'] = None
-        except OSError:
+                    safe_to_remove = False
+            elif outcomes is not None:
+                receipt['reason'] = 'fixture log unavailable or invalid'
+                receipt['status'] = 'BLOCKED'
+            if safe_to_remove:
+                for stream in (proc.stdin, proc.stdout):
+                    if stream:
+                        stream.close()
+        if safe_to_remove:
+            try:
+                shutil.rmtree(root)
+                receipt['residual_path'] = None
+            except OSError:
+                receipt['residual_path'] = str(root)
+                receipt['status'] = 'BLOCKED'
+        else:
             receipt['residual_path'] = str(root)
             receipt['status'] = 'BLOCKED'
     return receipt
@@ -205,13 +258,17 @@ def run_policy(binary, policy, timeout):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--codex', default='codex')
-    parser.add_argument('--candidate-sha', required=True, help='Exact source candidate SHA (recorded, not inferred)')
+    parser.add_argument('--candidate-sha', required=True, help='Exact clean checked-out source candidate SHA')
     parser.add_argument('--output', required=True, help='Sanitized JSON receipt path')
     parser.add_argument('--timeout', type=float, default=20)
     args = parser.parse_args()
     if len(args.candidate_sha) != 40 or any(c not in '0123456789abcdef' for c in args.candidate_sha) or not 0 < args.timeout <= 120:
         parser.error('candidate SHA must be 40 lowercase hex digits; timeout must be in (0, 120]')
     receipt = {'candidate_sha': args.candidate_sha, 'runtime_version': None, 'harness_sha256': digest(Path(__file__).read_bytes()), 'fixture_sha256': digest(FIXTURE.read_bytes()), 'runs': [], 'model_turns': 0}
+    if not candidate_check(Path(__file__).resolve().parents[3], args.candidate_sha, args.timeout):
+        receipt.update({'status': 'BLOCKED', 'reason': 'candidate mismatch or tracked changes'})
+        Path(args.output).write_text(json.dumps(receipt, indent=2) + '\n')
+        return 1
     try:
         with tempfile.TemporaryDirectory(prefix='mcp-acl-version-') as version_root:
             version_env = isolated_environment(Path(version_root), os.environ)
@@ -219,7 +276,7 @@ def main():
             version = subprocess.run([args.codex, '--version'], capture_output=True, text=True, timeout=args.timeout, check=True, env=version_env, cwd=version_root).stdout.strip()
         receipt['runtime_version'] = version if version == 'codex-cli 0.159.1' else 'unsupported or unrecognized'
         if receipt['runtime_version'] == 'codex-cli 0.159.1':
-            receipt['runs'] = [run_policy(args.codex, policy, args.timeout) for policy in ('enabled_tools', 'disabled_tools')]
+            receipt['runs'] = [run_policy(args.codex, policy, args.timeout, args.candidate_sha) for policy in ('enabled_tools', 'disabled_tools')]
     except (OSError, subprocess.SubprocessError):
         receipt['runtime_version'] = 'unavailable'
     receipt['status'] = 'PASS' if len(receipt['runs']) == 2 and all(r['status'] == 'PASS' for r in receipt['runs']) else ('FAIL' if any(r['status'] == 'FAIL' for r in receipt['runs']) else 'BLOCKED')
