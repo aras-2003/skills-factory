@@ -75,7 +75,7 @@
   },
   "result": {
     "reference": "evals/results/runtime-canaries/sdlc-deep-2026-11-27/runtime-e2e-01-receipt.json",
-    "sha256": "835152eed01850f40e946ac7cd5132e3d7615eb2d422953a053b70b4a2eab061",
+    "sha256": "c6b216f4b9e132101f5ef37ec0c7f3efef04f305802c286e4d96e06a1123526e",
     "reference_kind": "REPO_FILE"
   },
   "coordinator_disposition": {
