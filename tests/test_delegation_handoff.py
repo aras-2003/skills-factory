@@ -571,6 +571,34 @@ class FixturePolicyContractTests(unittest.TestCase):
         self.kwargs = dict(expected_task_id="fixture-policy", expected_role="sf-test-executor",
                            expected_test_case_ids=["CASE-1"], expected_candidate_sha="b" * 40)
 
+    def test_readonly_roles_pass_rejects_changed_paths(self):
+        self.payload["changed_paths"] = ["tests/example.py"]
+        for role in ("sf-test-executor", "sf-independent-reviewer"):
+            with self.subTest(role=role):
+                self.payload["role"] = self.kwargs["expected_role"] = role
+                with self.assertRaises(ValueError):
+                    handoff.validate_result(self.payload, **self.kwargs,
+                                            fixture_policy_by_case={"CASE-1": "c" * 64})
+
+    def test_readonly_roles_pass_accepts_empty_changed_paths(self):
+        for role in ("sf-test-executor", "sf-independent-reviewer"):
+            with self.subTest(role=role):
+                self.payload["role"] = self.kwargs["expected_role"] = role
+                checked = handoff.validate_result(self.payload, **self.kwargs,
+                                                  fixture_policy_by_case={"CASE-1": "c" * 64})
+                self.assertEqual([], checked["changed_paths"])
+
+    def test_readonly_roles_fail_accepts_changed_paths(self):
+        self.payload.update(status="FAIL", changed_paths=["tests/example.py"])
+        self.payload["test_case_outcomes"][0]["status"] = "FAIL"
+        self.payload["command_exit_codes"][0]["exit_code"] = 1
+        for role in ("sf-test-executor", "sf-independent-reviewer"):
+            with self.subTest(role=role):
+                self.payload["role"] = self.kwargs["expected_role"] = role
+                checked = handoff.validate_result(self.payload, **self.kwargs,
+                                                  fixture_policy_by_case={"CASE-1": "c" * 64})
+                self.assertEqual(["tests/example.py"], checked["changed_paths"])
+
     def test_policy_is_required_and_covers_exact_case_set(self):
         with self.assertRaises(TypeError):
             handoff.validate_result(self.payload, **self.kwargs)
