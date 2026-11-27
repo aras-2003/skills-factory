@@ -8,7 +8,10 @@ import {
   normalizeGithubCollection,
   priorityLabelFromLabels,
   repositoryUrl,
+  retryAtFromReason,
   sourceSnapshot,
+  sourceCacheEntryIsFresh,
+  sourceCacheRetentionMs,
   workAreaFromLabels,
   withBoundedGithubRetry,
 } from "../lib/product-intelligence.mjs";
@@ -66,7 +69,9 @@ test("heatmap keeps activity types separate and bins events by UTC calendar day"
     issue({ created_at: "2026-11-26T23:59:59-02:00" }),
     issue({ id: 11, number: 44, state: "closed", created_at: "2026-11-27T00:30:00Z", closed_at: "2026-11-27T01:00:00Z", state_reason: "completed" }),
   ], [pull()]);
-  const heatmap = buildHeatmap(events, { from: "2026-11-26", to: "2026-11-27", sourceState: "VERIFIED" });
+  const heatmap = buildHeatmap(events, { from: "2026-11-26", to: "2026-11-27", sourceState: "VERIFIED", sourceAsOf: {
+    issue_opened: "2026-11-30T23:59:59.999Z", issue_completed: "2026-11-30T23:59:59.999Z", pr_merged: "2026-11-30T23:59:59.999Z",
+  } });
   assert.deepEqual(heatmap.types, ["issue_opened", "issue_completed", "pr_merged"]);
   assert.equal(heatmap.cells.find((cell) => cell.type === "issue_opened" && cell.date === "2026-11-27")?.count, 2);
   assert.equal(heatmap.cells.find((cell) => cell.type === "issue_completed" && cell.date === "2026-11-27")?.count, 1);
@@ -74,10 +79,14 @@ test("heatmap keeps activity types separate and bins events by UTC calendar day"
   assert.equal(heatmap.complete, true);
   assert.equal(buildHeatmap(events, { from: "2026-11-26", to: "2026-11-27", sourceState: "PARTIAL" }).complete, false);
   assert.equal(buildHeatmap(events, { from: "2026-11-26", to: "2026-11-27", sourceState: "STALE" }).complete, false);
-  const weekly = buildHeatmap(events, { from: "2026-11-23", to: "2026-11-29", sourceState: "VERIFIED", period: "week" });
+  const weekly = buildHeatmap(events, { from: "2026-11-23", to: "2026-11-29", sourceState: "VERIFIED", sourceAsOf: {
+    issue_opened: "2026-11-30T23:59:59.999Z", issue_completed: "2026-11-30T23:59:59.999Z", pr_merged: "2026-11-30T23:59:59.999Z",
+  }, period: "week" });
   assert.equal(weekly.bins.length, 1);
   assert.equal(weekly.cells.find((cell) => cell.type === "issue_opened")?.count, 2);
-  const monthly = buildHeatmap(events, { from: "2026-11-01", to: "2026-11-30", sourceState: "VERIFIED", period: "month" });
+  const monthly = buildHeatmap(events, { from: "2026-11-01", to: "2026-11-30", sourceState: "VERIFIED", sourceAsOf: {
+    issue_opened: "2026-12-01T00:00:00.000Z", issue_completed: "2026-12-01T00:00:00.000Z", pr_merged: "2026-12-01T00:00:00.000Z",
+  }, period: "month" });
   assert.equal(monthly.bins[0].key, "2026-11");
   assert.equal(monthly.cells.find((cell) => cell.type === "pr_merged")?.count, 1);
   assert.equal(buildHeatmap(events, { from: "2026-11-26", to: "2026-11-27", sourceState: "UNAVAILABLE" }).cells.length, 0);
@@ -140,12 +149,19 @@ test("roadmap source links accept only canonical GitHub issue URLs", () => {
 
 test("malformed source rows downgrade collection completeness before aggregation", () => {
   const result = normalizeGithubCollection([
-    issue(),
+    issue({ body: "not projected into the normalized cache" }),
     issue({ id: 11, number: 44, html_url: "https://attacker.example/issues/44" }),
   ], "issues");
   assert.equal(result.items.length, 1);
+  assert.equal(result.items[0].body, undefined);
   assert.equal(result.state, "PARTIAL");
   assert.match(result.reason, /malformed/i);
+  const pullResult = normalizeGithubCollection([
+    pull(),
+    pull({ id: 21, number: 45, merged_at: "not-a-date" }),
+  ], "pulls");
+  assert.equal(pullResult.items.length, 1);
+  assert.equal(pullResult.state, "PARTIAL");
   const heatmap = buildHeatmap([], { from: "2026-11-01", to: "2026-11-02", sourceState: "PARTIAL" });
   assert.equal(heatmap.completeByType.issue_opened, false);
 });
@@ -156,6 +172,7 @@ test("event coverage is type-specific and heatmap date ranges are bounded and st
     to: "2026-11-03",
     sourceState: "VERIFIED",
     sourceStates: { issue_opened: "VERIFIED", issue_completed: "PARTIAL", pr_merged: "STALE" },
+    sourceAsOf: { issue_opened: "2026-11-04T00:00:00.000Z", issue_completed: "2026-11-04T00:00:00.000Z", pr_merged: "2026-11-04T00:00:00.000Z" },
   });
   assert.deepEqual(heatmap.completeByType, { issue_opened: true, issue_completed: false, pr_merged: false });
   assert.equal(buildHeatmap([], { from: "2026-01-01", to: "2026-04-01", sourceState: "VERIFIED" }).bins.length, 0);
@@ -164,6 +181,42 @@ test("event coverage is type-specific and heatmap date ranges are bounded and st
     issue_opened: "VERIFIED", issue_completed: "PARTIAL", pr_merged: "PARTIAL",
   });
   assert.equal(buildEventCoverage("STALE", "VERIFIED").issue_completed, "STALE");
+});
+
+test("per-source as-of times prevent empty daily, weekly and monthly bins beyond UTC coverage", () => {
+  const daily = buildHeatmap([], {
+    from: "2026-11-26", to: "2026-11-27", sourceState: "VERIFIED",
+    sourceStates: { issue_opened: "VERIFIED", issue_completed: "PARTIAL", pr_merged: "VERIFIED" },
+    sourceAsOf: { issue_opened: "2026-11-26T23:59:00.000Z", issue_completed: "2026-11-26T23:59:00.000Z", pr_merged: "2026-11-27T00:01:00.000Z" },
+  });
+  assert.equal(daily.completeByTypeAndBin.issue_opened["2026-11-26"], false);
+  assert.equal(daily.completeByTypeAndBin.pr_merged["2026-11-26"], true);
+  assert.equal(daily.completeByTypeAndBin.pr_merged["2026-11-27"], false);
+
+  const weekly = buildHeatmap([], {
+    from: "2026-11-23", to: "2026-11-29", sourceState: "VERIFIED", period: "week",
+    sourceAsOf: { issue_opened: "2026-11-30T00:01:00.000Z", issue_completed: "2026-11-30T00:01:00.000Z", pr_merged: "2026-11-29T23:59:00.000Z" },
+  });
+  assert.equal(weekly.completeByTypeAndBin.issue_opened["2026-11-23"], true);
+  assert.equal(weekly.completeByTypeAndBin.pr_merged["2026-11-23"], false);
+
+  const monthly = buildHeatmap([], {
+    from: "2026-11-01", to: "2026-11-30", sourceState: "VERIFIED", period: "month",
+    sourceAsOf: { issue_opened: "2026-12-01T00:00:00.000Z", issue_completed: "2026-12-01T00:00:00.000Z", pr_merged: "2026-11-30T23:59:59.000Z" },
+  });
+  assert.equal(monthly.completeByTypeAndBin.issue_opened["2026-11"], true);
+  assert.equal(monthly.completeByTypeAndBin.pr_merged["2026-11"], false);
+});
+
+test("partial rate-limited collection remains visible without retrying before provider reset", () => {
+  const now = Date.parse("2026-11-27T12:00:00.000Z");
+  const reset = Date.parse("2026-11-27T13:30:00.000Z");
+  assert.equal(retryAtFromReason("Rate limited; retry after 2026-11-27T13:30:00.000Z."), reset);
+  assert.equal(sourceCacheEntryIsFresh({ state: "PARTIAL", savedAt: now - 20 * 60_000, nextRetryAt: reset }, now, 10 * 60_000), true);
+  assert.equal(sourceCacheEntryIsFresh({ state: "PARTIAL", savedAt: now - 20 * 60_000, nextRetryAt: reset }, reset, 10 * 60_000), false);
+  assert.equal(sourceCacheEntryIsFresh({ state: "PARTIAL", savedAt: now - 5 * 60_000 }, now, 10 * 60_000), true);
+  assert.equal(sourceCacheEntryIsFresh({ state: "UNAVAILABLE", savedAt: now }, now, 10 * 60_000), false);
+  assert.equal(sourceCacheRetentionMs({ state: "PARTIAL", savedAt: now, nextRetryAt: reset }, "current", 10 * 60_000, 24 * 60 * 60_000), reset - now);
 });
 
 

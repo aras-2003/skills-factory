@@ -21,11 +21,12 @@ type DashboardData = {
   roadmap: RoadmapItem[] | null;
   events: ActivityEvent[];
   eventCoverage: Record<ActivityEvent["type"], SourceState>;
+  eventCoverageAsOf: Record<ActivityEvent["type"], string | null>;
   limitations: Record<string, string>;
 };
 
 type ActivityEvent = { id: string; sourceId: number; type: "issue_opened" | "issue_completed" | "pr_merged"; date: string; occurredAt: string; workArea: string; number: number; title: string; url: string };
-type HeatmapData = { bins: Array<{ key: string; label: string; from: string; to: string }>; types: ActivityEvent["type"][]; cells: Array<{ type: ActivityEvent["type"]; date: string; count: number }>; complete: boolean; completeByType: Record<ActivityEvent["type"], boolean>; state: SourceState };
+type HeatmapData = { bins: Array<{ key: string; label: string; from: string; to: string }>; types: ActivityEvent["type"][]; cells: Array<{ type: ActivityEvent["type"]; date: string; count: number }>; complete: boolean; completeByType: Record<ActivityEvent["type"], boolean>; completeByTypeAndBin: Record<ActivityEvent["type"], Record<string, boolean>>; state: SourceState };
 type WindowDays = 7 | 14 | 30;
 type Aggregation = "day" | "week" | "month";
 
@@ -114,6 +115,7 @@ function Heatmap({ data, range, aggregation, selectedTypes, onSelect, historical
     to: clippedTo,
     sourceState: historical && data.sources.github.state !== "UNAVAILABLE" ? "STALE" : data.sources.github.state,
     sourceStates: eventCoverage,
+    sourceAsOf: data.eventCoverageAsOf,
     period: aggregation,
   });
   if (!validDateRange(range.from, range.to)) return <div className="pi-empty" role="alert">Zakres musi być prawidłowy, chronologiczny i krótszy niż 90 dni.</div>;
@@ -129,29 +131,31 @@ function Heatmap({ data, range, aggregation, selectedTypes, onSelect, historical
     <div className="pi-heatmap-grid" style={{ gridTemplateColumns: `150px repeat(${heatmap.bins.length}, minmax(22px, 1fr))` }} role="group" aria-label={`Aktywność GitHub ${aggregation === "day" ? "dzienna" : aggregation === "week" ? "tygodniowa" : "miesięczna"}, daty UTC`}>
       <span aria-hidden="true" />
       {heatmap.bins.map((bin) => <span className="pi-date-heading" key={bin.key} title={`${bin.from} – ${bin.to} UTC`}>{bin.label}</span>)}
-      {heatmap.types.filter((type) => selectedTypes.includes(type)).map((type) => <FragmentRow key={type} type={type} bins={heatmap.bins} counts={counts} max={max} complete={heatmap.completeByType[type]} onSelect={onSelect} />)}
+      {heatmap.types.filter((type) => selectedTypes.includes(type)).map((type) => <FragmentRow key={type} type={type} bins={heatmap.bins} counts={counts} max={max} complete={heatmap.completeByType[type]} completeByBin={heatmap.completeByTypeAndBin[type]} onSelect={onSelect} />)}
     </div>
     <p className="pi-legend">Wartości liczą zdarzenia osobno. Puste przedziały pokazujemy jako zero wyłącznie przy zweryfikowanym, kompletnym odczycie danego typu. Zamknięcia oznaczają obecnie zamknięte Issues; bez historii ponownych otwarć ich pokrycie jest częściowe. Wszystkie granice są w UTC. {range.to > sourceDate ? `Zakres przyszły został ograniczony do ostatniego odczytu ${sourceDate}.` : ""}</p>
   </div>;
 }
 
-function FragmentRow({ type, bins, counts, max, complete, onSelect }: {
+function FragmentRow({ type, bins, counts, max, complete, completeByBin, onSelect }: {
   type: ActivityEvent["type"]; bins: HeatmapData["bins"]; counts: Map<string, number>; max: number; complete: boolean;
+  completeByBin: Record<string, boolean>;
   onSelect: (from: string, to: string, type: ActivityEvent["type"] | null) => void;
 }) {
   return <>
     <span className="pi-row-label">{eventLabels[type]}{complete ? "" : " · obserwowane"}</span>
     {bins.map((bin) => {
       const count = counts.get(`${type}:${bin.key}`);
-      if (count === undefined && !complete) return <span key={bin.key} role="img" className="pi-heat-cell pi-heat-unknown" aria-label={`${eventLabels[type]}: brak kompletnego odczytu dla ${bin.from}–${bin.to} UTC`} />;
+      const binComplete = completeByBin[bin.key] ?? false;
+      if (count === undefined && !binComplete) return <span key={bin.key} role="img" className="pi-heat-cell pi-heat-unknown" aria-label={`${eventLabels[type]}: brak kompletnego odczytu dla ${bin.from}–${bin.to} UTC`} />;
       const value = count ?? 0;
       const level = value === 0 ? 0 : Math.min(4, Math.ceil((value / max) * 4));
       return <button
         key={bin.key}
         type="button"
         className={`pi-heat-cell pi-heat-${level}`}
-        aria-label={`${eventLabels[type]}: ${complete ? value : `co najmniej ${value}`} w zakresie ${bin.from}–${bin.to} UTC`}
-        title={`${bin.from}–${bin.to} UTC · ${eventLabels[type]}: ${complete ? value : `co najmniej ${value}`}`}
+        aria-label={`${eventLabels[type]}: ${binComplete ? value : `co najmniej ${value}`} w zakresie ${bin.from}–${bin.to} UTC`}
+        title={`${bin.from}–${bin.to} UTC · ${eventLabels[type]}: ${binComplete ? value : `co najmniej ${value}`}`}
         onClick={() => onSelect(bin.from, bin.to, type)}
       >{value || ""}</button>;
     })}

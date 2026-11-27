@@ -10,7 +10,10 @@ import {
   parseGithubPage,
   priorityLabelFromLabels,
   repositoryUrl,
+  retryAtFromReason,
   sourceSnapshot,
+  sourceCacheEntryIsFresh,
+  sourceCacheRetentionMs,
   withBoundedGithubRetry,
   workAreaFromLabels,
 } from "@/lib/product-intelligence.mjs";
@@ -161,18 +164,13 @@ async function writeCachedCollection(key: Request, entry: CachedCollection) {
   memoryCollections.set(key.url, entry);
   try {
     if (edgeCache()) {
-      const maxAge = Math.floor((entry.state === "VERIFIED" && key.url.includes("layer=verified") ? LAST_KNOWN_GOOD_TTL_MS : CACHE_TTL_MS) / 1000);
+      const layer = key.url.includes("layer=verified") ? "verified" : "current";
+      const maxAge = Math.ceil(sourceCacheRetentionMs(entry, layer, CACHE_TTL_MS, LAST_KNOWN_GOOD_TTL_MS) / 1000);
       await edgeCache()!.put(key, Response.json(entry, {
         headers: { "Cache-Control": `public, max-age=${maxAge}` },
       }));
     }
   } catch { /* A regional cache is best-effort; the API remains read-only. */ }
-}
-
-function retryAtFromReason(reason: string | null) {
-  const match = reason?.match(/retry after (\d{4}-\d{2}-\d{2}T[^ ;]+)/i);
-  const parsed = match ? Date.parse(match[1]) : NaN;
-  return Number.isFinite(parsed) ? parsed : Date.now() + CACHE_TTL_MS;
 }
 
 async function loadCollection(resource: "issues" | "pulls", request: Request, scope: string): Promise<CachedCollection> {
@@ -186,23 +184,22 @@ async function loadCollection(resource: "issues" | "pulls", request: Request, sc
     ? { ...verified, state: "STALE", reason, asOf: verified.asOf }
     : { items: null, state: "UNAVAILABLE", reason, asOf: null, savedAt: now };
 
-  if (current && now - current.savedAt < CACHE_TTL_MS && current.state !== "UNAVAILABLE") {
-    return current;
-  }
-  if (current?.state === "UNAVAILABLE" && current.nextRetryAt && now < current.nextRetryAt) {
+  if (current && sourceCacheEntryIsFresh(current, now, CACHE_TTL_MS)) {
+    if (current.state !== "UNAVAILABLE") return current;
     return lastKnownGood(current.reason ?? "Current source read is waiting for the provider retry window.");
   }
 
   let pending = inFlightCollections.get(currentKey.url);
   if (!pending) {
     pending = (async () => {
+      const sourceReadStartedAt = new Date().toISOString();
       const raw = await collectPages((page: number) => fetchGithubPage(resource, page), {
         pageSize: PAGE_SIZE,
         maxPages: MAX_PAGES,
       }) as Collection;
       const normalized = raw.items === null
-        ? { ...raw, asOf: null }
-        : { ...normalizeGithubCollection(raw.items, resource, raw.state, raw.reason), asOf: new Date().toISOString() };
+        ? { ...raw, asOf: sourceReadStartedAt }
+        : { ...normalizeGithubCollection(raw.items, resource, raw.state, raw.reason), asOf: sourceReadStartedAt };
       const savedAt = Date.now();
       const entry: CachedCollection = { ...normalized, savedAt };
       if (entry.state === "VERIFIED") {
@@ -211,12 +208,15 @@ async function loadCollection(resource: "issues" | "pulls", request: Request, sc
         return entry;
       }
       if (entry.state === "PARTIAL") {
-        await writeCachedCollection(currentKey, entry);
-        return entry;
+        const retryAt = retryAtFromReason(entry.reason);
+        const rateLimited = /rate limited/i.test(entry.reason ?? "");
+        const partial: CachedCollection = { ...entry, ...(rateLimited ? { nextRetryAt: retryAt ?? Date.now() + CACHE_TTL_MS } : {}) };
+        await writeCachedCollection(currentKey, partial);
+        return partial;
       }
       const unavailable: CachedCollection = {
         ...entry,
-        nextRetryAt: retryAtFromReason(entry.reason),
+        nextRetryAt: retryAtFromReason(entry.reason) ?? Date.now() + CACHE_TTL_MS,
       };
       await writeCachedCollection(currentKey, unavailable);
       return lastKnownGood(entry.reason ?? "Current source read is unavailable.");
@@ -321,6 +321,11 @@ async function buildSnapshot(request: Request, versionMetadata: SiteVersionMetad
     }) ?? null,
     events,
     eventCoverage: buildEventCoverage(issues.state, pulls.state),
+    eventCoverageAsOf: {
+      issue_opened: issues.asOf ?? null,
+      issue_completed: issues.asOf ?? null,
+      pr_merged: pulls.asOf ?? null,
+    },
     limitations: {
       projectV2: "UNAVAILABLE: native Project fields and iterations are not exposed by this source.",
       deployments: "UNAVAILABLE: no deployment event reader is enabled.",

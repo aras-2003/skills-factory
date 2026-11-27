@@ -94,17 +94,16 @@ export function buildGithubActivity(issues, pulls) {
 
 /**
  * @param {Array<{type:string,date:string}>} events
- * @param {{from:string,to:string,sourceState?:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",sourceStates?:Record<string,"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE">,period?:"day"|"week"|"month"}} options
- * @returns {{bins:Array<{key:string,label:string,from:string,to:string}>,types:Array<"issue_opened"|"issue_completed"|"pr_merged">,cells:Array<{type:"issue_opened"|"issue_completed"|"pr_merged",date:string,count:number}>,complete:boolean,completeByType:Record<string,boolean>,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period:string}}
+ * @param {{from:string,to:string,sourceState?:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",sourceStates?:Record<string,"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE">,sourceAsOf?:Record<string,string|null>,period?:"day"|"week"|"month"}} options
+ * @returns {{bins:Array<{key:string,label:string,from:string,to:string}>,types:Array<"issue_opened"|"issue_completed"|"pr_merged">,cells:Array<{type:"issue_opened"|"issue_completed"|"pr_merged",date:string,count:number}>,complete:boolean,completeByType:Record<string,boolean>,completeByTypeAndBin:Record<string,Record<string,boolean>>,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period:string}}
  */
-export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", sourceStates = {}, period = "day" }) {
+export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", sourceStates = {}, sourceAsOf = {}, period = "day" }) {
   const start = utcDate(from);
   const end = utcDate(to);
   const state = ["VERIFIED", "PARTIAL", "STALE", "UNAVAILABLE"].includes(sourceState) ? sourceState : "UNAVAILABLE";
-  const completeByType = Object.fromEntries(EVENT_TYPES.map((type) => [type, (sourceStates[type] ?? state) === "VERIFIED"]));
   const rangeDays = start && end ? (Date.parse(`${end}T00:00:00.000Z`) - Date.parse(`${start}T00:00:00.000Z`)) / 86_400_000 + 1 : Infinity;
   if (!start || !end || start > end || rangeDays > 90 || state === "UNAVAILABLE" || !["day", "week", "month"].includes(period)) {
-    return { bins: [], types: [...EVENT_TYPES], cells: [], complete: false, completeByType, state, period };
+    return { bins: [], types: [...EVENT_TYPES], cells: [], complete: false, completeByType: {}, completeByTypeAndBin: {}, state, period };
   }
   const bins = [];
   const startDate = new Date(`${start}T00:00:00.000Z`);
@@ -135,6 +134,18 @@ export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", so
       bins.push({ key, label: key, from: clippedFrom, to: clippedTo });
     }
   }
+  const completeByTypeAndBin = Object.fromEntries(EVENT_TYPES.map((type) => {
+    const asOf = typeof sourceAsOf[type] === "string" ? Date.parse(sourceAsOf[type]) : NaN;
+    const coveredSource = (sourceStates[type] ?? state) === "VERIFIED" && Number.isFinite(asOf);
+    return [type, Object.fromEntries(bins.map((bin) => [
+      bin.key,
+      coveredSource && asOf >= Date.parse(`${bin.to}T23:59:59.999Z`),
+    ]))];
+  }));
+  const completeByType = Object.fromEntries(EVENT_TYPES.map((type) => [
+    type,
+    bins.length > 0 && bins.every((bin) => completeByTypeAndBin[type][bin.key]),
+  ]));
   const binForDate = new Map();
   for (const bin of bins) {
     for (let date = new Date(`${bin.from}T00:00:00.000Z`); date.toISOString().slice(0, 10) <= bin.to; date.setUTCDate(date.getUTCDate() + 1)) {
@@ -153,10 +164,11 @@ export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", so
     const split = key.indexOf(":");
     return { type: key.slice(0, split), date: key.slice(split + 1), count };
   }).sort((a, b) => a.date.localeCompare(b.date) || a.type.localeCompare(b.type));
-  return { bins, types: [...EVENT_TYPES], cells, complete: state === "VERIFIED", completeByType, state, period };
+  return { bins, types: [...EVENT_TYPES], cells, complete: state === "VERIFIED" && Object.values(completeByType).every(Boolean), completeByType, completeByTypeAndBin, state, period };
 }
 
 /** Validate GitHub REST rows before aggregating them; excluded rows make coverage partial. */
+/** @param {unknown[]} items @param {"issues"|"pulls"} resource @param {"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE"} [initialState] @param {string|null} [initialReason] @returns {{items:Array<Record<string,unknown>>|null,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",reason:string|null}} */
 export function normalizeGithubCollection(items, resource, initialState = "VERIFIED", initialReason = null) {
   if (!Array.isArray(items)) return { items: null, state: "UNAVAILABLE", reason: initialReason ?? "Source did not return a record array." };
   const normalized = [];
@@ -224,6 +236,30 @@ export function buildEventCoverage(issueState, pullState) {
     issue_completed: issues === "UNAVAILABLE" ? "UNAVAILABLE" : issues === "STALE" ? "STALE" : "PARTIAL",
     pr_merged: pulls,
   };
+}
+
+/** Keep a partial page cached while its provider retry window is still active. */
+export function sourceCacheEntryIsFresh(entry, now, ttlMs) {
+  if (!entry || !Number.isFinite(entry.savedAt)) return false;
+  if (Number.isFinite(entry.nextRetryAt)) return now < entry.nextRetryAt;
+  if (entry.state === "UNAVAILABLE") return false;
+  return now - entry.savedAt < ttlMs;
+}
+
+/** Retain a partial/unavailable cache marker through its retry time. */
+export function sourceCacheRetentionMs(entry, layer, currentTtlMs, verifiedTtlMs) {
+  if (layer === "verified" && entry?.state === "VERIFIED") return verifiedTtlMs;
+  const retryWindow = Number.isFinite(entry?.nextRetryAt) && Number.isFinite(entry?.savedAt)
+    ? Math.max(0, entry.nextRetryAt - entry.savedAt)
+    : 0;
+  return Math.max(currentTtlMs, retryWindow);
+}
+
+/** Read a provider retry timestamp without inferring one from an ordinary failure. */
+export function retryAtFromReason(reason) {
+  const match = typeof reason === "string" ? reason.match(/retry after (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z)(?:[.;,\s]|$)/i) : null;
+  const timestamp = match ? Date.parse(match[1]) : NaN;
+  return Number.isFinite(timestamp) ? timestamp : null;
 }
 
 /** GitHub connector results may wrap JSON in a structured payload or text block. */
