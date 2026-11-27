@@ -588,6 +588,14 @@ class FixturePolicyContractTests(unittest.TestCase):
                                                   fixture_policy_by_case={"CASE-1": "c" * 64})
                 self.assertEqual([], checked["changed_paths"])
 
+    def test_developer_pass_accepts_changed_paths(self):
+        self.payload.update(role="sf-developer-high", changed_paths=["tests/example.py"])
+        self.kwargs["expected_role"] = "sf-developer-high"
+        checked = handoff.validate_result(self.payload, **self.kwargs,
+                                          fixture_policy_by_case={"CASE-1": "c" * 64})
+        self.assertEqual("PASS", checked["status"])
+        self.assertEqual(["tests/example.py"], checked["changed_paths"])
+
     def test_readonly_roles_fail_accepts_changed_paths(self):
         self.payload.update(status="FAIL", changed_paths=["tests/example.py"])
         self.payload["test_case_outcomes"][0]["status"] = "FAIL"
