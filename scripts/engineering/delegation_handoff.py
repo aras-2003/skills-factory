@@ -68,7 +68,7 @@ def _required_object(value: Any, required: set[str], optional: set[str], name: s
     if missing:
         raise ValueError(f"{name} missing fields: {', '.join(sorted(missing))}")
     if unknown:
-        raise ValueError(f"{name} has unknown fields: {', '.join(sorted(unknown))}")
+        raise ValueError(f"{name} has unknown fields")
     return value
 
 
@@ -160,6 +160,8 @@ def read_input(data: bytes | str) -> dict:
         except UnicodeDecodeError:
             raise ValueError("serialized handoff must be valid UTF-8") from None
     elif isinstance(data, str):
+        if len(data) > MAX_HANDOFF_BYTES:
+            raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
         try:
             size = len(data.encode("utf-8"))
         except UnicodeEncodeError:
