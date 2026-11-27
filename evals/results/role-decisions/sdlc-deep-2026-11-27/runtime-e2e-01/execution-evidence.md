@@ -20,7 +20,20 @@
 | Independent Reviewer | Native collaboration child `/root/sf_independent_reviewer_c4`; requested Terra High, effective model/effort unavailable | Scoped review PASS; no actionable findings. Named profile activation and effective model remain UNKNOWN. |
 | Architect | Requested `gpt-6.2-sol`, high in the pre-task runtime-boundary advisory; a separate C4 contract review returned A1 / EXTEND | No architecture or rollback blocker; effective child model/effort UNKNOWN. |
 
-For the App Server roles, `activePermissionProfile` was `null`: the named TOML profile was not observed as loaded. The coordinator read the checked-in role definition and passed its `developer_instructions` and model/effort settings to the host. The host reported requested model and effort in `thread/start`; absent per-turn metadata remains UNKNOWN. Token usage was emitted for most App Server turns; the host exposed no financial cost.
+For App Server roles, `activePermissionProfile` was `null`: named TOML profile activation was not observed. The coordinator read each checked-in role definition and passed its instructions and requested model/effort. The `thread/start` response returned model/effort values matching the request, but `turn/started` and `turn/completed` omitted effective model/effort; therefore effective turn values remain UNKNOWN. Token usage was emitted for most App Server turns; the host exposed no financial cost.
+
+## Post-rebase exact-SHA Test Executor run
+
+On candidate `d839d18441ca741fb2c85f1349909338ee4ce867`, a fresh App Server Test Executor thread (`01a21ee0-dded-7423-8742-2691ba57fe27`) ran read-only. The `thread/start` response returned `gpt-6-luna` / `low`, matching the requested role settings; `turn/started` and `turn/completed` omitted model/effort, so effective turn model/effort remain UNKNOWN. `activePermissionProfile` was null. The turn completed, and token usage was observed (60,327 total tokens; 523 output tokens in final cumulative snapshot); financial cost was not exposed.
+
+| Exact command | Exit | Summary |
+|---|---:|---|
+| `git rev-parse HEAD` | 0 | Matched candidate SHA |
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.governance.test_sdlc_architecture_source_example -q` | 0 | 7 tests, OK |
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -q` | 0 | 10 tests, OK |
+| `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -q` | 0 | 42 tests, OK |
+
+The sanitized structured event data and output hashes are in `receipt.json` under `role_execution.executor_rebased_candidate_d839`; no conversational response is retained. This establishes the bounded Test Executor task only, not end-to-end release acceptance.
 
 ## Runtime permission check
 

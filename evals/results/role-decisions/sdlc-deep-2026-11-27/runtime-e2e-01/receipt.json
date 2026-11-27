@@ -55,8 +55,8 @@
     "bounded_handoff_resume": "PASS for fresh thread, byte-identical schema handoff and stale C1 rejection",
     "filesystem_acl": "PASS limited only with tmp exclusion flags; default workspaceWrite configuration FAILED the out-of-grant probe",
     "model_effort": [
-      "PASS for App Server Developer Terra High, Test Designer Terra Medium, Executor Luna Low, App Server Reviewer Terra High; named TOML profile activation remains UNKNOWN",
-      "Native child Reviewer model/effort UNKNOWN"
+      "PARTIAL: App Server thread/start returned the requested model and effort for its role turns; turn/started and turn/completed omit effective values, so effective turn model/effort remain UNKNOWN; named TOML profile activation remains UNKNOWN.",
+      "Native child Reviewer model/effort UNKNOWN."
     ],
     "native_desktop_child_requirement": "NOT_RUN",
     "production_or_site_runtime": "NOT_RUN"
@@ -199,8 +199,6 @@
           }
         }
       ],
-      "host_observed_effort": "high",
-      "host_observed_model": "gpt-6.1-terra",
       "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
       "profile_activation": "UNKNOWN",
       "requested_effort": "high",
@@ -218,7 +216,17 @@
         ]
       },
       "thread_id": "01a21ec9-2075-7f13-81fc-76d409eadd03",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6.1-terra",
+      "thread_start_returned_effort": "high",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "acl_without_tmp_exclusion": {
       "active_permission_profile": null,
@@ -313,8 +321,6 @@
           }
         }
       ],
-      "host_observed_effort": "high",
-      "host_observed_model": "gpt-6.1-terra",
       "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
       "profile_activation": "UNKNOWN",
       "requested_effort": "high",
@@ -332,7 +338,17 @@
         ]
       },
       "thread_id": "01a21ec8-8e0a-7250-a637-3f2e7c087529",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6.1-terra",
+      "thread_start_returned_effort": "high",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "appserver_reviewer_c4": {
       "active_permission_profile": null,
@@ -356,8 +372,7 @@
             "\"Ran 1 test in 0.001s\",",
             "\"Ran 10 tests in 0.001s\",",
             "\"Ran 42 tests in 0.008s\",",
-            "\"Ran 6 tests in 0.331s\",",
-            "\"role_result\": \"I\\u2019ll verify the checkout SHA first. If it matches, I\\u2019ll run only the three specified unittest commands and report their exact outputs and scope.The checkout SHA matches `6690ff6475b317774c845bc496da18a2c5928ece`. I\\u2019m running the three requested commands now, unchanged and in order.**Candidate SHA:** `6690ff6475b317774c845bc496da18a2c5928ece` \\u2014 matched the required SHA. All three commands exited `0`.\\n\\n| # | Exact command | Tests | Unittest summary |\\n|---|---|---:|---|\\n| 1 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -v` | 10 | `Ran 10 tests in 0.001s` \\u2014 `OK` |\\n| 2 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -v` | 42 | `Ran 42 tests in 0.008s` \\u2014 `OK` |\\n| 3 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.governance.test_sdlc_architecture_source_example -v` | 6 | `Ran 6 tests in 0.331s` \\u2014 `OK` |\\n\\nThe four new contract cases passed: `test_developer_pass_accepts_changed_paths`, `test_readonly_roles_fail_accepts_changed_paths`, `test_readonly_roles_pass_accepts_empty_changed_paths`, and `test_readonly_roles_pass_rejects_changed_paths`. The approved continuation digest test, `test_handoff_parser_source_refresh_is_exact_and_approved`, also passed.\\n\\nEvidence is the runner output in this execution transcript. These results cover only the three specified test commands; they do not establish wider coverage, runtime ACL acceptance, or release approval.\","
+            "\"Ran 6 tests in 0.331s\","
           ]
         },
         {
@@ -574,8 +589,6 @@
           }
         }
       ],
-      "host_observed_effort": "high",
-      "host_observed_model": "gpt-6.1-terra",
       "instructions_sha256": "cd4096e13c6375204f32b5a3a4805a7abd35a0908e1a5b619e0e1af80d49e5ab",
       "profile_activation": "UNKNOWN",
       "requested_effort": "high",
@@ -589,7 +602,17 @@
         "writableRoots": []
       },
       "thread_id": "01a21ec2-7be7-7750-bbc6-608a94b06849",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6.1-terra",
+      "thread_start_returned_effort": "high",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "developer_implementation_c2": {
       "active_permission_profile": null,
@@ -642,8 +665,6 @@
           "status": "completed"
         }
       ],
-      "host_observed_effort": "high",
-      "host_observed_model": "gpt-6.1-terra",
       "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
       "profile_activation": "UNKNOWN",
       "requested_effort": "high",
@@ -657,7 +678,17 @@
         "writableRoots": []
       },
       "thread_id": "01a21eb1-e231-7672-8400-061009c3ca48",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6.1-terra",
+      "thread_start_returned_effort": "high",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "developer_review_rework_c3": {
       "active_permission_profile": null,
@@ -786,8 +817,6 @@
           }
         }
       ],
-      "host_observed_effort": "high",
-      "host_observed_model": "gpt-6.1-terra",
       "instructions_sha256": "21eb0e7d8d07810c39ebc74f5ba666b3586707c81845ca24684dc682fed622ee",
       "profile_activation": "UNKNOWN",
       "requested_effort": "high",
@@ -801,7 +830,17 @@
         "writableRoots": []
       },
       "thread_id": "01a21eb8-e720-7912-8b92-969bd457b689",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6.1-terra",
+      "thread_start_returned_effort": "high",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "executor_c1_red": {
       "active_permission_profile": null,
@@ -900,8 +939,6 @@
           }
         }
       ],
-      "host_observed_effort": "low",
-      "host_observed_model": "gpt-6-luna",
       "instructions_sha256": "2dacc412e634f96d83b56af41ade8f71875a21300bf9126a2fa7f5887599b73d",
       "profile_activation": "UNKNOWN",
       "requested_effort": "low",
@@ -915,7 +952,17 @@
         "writableRoots": []
       },
       "thread_id": "01a21ebc-d16e-7792-9ce7-5a79edbd6b48",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6-luna",
+      "thread_start_returned_effort": "low",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "executor_c4_final": {
       "active_permission_profile": null,
@@ -1136,8 +1183,6 @@
           }
         }
       ],
-      "host_observed_effort": "low",
-      "host_observed_model": "gpt-6-luna",
       "instructions_sha256": "2dacc412e634f96d83b56af41ade8f71875a21300bf9126a2fa7f5887599b73d",
       "profile_activation": "UNKNOWN",
       "requested_effort": "low",
@@ -1151,7 +1196,17 @@
         "writableRoots": []
       },
       "thread_id": "01a21ec1-e222-7a10-bd23-e7ebeaa69385",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6-luna",
+      "thread_start_returned_effort": "low",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
     },
     "test_designer": {
       "active_permission_profile": null,
@@ -1441,8 +1496,6 @@
           }
         }
       ],
-      "host_observed_effort": "medium",
-      "host_observed_model": "gpt-6.1-terra",
       "instructions_sha256": "d62a06d8f18ba2e0ca28242d7c0121a34930cd209de7fafb972f46c0dd58d9e0",
       "profile_activation": "UNKNOWN",
       "requested_effort": "medium",
@@ -1456,10 +1509,143 @@
         "writableRoots": []
       },
       "thread_id": "01a21eca-d2fa-7580-a993-62aaed74c170",
-      "turn_status": "completed"
+      "turn_status": "completed",
+      "thread_start_returned_model": "gpt-6.1-terra",
+      "thread_start_returned_effort": "medium",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed did not expose the effective reasoning effort"
+      }
+    },
+    "executor_rebased_candidate_d839": {
+      "source_candidate_sha": "d839d18441ca741fb2c85f1349909338ee4ce867",
+      "thread_id": "01a21ee0-dded-7423-8742-2691ba57fe27",
+      "role": "sf-test-executor",
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "low",
+      "thread_start_returned_model": "gpt-6-luna",
+      "thread_start_returned_effort": "low",
+      "effective_turn_model": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed omitted model"
+      },
+      "effective_turn_effort": {
+        "value": "UNKNOWN",
+        "reason": "turn/started and turn/completed omitted effort"
+      },
+      "profile_activation": "UNKNOWN",
+      "active_permission_profile": null,
+      "sandbox": {
+        "type": "readOnly",
+        "networkAccess": false
+      },
+      "turn_status": "completed",
+      "commands": [
+        {
+          "command": "/bin/zsh -lc 'git rev-parse HEAD'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "cb3d588472dc33236757dc3fca4a0443f54b57242efc917aed992a630a6a9247",
+          "summaries": []
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.governance.test_sdlc_architecture_source_example -q'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "bce6d96efef38dc14a0722e9efe208bd9b443f2ee77693b7071e8b06d53075f8",
+          "summaries": [
+            "Ran 7 tests in 0.343s",
+            "OK"
+          ]
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -q'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "7f009373ff7d6e8d9d3870df8c665e1da2037377633b5e3be3a7cefaefca75dc",
+          "summaries": [
+            "Ran 10 tests in 0.001s",
+            "OK"
+          ]
+        },
+        {
+          "command": "/bin/zsh -lc 'PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -q'",
+          "status": "completed",
+          "exit_code": 0,
+          "output_sha256": "af369437038d3f0488ae77d6c3ed16e08b2871345a05909ca407816ac1930bcf",
+          "summaries": [
+            "Ran 42 tests in 0.007s",
+            "OK"
+          ]
+        }
+      ],
+      "token_usage_observations": [
+        {
+          "total": {
+            "totalTokens": 19811,
+            "inputTokens": 19696,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 115,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19811,
+            "inputTokens": 19696,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 115,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        },
+        {
+          "total": {
+            "totalTokens": 39892,
+            "inputTokens": 39555,
+            "cachedInputTokens": 19456,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 337,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 20081,
+            "inputTokens": 19859,
+            "cachedInputTokens": 19456,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 222,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        },
+        {
+          "total": {
+            "totalTokens": 60327,
+            "inputTokens": 59804,
+            "cachedInputTokens": 39168,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 523,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 20435,
+            "inputTokens": 20249,
+            "cachedInputTokens": 19712,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 186,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      ],
+      "financial_cost": "UNKNOWN; App Server did not expose currency cost"
     }
   },
   "schema_version": "1.0",
   "source_base_sha": "e4f96cc7c0e2b139c59f72d0b69bc880504b08a4",
-  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 \u2014 read-only handoff PASS claim validation; E2E support for #768"
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — read-only handoff PASS claim validation; E2E support for #768"
 }
