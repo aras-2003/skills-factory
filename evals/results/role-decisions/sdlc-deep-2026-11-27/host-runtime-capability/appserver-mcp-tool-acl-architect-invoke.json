@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/765 \u2014 verify per-thread App Server MCP tool filtering",
+  "source_revision": "bd00737b5c7331d377b57d75b119ec62879e6dd2",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "The App Server ThreadStartParams schema exposes an open-ended config override while current MCP role ACL evidence is NOT_PROVEN. Determine whether per-thread MCP tool allowlisting is a supported, enforceable host boundary before a negative runtime canary or implementation proposal.",
+    "timestamp": "2026-11-27T22:17:05Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml; role instructions to be supplied explicitly",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The collaboration tool accepted the task but did not expose effective model metadata."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The collaboration tool accepted the task but did not expose effective reasoning-effort metadata."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The collaboration tool does not expose named TOML profile activation."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Distinct Architect task /root/architect_appserver_mcp_acl returned by collaboration.spawn_agent; host timestamp unavailable.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T22:17:05Z",
+      "latest": "2026-11-27T22:17:30Z",
+      "evidence": "Validated pre-dispatch INVOKE was recorded at the lower bound; distinct accepted Architect task name was observed at the upper bound."
+    },
+    "time_unknown_reason": "The collaboration surface does not provide an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The distinct Architect child returned a bounded A2 decision; exact host lifecycle timestamps were not exposed.",
+    "started_coordinator_bounds": null,
+    "started_time_unknown_reason": "The collaboration host did not expose the Architect execution start time.",
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": "The collaboration host did not expose the Architect completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/appserver-mcp-acl-architect-review.md",
+    "sha256": "a2776217d3327178896ace86f7fd177a07879ff19eacdc609a6ac082e3872529",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T22:21:43Z",
+    "reason": "Used the Architect recommendation to freeze an isolated, no-model MCP ACL canary before runtime execution."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Architect dispatch was accepted before the dependent Test Designer task; exact host completion and first-dependent-action timestamps were not exposed.",
+    "assessed_at": "2026-11-27T22:21:43Z",
+    "first_dependent_action_at": null,
+    "reason": "Test design followed the Architect response, but the collaboration surface did not expose exact timestamps sufficient to establish non-overlapping bounds.",
+    "first_dependent_action_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/appserver-mcp-acl-test-design.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "No exact timestamp was retained for the first dependent design action."
+  },
+  "decision_id": "sdlcdeep-20261127-appserver-mcp-acl-architect",
+  "attempt_id": "sdlcdeep-20261127-appserver-mcp-acl-architect-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "https://github.com/aras-2003/skills-factory/issues/765; current acceptance requires version-pinned runtime ACL evidence.",
+      "captured_at": "2026-11-27T22:17:05Z"
+    },
+    {
+      "reference": "App Server v2 ThreadStartParams.json SHA-256 80a40a7fac15b4bf70efb7f893fb353acc0a0d30c68f54aee4f01923deca85de: config is open-ended; no top-level mcpServers field.",
+      "captured_at": "2026-11-27T22:17:05Z"
+    },
+    {
+      "reference": "Official OpenAI plugin configuration documentation describes MCP enabled_tools and disabled_tools; per-thread App Server support and enforcement remain unverified.",
+      "captured_at": "2026-11-27T22:17:05Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "Per-thread MCP tool visibility and authorization determine the runtime trust boundary for SDLC roles.",
+    "evidence_reference": "Issue #765, App Server ThreadStartParams schema, and current runtime-evidence receipt."
+  }
+}
