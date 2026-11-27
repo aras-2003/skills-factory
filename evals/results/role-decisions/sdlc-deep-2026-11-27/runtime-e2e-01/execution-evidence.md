@@ -33,7 +33,7 @@ On candidate `d839d18441ca741fb2c85f1349909338ee4ce867`, a fresh App Server Test
 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff.FixturePolicyContractTests -q` | 0 | 10 tests, OK |
 | `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_delegation_handoff -q` | 0 | 42 tests, OK |
 
-The sanitized structured event data and output hashes are in `receipt.json` under `role_execution.executor_rebased_candidate_d839`; no conversational response is retained. This establishes the bounded Test Executor task only, not end-to-end release acceptance.
+The sanitized structured event data and output hashes are in [`runtime-e2e-01-receipt.json`](../../../runtime-canaries/sdlc-deep-2026-11-27/runtime-e2e-01-receipt.json) under `role_execution.executor_rebased_candidate_d839`; no conversational response is retained. This establishes the bounded Test Executor task only, not end-to-end release acceptance.
 
 ## PR-head exact-SHA Test Executor rerun
 
