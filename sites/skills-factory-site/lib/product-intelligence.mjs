@@ -1,6 +1,37 @@
 const EVENT_TYPES = Object.freeze(["issue_opened", "issue_completed", "pr_merged"]);
 const SOURCE_STATES = Object.freeze(["VERIFIED", "PARTIAL", "STALE", "UNAVAILABLE"]);
 const REPOSITORY_PATH = "/aras-2003/skills-factory/";
+const UNASSIGNED_BUSINESS_DOMAIN = "unassigned";
+
+/** @template {{occurredAt:string,type:string,number:number,id:string}} T
+ * @param {T[]} events
+ * @returns {T[]}
+ * Return a stable newest-first view without mutating the caller's event list.
+ */
+export function activityNewestFirst(events) {
+  if (!Array.isArray(events)) return [];
+  return [...events].sort((a, b) => {
+    const timeOrder = String(b?.occurredAt ?? "").localeCompare(String(a?.occurredAt ?? ""));
+    return timeOrder
+      || String(a?.type ?? "").localeCompare(String(b?.type ?? ""))
+      || (Number(a?.number) || 0) - (Number(b?.number) || 0)
+      || String(a?.id ?? "").localeCompare(String(b?.id ?? ""));
+  });
+}
+
+/** @template {{date:string,type:string,businessDomain?:string}} T
+ * @param {T[]} events
+ * @param {{from:string,to:string,type:string|null,businessDomain:string}} selection
+ * @returns {T[]}
+ * Return only source events represented by one domain/type/date-range heatmap selection.
+ */
+export function activityForHeatmapCell(events, selection) {
+  if (!Array.isArray(events)) return [];
+  return events.filter((event) => event.date >= selection.from
+    && event.date <= selection.to
+    && (!selection.type || event.type === selection.type)
+    && (event.businessDomain ?? UNASSIGNED_BUSINESS_DOMAIN) === selection.businessDomain);
+}
 
 function utcDate(value) {
   if (typeof value !== "string" || !value) return null;
@@ -66,6 +97,9 @@ export function buildGithubActivity(issues, pulls) {
       type,
       date,
       occurredAt: new Date(sourceDate).toISOString(),
+      // The current read source has no verified business-domain mapping.
+      // Work-area labels and free text are not substitutes for that mapping.
+      businessDomain: UNASSIGNED_BUSINESS_DOMAIN,
       workArea: record.workArea,
       number: record.number,
       title: record.title,
@@ -89,13 +123,16 @@ export function buildGithubActivity(issues, pulls) {
     add("pr_merged", record, record.row.merged_at);
   }
 
-  return events.sort((a, b) => a.date.localeCompare(b.date) || a.type.localeCompare(b.type) || a.number - b.number);
+  return events.sort((a, b) => a.occurredAt.localeCompare(b.occurredAt)
+    || a.type.localeCompare(b.type)
+    || a.number - b.number
+    || a.id.localeCompare(b.id));
 }
 
 /**
- * @param {Array<{type:string,date:string}>} events
+ * @param {Array<{type:string,date:string,businessDomain?:string}>} events
  * @param {{from:string,to:string,sourceState?:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",sourceStates?:Record<string,"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE">,sourceAsOf?:Record<string,string|null>,period?:"day"|"week"|"month"}} options
- * @returns {{bins:Array<{key:string,label:string,from:string,to:string}>,types:Array<"issue_opened"|"issue_completed"|"pr_merged">,cells:Array<{type:"issue_opened"|"issue_completed"|"pr_merged",date:string,count:number}>,complete:boolean,completeByType:Record<string,boolean>,completeByTypeAndBin:Record<string,Record<string,boolean>>,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period:string}}
+ * @returns {{bins:Array<{key:string,label:string,from:string,to:string}>,domains:string[],types:Array<"issue_opened"|"issue_completed"|"pr_merged">,cells:Array<{businessDomain:string,type:"issue_opened"|"issue_completed"|"pr_merged",date:string,count:number}>,complete:boolean,completeByType:Record<string,boolean>,completeByTypeAndBin:Record<string,Record<string,boolean>>,state:"VERIFIED"|"PARTIAL"|"STALE"|"UNAVAILABLE",period:string}}
  */
 export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", sourceStates = {}, sourceAsOf = {}, period = "day" }) {
   const start = utcDate(from);
@@ -103,7 +140,7 @@ export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", so
   const state = ["VERIFIED", "PARTIAL", "STALE", "UNAVAILABLE"].includes(sourceState) ? sourceState : "UNAVAILABLE";
   const rangeDays = start && end ? (Date.parse(`${end}T00:00:00.000Z`) - Date.parse(`${start}T00:00:00.000Z`)) / 86_400_000 + 1 : Infinity;
   if (!start || !end || start > end || rangeDays > 90 || state === "UNAVAILABLE" || !["day", "week", "month"].includes(period)) {
-    return { bins: [], types: [...EVENT_TYPES], cells: [], complete: false, completeByType: {}, completeByTypeAndBin: {}, state, period };
+    return { bins: [], domains: [], types: [...EVENT_TYPES], cells: [], complete: false, completeByType: {}, completeByTypeAndBin: {}, state, period };
   }
   const bins = [];
   const startDate = new Date(`${start}T00:00:00.000Z`);
@@ -157,14 +194,29 @@ export function buildHeatmap(events, { from, to, sourceState = "UNAVAILABLE", so
     if (!EVENT_TYPES.includes(event?.type)) continue;
     const binKey = binForDate.get(event.date);
     if (!binKey) continue;
-    const key = `${event.type}:${binKey}`;
+    // Until a source-backed domain mapping exists, every event is explicitly
+    // unassigned. Ignore arbitrary domain-shaped values from cached payloads.
+    const businessDomain = UNASSIGNED_BUSINESS_DOMAIN;
+    const key = JSON.stringify([businessDomain, event.type, binKey]);
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
   const cells = [...counts.entries()].map(([key, count]) => {
-    const split = key.indexOf(":");
-    return { type: key.slice(0, split), date: key.slice(split + 1), count };
-  }).sort((a, b) => a.date.localeCompare(b.date) || a.type.localeCompare(b.type));
-  return { bins, types: [...EVENT_TYPES], cells, complete: state === "VERIFIED" && Object.values(completeByType).every(Boolean), completeByType, completeByTypeAndBin, state, period };
+    const [businessDomain, type, date] = JSON.parse(key);
+    return { businessDomain, type, date, count };
+  }).sort((a, b) => a.date.localeCompare(b.date)
+    || a.businessDomain.localeCompare(b.businessDomain)
+    || a.type.localeCompare(b.type));
+  return {
+    bins,
+    domains: [UNASSIGNED_BUSINESS_DOMAIN],
+    types: [...EVENT_TYPES],
+    cells,
+    complete: state === "VERIFIED" && Object.values(completeByType).every(Boolean),
+    completeByType,
+    completeByTypeAndBin,
+    state,
+    period,
+  };
 }
 
 /** Validate GitHub REST rows before aggregating them; excluded rows make coverage partial. */

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  activityForHeatmapCell,
+  activityNewestFirst,
   buildHeatmap,
 } from "@/lib/product-intelligence.mjs";
 
@@ -25,8 +27,8 @@ type DashboardData = {
   limitations: Record<string, string>;
 };
 
-type ActivityEvent = { id: string; sourceId: number; type: "issue_opened" | "issue_completed" | "pr_merged"; date: string; occurredAt: string; workArea: string; number: number; title: string; url: string };
-type HeatmapData = { bins: Array<{ key: string; label: string; from: string; to: string }>; types: ActivityEvent["type"][]; cells: Array<{ type: ActivityEvent["type"]; date: string; count: number }>; complete: boolean; completeByType: Record<ActivityEvent["type"], boolean>; completeByTypeAndBin: Record<ActivityEvent["type"], Record<string, boolean>>; state: SourceState };
+type ActivityEvent = { id: string; sourceId: number; type: "issue_opened" | "issue_completed" | "pr_merged"; date: string; occurredAt: string; businessDomain: string; workArea: string; number: number; title: string; url: string };
+type HeatmapData = { bins: Array<{ key: string; label: string; from: string; to: string }>; domains: string[]; types: ActivityEvent["type"][]; cells: Array<{ businessDomain: string; type: ActivityEvent["type"]; date: string; count: number }>; complete: boolean; completeByType: Record<ActivityEvent["type"], boolean>; completeByTypeAndBin: Record<ActivityEvent["type"], Record<string, boolean>>; state: SourceState };
 type WindowDays = 7 | 14 | 30;
 type Aggregation = "day" | "week" | "month";
 
@@ -104,7 +106,7 @@ function Heatmap({ data, range, aggregation, selectedTypes, onSelect, historical
   range: { from: string; to: string };
   aggregation: Aggregation;
   selectedTypes: ActivityEvent["type"][];
-  onSelect: (from: string, to: string, type: ActivityEvent["type"] | null) => void;
+  onSelect: (from: string, to: string, type: ActivityEvent["type"] | null, businessDomain: string) => void;
   historical: boolean;
 }) {
   const sourceDate = data.sources.github.asOf?.slice(0, 10) ?? data.asOf.slice(0, 10);
@@ -124,39 +126,40 @@ function Heatmap({ data, range, aggregation, selectedTypes, onSelect, historical
     return <div className="pi-empty"><strong>Heatmapa niedostępna</strong><p>{data.sources.github.reason ?? "Źródło GitHub nie zwróciło danych."}</p></div>;
   }
 
-  const counts = new Map(heatmap.cells.map((cell) => [`${cell.type}:${cell.date}`, cell.count]));
+  const counts = new Map(heatmap.cells.map((cell) => [JSON.stringify([cell.businessDomain, cell.type, cell.date]), cell.count]));
   const max = Math.max(1, ...heatmap.cells.map((cell) => cell.count));
   if (!selectedTypes.length) return <div className="pi-empty">Wybierz co najmniej jeden typ zdarzenia.</div>;
   return <div className="pi-heatmap-wrap">
-    <div className="pi-heatmap-grid" style={{ gridTemplateColumns: `150px repeat(${heatmap.bins.length}, minmax(22px, 1fr))` }} role="group" aria-label={`Aktywność GitHub ${aggregation === "day" ? "dzienna" : aggregation === "week" ? "tygodniowa" : "miesięczna"}, daty UTC`}>
+    <div className="pi-heatmap-grid" style={{ gridTemplateColumns: `190px repeat(${heatmap.bins.length}, minmax(22px, 1fr))` }} role="group" aria-label={`Aktywność według domeny biznesowej i typu, ${aggregation === "day" ? "dzienna" : aggregation === "week" ? "tygodniowa" : "miesięczna"}, daty UTC`}>
       <span aria-hidden="true" />
       {heatmap.bins.map((bin) => <span className="pi-date-heading" key={bin.key} title={`${bin.from} – ${bin.to} UTC`}>{bin.label}</span>)}
-      {heatmap.types.filter((type) => selectedTypes.includes(type)).map((type) => <FragmentRow key={type} type={type} bins={heatmap.bins} counts={counts} max={max} complete={heatmap.completeByType[type]} completeByBin={heatmap.completeByTypeAndBin[type]} onSelect={onSelect} />)}
+      {heatmap.domains.flatMap((businessDomain) => heatmap.types.filter((type) => selectedTypes.includes(type)).map((type) => <FragmentRow key={`${businessDomain}:${type}`} businessDomain={businessDomain} type={type} bins={heatmap.bins} counts={counts} max={max} complete={heatmap.completeByType[type]} completeByBin={heatmap.completeByTypeAndBin[type]} onSelect={onSelect} />))}
     </div>
-    <p className="pi-legend">Wartości liczą zdarzenia osobno. Puste przedziały pokazujemy jako zero wyłącznie przy zweryfikowanym, kompletnym odczycie danego typu. Zamknięcia oznaczają obecnie zamknięte Issues; bez historii ponownych otwarć ich pokrycie jest częściowe. Wszystkie granice są w UTC. {range.to > sourceDate ? `Zakres przyszły został ograniczony do ostatniego odczytu ${sourceDate}.` : ""}</p>
+    <p className="pi-legend">Domena biznesowa nie jest dostępna w obecnym źródle GitHub; wszystkie zdarzenia trafiają do „unassigned”. Etykiety obszaru pracy nie są mapowaniem domeny. Typy zdarzeń liczymy osobno. Puste przedziały pokazujemy jako zero wyłącznie przy zweryfikowanym, kompletnym odczycie danego typu. Zamknięcia oznaczają obecnie zamknięte Issues; bez historii ponownych otwarć ich pokrycie jest częściowe. Wszystkie granice są w UTC. {range.to > sourceDate ? `Zakres przyszły został ograniczony do ostatniego odczytu ${sourceDate}.` : ""}</p>
   </div>;
 }
 
-function FragmentRow({ type, bins, counts, max, complete, completeByBin, onSelect }: {
-  type: ActivityEvent["type"]; bins: HeatmapData["bins"]; counts: Map<string, number>; max: number; complete: boolean;
+function FragmentRow({ businessDomain, type, bins, counts, max, complete, completeByBin, onSelect }: {
+  businessDomain: string; type: ActivityEvent["type"]; bins: HeatmapData["bins"]; counts: Map<string, number>; max: number; complete: boolean;
   completeByBin: Record<string, boolean>;
-  onSelect: (from: string, to: string, type: ActivityEvent["type"] | null) => void;
+  onSelect: (from: string, to: string, type: ActivityEvent["type"] | null, businessDomain: string) => void;
 }) {
+  const domainLabel = businessDomain === "unassigned" ? "Unassigned" : businessDomain;
   return <>
-    <span className="pi-row-label">{eventLabels[type]}{complete ? "" : " · obserwowane"}</span>
+    <span className="pi-row-label">{domainLabel} · {eventLabels[type]}{complete ? "" : " · obserwowane"}</span>
     {bins.map((bin) => {
-      const count = counts.get(`${type}:${bin.key}`);
+      const count = counts.get(JSON.stringify([businessDomain, type, bin.key]));
       const binComplete = completeByBin[bin.key] ?? false;
-      if (count === undefined && !binComplete) return <span key={bin.key} role="img" className="pi-heat-cell pi-heat-unknown" aria-label={`${eventLabels[type]}: brak kompletnego odczytu dla ${bin.from}–${bin.to} UTC`} />;
+      if (count === undefined && !binComplete) return <span key={bin.key} role="img" className="pi-heat-cell pi-heat-unknown" aria-label={`${domainLabel}, ${eventLabels[type]}: brak kompletnego odczytu dla ${bin.from}–${bin.to} UTC`} />;
       const value = count ?? 0;
       const level = value === 0 ? 0 : Math.min(4, Math.ceil((value / max) * 4));
       return <button
         key={bin.key}
         type="button"
         className={`pi-heat-cell pi-heat-${level}`}
-        aria-label={`${eventLabels[type]}: ${binComplete ? value : `co najmniej ${value}`} w zakresie ${bin.from}–${bin.to} UTC`}
-        title={`${bin.from}–${bin.to} UTC · ${eventLabels[type]}: ${binComplete ? value : `co najmniej ${value}`}`}
-        onClick={() => onSelect(bin.from, bin.to, type)}
+        aria-label={`${domainLabel}, ${eventLabels[type]}: ${binComplete ? value : `co najmniej ${value}`} w zakresie ${bin.from}–${bin.to} UTC`}
+        title={`${bin.from}–${bin.to} UTC · ${domainLabel} · ${eventLabels[type]}: ${binComplete ? value : `co najmniej ${value}`}`}
+        onClick={() => onSelect(bin.from, bin.to, type, businessDomain)}
       >{value || ""}</button>;
     })}
   </>;
@@ -173,7 +176,7 @@ export default function IntelligenceDashboard() {
   const [aggregation, setAggregation] = useState<Aggregation>("day");
   const [selectedTypes, setSelectedTypes] = useState<ActivityEvent["type"][]>(["issue_opened", "issue_completed", "pr_merged"]);
   const refreshSequence = useRef(0);
-  const [eventFilter, setEventFilter] = useState<{ from: string; to: string; type: ActivityEvent["type"] | null } | null>(null);
+  const [eventFilter, setEventFilter] = useState<{ from: string; to: string; type: ActivityEvent["type"] | null; businessDomain: string } | null>(null);
   const [roadmapQuery, setRoadmapQuery] = useState("");
   const [workAreaFilter, setWorkAreaFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
@@ -225,9 +228,9 @@ export default function IntelligenceDashboard() {
   }, [refresh]);
 
   const filteredEvents = useMemo(() => {
-    const events = [...(data?.events ?? [])].reverse();
+    const events = activityNewestFirst(data?.events ?? []);
     if (!eventFilter) return events.slice(0, 10);
-    return events.filter((event) => event.date >= eventFilter.from && event.date <= eventFilter.to && (!eventFilter.type || event.type === eventFilter.type));
+    return activityForHeatmapCell(events, eventFilter);
   }, [data, eventFilter]);
 
   const roadmapOptions = useMemo(() => ({
@@ -282,7 +285,7 @@ export default function IntelligenceDashboard() {
       </section>
 
       <section className="pi-panel" aria-labelledby="heatmap-heading">
-        <div className="pi-section-head"><div><h2 id="heatmap-heading">Heatmapa zdarzeń GitHub</h2><p>Issues i PR z osobnymi typami zdarzeń. Etykiety GitHub opisują obszary pracy, nie domeny biznesowe.</p></div></div>
+        <div className="pi-section-head"><div><h2 id="heatmap-heading">Heatmapa domen biznesowych</h2><p>Otwarcia Issues, obecnie ukończone Issues i zmergowane PR pozostają osobnymi seriami. Brak zweryfikowanego mapowania biznesowego oznacza „unassigned”.</p></div></div>
         <div className="pi-heat-controls">
           <label>Od (UTC)<input type="date" max={data?.sources.github.asOf?.slice(0, 10) ?? undefined} value={range.from} onChange={(event) => { setRange((current) => ({ ...current, from: event.target.value })); setEventFilter(null); }} /></label>
           <label>Do (UTC)<input type="date" max={data?.sources.github.asOf?.slice(0, 10) ?? undefined} value={range.to} onChange={(event) => { setRange((current) => ({ ...current, to: event.target.value })); setEventFilter(null); }} /></label>
@@ -290,7 +293,7 @@ export default function IntelligenceDashboard() {
           <label>Agregacja<select value={aggregation} onChange={(event) => setAggregation(event.target.value as Aggregation)}><option value="day">Dzienna</option><option value="week">Tygodniowa</option><option value="month">Miesięczna</option></select></label>
         </div>
         <div className="pi-event-filters" role="group" aria-label="Typy zdarzeń heatmapy">{Object.entries(eventLabels).map(([type, label]) => { const value = type as ActivityEvent["type"]; const checked = selectedTypes.includes(value); return <button key={type} type="button" aria-pressed={checked} onClick={() => setSelectedTypes((current) => checked ? current.filter((item) => item !== value) : [...current, value])}>{label}</button>; })}</div>
-        {data ? <Heatmap data={data} range={range} aggregation={aggregation} selectedTypes={selectedTypes} historical={historical} onSelect={(from, to, type) => setEventFilter({ from, to, type })} /> : <div className="pi-empty">Brak odczytu.</div>}
+        {data ? <Heatmap data={data} range={range} aggregation={aggregation} selectedTypes={selectedTypes} historical={historical} onSelect={(from, to, type, businessDomain) => setEventFilter({ from, to, type, businessDomain })} /> : <div className="pi-empty">Brak odczytu.</div>}
         <p className="pi-legend">Zmiany capabilities, deploymenty, testy runtime, workflow runs, błędy i regresje nie są dostępne w tym przyroście.</p>
       </section>
 
@@ -305,8 +308,8 @@ export default function IntelligenceDashboard() {
       </section>
 
       <section className="pi-panel" aria-labelledby="events-heading">
-        <div className="pi-section-head"><div><h2 id="events-heading">Ostatnie zmiany</h2><p>{eventFilter ? `Filtr: ${eventFilter.from}–${eventFilter.to} UTC · ${eventFilter.type ? eventLabels[eventFilter.type] : "wszystkie typy"}` : "Najnowsze zdarzenia z dostępnego odczytu"}</p></div>{eventFilter && <button className="pi-reset" type="button" onClick={() => setEventFilter(null)}>Wyczyść filtr</button>}</div>
-        {!data?.events.length ? <div className="pi-empty"><strong>Brak zdarzeń do pokazania</strong><p>{data?.sources.github.state === "VERIFIED" ? "Kompletny odczyt nie zawiera zdarzeń w zakresie." : data?.sources.github.reason ?? "Dane źródłowe są niedostępne."}</p></div> : filteredEvents.length === 0 ? <div className="pi-empty">Brak zdarzeń dla wybranej komórki heatmapy.</div> : <ul className="pi-events">{filteredEvents.map((event) => <li key={event.id}><time dateTime={event.occurredAt}>{formatDate(event.occurredAt, true)}</time><span className="pi-event-type">{eventLabels[event.type]}</span><span className="pi-event-area">{event.workArea}</span><a href={event.url} target="_blank" rel="noreferrer">#{event.number} {event.title}</a></li>)}</ul>}
+        <div className="pi-section-head"><div><h2 id="events-heading">Ostatnie zmiany</h2><p>{eventFilter ? `Filtr: ${eventFilter.from}–${eventFilter.to} UTC · ${eventFilter.businessDomain === "unassigned" ? "Unassigned" : eventFilter.businessDomain} · ${eventFilter.type ? eventLabels[eventFilter.type] : "wszystkie typy"}` : "Najnowsze zdarzenia z dostępnego odczytu"}</p></div>{eventFilter && <button className="pi-reset" type="button" onClick={() => setEventFilter(null)}>Wyczyść filtr</button>}</div>
+        {!data?.events.length ? <div className="pi-empty"><strong>Brak zdarzeń do pokazania</strong><p>{data?.sources.github.state === "VERIFIED" ? "Kompletny odczyt nie zawiera zdarzeń w zakresie." : data?.sources.github.reason ?? "Dane źródłowe są niedostępne."}</p></div> : filteredEvents.length === 0 ? <div className="pi-empty">Brak zdarzeń dla wybranej komórki heatmapy.</div> : <ul className="pi-events">{filteredEvents.map((event) => <li key={event.id}><time dateTime={event.occurredAt}>{formatDate(event.occurredAt, true)}</time><span className="pi-event-type">{eventLabels[event.type]}</span><span className="pi-event-area">Domena: {event.businessDomain}</span><span className="pi-event-area">Obszar: {event.workArea}</span><a href={event.url} target="_blank" rel="noreferrer">#{event.number} {event.title}</a></li>)}</ul>}
       </section>
 
       <section className="pi-limits" aria-label="Źródła niedostępne">

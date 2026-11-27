@@ -27,3 +27,19 @@ The final candidate will have a later SHA; bind execution evidence to that full 
 |---|---|---|---|
 | **PIC-ASOF-01 / AC3, AC4** | Issues and pulls have different as-of instants around UTC midnight. Supply independently enumerated events and daily, Monday-to-Sunday weekly and monthly bins including one wholly before, one straddling and one after each source's as-of boundary. Repeat with PARTIAL/STALE sources and a clipped date range. | Completeness is calculated separately for each resource and event type **for each displayed bin**. A bin extending beyond its source's observed boundary cannot claim a complete zero; a wholly observed bin may show zero only when its own relevant source and event-type coverage are complete. Show observed partial counts with their incomplete state, preserving UTC boundaries and source as-of. Never borrow the newer resource's timestamp to complete the older resource's bin. | Deterministic aggregation and UI tests with hand-calculated bin bounds, source-specific as-of, per-type expected states and event IDs; fixture digest and final candidate SHA. |
 | **PIC-RATE-01 / AC1, AC4** | Issue page one returns 100 valid rows; page two returns HTTP 429 with reset 20 minutes ahead and no acceptable short retry. Pull pages succeed. With a controlled clock, repeat request at +9 and +11 minutes and again after reset. | The observed issue rows remain visible as PARTIAL with their source as-of and reason; pulls remain independently current. No GitHub issue retry occurs before the provider reset, including after the ordinary 10-minute cache window; at or after reset one bounded new read may occur. No empty/zero replacement, false VERIFIED state or unbounded wait. | Route/cache integration with request counts, fake time, partial IDs, reset timestamp and response states; separately observe real provider rate-limit behavior if available. |
+
+## Reviewer delta for `c059b007` — designed before implementation
+
+These cases address the independent review findings. The source exposes no
+verified business-domain mapping, so `area:*`, free text, and current labels
+must not be used to infer one. Until a canonical mapping source is approved,
+the expected domain bucket is `unassigned` for every event.
+
+| Case | Controlled input and oracle | Required result |
+|---|---|---|
+| **PIC-DOM-04** | Issue events with `area:engineering`, no labels, conflicting labels, and a merged PR; independently enumerate source IDs by event type and UTC day. Select the unassigned/opened/day cell. | Every event is in exactly one `unassigned` domain bucket; opened, completed and merged remain separate. `area:*` is not a business-domain mapping. Cell drill-down returns only matching source IDs for domain, type and date range. |
+| **PIC-RECENT-02** | Eleven same-day events with different UTC instants; the latest event has a lower Issue number and a different event type than earlier rows. Include equal instants and a timestamp with an explicit UTC offset. | The latest ten are sorted by full UTC instant, include the latest source event, exclude the earliest, and use a deterministic tie-break for equal instants. Offset timestamps are normalized to UTC before ordering. |
+
+These tests cover the available P0 contract only; a verified multi-domain
+breakdown remains unavailable until an authoritative domain mapping is
+provided.

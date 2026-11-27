@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  activityNewestFirst,
+  activityForHeatmapCell,
   buildGithubActivity,
   buildEventCoverage,
   buildHeatmap,
@@ -57,6 +59,51 @@ test("completed issues exclude not_planned and unmapped domains remain unassigne
   const completed = events.filter((event) => event.type === "issue_completed");
   assert.equal(completed.length, 1);
   assert.equal(completed[0].workArea, "unassigned");
+  assert.equal(completed[0].businessDomain, "unassigned");
+});
+
+test("domain heatmap keeps unverified business-domain mapping in one unassigned bucket", () => {
+  const events = buildGithubActivity([
+    issue({ id: 31, number: 51, labels: [{ name: "area:engineering" }], created_at: "2026-11-26T08:00:00Z" }),
+    issue({ id: 32, number: 52, labels: [], created_at: "2026-11-26T09:00:00Z" }),
+    issue({ id: 33, number: 53, created_at: "2026-11-27T09:00:00Z" }),
+  ], [pull({ id: 41, number: 61, merged_at: "2026-11-26T10:00:00Z" })]);
+  const heatmap = buildHeatmap(events, {
+    from: "2026-11-26", to: "2026-11-26", sourceState: "VERIFIED",
+    sourceAsOf: { issue_opened: "2026-11-27T00:00:00Z", issue_completed: "2026-11-27T00:00:00Z", pr_merged: "2026-11-27T00:00:00Z" },
+  });
+
+  assert.deepEqual(events.map((event) => event.businessDomain), ["unassigned", "unassigned", "unassigned", "unassigned"]);
+  assert.deepEqual(heatmap.domains, ["unassigned"]);
+  assert.equal(heatmap.cells.find((cell) => cell.businessDomain === "unassigned" && cell.type === "issue_opened")?.count, 2);
+  assert.equal(heatmap.cells.find((cell) => cell.businessDomain === "unassigned" && cell.type === "pr_merged")?.count, 1);
+  assert.deepEqual(activityForHeatmapCell(events, {
+    from: "2026-11-26", to: "2026-11-26", type: "issue_opened", businessDomain: "unassigned",
+  }).map((event) => event.number), [51, 52]);
+});
+
+test("recent activity orders full UTC instants newest first and breaks ties deterministically", () => {
+  const issues = Array.from({ length: 11 }, (_, index) => {
+    const latest = index === 0;
+    const number = latest ? 1 : index + 1;
+    const time = latest ? "2026-11-26T23:59:00Z" : `2026-11-26T00:${String(index + 1).padStart(2, "0")}:00Z`;
+    return issue({ id: 100 + index, number, created_at: time });
+  });
+  const events = buildGithubActivity(issues, [
+    pull({ id: 250, number: 250, merged_at: "2026-11-26T23:59:00+00:00" }),
+  ]);
+  const latestTen = activityNewestFirst(events).slice(0, 10);
+
+  assert.equal(latestTen[0].occurredAt, "2026-11-26T23:59:00.000Z");
+  assert.equal(latestTen.some((event) => event.number === 1), true);
+  assert.equal(latestTen.some((event) => event.number === 2), false);
+  assert.equal(latestTen.length, 10);
+  const tied = activityNewestFirst([
+    { id: "z", type: "pr_merged", number: 9, occurredAt: "2026-11-27T01:00:00.000Z" },
+    { id: "b", type: "issue_opened", number: 8, occurredAt: "2026-11-27T01:00:00.000Z" },
+    { id: "a", type: "issue_opened", number: 3, occurredAt: "2026-11-27T01:00:00.000Z" },
+  ]);
+  assert.deepEqual(tied.map((event) => event.id), ["a", "b", "z"]);
 });
 
 test("duplicate issues are counted once and invalid source records are ignored", () => {
