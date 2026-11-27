@@ -86,7 +86,11 @@ test("recent activity orders full UTC instants newest first and breaks ties dete
   const issues = Array.from({ length: 11 }, (_, index) => {
     const latest = index === 0;
     const number = latest ? 1 : index + 1;
-    const time = latest ? "2026-11-26T23:59:00Z" : `2026-11-26T00:${String(index + 1).padStart(2, "0")}:00Z`;
+    const time = latest
+      ? "2026-11-26T23:59:00Z"
+      : index === 10
+        ? "2026-11-27T00:59:00+01:00"
+        : `2026-11-26T00:${String(index + 1).padStart(2, "0")}:00Z`;
     return issue({ id: 100 + index, number, created_at: time });
   });
   const events = buildGithubActivity(issues, [
@@ -95,6 +99,7 @@ test("recent activity orders full UTC instants newest first and breaks ties dete
   const latestTen = activityNewestFirst(events).slice(0, 10);
 
   assert.equal(latestTen[0].occurredAt, "2026-11-26T23:59:00.000Z");
+  assert.equal(events.find((event) => event.number === 11)?.occurredAt, "2026-11-26T23:59:00.000Z");
   assert.equal(latestTen.some((event) => event.number === 1), true);
   assert.equal(latestTen.some((event) => event.number === 2), false);
   assert.equal(latestTen.length, 10);
