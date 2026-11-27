@@ -1,0 +1,250 @@
+{
+  "candidate_sha": "ac40b4204fcd34a7d168febb047de6b113588250",
+  "runtime_version": "codex-cli 0.159.1",
+  "harness_sha256": "6e5ea9f866dd66ab37d5725f30e20d2d27915e1574fdca0e5f8a1dc5c4df2dab",
+  "fixture_sha256": "6c8c86e8badaf7c705f95608cb35fb7fac2ce309b9c75f7ba7335725f1f4905d",
+  "runs": [
+    {
+      "policy": "enabled_tools",
+      "status": "PASS",
+      "cases": {
+        "SETUP": "PASS",
+        "BASELINE": "PASS",
+        "ALLOW": "PASS",
+        "DENY": "PASS",
+        "BARRIER": "PASS"
+      },
+      "requests": [
+        {
+          "id": 1,
+          "method": "initialize",
+          "class": "result"
+        },
+        {
+          "id": 2,
+          "method": "thread/start",
+          "class": "result"
+        },
+        {
+          "id": 3,
+          "method": "mcpServerStatus/list",
+          "class": "result"
+        },
+        {
+          "id": 4,
+          "method": "thread/start",
+          "class": "result"
+        },
+        {
+          "id": 5,
+          "method": "mcpServerStatus/list",
+          "class": "result"
+        },
+        {
+          "id": 6,
+          "method": "mcpServerStatus/list",
+          "class": "result"
+        },
+        {
+          "id": 7,
+          "method": "mcpServer/tool/call",
+          "class": "result"
+        },
+        {
+          "id": 8,
+          "method": "mcpServer/tool/call",
+          "class": "result"
+        },
+        {
+          "id": 9,
+          "method": "mcpServer/tool/call",
+          "class": "error",
+          "error": "tool 'forbidden' is disabled for MCP server 'canary'",
+          "code": -32603
+        },
+        {
+          "id": 10,
+          "method": "mcpServer/tool/call",
+          "class": "result"
+        }
+      ],
+      "threads": {
+        "baseline": "01a21f28-7bac-7323-bdee-76bc521465ba",
+        "restricted": "01a21f28-7c26-7602-9eb8-a67c7c083f47"
+      },
+      "config_sha256": "2e2be1090c6621e47b514589319f7d6a5600670b9e99dc49130b6c6e6c6f7c95",
+      "catalogs": {
+        "baseline": [
+          "allowed",
+          "forbidden"
+        ],
+        "restricted": [
+          "allowed"
+        ],
+        "baseline_after": [
+          "allowed",
+          "forbidden"
+        ]
+      },
+      "app_server_exit": 0,
+      "residual_process_group": null,
+      "fixture_processes": [
+        {
+          "pid": 56922,
+          "termination_handler_observed": true,
+          "process_absent": true
+        },
+        {
+          "pid": 56934,
+          "termination_handler_observed": true,
+          "process_absent": true
+        }
+      ],
+      "fixture_log_sha256": "cec2b51d51ee942582d19006bcb650b5696d77d0da92fa2b8e37393e4adff359",
+      "ingress": {
+        "B": 1,
+        "A": 1,
+        "X": 0,
+        "Q": 1
+      },
+      "fixture_calls": [
+        {
+          "tool": "forbidden",
+          "nonce": "B"
+        },
+        {
+          "tool": "allowed",
+          "nonce": "A"
+        },
+        {
+          "tool": "allowed",
+          "nonce": "Q"
+        }
+      ],
+      "unexpected_ingress": false,
+      "residual_path": null
+    },
+    {
+      "policy": "disabled_tools",
+      "status": "PASS",
+      "cases": {
+        "SETUP": "PASS",
+        "BASELINE": "PASS",
+        "ALLOW": "PASS",
+        "DENY": "PASS",
+        "BARRIER": "PASS"
+      },
+      "requests": [
+        {
+          "id": 1,
+          "method": "initialize",
+          "class": "result"
+        },
+        {
+          "id": 2,
+          "method": "thread/start",
+          "class": "result"
+        },
+        {
+          "id": 3,
+          "method": "mcpServerStatus/list",
+          "class": "result"
+        },
+        {
+          "id": 4,
+          "method": "thread/start",
+          "class": "result"
+        },
+        {
+          "id": 5,
+          "method": "mcpServerStatus/list",
+          "class": "result"
+        },
+        {
+          "id": 6,
+          "method": "mcpServerStatus/list",
+          "class": "result"
+        },
+        {
+          "id": 7,
+          "method": "mcpServer/tool/call",
+          "class": "result"
+        },
+        {
+          "id": 8,
+          "method": "mcpServer/tool/call",
+          "class": "result"
+        },
+        {
+          "id": 9,
+          "method": "mcpServer/tool/call",
+          "class": "error",
+          "error": "tool 'forbidden' is disabled for MCP server 'canary'",
+          "code": -32603
+        },
+        {
+          "id": 10,
+          "method": "mcpServer/tool/call",
+          "class": "result"
+        }
+      ],
+      "threads": {
+        "baseline": "01a21f28-7d25-7bc0-9fbb-4cb6e2263f19",
+        "restricted": "01a21f28-7d43-7d81-ab3c-293bfb9e938c"
+      },
+      "config_sha256": "6dd487ea45949264ce06b4ac7daaf6b1b199c07e79452f9eed266d6310385284",
+      "catalogs": {
+        "baseline": [
+          "allowed",
+          "forbidden"
+        ],
+        "restricted": [
+          "allowed"
+        ],
+        "baseline_after": [
+          "allowed",
+          "forbidden"
+        ]
+      },
+      "app_server_exit": 0,
+      "residual_process_group": null,
+      "fixture_processes": [
+        {
+          "pid": 56969,
+          "termination_handler_observed": true,
+          "process_absent": true
+        },
+        {
+          "pid": 56987,
+          "termination_handler_observed": true,
+          "process_absent": true
+        }
+      ],
+      "fixture_log_sha256": "fc56b90203305908689842acf5b4d2037541bae1dc236a2fe57468a1c6f4295c",
+      "ingress": {
+        "B": 1,
+        "A": 1,
+        "X": 0,
+        "Q": 1
+      },
+      "fixture_calls": [
+        {
+          "tool": "forbidden",
+          "nonce": "B"
+        },
+        {
+          "tool": "allowed",
+          "nonce": "A"
+        },
+        {
+          "tool": "allowed",
+          "nonce": "Q"
+        }
+      ],
+      "unexpected_ingress": false,
+      "residual_path": null
+    }
+  ],
+  "model_turns": 0,
+  "status": "PASS"
+}

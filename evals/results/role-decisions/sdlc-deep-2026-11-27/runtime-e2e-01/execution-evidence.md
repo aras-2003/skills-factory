@@ -73,3 +73,40 @@ The source-level change is A1 / EXTEND at `validate_result`; it preserves v1 fie
 The continuation remains `INTEGRATION_ISOLATED`, runtime `NOT_RUN`, and release approval `false`. No Site deployment occurred. Keep #748 and #768 open until native-child routing, MCP/tool ACL, approval non-transfer, complete role/profile evidence, and the remaining campaign gates are separately verified.
 
 Machine-readable sanitized runtime receipt: [`runtime-e2e-01-receipt.json`](../../../runtime-canaries/sdlc-deep-2026-11-27/runtime-e2e-01-receipt.json). Test plan: [`test-plan.md`](test-plan.md).
+
+## Per-thread MCP tool ACL canary (2026-11-27)
+
+The independent A2 architecture recommendation and frozen Test Designer plan led
+to a local no-model App Server canary on candidate
+`68a950216aaffff150bdde640a955aa3b8c79ac5` using `codex-cli 0.159.1`. The
+replayable harness first passed 9 focused unit tests; the exact candidate was
+then independently checked by the read-only Test Executor and reviewed by the
+Independent Reviewer. Both roles accepted this exact SHA before runtime.
+
+The three validated commits were replayed on a clean branch from current main.
+The Independent Reviewer approved the byte-identical code tree, and the
+read-only Test Executor passed all 9 tests on exact PR HEAD
+`ac40b4204fcd34a7d168febb047de6b113588250`. The canary was rerun against that
+exact PR HEAD; the linked receipt binds to it.
+
+The canary ran two isolated App Server processes, one for `enabled_tools` and
+one for `disabled_tools`, each with baseline and per-thread restricted MCP
+configuration and a local two-tool stdio fixture. No model turn, hosted MCP,
+Site deployment, or production integration was used. In both runs, the
+restricted thread's catalog contained only `allowed`, the baseline catalog
+still contained both tools, an allowed call reached the fixture, and a direct
+`forbidden` call returned the host denial
+`tool 'forbidden' is disabled for MCP server 'canary'`. The fixture log had
+zero forbidden-call ingress and exactly one baseline, allow, and barrier call.
+Both App Server processes exited 0; all fixture processes observed shutdown and
+were absent; no residual process group or temp path remained.
+
+**Disposition: PASS, narrowly scoped to Codex App Server 0.159.1 direct
+JSON-RPC per-thread MCP filtering for both documented configuration keys.**
+The receipt is
+[`appserver-mcp-tool-acl-canary.json`](../../../runtime-canaries/sdlc-deep-2026-11-27/appserver-mcp-tool-acl-canary.json).
+This supersedes the earlier `NOT_PROVEN` schema-only statement for this exact
+surface/version. It does not establish Desktop native-child inheritance,
+Cloud Next/hosted integration enforcement, role-to-profile activation, model
+selection, or a full Developer→Executor→Reviewer→rework cycle. The harness
+blocks PASS if candidate source/index/worktree changes or cleanup remains.
