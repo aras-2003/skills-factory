@@ -83,6 +83,12 @@ replayable harness first passed 9 focused unit tests; the exact candidate was
 then independently checked by the read-only Test Executor and reviewed by the
 Independent Reviewer. Both roles accepted this exact SHA before runtime.
 
+The three validated commits were replayed on a clean branch from current main.
+The Independent Reviewer approved the byte-identical code tree, and the
+read-only Test Executor passed all 9 tests on exact PR HEAD
+`ac40b4204fcd34a7d168febb047de6b113588250`. The canary was rerun against that
+exact PR HEAD; the linked receipt binds to it.
+
 The canary ran two isolated App Server processes, one for `enabled_tools` and
 one for `disabled_tools`, each with baseline and per-thread restricted MCP
 configuration and a local two-tool stdio fixture. No model turn, hosted MCP,

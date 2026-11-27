@@ -1,5 +1,5 @@
 {
-  "candidate_sha": "68a950216aaffff150bdde640a955aa3b8c79ac5",
+  "candidate_sha": "ac40b4204fcd34a7d168febb047de6b113588250",
   "runtime_version": "codex-cli 0.159.1",
   "harness_sha256": "6e5ea9f866dd66ab37d5725f30e20d2d27915e1574fdca0e5f8a1dc5c4df2dab",
   "fixture_sha256": "6c8c86e8badaf7c705f95608cb35fb7fac2ce309b9c75f7ba7335725f1f4905d",
@@ -69,10 +69,10 @@
         }
       ],
       "threads": {
-        "baseline": "01a21f25-65ce-7521-a404-0d7a13b9d2c8",
-        "restricted": "01a21f25-664d-77e2-b0de-c9c5b98120c7"
+        "baseline": "01a21f28-7bac-7323-bdee-76bc521465ba",
+        "restricted": "01a21f28-7c26-7602-9eb8-a67c7c083f47"
       },
-      "config_sha256": "31332523b60734c61a4aa075e5e7b587492c5c88926409d8a261065072c7caf9",
+      "config_sha256": "2e2be1090c6621e47b514589319f7d6a5600670b9e99dc49130b6c6e6c6f7c95",
       "catalogs": {
         "baseline": [
           "allowed",
@@ -90,17 +90,17 @@
       "residual_process_group": null,
       "fixture_processes": [
         {
-          "pid": 55223,
+          "pid": 56922,
           "termination_handler_observed": true,
           "process_absent": true
         },
         {
-          "pid": 55225,
+          "pid": 56934,
           "termination_handler_observed": true,
           "process_absent": true
         }
       ],
-      "fixture_log_sha256": "a8892dd752d84dd7fd3fa0aa33c344ef1d5b35b70894edd3e0d5a0627c66b29f",
+      "fixture_log_sha256": "cec2b51d51ee942582d19006bcb650b5696d77d0da92fa2b8e37393e4adff359",
       "ingress": {
         "B": 1,
         "A": 1,
@@ -189,10 +189,10 @@
         }
       ],
       "threads": {
-        "baseline": "01a21f25-6748-7351-a008-49f319ee7164",
-        "restricted": "01a21f25-676a-7272-b779-0fb0efa73e52"
+        "baseline": "01a21f28-7d25-7bc0-9fbb-4cb6e2263f19",
+        "restricted": "01a21f28-7d43-7d81-ab3c-293bfb9e938c"
       },
-      "config_sha256": "814a618c935d6db8e027f0f143649935b3a66c47f0eb039f46fb64515fe23244",
+      "config_sha256": "6dd487ea45949264ce06b4ac7daaf6b1b199c07e79452f9eed266d6310385284",
       "catalogs": {
         "baseline": [
           "allowed",
@@ -210,17 +210,17 @@
       "residual_process_group": null,
       "fixture_processes": [
         {
-          "pid": 55251,
+          "pid": 56969,
           "termination_handler_observed": true,
           "process_absent": true
         },
         {
-          "pid": 55269,
+          "pid": 56987,
           "termination_handler_observed": true,
           "process_absent": true
         }
       ],
-      "fixture_log_sha256": "b3c8bc804cc763f96e1a5519149790a91a9e471a8e73b22b34d9fdc2fa5ab462",
+      "fixture_log_sha256": "fc56b90203305908689842acf5b4d2037541bae1dc236a2fe57468a1c6f4295c",
       "ingress": {
         "B": 1,
         "A": 1,
