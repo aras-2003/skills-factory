@@ -55,7 +55,8 @@ def request_is_exact_marker_write(profile, marker):
             'read', 'write', 'globScanMaxDepth', 'entries'}
             or not {'read', 'write', 'entries'} <= set(filesystem)):
         return False
-    if (filesystem.get('read') is not None or filesystem.get('write') is not None
+    if (any(value is not None and value != [] for value in
+            (filesystem.get('read'), filesystem.get('write')))
             or ('globScanMaxDepth' in filesystem
                 and (not isinstance(filesystem['globScanMaxDepth'], int)
                      or isinstance(filesystem['globScanMaxDepth'], bool)))):
@@ -138,7 +139,8 @@ def permission_profile_diagnostic(params):
         return 'unexpected_file_system_fields'
     if not {'read', 'write', 'entries'} <= set(filesystem):
         return 'missing_legacy_nullables_or_entries'
-    if filesystem.get('read') is not None or filesystem.get('write') is not None:
+    if any(value is not None and value != [] for value in
+           (filesystem.get('read'), filesystem.get('write'))):
         return 'legacy_access_present'
     depth = filesystem.get('globScanMaxDepth')
     if 'globScanMaxDepth' in filesystem and (not isinstance(depth, int) or isinstance(depth, bool)):
