@@ -4,6 +4,7 @@
 This is intentionally opt-in. Unit tests never start Codex or approve a command.
 """
 import argparse
+import errno
 import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -12,6 +13,7 @@ import platform
 from pathlib import Path
 import queue
 import shutil
+import socket
 import signal
 import subprocess
 import sys
@@ -1421,8 +1423,12 @@ def verify_filesystem_profile(root, sibling, marker, port, profile, env, timeout
     sentinel = root / 'sandbox-child-entered'
     outside = sibling / 'outside-canary'
     outside.write_bytes(b'baseline')
+    tmp_alias = Path('/tmp') / sibling.name / 'outside-canary'
+    tmp_alias_applicable = tmp_alias.resolve() == outside
+    escape = root / 'outside-link'
+    escape.symlink_to(sibling, target_is_directory=True)
     script = r'''import errno,json,os,pathlib,sys
-root=pathlib.Path(sys.argv[1]); sibling=pathlib.Path(sys.argv[2]); marker=pathlib.Path(sys.argv[3]); sentinel=pathlib.Path(sys.argv[4])
+root=pathlib.Path(sys.argv[1]); sibling=pathlib.Path(sys.argv[2]); marker=pathlib.Path(sys.argv[3]); sentinel=pathlib.Path(sys.argv[4]); alias=pathlib.Path(sys.argv[5])
 sentinel.write_text('entered')
 with marker.open('ab') as f: f.write(b'z')
 def denied(path, mode):
@@ -1431,12 +1437,21 @@ def denied(path, mode):
    if 'a' in mode: f.write('x')
   return 'ALLOWED'
  except OSError as e: return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
-print(json.dumps({'create':denied(sibling/'new-canary','x'),'append':denied(sibling/'outside-canary','a')}))
+print(json.dumps({'create':denied(sibling/'new-canary','x'),'append':denied(sibling/'outside-canary','a'),
+ 'symlink_create':denied(root/'outside-link'/'symlink-canary','x'),
+ 'tmp_alias_append':denied(alias,'a')}))
 '''
-    result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', script,
-            str(root), str(sibling), str(marker), str(sentinel)], stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, timeout=timeout,
-            env=env, check=False)
+    try:
+        result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', script,
+                str(root), str(sibling), str(marker), str(sentinel), str(tmp_alias)], stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, timeout=timeout,
+                env=env, check=False, cwd=root)
+    except (OSError, subprocess.SubprocessError):
+        return {'status': 'BLOCKED', 'child_entry': False, 'in_root_write': False,
+                'outside_create': 'UNKNOWN', 'outside_append': 'UNKNOWN',
+                'symlink_escape_create': 'UNKNOWN', 'tmp_alias_applicable': tmp_alias_applicable,
+                'tmp_alias_append': 'UNKNOWN', 'outside_unchanged': outside.read_bytes() == b'baseline',
+                'launcher_exit_class': 'NOT_STARTED_OR_TIMEOUT', 'launcher_exit_code': None}
     entered = sentinel.is_file() and sentinel.read_text() == 'entered'
     try:
         outcome = json.loads(result.stdout.strip()) if result.stdout else {}
@@ -1445,45 +1460,163 @@ print(json.dumps({'create':denied(sibling/'new-canary','x'),'append':denied(sibl
     ok = (result.returncode == 0 and entered and marker.read_bytes().endswith(b'z')
           and outcome.get('create') in ('EPERM', 'EACCES')
           and outcome.get('append') in ('EPERM', 'EACCES')
+          and outcome.get('symlink_create') in ('EPERM', 'EACCES')
+          and tmp_alias_applicable and outcome.get('tmp_alias_append') in ('EPERM', 'EACCES')
           and not (sibling / 'new-canary').exists()
+          and not (sibling / 'symlink-canary').exists()
           and outside.read_bytes() == b'baseline')
     return {'status': 'PASS' if ok else 'BLOCKED', 'child_entry': entered,
             'in_root_write': marker.read_bytes().endswith(b'z'),
             'outside_create': outcome.get('create', 'UNKNOWN'),
             'outside_append': outcome.get('append', 'UNKNOWN'),
+            'symlink_escape_create': outcome.get('symlink_create', 'UNKNOWN'),
+            'tmp_alias_applicable': tmp_alias_applicable,
+            'tmp_alias_append': outcome.get('tmp_alias_append', 'UNKNOWN'),
             'outside_unchanged': outside.read_bytes() == b'baseline',
-            'launcher_exit_class': 'zero' if result.returncode == 0 else 'nonzero'}
+            'launcher_exit_class': 'zero' if result.returncode == 0 else 'nonzero',
+            'launcher_exit_code': result.returncode}
 
 
 def verify_network_profile(port, profile, root, env, timeout, fixture):
-    """Positive fixture request and errno-classified negatives under the exact profile."""
-    probe = f'''import errno,socket,sys
+    """Verify TCP fixture allow and live wrong-port/IPv6/UDP denials."""
+    decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    decoy.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    decoy.bind(('127.0.0.1', 0))
+    decoy.listen(4)
+    decoy.settimeout(.2)
+    decoy_port = decoy.getsockname()[1]
+    ipv6 = udp = None
+    ipv6_ingress = udp_ingress = 0
+    decoy_count = 0
+    baseline_ok = False
+    stop = threading.Event()
+    def serve_decoy():
+        nonlocal decoy_count
+        while not stop.is_set():
+            try:
+                connection, _ = decoy.accept()
+                with connection:
+                    connection.recv(64)
+                    connection.sendall(b'HTTP/1.0 200 OK\\r\\nContent-Length: 0\\r\\n\\r\\n')
+                    decoy_count += 1
+            except socket.timeout:
+                continue
+            except OSError:
+                return
+    worker = threading.Thread(target=serve_decoy, daemon=True)
+    worker.start()
+    try:
+        with socket.create_connection(('127.0.0.1', decoy_port), timeout=2) as control:
+            control.sendall(b'controller')
+            baseline_ok = True
+        deadline = time.monotonic() + 2
+        while decoy_count < 1 and time.monotonic() < deadline:
+            time.sleep(.01)
+        baseline_ok = baseline_ok and decoy_count == 1
+        ipv6 = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+        ipv6.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
+        ipv6.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        ipv6.bind(('::1', int(port)))
+        ipv6.listen(4)
+        ipv6.settimeout(.2)
+        udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        udp.bind(('127.0.0.1', int(port)))
+        udp.settimeout(.2)
+        baseline_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        baseline_udp.sendto(b'controller', ('127.0.0.1', int(port)))
+        udp.recvfrom(64)
+        baseline_udp.close()
+        with socket.create_connection(('::1', int(port)), timeout=2):
+            ipv6.accept()[0].close()
+        ipv6_ingress = 1
+        baseline_ipv6 = True
+    except OSError:
+        baseline_ipv6 = False
+    probe = f'''import errno,json,socket,sys
 port={int(port)}
-def connect(host,p):
- s=socket.socket(socket.AF_INET); s.settimeout(1)
+decoy_port={int(decoy_port)}
+def connect(family,host,p):
+ s=socket.socket(family,socket.SOCK_STREAM); s.settimeout(1)
  try:
   s.connect((host,p)); return 'CONNECTED'
+ except OSError as e:
+  return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
+ finally: s.close()
+def udp_send():
+ s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+ try:
+  s.sendto(b'probe',('127.0.0.1',port)); return 'SENT'
  except OSError as e:
   return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
  finally: s.close()
 s=socket.create_connection(('127.0.0.1',port),timeout=2)
 s.sendall(b'GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n')
 response=s.recv(256); s.close()
-if b' 200 ' not in response.split(b'\\r\\n',1)[0]: sys.exit(10)
-for host,p in [('127.0.0.2',port),('198.51.100.1',port)]:
- if connect(host,p) not in ('EPERM','EACCES'): sys.exit(11)
+fixture='allowed' if b' 200 ' in response.split(b'\\r\\n',1)[0] else 'failed'
+print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'127.0.0.1',decoy_port),
+ 'ipv6':connect(socket.AF_INET6,'::1',port),'udp':udp_send()}))
 '''
-    result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', probe],
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-        timeout=timeout, env=env, check=False)
-    ingress_ok = fixture.egress_check_count == 1
-    passed = result.returncode == 0 and ingress_ok
+    result = None
+    try:
+        result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', probe],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            timeout=timeout, env=env, check=False, cwd=root, text=True)
+        try:
+            observed = json.loads(result.stdout.strip())
+        except (ValueError, TypeError):
+            observed = {}
+    except (OSError, subprocess.SubprocessError):
+        observed = {}
+    deadline = time.monotonic() + 2
+    while time.monotonic() < deadline:
+        if decoy_count > 1:
+            break
+        time.sleep(.01)
+    if ipv6 is not None:
+        try:
+            connection, _ = ipv6.accept()
+            connection.close()
+            ipv6_ingress += 1
+        except socket.timeout:
+            pass
+        except OSError:
+            pass
+    if udp is not None:
+        try:
+            udp.recvfrom(64)
+            udp_ingress += 1
+        except socket.timeout:
+            pass
+        except OSError:
+            pass
+    # If a disallowed sandbox probe reached any decoy, the rule failed even if
+    # the caller later received a transport error.
+    no_decoy_ingress = decoy_count == 1
+    passed = (baseline_ok and result is not None and result.returncode == 0
+              and observed.get('fixture_http') == 'allowed'
+              and observed.get('wrong_port') in ('EPERM', 'EACCES')
+              and observed.get('ipv6') in ('EPERM', 'EACCES')
+              and observed.get('udp') in ('EPERM', 'EACCES') and baseline_ipv6
+              and ipv6_ingress == 1 and udp_ingress == 1 and no_decoy_ingress)
+    ipv6.close() if ipv6 else None
+    udp.close() if udp else None
+    stop.set()
+    decoy.close()
+    worker.join(timeout=2)
     return {'status': 'PASS' if passed else 'BLOCKED',
-            'fixture_ipv4_loopback_allowed': result.returncode == 0,
-            'wrong_ipv4_and_reserved_address_denied': result.returncode == 0,
+            'fixture_http': observed.get('fixture_http', 'UNKNOWN'),
+            'wrong_port': observed.get('wrong_port', 'UNKNOWN'),
+            'ipv6_same_port_v6only': observed.get('ipv6', 'UNKNOWN'),
+            'udp_to_fixture_port': observed.get('udp', 'UNKNOWN'),
+            'controller_decoy_reachable': baseline_ok,
+            'wrong_port_decoy_ingress_count': decoy_count,
             'fixture_ingress_count': fixture.egress_check_count,
-            'fixture_ingress_correlated': ingress_ok,
-            'probe_exit_class': 'zero' if result.returncode == 0 else 'nonzero'}
+            'fixture_ingress_correlated': fixture.egress_check_count == 1,
+            'ipv6_decoy_controller_reachable': baseline_ipv6,
+            'ipv6_decoy_ingress_count': ipv6_ingress,
+            'udp_decoy_ingress_count': udp_ingress,
+            'probe_exit_class': ('zero' if result and result.returncode == 0 else
+                                 'nonzero' if result else 'NOT_STARTED_OR_TIMEOUT')}
 
 
 def run_local_mock(binary, candidate_sha, timeout):
@@ -1505,8 +1638,7 @@ def run_local_mock(binary, candidate_sha, timeout):
     try:
         root = Path(tempfile.mkdtemp(prefix='permission-mock-', dir='/tmp')).resolve()
         root.chmod(0o700)
-        sibling = root.parent / (root.name + '-outside')
-        sibling.mkdir(mode=0o700)
+        sibling = Path(tempfile.mkdtemp(prefix=root.name + '-outside-', dir=root.parent)).resolve()
         env = isolated_runtime_env(os.environ, root)
         if not candidate_is_clean(candidate_sha, timeout, env):
             raise RuntimeError('candidate mismatch or tracked changes')
@@ -1595,14 +1727,23 @@ def run_local_mock(binary, candidate_sha, timeout):
         probe_started = rpc.wait_for_event(lambda e: e.get('method') == 'item/started'
             and is_b_command_event(e, probe_id, probe_turn), timeout)
         probe_item = event_item(probe_started)
+        probe_id_value = probe_item.get('id')
         probe_done = rpc.wait_for_event(lambda e: e.get('method') == 'item/completed'
             and is_b_command_event(e, probe_id, probe_turn)
-            and event_item(e).get('id') == probe_item.get('id'), timeout)
+            and event_item(e).get('id') == probe_id_value, timeout)
         probe_turn_done = rpc.wait_for_event(lambda e: e.get('method') == 'turn/completed'
             and e.get('params', {}).get('threadId') == probe_id
             and event_turn_id(e) == probe_turn, timeout)
-        if (probe_item.get('command') != 'true' or event_item(probe_done).get('exitCode') != 0
+        probe_events = [e for e in rpc.events if is_b_command_event(e, probe_id, probe_turn)]
+        if (not isinstance(probe_id_value, str) or not probe_id_value
+                or len(probe_events) != 2 or not events_are_ordered(rpc.events, probe_started, probe_done)
+                or probe_item.get('command') != 'true'
+                or probe_item.get('cwd') != str(root)
+                or event_item(probe_done).get('command') != 'true'
+                or event_item(probe_done).get('cwd') != str(root)
+                or event_item(probe_done).get('exitCode') != 0
                 or event_item(probe_done).get('status') != 'completed'
+                or not events_are_ordered(rpc.events, probe_done, probe_turn_done)
                 or probe_turn_done.get('params', {}).get('turn', {}).get('status') != 'completed'):
             raise RuntimeError('nested execution probe not verified')
         receipt['nested_execution_probe'] = {'status': 'PASS', 'command': 'true',
@@ -1796,7 +1937,12 @@ def run_local_mock(binary, candidate_sha, timeout):
                 for case, status in group.items():
                     if status == 'PASS':
                         group[case] = 'BLOCKED'
-        statuses = list(receipt['cases'].values()) + list(receipt['enforcement_cases'].values())
+        boundary_statuses = [
+            receipt.get('filesystem_sandbox', {}).get('status', 'BLOCKED'),
+            receipt.get('network_sandbox', {}).get('status', 'BLOCKED'),
+            receipt.get('nested_execution_probe', {}).get('status', 'BLOCKED'),
+        ]
+        statuses = list(receipt['cases'].values()) + list(receipt['enforcement_cases'].values()) + boundary_statuses
         receipt['status'] = 'FAIL' if 'FAIL' in statuses else ('PASS' if all(s == 'PASS' for s in statuses) else 'BLOCKED')
         receipt['fixture_protocol_error'] = bool(fixture and fixture.error)
         if fixture and fixture.error_reason:

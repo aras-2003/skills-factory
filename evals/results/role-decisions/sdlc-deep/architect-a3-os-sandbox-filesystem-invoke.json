@@ -68,7 +68,7 @@
   },
   "result": {
     "reference": "evals/results/role-decisions/sdlc-deep/architect-a3-os-sandbox-filesystem-result.md",
-    "sha256": "852e20c3ba6b8733af1c9b11813c3649b396b99c91fd52d4ad3ad1d19a041ac3",
+    "sha256": "50985c580d21445eb248806ceed4f51d984a44041aebb2cb90e895a6bf4ca1d5",
     "reference_kind": "REPO_FILE"
   },
   "coordinator_disposition": {
