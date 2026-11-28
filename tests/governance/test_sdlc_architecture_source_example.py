@@ -24,6 +24,8 @@ REFRESHED_DIGEST_PATHS = (
     "docs/architecture/decisions/2026-11-load-skill-source-pin.md",
     "docs/governance/CODEX-SUBAGENT-PILOT.md",
     "scripts/engineering/delegation_handoff.py",
+    "scripts/engineering/developer_scope.py",
+    "tests/test_developer_scope.py",
     "tests/governance/test_sdlc_architecture_source_example.py",
     "tests/test_delegation_handoff.py",
 )
@@ -42,8 +44,10 @@ APPROVED_REFRESHED_SOURCE_SHA256 = {
         "adapters/skills-factory-cloud-next/src/cloud-tools.ts"
     ],
     "scripts/engineering/delegation_handoff.py": "afce4a42c6da52c4d95efc68a38becc6443eeebcb77911d2734af71a523529b8",
-    "docs/governance/CODEX-SUBAGENT-PILOT.md": "bfc923d87c5a781331a113d639a004cebe45380ec0b4f5b25c13c4a085c3fff6",
-    "tests/test_delegation_handoff.py": "6396ef137fc43794601a218c1ce22fcf0b7be2df4b9edea2b6ccb1af48c9c739",
+    "scripts/engineering/developer_scope.py": "ee2c765e22b47ddfdaaa9a51b92f9fb56d8829be23285ed40b21a24c8ab99496",
+    "tests/test_developer_scope.py": "c860db45d5073d0d5f14a6b245a0119805180b6f34944e9c7deae9ba96b35b89",
+    "docs/governance/CODEX-SUBAGENT-PILOT.md": "e3ca2df547e4277a092260003baea9f2dd8de14d4a8b815342a2d6e6c94a32fe",
+    "tests/test_delegation_handoff.py": "f4e4da504f11e8d201addb7a47e0726b7b7e6895c0e960f829a9a8564dbd7ae9",
 }
 CONSUMER_MAP_PATHS = (
     "runtime/contracts/mcp-tools-v1.json",
