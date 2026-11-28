@@ -374,6 +374,18 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertIn(b'Done.', fixture.respond(command_output))
         self.assertTrue(fixture.readbacks['ENF_command_denied'])
 
+    def test_fixture_A_completes_after_command_output(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('A')
+        self.assertIn(b'request_permissions', fixture.respond({'input': []}))
+        granted = json.dumps({'permissions': {'network': None, 'file_system': {
+            'entries': [self.expected.write_entry], 'glob_scan_max_depth': None}}, 'scope': 'turn'})
+        self.assertIn(b'exec_command', fixture.respond({'input': [{
+            'type': 'function_call_output', 'call_id': 'permission_A', 'output': granted}]}))
+        self.assertIn(b'Done.', fixture.respond({'input': [{
+            'type': 'function_call_output', 'call_id': 'command_A', 'output': 'command completed'}]}))
+        self.assertFalse(fixture.error)
+
     def test_reported_command_pids_include_unexpected_starts(self):
         events = [
             {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
