@@ -418,16 +418,26 @@ class LocalMockPrimitivesTests(unittest.TestCase):
 
     def test_fixture_close_failure_is_reported_as_unverified_cleanup(self):
         class FakeServer:
+            created = []
+
             def __init__(self, *_args):
+                self.close_attempted = False
                 self.server_address = ('127.0.0.1', 43210)
+                self.created.append(self)
 
             def server_close(self):
+                self.close_attempted = True
                 raise OSError('SECRET-close-path')
 
+            def serve_forever(self):
+                pass
+
         with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
-             mock.patch.object(canary.threading, 'Thread', side_effect=TypeError('SECRET-thread-path')):
+             mock.patch.object(canary.threading, 'Thread', side_effect=TypeError('SECRET-thread-path')) as thread_factory:
             with self.assertRaises(canary.FixtureSetupCleanupError):
                 canary.start_fixture(self.expected)
+        thread_factory.assert_called_once()
+        self.assertTrue(FakeServer.created[0].close_attempted)
 
     def test_fixture_close_failure_cannot_claim_cleanup_verified(self):
         expected_sha = 'a' * 40
