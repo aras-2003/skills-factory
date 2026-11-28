@@ -415,6 +415,12 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertEqual(fixture.command_schema_summary, {
             'parameters_type': 'object', 'properties': ['command', 'other'], 'required': ['command', 'other']})
 
+    def test_runtime_turn_status_summary_is_allowlisted(self):
+        events = [{'method': 'turn/completed', 'params': {'threadId': 'A',
+            'turn': {'status': 'private-unexpected-value'}}}]
+        self.assertEqual(canary.safe_turn_status(events, 'A'), 'unknown')
+        self.assertEqual(canary.safe_turn_status([], 'A'), 'not_completed')
+
     def test_reported_command_pids_include_unexpected_starts(self):
         events = [
             {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',

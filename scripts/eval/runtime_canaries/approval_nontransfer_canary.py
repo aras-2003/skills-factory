@@ -532,6 +532,15 @@ def event_item(event):
     return event.get('params', {}).get('item', {})
 
 
+def safe_turn_status(events, thread_id):
+    for event in reversed(events):
+        params = event.get('params', {})
+        if event.get('method') == 'turn/completed' and params.get('threadId') == thread_id:
+            status = params.get('turn', {}).get('status')
+            return status if status in ('completed', 'failed', 'interrupted', 'cancelled') else 'unknown'
+    return 'not_completed'
+
+
 def command_item_active(events, thread_id, turn_id, item_id):
     started = any(event.get('method') == 'item/started'
         and event.get('params', {}).get('threadId') == thread_id
@@ -1656,9 +1665,7 @@ def run_local_mock(binary, candidate_sha, timeout):
                 'item_types': {item_type: sum(1 for event in rpc.events
                     if event_item(event).get('type') == item_type)
                     for item_type in ('commandExecution', 'functionCall', 'functionCallOutput', 'message')},
-                'turn_statuses': {label: next((event.get('params', {}).get('turn', {}).get('status')
-                    for event in reversed(rpc.events) if event.get('method') == 'turn/completed'
-                    and event.get('params', {}).get('threadId') == thread_id), 'not_completed')
+                'turn_statuses': {label: safe_turn_status(rpc.events, thread_id)
                     for label, thread_id in thread_ids.items()},
             }
     return receipt
