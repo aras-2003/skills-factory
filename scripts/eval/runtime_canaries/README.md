@@ -59,9 +59,11 @@ selects a scripted loopback Responses fixture. Supply the same `--candidate-sha`
 and `--output` arguments as above. This path uses fresh temporary HOME,
 CODEX_HOME and TMPDIR, no credentials or MCP servers, zero provider retries,
 and a `sandbox-exec` network profile that denies outbound traffic except the
-fixture's localhost port. The profile's localhost allowance can include IPv6;
-the fixture itself binds numeric IPv4. A profile configuration is not evidence
-that network isolation passed on a particular host.
+fixture's localhost port. Before starting App Server, the runner requires a
+preflight through that exact profile: fixture IPv4 loopback succeeds, another
+IPv4 loopback and a reserved external IPv4 target return OS `EPERM`. The profile's
+localhost allowance can include IPv6; the fixture itself binds numeric IPv4 and
+the receipt labels IPv6 egress `UNKNOWN`.
 
 The mock scripts permission and command tool calls and verifies each permission
 output in the following fixture request. All threads must return a read-only
@@ -72,5 +74,5 @@ an approval request is declined and cannot prove OS enforcement. A marker change
 is a failure. Missing or unrecognized denial evidence is blocked. Receipts omit
 raw fixture requests, commands, paths, prompts and logs; a local mock pass does
 not change Gate 0 or establish real-model behavior. Cleanup verifies the App Server
-process group and the observed A command PID; it does not independently enumerate
-descendants that might detach into another session.
+process group and every command PID reported by the host; it does not independently
+enumerate descendants that might detach into another session or go unreported.
