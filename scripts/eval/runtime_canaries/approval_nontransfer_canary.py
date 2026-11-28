@@ -629,6 +629,56 @@ def fixture_permission_output(body, call_id, expected):
     return permission_tool_outcome(event, 'fixture', 'fixture', call_id, expected)
 
 
+def fixture_permission_output_diagnostic(body, call_id, expected):
+    """Classify the fixture's readback without retaining output values or paths."""
+    if not isinstance(body, dict) or not isinstance(body.get('input'), list):
+        return 'input_shape_invalid'
+    outputs = [item for item in body['input'] if isinstance(item, dict)
+               and item.get('type') == 'function_call_output' and item.get('call_id') == call_id]
+    if len(outputs) != 1:
+        return 'output_correlation_invalid'
+    output = outputs[0].get('output')
+    if isinstance(output, list):
+        if len(output) != 1 or not isinstance(output[0], dict) or output[0].get('type') != 'input_text':
+            return 'output_content_shape_invalid'
+        output = output[0].get('text')
+    if not isinstance(output, str):
+        return 'output_not_text'
+    try:
+        result = json.loads(output)
+    except (TypeError, json.JSONDecodeError):
+        return 'output_not_json'
+    if not isinstance(result, dict):
+        return 'result_not_object'
+    if result.get('scope') != 'turn':
+        return 'scope_mismatch'
+    permissions = result.get('permissions')
+    if not isinstance(permissions, dict):
+        return 'permissions_not_object'
+    fs_key = 'file_system' if 'file_system' in permissions else 'fileSystem'
+    filesystem = permissions.get(fs_key)
+    if filesystem is None:
+        return 'permission_denied'
+    if not isinstance(filesystem, dict):
+        return 'file_system_not_object'
+    entries = filesystem.get('entries')
+    if not isinstance(entries, list):
+        return 'entries_missing'
+    if not entries:
+        return 'entries_empty'
+    if len(entries) != 1:
+        return 'entry_count_not_one'
+    entry = entries[0]
+    path = entry.get('path') if isinstance(entry, dict) else None
+    if not isinstance(path, dict):
+        return 'entry_path_invalid'
+    if path.get('path') != expected.marker:
+        return 'marker_mismatch'
+    if entry.get('access') != 'write' or path.get('type') != 'path':
+        return 'entry_access_mismatch'
+    return 'shape_matches_marker_grant'
+
+
 def fixture_command_denial_output(body, call_id, marker):
     """Require the real command tool output to name this marker and an OS denial."""
     if not isinstance(body, dict) or not isinstance(body.get('input'), list):
@@ -1067,6 +1117,7 @@ class ScriptedResponses:
         self.readbacks = {}
         self.error = False
         self.error_reason = None
+        self.diagnostics = {}
 
     def begin(self, phase):
         with self.lock:
@@ -1092,6 +1143,8 @@ class ScriptedResponses:
                 outcome = fixture_permission_output(body, call_id, self.expected)
                 wanted = 'granted' if phase == 'A' else 'denied'
                 if outcome != wanted:
+                    self.diagnostics['permission_readback_' + phase] = fixture_permission_output_diagnostic(
+                        body, call_id, self.expected)
                     raise ValueError('fixture permission readback mismatch')
                 self.readbacks[phase] = outcome
                 if phase in ('A', 'ENF'):
@@ -1500,6 +1553,8 @@ def run_local_mock(binary, candidate_sha, timeout):
         receipt['fixture_protocol_error'] = bool(fixture and fixture.error)
         if fixture and fixture.error_reason:
             receipt['fixture_protocol_error_class'] = fixture.error_reason
+        if fixture and fixture.diagnostics:
+            receipt['fixture_diagnostics'] = fixture.diagnostics
     return receipt
 
 

@@ -296,6 +296,15 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                      {'input': [{**item, 'output': '{}'}]}, {'input': 'invalid'}):
             self.assertEqual(canary.fixture_permission_output(body, 'call-1', self.expected), 'unknown')
 
+    def test_fixture_permission_output_diagnostic_contains_no_payload(self):
+        output = json.dumps({'permissions': {'fileSystem': {'entries': [self.expected.write_entry]},
+                                             'network': None}, 'scope': 'turn'})
+        body = {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': output}]}
+        self.assertEqual(canary.fixture_permission_output_diagnostic(body, 'call-1', self.expected),
+                         'shape_matches_marker_grant')
+        self.assertNotIn(self.expected.marker, canary.fixture_permission_output_diagnostic(
+            body, 'call-1', self.expected))
+
     def test_runtime_permission_schema_null_legacy_fields_are_allowed(self):
         profile = {'fileSystem': {'read': None, 'write': None,
                                   'entries': [self.expected.write_entry]}, 'network': None}
