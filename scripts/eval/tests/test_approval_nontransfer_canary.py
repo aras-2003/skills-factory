@@ -329,22 +329,67 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertEqual(second_events[-1]['response']['status'], 'completed')
         self.assertEqual(fixture.diagnostics['nested_execution_output'], 'expected')
 
-    def test_network_preflight_startup_exception_closes_registered_sockets(self):
+    def test_network_preflight_second_worker_start_exception_closes_resources(self):
         fixture = canary.ScriptedResponses(self.expected)
         created = []
-        real_socket = socket.socket
-        def create_socket(*args, **kwargs):
-            value = real_socket(*args, **kwargs)
+        real_start = canary.threading.Thread.start
+        start_count = []
+        class FakeConnection:
+            def __enter__(self):
+                return self
+            def __exit__(self, *_args):
+                return None
+            def close(self):
+                return None
+        class FakeSocket:
+            def __init__(self, family, kind):
+                self.family, self.kind, self.closed = family, kind, False
+            def setsockopt(self, *_args):
+                return None
+            def bind(self, *_args):
+                return None
+            def listen(self, *_args):
+                return None
+            def settimeout(self, *_args):
+                return None
+            def getsockname(self):
+                return ('10.0.0.2', 43210)
+            def accept(self):
+                if (self.family == socket.AF_INET6
+                        and canary.threading.current_thread() is canary.threading.main_thread()):
+                    return FakeConnection(), ('::1', 1234)
+                canary.time.sleep(.01)
+                raise socket.timeout()
+            def recvfrom(self, *_args):
+                return b'controller', ('127.0.0.1', 1234)
+            def sendto(self, *_args):
+                return 10
+            def connect(self, *_args):
+                return None
+            def close(self):
+                self.closed = True
+            def fileno(self):
+                return -1 if self.closed else 100
+        def create_socket(family, kind, *_args, **_kwargs):
+            value = FakeSocket(family, kind)
             created.append(value)
             return value
+        def fail_second_start(thread, *args, **kwargs):
+            start_count.append(thread)
+            if len(start_count) == 2:
+                raise RuntimeError('injected second worker start failure')
+            return real_start(thread, *args, **kwargs)
         with mock.patch.object(canary.socket, 'socket', side_effect=create_socket), \
-             mock.patch.object(canary.threading.Thread, 'start', side_effect=RuntimeError('injected start failure')):
+             mock.patch.object(canary.socket, 'create_connection', return_value=FakeConnection()), \
+             mock.patch.object(canary.threading.Thread, 'start', new=fail_second_start):
             result = canary.verify_network_profile(12345, canary.sandbox_profile('/tmp/root', 12345),
                 '/tmp/root', {}, 1, fixture)
         self.assertEqual(result['status'], 'BLOCKED')
         self.assertTrue(result['decoy_workers_stopped'])
+        self.assertTrue(result['decoy_sockets_closed'])
+        self.assertEqual(len(start_count), 2)
         self.assertTrue(created)
-        self.assertTrue(all(sock.fileno() == -1 for sock in created))
+        self.assertTrue(all(sock.closed and sock.fileno() == -1 for sock in created))
 
     def test_fixture_readback_requires_unique_call_id_and_exact_profile(self):
         output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
