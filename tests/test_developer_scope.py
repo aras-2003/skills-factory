@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 from scripts.engineering.delegation_handoff import validate_developer_result
 
 
@@ -131,6 +132,56 @@ class DeveloperScopeTests(unittest.TestCase):
             with self.subTest(grant=grant):
                 with self.assertRaises(ValueError):
                     self.verify(candidate, [grant], [])
+
+    def test_gitmeta_01_rejects_git_metadata_components_lexically(self):
+        invalid = (
+            ".git", ".git/", ".git/config", "src/.git", "src/.git/",
+            "src/.git/config", ".Git/", "src/.GIT/config",
+        )
+        for path in invalid:
+            with self.subTest(path=path):
+                with self.assertRaises(ValueError):
+                    developer_scope.validate_repo_relative_path(path, directory_allowed=True)
+
+    def test_gitmeta_02_preserves_git_named_source_siblings(self):
+        valid = (
+            ".github/", ".github/workflows/ci.yml", ".gitignore", ".gitmodules",
+            ".gitconfig", ".gitkeep", "src/.gitkeep", "src/.gitfoo/config",
+            "src/git/.gitignore",
+        )
+        for path in valid:
+            with self.subTest(path=path):
+                self.assertEqual(
+                    path,
+                    developer_scope.validate_repo_relative_path(path, directory_allowed=True),
+                )
+
+    def test_gitmeta_05_rejects_git_metadata_grants_and_reported_paths_before_git_access(self):
+        invalid_grants = (".git", ".git/", ".git/config", "nested/.Git/")
+        candidate = self.base
+        for path in invalid_grants:
+            with self.subTest(grant=path):
+                with patch.object(developer_scope, "_git") as git:
+                    with self.assertRaises(ValueError):
+                        self.verify(candidate, [path], [])
+                    git.assert_not_called()
+
+        with patch.object(developer_scope, "_git") as git:
+            with self.assertRaises(ValueError):
+                self.verify(candidate, [], [".git/config"])
+            git.assert_not_called()
+
+    def test_gitmeta_06_accepts_git_named_source_paths_in_scope(self):
+        (self.repo / ".github" / "workflows").mkdir(parents=True)
+        (self.repo / ".github" / "workflows" / "ci.yml").write_text("name: ci\n", encoding="utf-8")
+        (self.repo / ".gitignore").write_text("*.tmp\n", encoding="utf-8")
+        candidate = self.commit_candidate("add Git-named source paths")
+
+        result = self.verify(candidate, [".github/", ".gitignore"], [".github/workflows/ci.yml", ".gitignore"])
+
+        self.assertEqual("PASS", result["scope_status"])
+        self.assertEqual([".github/workflows/ci.yml", ".gitignore"], result["actual_changed_paths"])
+        self.assertEqual([], result["violations"])
 
     def test_dev_scope_06_fails_closed_for_changed_symlink(self):
         outside = Path(self.temp.name) / "outside.txt"
