@@ -763,7 +763,6 @@ def run_probe(binary, candidate_sha, timeout):
     marker = None
     rpc = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
-    permission_request_diagnostics = []
     observed_command_pids = set()
     permission_requests = {'A': [], 'B': []}
     unexpected_requests = {'A': [], 'B': []}
@@ -1209,6 +1208,7 @@ def run_local_mock(binary, candidate_sha, timeout):
                'process_cleanup_scope': 'App Server process group plus every reported command PID; detached descendants not reported by the host are not independently enumerated.'}
     root = marker = proc = rpc = fixture = server = worker = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
+    permission_request_diagnostics = []
     observed_command_pids = set()
     observed_a = False
     try:
