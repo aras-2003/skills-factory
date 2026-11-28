@@ -353,8 +353,7 @@ class Rpc:
             'sent': True,
         }
         if method == PERMISSION_METHOD:
-            record['permission_profile_diagnostic'] = message.get('_safe_permission_diagnostic',
-                permission_profile_diagnostic(params))
+            record['permission_profile_diagnostic'] = permission_profile_diagnostic(params)
         self.host_responses.append(record)
         return record
 
@@ -764,6 +763,7 @@ def run_probe(binary, candidate_sha, timeout):
     marker = None
     rpc = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
+    permission_request_diagnostics = []
     observed_command_pids = set()
     permission_requests = {'A': [], 'B': []}
     unexpected_requests = {'A': [], 'B': []}
@@ -1262,11 +1262,12 @@ def run_local_mock(binary, candidate_sha, timeout):
                 grant = label == 'A' and not requests[label]
                 reply, valid = permission_request_reply(message, expected, thread_id, turn_id, grant=grant)
                 params = message.get('params', {}) if isinstance(message.get('params'), dict) else {}
-                message['_safe_permission_diagnostic'] = {
+                permission_request_diagnostics.append({
+                    'phase': label,
                     'correlation': ('valid' if request_is_correlated(
                         params, thread_id, turn_id, expected.cwd) else 'mismatch'),
                     'profile': permission_profile_diagnostic(params, expected.marker),
-                }
+                })
                 requests[label].append({'id': message.get('id'), 'threadId': params.get('threadId'),
                     'turnId': params.get('turnId'), 'itemId': params.get('itemId'), 'valid': valid})
                 return reply
@@ -1413,6 +1414,8 @@ def run_local_mock(binary, candidate_sha, timeout):
             json.JSONDecodeError):
         receipt['reason'] = 'local mock precondition or protocol unverified'
     finally:
+        if permission_request_diagnostics:
+            receipt['permission_request_diagnostics'] = permission_request_diagnostics
         cleanup = stop_process_group(proc, timeout) if proc else True
         if rpc:
             cleanup = rpc.drain_pending_notifications(min(timeout, 5)) and cleanup
