@@ -1,0 +1,41 @@
+{
+  "candidate_sha": "e3c6b529fc8bd1a3dd51296af459b6e00a735d71",
+  "mode": "credential-free-local-mock",
+  "model_execution": "SCRIPTED_FIXTURE_NO_LLM",
+  "effective_model": "NOT_APPLICABLE",
+  "reasoning_effort": "NOT_APPLICABLE",
+  "gate0_auth_status": "BLOCKED",
+  "auth_broker_status": "NOT_RUN",
+  "cases": {
+    "PERM-NT-01": "NOT_RUN",
+    "PERM-NT-02": "NOT_RUN",
+    "PERM-NT-03": "NOT_RUN",
+    "PERM-NT-04": "NOT_RUN",
+    "PERM-NT-05": "NOT_RUN",
+    "PERM-NT-06": "NOT_RUN",
+    "PERM-NT-07": "BLOCKED"
+  },
+  "enforcement_cases": {
+    "ENF-01": "NOT_RUN",
+    "ENF-02": "NOT_RUN",
+    "ENF-03": "NOT_RUN"
+  },
+  "runtime_process_started": false,
+  "status": "BLOCKED",
+  "reason": "local mock precondition or protocol unverified",
+  "cost": "UNKNOWN",
+  "process_cleanup_scope": "App Server process group plus every reported command PID; detached descendants not reported by the host are not independently enumerated.",
+  "runtime_version": "codex-cli 0.159.1",
+  "failure_phase": "fixture_setup",
+  "failure_class": "os_error",
+  "observed_command_process_count": 0,
+  "observed_command_processes_terminated": true,
+  "thread_id_hashes": {},
+  "turn_id_hashes": {},
+  "item_id_hashes": {},
+  "marker_length": 0,
+  "marker_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "cleanup_verified": true,
+  "fixture_removed": true,
+  "fixture_protocol_error": false
+}
