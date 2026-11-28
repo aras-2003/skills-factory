@@ -14,8 +14,10 @@ Assess whether continuing the scripted App Server permission diagnostic under th
 
 The existing receipt is **ineligible**: it records IPv6 same-port CONNECTED, but also same-port other-local-IPv4 CONNECTED and an uncorrelated/failed controller baseline. For permission-flow debugging, stopping after correlated A readback may be sufficient; avoid the marker command where possible. Keep the fixed scripted sequence, no credentials, empty MCP set, read-only policy, and exact candidate setup. If the narrow exception cannot be established, remove the option and use an isolated guest.
 
-The coordinator tightened the predicate and added tests for the eligibility allowlist, malformed/failed observations, cleanup and CLI side effects. This does not make the current receipt eligible and does not authorize running App Server on this host.
+The coordinator initially tightened the predicate and committed it as `e0eead51bb7a2c3fa245745e35b253e7bc565ad6`. Independent review of that exact SHA failed: actual UDP observations are strings while the predicate accepts only dictionaries, so the allowlist could never match real evidence; also, the live IPv6 listener is closed before App Server starts, so endpoint control is not retained. Synthetic tests masked the first mismatch. Reviewer effective model and effort were not exposed (`UNKNOWN`). The reviewer's attempt to validate this record was `NOT_RUN` because the environment lacked the `jsonschema` package.
+
+**Coordinator resolution: REJECT the diagnostic continuation flag.** It has been removed; the existing fail-closed preflight remains. No App Server runtime was run with this option. A future attempt needs a reviewed design that keeps control of any reachable endpoint for the entire process lifetime and tests against the actual probe result schema, or an isolated guest runtime.
 
 ## Routing chronology
 
-This A3 security-boundary trigger was recognized after the code change and its unit tests. The decision is recorded as late; exact edit time was not captured. Architect follow-up was source-only; no runtime was run with the diagnostic continuation option.
+This A3 security-boundary trigger was recognized after the code change and its unit tests. The decision is recorded as late; exact edit time was not captured. Architect and independent review were source-only; no runtime was run with the diagnostic continuation option.
