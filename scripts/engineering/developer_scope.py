@@ -45,6 +45,8 @@ def validate_repo_relative_path(value: Any, *, directory_allowed: bool) -> str:
     body = value[:-1] if value.endswith("/") else value
     if not body or any(part in {"", ".", ".."} for part in body.split("/")):
         raise ValueError("paths must not contain empty, dot or parent components")
+    if any(part.lower() == ".git" for part in body.split("/")):
+        raise ValueError("paths must not contain a Git metadata component")
     return value
 
 
