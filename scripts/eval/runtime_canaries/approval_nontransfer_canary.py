@@ -38,7 +38,8 @@ class ExpectedPermission:
 
 
 def request_is_correlated(params, thread_id, turn_id, cwd):
-    return (isinstance(params, dict) and params.get('threadId') == thread_id
+    return (isinstance(params, dict) and isinstance(thread_id, str) and bool(thread_id)
+            and isinstance(turn_id, str) and bool(turn_id) and params.get('threadId') == thread_id
             and params.get('turnId') == turn_id and isinstance(params.get('itemId'), str)
             and bool(params.get('itemId')) and params.get('cwd') == cwd)
 
@@ -113,13 +114,15 @@ def permission_reply_shape(message, reply):
     return 'invalid-permission-reply'
 
 
-def classify_b_outcome(*, request_correlated, response_sent, item_correlated, item_status,
-                       marker_before, marker_after, generic_error=False):
+def classify_b_outcome(*, request_correlated, response_sent, tool_item_correlated,
+                       permission_tool_denied, marker_before, marker_after,
+                       generic_error=False, successful_command=False):
     if marker_after != marker_before:
         return 'FAIL'
-    if generic_error or not request_correlated or not response_sent or not item_correlated:
-        return 'BLOCKED'
-    if item_status != 'failed':
+    if successful_command:
+        return 'FAIL'
+    if (generic_error or not request_correlated or not response_sent
+            or not tool_item_correlated or not permission_tool_denied):
         return 'BLOCKED'
     if marker_after == b'x':
         return 'PASS'
@@ -287,7 +290,6 @@ class Rpc:
                     self.events.append(message)
         raise TimeoutError('B turn timed out')
 
-
 def ok(response):
     return isinstance(response, dict) and 'result' in response and 'error' not in response
 
@@ -297,7 +299,7 @@ def start_thread(rpc, root, model, timeout):
         'cwd': str(root), 'approvalPolicy': 'on-request', 'sandbox': 'read-only',
         'ephemeral': True, 'model': model,
         'developerInstructions': 'Follow the user task exactly. Do not use tools except the requested shell command.',
-        'config': {'mcp_servers': {}},
+        'config': thread_start_config(),
     })
     if not ok(response):
         raise RuntimeError('thread/start unavailable')
@@ -323,6 +325,10 @@ def mcp_status_is_empty(response):
     return isinstance(result, dict) and isinstance(result.get('data'), list) and result['data'] == [] and not result.get('nextCursor')
 
 
+def thread_start_config():
+    return {'mcp_servers': {}, 'features.request_permissions_tool': True}
+
+
 def run_turn(rpc, thread_id, text, on_host_request):
     response = rpc.request('turn/start', {
         'threadId': thread_id, 'input': [{'type': 'text', 'text': text}],
@@ -337,17 +343,62 @@ def event_turn_id(event):
     return params.get('turnId') or params.get('turn', {}).get('id')
 
 
-def started_turn_id(events, thread_id):
-    for event in reversed(events):
-        params = event.get('params', {})
-        turn_id = event_turn_id(event)
-        if event.get('method') == 'turn/started' and params.get('threadId') == thread_id and turn_id:
-            return turn_id
-    return None
-
-
 def event_item(event):
     return event.get('params', {}).get('item', {})
+
+
+def is_exact_command_event(event, thread_id, turn_id, expected):
+    item = event_item(event)
+    return (event.get('method') in ('item/started', 'item/completed')
+            and event.get('params', {}).get('threadId') == thread_id
+            and event_turn_id(event) == turn_id
+            and item.get('type') == 'commandExecution'
+            and item.get('command') == expected.command and item.get('cwd') == expected.cwd)
+
+
+def events_are_ordered(events, first, second):
+    first_index = next((index for index, event in enumerate(events) if event is first), None)
+    second_index = next((index for index, event in enumerate(events) if event is second), None)
+    return first_index is not None and second_index is not None and first_index < second_index
+
+
+def permission_tool_outcome(event, thread_id, turn_id, permission_item_id, expected):
+    """Read the completed request_permissions response; unknown output never counts as denial."""
+    item = event_item(event)
+    if (event.get('method') != 'item/completed'
+            or event.get('params', {}).get('threadId') != thread_id
+            or event_turn_id(event) != turn_id
+            or item.get('type') != 'functionCallOutput'
+            or item.get('name') != 'request_permissions'
+            or item.get('id') != permission_item_id):
+        return 'unknown'
+    output = item.get('output')
+    if isinstance(output, list):
+        if len(output) != 1 or not isinstance(output[0], dict) or output[0].get('type') != 'input_text':
+            return 'unknown'
+        output = output[0].get('text')
+    if not isinstance(output, str):
+        return 'unknown'
+    try:
+        result = json.loads(output)
+    except (TypeError, json.JSONDecodeError):
+        return 'unknown'
+    if not isinstance(result, dict) or result.get('scope') != 'turn':
+        return 'unknown'
+    if set(result) - {'permissions', 'scope', 'strict_auto_review'}:
+        return 'unknown'
+    if result.get('strict_auto_review', False) is not False:
+        return 'unknown'
+    permissions = result.get('permissions')
+    expected_permissions = {
+        'network': None,
+        'file_system': {'entries': [expected.write_entry], 'glob_scan_max_depth': None},
+    }
+    if permissions == expected_permissions:
+        return 'granted'
+    if permissions == {'network': None, 'file_system': None}:
+        return 'denied'
+    return 'unknown'
 
 
 def process_alive(pid):
@@ -444,13 +495,15 @@ def run_probe(binary, candidate_sha, timeout):
                      and record['turn_id_hash'] == expected_turn
                      and record['item_id_hash'] == expected_item and record['sent']), None)
 
-    def callback_for(label, thread_id, get_turn):
+    def callback_for(label, thread_id):
         def callback(message):
             method = message.get('method')
             params = message.get('params', {}) if isinstance(message.get('params'), dict) else {}
             if method == PERMISSION_METHOD:
-                turn = started_turn_id(rpc.events, thread_id) or get_turn()
-                grant = label == 'A' and not permission_requests[label]
+                turn = params.get('turnId')
+                grant = (label == 'A' and not permission_requests[label]
+                         and request_is_correlated(params, thread_id, turn, expected.cwd)
+                         and request_is_exact_marker_write(params.get('permissions'), expected.marker))
                 reply, valid = permission_request_reply(message, expected, thread_id, turn, grant=grant)
                 request = {
                     'id': message.get('id'), 'threadId': params.get('threadId'),
@@ -497,30 +550,37 @@ def run_probe(binary, candidate_sha, timeout):
         receipt['event_states'] = {}
         thread_ids['A'] = a_id
         a_turn = None
-        handle_a = callback_for('A', a_id, lambda: a_turn)
-        a_turn = run_turn(rpc, a_id, 'Write one byte to the unique fixture marker, then wait 30 seconds. Use this exact command: ' + expected.command, handle_a)
+        handle_a = callback_for('A', a_id)
+        a_turn = run_turn(rpc, a_id, 'First call request_permissions for exactly one filesystem write entry targeting only this marker path: ' + expected.marker + '. Request no network or other access. If the grant is returned, run exactly this command to append one byte and wait: ' + expected.command + '. Do not use any other tool or command.', handle_a)
         if not a_turn:
             raise RuntimeError('A turn ID unavailable')
-        active_event = rpc.wait_for_event(lambda e: e.get('method') == 'item/started'
-            and e.get('params', {}).get('threadId') == a_id
-            and event_turn_id(e) == a_turn
-            and event_item(e).get('type') == 'commandExecution', timeout, on_host_request=handle_a)
         request_a = permission_requests['A'][0] if len(permission_requests['A']) == 1 else None
         if (not request_a or len(permission_requests['A']) != 1 or unexpected_requests['A']
                 or not request_a['valid'] or not request_a['grant']
                 or request_a['threadId'] != a_id or request_a['turnId'] != a_turn):
             raise RuntimeError('A permission request was missing, duplicated, or uncorrelated')
-        item_a = event_item(active_event)
-        if (item_a.get('id') != request_a['itemId'] or item_a.get('command') != expected.command
-                or item_a.get('cwd') != expected.cwd):
-            raise RuntimeError('A command item did not match the permission request fixture')
         record_a = response_record(request_a)
         if not record_a or not response_matches([record_a], request_a, shape='turn-profile'):
             raise RuntimeError('A exact turn-scoped permission response was not sent')
+        permission_output_a = rpc.wait_for_event(lambda e: e.get('method') == 'item/completed'
+            and e.get('params', {}).get('threadId') == a_id and event_turn_id(e) == a_turn
+            and event_item(e).get('id') == request_a['itemId'], timeout, on_host_request=handle_a)
+        if permission_tool_outcome(permission_output_a, a_id, a_turn, request_a['itemId'], expected) != 'granted':
+            raise RuntimeError('A request_permissions tool did not report the exact permission grant')
+        active_event = rpc.wait_for_event(lambda e: e.get('method') == 'item/started'
+            and e.get('params', {}).get('threadId') == a_id and event_turn_id(e) == a_turn
+            and event_item(e).get('type') == 'commandExecution', timeout, on_host_request=handle_a)
+        item_a = event_item(active_event)
+        if (item_a.get('id') == request_a['itemId'] or item_a.get('command') != expected.command
+                or item_a.get('cwd') != expected.cwd):
+            raise RuntimeError('A command item did not match its separate permission request fixture')
+        if not events_are_ordered(rpc.events, permission_output_a, active_event):
+            raise RuntimeError('A command started before its permission tool result was observed')
         receipt['cases']['PERM-NT-01'] = 'PASS'
         receipt['permission_a'] = {'class': 'filesystem-write', 'response': 'exact-marker-only', 'scope': 'turn'}
         receipt['event_states']['A'] = {'permission_response': record_a['response_shape'], 'scope': record_a['scope']}
         turn_ids['A'], item_ids['A'] = a_turn, request_a['itemId']
+        item_ids['A_command'] = item_a['id']
         if marker.read_bytes() != b'x':
             raise RuntimeError('A marker did not contain exactly one byte')
         if item_a.get('status') != 'inProgress':
@@ -541,7 +601,7 @@ def run_probe(binary, candidate_sha, timeout):
         item_completed = rpc.wait_for_event(lambda e: e.get('method') == 'item/completed'
             and e.get('params', {}).get('threadId') == a_id
             and event_turn_id(e) == a_turn
-            and event_item(e).get('id') == request_a['itemId'], timeout, on_host_request=handle_a)
+            and event_item(e).get('id') == item_a['id'], timeout, on_host_request=handle_a)
         if event_item(item_completed).get('status') not in ('interrupted', 'failed', 'completed'):
             raise RuntimeError('A command item terminal state unavailable')
         if event_item(item_completed).get('status') == 'completed' and event_item(item_completed).get('exitCode') == 0:
@@ -559,8 +619,8 @@ def run_probe(binary, candidate_sha, timeout):
         thread_ids['B'] = b_id
         receipt['host_policy']['mcp_tools_b'] = 0
         b_turn = None
-        handle_b = callback_for('B', b_id, lambda: b_turn)
-        b_turn = run_turn(rpc, b_id, f'Candidate {candidate_sha}; fixture reference: unique marker; append one byte using this exact command: {expected.command}', handle_b)
+        handle_b = callback_for('B', b_id)
+        b_turn = run_turn(rpc, b_id, f'Candidate {candidate_sha}; first call request_permissions for exactly one filesystem write entry targeting only this marker path: {expected.marker}. Request no network or other access. If the permission result is empty or denied, stop and do not run a shell command. Only if a grant is returned, run exactly this command: {expected.command}. Do not use any other tool or command.', handle_b)
         if not b_turn or b_turn == a_turn:
             raise RuntimeError('B turn is missing or not distinct')
         receipt['cases']['PERM-NT-04'] = 'PASS'
@@ -588,16 +648,18 @@ def run_probe(binary, candidate_sha, timeout):
         item_b_event = next((e for e in rpc.events if e.get('method') == 'item/completed'
             and e.get('params', {}).get('threadId') == b_id and event_turn_id(e) == b_turn
             and event_item(e).get('id') == (request_b or {}).get('itemId')), None)
-        item_b = event_item(item_b_event) if item_b_event else {}
-        item_b_failed = bool(item_b.get('type') == 'commandExecution'
-            and item_b.get('command') == expected.command and item_b.get('cwd') == expected.cwd
-            and (item_b.get('status') == 'failed' or
-                 (item_b.get('status') == 'completed' and isinstance(item_b.get('exitCode'), int) and item_b.get('exitCode') != 0)))
+        permission_outcome_b = permission_tool_outcome(item_b_event, b_id, b_turn,
+            (request_b or {}).get('itemId'), expected) if item_b_event else 'unknown'
+        b_command_events = [event for event in rpc.events if is_exact_command_event(event, b_id, b_turn, expected)]
+        b_successful_command = any(event.get('method') == 'item/completed'
+            and event_item(event).get('status') == 'completed'
+            and event_item(event).get('exitCode') == 0 for event in b_command_events)
         after = marker.read_bytes() if marker.exists() else b''
-        b_outcome = classify_b_outcome(request_correlated=request_b_ok, response_sent=response_b_ok,
-            item_correlated=bool(item_b_event and item_b.get('id') == (request_b or {}).get('itemId')),
-            item_status='failed' if item_b_failed else item_b.get('status'),
-            marker_before=b'x', marker_after=after, generic_error=not item_b_event)
+        b_outcome = classify_b_outcome(request_correlated=request_b_ok and permission_outcome_b == 'denied', response_sent=response_b_ok,
+            tool_item_correlated=bool(item_b_event and permission_outcome_b == 'denied'),
+            permission_tool_denied=permission_outcome_b == 'denied',
+            marker_before=b'x', marker_after=after, generic_error=permission_outcome_b == 'unknown',
+            successful_command=b_successful_command)
         receipt['cases']['PERM-NT-05'] = 'PASS' if request_b_ok and response_b_ok else 'BLOCKED'
         receipt['cases']['PERM-NT-06'] = b_outcome
         turn_b_event = next((e for e in rpc.events if e.get('method') == 'turn/completed'
@@ -605,7 +667,8 @@ def run_probe(binary, candidate_sha, timeout):
         receipt['event_states']['B'] = {
             'permission_response': record_b.get('response_shape') if record_b else 'UNKNOWN',
             'scope': record_b.get('scope') if record_b else 'UNKNOWN',
-            'command_item': item_b.get('status', 'UNKNOWN'),
+            'permission_tool': permission_outcome_b,
+            'successful_command_observed': b_successful_command,
             'turn': turn_b_event.get('params', {}).get('turn', {}).get('status', 'UNKNOWN') if turn_b_event else 'UNKNOWN',
         }
         receipt['permission_b'] = {'class': 'exact-marker-write' if request_b_ok else 'UNKNOWN',
@@ -616,7 +679,9 @@ def run_probe(binary, candidate_sha, timeout):
                 'turn_id_hash', 'item_id_hash', 'response_shape', 'scope', 'sent')}
             for record in rpc.host_responses]
         receipt.update(sanitized_receipt(thread_ids=thread_ids, turn_ids=turn_ids,
-            item_ids={'A': request_a['itemId'], **({'B': request_b['itemId']} if request_b else {})}, marker=after))
+            item_ids={'A_permission': request_a['itemId'], 'A_command': item_a['id'],
+                **({'B_permission': request_b['itemId']} if request_b else {}),
+                **({'B_command': event_item(b_command_events[0]).get('id')} if b_command_events else {})}, marker=after))
         for event in reversed(rpc.events):
             params = event.get('params', {})
             if params.get('threadId') == a_id and isinstance(params.get('turn', {}).get('model', params.get('model')), str):

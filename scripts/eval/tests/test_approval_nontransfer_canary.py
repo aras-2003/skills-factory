@@ -50,20 +50,63 @@ class PermissionNontransferTests(unittest.TestCase):
             self.assertEqual(safe_reply, {'result': canary.empty_permission_response()})
             self.assertFalse(was_granted)
 
+    def test_permission_item_and_command_item_are_distinct_but_share_thread_and_turn(self):
+        request = {'id': 77, 'method': canary.PERMISSION_METHOD, 'params': {
+            'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'permission-call-A',
+            'cwd': self.expected.cwd,
+            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}}}
+        response, granted = canary.permission_request_reply(request, self.expected, 'A', 'turn-A', grant=True)
+        self.assertTrue(granted)
+        self.assertEqual(response['result']['scope'], 'turn')
+        command = {'method': 'item/started', 'params': {'threadId': 'A', 'turnId': 'turn-A',
+            'item': {'id': 'command-item-A', 'type': 'commandExecution',
+                     'command': self.expected.command, 'cwd': self.expected.cwd}}}
+        self.assertTrue(canary.is_exact_command_event(command, 'A', 'turn-A', self.expected))
+        self.assertNotEqual(request['params']['itemId'], command['params']['item']['id'])
+        self.assertFalse(canary.is_exact_command_event(command, 'B', 'turn-A', self.expected))
+        self.assertFalse(canary.is_exact_command_event(command, 'A', 'turn-B', self.expected))
+        permission_output = {'method': 'item/completed'}
+        self.assertTrue(canary.events_are_ordered([permission_output, command], permission_output, command))
+        self.assertFalse(canary.events_are_ordered([command, permission_output], permission_output, command))
+
+    def test_permission_tool_output_distinguishes_grant_denial_and_unknown(self):
+        def event(output, *, item_id='permission-call-A', thread_id='A', turn_id='turn-A'):
+            return {'method': 'item/completed', 'params': {'threadId': thread_id, 'turnId': turn_id,
+                'item': {'id': item_id, 'type': 'functionCallOutput', 'name': 'request_permissions',
+                         'output': json.dumps(output)}}}
+        granted = {'permissions': {'network': None, 'file_system': {
+            'entries': [self.expected.write_entry], 'glob_scan_max_depth': None}}, 'scope': 'turn'}
+        denied = {'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(granted), 'A', 'turn-A', 'permission-call-A', self.expected), 'granted')
+        self.assertEqual(canary.permission_tool_outcome(event(denied), 'A', 'turn-A', 'permission-call-A', self.expected), 'denied')
+        for malformed in (
+            event({'error': 'permission request failed'}),
+            event(denied, item_id='other-call'),
+            event(denied, thread_id='B'),
+            event(denied, turn_id='turn-B'),
+        ):
+            self.assertEqual(canary.permission_tool_outcome(malformed, 'A', 'turn-A', 'permission-call-A', self.expected), 'unknown')
+
     def test_b_reply_is_correlated_valid_empty_profile_and_failure_is_required_for_pass(self):
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
-            item_correlated=True, item_status='failed', marker_before=b'x', marker_after=b'x'), 'PASS')
+            tool_item_correlated=True, permission_tool_denied=True,
+            marker_before=b'x', marker_after=b'x'), 'PASS')
         for kwargs in (
-            {'request_correlated': False, 'response_sent': True, 'item_correlated': True, 'item_status': 'failed'},
-            {'request_correlated': True, 'response_sent': False, 'item_correlated': True, 'item_status': 'failed'},
-            {'request_correlated': True, 'response_sent': True, 'item_correlated': False, 'item_status': 'failed'},
-            {'request_correlated': True, 'response_sent': True, 'item_correlated': True, 'item_status': 'completed'},
+            {'request_correlated': False, 'response_sent': True, 'tool_item_correlated': True, 'permission_tool_denied': True},
+            {'request_correlated': True, 'response_sent': False, 'tool_item_correlated': True, 'permission_tool_denied': True},
+            {'request_correlated': True, 'response_sent': True, 'tool_item_correlated': False, 'permission_tool_denied': True},
+            {'request_correlated': True, 'response_sent': True, 'tool_item_correlated': True, 'permission_tool_denied': False},
         ):
             self.assertEqual(canary.classify_b_outcome(**kwargs, marker_before=b'x', marker_after=b'x'), 'BLOCKED')
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
-            item_correlated=True, item_status='completed', marker_before=b'x', marker_after=b'xx'), 'FAIL')
+            tool_item_correlated=True, permission_tool_denied=True,
+            marker_before=b'x', marker_after=b'xx'), 'FAIL')
+        self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
+            tool_item_correlated=True, permission_tool_denied=True, marker_before=b'x', marker_after=b'x',
+            successful_command=True), 'FAIL')
         self.assertEqual(canary.classify_b_outcome(request_correlated=False, response_sent=False,
-            item_correlated=False, item_status='failed', marker_before=b'x', marker_after=b'x', generic_error=True), 'BLOCKED')
+            tool_item_correlated=False, permission_tool_denied=False,
+            marker_before=b'x', marker_after=b'x', generic_error=True), 'BLOCKED')
 
     def test_unknown_host_request_uses_json_rpc_error_not_permissions_response(self):
         reply = canary.unknown_request_reply({'id': 88, 'method': 'unknown/request'})
@@ -81,6 +124,10 @@ class PermissionNontransferTests(unittest.TestCase):
             {'error': {'code': -1}},
         ):
             self.assertFalse(canary.mcp_status_is_empty(malformed))
+
+    def test_thread_config_enables_permission_tool_and_disables_mcp_servers(self):
+        self.assertEqual(canary.thread_start_config(), {
+            'mcp_servers': {}, 'features.request_permissions_tool': True})
 
     def test_response_must_match_original_json_rpc_and_host_item_ids(self):
         request = {'id': 77, 'threadId': 'thread-B', 'turnId': 'turn-B', 'itemId': 'item-B'}
