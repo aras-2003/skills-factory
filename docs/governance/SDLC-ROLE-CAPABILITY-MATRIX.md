@@ -106,7 +106,7 @@ Observed App Server evidence narrows two permissions surfaces:
   candidate `e3c6b529fc8bd1a3dd51296af459b6e00a735d71` and stopped in
   `fixture_setup` with a sanitized `os_error` before any App Server process
   started. The marker remained empty and cleanup passed; PERM-NT-01–06 and
-  ENF-01–03 are `NOT_RUN`. See
+  ENF-01–03 are `NOT_RUN`; PERM-NT-07 is `BLOCKED`. See
   [`approval-nontransfer-local-mock-blocked.json`](../../evals/results/runtime-canaries/sdlc-deep-2026-11-28/approval-nontransfer-local-mock-blocked.json).
   This does not test approval transfer or runtime permission enforcement.
 - A fresh isolated App Server profile probe on 2026-11-28 returned
