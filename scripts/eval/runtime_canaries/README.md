@@ -71,4 +71,6 @@ cover the empty-profile response in a third fresh thread, attempted exact marker
 an approval request is declined and cannot prove OS enforcement. A marker change
 is a failure. Missing or unrecognized denial evidence is blocked. Receipts omit
 raw fixture requests, commands, paths, prompts and logs; a local mock pass does
-not change Gate 0 or establish real-model behavior.
+not change Gate 0 or establish real-model behavior. Cleanup verifies the App Server
+process group and the observed A command PID; it does not independently enumerate
+descendants that might detach into another session.

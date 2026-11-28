@@ -118,12 +118,12 @@ def permission_reply_shape(message, reply):
 
 def classify_b_outcome(*, request_correlated, response_sent, tool_item_correlated,
                        permission_tool_denied, marker_before, marker_after,
-                       generic_error=False, command_execution_observed=False):
+                       turn_completed, generic_error=False, command_execution_observed=False):
     if marker_after != marker_before:
         return 'FAIL'
     if command_execution_observed:
         return 'BLOCKED'
-    if (generic_error or not request_correlated or not response_sent
+    if (not turn_completed or generic_error or not request_correlated or not response_sent
             or not tool_item_correlated or not permission_tool_denied):
         return 'BLOCKED'
     if marker_after == b'x':
@@ -413,12 +413,11 @@ def thread_start_config():
 
 
 def run_turn(rpc, thread_id, text, on_host_request):
-    response = rpc.request('turn/start', {
-        'threadId': thread_id, 'input': [{'type': 'text', 'text': text}],
-    }, on_host_request=on_host_request)
-    if not ok(response):
-        raise RuntimeError('turn/start failed')
-    return response['result'].get('turn', {}).get('id')
+    turn_id = rpc.start_turn_queued(thread_id, text, on_host_request)
+    bind_turn = getattr(on_host_request, 'bind_turn', None)
+    if callable(bind_turn):
+        bind_turn(thread_id, turn_id)
+    return turn_id
 
 
 def event_turn_id(event):
@@ -641,15 +640,22 @@ def run_probe(binary, candidate_sha, timeout):
                      and record['item_id_hash'] == expected_item and record['sent']), None)
 
     def callback_for(label, thread_id):
-        def callback(message):
+        known = {'thread_id': thread_id, 'turn_id': None}
+        def callback(message, returned_thread_id=None, returned_turn_id=None):
+            if returned_thread_id is not None:
+                known['thread_id'] = returned_thread_id
+            if returned_turn_id is not None:
+                known['turn_id'] = returned_turn_id
+            expected_thread_id, expected_turn_id = known['thread_id'], known['turn_id']
             method = message.get('method')
             params = message.get('params', {}) if isinstance(message.get('params'), dict) else {}
             if method == PERMISSION_METHOD:
-                turn = params.get('turnId')
                 grant = (label == 'A' and not permission_requests[label]
-                         and request_is_correlated(params, thread_id, turn, expected.cwd)
+                         and expected_turn_id is not None
+                         and request_is_correlated(params, expected_thread_id, expected_turn_id, expected.cwd)
                          and request_is_exact_marker_write(params.get('permissions'), expected.marker))
-                reply, valid = permission_request_reply(message, expected, thread_id, turn, grant=grant)
+                reply, valid = permission_request_reply(message, expected, expected_thread_id,
+                                                        expected_turn_id, grant=grant)
                 request = {
                     'id': message.get('id'), 'threadId': params.get('threadId'),
                     'turnId': params.get('turnId'), 'itemId': params.get('itemId'),
@@ -661,6 +667,8 @@ def run_probe(binary, candidate_sha, timeout):
             if method == COMMAND_APPROVAL_METHOD:
                 return unknown_request_reply(message)
             return unknown_request_reply(message)
+        callback.bind_turn = lambda returned_thread_id, returned_turn_id: known.update(
+            thread_id=returned_thread_id, turn_id=returned_turn_id)
         return callback
 
     try:
@@ -798,16 +806,17 @@ def run_probe(binary, candidate_sha, timeout):
         permission_outcome_b = permission_tool_outcome(item_b_event, b_id, b_turn,
             (request_b or {}).get('itemId'), expected) if item_b_event else 'unknown'
         b_command_events = [event for event in rpc.events if is_b_command_event(event, b_id, b_turn)]
+        turn_b_event = next((e for e in rpc.events if e.get('method') == 'turn/completed'
+            and e.get('params', {}).get('threadId') == b_id and event_turn_id(e) == b_turn), None)
         after = marker.read_bytes() if marker.exists() else b''
         b_outcome = classify_b_outcome(request_correlated=request_b_ok and permission_outcome_b == 'denied', response_sent=response_b_ok,
             tool_item_correlated=bool(item_b_event and permission_outcome_b == 'denied'),
             permission_tool_denied=permission_outcome_b == 'denied',
             marker_before=b'x', marker_after=after, generic_error=permission_outcome_b == 'unknown',
+            turn_completed=bool(turn_b_event and turn_b_event.get('params', {}).get('turn', {}).get('status') == 'completed'),
             command_execution_observed=bool(b_command_events))
         receipt['cases']['PERM-NT-05'] = 'PASS' if request_b_ok and response_b_ok else 'BLOCKED'
         receipt['cases']['PERM-NT-06'] = b_outcome
-        turn_b_event = next((e for e in rpc.events if e.get('method') == 'turn/completed'
-            and e.get('params', {}).get('threadId') == b_id and event_turn_id(e) == b_turn), None)
         receipt['event_states']['B'] = {
             'permission_response': record_b.get('response_shape') if record_b else 'UNKNOWN',
             'scope': record_b.get('scope') if record_b else 'UNKNOWN',
@@ -1012,7 +1021,8 @@ def run_local_mock(binary, candidate_sha, timeout):
                'cases': {f'PERM-NT-{i:02d}': 'NOT_RUN' for i in range(1, 8)},
                'enforcement_cases': {f'ENF-{i:02d}': 'NOT_RUN' for i in range(1, 4)},
                'runtime_process_started': False, 'status': 'BLOCKED', 'reason': None,
-               'cost': 'UNKNOWN'}
+               'cost': 'UNKNOWN',
+               'process_cleanup_scope': 'App Server process group plus observed A command PID; detached descendants are not independently enumerated.'}
     root = marker = proc = rpc = fixture = server = worker = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
     observed_a = False
@@ -1126,6 +1136,9 @@ def run_local_mock(binary, candidate_sha, timeout):
         turn_ids['B'] = b_turn
         receipt['cases']['PERM-NT-04'] = 'PASS'
         rpc.wait_for_b_turn_or_effect(b_id, b_turn, marker, timeout, handle_b)
+        b_turn_event = next((e for e in rpc.events if e.get('method') == 'turn/completed'
+            and e.get('params', {}).get('threadId') == b_id and event_turn_id(e) == b_turn), None)
+        b_turn_completed = bool(b_turn_event and b_turn_event.get('params', {}).get('turn', {}).get('status') == 'completed')
         after = marker.read_bytes() if marker.exists() else b''
         b_ok = request_ok('B', b_id, b_turn, 'empty-turn-profile')
         receipt['cases']['PERM-NT-05'] = 'PASS' if b_ok else 'BLOCKED'
@@ -1133,7 +1146,8 @@ def run_local_mock(binary, candidate_sha, timeout):
         receipt['cases']['PERM-NT-06'] = classify_b_outcome(
             request_correlated=b_ok, response_sent=b_ok, tool_item_correlated=fixture.readbacks.get('B') == 'denied',
             permission_tool_denied=fixture.readbacks.get('B') == 'denied', marker_before=b'x', marker_after=after,
-            command_execution_observed=bool(commands), generic_error=bool(unexpected['B']))
+            turn_completed=b_turn_completed, command_execution_observed=bool(commands),
+            generic_error=bool(unexpected['B']))
         if receipt['cases']['PERM-NT-06'] != 'PASS':
             raise RuntimeError('B nontransfer unverified')
         item_ids['B_permission'] = requests['B'][0]['itemId']
