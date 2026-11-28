@@ -603,13 +603,36 @@ def permission_tool_outcome(event, thread_id, turn_id, permission_item_id, expec
     if result.get('strict_auto_review', False) is not False:
         return 'unknown'
     permissions = result.get('permissions')
-    expected_permissions = {
-        'network': None,
-        'file_system': {'entries': [expected.write_entry], 'glob_scan_max_depth': None},
-    }
-    if permissions == expected_permissions:
+    if not isinstance(permissions, dict) or 'network' not in permissions:
+        return 'unknown'
+    fs_keys = [key for key in ('file_system', 'fileSystem') if key in permissions]
+    if len(fs_keys) != 1 or set(permissions) != {'network', fs_keys[0]}:
+        return 'unknown'
+    network = permissions['network']
+    if network is not None and not (isinstance(network, dict) and set(network) == {'enabled'}
+            and (network['enabled'] is False or network['enabled'] is None)):
+        return 'unknown'
+    filesystem = permissions[fs_keys[0]]
+    if filesystem is None:
+        return 'denied' if network is None else 'unknown'
+    if not isinstance(filesystem, dict):
+        return 'unknown'
+    allowed_fs_keys = {'entries', 'read', 'write', 'glob_scan_max_depth', 'globScanMaxDepth'}
+    if set(filesystem) - allowed_fs_keys or ('glob_scan_max_depth' in filesystem
+            and 'globScanMaxDepth' in filesystem):
+        return 'unknown'
+    read, write = filesystem.get('read'), filesystem.get('write')
+    if read not in (None, []) or write not in (None, [], [expected.marker]):
+        return 'unknown'
+    depth_key = 'glob_scan_max_depth' if 'glob_scan_max_depth' in filesystem else 'globScanMaxDepth'
+    if depth_key in filesystem and filesystem[depth_key] is not None and (
+            not isinstance(filesystem[depth_key], int) or isinstance(filesystem[depth_key], bool)):
+        return 'unknown'
+    if network is not None:
+        return 'unknown'
+    if filesystem.get('entries') == [expected.write_entry]:
         return 'granted'
-    if permissions == {'network': None, 'file_system': None}:
+    if filesystem.get('entries') == [] and read in (None, []) and write in (None, []):
         return 'denied'
     return 'unknown'
 
@@ -676,7 +699,12 @@ def fixture_permission_output_diagnostic(body, call_id, expected):
         return 'marker_mismatch'
     if entry.get('access') != 'write' or path.get('type') != 'path':
         return 'entry_access_mismatch'
-    return 'shape_matches_marker_grant'
+    event = {'method': 'item/completed', 'params': {'threadId': 'fixture', 'turnId': 'fixture',
+        'item': {'type': 'functionCallOutput', 'name': 'request_permissions', 'id': call_id,
+                 'output': output}}}
+    outcome = permission_tool_outcome(event, 'fixture', 'fixture', call_id, expected)
+    return {'granted': 'exact_turn_marker_grant', 'denied': 'empty_turn_profile'}.get(
+        outcome, 'permission_semantics_unknown')
 
 
 def fixture_command_denial_output(body, call_id, marker):

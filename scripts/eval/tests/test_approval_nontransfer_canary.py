@@ -103,6 +103,14 @@ class PermissionNontransferTests(unittest.TestCase):
         denied = {'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'}
         self.assertEqual(canary.permission_tool_outcome(event(granted), 'A', 'turn-A', 'permission-call-A', self.expected), 'granted')
         self.assertEqual(canary.permission_tool_outcome(event(denied), 'A', 'turn-A', 'permission-call-A', self.expected), 'denied')
+        camel_granted = {'permissions': {'network': None, 'fileSystem': {
+            'read': [], 'write': [self.expected.marker], 'entries': [self.expected.write_entry]}}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(camel_granted), 'A', 'turn-A',
+                                                         'permission-call-A', self.expected), 'granted')
+        broad = {'permissions': {'network': {'enabled': True}, 'file_system': {
+            'entries': [self.expected.write_entry]}}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(broad), 'A', 'turn-A',
+                                                         'permission-call-A', self.expected), 'unknown')
         for malformed in (
             event({'error': 'permission request failed'}),
             event(denied, item_id='other-call'),
@@ -301,7 +309,7 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                                              'network': None}, 'scope': 'turn'})
         body = {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': output}]}
         self.assertEqual(canary.fixture_permission_output_diagnostic(body, 'call-1', self.expected),
-                         'shape_matches_marker_grant')
+                         'exact_turn_marker_grant')
         self.assertNotIn(self.expected.marker, canary.fixture_permission_output_diagnostic(
             body, 'call-1', self.expected))
 
