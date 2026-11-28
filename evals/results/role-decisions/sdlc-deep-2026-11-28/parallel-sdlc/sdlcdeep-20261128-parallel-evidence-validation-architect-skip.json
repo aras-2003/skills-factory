@@ -47,15 +47,15 @@
   "dispatch": {
     "status": "NOT_ATTEMPTED",
     "timestamp": null,
-    "reason": "Pre-dispatch decision record.",
-    "time_unknown_reason": "No dispatch has occurred.",
+    "reason": "Architect dispatch was intentionally skipped for this A0 deterministic validation action.",
+    "time_unknown_reason": "No Architect dispatch occurred.",
     "coordinator_bounds": null
   },
   "execution": {
     "state": "NOT_STARTED",
     "started_at": null,
     "ended_at": null,
-    "reason": "Pre-dispatch record.",
+    "reason": "No Architect child ran by design; the coordinator completed the deterministic role-record validator action.",
     "started_time_unknown_reason": null,
     "ended_time_unknown_reason": null,
     "started_coordinator_bounds": null,
@@ -67,21 +67,21 @@
     "reference_kind": null
   },
   "coordinator_disposition": {
-    "value": "PENDING",
-    "timestamp": "2026-11-28T08:38:02Z",
-    "reason": "Decision recorded before dependent work."
+    "value": "NOT_USED",
+    "timestamp": "2026-11-28T08:59:58Z",
+    "reason": "The routine A0 validator action completed without requiring Architect advice."
   },
   "timing_assessment": {
     "value": "UNKNOWN",
-    "assessor": "Coordinator",
-    "provenance": "Pre-dispatch/pre-action record.",
-    "assessed_at": "2026-11-28T08:38:02Z",
+    "assessor": "Independent Reviewer",
+    "provenance": "evals/results/role-decisions/sdlc-deep-2026-11-28/parallel-sdlc/architect-timing-review.md sha256:fb6a2be1da433b78d204ac7f767438bd4feefd691b540c71502b7f874112987d",
+    "assessed_at": "2026-11-28T08:59:58Z",
     "first_dependent_action_at": null,
-    "reason": "No dependent action has occurred.",
+    "reason": "The validator command did run after the SKIP record, but exact time bounds were not captured; independent timing correctness cannot be proven.",
     "first_dependent_action_reference": null,
     "no_qualifying_action_confirmed": null,
     "first_dependent_action_coordinator_bounds": null,
-    "first_dependent_action_time_unknown_reason": "No dependent action has occurred."
+    "first_dependent_action_time_unknown_reason": "No comparable coordinator bounds or safe action reference were captured when the validator command ran."
   },
   "decision_id": "sdlcdeep-20261128-parallel-evidence-validation-architect-skip",
   "attempt_id": null,

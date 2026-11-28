@@ -30,18 +30,18 @@
   "host_observed": {
     "model": {
       "value": "UNKNOWN",
-      "provenance": "Not yet dispatched",
-      "reason": "No Architect child has been dispatched for this decision."
+      "provenance": "Codex collaboration surface",
+      "reason": "The distinct sf-architect child was accepted and returned a result, but the host did not expose the effective per-turn model."
     },
     "effort": {
       "value": "UNKNOWN",
-      "provenance": "Not yet dispatched",
-      "reason": "No Architect child has been dispatched for this decision."
+      "provenance": "Codex collaboration surface",
+      "reason": "The host did not expose effective reasoning effort for the Architect child."
     },
     "profile": {
       "value": "UNKNOWN",
-      "provenance": "Not yet dispatched",
-      "reason": "No Architect child has been dispatched for this decision."
+      "provenance": "Codex collaboration surface",
+      "reason": "The host did not expose whether the repository TOML profile was loaded or which effective profile was active."
     }
   },
   "dispatch": {
@@ -85,19 +85,19 @@
   },
   "timing_assessment": {
     "value": "ON_TIME",
-    "assessor": "Coordinator",
-    "provenance": "Pre-dispatch A3 decision record and non-overlapping coordinator bounds for architecture dispatch and first dependent test-design action.",
-    "assessed_at": "2026-11-28T08:47:55Z",
+    "assessor": "Independent Reviewer",
+    "provenance": "evals/results/role-decisions/sdlc-deep-2026-11-28/parallel-sdlc/architect-timing-review.md sha256:fb6a2be1da433b78d204ac7f767438bd4feefd691b540c71502b7f874112987d; based only on non-overlapping coordinator observation bounds.",
+    "assessed_at": "2026-11-28T08:59:58Z",
     "first_dependent_action_at": null,
-    "reason": "The Architect dispatch was observed accepted by 08:40:41Z; the first dependent Test Designer dispatch occurred after the 08:42:54Z observation.",
-    "first_dependent_action_reference": "Distinct sf-test-designer dispatch for the AC-D04 frozen test design.",
+    "reason": "Independent reviewer confirmed Architect dispatch was accepted by 08:40:41Z and first dependent Test Designer dispatch followed the 08:42:54Z observation; exact host timestamps remain unavailable.",
+    "first_dependent_action_reference": "Distinct sf-test-designer dispatch for the frozen AC-D04 test design.",
     "no_qualifying_action_confirmed": false,
     "first_dependent_action_coordinator_bounds": {
       "earliest": "2026-11-28T08:42:54Z",
       "latest": "2026-11-28T08:47:55Z",
-      "evidence": "The exact-main Test Designer was dispatched after the coordinator observed the completed Architect advice."
+      "evidence": "Independent reviewer inspected the recorded tool/message sequence and confirmed the non-overlapping bounds."
     },
-    "first_dependent_action_time_unknown_reason": "The collaboration runtime does not expose an exact Test Designer dispatch timestamp."
+    "first_dependent_action_time_unknown_reason": "The collaboration runtime did not expose an exact Test Designer dispatch timestamp."
   },
   "decision_id": "sdlcdeep-20261128-parallel-runtime-architect",
   "attempt_id": "sdlcdeep-20261128-parallel-runtime-architect-attempt-1",
