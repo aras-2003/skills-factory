@@ -541,6 +541,21 @@ def safe_turn_status(events, thread_id):
     return 'not_completed'
 
 
+def safe_item_type_counts(events):
+    known_types = ('commandExecution', 'functionCall', 'function_call', 'functionCallOutput',
+        'function_call_output', 'message', 'reasoning', 'webSearch', 'mcpToolCall',
+        'collabToolCall', 'plan', 'other', 'untyped')
+    counts = {item_type: 0 for item_type in known_types}
+    for event in events:
+        if event.get('method') not in ('item/started', 'item/completed'):
+            continue
+        item = event_item(event)
+        item_type = item.get('type') if isinstance(item, dict) else None
+        label = item_type if item_type in known_types[:-2] else ('untyped' if item_type is None else 'other')
+        counts[label] += 1
+    return counts
+
+
 def command_item_active(events, thread_id, turn_id, item_id):
     started = any(event.get('method') == 'item/started'
         and event.get('params', {}).get('threadId') == thread_id
@@ -1662,9 +1677,7 @@ def run_local_mock(binary, candidate_sha, timeout):
                 'methods': {method: sum(1 for event in rpc.events if event.get('method') == method)
                     for method in ('turn/completed', 'item/started', 'item/completed',
                                    'item/commandExecution/requestApproval')},
-                'item_types': {item_type: sum(1 for event in rpc.events
-                    if event_item(event).get('type') == item_type)
-                    for item_type in ('commandExecution', 'functionCall', 'functionCallOutput', 'message')},
+                'item_types': safe_item_type_counts(rpc.events),
                 'turn_statuses': {label: safe_turn_status(rpc.events, thread_id)
                     for label, thread_id in thread_ids.items()},
             }

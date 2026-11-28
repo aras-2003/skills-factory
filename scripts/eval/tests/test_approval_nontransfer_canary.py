@@ -421,6 +421,13 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertEqual(canary.safe_turn_status(events, 'A'), 'unknown')
         self.assertEqual(canary.safe_turn_status([], 'A'), 'not_completed')
 
+    def test_runtime_item_types_map_unknown_values_to_other(self):
+        events = [{'method': 'item/started', 'params': {'item': {'type': 'private-item-kind'}}},
+                  {'method': 'item/completed', 'params': {'item': {'type': 'function_call'}}}]
+        counts = canary.safe_item_type_counts(events)
+        self.assertEqual(counts['other'], 1)
+        self.assertEqual(counts['function_call'], 1)
+
     def test_reported_command_pids_include_unexpected_starts(self):
         events = [
             {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
