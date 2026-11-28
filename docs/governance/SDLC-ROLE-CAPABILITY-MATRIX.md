@@ -102,6 +102,13 @@ Observed App Server evidence narrows two permissions surfaces:
   This is direct thread-scoped App Server MCP filtering, not native subagent
   inheritance or filesystem ACL evidence. The candidate tree matches the
   post-merge source tree from PR #832.
+- The credential-free approval-transfer local-mock canary was attempted on
+  candidate `e3c6b529fc8bd1a3dd51296af459b6e00a735d71` and stopped in
+  `fixture_setup` with a sanitized `os_error` before any App Server process
+  started. The marker remained empty and cleanup passed; PERM-NT-01–06 and
+  ENF-01–03 are `NOT_RUN`. See
+  [`approval-nontransfer-local-mock-blocked.json`](../../evals/results/runtime-canaries/sdlc-deep-2026-11-28/approval-nontransfer-local-mock-blocked.json).
+  This does not test approval transfer or runtime permission enforcement.
 - A fresh isolated App Server profile probe on 2026-11-28 returned
   `activePermissionProfile.id=:workspace`, returned the requested model, and
   rejected an unknown profile. The response reported no writable roots. The
