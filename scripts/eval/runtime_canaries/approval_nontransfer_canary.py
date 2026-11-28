@@ -124,6 +124,42 @@ def permission_reply_shape(message, reply):
     return 'invalid-permission-reply'
 
 
+def permission_profile_diagnostic(params):
+    """Return a path-free structural diagnosis for a host permission request."""
+    profile = params.get('permissions') if isinstance(params, dict) else None
+    if not isinstance(profile, dict):
+        return 'permissions_not_object'
+    if set(profile) != {'fileSystem', 'network'}:
+        return 'unexpected_or_missing_profile_fields'
+    filesystem = profile.get('fileSystem')
+    if not isinstance(filesystem, dict):
+        return 'file_system_not_object'
+    if set(filesystem) - {'read', 'write', 'globScanMaxDepth', 'entries'}:
+        return 'unexpected_file_system_fields'
+    if not {'read', 'write', 'entries'} <= set(filesystem):
+        return 'missing_legacy_nullables_or_entries'
+    if filesystem.get('read') is not None or filesystem.get('write') is not None:
+        return 'legacy_access_present'
+    depth = filesystem.get('globScanMaxDepth')
+    if 'globScanMaxDepth' in filesystem and (not isinstance(depth, int) or isinstance(depth, bool)):
+        return 'invalid_glob_depth'
+    entries = filesystem.get('entries')
+    if not isinstance(entries, list) or len(entries) != 1:
+        return 'entry_count_not_one'
+    entry = entries[0]
+    if not isinstance(entry, dict) or entry.get('access') != 'write':
+        return 'entry_not_single_write'
+    path = entry.get('path')
+    if not isinstance(path, dict) or path.get('type') != 'path' or not isinstance(path.get('path'), str):
+        return 'entry_path_shape_invalid'
+    network = profile.get('network')
+    if network is not None and (not isinstance(network, dict) or set(network) != {'enabled'}):
+        return 'network_shape_invalid'
+    if isinstance(network, dict) and network['enabled'] is not None and network['enabled'] is not False:
+        return 'network_enabled'
+    return 'valid_shape_path_or_marker_mismatch'
+
+
 def classify_b_outcome(*, request_correlated, response_sent, tool_item_correlated,
                        permission_tool_denied, marker_before, marker_after,
                        turn_completed, generic_error=False, command_execution_observed=False):
@@ -300,6 +336,8 @@ class Rpc:
             'scope': reply.get('result', {}).get('scope') if isinstance(reply.get('result'), dict) else None,
             'sent': True,
         }
+        if method == PERMISSION_METHOD:
+            record['permission_profile_diagnostic'] = permission_profile_diagnostic(params)
         self.host_responses.append(record)
         return record
 
