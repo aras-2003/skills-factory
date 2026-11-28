@@ -630,10 +630,13 @@ def permission_tool_outcome(event, thread_id, turn_id, permission_item_id, expec
         return 'unknown'
     if network is not None:
         return 'unknown'
-    if filesystem.get('entries') == [expected.write_entry]:
+    entries = filesystem.get('entries')
+    if entries == [expected.write_entry] or (entries is None and write == [expected.marker]):
         return 'granted'
-    if filesystem.get('entries') == [] and read in (None, []) and write in (None, []):
+    if entries in (None, []) and read in (None, []) and write in (None, []):
         return 'denied'
+    if entries is not None and (not isinstance(entries, list) or entries != [expected.write_entry]):
+        return 'unknown'
     return 'unknown'
 
 
@@ -682,6 +685,14 @@ def fixture_permission_output_diagnostic(body, call_id, expected):
         return 'result_not_object'
     if result.get('scope') != 'turn':
         return 'scope_mismatch'
+    semantic_event = {'method': 'item/completed', 'params': {'threadId': 'fixture', 'turnId': 'fixture',
+        'item': {'type': 'functionCallOutput', 'name': 'request_permissions', 'id': call_id,
+                 'output': output}}}
+    semantic_outcome = permission_tool_outcome(semantic_event, 'fixture', 'fixture', call_id, expected)
+    if semantic_outcome == 'granted':
+        return 'exact_turn_marker_grant'
+    if semantic_outcome == 'denied':
+        return 'empty_turn_profile'
     permissions = result.get('permissions')
     if not isinstance(permissions, dict):
         return 'permissions_not_object'
@@ -706,12 +717,7 @@ def fixture_permission_output_diagnostic(body, call_id, expected):
         return 'marker_mismatch'
     if entry.get('access') != 'write' or path.get('type') != 'path':
         return 'entry_access_mismatch'
-    event = {'method': 'item/completed', 'params': {'threadId': 'fixture', 'turnId': 'fixture',
-        'item': {'type': 'functionCallOutput', 'name': 'request_permissions', 'id': call_id,
-                 'output': output}}}
-    outcome = permission_tool_outcome(event, 'fixture', 'fixture', call_id, expected)
-    return {'granted': 'exact_turn_marker_grant', 'denied': 'empty_turn_profile'}.get(
-        outcome, 'permission_semantics_unknown')
+    return 'permission_semantics_unknown'
 
 
 def fixture_command_denial_output(body, call_id, marker):
