@@ -48,13 +48,17 @@ def request_is_correlated(params, thread_id, turn_id, cwd):
 
 def request_is_exact_marker_write(profile, marker):
     """Reject every permission beyond one exact filesystem marker path."""
-    if not isinstance(profile, dict) or set(profile) - {'fileSystem', 'network'}:
+    if (not isinstance(profile, dict) or set(profile) != {'fileSystem', 'network'}):
         return False
     filesystem = profile.get('fileSystem')
-    if not isinstance(filesystem, dict) or set(filesystem) - {
-            'read', 'write', 'globScanMaxDepth', 'entries'}:
+    if (not isinstance(filesystem, dict) or set(filesystem) - {
+            'read', 'write', 'globScanMaxDepth', 'entries'}
+            or not {'read', 'write', 'entries'} <= set(filesystem)):
         return False
-    if any(filesystem.get(field) is not None for field in ('read', 'write', 'globScanMaxDepth')):
+    if (filesystem.get('read') is not None or filesystem.get('write') is not None
+            or ('globScanMaxDepth' in filesystem
+                and (not isinstance(filesystem['globScanMaxDepth'], int)
+                     or isinstance(filesystem['globScanMaxDepth'], bool)))):
         return False
     entries = filesystem.get('entries')
     if not isinstance(entries, list) or len(entries) != 1:
@@ -63,7 +67,8 @@ def request_is_exact_marker_write(profile, marker):
     if entry != {'access': 'write', 'path': {'type': 'path', 'path': marker}}:
         return False
     network = profile.get('network')
-    return network is None or network == {} or network == {'enabled': False} or network == {'enabled': None}
+    return network is None or (isinstance(network, dict) and set(network) == {'enabled'}
+        and (network['enabled'] is False or network['enabled'] is None))
 
 
 def permission_response(expected):

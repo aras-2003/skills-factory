@@ -18,16 +18,21 @@ class PermissionNontransferTests(unittest.TestCase):
     def setUp(self):
         self.expected = canary.ExpectedPermission('/tmp/fixture', '/tmp/fixture/marker')
 
+    def requested_profile(self, entries=None, network=None):
+        return {'fileSystem': {'read': None, 'write': None,
+                               'entries': entries if entries is not None else [self.expected.write_entry]},
+                'network': network}
+
     def test_a_profile_must_be_exact_marker_write_with_no_network_or_legacy_access(self):
-        profile = {'fileSystem': {'entries': [self.expected.write_entry]}, 'network': {'enabled': False}}
+        profile = self.requested_profile(network={'enabled': False})
         self.assertTrue(canary.request_is_exact_marker_write(profile, self.expected.marker))
         for altered in (
-            {'fileSystem': {'entries': [{**self.expected.write_entry, 'path': {'type': 'path', 'path': self.expected.cwd}}]}},
-            {'fileSystem': {'entries': [self.expected.write_entry, self.expected.write_entry]}},
-            {'fileSystem': {'entries': [{**self.expected.write_entry, 'access': 'read'}]}},
-            {'fileSystem': {'entries': [{'access': 'write', 'path': {'type': 'glob_pattern', 'pattern': self.expected.marker}}]}},
-            {'fileSystem': {'entries': [self.expected.write_entry], 'write': [self.expected.marker]}},
-            {'fileSystem': {'entries': [self.expected.write_entry]}, 'network': {'enabled': True}},
+            {'fileSystem': {'read': None, 'write': None, 'entries': [{**self.expected.write_entry, 'path': {'type': 'path', 'path': self.expected.cwd}}]}, 'network': {'enabled': False}},
+            self.requested_profile(entries=[self.expected.write_entry, self.expected.write_entry], network={'enabled': False}),
+            self.requested_profile(entries=[{**self.expected.write_entry, 'access': 'read'}], network={'enabled': False}),
+            self.requested_profile(entries=[{'access': 'write', 'path': {'type': 'glob_pattern', 'pattern': self.expected.marker}}], network={'enabled': False}),
+            {'fileSystem': {'read': None, 'write': [self.expected.marker], 'entries': [self.expected.write_entry]}, 'network': {'enabled': False}},
+            self.requested_profile(network={'enabled': True}),
             {'fileSystem': {'entries': [self.expected.write_entry]}, 'other': {}},
         ):
             self.assertFalse(canary.request_is_exact_marker_write(altered, self.expected.marker))
@@ -41,7 +46,7 @@ class PermissionNontransferTests(unittest.TestCase):
     def test_a_grant_requires_correlated_ids_and_exact_permission_request(self):
         message = {'id': 77, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'item-A', 'cwd': self.expected.cwd,
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}, 'network': {'enabled': False}}}}
+            'permissions': self.requested_profile(network={'enabled': False})}}
         response, granted = canary.permission_request_reply(message, self.expected, 'A', 'turn-A', grant=True)
         self.assertEqual(response, {'result': canary.permission_response(self.expected)})
         self.assertTrue(granted)
@@ -59,7 +64,7 @@ class PermissionNontransferTests(unittest.TestCase):
         request = {'id': 77, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'permission-call-A',
             'cwd': self.expected.cwd,
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}}}
+            'permissions': self.requested_profile()}}
         response, granted = canary.permission_request_reply(request, self.expected, 'A', 'turn-A', grant=True)
         self.assertTrue(granted)
         self.assertEqual(response['result']['scope'], 'turn')
@@ -173,7 +178,7 @@ class PermissionNontransferTests(unittest.TestCase):
         rpc.host_responses = []
         message = {'id': 994, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'B', 'turnId': 'turn-B', 'itemId': 'item-B', 'cwd': self.expected.cwd,
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}}}
+            'permissions': self.requested_profile()}}
         reply = {'result': canary.empty_permission_response()}
         record = rpc._reply_to_host_request(message, lambda _: reply)
         sent = json.loads(writer.values[0])
@@ -183,8 +188,8 @@ class PermissionNontransferTests(unittest.TestCase):
         self.assertTrue(record['sent'])
 
     def test_response_shape_rejects_grants_broader_than_the_requested_marker(self):
-        request = {'method': canary.PERMISSION_METHOD, 'params': {'permissions': {
-            'fileSystem': {'entries': [self.expected.write_entry]}}}}
+        request = {'method': canary.PERMISSION_METHOD, 'params': {
+            'permissions': self.requested_profile()}}
         self.assertEqual(canary.permission_reply_shape(request,
             {'result': canary.permission_response(self.expected)}), 'turn-profile')
         broad = {'result': {'permissions': {'fileSystem': {'entries': [
@@ -283,12 +288,20 @@ class LocalMockPrimitivesTests(unittest.TestCase):
             self.assertEqual(canary.fixture_permission_output(body, 'call-1', self.expected), 'unknown')
 
     def test_runtime_permission_schema_null_legacy_fields_are_allowed(self):
-        profile = {'fileSystem': {'read': None, 'write': None, 'globScanMaxDepth': None,
+        profile = {'fileSystem': {'read': None, 'write': None,
                                   'entries': [self.expected.write_entry]}, 'network': None}
         self.assertTrue(canary.request_is_exact_marker_write(profile, self.expected.marker))
-        for field, value in (('read', ['/']), ('write', ['/tmp']), ('globScanMaxDepth', 3)):
+        with_glob_depth = {'fileSystem': {**profile['fileSystem'], 'globScanMaxDepth': 3},
+                           'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(with_glob_depth, self.expected.marker))
+        for field, value in (('read', ['/']), ('write', ['/tmp']), ('globScanMaxDepth', True)):
             broadened = {'fileSystem': {**profile['fileSystem'], field: value}, 'network': None}
             self.assertFalse(canary.request_is_exact_marker_write(broadened, self.expected.marker))
+        for invalid_network in ({}, {'enabled': True}, {'enabled': 0}, {'other': None}):
+            self.assertFalse(canary.request_is_exact_marker_write(
+                {'fileSystem': profile['fileSystem'], 'network': invalid_network}, self.expected.marker))
+        self.assertFalse(canary.request_is_exact_marker_write({'fileSystem': profile['fileSystem']},
+                                                               self.expected.marker))
 
     def test_fixture_sequence_requires_readback_before_command(self):
         fixture = canary.ScriptedResponses(self.expected)
