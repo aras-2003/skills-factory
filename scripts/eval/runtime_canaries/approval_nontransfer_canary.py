@@ -1267,8 +1267,26 @@ class ScriptedResponses:
                 self.readbacks['ENF_command_denied'] = True
                 item = None
             elif step == 2 and phase == 'A':
-                if fixture_text_output(body, 'command_A') is None:
+                command_output = fixture_text_output(body, 'command_A')
+                if command_output is None:
                     raise ValueError('fixture command readback mismatch')
+                lowered = command_output.lower()
+                if not command_output:
+                    output_class = 'empty'
+                elif any(term in lowered for term in ('operation not permitted', 'permission denied', 'not allowed')):
+                    output_class = 'denied'
+                elif any(term in lowered for term in ('invalid', 'malformed', 'not found', 'failed')):
+                    output_class = 'tool_error'
+                else:
+                    output_class = 'nonempty_other'
+                try:
+                    marker_contents = Path(self.expected.marker).read_bytes()
+                    marker_state = ('one_byte_written' if marker_contents == b'x'
+                                    else 'unchanged' if marker_contents == b'' else 'unexpected_contents')
+                except OSError:
+                    marker_state = 'unavailable'
+                self.diagnostics['command_A_output'] = output_class
+                self.diagnostics['command_A_marker'] = marker_state
                 item = None
             else:
                 raise ValueError('unexpected fixture sequence')
