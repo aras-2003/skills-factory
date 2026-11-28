@@ -85,7 +85,11 @@
     "reason": "Sandbox-profile implementation was confirmed after the recorded decision, but its exact first-action time was not captured; the host does not expose dispatch timestamps.",
     "first_dependent_action_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py sandbox_profile and local-mock preflight changes",
     "no_qualifying_action_confirmed": false,
-    "first_dependent_action_coordinator_bounds": "After 2026-11-28T02:41:34Z and before 2026-11-28T02:50:21Z",
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T02:41:34Z",
+      "latest": "2026-11-28T02:50:21Z",
+      "evidence": "Coordinator disposition was recorded at the earliest bound and timing was assessed at the latest bound; exact first-action time was not captured."
+    },
     "first_dependent_action_time_unknown_reason": "The coordinator did not capture the exact edit timestamp; the interval bounds only establish that the implementation followed the decision."
   },
   "decision_id": "sdlc-deep-os-sandbox-filesystem-architect-a3",
