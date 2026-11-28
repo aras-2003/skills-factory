@@ -320,7 +320,7 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                        "'127.0.0.1',port", "'local_same_port'", "'fixture_http'"):
             self.assertIn(target, source)
 
-    def test_network_block_cannot_be_overridden_by_diagnostic_continuation(self):
+    def test_network_block_keeps_aggregate_blocked_and_failure_remains_failure(self):
         receipt = {'cases': {f'PERM-NT-{i:02d}': 'PASS' for i in range(1, 8)},
                    'enforcement_cases': {f'ENF-{i:02d}': 'PASS' for i in range(1, 4)},
                    'filesystem_sandbox': {'status': 'PASS'},
@@ -330,37 +330,10 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertEqual(canary.aggregate_canary_status(receipt), 'BLOCKED')
         receipt['network_sandbox']['status'] = 'PASS'
         self.assertEqual(canary.aggregate_canary_status(receipt), 'PASS')
+        receipt['network_sandbox']['status'] = 'FAIL'
+        self.assertEqual(canary.aggregate_canary_status(receipt), 'FAIL')
 
-    def test_diagnostic_continuation_only_allows_evidenced_ipv6_exception(self):
-        network = {
-            'status': 'BLOCKED', 'probe_exit_class': 'zero',
-            'fixture_http': 'allowed', 'fixture_ingress_count': 1,
-            'fixture_ingress_correlated': True,
-            'wrong_port': {'class': 'EPERM'}, 'controller_decoy_reachable': True,
-            'wrong_port_decoy_ingress_count': 1,
-            'same_port_other_local_ipv4': {'class': 'EPERM'},
-            'other_local_ipv4_controller_reachable': True,
-            'other_local_ipv4_decoy_ingress_count': 1,
-            'ipv6_same_port_v6only': 'CONNECTED',
-            'ipv6_decoy_controller_reachable': True,
-            'ipv6_decoy_ingress_count': 2,
-            'udp_to_fixture_port': {'class': 'EPERM'},
-            'udp_decoy_ingress_count': 1,
-            'decoy_sockets_closed': True, 'decoy_workers_stopped': True,
-        }
-        self.assertTrue(canary.network_diagnostic_continuation_eligible(network))
-        for key, value in (
-            ('status', 'FAIL'), ('fixture_ingress_correlated', False),
-            ('other_local_ipv4_controller_reachable', False),
-            ('same_port_other_local_ipv4', {'class': 'CONNECTED'}),
-            ('decoy_workers_stopped', False), ('udp_to_fixture_port', 'UNKNOWN'),
-        ):
-            altered = dict(network)
-            altered[key] = value
-            self.assertFalse(canary.network_diagnostic_continuation_eligible(altered), key)
-        self.assertFalse(canary.network_diagnostic_continuation_eligible(None))
-
-    def test_diagnostic_continuation_requires_local_mock(self):
+    def test_removed_diagnostic_continuation_flag_has_no_side_effects(self):
         args = ['approval_nontransfer_canary.py', '--execute', '--candidate-sha', 'a' * 40,
                 '--output', '/tmp/unused-receipt.json', '--diagnostic-continue-after-network-block']
         with mock.patch.object(sys, 'argv', args), \

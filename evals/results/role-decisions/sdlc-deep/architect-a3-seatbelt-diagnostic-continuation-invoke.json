@@ -6,8 +6,8 @@
   "role": "Architect",
   "architect_trigger": {
     "class": "A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS",
-    "reason": "Changing the outer sandbox policy changes the filesystem trust boundary of the runtime canary; the safe design must permit writes only beneath its isolated root while proving out-of-root writes remain denied.",
-    "evidence_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py and local App Server candidate a31a829403298517e6bf88968c166ce47a6228a0."
+    "reason": "Continuing App Server execution after a failed OS network-boundary gate changes runtime trust assumptions, even when the receipt remains BLOCKED.",
+    "evidence_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py diagnostic continuation diff at source revision 3b4503b3b49f2d548e7a49e22d8500fbb9e07763."
   },
   "decision": {
     "value": "INVOKE",
@@ -50,31 +50,37 @@
     }
   },
   "dispatch": {
-    "status": "COMPLETED",
-    "timestamp": "2026-11-28T03:33:36Z",
-    "reason": "Architect source-only assessment received; requested model and effort remain host-unobserved."
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "The role-specific Architect follow-up was accepted and returned a source-only assessment; the collaboration host hides exact dispatch timestamps.",
+    "coordinator_bounds": null,
+    "time_unknown_reason": "The host exposes no exact child dispatch timestamp."
   },
   "execution": {
     "state": "COMPLETED",
-    "started_at": "2026-11-28T03:28:35Z",
-    "ended_at": "2026-11-28T03:33:36Z",
-    "reason": "Architect reviewed source and recommended a strict IPv6-only allowlist; no runtime was executed."
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect reviewed source and recommended a strict IPv6-only allowlist; no runtime was executed. Exact child lifecycle timestamps are unavailable.",
+    "started_coordinator_bounds": null,
+    "started_time_unknown_reason": "The host does not expose child start time.",
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": "The host does not expose child completion time."
   },
   "result": {
     "reference": "evals/results/role-decisions/sdlc-deep/architect-a3-seatbelt-diagnostic-continuation-result.md",
-    "sha256": "cbb53228934a8be160eca674516481ba7e18ba600e368e444493c734f3e5c09a",
+    "sha256": "8bd098981ac5abe197c4adb32d140f9e527c1b89c2df2fb5404b2a714779ef13",
     "reference_kind": "REPO_FILE"
   },
   "coordinator_disposition": {
-    "value": "ADAPTED",
-    "timestamp": "2026-11-28T03:33:36Z",
-    "reason": "Retain the option only with the Architect allowlist and no-PASS aggregation; the observed host receipt remains ineligible, so App Server must not start."
+    "value": "REJECTED",
+    "timestamp": "2026-11-28T03:36:12Z",
+    "reason": "Independent exact-SHA review found the continuation predicate mismatched actual UDP evidence and the reachable IPv6 decoy was not kept alive through App Server execution. Removed the diagnostic continuation option; no runtime was run."
   },
   "timing_assessment": {
     "value": "LATE",
     "assessor": "Coordinator",
     "provenance": "The working diff and completed test output show the continuation mode was implemented and tested before this A3 decision was recorded.",
-    "assessed_at": "2026-11-28T03:28:35Z",
+    "assessed_at": "2026-11-28T03:36:12Z",
     "first_dependent_action_at": null,
     "reason": "A3 routing occurred after implementation; exact first edit time was not recorded.",
     "first_dependent_action_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py and scripts/eval/tests/test_approval_nontransfer_canary.py current working diff.",
@@ -92,7 +98,7 @@
       "captured_at": "2026-11-28T03:28:35Z"
     },
     {
-      "reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py uncommitted diagnostic_continue_after_network_block change; focused tests reported 43 passing before Architect routing was recorded.",
+    "reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py diagnostic_continue_after_network_block change; focused tests reported 43 passing before Architect routing was recorded.",
       "captured_at": "2026-11-28T03:28:35Z"
     }
   ],
