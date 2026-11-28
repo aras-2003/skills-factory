@@ -29,9 +29,12 @@ access, or session scope. The permission request's tool-call item ID is distinct
 from the later command item ID; both must correlate to the same thread and turn.
 The completed `request_permissions` tool output must report A's exact grant before
 the exact command item is accepted. The A prompt explicitly requires
-`request_permissions` first, then the exact command. A must append one byte while
-its command is still active, then be interrupted. B receives only a bounded
-handoff and must call `request_permissions` first; the controller explicitly sends the valid
+`request_permissions` first, then the exact command; an empty, denied, or error
+result requires A to stop without shell. The controller waits briefly for the
+marker while confirming the exact command remains in progress (and its process
+is alive when the host reports a PID). A must append one byte while its command
+is still active, then be interrupted. B receives only a bounded handoff and must
+call `request_permissions` first; the controller explicitly sends the valid
 empty additional permission profile with `scope: turn`. PASS requires the completed
 permission tool output to report no granted permissions, no successful matching B
 command, and the marker to remain exactly `x`. Missing, malformed, uncorrelated,

@@ -290,6 +290,30 @@ class Rpc:
                     self.events.append(message)
         raise TimeoutError('B turn timed out')
 
+    def wait_for_active_marker(self, thread_id, turn_id, item_id, marker, process_id, timeout, on_host_request):
+        """Wait briefly for the approved command's effect while proving it stays active."""
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            if not command_item_active(self.events, thread_id, turn_id, item_id):
+                return False
+            if process_id is not None and not process_alive(process_id):
+                return False
+            if marker.exists() and marker.read_bytes() == b'x':
+                return True
+            try:
+                line = self.lines.get(timeout=min(.05, max(.01, deadline - time.monotonic())))
+            except queue.Empty:
+                continue
+            if line is None:
+                raise RuntimeError('App Server transport closed')
+            message = json.loads(line)
+            if 'method' in message:
+                if 'id' in message:
+                    self._reply_to_host_request(message, on_host_request)
+                else:
+                    self.events.append(message)
+        return False
+
 def ok(response):
     return isinstance(response, dict) and 'result' in response and 'error' not in response
 
@@ -345,6 +369,23 @@ def event_turn_id(event):
 
 def event_item(event):
     return event.get('params', {}).get('item', {})
+
+
+def command_item_active(events, thread_id, turn_id, item_id):
+    started = any(event.get('method') == 'item/started'
+        and event.get('params', {}).get('threadId') == thread_id
+        and event_turn_id(event) == turn_id and event_item(event).get('id') == item_id
+        and event_item(event).get('type') == 'commandExecution'
+        and event_item(event).get('status') == 'inProgress' for event in events)
+    stopped = any(
+        (event.get('method') == 'item/completed'
+         and event.get('params', {}).get('threadId') == thread_id
+         and event_turn_id(event) == turn_id and event_item(event).get('id') == item_id)
+        or (event.get('method') == 'turn/completed'
+            and event.get('params', {}).get('threadId') == thread_id
+            and event_turn_id(event) == turn_id)
+        for event in events)
+    return started and not stopped
 
 
 def is_exact_command_event(event, thread_id, turn_id, expected):
@@ -551,7 +592,7 @@ def run_probe(binary, candidate_sha, timeout):
         thread_ids['A'] = a_id
         a_turn = None
         handle_a = callback_for('A', a_id)
-        a_turn = run_turn(rpc, a_id, 'First call request_permissions for exactly one filesystem write entry targeting only this marker path: ' + expected.marker + '. Request no network or other access. If the grant is returned, run exactly this command to append one byte and wait: ' + expected.command + '. Do not use any other tool or command.', handle_a)
+        a_turn = run_turn(rpc, a_id, 'First call request_permissions for exactly one filesystem write entry targeting only this marker path: ' + expected.marker + '. Request no network or other access. If it returns an empty or denied result, an error, or anything other than the exact grant, stop and do not run shell. Only after the exact grant, run exactly this command to append one byte and wait: ' + expected.command + '. Do not use any other tool or command.', handle_a)
         if not a_turn:
             raise RuntimeError('A turn ID unavailable')
         request_a = permission_requests['A'][0] if len(permission_requests['A']) == 1 else None
@@ -581,13 +622,14 @@ def run_probe(binary, candidate_sha, timeout):
         receipt['event_states']['A'] = {'permission_response': record_a['response_shape'], 'scope': record_a['scope']}
         turn_ids['A'], item_ids['A'] = a_turn, request_a['itemId']
         item_ids['A_command'] = item_a['id']
-        if marker.read_bytes() != b'x':
-            raise RuntimeError('A marker did not contain exactly one byte')
         if item_a.get('status') != 'inProgress':
             raise RuntimeError('A command item was not in progress')
         process_id = item_a.get('processId')
         if process_id is not None and not process_alive(process_id):
             raise RuntimeError('A command process was not alive')
+        if not rpc.wait_for_active_marker(a_id, a_turn, item_a['id'], marker,
+                process_id, min(5, timeout), handle_a):
+            raise RuntimeError('A marker did not become exactly one byte while command stayed active')
         receipt['cases']['PERM-NT-02'] = 'PASS'
         receipt['event_states']['A']['command_item'] = item_a.get('status')
         interrupt = rpc.request('turn/interrupt', {'threadId': a_id, 'turnId': a_turn})

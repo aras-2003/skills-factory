@@ -60,11 +60,16 @@ class PermissionNontransferTests(unittest.TestCase):
         self.assertEqual(response['result']['scope'], 'turn')
         command = {'method': 'item/started', 'params': {'threadId': 'A', 'turnId': 'turn-A',
             'item': {'id': 'command-item-A', 'type': 'commandExecution',
-                     'command': self.expected.command, 'cwd': self.expected.cwd}}}
+                     'command': self.expected.command, 'cwd': self.expected.cwd, 'status': 'inProgress'}}}
         self.assertTrue(canary.is_exact_command_event(command, 'A', 'turn-A', self.expected))
         self.assertNotEqual(request['params']['itemId'], command['params']['item']['id'])
         self.assertFalse(canary.is_exact_command_event(command, 'B', 'turn-A', self.expected))
         self.assertFalse(canary.is_exact_command_event(command, 'A', 'turn-B', self.expected))
+        self.assertTrue(canary.command_item_active([command], 'A', 'turn-A', 'command-item-A'))
+        completed = {'method': 'item/completed', 'params': {'threadId': 'A', 'turnId': 'turn-A',
+            'item': {'id': 'command-item-A', 'type': 'commandExecution', 'status': 'interrupted'}}}
+        self.assertFalse(canary.command_item_active([command, completed], 'A', 'turn-A', 'command-item-A'))
+        self.assertFalse(canary.command_item_active([command], 'B', 'turn-A', 'command-item-A'))
         permission_output = {'method': 'item/completed'}
         self.assertTrue(canary.events_are_ordered([permission_output, command], permission_output, command))
         self.assertFalse(canary.events_are_ordered([command, permission_output], permission_output, command))
