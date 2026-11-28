@@ -55,8 +55,11 @@ class DelegationHandoffTests(unittest.TestCase):
     def _assert_rejected_by_both_inputs(self, payload):
         with self.assertRaises(ValueError):
             handoff.serialize_input(payload)
+        encoded = json.dumps(payload)
         with self.assertRaises(ValueError):
-            handoff.read_input(json.dumps(payload))
+            handoff.read_input(encoded.encode("utf-8"))
+        with self.assertRaises(ValueError):
+            handoff.read_input(encoded)
 
     def _assert_accepted_by_both_inputs(self, payload):
         encoded = handoff.serialize_input(payload)
@@ -326,6 +329,25 @@ class DelegationHandoffTests(unittest.TestCase):
         payload = valid_input()
         payload["readonly_paths"] = ["src-old/file.py"]
         payload["writable_paths"] = ["src/"]
+        self._assert_accepted_by_both_inputs(payload)
+
+    def test_gitmeta_03_rejects_git_metadata_in_both_scope_fields(self):
+        invalid = (".git/", ".git/config", "src/.Git/", "src/.GIT/config")
+        for field in ("readonly_paths", "writable_paths"):
+            for path in invalid:
+                with self.subTest(field=field, path=path):
+                    payload = valid_input()
+                    payload["context_budget"] = 2400
+                    payload["readonly_paths"] = ["AGENTS.md"]
+                    payload["writable_paths"] = ["src/change.py"]
+                    payload[field] = [path]
+                    self._assert_rejected_by_both_inputs(payload)
+
+    def test_gitmeta_04_round_trips_git_named_source_scope_paths(self):
+        payload = valid_input()
+        payload["context_budget"] = 2400
+        payload["readonly_paths"] = [".github/", "src/.gitkeep"]
+        payload["writable_paths"] = [".gitignore", "src/.gitconfig"]
         self._assert_accepted_by_both_inputs(payload)
 
     def test_handoff_01_requires_bounded_input_fields_and_references(self):
