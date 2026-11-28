@@ -41,9 +41,9 @@ APPROVED_REFRESHED_SOURCE_SHA256 = {
     "adapters/skills-factory-cloud-next/src/cloud-tools.ts": SUCCESSOR_DELTA_SHA256[
         "adapters/skills-factory-cloud-next/src/cloud-tools.ts"
     ],
-    "scripts/engineering/delegation_handoff.py": "05670e60c7f916367662a9e20c5cefc8699f7e0d1a411889fe5c9979927c926c",
+    "scripts/engineering/delegation_handoff.py": "afce4a42c6da52c4d95efc68a38becc6443eeebcb77911d2734af71a523529b8",
     "docs/governance/CODEX-SUBAGENT-PILOT.md": "bfc923d87c5a781331a113d639a004cebe45380ec0b4f5b25c13c4a085c3fff6",
-    "tests/test_delegation_handoff.py": "6f4d95f015801f370d17c69beca982d64fdf0a3eeb3974dd4b6edba433c9ee4b",
+    "tests/test_delegation_handoff.py": "6396ef137fc43794601a218c1ce22fcf0b7be2df4b9edea2b6ccb1af48c9c739",
 }
 CONSUMER_MAP_PATHS = (
     "runtime/contracts/mcp-tools-v1.json",

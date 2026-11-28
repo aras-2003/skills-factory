@@ -1,5 +1,6 @@
 """Contract checks for compact, source-bound SDLC child handoffs."""
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -62,13 +63,88 @@ class DelegationHandoffTests(unittest.TestCase):
         self.assertEqual(payload, handoff.read_input(encoded))
         self.assertEqual(payload, handoff.read_input(json.dumps(payload)))
 
+    def test_hbd_01_rejects_raw_wire_over_declared_budget(self):
+        payload = {
+            "issue_id": 748, "role": "sf-test-executor", "objective": "Run checks.",
+            "acceptance_criteria": ["1. AC-D04"], "source_base_sha": "a" * 40,
+            "candidate_sha": "b" * 40, "architecture_impact": "A1",
+            "readonly_paths": ["AGENTS.md"], "writable_paths": [], "dependencies": [724],
+            "selected_skill_refs": [], "tool_profile_ref": "#765:TOOL-01",
+            "test_case_ids": ["HANDOFF-01"], "stop_conditions": ["SHA mismatch"],
+            "context_budget": 600, "output_contract_version": "1",
+        }
+        encoded = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
+        wire = encoded + b" " * (601 - len(encoded))
+        self.assertEqual("dff39fa9d46cbcc03d23d0016040d5cfc3d88ccd0f8b8e835a766cc40c444da6",
+                         hashlib.sha256(wire).hexdigest())
+        for kind, data in (("bytes", wire), ("str", wire.decode("utf-8"))):
+            with self.subTest(kind=kind):
+                with self.assertRaises(ValueError):
+                    handoff.read_input(data)
+
+    def test_hbd_02_03_04_accept_bounded_utf8_and_formatted_input(self):
+        payload = {
+            "issue_id": 748, "role": "sf-test-executor", "objective": "Run checks.",
+            "acceptance_criteria": ["1. AC-D04"], "source_base_sha": "a" * 40,
+            "candidate_sha": "b" * 40, "architecture_impact": "A1",
+            "readonly_paths": ["AGENTS.md"], "writable_paths": [], "dependencies": [724],
+            "selected_skill_refs": [], "tool_profile_ref": "#765:TOOL-01",
+            "test_case_ids": ["HANDOFF-01"], "stop_conditions": ["SHA mismatch"],
+            "context_budget": 600, "output_contract_version": "1",
+        }
+        fixtures = (
+            (599, "1d38ff8b9755c05d7c57999be3f73102f4e838700a776b32e74cdfe796bb3b17"),
+            (600, "9271772760f6d0d3bdcd0c3329acc061f75b4512e7556cb7f5dcbd109fd6584f"),
+        )
+        for size, digest in fixtures:
+            raw = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
+            wire = raw + b" " * (size - len(raw))
+            self.assertEqual(digest, hashlib.sha256(wire).hexdigest())
+            for data in (wire, wire.decode("utf-8")):
+                with self.subTest(case="HBD-02", size=size, kind=type(data).__name__):
+                    self.assertEqual(payload, handoff.read_input(data))
+
+        payload["objective"] = "Run café checks."
+        for size, digest in (
+            (600, "72694146a03891d0a3d63d472fa545a0fca9f6d176ed1608be978fe73b37816e"),
+            (601, "4c29f30cc4f06bdd3bfd8f736fbf55c797aac407d187278a2ab277245595dd89"),
+        ):
+            raw = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode("utf-8")
+            wire = raw + b" " * (size - len(raw))
+            self.assertEqual(digest, hashlib.sha256(wire).hexdigest())
+            self.assertEqual(size - 1, len(wire.decode("utf-8")))
+            for data in (wire, wire.decode("utf-8")):
+                with self.subTest(case="HBD-03", size=size, kind=type(data).__name__):
+                    if size == 600:
+                        self.assertEqual(payload, handoff.read_input(data))
+                    else:
+                        with self.assertRaises(ValueError):
+                            handoff.read_input(data)
+
+        payload["objective"] = "Run checks."
+        payload["context_budget"] = 604
+        wire = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+        self.assertEqual(604, len(wire))
+        self.assertEqual("9311c6d02fa1e69a51ffd653600c5e0d97d73c1e69990ea5964b91666275d7d0",
+                         hashlib.sha256(wire).hexdigest())
+        for data in (wire, wire.decode("utf-8")):
+            with self.subTest(case="HBD-04", kind=type(data).__name__):
+                self.assertEqual(payload, handoff.read_input(data))
+        self.assertEqual(payload, handoff.read_input(handoff.serialize_input(payload)))
+
     def test_handoff_wire_01_enforces_raw_utf8_byte_limit(self):
         payload = valid_input()
         payload["objective"] = "Run checks for café."
+        payload["context_budget"] = 16_384
         formatted = json.dumps(payload, ensure_ascii=False, indent=2)
         for size in (16_384, 16_385):
             wire = formatted + " " * (size - len(formatted.encode("utf-8")))
             self.assertEqual(size, len(wire.encode("utf-8")))
+            expected_digest = {
+                16_384: "9ccb56b407846101e724eaeb0035ddae31aa1870b10b06576c1ba189ecb9e96e",
+                16_385: "e7510f8c8576cc370b1e718f7422f780013eeab85e9f1352a3586eebfdae7002",
+            }[size]
+            self.assertEqual(expected_digest, hashlib.sha256(wire.encode("utf-8")).hexdigest())
             self.assertLess(len(wire), size)  # The non-ASCII character uses two bytes.
             for kind, data in (("str", wire), ("bytes", wire.encode("utf-8"))):
                 with self.subTest(size=size, kind=kind):
