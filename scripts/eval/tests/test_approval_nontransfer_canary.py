@@ -398,6 +398,14 @@ class LocalMockPrimitivesTests(unittest.TestCase):
             fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'wrong',
                                        'output': 'command completed'}]})
 
+    def test_fixture_records_only_allowlisted_tool_names(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('A')
+        fixture.respond({'tools': [{'type': 'function', 'name': 'request_permissions'},
+                                   {'type': 'function', 'name': 'exec_command'},
+                                   {'type': 'function', 'name': 'secret-bearing-name'}], 'input': []})
+        self.assertEqual(fixture.tool_classes, ['exec_command', 'other', 'request_permissions'])
+
     def test_reported_command_pids_include_unexpected_starts(self):
         events = [
             {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
