@@ -1176,6 +1176,7 @@ class ScriptedResponses:
         self.error_reason = None
         self.diagnostics = {}
         self.tool_classes = []
+        self.command_schema_summary = None
         self.completed_steps = {}
 
     def begin(self, phase):
@@ -1198,6 +1199,21 @@ class ScriptedResponses:
                 name = tool.get('name') if isinstance(tool, dict) else None
                 if isinstance(name, str):
                     names.add(name if name in ('request_permissions', 'exec_command') else 'other')
+                    if name == 'exec_command':
+                        parameters = tool.get('parameters')
+                        properties = parameters.get('properties') if isinstance(parameters, dict) else None
+                        required = parameters.get('required') if isinstance(parameters, dict) else None
+                        field_allowlist = {'cmd', 'command', 'workdir', 'yield_time_ms',
+                            'max_output_tokens', 'timeout_ms', 'sandbox_permissions', 'shell',
+                            'env', 'login', 'tty', 'justification', 'prefix_rule'}
+                        self.command_schema_summary = {
+                            'parameters_type': parameters.get('type') if isinstance(parameters, dict)
+                                and parameters.get('type') in ('object', 'array', 'string') else 'other',
+                            'properties': sorted(field if field in field_allowlist else 'other'
+                                for field in properties if isinstance(field, str)) if isinstance(properties, dict) else [],
+                            'required': sorted(field if field in field_allowlist else 'other'
+                                for field in required if isinstance(field, str)) if isinstance(required, list) else [],
+                        }
             self.tool_classes = sorted(names)
             call_id = 'permission_' + phase
             if step == 0:
@@ -1628,6 +1644,7 @@ def run_local_mock(binary, candidate_sha, timeout):
             receipt['fixture_diagnostics'] = fixture.diagnostics
         if fixture:
             receipt['fixture_available_tool_classes'] = fixture.tool_classes
+            receipt['exec_command_schema_summary'] = fixture.command_schema_summary
             receipt['fixture_completed_step_counts'] = fixture.completed_steps
         if rpc:
             receipt['command_execution_event_count'] = sum(
