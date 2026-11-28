@@ -291,6 +291,9 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         profile = {'fileSystem': {'read': None, 'write': None,
                                   'entries': [self.expected.write_entry]}, 'network': None}
         self.assertTrue(canary.request_is_exact_marker_write(profile, self.expected.marker))
+        empty_legacy = {'fileSystem': {'read': [], 'write': [],
+                                        'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(empty_legacy, self.expected.marker))
         with_glob_depth = {'fileSystem': {**profile['fileSystem'], 'globScanMaxDepth': 3},
                            'network': None}
         self.assertTrue(canary.request_is_exact_marker_write(with_glob_depth, self.expected.marker))
