@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — assess current-host App Server thread-start permission profiles/model and turn-start effort for a capability-bounded role runner",
+  "source_revision": "ede718afe3a7ef768011b08e71ba64fceda30272",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Current codex-cli 0.159.1 App Server schema exposes thread-scoped permissions profile selection and reports activePermissionProfile/model; turn/start accepts model and effort. A direct App Server role runner could change the trust boundary and replace behavioral-only collaboration handoffs, so architecture advice is required before any runtime experiment or implementation.",
+    "timestamp": "2026-11-28T10:34:37Z"
+  },
+  "impact": "A3",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml; role instructions supplied explicitly",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration dispatch",
+      "reason": "The role response and host surface did not expose effective model telemetry."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration dispatch",
+      "reason": "The role response and host surface did not expose effective reasoning-effort telemetry."
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Observed role-specific subagent dispatch",
+      "reason": null
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "The sf-architect subagent returned a bounded A3 architecture recommendation; the host does not expose exact dispatch time.",
+    "time_unknown_reason": "Codex collaboration does not expose exact child dispatch timestamps.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-28T10:34:37Z",
+      "latest": "2026-11-28T10:44:37Z",
+      "evidence": "The pre-action INVOKE record predates the observed completed architecture result."
+    }
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned the COMPOSE recommendation and bounded runtime interpretation recorded in the linked result.",
+    "started_time_unknown_reason": "Codex collaboration does not expose child start timestamps.",
+    "ended_time_unknown_reason": "Codex collaboration does not expose child completion timestamps.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-28T10:34:37Z",
+      "latest": "2026-11-28T10:44:37Z",
+      "evidence": "The role was dispatched after the validated pre-action INVOKE record and its final result was observed by the latest bound."
+    },
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-28T10:34:37Z",
+      "latest": "2026-11-28T10:44:37Z",
+      "evidence": "The completed Architect recommendation was observed by the coordinator by the latest bound."
+    }
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-28/direct-appserver-role-profiles-architect-review.md",
+    "sha256": "7273b1667ae01ad56fead7a1c4c2cf7d13669d9a68a114ddfa902b6517feab76",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-28T10:44:37Z",
+    "reason": "Retain native role dispatch; use only previously demonstrated narrow App Server command/MCP controls and classify the new permission-profile positive-control failure as BLOCKED."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "The INVOKE decision is pre-action, but exact dispatch and first dependent-action timestamps are not exposed.",
+    "assessed_at": "2026-11-28T10:44:37Z",
+    "first_dependent_action_at": null,
+    "reason": "The architecture recommendation preceded the profile canary, but the available coordinator bounds are insufficient to distinguish exact dispatch ordering from the canary start.",
+    "first_dependent_action_reference": "evals/results/runtime-canaries/sdlc-deep-2026-11-28/direct-appserver-profile-canary.json",
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T10:34:37Z",
+      "latest": "2026-11-28T10:44:37Z",
+      "evidence": "The linked architecture result and canary are both observed after the pre-action record; exact action times are unavailable."
+    },
+    "first_dependent_action_time_unknown_reason": "The exact start time for the profile canary is not available."
+  },
+  "decision_id": "sdlcdeep-20261128-direct-appserver-role-profiles-architect-invoke",
+  "attempt_id": "sdlcdeep-20261128-direct-appserver-role-profiles-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "/private/tmp/sdlc-appserver-schema-0159/v2/ThreadStartParams.json sha256:80a40a7fac15b4bf70efb7f893fb353acc0a0d30c68f54aee4f01923deca85de; v2/ThreadStartResponse.json sha256:92f5ddc37717b922de1dc0b0405e9a6d463f370554e2091610c6e595bc2616d4; v2/TurnStartParams.json sha256:07771223642e1b61bd9aac0069fc0f98143a1c047724ca02c7ceb13653442738; codex-cli 0.159.1; current role capability matrix.",
+      "captured_at": "2026-11-28T10:34:37Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS",
+    "reason": "Selecting permission profiles and model/effort directly through App Server could provide host-enforced role policies but changes the SDLC orchestration trust boundary, tool policy and execution lifecycle. Must verify available profiles, profile enforcement, approval flow and rollback before relying on it.",
+    "evidence_reference": "Local current-host App Server v2 schemas for ThreadStartParams, ThreadStartResponse and TurnStartParams plus docs/governance/SDLC-ROLE-CAPABILITY-MATRIX.md."
+  }
+}
