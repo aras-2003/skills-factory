@@ -319,6 +319,12 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                          'exact_turn_marker_grant')
         self.assertNotIn(self.expected.marker, canary.fixture_permission_output_diagnostic(
             body, 'call-1', self.expected))
+        broad_denial = json.dumps({'permissions': {'network': {'enabled': True}, 'file_system': None},
+                                   'scope': 'turn'})
+        broad_body = {'input': [{'type': 'function_call_output', 'call_id': 'call-1',
+                                 'output': broad_denial}]}
+        self.assertEqual(canary.fixture_permission_output_diagnostic(broad_body, 'call-1', self.expected),
+                         'permission_semantics_unknown')
 
     def test_runtime_permission_schema_null_legacy_fields_are_allowed(self):
         profile = {'fileSystem': {'read': None, 'write': None,
