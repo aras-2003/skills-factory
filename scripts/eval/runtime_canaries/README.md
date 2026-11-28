@@ -36,8 +36,8 @@ is alive when the host reports a PID). A must append one byte while its command
 is still active, then be interrupted. B receives only a bounded handoff and must
 call `request_permissions` first; the controller explicitly sends the valid
 empty additional permission profile with `scope: turn`. PASS requires the completed
-permission tool output to report no granted permissions, no successful matching B
-command, and the marker to remain exactly `x`. Missing, malformed, uncorrelated,
+permission tool output to report no granted permissions, no B `commandExecution`
+item of any kind, and the marker to remain exactly `x`. Missing, malformed, uncorrelated,
 generic-error, or unexpected host requests cannot pass; unknown request methods get
 a JSON-RPC error, while the known command-approval method gets its distinct safe
 decline response and blocks this gate. A changed marker is FAIL. Receipts keep only

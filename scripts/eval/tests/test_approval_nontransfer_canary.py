@@ -106,9 +106,16 @@ class PermissionNontransferTests(unittest.TestCase):
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
             tool_item_correlated=True, permission_tool_denied=True,
             marker_before=b'x', marker_after=b'xx'), 'FAIL')
-        self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
-            tool_item_correlated=True, permission_tool_denied=True, marker_before=b'x', marker_after=b'x',
-            successful_command=True), 'FAIL')
+        for command_event in ('started', 'nonzero', 'completed'):
+            event = {'method': 'item/started' if command_event == 'started' else 'item/completed',
+                'params': {'threadId': 'B', 'turnId': 'turn-B', 'item': {
+                    'id': 'unrelated-command', 'type': 'commandExecution', 'command': 'true',
+                    'cwd': '/tmp/other', 'status': 'inProgress' if command_event == 'started' else 'completed',
+                    'exitCode': 1 if command_event == 'nonzero' else 0 if command_event == 'completed' else None}}}
+            self.assertTrue(canary.is_b_command_event(event, 'B', 'turn-B'))
+            self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
+                tool_item_correlated=True, permission_tool_denied=True, marker_before=b'x', marker_after=b'x',
+                command_execution_observed=True), 'BLOCKED')
         self.assertEqual(canary.classify_b_outcome(request_correlated=False, response_sent=False,
             tool_item_correlated=False, permission_tool_denied=False,
             marker_before=b'x', marker_after=b'x', generic_error=True), 'BLOCKED')

@@ -116,11 +116,11 @@ def permission_reply_shape(message, reply):
 
 def classify_b_outcome(*, request_correlated, response_sent, tool_item_correlated,
                        permission_tool_denied, marker_before, marker_after,
-                       generic_error=False, successful_command=False):
+                       generic_error=False, command_execution_observed=False):
     if marker_after != marker_before:
         return 'FAIL'
-    if successful_command:
-        return 'FAIL'
+    if command_execution_observed:
+        return 'BLOCKED'
     if (generic_error or not request_correlated or not response_sent
             or not tool_item_correlated or not permission_tool_denied):
         return 'BLOCKED'
@@ -395,6 +395,13 @@ def is_exact_command_event(event, thread_id, turn_id, expected):
             and event_turn_id(event) == turn_id
             and item.get('type') == 'commandExecution'
             and item.get('command') == expected.command and item.get('cwd') == expected.cwd)
+
+
+def is_b_command_event(event, thread_id, turn_id):
+    return (event.get('method') in ('item/started', 'item/completed')
+            and event.get('params', {}).get('threadId') == thread_id
+            and event_turn_id(event) == turn_id
+            and event_item(event).get('type') == 'commandExecution')
 
 
 def events_are_ordered(events, first, second):
@@ -692,16 +699,13 @@ def run_probe(binary, candidate_sha, timeout):
             and event_item(e).get('id') == (request_b or {}).get('itemId')), None)
         permission_outcome_b = permission_tool_outcome(item_b_event, b_id, b_turn,
             (request_b or {}).get('itemId'), expected) if item_b_event else 'unknown'
-        b_command_events = [event for event in rpc.events if is_exact_command_event(event, b_id, b_turn, expected)]
-        b_successful_command = any(event.get('method') == 'item/completed'
-            and event_item(event).get('status') == 'completed'
-            and event_item(event).get('exitCode') == 0 for event in b_command_events)
+        b_command_events = [event for event in rpc.events if is_b_command_event(event, b_id, b_turn)]
         after = marker.read_bytes() if marker.exists() else b''
         b_outcome = classify_b_outcome(request_correlated=request_b_ok and permission_outcome_b == 'denied', response_sent=response_b_ok,
             tool_item_correlated=bool(item_b_event and permission_outcome_b == 'denied'),
             permission_tool_denied=permission_outcome_b == 'denied',
             marker_before=b'x', marker_after=after, generic_error=permission_outcome_b == 'unknown',
-            successful_command=b_successful_command)
+            command_execution_observed=bool(b_command_events))
         receipt['cases']['PERM-NT-05'] = 'PASS' if request_b_ok and response_b_ok else 'BLOCKED'
         receipt['cases']['PERM-NT-06'] = b_outcome
         turn_b_event = next((e for e in rpc.events if e.get('method') == 'turn/completed'
@@ -710,7 +714,7 @@ def run_probe(binary, candidate_sha, timeout):
             'permission_response': record_b.get('response_shape') if record_b else 'UNKNOWN',
             'scope': record_b.get('scope') if record_b else 'UNKNOWN',
             'permission_tool': permission_outcome_b,
-            'successful_command_observed': b_successful_command,
+            'command_execution_count': len(b_command_events),
             'turn': turn_b_event.get('params', {}).get('turn', {}).get('status', 'UNKNOWN') if turn_b_event else 'UNKNOWN',
         }
         receipt['permission_b'] = {'class': 'exact-marker-write' if request_b_ok else 'UNKNOWN',
