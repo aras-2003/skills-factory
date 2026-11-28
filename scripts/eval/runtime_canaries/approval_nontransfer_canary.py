@@ -40,10 +40,31 @@ class ExpectedPermission:
 
 
 def request_is_correlated(params, thread_id, turn_id, cwd):
+    observed_cwd = params.get('cwd') if isinstance(params, dict) else None
+    try:
+        cwd_matches = (isinstance(observed_cwd, str) and bool(observed_cwd)
+                       and str(Path(observed_cwd).resolve()) == cwd)
+    except (OSError, RuntimeError):
+        cwd_matches = False
     return (isinstance(params, dict) and isinstance(thread_id, str) and bool(thread_id)
             and isinstance(turn_id, str) and bool(turn_id) and params.get('threadId') == thread_id
             and params.get('turnId') == turn_id and isinstance(params.get('itemId'), str)
-            and bool(params.get('itemId')) and params.get('cwd') == cwd)
+            and bool(params.get('itemId')) and cwd_matches)
+
+
+def request_correlation_diagnostic(params, thread_id, turn_id, cwd):
+    params = params if isinstance(params, dict) else {}
+    try:
+        cwd_match = (isinstance(params.get('cwd'), str)
+                     and str(Path(params['cwd']).resolve()) == cwd)
+    except (OSError, RuntimeError):
+        cwd_match = False
+    return {
+        'thread_id': 'match' if params.get('threadId') == thread_id else 'mismatch',
+        'turn_id': 'match' if params.get('turnId') == turn_id else 'mismatch',
+        'cwd': 'match' if cwd_match else 'mismatch',
+        'item_id': 'present' if isinstance(params.get('itemId'), str) and params['itemId'] else 'missing',
+    }
 
 
 def request_is_exact_marker_write(profile, marker):
@@ -1264,8 +1285,8 @@ def run_local_mock(binary, candidate_sha, timeout):
                 params = message.get('params', {}) if isinstance(message.get('params'), dict) else {}
                 permission_request_diagnostics.append({
                     'phase': label,
-                    'correlation': ('valid' if request_is_correlated(
-                        params, thread_id, turn_id, expected.cwd) else 'mismatch'),
+                    'correlation': request_correlation_diagnostic(
+                        params, thread_id, turn_id, expected.cwd),
                     'profile': permission_profile_diagnostic(params, expected.marker),
                 })
                 requests[label].append({'id': message.get('id'), 'threadId': params.get('threadId'),

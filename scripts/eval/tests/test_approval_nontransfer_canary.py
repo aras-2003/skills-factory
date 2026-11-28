@@ -60,6 +60,15 @@ class PermissionNontransferTests(unittest.TestCase):
             self.assertEqual(safe_reply, {'result': canary.empty_permission_response()})
             self.assertFalse(was_granted)
 
+    def test_permission_correlation_normalizes_tmp_symlink_only(self):
+        params = {'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'item-A',
+                  'cwd': '/tmp/fixture'}
+        self.assertTrue(canary.request_is_correlated(params, 'A', 'turn-A', self.expected.cwd))
+        self.assertFalse(canary.request_is_correlated({**params, 'cwd': '/tmp/other'},
+                                                       'A', 'turn-A', self.expected.cwd))
+        self.assertFalse(canary.request_is_correlated({**params, 'turnId': 'turn-B'},
+                                                       'A', 'turn-A', self.expected.cwd))
+
     def test_permission_item_and_command_item_are_distinct_but_share_thread_and_turn(self):
         request = {'id': 77, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'permission-call-A',
