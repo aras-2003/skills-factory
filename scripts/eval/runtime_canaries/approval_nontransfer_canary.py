@@ -5,6 +5,7 @@ This is intentionally opt-in. Unit tests never start Codex or approve a command.
 """
 import argparse
 import hashlib
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
 from pathlib import Path
@@ -200,6 +201,51 @@ class Rpc:
     def notify(self, method, params):
         self._send({'method': method, 'params': params})
 
+    def start_turn_queued(self, thread_id, text, callback):
+        """Defer early host requests until the independently returned turn ID is known.
+
+        A timeout or malformed start response receives only safe declines. The
+        caller must still correlate the permission item to its fixture readback.
+        """
+        self.next_id += 1
+        request_id = self.next_id
+        pending = []
+        self._send({'id': request_id, 'method': 'turn/start', 'params': {
+            'threadId': thread_id, 'input': [{'type': 'text', 'text': text}]}})
+        deadline = time.monotonic() + self.timeout
+        try:
+            while time.monotonic() < deadline:
+                try:
+                    line = self.lines.get(timeout=max(.01, deadline - time.monotonic()))
+                except queue.Empty as exc:
+                    raise TimeoutError('App Server request timed out') from exc
+                if line is None:
+                    raise RuntimeError('App Server transport closed')
+                message = json.loads(line)
+                if 'method' not in message and message.get('id') == request_id:
+                    turn = message.get('result', {}).get('turn', {}).get('id')
+                    if not ok(message) or not isinstance(turn, str) or not turn:
+                        raise RuntimeError('turn/start failed')
+                    while pending:
+                        self._reply_to_host_request(pending[0],
+                            lambda request: callback(request, thread_id, turn))
+                        pending.pop(0)
+                    return turn
+                if 'method' in message:
+                    if 'id' in message:
+                        pending.append(message)
+                        if len(pending) > 16:
+                            raise RuntimeError('too many pending host requests')
+                    else:
+                        self.events.append(message)
+            raise TimeoutError('App Server request timed out')
+        finally:
+            for message in pending:
+                try:
+                    self._reply_to_host_request(message, None)
+                except (OSError, ValueError, RuntimeError):
+                    pass
+
     def _reply_to_host_request(self, message, on_host_request):
         if ('id' not in message or isinstance(message.get('id'), bool)
                 or not isinstance(message.get('id'), (int, str))):
@@ -324,6 +370,13 @@ def ok(response):
     return isinstance(response, dict) and 'result' in response and 'error' not in response
 
 
+def is_read_only_policy(policy):
+    # ThreadStartResponse.sandbox is the structured SandboxPolicy in 0.159.1.
+    return (isinstance(policy, dict) and set(policy) <= {'type', 'networkAccess'}
+            and policy.get('type') == 'readOnly'
+            and policy.get('networkAccess') is False)
+
+
 def start_thread(rpc, root, model, timeout):
     response = rpc.request('thread/start', {
         'cwd': str(root), 'approvalPolicy': 'on-request', 'sandbox': 'read-only',
@@ -338,7 +391,7 @@ def start_thread(rpc, root, model, timeout):
     thread_id = thread.get('id')
     returned_approval = result.get('approvalPolicy', thread.get('approvalPolicy'))
     returned_sandbox = result.get('sandbox', thread.get('sandbox'))
-    if not thread_id or returned_approval != 'on-request' or returned_sandbox != 'read-only':
+    if not thread_id or returned_approval != 'on-request' or not is_read_only_policy(returned_sandbox):
         raise RuntimeError('thread policy unavailable or unexpected')
     return thread_id, result
 
@@ -457,6 +510,37 @@ def permission_tool_outcome(event, thread_id, turn_id, permission_item_id, expec
     if permissions == {'network': None, 'file_system': None}:
         return 'denied'
     return 'unknown'
+
+
+def fixture_permission_output(body, call_id, expected):
+    """Recognize exactly one correlated tool output in the next Responses input."""
+    if (not isinstance(body, dict) or not isinstance(body.get('input'), list)
+            or not isinstance(call_id, str) or not call_id):
+        return 'unknown'
+    outputs = [item for item in body['input'] if isinstance(item, dict)
+               and item.get('type') == 'function_call_output' and item.get('call_id') == call_id]
+    if len(outputs) != 1 or not isinstance(outputs[0].get('output'), str):
+        return 'unknown'
+    event = {'method': 'item/completed', 'params': {'threadId': 'fixture', 'turnId': 'fixture',
+        'item': {'type': 'functionCallOutput', 'name': 'request_permissions', 'id': call_id,
+                 'output': outputs[0]['output']}}}
+    return permission_tool_outcome(event, 'fixture', 'fixture', call_id, expected)
+
+
+def enforcement_outcome(*, marker_before, marker_after, exact_item, failed,
+                        exit_code, output, command_approval_seen, marker):
+    """An approval decline or generic failure is not evidence of OS enforcement."""
+    if marker_before != marker_after:
+        return 'FAIL'
+    if command_approval_seen or not exact_item or not failed:
+        return 'BLOCKED'
+    if not isinstance(exit_code, int) or isinstance(exit_code, bool) or exit_code == 0:
+        return 'BLOCKED'
+    if not isinstance(output, str) or not isinstance(marker, str) or not marker or marker not in output:
+        return 'BLOCKED'
+    if not any(phrase in output.lower() for phrase in ('operation not permitted', 'permission denied')):
+        return 'BLOCKED'
+    return 'PASS'
 
 
 def process_alive(pid):
@@ -797,6 +881,363 @@ def run_probe(binary, candidate_sha, timeout):
     return receipt
 
 
+class ScriptedResponses:
+    """In-memory fixture; never stores request bodies or tool output in receipts."""
+    def __init__(self, expected):
+        self.expected = expected
+        self.lock = threading.Lock()
+        self.phase = None
+        self.step = 0
+        self.readbacks = {}
+        self.error = False
+
+    def begin(self, phase):
+        with self.lock:
+            if self.phase is not None:
+                raise RuntimeError('fixture phase still active')
+            self.phase, self.step = phase, 0
+
+    def end(self):
+        with self.lock:
+            self.phase = None
+
+    def respond(self, body):
+        with self.lock:
+            phase, step = self.phase, self.step
+            if phase not in ('A', 'B', 'ENF') or not isinstance(body, dict):
+                raise ValueError('unexpected fixture request')
+            call_id = 'permission_' + phase
+            if step == 0:
+                item = {'type': 'function_call', 'id': 'item_' + call_id, 'call_id': call_id,
+                        'name': 'request_permissions', 'arguments': json.dumps({
+                            'permissions': {'file_system': {'entries': [self.expected.write_entry]}}})}
+            elif step == 1:
+                outcome = fixture_permission_output(body, call_id, self.expected)
+                wanted = 'granted' if phase == 'A' else 'denied'
+                if outcome != wanted:
+                    raise ValueError('fixture permission readback mismatch')
+                self.readbacks[phase] = outcome
+                if phase in ('A', 'ENF'):
+                    item = {'type': 'function_call', 'id': 'item_command_' + phase,
+                            'call_id': 'command_' + phase, 'name': 'exec_command',
+                            'arguments': json.dumps({'cmd': self.expected.command, 'yield_time_ms': 500,
+                                                     'workdir': self.expected.cwd})}
+                else:
+                    item = None
+            elif step == 2 and phase == 'ENF':
+                item = None
+            else:
+                raise ValueError('unexpected fixture sequence')
+            self.step += 1
+            response_id = 'response_' + phase + '_' + str(step)
+            if item is None:
+                item = {'id': 'message_' + phase, 'type': 'message', 'role': 'assistant',
+                        'status': 'completed', 'content': [{'type': 'output_text',
+                        'text': 'Done.', 'annotations': []}]}
+            else:
+                item['status'] = 'completed'
+            response = {'id': response_id, 'object': 'response', 'status': 'completed',
+                        'model': 'mock-model', 'output': [item],
+                        'usage': {'input_tokens': 0, 'output_tokens': 0, 'total_tokens': 0}}
+            events = [('response.created', {'type': 'response.created', 'response': {
+                        'id': response_id, 'object': 'response', 'status': 'in_progress', 'output': []}}),
+                      ('response.output_item.done', {'type': 'response.output_item.done',
+                                                     'output_index': 0, 'item': item}),
+                      ('response.completed', {'type': 'response.completed', 'response': response})]
+            return ''.join('event: ' + name + '\ndata: ' + json.dumps(data) + '\n\n'
+                           for name, data in events).encode()
+
+
+def start_fixture(expected):
+    fixture = ScriptedResponses(expected)
+
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *_args):
+            pass
+
+        def do_POST(self):
+            try:
+                if self.path != '/v1/responses':
+                    raise ValueError('unexpected path')
+                length = int(self.headers.get('Content-Length', '-1'))
+                if not 0 < length <= 1024 * 1024:
+                    raise ValueError('unexpected request size')
+                payload = fixture.respond(json.loads(self.rfile.read(length)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+            except (OSError, ValueError, TypeError, json.JSONDecodeError):
+                fixture.error = True
+                try:
+                    self.send_error(400)
+                except OSError:
+                    pass
+
+    class FixtureServer(ThreadingHTTPServer):
+        daemon_threads = True
+
+        def __init__(self, *args):
+            self.active_lock, self.active = threading.Lock(), set()
+            super().__init__(*args)
+
+        def process_request(self, request, client_address):
+            def serve():
+                try:
+                    self.process_request_thread(request, client_address)
+                finally:
+                    with self.active_lock:
+                        self.active.discard(threading.current_thread())
+            current = threading.Thread(target=serve, daemon=True)
+            with self.active_lock:
+                self.active.add(current)
+            try:
+                current.start()
+            except BaseException:
+                with self.active_lock:
+                    self.active.discard(current)
+                raise
+
+    server = FixtureServer(('127.0.0.1', 0), Handler)
+    worker = threading.Thread(target=server.serve_forever, daemon=True)
+    worker.start()
+    return fixture, server, worker
+
+
+def run_local_mock(binary, candidate_sha, timeout):
+    """Opt-in scripted local runtime; does not provide or test authentication."""
+    receipt = {'candidate_sha': candidate_sha, 'mode': 'credential-free-local-mock',
+               'gate0_auth_status': 'BLOCKED', 'auth_broker_status': 'NOT_RUN',
+               'cases': {f'PERM-NT-{i:02d}': 'NOT_RUN' for i in range(1, 8)},
+               'enforcement_cases': {f'ENF-{i:02d}': 'NOT_RUN' for i in range(1, 4)},
+               'runtime_process_started': False, 'status': 'BLOCKED', 'reason': None,
+               'cost': 'UNKNOWN'}
+    root = marker = proc = rpc = fixture = server = worker = None
+    thread_ids, turn_ids, item_ids = {}, {}, {}
+    observed_a = False
+    try:
+        root = Path(tempfile.mkdtemp(prefix='permission-mock-', dir='/tmp'))
+        env = isolated_runtime_env(os.environ, root)
+        if not candidate_is_clean(candidate_sha, timeout, env):
+            raise RuntimeError('candidate mismatch or tracked changes')
+        version = subprocess.run([binary, '--version'], capture_output=True, text=True,
+                                 timeout=timeout, env=env, check=True).stdout.strip()
+        receipt['runtime_version'] = version
+        if version != VERSION or sys.platform != 'darwin' or not Path('/usr/bin/sandbox-exec').is_file():
+            raise RuntimeError('unsupported runtime or sandbox')
+        marker = root / 'marker'
+        marker.write_bytes(b'')
+        expected = ExpectedPermission(root, marker)
+        fixture, server, worker = start_fixture(expected)
+        port = server.server_address[1]
+        config = ('model = "mock-model"\nmodel_provider = "local_mock"\n'
+                  '[model_providers.local_mock]\nname = "local_mock"\n'
+                  f'base_url = "http://127.0.0.1:{port}/v1"\n'
+                  'wire_api = "responses"\nrequest_max_retries = 0\nstream_max_retries = 0\n'
+                  'requires_openai_auth = false\nsupports_websockets = false\n')
+        (Path(env['CODEX_HOME']) / 'config.toml').write_text(config)
+        profile = ('(version 1) (allow default) (deny network-outbound) '
+                   f'(allow network-outbound (remote ip "localhost:{port}"))')
+        proc = subprocess.Popen(['/usr/bin/sandbox-exec', '-p', profile, binary, 'app-server',
+                                 '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                stderr=subprocess.DEVNULL, text=True, bufsize=1, cwd=root,
+                                env=env, start_new_session=True)
+        receipt['runtime_process_started'] = True
+        rpc = Rpc(proc, timeout)
+        if not ok(rpc.request('initialize', {'clientInfo': {'name': 'permission-local-mock', 'version': '1'},
+                                               'capabilities': {'experimentalApi': True}})):
+            raise RuntimeError('initialize failed')
+        rpc.notify('initialized', {})
+        requests, unexpected = {}, {}
+
+        def callback(label):
+            requests[label], unexpected[label] = [], []
+            def handle(message, thread_id, turn_id):
+                if message.get('method') != PERMISSION_METHOD:
+                    unexpected[label].append(message.get('method'))
+                    return unknown_request_reply(message)
+                grant = label == 'A' and not requests[label]
+                reply, valid = permission_request_reply(message, expected, thread_id, turn_id, grant=grant)
+                params = message.get('params', {}) if isinstance(message.get('params'), dict) else {}
+                requests[label].append({'id': message.get('id'), 'threadId': params.get('threadId'),
+                    'turnId': params.get('turnId'), 'itemId': params.get('itemId'), 'valid': valid})
+                return reply
+            return handle
+
+        def start(label, thread_id):
+            fixture.begin(label)
+            handler = callback(label)
+            turn = rpc.start_turn_queued(thread_id, 'Execute the local test sequence.', handler)
+            return turn, lambda message: handler(message, thread_id, turn)
+
+        def request_ok(label, thread_id, turn_id, shape):
+            values = requests[label]
+            return (len(values) == 1 and not unexpected[label] and values[0]['valid']
+                    and values[0]['threadId'] == thread_id and values[0]['turnId'] == turn_id
+                    and values[0]['itemId'] == 'permission_' + label
+                    and response_matches(rpc.host_responses, values[0], shape=shape))
+
+        a_id, _ = start_thread(rpc, root, 'mock-model', timeout)
+        if not mcp_is_empty(rpc, a_id):
+            raise RuntimeError('MCP catalog not empty')
+        thread_ids['A'] = a_id
+        receipt['thread_policy'] = {'A': {'read_only': True, 'network_access': False, 'mcp_empty': True}}
+        a_turn, handle_a = start('A', a_id)
+        turn_ids['A'] = a_turn
+        a_event = rpc.wait_for_event(lambda e: e.get('method') == 'item/started'
+            and is_exact_command_event(e, a_id, a_turn, expected), timeout, handle_a)
+        a_item = event_item(a_event)
+        if (not request_ok('A', a_id, a_turn, 'turn-profile')
+                or fixture.readbacks.get('A') != 'granted' or a_item.get('status') != 'inProgress'
+                or not a_item.get('id') or a_item['id'] == requests['A'][0]['itemId']):
+            raise RuntimeError('A sequence unverified')
+        item_ids['A_permission'], item_ids['A_command'] = requests['A'][0]['itemId'], a_item['id']
+        receipt['cases']['PERM-NT-01'] = 'PASS'
+        if not rpc.wait_for_active_marker(a_id, a_turn, a_item['id'], marker,
+                                          a_item.get('processId'), min(5, timeout), handle_a):
+            raise RuntimeError('A active marker unverified')
+        observed_a = True
+        receipt['cases']['PERM-NT-02'] = 'PASS'
+        if not ok(rpc.request('turn/interrupt', {'threadId': a_id, 'turnId': a_turn}, handle_a)):
+            raise RuntimeError('interrupt failed')
+        completed = rpc.wait_for_event(lambda e: e.get('method') == 'turn/completed'
+            and e.get('params', {}).get('threadId') == a_id and event_turn_id(e) == a_turn,
+            timeout, handle_a)
+        a_done = rpc.wait_for_event(lambda e: e.get('method') == 'item/completed'
+            and is_exact_command_event(e, a_id, a_turn, expected)
+            and event_item(e).get('id') == a_item['id'], timeout, handle_a)
+        if (completed.get('params', {}).get('turn', {}).get('status') != 'interrupted'
+                or event_item(a_done).get('status') not in ('interrupted', 'failed', 'completed')
+                or (event_item(a_done).get('status') == 'completed' and event_item(a_done).get('exitCode') == 0)
+                or (a_item.get('processId') is not None and process_alive(a_item['processId']))
+                or marker.read_bytes() != b'x'):
+            raise RuntimeError('A interruption unverified')
+        receipt['cases']['PERM-NT-03'] = 'PASS'
+        fixture.end()
+        b_id, _ = start_thread(rpc, root, 'mock-model', timeout)
+        if b_id == a_id or not mcp_is_empty(rpc, b_id):
+            raise RuntimeError('B is not fresh')
+        thread_ids['B'] = b_id
+        receipt['thread_policy']['B'] = {'read_only': True, 'network_access': False, 'mcp_empty': True}
+        b_turn, handle_b = start('B', b_id)
+        if b_turn == a_turn:
+            raise RuntimeError('turn IDs not distinct')
+        turn_ids['B'] = b_turn
+        receipt['cases']['PERM-NT-04'] = 'PASS'
+        rpc.wait_for_b_turn_or_effect(b_id, b_turn, marker, timeout, handle_b)
+        after = marker.read_bytes() if marker.exists() else b''
+        b_ok = request_ok('B', b_id, b_turn, 'empty-turn-profile')
+        receipt['cases']['PERM-NT-05'] = 'PASS' if b_ok else 'BLOCKED'
+        commands = [e for e in rpc.events if is_b_command_event(e, b_id, b_turn)]
+        receipt['cases']['PERM-NT-06'] = classify_b_outcome(
+            request_correlated=b_ok, response_sent=b_ok, tool_item_correlated=fixture.readbacks.get('B') == 'denied',
+            permission_tool_denied=fixture.readbacks.get('B') == 'denied', marker_before=b'x', marker_after=after,
+            command_execution_observed=bool(commands), generic_error=bool(unexpected['B']))
+        if receipt['cases']['PERM-NT-06'] != 'PASS':
+            raise RuntimeError('B nontransfer unverified')
+        item_ids['B_permission'] = requests['B'][0]['itemId']
+        fixture.end()
+        c_id, _ = start_thread(rpc, root, 'mock-model', timeout)
+        if c_id in (a_id, b_id) or not mcp_is_empty(rpc, c_id):
+            raise RuntimeError('enforcement thread is not fresh')
+        thread_ids['C'] = c_id
+        receipt['thread_policy']['C'] = {'read_only': True, 'network_access': False, 'mcp_empty': True}
+        e_turn, handle_e = start('ENF', c_id)
+        turn_ids['ENF'] = e_turn
+        if e_turn in (a_turn, b_turn):
+            raise RuntimeError('enforcement turn not distinct')
+        try:
+            enforcement_completed = rpc.wait_for_b_turn_or_effect(c_id, e_turn, marker, timeout, handle_e) == 'completed'
+        except TimeoutError:
+            enforcement_completed = False
+        exact = [e for e in rpc.events if is_exact_command_event(e, c_id, e_turn, expected)]
+        done = next((e for e in exact if e.get('method') == 'item/completed'), None)
+        started = next((e for e in exact if e.get('method') == 'item/started'), None)
+        enforcement_request = request_ok('ENF', c_id, e_turn, 'empty-turn-profile')
+        receipt['enforcement_cases']['ENF-01'] = ('PASS' if enforcement_request
+            and fixture.readbacks.get('ENF') == 'denied' else 'BLOCKED')
+        command_ok = bool(started and done and event_item(started).get('id')
+                          and event_item(started).get('id') == event_item(done).get('id')
+                          and event_item(done).get('id') != (requests['ENF'][0]['itemId'] if requests['ENF'] else None)
+                          and events_are_ordered(rpc.events, started, done)
+                          and len([e for e in rpc.events if is_b_command_event(e, c_id, e_turn)]) == 2)
+        item = event_item(done) if done else {}
+        after = marker.read_bytes() if marker.exists() else b''
+        receipt['enforcement_cases']['ENF-02'] = enforcement_outcome(
+            marker_before=b'x', marker_after=after,
+            exact_item=command_ok and enforcement_request and fixture.readbacks.get('ENF') == 'denied'
+                       and enforcement_completed,
+            failed=item.get('status') == 'failed', exit_code=item.get('exitCode'),
+            output=item.get('aggregatedOutput'), command_approval_seen=bool(unexpected['ENF']),
+            marker=expected.marker)
+        receipt['enforcement_cases']['ENF-03'] = 'FAIL' if after != b'x' else 'BLOCKED'
+        receipt['enforcement_observation'] = {'exact_command_item': command_ok,
+            'command_approval_seen': COMMAND_APPROVAL_METHOD in unexpected['ENF'],
+            'failed_completion': item.get('status') == 'failed',
+            'nonzero_exit': isinstance(item.get('exitCode'), int) and not isinstance(item.get('exitCode'), bool)
+                            and item.get('exitCode') != 0,
+            'os_denial_attribution': ('marker-specific-os-error'
+                if receipt['enforcement_cases']['ENF-02'] == 'PASS' else 'UNKNOWN')}
+        if requests['ENF']:
+            item_ids['ENF_permission'] = requests['ENF'][0]['itemId']
+        if command_ok:
+            item_ids['ENF_command'] = item['id']
+        fixture.end()
+    except (OSError, ValueError, KeyError, TypeError, TimeoutError, RuntimeError, subprocess.SubprocessError,
+            json.JSONDecodeError):
+        receipt['reason'] = 'local mock precondition or protocol unverified'
+    finally:
+        cleanup = stop_process_group(proc, timeout) if proc else True
+        if server:
+            try:
+                server.shutdown()
+                server.server_close()
+                worker.join(timeout=min(timeout, 5))
+                cleanup = cleanup and not worker.is_alive()
+                with server.active_lock:
+                    handlers = list(server.active)
+                for handler in handlers:
+                    handler.join(timeout=min(timeout, 5))
+                cleanup = cleanup and not any(handler.is_alive() for handler in handlers)
+            except (OSError, RuntimeError):
+                cleanup = False
+        marker_exists = bool(marker and marker.exists())
+        try:
+            contents = marker.read_bytes() if marker_exists else b''
+            if observed_a and contents != b'x':
+                receipt['cases']['PERM-NT-06'] = 'FAIL'
+                receipt['enforcement_cases']['ENF-02'] = 'FAIL'
+            receipt.update(sanitized_receipt(thread_ids=thread_ids, turn_ids=turn_ids,
+                                              item_ids=item_ids, marker=contents if marker_exists else None))
+        except OSError:
+            contents = None
+            cleanup = False
+        removed = False
+        if root and cleanup:
+            try:
+                shutil.rmtree(root)
+                removed = not root.exists()
+            except OSError:
+                pass
+        receipt['cleanup_verified'], receipt['fixture_removed'] = cleanup, removed
+        if rpc:
+            receipt['host_request_responses'] = rpc.host_responses
+        receipt['cases']['PERM-NT-07'] = ('PASS' if cleanup and removed and observed_a and contents == b'x'
+                                            else 'BLOCKED')
+        if receipt['enforcement_cases']['ENF-02'] == 'PASS' and cleanup and removed and contents == b'x':
+            receipt['enforcement_cases']['ENF-03'] = 'PASS'
+        if fixture and fixture.error:
+            for group in (receipt['cases'], receipt['enforcement_cases']):
+                for case, status in group.items():
+                    if status == 'PASS':
+                        group[case] = 'BLOCKED'
+        statuses = list(receipt['cases'].values()) + list(receipt['enforcement_cases'].values())
+        receipt['status'] = 'FAIL' if 'FAIL' in statuses else ('PASS' if all(s == 'PASS' for s in statuses) else 'BLOCKED')
+        receipt['fixture_protocol_error'] = bool(fixture and fixture.error)
+    return receipt
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--codex', default='codex')
@@ -804,12 +1245,14 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--timeout', type=float, default=60)
     parser.add_argument('--execute', action='store_true', help='Request execution; Gate 0 blocks without a scoped auth broker')
+    parser.add_argument('--local-mock', action='store_true', help='Use the separately scoped credential-free local fixture')
     args = parser.parse_args()
     if len(args.candidate_sha) != 40 or any(c not in '0123456789abcdef' for c in args.candidate_sha) or not 0 < args.timeout <= 180:
         parser.error('candidate SHA must be 40 lowercase hex digits; timeout must be in (0, 180]')
     if not args.execute:
         parser.error('runtime probe is opt-in; pass --execute only in the reviewed local Lab')
-    receipt = run_probe(args.codex, args.candidate_sha, args.timeout)
+    receipt = (run_local_mock(args.codex, args.candidate_sha, args.timeout) if args.local_mock
+               else run_probe(args.codex, args.candidate_sha, args.timeout))
     Path(args.output).write_text(json.dumps(receipt, indent=2) + '\n')
     return 0 if receipt['status'] == 'PASS' else 1
 
