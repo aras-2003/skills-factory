@@ -386,6 +386,18 @@ class LocalMockPrimitivesTests(unittest.TestCase):
             'type': 'function_call_output', 'call_id': 'command_A', 'output': 'command completed'}]}))
         self.assertFalse(fixture.error)
 
+    def test_fixture_A_rejects_uncorrelated_command_output(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('A')
+        fixture.respond({'input': []})
+        granted = json.dumps({'permissions': {'network': None, 'file_system': {
+            'entries': [self.expected.write_entry], 'glob_scan_max_depth': None}}, 'scope': 'turn'})
+        fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'permission_A',
+                                   'output': granted}]})
+        with self.assertRaises(ValueError):
+            fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'wrong',
+                                       'output': 'command completed'}]})
+
     def test_reported_command_pids_include_unexpected_starts(self):
         events = [
             {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',

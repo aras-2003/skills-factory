@@ -740,6 +740,22 @@ def fixture_command_denial_output(body, call_id, marker):
     return marker in output and any(phrase in lowered for phrase in ('operation not permitted', 'permission denied'))
 
 
+def fixture_text_output(body, call_id):
+    """Return one correlated text tool output; reject duplicates and other shapes."""
+    if not isinstance(body, dict) or not isinstance(body.get('input'), list):
+        return None
+    outputs = [item for item in body['input'] if isinstance(item, dict)
+               and item.get('type') == 'function_call_output' and item.get('call_id') == call_id]
+    if len(outputs) != 1:
+        return None
+    output = outputs[0].get('output')
+    if isinstance(output, list):
+        if len(output) != 1 or not isinstance(output[0], dict) or output[0].get('type') != 'input_text':
+            return None
+        output = output[0].get('text')
+    return output if isinstance(output, str) else None
+
+
 def reported_command_pids(events):
     """Collect all valid host-reported command PIDs, including unexpected starts."""
     pids = set()
@@ -1201,6 +1217,8 @@ class ScriptedResponses:
                 self.readbacks['ENF_command_denied'] = True
                 item = None
             elif step == 2 and phase == 'A':
+                if fixture_text_output(body, 'command_A') is None:
+                    raise ValueError('fixture command readback mismatch')
                 item = None
             else:
                 raise ValueError('unexpected fixture sequence')
@@ -1258,7 +1276,8 @@ def start_fixture(expected):
                 fixture.error_reason = (reason if reason in {
                     'unexpected path', 'unexpected request size', 'unexpected fixture request',
                     'fixture permission readback mismatch', 'fixture command denial readback mismatch',
-                    'unexpected fixture sequence'} else 'fixture request or transport invalid')
+                    'fixture command readback mismatch', 'unexpected fixture sequence'}
+                    else 'fixture request or transport invalid')
                 try:
                     self.send_error(400)
                 except OSError:
