@@ -1731,7 +1731,43 @@ def _verify_network_profile(port, profile, root, env, timeout, fixture, resource
                                  'nonzero' if result else 'NOT_STARTED_OR_TIMEOUT')}
 
 
-def run_local_mock(binary, candidate_sha, timeout):
+def aggregate_canary_status(receipt):
+    boundary_statuses = [
+        receipt.get('filesystem_sandbox', {}).get('status', 'BLOCKED'),
+        receipt.get('network_sandbox', {}).get('status', 'BLOCKED'),
+        receipt.get('nested_execution_probe', {}).get('status', 'BLOCKED'),
+    ]
+    statuses = list(receipt['cases'].values()) + list(receipt['enforcement_cases'].values()) + boundary_statuses
+    return 'FAIL' if 'FAIL' in statuses else ('PASS' if all(s == 'PASS' for s in statuses) else 'BLOCKED')
+
+
+def network_diagnostic_continuation_eligible(network):
+    """Allow only a fully evidenced IPv6 same-port exception for mock diagnostics."""
+    denied = lambda result: (isinstance(result, dict)
+                             and result.get('class') in ('EPERM', 'EACCES'))
+    return (
+        isinstance(network, dict) and network.get('status') == 'BLOCKED'
+        and network.get('probe_exit_class') == 'zero'
+        and network.get('fixture_http') == 'allowed'
+        and network.get('fixture_ingress_count') == 1
+        and network.get('fixture_ingress_correlated') is True
+        and denied(network.get('wrong_port'))
+        and network.get('controller_decoy_reachable') is True
+        and network.get('wrong_port_decoy_ingress_count') == 1
+        and denied(network.get('same_port_other_local_ipv4'))
+        and network.get('other_local_ipv4_controller_reachable') is True
+        and network.get('other_local_ipv4_decoy_ingress_count') == 1
+        and network.get('ipv6_same_port_v6only') == 'CONNECTED'
+        and network.get('ipv6_decoy_controller_reachable') is True
+        and network.get('ipv6_decoy_ingress_count') == 2
+        and denied(network.get('udp_to_fixture_port'))
+        and network.get('udp_decoy_ingress_count') == 1
+        and network.get('decoy_sockets_closed') is True
+        and network.get('decoy_workers_stopped') is True
+    )
+
+
+def run_local_mock(binary, candidate_sha, timeout, *, diagnostic_continue_after_network_block=False):
     """Opt-in scripted local runtime; does not provide or test authentication."""
     receipt = {'candidate_sha': candidate_sha, 'mode': 'credential-free-local-mock',
                'model_execution': 'SCRIPTED_FIXTURE_NO_LLM', 'effective_model': 'NOT_APPLICABLE',
@@ -1782,7 +1818,16 @@ def run_local_mock(binary, candidate_sha, timeout):
         network_preflight = verify_network_profile(port, profile, root, env, min(timeout, 10), fixture)
         receipt['network_sandbox'] = network_preflight
         if network_preflight['status'] != 'PASS':
-            raise RuntimeError('network sandbox preflight not proven')
+            if not diagnostic_continue_after_network_block:
+                raise RuntimeError('network sandbox preflight not proven')
+            continuation_eligible = network_diagnostic_continuation_eligible(network_preflight)
+            receipt['diagnostic_continuation'] = {
+                'enabled': True, 'purpose': 'credential-free App Server permission-flow diagnostics',
+                'eligible': continuation_eligible, 'network_gate': network_preflight['status'],
+                'overall_acceptance_can_pass': False,
+            }
+            if not continuation_eligible:
+                raise RuntimeError('network result is not an evidenced IPv6-only block')
         proc = subprocess.Popen(sandbox_prefix(root, port, profile) + [binary, 'app-server',
                                  '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.DEVNULL, text=True, bufsize=1, cwd=root,
@@ -2052,13 +2097,7 @@ def run_local_mock(binary, candidate_sha, timeout):
                 for case, status in group.items():
                     if status == 'PASS':
                         group[case] = 'BLOCKED'
-        boundary_statuses = [
-            receipt.get('filesystem_sandbox', {}).get('status', 'BLOCKED'),
-            receipt.get('network_sandbox', {}).get('status', 'BLOCKED'),
-            receipt.get('nested_execution_probe', {}).get('status', 'BLOCKED'),
-        ]
-        statuses = list(receipt['cases'].values()) + list(receipt['enforcement_cases'].values()) + boundary_statuses
-        receipt['status'] = 'FAIL' if 'FAIL' in statuses else ('PASS' if all(s == 'PASS' for s in statuses) else 'BLOCKED')
+        receipt['status'] = aggregate_canary_status(receipt)
         receipt['fixture_protocol_error'] = bool(fixture and fixture.error)
         if fixture and fixture.error_reason:
             receipt['fixture_protocol_error_class'] = fixture.error_reason
@@ -2090,12 +2129,18 @@ def main():
     parser.add_argument('--timeout', type=float, default=60)
     parser.add_argument('--execute', action='store_true', help='Request execution; Gate 0 blocks without a scoped auth broker')
     parser.add_argument('--local-mock', action='store_true', help='Use the separately scoped credential-free local fixture')
+    parser.add_argument('--diagnostic-continue-after-network-block', action='store_true',
+                        help='Continue only credential-free local-mock diagnostics; network and overall gates remain BLOCKED')
     args = parser.parse_args()
     if len(args.candidate_sha) != 40 or any(c not in '0123456789abcdef' for c in args.candidate_sha) or not 0 < args.timeout <= 180:
         parser.error('candidate SHA must be 40 lowercase hex digits; timeout must be in (0, 180]')
     if not args.execute:
         parser.error('runtime probe is opt-in; pass --execute only in the reviewed local Lab')
-    receipt = (run_local_mock(args.codex, args.candidate_sha, args.timeout) if args.local_mock
+    if args.diagnostic_continue_after_network_block and not args.local_mock:
+        parser.error('--diagnostic-continue-after-network-block requires --local-mock')
+    receipt = (run_local_mock(args.codex, args.candidate_sha, args.timeout,
+                               diagnostic_continue_after_network_block=args.diagnostic_continue_after_network_block)
+               if args.local_mock
                else run_probe(args.codex, args.candidate_sha, args.timeout))
     Path(args.output).write_text(json.dumps(receipt, indent=2) + '\n')
     return 0 if receipt['status'] == 'PASS' else 1
