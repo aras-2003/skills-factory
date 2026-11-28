@@ -107,6 +107,10 @@ class PermissionNontransferTests(unittest.TestCase):
             'read': [], 'write': [self.expected.marker], 'entries': [self.expected.write_entry]}}, 'scope': 'turn'}
         self.assertEqual(canary.permission_tool_outcome(event(camel_granted), 'A', 'turn-A',
                                                          'permission-call-A', self.expected), 'granted')
+        legacy_only_grant = {'permissions': {'network': None, 'file_system': {
+            'read': [], 'write': [self.expected.marker]}}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(legacy_only_grant), 'A', 'turn-A',
+                                                         'permission-call-A', self.expected), 'granted')
         broad = {'permissions': {'network': {'enabled': True}, 'file_system': {
             'entries': [self.expected.write_entry]}}, 'scope': 'turn'}
         self.assertEqual(canary.permission_tool_outcome(event(broad), 'A', 'turn-A',
