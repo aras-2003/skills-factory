@@ -42,6 +42,10 @@ class ExpectedPermission:
         self.write_entry = {'access': 'write', 'path': {'type': 'path', 'path': self.marker}}
 
 
+class FixtureSetupCleanupError(RuntimeError):
+    """The fixture failed during startup and its bound server did not confirm close."""
+
+
 def request_is_correlated(params, thread_id, turn_id, cwd):
     observed_cwd = params.get('cwd') if isinstance(params, dict) else None
     try:
@@ -1399,8 +1403,11 @@ def start_fixture(expected):
     try:
         worker = threading.Thread(target=server.serve_forever, daemon=True)
         worker.start()
-    except BaseException:
-        server.server_close()
+    except BaseException as setup_error:
+        try:
+            server.server_close()
+        except BaseException:
+            raise FixtureSetupCleanupError() from None
         raise
     return fixture, server, worker
 
@@ -2031,17 +2038,21 @@ def run_local_mock(binary, candidate_sha, timeout):
             item_ids['ENF_command'] = item['id']
         fixture.end()
     except (OSError, ValueError, KeyError, TypeError, TimeoutError, RuntimeError, subprocess.SubprocessError,
-            json.JSONDecodeError):
+            json.JSONDecodeError) as error:
         receipt['reason'] = 'local mock precondition or protocol unverified'
         allowed_phases = {'runtime_setup', 'candidate_check', 'runtime_check', 'fixture_setup',
                           'profile_setup', 'filesystem_preflight', 'network_preflight',
                           'app_server_start', 'protocol'}
         receipt['failure_phase'] = failure_phase if failure_phase in allowed_phases else 'unknown'
-        receipt['failure_class'] = local_mock_exception_class(sys.exc_info()[1])
+        receipt['failure_class'] = local_mock_exception_class(error)
+        if isinstance(error, FixtureSetupCleanupError):
+            receipt['fixture_setup_cleanup'] = 'FAILED'
     finally:
         if permission_request_diagnostics:
             receipt['permission_request_diagnostics'] = permission_request_diagnostics
         cleanup = stop_process_group(proc, timeout) if proc else True
+        if receipt.get('fixture_setup_cleanup') == 'FAILED':
+            cleanup = False
         if rpc:
             cleanup = rpc.drain_pending_notifications(min(timeout, 5)) and cleanup
             observed_command_pids.update(reported_command_pids(rpc.events))
