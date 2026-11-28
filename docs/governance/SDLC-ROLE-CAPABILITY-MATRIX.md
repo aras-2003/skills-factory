@@ -72,6 +72,50 @@ deploy canaries; prove lazy-load behavior; simulate missing MCP/interruption;
 and compare schema/tokens only when the host exposes them. Static profile tests
 do not satisfy these runtime cases.
 
+## Current-runtime operating mode (2026-11-28)
+
+The local Codex CLI/App Server `0.159.1` exposes useful enforcement surfaces,
+but they are not interchangeable with native Desktop child-agent permissions.
+Use the existing `collaboration.spawn_agent` role workflow for role selection,
+bounded handoffs, Developer work, Executor runs and independent review. Use a
+dedicated worktree, exact candidate SHA, handoff/scope validators and before /
+after source checks. A role's requested model and effort remain requested values
+unless the host returns trustworthy effective-turn telemetry.
+
+Observed App Server evidence narrows two permissions surfaces:
+
+- App Server `command/exec` with explicit `sandboxPolicy` passed one bounded
+  filesystem control: a write under the declared `tests/` root succeeded while
+  a write outside that root was denied. See the `runtime-e2e-01` receipt and
+  execution evidence. This proves that operation in that tested turn only.
+- App Server per-thread MCP filtering passed direct JSON-RPC allow / deny
+  controls on CLI `0.159.1`; see the dated runtime ACL receipt. This does not
+  prove the model-visible tool schema, native child inheritance, hosted MCP,
+  or policy inheritance between threads.
+- A fresh isolated App Server profile probe on 2026-11-28 returned
+  `activePermissionProfile.id=:workspace`, returned the requested model, and
+  rejected an unknown profile. The response reported no writable roots. The
+  positive write control failed and the outside-workspace write was denied.
+  Disposition: **BLOCKED / incomplete positive control**. Do not use that probe
+  as evidence that the selected profile grants the intended workspace, or as a
+  role sandbox guarantee. Its sanitized receipt is linked from the runtime
+  evidence note.
+- App Server turn lifecycle did not expose effective reasoning effort; model
+  and effort for the turn therefore remain `UNKNOWN`. The `thread/start` model
+  value and a `turn/start` request are configuration readback / requested
+  inputs, not proof of effective per-turn execution.
+
+Operational adaptation: prefer the already tested explicit per-turn
+`sandboxPolicy` plus narrow writable roots when a separately launched App
+Server command runner is used. Keep each run ephemeral and isolated. Do not
+start it with ambient user credentials or the coordinator's Codex home for
+credential-bound tests. Treat approval non-transfer, secret isolation,
+Desktop child ACL, and production/deployment authorization as `BLOCKED`,
+`NOT_RUN`, or `UNKNOWN` until separately demonstrated. A passing direct MCP
+ACL canary does not upgrade those gates. Continue using repository branch
+protections, PR review and explicit owner authorization for integration and
+release.
+
 ## Remediation order
 
 1. Use the host's supported permission or isolated-worktree controls to run a

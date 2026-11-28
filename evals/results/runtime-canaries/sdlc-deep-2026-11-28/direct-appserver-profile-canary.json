@@ -1,0 +1,55 @@
+{
+  "app_server_exit": 0,
+  "candidate_sha": "ede718afe3a7ef768011b08e71ba64fceda30272",
+  "cleanup_verified": true,
+  "command_cases": {
+    "inside_workspace": {
+      "exit_code": 71,
+      "marker_sha256": null,
+      "status": "FAIL"
+    },
+    "outside_workspace": {
+      "exit_code": 71,
+      "marker_created": false,
+      "response": "result",
+      "status": "PASS",
+      "stderr_class": "permission_denied"
+    }
+  },
+  "credentials_inherited": false,
+  "effort_readback": null,
+  "fixture_removed": true,
+  "mode": "isolated_app_server_no_llm",
+  "model_readback": "gpt-6-luna",
+  "model_turns": 0,
+  "profiles": [
+    {
+      "allowed": true,
+      "id": ":read-only"
+    },
+    {
+      "allowed": true,
+      "id": ":workspace"
+    },
+    {
+      "allowed": true,
+      "id": ":danger-full-access"
+    }
+  ],
+  "reason": "RuntimeError: permission profile positive/negative control incomplete",
+  "runtime_version": "codex-cli 0.159.1",
+  "status": "BLOCKED",
+  "temp_root_retained": null,
+  "thread_profile_readback": {
+    "extends": null,
+    "id": ":workspace",
+    "sandbox": {
+      "excludeSlashTmp": false,
+      "excludeTmpdirEnvVar": false,
+      "networkAccess": false,
+      "type": "workspaceWrite",
+      "writableRoots": []
+    }
+  },
+  "unknown_profile_rejected": true
+}
