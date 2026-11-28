@@ -542,11 +542,11 @@ def safe_turn_status(events, thread_id):
 
 
 def safe_item_type_counts(events):
-    known_types = ('commandExecution', 'functionCall', 'function_call', 'functionCallOutput',
-        'function_call_output', 'message', 'reasoning', 'webSearch', 'mcpToolCall',
-        'collabToolCall', 'plan', 'userMessage', 'hookPrompt', 'agentMessage', 'fileChange',
-        'dynamicToolCall', 'imageView', 'imageGeneration', 'enteredReviewMode',
-        'exitedReviewMode', 'contextCompaction', 'sleep', 'other', 'untyped')
+    known_types = ('userMessage', 'hookPrompt', 'agentMessage', 'functionCallOutput', 'plan',
+        'reasoning', 'commandExecution', 'fileChange', 'mcpToolCall', 'dynamicToolCall',
+        'collabAgentToolCall', 'subAgentActivity', 'webSearch', 'imageView', 'sleep',
+        'imageGeneration', 'enteredReviewMode', 'exitedReviewMode', 'contextCompaction',
+        'other', 'untyped')
     counts = {item_type: 0 for item_type in known_types}
     for event in events:
         if event.get('method') not in ('item/started', 'item/completed'):
