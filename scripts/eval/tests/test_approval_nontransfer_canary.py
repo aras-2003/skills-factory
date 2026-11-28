@@ -100,17 +100,21 @@ class PermissionNontransferTests(unittest.TestCase):
     def test_b_reply_is_correlated_valid_empty_profile_and_failure_is_required_for_pass(self):
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
             tool_item_correlated=True, permission_tool_denied=True,
-            marker_before=b'x', marker_after=b'x'), 'PASS')
+            marker_before=b'x', marker_after=b'x', turn_completed=True), 'PASS')
+        self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
+            tool_item_correlated=True, permission_tool_denied=True,
+            marker_before=b'x', marker_after=b'x', turn_completed=False), 'BLOCKED')
         for kwargs in (
             {'request_correlated': False, 'response_sent': True, 'tool_item_correlated': True, 'permission_tool_denied': True},
             {'request_correlated': True, 'response_sent': False, 'tool_item_correlated': True, 'permission_tool_denied': True},
             {'request_correlated': True, 'response_sent': True, 'tool_item_correlated': False, 'permission_tool_denied': True},
             {'request_correlated': True, 'response_sent': True, 'tool_item_correlated': True, 'permission_tool_denied': False},
         ):
-            self.assertEqual(canary.classify_b_outcome(**kwargs, marker_before=b'x', marker_after=b'x'), 'BLOCKED')
+            self.assertEqual(canary.classify_b_outcome(**kwargs, marker_before=b'x', marker_after=b'x',
+                turn_completed=True), 'BLOCKED')
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
             tool_item_correlated=True, permission_tool_denied=True,
-            marker_before=b'x', marker_after=b'xx'), 'FAIL')
+            marker_before=b'x', marker_after=b'xx', turn_completed=True), 'FAIL')
         for command_event in ('started', 'nonzero', 'completed'):
             event = {'method': 'item/started' if command_event == 'started' else 'item/completed',
                 'params': {'threadId': 'B', 'turnId': 'turn-B', 'item': {
@@ -120,10 +124,10 @@ class PermissionNontransferTests(unittest.TestCase):
             self.assertTrue(canary.is_b_command_event(event, 'B', 'turn-B'))
             self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
                 tool_item_correlated=True, permission_tool_denied=True, marker_before=b'x', marker_after=b'x',
-                command_execution_observed=True), 'BLOCKED')
+                turn_completed=True, command_execution_observed=True), 'BLOCKED')
         self.assertEqual(canary.classify_b_outcome(request_correlated=False, response_sent=False,
             tool_item_correlated=False, permission_tool_denied=False,
-            marker_before=b'x', marker_after=b'x', generic_error=True), 'BLOCKED')
+            marker_before=b'x', marker_after=b'x', turn_completed=False, generic_error=True), 'BLOCKED')
 
     def test_unknown_host_request_uses_json_rpc_error_not_permissions_response(self):
         reply = canary.unknown_request_reply({'id': 88, 'method': 'unknown/request'})
@@ -312,6 +316,15 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         callback = mock.Mock(return_value={'result': {}})
         self.assertEqual(rpc.start_turn_queued('thread', 'task', callback), 'turn')
         callback.assert_called_once_with(host, 'thread', 'turn')
+
+    def test_shared_run_turn_uses_independent_id_queued_path(self):
+        rpc = mock.Mock()
+        rpc.start_turn_queued.return_value = 'host-returned-turn'
+        callback = mock.Mock()
+        callback.bind_turn = mock.Mock()
+        self.assertEqual(canary.run_turn(rpc, 'thread', 'task', callback), 'host-returned-turn')
+        rpc.start_turn_queued.assert_called_once_with('thread', 'task', callback)
+        callback.bind_turn.assert_called_once_with('thread', 'host-returned-turn')
 
     def test_queued_request_is_declined_if_transport_closes(self):
         rpc = object.__new__(canary.Rpc)
