@@ -31,7 +31,7 @@ class PermissionNontransferTests(unittest.TestCase):
             self.requested_profile(entries=[self.expected.write_entry, self.expected.write_entry], network={'enabled': False}),
             self.requested_profile(entries=[{**self.expected.write_entry, 'access': 'read'}], network={'enabled': False}),
             self.requested_profile(entries=[{'access': 'write', 'path': {'type': 'glob_pattern', 'pattern': self.expected.marker}}], network={'enabled': False}),
-            {'fileSystem': {'read': None, 'write': [self.expected.marker], 'entries': [self.expected.write_entry]}, 'network': {'enabled': False}},
+            {'fileSystem': {'read': None, 'write': [self.expected.cwd], 'entries': [self.expected.write_entry]}, 'network': {'enabled': False}},
             self.requested_profile(network={'enabled': True}),
             {'fileSystem': {'entries': [self.expected.write_entry]}, 'other': {}},
         ):
@@ -294,6 +294,12 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         empty_legacy = {'fileSystem': {'read': [], 'write': [],
                                         'entries': [self.expected.write_entry]}, 'network': None}
         self.assertTrue(canary.request_is_exact_marker_write(empty_legacy, self.expected.marker))
+        redundant_exact_write = {'fileSystem': {'read': None, 'write': [self.expected.marker],
+                                                 'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(redundant_exact_write, self.expected.marker))
+        unrelated_legacy_write = {'fileSystem': {'read': None, 'write': [self.expected.cwd],
+                                                  'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertFalse(canary.request_is_exact_marker_write(unrelated_legacy_write, self.expected.marker))
         with_glob_depth = {'fileSystem': {**profile['fileSystem'], 'globScanMaxDepth': 3},
                            'network': None}
         self.assertTrue(canary.request_is_exact_marker_write(with_glob_depth, self.expected.marker))

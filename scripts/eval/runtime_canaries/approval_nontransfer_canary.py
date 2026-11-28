@@ -55,8 +55,7 @@ def request_is_exact_marker_write(profile, marker):
             'read', 'write', 'globScanMaxDepth', 'entries'}
             or not {'read', 'write', 'entries'} <= set(filesystem)):
         return False
-    if (any(value is not None and value != [] for value in
-            (filesystem.get('read'), filesystem.get('write')))
+    if (filesystem.get('read') not in (None, [])
             or ('globScanMaxDepth' in filesystem
                 and (not isinstance(filesystem['globScanMaxDepth'], int)
                      or isinstance(filesystem['globScanMaxDepth'], bool)))):
@@ -66,6 +65,9 @@ def request_is_exact_marker_write(profile, marker):
         return False
     entry = entries[0]
     if entry != {'access': 'write', 'path': {'type': 'path', 'path': marker}}:
+        return False
+    legacy_write = filesystem.get('write')
+    if legacy_write not in (None, []) and legacy_write != [marker]:
         return False
     network = profile.get('network')
     return network is None or (isinstance(network, dict) and set(network) == {'enabled'}
@@ -146,8 +148,6 @@ def permission_profile_diagnostic(params):
             return 'empty' if not value else 'nonempty'
         return 'invalid'
     legacy_read, legacy_write = legacy_state(filesystem['read']), legacy_state(filesystem['write'])
-    if legacy_read not in ('null', 'empty') or legacy_write not in ('null', 'empty'):
-        return f'legacy_access_read_{legacy_read}_write_{legacy_write}'
     depth = filesystem.get('globScanMaxDepth')
     if 'globScanMaxDepth' in filesystem and (not isinstance(depth, int) or isinstance(depth, bool)):
         return 'invalid_glob_depth'
@@ -160,6 +160,10 @@ def permission_profile_diagnostic(params):
     path = entry.get('path')
     if not isinstance(path, dict) or path.get('type') != 'path' or not isinstance(path.get('path'), str):
         return 'entry_path_shape_invalid'
+    if legacy_read not in ('null', 'empty'):
+        return f'legacy_access_read_{legacy_read}_write_{legacy_write}'
+    if legacy_write not in ('null', 'empty') and filesystem.get('write') != [path['path']]:
+        return f'legacy_access_read_{legacy_read}_write_{legacy_write}'
     network = profile.get('network')
     if network is not None and (not isinstance(network, dict) or set(network) != {'enabled'}):
         return 'network_shape_invalid'
