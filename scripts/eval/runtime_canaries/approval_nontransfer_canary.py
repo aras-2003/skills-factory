@@ -96,7 +96,8 @@ def request_is_exact_marker_write(profile, marker):
 
 
 def permission_response(expected):
-    return {'permissions': {'fileSystem': {'entries': [expected.write_entry]}}, 'scope': 'turn'}
+    return {'permissions': {'fileSystem': {'read': None, 'write': [expected.marker],
+                                           'entries': [expected.write_entry]}}, 'scope': 'turn'}
 
 
 def empty_permission_response():
@@ -142,7 +143,8 @@ def permission_reply_shape(message, reply):
     result = reply.get('result')
     if result == empty_permission_response():
         return 'empty-turn-profile'
-    expected = {'permissions': {'fileSystem': {'entries': [entries[0]]}}, 'scope': 'turn'}
+    expected = {'permissions': {'fileSystem': {'read': None,
+        'write': [marker], 'entries': [entries[0]]}}, 'scope': 'turn'}
     if result == expected:
         return 'turn-profile'
     return 'invalid-permission-reply'

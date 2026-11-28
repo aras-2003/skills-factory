@@ -39,7 +39,8 @@ class PermissionNontransferTests(unittest.TestCase):
 
     def test_responses_have_exact_turn_scope_and_distinct_profiles(self):
         self.assertEqual(canary.permission_response(self.expected), {
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}, 'scope': 'turn'})
+            'permissions': {'fileSystem': {'read': None, 'write': [self.expected.marker],
+                'entries': [self.expected.write_entry]}}, 'scope': 'turn'})
         self.assertEqual(canary.empty_permission_response(), {'permissions': {}, 'scope': 'turn'})
         self.assertNotIn('session', str(canary.permission_response(self.expected)))
 
