@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — assess and fix writable scope grants that can include Git metadata",
+  "source_revision": "f8f097175ba7c65e59b93230b5899f675b709151",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Source inspection found the shared Developer scope validator accepts a writable grant rooted at .git, while git status and committed-diff checks do not observe Git metadata contents. This may undermine the scope evidence boundary, so architecture advice is needed before changing the shared contract. No test or code change has started.",
+    "timestamp": "2026-11-28T11:01:41Z"
+  },
+  "impact": "A1",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved sf-architect profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved sf-architect profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Host model metadata reported by Architect child",
+      "reason": null
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Effective reasoning effort was not exposed by host metadata."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "Host did not expose whether the named TOML profile was loaded."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "A distinct sf-architect child returned the bounded A1 trust-boundary review; exact host dispatch time is not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-28T11:01:41Z",
+      "latest": "2026-11-28T11:05:07Z",
+      "evidence": "The pre-dispatch INVOKE record preceded the completed Architect result observed by the coordinator."
+    },
+    "time_unknown_reason": "Host did not expose exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned the A1 / EXTEND assessment and a bounded lexical validation fix with compatibility consumers.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-28T11:01:41Z",
+      "latest": "2026-11-28T11:05:07Z",
+      "evidence": "Architect dispatch followed the validated pre-dispatch decision and result was observed by the latest bound."
+    },
+    "started_time_unknown_reason": "Host did not expose exact worker start time.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-28T11:01:41Z",
+      "latest": "2026-11-28T11:05:07Z",
+      "evidence": "The completed review was observed by the coordinator by the latest bound."
+    },
+    "ended_time_unknown_reason": "Host did not expose exact worker completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-28/git-metadata-scope/architect-review.md",
+    "sha256": "f18c49cc80c5a58eb867a9fd874340c7dc41f73cc5f5fb848019c0f9ba312831",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-28T11:05:07Z",
+    "reason": "Adopt the narrow complete-component rejection and freeze tests across shared lexical validation, handoff callers and candidate-scope preconditions; preserve valid .git-prefixed sibling names and keep host ACL claims separate."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Pre-action INVOKE is recorded, but host dispatch/action timestamps are unavailable.",
+    "assessed_at": "2026-11-28T11:05:07Z",
+    "first_dependent_action_at": null,
+    "reason": "Architect completed before the Test Designer was dispatched, but only coordinator ordering is observed and no non-overlapping timestamps were captured.",
+    "first_dependent_action_reference": "evals/results/role-decisions/sdlc-deep-2026-11-28/git-metadata-scope/test-design.md",
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T11:01:41Z",
+      "latest": "2026-11-28T11:05:07Z",
+      "evidence": "The frozen Test Designer plan is the first dependent action recorded after the Architect review; exact child lifecycle times are unavailable."
+    },
+    "first_dependent_action_time_unknown_reason": "No exact timestamp for first dependent child dispatch is exposed."
+  },
+  "decision_id": "sdlcdeep-20261128-git-metadata-scope-architect-invoke",
+  "attempt_id": "sdlcdeep-20261128-git-metadata-scope-architect-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "scripts/engineering/developer_scope.py:validate_repo_relative_path and verify_candidate_scope at source f8f097175ba7c65e59b93230b5899f675b709151; git status excludes Git metadata.",
+      "captured_at": "2026-11-28T11:01:41Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A1_TRUST_BOUNDARY",
+    "reason": "The scope verifier may accept a writable grant over Git’s control metadata, where its later Git-diff/status checks do not cover the changed state. This affects the trust boundary of Developer scope validation.",
+    "evidence_reference": "scripts/engineering/developer_scope.py:validate_repo_relative_path, verify_candidate_scope; exact source f8f097175ba7c65e59b93230b5899f675b709151."
+  }
+}
