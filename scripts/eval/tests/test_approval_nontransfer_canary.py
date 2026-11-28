@@ -333,6 +333,67 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         receipt['network_sandbox']['status'] = 'FAIL'
         self.assertEqual(canary.aggregate_canary_status(receipt), 'FAIL')
 
+    def test_local_mock_failure_classes_are_fixed_labels(self):
+        class SecretOSError(OSError):
+            pass
+
+        self.assertEqual(canary.local_mock_exception_class(TimeoutError('secret timeout')), 'timeout')
+        self.assertEqual(canary.local_mock_exception_class(subprocess.TimeoutExpired('secret-cmd', 1)), 'timeout')
+        self.assertEqual(canary.local_mock_exception_class(SecretOSError('secret path/cmd')), 'os_error')
+        self.assertEqual(canary.local_mock_exception_class(subprocess.SubprocessError('secret')), 'subprocess_error')
+        self.assertEqual(canary.local_mock_exception_class(json.JSONDecodeError('secret', 'x', 0)), 'value_error')
+        self.assertEqual(canary.local_mock_exception_class(ValueError('secret')), 'value_error')
+        self.assertEqual(canary.local_mock_exception_class(TypeError('secret')), 'type_error')
+        self.assertEqual(canary.local_mock_exception_class(KeyError('secret')), 'key_error')
+        self.assertEqual(canary.local_mock_exception_class(RuntimeError('secret')), 'runtime_error')
+        self.assertEqual(canary.local_mock_exception_class(Exception('secret')), 'other')
+
+    def test_fixture_setup_exception_is_sanitized_and_stops_before_app_server(self):
+        expected_sha = 'a' * 40
+        secret = 'SENTINEL-secret-/private/tmp/raw-cmd'
+        version = subprocess.CompletedProcess(['codex', '--version'], 0, canary.VERSION + '\n', '')
+        with mock.patch.object(canary, 'candidate_is_clean', return_value=True), \
+             mock.patch.object(canary.subprocess, 'run', return_value=version), \
+             mock.patch.object(canary.sys, 'platform', 'darwin'), \
+             mock.patch.object(Path, 'is_file', return_value=True), \
+             mock.patch.object(canary, 'start_fixture', side_effect=OSError(secret)), \
+             mock.patch.object(canary.subprocess, 'Popen') as popen:
+            receipt = canary.run_local_mock('codex', expected_sha, 2)
+
+        popen.assert_not_called()
+        self.assertEqual(receipt['failure_phase'], 'fixture_setup')
+        self.assertEqual(receipt['failure_class'], 'os_error')
+        self.assertEqual(receipt['reason'], 'local mock precondition or protocol unverified')
+        self.assertEqual(receipt['status'], 'BLOCKED')
+        self.assertFalse(receipt['runtime_process_started'])
+        self.assertTrue(all(receipt['cases'][f'PERM-NT-{i:02d}'] == 'NOT_RUN' for i in range(1, 7)))
+        self.assertEqual(receipt['cases']['PERM-NT-07'], 'BLOCKED')
+        self.assertTrue(receipt['cleanup_verified'])
+        serialized = json.dumps(receipt)
+        for fragment in ('SENTINEL', 'private/tmp', 'raw-cmd', secret):
+            self.assertNotIn(fragment, serialized)
+
+    def test_fixture_worker_start_failure_closes_bound_server(self):
+        class FakeServer:
+            created = []
+
+            def __init__(self, *_args):
+                self.closed = False
+                self.server_address = ('127.0.0.1', 43210)
+                self.created.append(self)
+
+            def server_close(self):
+                self.closed = True
+
+            def serve_forever(self):
+                pass
+
+        with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
+             mock.patch.object(canary.threading.Thread, 'start', side_effect=RuntimeError('secret')):
+            with self.assertRaises(RuntimeError):
+                canary.start_fixture(self.expected)
+        self.assertTrue(FakeServer.created[0].closed)
+
     def test_removed_diagnostic_continuation_flag_has_no_side_effects(self):
         args = ['approval_nontransfer_canary.py', '--execute', '--candidate-sha', 'a' * 40,
                 '--output', '/tmp/unused-receipt.json', '--diagnostic-continue-after-network-block']

@@ -1397,7 +1397,11 @@ def start_fixture(expected):
 
     server = FixtureServer(('127.0.0.1', 0), Handler)
     worker = threading.Thread(target=server.serve_forever, daemon=True)
-    worker.start()
+    try:
+        worker.start()
+    except BaseException:
+        server.server_close()
+        raise
     return fixture, server, worker
 
 
@@ -1741,6 +1745,27 @@ def aggregate_canary_status(receipt):
     return 'FAIL' if 'FAIL' in statuses else ('PASS' if all(s == 'PASS' for s in statuses) else 'BLOCKED')
 
 
+def local_mock_exception_class(error):
+    """Map setup failures to fixed labels; never expose exception text or names."""
+    if isinstance(error, (TimeoutError, subprocess.TimeoutExpired)):
+        return 'timeout'
+    if isinstance(error, OSError):
+        return 'os_error'
+    if isinstance(error, subprocess.SubprocessError):
+        return 'subprocess_error'
+    if isinstance(error, json.JSONDecodeError):
+        return 'value_error'
+    if isinstance(error, ValueError):
+        return 'value_error'
+    if isinstance(error, TypeError):
+        return 'type_error'
+    if isinstance(error, KeyError):
+        return 'key_error'
+    if isinstance(error, RuntimeError):
+        return 'runtime_error'
+    return 'other'
+
+
 def run_local_mock(binary, candidate_sha, timeout):
     """Opt-in scripted local runtime; does not provide or test authentication."""
     receipt = {'candidate_sha': candidate_sha, 'mode': 'credential-free-local-mock',
@@ -1757,23 +1782,28 @@ def run_local_mock(binary, candidate_sha, timeout):
     permission_request_diagnostics = []
     observed_command_pids = set()
     observed_a = False
+    failure_phase = 'runtime_setup'
     try:
         root = Path(tempfile.mkdtemp(prefix='permission-mock-', dir='/tmp')).resolve()
         root.chmod(0o700)
         sibling = Path(tempfile.mkdtemp(prefix=root.name + '-outside-', dir=root.parent)).resolve()
         env = isolated_runtime_env(os.environ, root)
+        failure_phase = 'candidate_check'
         if not candidate_is_clean(candidate_sha, timeout, env):
             raise RuntimeError('candidate mismatch or tracked changes')
+        failure_phase = 'runtime_check'
         version = subprocess.run([binary, '--version'], capture_output=True, text=True,
                                  timeout=timeout, env=env, check=True).stdout.strip()
         receipt['runtime_version'] = version
         if version != VERSION or sys.platform != 'darwin' or not Path('/usr/bin/sandbox-exec').is_file():
             raise RuntimeError('unsupported runtime or sandbox')
+        failure_phase = 'fixture_setup'
         marker = root / 'marker'
         marker.write_bytes(b'')
         expected = ExpectedPermission(root, marker)
         fixture, server, worker = start_fixture(expected)
         port = server.server_address[1]
+        failure_phase = 'profile_setup'
         config = ('model = "mock-model"\nmodel_provider = "local_mock"\n'
                   '[model_providers.local_mock]\nname = "local_mock"\n'
                   f'base_url = "http://127.0.0.1:{port}/v1"\n'
@@ -1784,21 +1814,25 @@ def run_local_mock(binary, candidate_sha, timeout):
         receipt['macos'] = {'version': platform.mac_ver()[0] or 'UNKNOWN',
                             'machine': platform.machine() or 'UNKNOWN'}
         receipt['sandbox_profile_sha256'] = digest(profile.encode())
+        failure_phase = 'filesystem_preflight'
         fs_preflight = verify_filesystem_profile(root, sibling, marker, port, profile, env, min(timeout, 10))
         receipt['filesystem_sandbox'] = fs_preflight
         if fs_preflight['status'] != 'PASS':
             raise RuntimeError('filesystem sandbox preflight not proven')
         marker.write_bytes(b'')
+        failure_phase = 'network_preflight'
         network_preflight = verify_network_profile(port, profile, root, env, min(timeout, 10), fixture)
         receipt['network_sandbox'] = network_preflight
         if network_preflight['status'] != 'PASS':
             raise RuntimeError('network sandbox preflight not proven')
+        failure_phase = 'app_server_start'
         proc = subprocess.Popen(sandbox_prefix(root, port, profile) + [binary, 'app-server',
                                  '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.DEVNULL, text=True, bufsize=1, cwd=root,
                                 env=env, start_new_session=True)
         receipt['runtime_process_started'] = True
         rpc = Rpc(proc, timeout)
+        failure_phase = 'protocol'
         if not ok(rpc.request('initialize', {'clientInfo': {'name': 'permission-local-mock', 'version': '1'},
                                                'capabilities': {'experimentalApi': True}})):
             raise RuntimeError('initialize failed')
@@ -1999,6 +2033,11 @@ def run_local_mock(binary, candidate_sha, timeout):
     except (OSError, ValueError, KeyError, TypeError, TimeoutError, RuntimeError, subprocess.SubprocessError,
             json.JSONDecodeError):
         receipt['reason'] = 'local mock precondition or protocol unverified'
+        allowed_phases = {'runtime_setup', 'candidate_check', 'runtime_check', 'fixture_setup',
+                          'profile_setup', 'filesystem_preflight', 'network_preflight',
+                          'app_server_start', 'protocol'}
+        receipt['failure_phase'] = failure_phase if failure_phase in allowed_phases else 'unknown'
+        receipt['failure_class'] = local_mock_exception_class(sys.exc_info()[1])
     finally:
         if permission_request_diagnostics:
             receipt['permission_request_diagnostics'] = permission_request_diagnostics
