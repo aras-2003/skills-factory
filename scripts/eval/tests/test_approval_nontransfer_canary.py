@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import socket
 import subprocess
 import sys
 import tempfile
@@ -327,6 +328,23 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                          if line.startswith('data: ')]
         self.assertEqual(second_events[-1]['response']['status'], 'completed')
         self.assertEqual(fixture.diagnostics['nested_execution_output'], 'expected')
+
+    def test_network_preflight_startup_exception_closes_registered_sockets(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        created = []
+        real_socket = socket.socket
+        def create_socket(*args, **kwargs):
+            value = real_socket(*args, **kwargs)
+            created.append(value)
+            return value
+        with mock.patch.object(canary.socket, 'socket', side_effect=create_socket), \
+             mock.patch.object(canary.threading.Thread, 'start', side_effect=RuntimeError('injected start failure')):
+            result = canary.verify_network_profile(12345, canary.sandbox_profile('/tmp/root', 12345),
+                '/tmp/root', {}, 1, fixture)
+        self.assertEqual(result['status'], 'BLOCKED')
+        self.assertTrue(result['decoy_workers_stopped'])
+        self.assertTrue(created)
+        self.assertTrue(all(sock.fileno() == -1 for sock in created))
 
     def test_fixture_readback_requires_unique_call_id_and_exact_profile(self):
         output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
