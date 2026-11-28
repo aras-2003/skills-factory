@@ -92,6 +92,23 @@ Observed App Server evidence narrows two permissions surfaces:
   controls on CLI `0.159.1`; see the dated runtime ACL receipt. This does not
   prove the model-visible tool schema, native child inheritance, hosted MCP,
   or policy inheritance between threads.
+- A fresh credential-filtered, zero-model-turn MCP ACL canary after PR #832
+  also passed both `enabled_tools` and `disabled_tools` policies on candidate
+  `3bea5127ef154aa55cb118c4b304521c554a4a30` (tree
+  `40c94fc5cf66a1eba97406542083a073af9c1e9d`). The restricted catalog exposed
+  only `allowed`; App Server rejected the `forbidden` call and the fixture
+  observed zero ingress for it. See
+  [`appserver-mcp-tool-acl-canary.json`](../../evals/results/runtime-canaries/sdlc-deep-2026-11-28/appserver-mcp-tool-acl-canary.json).
+  This is direct thread-scoped App Server MCP filtering, not native subagent
+  inheritance or filesystem ACL evidence. The candidate tree matches the
+  post-merge source tree from PR #832.
+- The credential-free approval-transfer local-mock canary was attempted on
+  candidate `e3c6b529fc8bd1a3dd51296af459b6e00a735d71` and stopped in
+  `fixture_setup` with a sanitized `os_error` before any App Server process
+  started. The marker remained empty and cleanup passed; PERM-NT-01–06 and
+  ENF-01–03 are `NOT_RUN`; PERM-NT-07 is `BLOCKED`. See
+  [`approval-nontransfer-local-mock-blocked.json`](../../evals/results/runtime-canaries/sdlc-deep-2026-11-28/approval-nontransfer-local-mock-blocked.json).
+  This does not test approval transfer or runtime permission enforcement.
 - A fresh isolated App Server profile probe on 2026-11-28 returned
   `activePermissionProfile.id=:workspace`, returned the requested model, and
   rejected an unknown profile. The response reported no writable roots. The
