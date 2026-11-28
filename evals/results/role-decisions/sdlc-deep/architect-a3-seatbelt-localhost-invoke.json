@@ -85,7 +85,11 @@
     "reason": "The first dependent action occurred after the recorded decision, but its precise time was not captured.",
     "first_dependent_action_reference": "Harmless Seatbelt parser and AF_INET6 socket-creation experiments under the candidate profile.",
     "no_qualifying_action_confirmed": false,
-    "first_dependent_action_coordinator_bounds": "After 2026-11-28T02:59:55Z and before 2026-11-28T03:05:40Z",
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T02:59:55Z",
+      "latest": "2026-11-28T03:05:40Z",
+      "evidence": "Coordinator disposition was recorded at the earliest bound and timing was assessed at the latest bound; exact first-action time was not captured."
+    },
     "first_dependent_action_time_unknown_reason": "No exact timestamp was recorded for the first experiment."
   },
   "decision_id": "sdlc-deep-seatbelt-localhost-architect-a3",
