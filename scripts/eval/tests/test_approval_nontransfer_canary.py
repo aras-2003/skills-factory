@@ -282,6 +282,14 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                      {'input': [{**item, 'output': '{}'}]}, {'input': 'invalid'}):
             self.assertEqual(canary.fixture_permission_output(body, 'call-1', self.expected), 'unknown')
 
+    def test_runtime_permission_schema_null_legacy_fields_are_allowed(self):
+        profile = {'fileSystem': {'read': None, 'write': None, 'globScanMaxDepth': None,
+                                  'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(profile, self.expected.marker))
+        for field, value in (('read', ['/']), ('write', ['/tmp']), ('globScanMaxDepth', 3)):
+            broadened = {'fileSystem': {**profile['fileSystem'], field: value}, 'network': None}
+            self.assertFalse(canary.request_is_exact_marker_write(broadened, self.expected.marker))
+
     def test_fixture_sequence_requires_readback_before_command(self):
         fixture = canary.ScriptedResponses(self.expected)
         fixture.begin('ENF')

@@ -51,7 +51,10 @@ def request_is_exact_marker_write(profile, marker):
     if not isinstance(profile, dict) or set(profile) - {'fileSystem', 'network'}:
         return False
     filesystem = profile.get('fileSystem')
-    if not isinstance(filesystem, dict) or set(filesystem) != {'entries'}:
+    if not isinstance(filesystem, dict) or set(filesystem) - {
+            'read', 'write', 'globScanMaxDepth', 'entries'}:
+        return False
+    if any(filesystem.get(field) is not None for field in ('read', 'write', 'globScanMaxDepth')):
         return False
     entries = filesystem.get('entries')
     if not isinstance(entries, list) or len(entries) != 1:
