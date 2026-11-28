@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 \u2014 bounded parallel work plan for SDLC Deep runtime acceptance",
+  "source_revision": "642c745a847b56bdf285cae202c68e3e855048d7",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "The proposed parallel work spans role dispatch/model telemetry, per-thread ACLs, isolated auth and resumable handoffs. These components share runtime trust, evidence and lifecycle contracts; architecture review is required before splitting implementation ownership.",
+    "timestamp": "2026-11-28T08:38:02Z"
+  },
+  "impact": "A3",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml; role instructions to be supplied explicitly",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The distinct sf-architect child was accepted and returned a result, but the host did not expose the effective per-turn model."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host did not expose effective reasoning effort for the Architect child."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host did not expose whether the repository TOML profile was loaded or which effective profile was active."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Distinct sf-architect task /root/sdlc_parallel_architecture was accepted by the collaboration runtime; exact host dispatch timestamp is not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-28T08:38:02Z",
+      "latest": "2026-11-28T08:40:41Z",
+      "evidence": "Pre-dispatch sidecar was validated before the dispatch call; the collaboration runtime returned the distinct named Architect child. Exact dispatch time is not exposed."
+    },
+    "time_unknown_reason": "The collaboration runtime does not expose an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Distinct Architect child returned a bounded A3 architecture decision and source-linked AC-D04 finding; exact host lifecycle timestamps are not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-28T08:38:02Z",
+      "latest": "2026-11-28T08:40:41Z",
+      "evidence": "Accepted Architect child was later observed running; exact start time is unavailable."
+    },
+    "started_time_unknown_reason": "The collaboration runtime does not expose an execution start timestamp.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-28T08:41:58Z",
+      "latest": "2026-11-28T08:42:54Z",
+      "evidence": "The Architect recommendation was received between these coordinator observations."
+    },
+    "ended_time_unknown_reason": "The collaboration runtime does not expose an execution completion timestamp."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-28/parallel-sdlc/architect-parallel-sdlc-review.md",
+    "sha256": "86f87344fed707e9137b2be1ef6b5c9eea15aafb8fc8b46f3815833204d0657e",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-28T08:47:55Z",
+    "reason": "Accepted the composed architecture and selected the reproducible AC-D04 handoff-budget defect as the first implementation slice; other tracks remain conditional."
+  },
+  "timing_assessment": {
+    "value": "ON_TIME",
+    "assessor": "Independent Reviewer",
+    "provenance": "evals/results/role-decisions/sdlc-deep-2026-11-28/parallel-sdlc/architect-timing-review.md sha256:fb6a2be1da433b78d204ac7f767438bd4feefd691b540c71502b7f874112987d; based only on non-overlapping coordinator observation bounds.",
+    "assessed_at": "2026-11-28T08:59:58Z",
+    "first_dependent_action_at": null,
+    "reason": "Independent reviewer confirmed Architect dispatch was accepted by 08:40:41Z and first dependent Test Designer dispatch followed the 08:42:54Z observation; exact host timestamps remain unavailable.",
+    "first_dependent_action_reference": "Distinct sf-test-designer dispatch for the frozen AC-D04 test design.",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T08:42:54Z",
+      "latest": "2026-11-28T08:47:55Z",
+      "evidence": "Independent reviewer inspected the recorded tool/message sequence and confirmed the non-overlapping bounds."
+    },
+    "first_dependent_action_time_unknown_reason": "The collaboration runtime did not expose an exact Test Designer dispatch timestamp."
+  },
+  "decision_id": "sdlcdeep-20261128-parallel-runtime-architect",
+  "attempt_id": "sdlcdeep-20261128-parallel-runtime-architect-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Issue #748 AC-D01..D07; docs/governance/SDLC-ROLE-CAPABILITY-MATRIX.md; docs/governance/CODEX-SUBAGENT-PILOT.md; scripts/engineering/delegation_handoff.py; current runtime-canary receipts.",
+      "captured_at": "2026-11-28T08:38:02Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS",
+    "reason": "The proposed parallel work spans role dispatch/model telemetry, per-thread ACLs, isolated auth and resumable handoffs. These components share runtime trust, evidence and lifecycle contracts; architecture review is required before splitting implementation ownership.",
+    "evidence_reference": "Issue #748 AC-D01..D07; docs/governance/SDLC-ROLE-CAPABILITY-MATRIX.md; docs/governance/CODEX-SUBAGENT-PILOT.md; scripts/engineering/delegation_handoff.py; current runtime-canary receipts."
+  }
+}

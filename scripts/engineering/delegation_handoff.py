@@ -156,7 +156,8 @@ def _unique_object(pairs: list[tuple[str, Any]]) -> dict:
 
 def read_input(data: bytes | str) -> dict:
     if isinstance(data, bytes):
-        if len(data) > MAX_HANDOFF_BYTES:
+        size = len(data)
+        if size > MAX_HANDOFF_BYTES:
             raise ValueError(f"handoff exceeds {MAX_HANDOFF_BYTES} byte context limit")
         try:
             data = data.decode("utf-8")
@@ -179,7 +180,10 @@ def read_input(data: bytes | str) -> dict:
         raise ValueError("serialized handoff is not valid JSON") from None
     except RecursionError:
         raise ValueError("serialized handoff exceeds recursion limit") from None
-    return validate_input(payload)
+    item = validate_input(payload)
+    if size > item["context_budget"]:
+        raise ValueError("serialized input exceeds declared context_budget")
+    return item
 
 
 def validate_result(
