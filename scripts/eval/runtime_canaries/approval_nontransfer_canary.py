@@ -1516,6 +1516,39 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
     return result
 
 
+def network_probe_script(port, decoy_port, local_interface):
+    """Build valid child Python for the exact-profile egress probes."""
+    return f'''import errno,json,socket,sys
+port={int(port)}
+decoy_port={int(decoy_port)}
+local_interface={local_interface!r}
+def connect(family,host,p):
+ try:
+  s=socket.socket(family,socket.SOCK_STREAM); s.settimeout(1)
+ except OSError as e:
+  return {{'stage':'socket_create','class':'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'}}
+ try:
+  s.connect((host,p)); return 'CONNECTED'
+ except OSError as e:
+  return {{'stage':'connect','class':'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'}}
+ finally: s.close()
+def udp_send():
+ s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+ try:
+  s.sendto(b'probe',('127.0.0.1',port)); return 'SENT'
+ except OSError as e:
+  return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
+ finally: s.close()
+s=socket.create_connection(('127.0.0.1',port),timeout=2)
+s.sendall(b'GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n')
+response=s.recv(256); s.close()
+fixture='allowed' if b' 200 ' in response.split(b'\\r\\n',1)[0] else 'failed'
+local_result=connect(socket.AF_INET,local_interface,port) if local_interface else 'UNKNOWN'
+print(json.dumps({{'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'127.0.0.1',decoy_port),
+ 'local_same_port':local_result,'ipv6':connect(socket.AF_INET6,'::1',port),'udp':udp_send()}}))
+'''
+
+
 def _verify_network_profile(port, profile, root, env, timeout, fixture, resources):
     """Verify TCP fixture allow and live wrong-port/IPv6/UDP denials."""
     decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -1623,35 +1656,7 @@ def _verify_network_profile(port, profile, root, env, timeout, fixture, resource
         except OSError:
             local_controller_reachable = False
             local_interface = None
-    probe = f'''import errno,json,socket,sys
-port={int(port)}
-decoy_port={int(decoy_port)}
-local_interface={local_interface!r}
-def connect(family,host,p):
- try:
-  s=socket.socket(family,socket.SOCK_STREAM); s.settimeout(1)
- except OSError as e:
-  return {{'stage':'socket_create','class':'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'}}
- try:
-  s.connect((host,p)); return 'CONNECTED'
- except OSError as e:
-  return {{'stage':'connect','class':'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'}}
- finally: s.close()
-def udp_send():
- s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
- try:
-  s.sendto(b'probe',('127.0.0.1',port)); return 'SENT'
- except OSError as e:
-  return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
- finally: s.close()
-s=socket.create_connection(('127.0.0.1',port),timeout=2)
-s.sendall(b'GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n')
-response=s.recv(256); s.close()
-fixture='allowed' if b' 200 ' in response.split(b'\\r\\n',1)[0] else 'failed'
-local_result=connect(socket.AF_INET,local_interface,port) if local_interface else 'UNKNOWN'
-print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'127.0.0.1',decoy_port),
- 'local_same_port':local_result,'ipv6':connect(socket.AF_INET6,'::1',port),'udp':udp_send()}))
-'''
+    probe = network_probe_script(port, decoy_port, local_interface)
     result = None
     try:
         result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', probe],

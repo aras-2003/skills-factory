@@ -313,6 +313,13 @@ class LocalMockPrimitivesTests(unittest.TestCase):
             '/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path("/tmp/canary-root").resolve()}',
             '-D', 'FIXTURE_ENDPOINT=localhost:43210', '-p', profile])
 
+    def test_network_probe_script_compiles_and_covers_each_destination_class(self):
+        source = canary.network_probe_script(43210, 43211, '10.0.0.2')
+        compile(source, '<network-probe>', 'exec')
+        for target in ("'127.0.0.1',decoy_port", 'local_interface,port', "'::1',port",
+                       "'127.0.0.1',port", "'local_same_port'", "'fixture_http'"):
+            self.assertIn(target, source)
+
     def test_nested_probe_fixture_returns_only_true_command_and_correlated_output(self):
         fixture = canary.ScriptedResponses(self.expected)
         fixture.begin('PROBE')
