@@ -1649,6 +1649,18 @@ def run_local_mock(binary, candidate_sha, timeout):
         if rpc:
             receipt['command_execution_event_count'] = sum(
                 1 for event in rpc.events if event_item(event).get('type') == 'commandExecution')
+            receipt['runtime_event_summary'] = {
+                'methods': {method: sum(1 for event in rpc.events if event.get('method') == method)
+                    for method in ('turn/completed', 'item/started', 'item/completed',
+                                   'item/commandExecution/requestApproval')},
+                'item_types': {item_type: sum(1 for event in rpc.events
+                    if event_item(event).get('type') == item_type)
+                    for item_type in ('commandExecution', 'functionCall', 'functionCallOutput', 'message')},
+                'turn_statuses': {label: next((event.get('params', {}).get('turn', {}).get('status')
+                    for event in reversed(rpc.events) if event.get('method') == 'turn/completed'
+                    and event.get('params', {}).get('threadId') == thread_id), 'not_completed')
+                    for label, thread_id in thread_ids.items()},
+            }
     return receipt
 
 
