@@ -300,6 +300,9 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
         item = {'type': 'function_call_output', 'call_id': 'call-1', 'output': output}
         self.assertEqual(canary.fixture_permission_output({'input': [item]}, 'call-1', self.expected), 'denied')
+        structured_item = {**item, 'output': [{'type': 'input_text', 'text': output}]}
+        self.assertEqual(canary.fixture_permission_output({'input': [structured_item]},
+                                                          'call-1', self.expected), 'denied')
         for body in ({'input': [item, item]}, {'input': [{**item, 'call_id': 'wrong'}]},
                      {'input': [{**item, 'output': '{}'}]}, {'input': 'invalid'}):
             self.assertEqual(canary.fixture_permission_output(body, 'call-1', self.expected), 'unknown')

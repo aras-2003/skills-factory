@@ -644,11 +644,18 @@ def fixture_permission_output(body, call_id, expected):
         return 'unknown'
     outputs = [item for item in body['input'] if isinstance(item, dict)
                and item.get('type') == 'function_call_output' and item.get('call_id') == call_id]
-    if len(outputs) != 1 or not isinstance(outputs[0].get('output'), str):
+    if len(outputs) != 1:
+        return 'unknown'
+    output = outputs[0].get('output')
+    if isinstance(output, list):
+        if len(output) != 1 or not isinstance(output[0], dict) or output[0].get('type') != 'input_text':
+            return 'unknown'
+        output = output[0].get('text')
+    if not isinstance(output, str):
         return 'unknown'
     event = {'method': 'item/completed', 'params': {'threadId': 'fixture', 'turnId': 'fixture',
         'item': {'type': 'functionCallOutput', 'name': 'request_permissions', 'id': call_id,
-                 'output': outputs[0]['output']}}}
+                 'output': output}}}
     return permission_tool_outcome(event, 'fixture', 'fixture', call_id, expected)
 
 
