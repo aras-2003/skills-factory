@@ -301,6 +301,33 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                        {'type': 'workspaceWrite'}, {'type': 'readOnly', 'other': True}):
             self.assertFalse(canary.is_read_only_policy(policy))
 
+    def test_outer_profile_is_root_scoped_and_numeric_endpoint_only(self):
+        profile = canary.sandbox_profile('/tmp/canary-root', 43210)
+        self.assertIn('(deny file-write* (require-not (subpath (param "CANARY_ROOT"))))', profile)
+        self.assertIn('(allow file-write* (subpath (param "CANARY_ROOT")))', profile)
+        self.assertIn('(deny network-outbound)', profile)
+        self.assertIn('(remote tcp (param "FIXTURE_ENDPOINT"))', profile)
+        self.assertNotIn('localhost', profile)
+        self.assertEqual(canary.sandbox_prefix('/tmp/canary-root', 43210, profile), [
+            '/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path("/tmp/canary-root").resolve()}',
+            '-D', 'FIXTURE_ENDPOINT=127.0.0.1:43210', '-p', profile])
+
+    def test_nested_probe_fixture_returns_only_true_command_and_correlated_output(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('PROBE')
+        first = fixture.respond({'tools': [{'name': 'exec_command', 'parameters': {'type': 'object'}}]})
+        event_data = [line[6:] for line in first.decode().splitlines() if line.startswith('data: ')]
+        first_payload = json.loads(event_data[1])
+        item = first_payload['item']
+        self.assertEqual(item['call_id'], 'command_PROBE')
+        self.assertEqual(json.loads(item['arguments'])['cmd'], 'true')
+        second = fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'command_PROBE',
+                                             'output': ''}]})
+        second_events = [json.loads(line[6:]) for line in second.decode().splitlines()
+                         if line.startswith('data: ')]
+        self.assertEqual(second_events[-1]['response']['status'], 'completed')
+        self.assertEqual(fixture.diagnostics['nested_execution_output'], 'expected')
+
     def test_fixture_readback_requires_unique_call_id_and_exact_profile(self):
         output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
         item = {'type': 'function_call_output', 'call_id': 'call-1', 'output': output}

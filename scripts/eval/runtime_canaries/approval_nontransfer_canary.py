@@ -8,6 +8,7 @@ import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
+import platform
 from pathlib import Path
 import queue
 import shutil
@@ -1206,6 +1207,7 @@ class ScriptedResponses:
         self.tool_classes = []
         self.command_schema_summary = None
         self.completed_steps = {}
+        self.egress_check_count = 0
 
     def begin(self, phase):
         with self.lock:
@@ -1220,7 +1222,7 @@ class ScriptedResponses:
     def respond(self, body):
         with self.lock:
             phase, step = self.phase, self.step
-            if phase not in ('A', 'B', 'ENF') or not isinstance(body, dict):
+            if phase not in ('PROBE', 'A', 'B', 'ENF') or not isinstance(body, dict):
                 raise ValueError('unexpected fixture request')
             names = set()
             for tool in body.get('tools', []) if isinstance(body.get('tools'), list) else []:
@@ -1244,7 +1246,18 @@ class ScriptedResponses:
                         }
             self.tool_classes = sorted(names)
             call_id = 'permission_' + phase
-            if step == 0:
+            if phase == 'PROBE' and step == 0:
+                item = {'type': 'function_call', 'id': 'item_command_PROBE',
+                        'call_id': 'command_PROBE', 'name': 'exec_command',
+                        'arguments': json.dumps({'cmd': 'true', 'yield_time_ms': 500,
+                                                 'workdir': self.expected.cwd})}
+            elif phase == 'PROBE' and step == 1:
+                output = fixture_text_output(body, 'command_PROBE')
+                if output is None:
+                    raise ValueError('nested execution probe readback mismatch')
+                self.diagnostics['nested_execution_output'] = 'expected' if output.strip() == '' else 'unexpected'
+                item = None
+            elif step == 0:
                 item = {'type': 'function_call', 'id': 'item_' + call_id, 'call_id': call_id,
                         'name': 'request_permissions', 'arguments': json.dumps({
                             'permissions': {'file_system': {'entries': [self.expected.write_entry]}}})}
@@ -1324,6 +1337,7 @@ def start_fixture(expected):
             if self.path != '/__egress_check':
                 self.send_error(404)
                 return
+            fixture.egress_check_count += 1
             self.send_response(200)
             self.send_header('Content-Length', '0')
             self.end_headers()
@@ -1347,7 +1361,8 @@ def start_fixture(expected):
                 fixture.error_reason = (reason if reason in {
                     'unexpected path', 'unexpected request size', 'unexpected fixture request',
                     'fixture permission readback mismatch', 'fixture command denial readback mismatch',
-                    'fixture command readback mismatch', 'unexpected fixture sequence'}
+                    'fixture command readback mismatch', 'nested execution probe readback mismatch',
+                    'unexpected fixture sequence'}
                     else 'fixture request or transport invalid')
                 try:
                     self.send_error(400)
@@ -1384,28 +1399,91 @@ def start_fixture(expected):
     return fixture, server, worker
 
 
-def verify_network_profile(port, profile, env, timeout):
-    """Verify the active OS profile permits only the fixture localhost port for IPv4."""
-    probe = f'''import socket,sys
-port = {int(port)}
-s = socket.create_connection(("127.0.0.1", port), timeout=2)
-s.sendall(f"GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n".encode())
-response = s.recv(256)
-s.close()
-if b" 200 " not in response.split(b"\\r\\n", 1)[0]: sys.exit(10)
-for host in ("127.0.0.2", "198.51.100.1"):
-    s = socket.socket(socket.AF_INET); s.settimeout(.5)
-    try:
-        s.connect((host, port)); sys.exit(11)
-    except PermissionError as error:
-        if error.errno != 1: sys.exit(12)
-    except OSError: sys.exit(13)
-    finally: s.close()
+def sandbox_profile(root, port):
+    """Build the root-scoped, numeric-endpoint Seatbelt profile used by every probe."""
+    return ('(version 1) (allow default) '
+            '(deny file-write* (require-not (subpath (param "CANARY_ROOT")))) '
+            '(allow file-write* (subpath (param "CANARY_ROOT"))) '
+            '(deny file-write-unlink (require-all (literal (param "CANARY_ROOT")) '
+            '(vnode-type DIRECTORY))) (deny system-fcntl (fcntl-command 80 110)) '
+            '(deny network-outbound) '
+            '(allow network-outbound (remote tcp (param "FIXTURE_ENDPOINT")))')
+
+
+def sandbox_prefix(root, port, profile):
+    return ['/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path(root).resolve()}',
+            '-D', f'FIXTURE_ENDPOINT=127.0.0.1:{int(port)}', '-p', profile]
+
+
+def verify_filesystem_profile(root, sibling, marker, port, profile, env, timeout):
+    """Require child entry, root write success and EPERM/EACCES for outside writes."""
+    root, sibling, marker = Path(root).resolve(), Path(sibling).resolve(), Path(marker).resolve()
+    sentinel = root / 'sandbox-child-entered'
+    outside = sibling / 'outside-canary'
+    outside.write_bytes(b'baseline')
+    script = r'''import errno,json,os,pathlib,sys
+root=pathlib.Path(sys.argv[1]); sibling=pathlib.Path(sys.argv[2]); marker=pathlib.Path(sys.argv[3]); sentinel=pathlib.Path(sys.argv[4])
+sentinel.write_text('entered')
+with marker.open('ab') as f: f.write(b'z')
+def denied(path, mode):
+ try:
+  with open(path, mode) as f:
+   if 'a' in mode: f.write('x')
+  return 'ALLOWED'
+ except OSError as e: return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
+print(json.dumps({'create':denied(sibling/'new-canary','x'),'append':denied(sibling/'outside-canary','a')}))
 '''
-    result = subprocess.run(['/usr/bin/sandbox-exec', '-p', profile, sys.executable, '-c', probe],
+    result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', script,
+            str(root), str(sibling), str(marker), str(sentinel)], stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, timeout=timeout,
+            env=env, check=False)
+    entered = sentinel.is_file() and sentinel.read_text() == 'entered'
+    try:
+        outcome = json.loads(result.stdout.strip()) if result.stdout else {}
+    except (ValueError, TypeError):
+        outcome = {}
+    ok = (result.returncode == 0 and entered and marker.read_bytes().endswith(b'z')
+          and outcome.get('create') in ('EPERM', 'EACCES')
+          and outcome.get('append') in ('EPERM', 'EACCES')
+          and not (sibling / 'new-canary').exists()
+          and outside.read_bytes() == b'baseline')
+    return {'status': 'PASS' if ok else 'BLOCKED', 'child_entry': entered,
+            'in_root_write': marker.read_bytes().endswith(b'z'),
+            'outside_create': outcome.get('create', 'UNKNOWN'),
+            'outside_append': outcome.get('append', 'UNKNOWN'),
+            'outside_unchanged': outside.read_bytes() == b'baseline',
+            'launcher_exit_class': 'zero' if result.returncode == 0 else 'nonzero'}
+
+
+def verify_network_profile(port, profile, root, env, timeout, fixture):
+    """Positive fixture request and errno-classified negatives under the exact profile."""
+    probe = f'''import errno,socket,sys
+port={int(port)}
+def connect(host,p):
+ s=socket.socket(socket.AF_INET); s.settimeout(1)
+ try:
+  s.connect((host,p)); return 'CONNECTED'
+ except OSError as e:
+  return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
+ finally: s.close()
+s=socket.create_connection(('127.0.0.1',port),timeout=2)
+s.sendall(b'GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n')
+response=s.recv(256); s.close()
+if b' 200 ' not in response.split(b'\\r\\n',1)[0]: sys.exit(10)
+for host,p in [('127.0.0.2',port),('198.51.100.1',port)]:
+ if connect(host,p) not in ('EPERM','EACCES'): sys.exit(11)
+'''
+    result = subprocess.run(sandbox_prefix(root, port, profile) + [sys.executable, '-c', probe],
         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         timeout=timeout, env=env, check=False)
-    return result.returncode == 0
+    ingress_ok = fixture.egress_check_count == 1
+    passed = result.returncode == 0 and ingress_ok
+    return {'status': 'PASS' if passed else 'BLOCKED',
+            'fixture_ipv4_loopback_allowed': result.returncode == 0,
+            'wrong_ipv4_and_reserved_address_denied': result.returncode == 0,
+            'fixture_ingress_count': fixture.egress_check_count,
+            'fixture_ingress_correlated': ingress_ok,
+            'probe_exit_class': 'zero' if result.returncode == 0 else 'nonzero'}
 
 
 def run_local_mock(binary, candidate_sha, timeout):
@@ -1419,13 +1497,16 @@ def run_local_mock(binary, candidate_sha, timeout):
                'runtime_process_started': False, 'status': 'BLOCKED', 'reason': None,
                'cost': 'UNKNOWN',
                'process_cleanup_scope': 'App Server process group plus every reported command PID; detached descendants not reported by the host are not independently enumerated.'}
-    root = marker = proc = rpc = fixture = server = worker = None
+    root = marker = proc = rpc = fixture = server = worker = sibling = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
     permission_request_diagnostics = []
     observed_command_pids = set()
     observed_a = False
     try:
-        root = Path(tempfile.mkdtemp(prefix='permission-mock-', dir='/tmp'))
+        root = Path(tempfile.mkdtemp(prefix='permission-mock-', dir='/tmp')).resolve()
+        root.chmod(0o700)
+        sibling = root.parent / (root.name + '-outside')
+        sibling.mkdir(mode=0o700)
         env = isolated_runtime_env(os.environ, root)
         if not candidate_is_clean(candidate_sha, timeout, env):
             raise RuntimeError('candidate mismatch or tracked changes')
@@ -1445,16 +1526,20 @@ def run_local_mock(binary, candidate_sha, timeout):
                   'wire_api = "responses"\nrequest_max_retries = 0\nstream_max_retries = 0\n'
                   'requires_openai_auth = false\nsupports_websockets = false\n')
         (Path(env['CODEX_HOME']) / 'config.toml').write_text(config)
-        profile = ('(version 1) (allow default) (deny network-outbound) '
-                   f'(allow network-outbound (remote ip "localhost:{port}"))')
-        if not verify_network_profile(port, profile, env, min(timeout, 10)):
-            raise RuntimeError('network sandbox preflight failed')
-        receipt['network_sandbox'] = {
-            'status': 'PASS', 'fixture_ipv4_loopback_allowed': True,
-            'other_ipv4_loopback_denied': True, 'reserved_external_ipv4_denied': True,
-            'ipv6_loopback': 'UNKNOWN_MAY_BE_ALLOWED_BY_LOCALHOST_MATCHER',
-        }
-        proc = subprocess.Popen(['/usr/bin/sandbox-exec', '-p', profile, binary, 'app-server',
+        profile = sandbox_profile(root, port)
+        receipt['macos'] = {'version': platform.mac_ver()[0] or 'UNKNOWN',
+                            'machine': platform.machine() or 'UNKNOWN'}
+        receipt['sandbox_profile_sha256'] = digest(profile.encode())
+        fs_preflight = verify_filesystem_profile(root, sibling, marker, port, profile, env, min(timeout, 10))
+        receipt['filesystem_sandbox'] = fs_preflight
+        if fs_preflight['status'] != 'PASS':
+            raise RuntimeError('filesystem sandbox preflight not proven')
+        marker.write_bytes(b'')
+        network_preflight = verify_network_profile(port, profile, root, env, min(timeout, 10), fixture)
+        receipt['network_sandbox'] = network_preflight
+        if network_preflight['status'] != 'PASS':
+            raise RuntimeError('network sandbox preflight not proven')
+        proc = subprocess.Popen(sandbox_prefix(root, port, profile) + [binary, 'app-server',
                                  '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.DEVNULL, text=True, bufsize=1, cwd=root,
                                 env=env, start_new_session=True)
@@ -1498,6 +1583,31 @@ def run_local_mock(binary, candidate_sha, timeout):
                     and values[0]['threadId'] == thread_id and values[0]['turnId'] == turn_id
                     and values[0]['itemId'] == 'permission_' + label
                     and response_matches(rpc.host_responses, values[0], shape=shape))
+
+        # Prove nested Codex command launch before attributing later errors to access policy.
+        probe_id, _ = start_thread(rpc, root, 'mock-model', timeout)
+        if not mcp_is_empty(rpc, probe_id):
+            raise RuntimeError('nested execution probe MCP catalog not empty')
+        thread_ids['PROBE'] = probe_id
+        fixture.begin('PROBE')
+        probe_turn = run_turn(rpc, probe_id, 'Run exactly the harmless command true and report its output.', None)
+        turn_ids['PROBE'] = probe_turn
+        probe_started = rpc.wait_for_event(lambda e: e.get('method') == 'item/started'
+            and is_b_command_event(e, probe_id, probe_turn), timeout)
+        probe_item = event_item(probe_started)
+        probe_done = rpc.wait_for_event(lambda e: e.get('method') == 'item/completed'
+            and is_b_command_event(e, probe_id, probe_turn)
+            and event_item(e).get('id') == probe_item.get('id'), timeout)
+        probe_turn_done = rpc.wait_for_event(lambda e: e.get('method') == 'turn/completed'
+            and e.get('params', {}).get('threadId') == probe_id
+            and event_turn_id(e) == probe_turn, timeout)
+        if (probe_item.get('command') != 'true' or event_item(probe_done).get('exitCode') != 0
+                or event_item(probe_done).get('status') != 'completed'
+                or probe_turn_done.get('params', {}).get('turn', {}).get('status') != 'completed'):
+            raise RuntimeError('nested execution probe not verified')
+        receipt['nested_execution_probe'] = {'status': 'PASS', 'command': 'true',
+            'command_started_and_completed': True, 'exit_code': 0}
+        fixture.end()
 
         a_id, _ = start_thread(rpc, root, 'mock-model', timeout)
         if not mcp_is_empty(rpc, a_id):
@@ -1669,6 +1779,11 @@ def run_local_mock(binary, candidate_sha, timeout):
                 removed = not root.exists()
             except OSError:
                 pass
+        if sibling:
+            try:
+                shutil.rmtree(sibling)
+            except OSError:
+                cleanup = False
         receipt['cleanup_verified'], receipt['fixture_removed'] = cleanup, removed
         if rpc:
             receipt['host_request_responses'] = rpc.host_responses
