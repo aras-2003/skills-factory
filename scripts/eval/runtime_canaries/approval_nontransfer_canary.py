@@ -1066,6 +1066,7 @@ class ScriptedResponses:
         self.step = 0
         self.readbacks = {}
         self.error = False
+        self.error_reason = None
 
     def begin(self, phase):
         with self.lock:
@@ -1155,8 +1156,13 @@ def start_fixture(expected):
                 self.send_header('Content-Length', str(len(payload)))
                 self.end_headers()
                 self.wfile.write(payload)
-            except (OSError, ValueError, TypeError, json.JSONDecodeError):
+            except (OSError, ValueError, TypeError, json.JSONDecodeError) as error:
                 fixture.error = True
+                reason = str(error)
+                fixture.error_reason = (reason if reason in {
+                    'unexpected path', 'unexpected request size', 'unexpected fixture request',
+                    'fixture permission readback mismatch', 'fixture command denial readback mismatch',
+                    'unexpected fixture sequence'} else 'fixture request or transport invalid')
                 try:
                     self.send_error(400)
                 except OSError:
@@ -1492,6 +1498,8 @@ def run_local_mock(binary, candidate_sha, timeout):
         statuses = list(receipt['cases'].values()) + list(receipt['enforcement_cases'].values())
         receipt['status'] = 'FAIL' if 'FAIL' in statuses else ('PASS' if all(s == 'PASS' for s in statuses) else 'BLOCKED')
         receipt['fixture_protocol_error'] = bool(fixture and fixture.error)
+        if fixture and fixture.error_reason:
+            receipt['fixture_protocol_error_class'] = fixture.error_reason
     return receipt
 
 
