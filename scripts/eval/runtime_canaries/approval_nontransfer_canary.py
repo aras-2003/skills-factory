@@ -187,12 +187,32 @@ class Rpc:
         self.lines = queue.Queue()
         self.events = []
         self.host_responses = []
-        threading.Thread(target=self._read, daemon=True).start()
+        self.reader = threading.Thread(target=self._read, daemon=True)
+        self.reader.start()
 
     def _read(self):
         for line in self.proc.stdout:
             self.lines.put(line)
         self.lines.put(None)
+
+    def drain_pending_notifications(self, timeout):
+        """After process shutdown, ingest unread stdout notifications for cleanup."""
+        self.reader.join(timeout=max(.01, timeout))
+        if self.reader.is_alive():
+            return False
+        while True:
+            try:
+                line = self.lines.get_nowait()
+            except queue.Empty:
+                return True
+            if line is None:
+                continue
+            try:
+                message = json.loads(line)
+            except (TypeError, json.JSONDecodeError):
+                return False
+            if isinstance(message, dict) and 'method' in message and 'id' not in message:
+                self.events.append(message)
 
     def _send(self, message):
         self.proc.stdin.write(json.dumps(message, separators=(',', ':')) + '\n')
@@ -1325,9 +1345,10 @@ def run_local_mock(binary, candidate_sha, timeout):
             json.JSONDecodeError):
         receipt['reason'] = 'local mock precondition or protocol unverified'
     finally:
-        if rpc:
-            observed_command_pids.update(reported_command_pids(rpc.events))
         cleanup = stop_process_group(proc, timeout) if proc else True
+        if rpc:
+            cleanup = rpc.drain_pending_notifications(min(timeout, 5)) and cleanup
+            observed_command_pids.update(reported_command_pids(rpc.events))
         process_cleanup_results = [stop_process_id(pid, min(timeout, 3)) for pid in observed_command_pids]
         process_cleanup = all(process_cleanup_results)
         cleanup = cleanup and process_cleanup

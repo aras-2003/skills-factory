@@ -310,6 +310,19 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         ]
         self.assertEqual(canary.reported_command_pids(events), {421})
 
+    def test_cleanup_drains_unread_command_notifications(self):
+        rpc = canary.Rpc.__new__(canary.Rpc)
+        rpc.lines = canary.queue.Queue()
+        rpc.events = []
+        rpc.reader = canary.threading.Thread(target=lambda: None)
+        rpc.reader.start()
+        rpc.reader.join()
+        rpc.lines.put(json.dumps({'method': 'item/started', 'params': {'item': {
+            'type': 'commandExecution', 'processId': 424}}}))
+        rpc.lines.put(None)
+        self.assertTrue(rpc.drain_pending_notifications(.1))
+        self.assertEqual(canary.reported_command_pids(rpc.events), {424})
+
     def test_command_denial_readback_is_marker_specific(self):
         marker = '/tmp/fixture/marker'
         good = {'input': [{'type': 'function_call_output', 'call_id': 'call-1',
