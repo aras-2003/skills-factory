@@ -294,10 +294,21 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertEqual(fixture.readbacks['ENF'], 'denied')
         with self.assertRaises(ValueError):
             fixture.respond({'input': []})
+        marker = str(self.expected.marker)
         command_output = {'input': [{'type': 'function_call_output', 'call_id': 'command_ENF',
-            'output': '/tmp/fixture/marker: Operation not permitted'}]}
+            'output': f'{marker}: Operation not permitted'}]}
         self.assertIn(b'Done.', fixture.respond(command_output))
         self.assertTrue(fixture.readbacks['ENF_command_denied'])
+
+    def test_reported_command_pids_include_unexpected_starts(self):
+        events = [
+            {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
+                'processId': 421, 'command': 'unexpected'}}},
+            {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
+                'processId': '422'}}},
+            {'method': 'item/started', 'params': {'item': {'type': 'other', 'processId': 423}}},
+        ]
+        self.assertEqual(canary.reported_command_pids(events), {421})
 
     def test_command_denial_readback_is_marker_specific(self):
         marker = '/tmp/fixture/marker'
