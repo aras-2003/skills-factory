@@ -1495,17 +1495,23 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
                   'probe_exit_class': 'PRECONDITION_OR_SETUP_ERROR'}
     finally:
         resources['stop'].set()
+        sockets_closed = True
         for sock in resources['sockets']:
             try:
                 sock.close()
             except OSError:
-                pass
+                sockets_closed = False
+            try:
+                sockets_closed = sockets_closed and sock.fileno() == -1
+            except OSError:
+                sockets_closed = False
         for worker in resources['workers']:
             if worker.is_alive():
                 worker.join(timeout=2)
     workers_stopped = all(not worker.is_alive() for worker in resources['workers'])
+    result['decoy_sockets_closed'] = sockets_closed
     result['decoy_workers_stopped'] = workers_stopped
-    if not workers_stopped:
+    if not workers_stopped or not sockets_closed:
         result['status'] = 'BLOCKED'
     return result
 
@@ -1989,7 +1995,8 @@ def run_local_mock(binary, candidate_sha, timeout):
         process_cleanup = all(process_cleanup_results)
         cleanup = cleanup and process_cleanup
         if receipt.get('network_sandbox') is not None:
-            cleanup = cleanup and receipt['network_sandbox'].get('decoy_workers_stopped', False)
+            cleanup = (cleanup and receipt['network_sandbox'].get('decoy_workers_stopped', False)
+                       and receipt['network_sandbox'].get('decoy_sockets_closed', False))
         receipt['observed_command_process_count'] = len(observed_command_pids)
         receipt['observed_command_processes_terminated'] = process_cleanup
         if server:
