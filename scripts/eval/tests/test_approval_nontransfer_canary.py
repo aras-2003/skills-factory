@@ -300,6 +300,11 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         unrelated_legacy_write = {'fileSystem': {'read': None, 'write': [self.expected.cwd],
                                                   'entries': [self.expected.write_entry]}, 'network': None}
         self.assertFalse(canary.request_is_exact_marker_write(unrelated_legacy_write, self.expected.marker))
+        params = {'permissions': redundant_exact_write}
+        self.assertEqual(canary.permission_profile_diagnostic(params, self.expected.marker),
+                         'exact_marker_profile')
+        self.assertEqual(canary.permission_profile_diagnostic(params, '/private/other/marker'),
+                         'marker_path_mismatch')
         with_glob_depth = {'fileSystem': {**profile['fileSystem'], 'globScanMaxDepth': 3},
                            'network': None}
         self.assertTrue(canary.request_is_exact_marker_write(with_glob_depth, self.expected.marker))
