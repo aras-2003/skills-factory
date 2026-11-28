@@ -1402,7 +1402,7 @@ def start_fixture(expected):
 
 
 def sandbox_profile(root, port):
-    """Build the root-scoped, numeric-endpoint Seatbelt profile used by every probe."""
+    """Build the root-scoped profile with TCP egress to one localhost port."""
     return ('(version 1) (allow default) '
             '(deny file-write* (require-not (subpath (param "CANARY_ROOT")))) '
             '(allow file-write* (subpath (param "CANARY_ROOT"))) '
@@ -1414,7 +1414,7 @@ def sandbox_profile(root, port):
 
 def sandbox_prefix(root, port, profile):
     return ['/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path(root).resolve()}',
-            '-D', f'FIXTURE_ENDPOINT=127.0.0.1:{int(port)}', '-p', profile]
+            '-D', f'FIXTURE_ENDPOINT=localhost:{int(port)}', '-p', profile]
 
 
 def verify_filesystem_profile(root, sibling, marker, port, profile, env, timeout):
@@ -1485,8 +1485,12 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
     decoy.listen(4)
     decoy.settimeout(.2)
     decoy_port = decoy.getsockname()[1]
-    ipv6 = udp = None
-    ipv6_ingress = udp_ingress = 0
+    ipv6 = udp = local_decoy = local_worker = None
+    ipv6_ingress, udp_ingress = 0, 0
+    local_ingress = [0]
+    local_lock = threading.Lock()
+    local_interface = None
+    local_controller_reachable = False
     decoy_count = 0
     baseline_ok = False
     stop = threading.Event()
@@ -1526,21 +1530,69 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
         baseline_udp.sendto(b'controller', ('127.0.0.1', int(port)))
         udp.recvfrom(64)
         baseline_udp.close()
+        udp_ingress = 1
         with socket.create_connection(('::1', int(port)), timeout=2):
             ipv6.accept()[0].close()
         ipv6_ingress = 1
         baseline_ipv6 = True
     except OSError:
         baseline_ipv6 = False
+    # Determine the selected local IPv4 interface without sending a datagram,
+    # then require a controller-positive same-port decoy there when available.
+    route = None
+    try:
+        route = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        route.connect(('192.0.2.1', 9))
+        candidate_local_ip = route.getsockname()[0]
+        if not candidate_local_ip.startswith('127.') and candidate_local_ip != '0.0.0.0':
+            local_interface = candidate_local_ip
+    except OSError:
+        pass
+    finally:
+        if route:
+            route.close()
+    if local_interface:
+        try:
+            local_decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            local_decoy.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            local_decoy.bind((local_interface, int(port)))
+            local_decoy.listen(4)
+            local_decoy.settimeout(.2)
+            def serve_local_decoy():
+                while not stop.is_set():
+                    try:
+                        connection, _ = local_decoy.accept()
+                        connection.close()
+                        with local_lock:
+                            local_ingress[0] += 1
+                    except socket.timeout:
+                        continue
+                    except OSError:
+                        return
+            local_worker = threading.Thread(target=serve_local_decoy, daemon=True)
+            local_worker.start()
+            with socket.create_connection((local_interface, int(port)), timeout=2):
+                pass
+            deadline = time.monotonic() + 2
+            while local_ingress[0] < 1 and time.monotonic() < deadline:
+                time.sleep(.01)
+            local_controller_reachable = local_ingress[0] == 1
+        except OSError:
+            local_controller_reachable = False
+            local_interface = None
     probe = f'''import errno,json,socket,sys
 port={int(port)}
 decoy_port={int(decoy_port)}
+local_interface={local_interface!r}
 def connect(family,host,p):
- s=socket.socket(family,socket.SOCK_STREAM); s.settimeout(1)
+ try:
+  s=socket.socket(family,socket.SOCK_STREAM); s.settimeout(1)
+ except OSError as e:
+  return {{'stage':'socket_create','class':'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'}}
  try:
   s.connect((host,p)); return 'CONNECTED'
  except OSError as e:
-  return 'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'
+  return {{'stage':'connect','class':'EPERM' if e.errno==errno.EPERM else 'EACCES' if e.errno==errno.EACCES else 'OTHER'}}
  finally: s.close()
 def udp_send():
  s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -1553,8 +1605,9 @@ s=socket.create_connection(('127.0.0.1',port),timeout=2)
 s.sendall(b'GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n')
 response=s.recv(256); s.close()
 fixture='allowed' if b' 200 ' in response.split(b'\\r\\n',1)[0] else 'failed'
+local_result=connect(socket.AF_INET,local_interface,port) if local_interface else 'UNKNOWN'
 print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'127.0.0.1',decoy_port),
- 'ipv6':connect(socket.AF_INET6,'::1',port),'udp':udp_send()}))
+ 'local_same_port':local_result,'ipv6':connect(socket.AF_INET6,'::1',port),'udp':udp_send()}))
 '''
     result = None
     try:
@@ -1589,23 +1642,43 @@ print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'12
             pass
         except OSError:
             pass
+    if local_decoy is not None:
+        deadline = time.monotonic() + 2
+        while time.monotonic() < deadline:
+            with local_lock:
+                if local_ingress[0] > 1:
+                    break
+            time.sleep(.01)
     # If a disallowed sandbox probe reached any decoy, the rule failed even if
     # the caller later received a transport error.
     no_decoy_ingress = decoy_count == 1
     passed = (baseline_ok and result is not None and result.returncode == 0
               and observed.get('fixture_http') == 'allowed'
-              and observed.get('wrong_port') in ('EPERM', 'EACCES')
-              and observed.get('ipv6') in ('EPERM', 'EACCES')
+              and fixture.egress_check_count == 1
+              and isinstance(observed.get('wrong_port'), dict)
+              and observed['wrong_port'].get('class') in ('EPERM', 'EACCES')
+              and local_controller_reachable and isinstance(observed.get('local_same_port'), dict)
+              and observed['local_same_port'].get('class') in ('EPERM', 'EACCES')
+              and isinstance(observed.get('ipv6'), dict)
+              and observed['ipv6'].get('class') in ('EPERM', 'EACCES')
               and observed.get('udp') in ('EPERM', 'EACCES') and baseline_ipv6
-              and ipv6_ingress == 1 and udp_ingress == 1 and no_decoy_ingress)
+              and ipv6_ingress == 1 and udp_ingress == 1 and no_decoy_ingress
+              and local_decoy is not None and local_ingress[0] == 1)
     ipv6.close() if ipv6 else None
     udp.close() if udp else None
+    local_decoy.close() if local_decoy else None
     stop.set()
     decoy.close()
     worker.join(timeout=2)
+    local_worker.join(timeout=2) if local_worker else None
+    workers_stopped = (not worker.is_alive() and (local_worker is None or not local_worker.is_alive()))
+    passed = passed and workers_stopped
     return {'status': 'PASS' if passed else 'BLOCKED',
             'fixture_http': observed.get('fixture_http', 'UNKNOWN'),
             'wrong_port': observed.get('wrong_port', 'UNKNOWN'),
+            'same_port_other_local_ipv4': observed.get('local_same_port', 'UNKNOWN'),
+            'other_local_ipv4_controller_reachable': local_controller_reachable,
+            'other_local_ipv4_decoy_ingress_count': local_ingress[0],
             'ipv6_same_port_v6only': observed.get('ipv6', 'UNKNOWN'),
             'udp_to_fixture_port': observed.get('udp', 'UNKNOWN'),
             'controller_decoy_reachable': baseline_ok,
@@ -1615,6 +1688,7 @@ print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'12
             'ipv6_decoy_controller_reachable': baseline_ipv6,
             'ipv6_decoy_ingress_count': ipv6_ingress,
             'udp_decoy_ingress_count': udp_ingress,
+            'decoy_workers_stopped': workers_stopped,
             'probe_exit_class': ('zero' if result and result.returncode == 0 else
                                  'nonzero' if result else 'NOT_STARTED_OR_TIMEOUT')}
 

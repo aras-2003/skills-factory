@@ -301,7 +301,7 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                        {'type': 'workspaceWrite'}, {'type': 'readOnly', 'other': True}):
             self.assertFalse(canary.is_read_only_policy(policy))
 
-    def test_outer_profile_is_root_scoped_and_numeric_endpoint_only(self):
+    def test_outer_profile_is_root_scoped_and_tcp_localhost_port_only(self):
         profile = canary.sandbox_profile('/tmp/canary-root', 43210)
         self.assertIn('(deny file-write* (require-not (subpath (param "CANARY_ROOT"))))', profile)
         self.assertIn('(allow file-write* (subpath (param "CANARY_ROOT")))', profile)
@@ -310,7 +310,7 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertNotIn('localhost', profile)
         self.assertEqual(canary.sandbox_prefix('/tmp/canary-root', 43210, profile), [
             '/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path("/tmp/canary-root").resolve()}',
-            '-D', 'FIXTURE_ENDPOINT=127.0.0.1:43210', '-p', profile])
+            '-D', 'FIXTURE_ENDPOINT=localhost:43210', '-p', profile])
 
     def test_nested_probe_fixture_returns_only_true_command_and_correlated_output(self):
         fixture = canary.ScriptedResponses(self.expected)
