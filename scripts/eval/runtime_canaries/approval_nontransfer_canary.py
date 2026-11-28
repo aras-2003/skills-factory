@@ -1175,6 +1175,8 @@ class ScriptedResponses:
         self.error = False
         self.error_reason = None
         self.diagnostics = {}
+        self.tool_classes = []
+        self.completed_steps = {}
 
     def begin(self, phase):
         with self.lock:
@@ -1191,6 +1193,12 @@ class ScriptedResponses:
             phase, step = self.phase, self.step
             if phase not in ('A', 'B', 'ENF') or not isinstance(body, dict):
                 raise ValueError('unexpected fixture request')
+            names = set()
+            for tool in body.get('tools', []) if isinstance(body.get('tools'), list) else []:
+                name = tool.get('name') if isinstance(tool, dict) else None
+                if isinstance(name, str):
+                    names.add(name if name in ('request_permissions', 'exec_command') else 'other')
+            self.tool_classes = sorted(names)
             call_id = 'permission_' + phase
             if step == 0:
                 item = {'type': 'function_call', 'id': 'item_' + call_id, 'call_id': call_id,
@@ -1223,6 +1231,7 @@ class ScriptedResponses:
             else:
                 raise ValueError('unexpected fixture sequence')
             self.step += 1
+            self.completed_steps[phase] = self.step
             response_id = 'response_' + phase + '_' + str(step)
             if item is None:
                 item = {'id': 'message_' + phase, 'type': 'message', 'role': 'assistant',
@@ -1617,6 +1626,12 @@ def run_local_mock(binary, candidate_sha, timeout):
             receipt['fixture_protocol_error_class'] = fixture.error_reason
         if fixture and fixture.diagnostics:
             receipt['fixture_diagnostics'] = fixture.diagnostics
+        if fixture:
+            receipt['fixture_available_tool_classes'] = fixture.tool_classes
+            receipt['fixture_completed_step_counts'] = fixture.completed_steps
+        if rpc:
+            receipt['command_execution_event_count'] = sum(
+                1 for event in rpc.events if event_item(event).get('type') == 'commandExecution')
     return receipt
 
 
