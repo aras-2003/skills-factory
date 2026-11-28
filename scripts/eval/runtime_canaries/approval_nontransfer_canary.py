@@ -1478,8 +1478,42 @@ print(json.dumps({'create':denied(sibling/'new-canary','x'),'append':denied(sibl
 
 
 def verify_network_profile(port, profile, root, env, timeout, fixture):
+    resources = {'sockets': [], 'workers': [], 'stop': threading.Event()}
+    try:
+        result = _verify_network_profile(port, profile, root, env, timeout, fixture, resources)
+    except (OSError, RuntimeError, ValueError, TypeError, subprocess.SubprocessError):
+        result = {'status': 'BLOCKED', 'fixture_http': 'UNKNOWN', 'wrong_port': 'UNKNOWN',
+                  'same_port_other_local_ipv4': 'UNKNOWN',
+                  'other_local_ipv4_controller_reachable': False,
+                  'other_local_ipv4_decoy_ingress_count': 0,
+                  'ipv6_same_port_v6only': 'UNKNOWN', 'udp_to_fixture_port': 'UNKNOWN',
+                  'controller_decoy_reachable': False, 'wrong_port_decoy_ingress_count': 0,
+                  'fixture_ingress_count': fixture.egress_check_count,
+                  'fixture_ingress_correlated': False,
+                  'ipv6_decoy_controller_reachable': False,
+                  'ipv6_decoy_ingress_count': 0, 'udp_decoy_ingress_count': 0,
+                  'probe_exit_class': 'PRECONDITION_OR_SETUP_ERROR'}
+    finally:
+        resources['stop'].set()
+        for sock in resources['sockets']:
+            try:
+                sock.close()
+            except OSError:
+                pass
+        for worker in resources['workers']:
+            if worker.is_alive():
+                worker.join(timeout=2)
+    workers_stopped = all(not worker.is_alive() for worker in resources['workers'])
+    result['decoy_workers_stopped'] = workers_stopped
+    if not workers_stopped:
+        result['status'] = 'BLOCKED'
+    return result
+
+
+def _verify_network_profile(port, profile, root, env, timeout, fixture, resources):
     """Verify TCP fixture allow and live wrong-port/IPv6/UDP denials."""
     decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    resources['sockets'].append(decoy)
     decoy.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     decoy.bind(('127.0.0.1', 0))
     decoy.listen(4)
@@ -1493,7 +1527,7 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
     local_controller_reachable = False
     decoy_count = 0
     baseline_ok = False
-    stop = threading.Event()
+    stop = resources['stop']
     def serve_decoy():
         nonlocal decoy_count
         while not stop.is_set():
@@ -1506,6 +1540,7 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
             except OSError:
                 return
     worker = threading.Thread(target=serve_decoy, daemon=True)
+    resources['workers'].append(worker)
     worker.start()
     try:
         with socket.create_connection(('127.0.0.1', decoy_port), timeout=2) as control:
@@ -1515,15 +1550,18 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
             time.sleep(.01)
         baseline_ok = baseline_ok and decoy_count == 1
         ipv6 = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+        resources['sockets'].append(ipv6)
         ipv6.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
         ipv6.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         ipv6.bind(('::1', int(port)))
         ipv6.listen(4)
         ipv6.settimeout(.2)
         udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        resources['sockets'].append(udp)
         udp.bind(('127.0.0.1', int(port)))
         udp.settimeout(.2)
         baseline_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        resources['sockets'].append(baseline_udp)
         baseline_udp.sendto(b'controller', ('127.0.0.1', int(port)))
         udp.recvfrom(64)
         baseline_udp.close()
@@ -1551,6 +1589,7 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
     if local_interface:
         try:
             local_decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            resources['sockets'].append(local_decoy)
             local_decoy.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             local_decoy.bind((local_interface, int(port)))
             local_decoy.listen(4)
@@ -1567,6 +1606,7 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
                     except OSError:
                         return
             local_worker = threading.Thread(target=serve_local_decoy, daemon=True)
+            resources['workers'].append(local_worker)
             local_worker.start()
             with socket.create_connection((local_interface, int(port)), timeout=2):
                 pass
@@ -1661,15 +1701,6 @@ print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'12
               and observed.get('udp') in ('EPERM', 'EACCES') and baseline_ipv6
               and ipv6_ingress == 1 and udp_ingress == 1 and no_decoy_ingress
               and local_decoy is not None and local_ingress[0] == 1)
-    ipv6.close() if ipv6 else None
-    udp.close() if udp else None
-    local_decoy.close() if local_decoy else None
-    stop.set()
-    decoy.close()
-    worker.join(timeout=2)
-    local_worker.join(timeout=2) if local_worker else None
-    workers_stopped = (not worker.is_alive() and (local_worker is None or not local_worker.is_alive()))
-    passed = passed and workers_stopped
     return {'status': 'PASS' if passed else 'BLOCKED',
             'fixture_http': observed.get('fixture_http', 'UNKNOWN'),
             'wrong_port': observed.get('wrong_port', 'UNKNOWN'),
@@ -1685,7 +1716,6 @@ print(json.dumps({'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'12
             'ipv6_decoy_controller_reachable': baseline_ipv6,
             'ipv6_decoy_ingress_count': ipv6_ingress,
             'udp_decoy_ingress_count': udp_ingress,
-            'decoy_workers_stopped': workers_stopped,
             'probe_exit_class': ('zero' if result and result.returncode == 0 else
                                  'nonzero' if result else 'NOT_STARTED_OR_TIMEOUT')}
 
