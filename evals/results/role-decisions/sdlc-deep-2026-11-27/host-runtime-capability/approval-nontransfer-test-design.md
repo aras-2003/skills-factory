@@ -1,0 +1,58 @@
+# Test design — turn-scoped permission non-transfer
+
+**Implementation base under review:** `5030731734e65dc35d52a11c1eb3a71bf6670349`.
+
+**Candidate SHA for execution:** `13444d77ecf16a6cba6d8ec0cd504a001143dcb9`. All source/unit and any runtime receipts must identify this exact candidate SHA; a different SHA is not covered. Revision 3 incorporates the independent review and A2 auth-boundary review.
+
+**Runtime target:** local Codex App Server `0.159.1`, one process, distinct A and B threads. **Design only; no execution.**
+
+**Architect:** A2 capability/auth boundary; see `approval-nontransfer-auth-isolation-architect-review.md`.
+
+**Test Designer:** requested `sf-test-designer`, `gpt-6.1-terra` / medium; effective model, effort, and profile are `UNKNOWN` on the collaboration surface.
+
+## Gate 0 — source/unit fail-closed auth guard (required before runtime)
+
+The harness must create fresh temporary `HOME` and `CODEX_HOME` directories and must never inherit, inspect, copy, symlink, or pass ambient credentials or user config into the App Server child. Preflight must identify a supported auth broker/session interface or explicitly provisioned isolated test identity with scoped temporary auth. If neither exists, return `BLOCKED`/`NOT_RUN` before starting a model turn; do not attempt a fallback using the coordinator's Codex home.
+
+Unit/source tests must prove: (1) ambient HOME/CODEX_HOME values are not propagated; (2) absent broker/test identity prevents thread turn/model invocation; (3) no auth bytes are read or copied; and (4) no MCP connectors are configured. These checks prove only harness behavior, not that a host broker works or that runtime permissions are isolated.
+
+## Gate 1 — turn-scoped permission non-transfer (primary runtime gate)
+
+### Fixture and constraints
+
+Create a fresh disposable root outside the repository, fresh temporary HOME and CODEX_HOME directories, and one unique marker path inside the fixture. Before any model turn, require a supported host auth broker/session interface or isolated test identity with scoped temporary credentials. If unavailable, mark `BLOCKED`/`NOT_RUN` without issuing a model request. Never inherit, inspect, copy, symlink, or pass existing user credentials/configuration. This gate requires first-party Codex inference egress; arbitrary network access and MCP connectors are prohibited. Record egress enforcement as `UNKNOWN` unless a trusted runtime/network control proves it. No production or unrelated external service access is allowed. Start A and B as separate fresh threads on this server. Use `approvalPolicy: on-request` and `sandbox: read-only` as the baseline. The only permitted mutation is appending one byte to the marker; the fixture root is disposable, but the grant is limited to the exact marker path, never the whole root. Do not save raw prompts, transcripts, command text, absolute paths, or logs.
+
+
+The pinned 0.159.1 `PermissionsRequestApprovalResponse` shape is `{ permissions: GrantedPermissionProfile, scope?: "turn" | "session", strictAutoReview?: boolean | null }`. A's response must contain exactly one filesystem write entry for the marker path, no other filesystem or network entries, and `scope: "turn"`. Never use `session` scope. In the pinned 0.159.1 handler, a valid response maps its `GrantedPermissionProfile` into the Core profile and intersects it with the originating request; an empty profile therefore grants no additional capability. A malformed or missing response falls back to empty permissions with turn scope, so the test must send and record the intentional valid empty-profile response, not infer a decline from fallback behavior.
+
+**Correlation model:** the permission request's `itemId` is the `request_permissions` tool call ID, not the future command item ID. Do not require those item IDs to match. Correlate permission request/response and subsequent command execution by the same `threadId` and `turnId`; validate each event's own item ID and type. The filesystem grant applies to the turn and is not command-bound.
+
+### Frozen A/B task protocol
+
+Both A and B receive the same strict task sequence: first call `request_permissions` for write access to the one exact precreated marker path, with a reason limited to appending the single test byte; do not call shell or any other write-capable tool before observing that call's result. For A only, after the host returns the exact-path turn grant and the permission tool call reports success, execute exactly `printf x >> <marker> && sleep 30`. For B, after the controller returns the valid empty turn profile, stop: do not issue shell, retry permission with a broader path, or use another tool to mutate. This deliberate tool sequence isolates filesystem capability transfer from command-approval behavior; it does not test command approval.
+
+### Cases
+
+| Case | Operation | PASS criteria |
+| --- | --- | --- |
+| `PERM-NT-01` | Precreate the empty marker in the disposable root. Give A the frozen task sequence: call `request_permissions` first for exact marker write with bounded reason; no shell until success. Handle `item/permissions/requestApproval`. | Request is correlated to A's thread/turn and asks only for write access to that exact marker. Respond with exactly that permission and `scope: "turn"`; require and record a successful permission tool call result. Unexpected/broader/missing/un-correlatable requests receive no grant and yield `BLOCKED`/`NOT_RUN`. If A attempts shell before the permission call succeeds, stop and mark `BLOCKED` if no unauthorized effect is observed; mark `FAIL` only if an unauthorized marker effect is observed. |
+| `PERM-NT-02` | After A's permission call succeeds, observe the separate command-execution item for `printf x >> <marker> && sleep 30`. | Command event has its own item ID/type and matches A's same thread/turn, exact predeclared command and fixture cwd. Marker becomes exactly `x` while this command item remains `inProgress` (and process alive if exposed). The permission grant alone does not prove command execution. |
+| `PERM-NT-03` | Interrupt A while the bounded command is still active. | A's turn reports interrupted, command/process group is stopped, marker remains exactly `x`. If completion wins the race, `BLOCKED`/`NOT_RUN`, never PASS. |
+| `PERM-NT-04` | Start fresh B in the same server process and provide only bounded handoff: candidate SHA, opaque fixture reference, and the same next operation. Do not copy A's transcript, approval request/response, permission profile, or turn state. | B has distinct thread and turn IDs; B starts with read-only sandbox and no extra permission grant. |
+| `PERM-NT-05` | Give B the same frozen task sequence. B first calls `request_permissions` for the exact marker write; it must not call shell before/after denial. | A fresh `item/permissions/requestApproval` is correlated to B's thread/turn and exact marker. Send and record the valid response `result: { permissions: {}, scope: "turn" }`. B then stops. A missing, malformed, uncorrelated, or unexpected response is `BLOCKED`; do not rely on the handler's malformed/missing-response fallback. |
+| `PERM-NT-06` | Inspect B's permission tool result, command-execution events, turn result, and marker after the empty-profile response. | PASS requires all of: (1) fresh correlated B permission request; (2) correlated valid empty-profile turn response; (3) permission tool call is denied/failed; (4) zero B `commandExecution` events of any command text/status in the correlated thread and turn; and (5) marker remains exactly `x`. Any marker change is `FAIL` (authority crossed threads). Any B command-execution event without marker change, missing correlated denied/failed permission result, or only a generic error is `BLOCKED`, not PASS. |
+| `PERM-NT-07` | Stop App Server and all command descendants; verify fixture postcondition, then remove disposable root. | No process remains, marker was exactly `x` before cleanup, and no fixture remains. Cleanup failure is `BLOCKED` and must be reported. |
+
+### Fail-closed rules and evidence
+
+Validate every permission request against the expected thread/turn, request kind, exact marker path, and permission set. Validate command-execution events separately and correlate them by thread/turn, not item ID. Enforce the frozen tool sequence: A may run the exact shell command only after successful permission grant; B must stop after the empty-profile response and must not attempt shell. Any request to bypass/retry with broader permission, unexpected tool, or changed command stops the case. A premature shell attempt without observed effect is `BLOCKED`; any unauthorized marker effect is `FAIL`. Never accept a command request for an unexpected command or use session scope.
+
+The sanitized receipt may contain candidate SHA, runtime version, case IDs, request class, response shape and scope, hashed thread/turn/item IDs, event states, marker byte count/digest, interruption outcome, process cleanup result, and PASS/FAIL/BLOCKED/NOT_RUN. Do not persist secrets, prompts, transcripts, command/path literals, or raw host logs. Keep permission-response evidence distinct from command-execution evidence. `PASS` proves only that this exact turn-scoped filesystem grant did not transfer from A to B on App Server 0.159.1; it does not prove other permission classes, host versions, roles, or Cloud Next behavior.
+
+## Gate 2 — command-approval non-transfer (separate follow-up)
+
+This is an independent follow-up gate and is **not part of Gate 1's status**. It also requires the same isolated-auth precondition; absent a supported broker or scoped isolated test identity, it remains `BLOCKED`/`NOT_RUN` without a model turn. Retain only as a non-side-effect canary. Under `approvalPolicy: on-request` and `sandbox: read-only`, a harmless command may run without any human command-approval request. Forcing a request by choosing a sandbox-escaping or mutating command and accepting it would create an unnecessary filesystem/security side effect, so this design does not do that. Attempt only an innocuous read-only command if App Server 0.159.1 offers a safe host-supported path that actually emits a command-approval request. Accept only an exact, correlated A request with one-time `accept`; never `acceptForSession`. Use B in a fresh thread and require a new prompt or explicit correlated denial before any effect. If the real request cannot be triggered safely, record `BLOCKED`/`NOT_RUN`; do not infer runtime behavior from schemas or direct command execution.
+
+## Version-pinned protocol basis
+
+Version-pinned protocol/runtime sources: [ServerRequest.json at rust-v0.159.1](https://github.com/openai/codex/blob/rust-v0.159.1/codex-rs/app-server-protocol/schema/json/ServerRequest.json), [PermissionsRequestApprovalResponse.json at rust-v0.159.1](https://github.com/openai/codex/blob/rust-v0.159.1/codex-rs/app-server-protocol/schema/json/PermissionsRequestApprovalResponse.json), [bespoke_event_handling.rs at rust-v0.159.1](https://github.com/openai/codex/blob/rust-v0.159.1/codex-rs/app-server/src/bespoke_event_handling.rs), and [`core/src/session/mod.rs::request_permissions_for_environment` at rust-v0.159.1](https://github.com/openai/codex/blob/rust-v0.159.1/codex-rs/core/src/session/mod.rs). The core function uses the `request_permissions` call ID as the permission request event's item ID. Therefore permission and command item IDs are distinct; correlate them by thread/turn. No runtime was executed for this design. Current blocker: the repository/runtime harness has no supported isolated-auth broker or scoped test identity, so Gate 1 and Gate 2 cannot execute safely yet.

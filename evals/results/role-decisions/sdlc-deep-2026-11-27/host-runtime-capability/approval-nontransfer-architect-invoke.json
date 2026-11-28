@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 — A2 runtime boundary review for one-time approval non-transfer during fresh-session resume",
+  "source_revision": "c5c15a3a49a504c12bd969934f5acc435370ec42",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "The unresolved acceptance asks whether a one-time host authorization granted to an interrupted session can be inherited by a distinct resumed session. Testing this changes the permission trust boundary and must be architected before the test design.",
+    "timestamp": "2026-11-27T22:51:31Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml; role instructions to be supplied explicitly",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface accepted a distinct role task but did not expose effective model, effort, or profile metadata."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface accepted a distinct role task but did not expose effective model, effort, or profile metadata."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface accepted a distinct role task but did not expose effective model, effort, or profile metadata."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Distinct Architect child `/root/architect_approval_nontransfer` was accepted by the collaboration runtime; exact host dispatch time is not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-27T22:51:31Z",
+      "latest": "2026-11-27T22:53:27Z",
+      "evidence": "Validated pre-dispatch INVOKE preceded the returned distinct Architect child task; exact dispatch time is unavailable."
+    },
+    "time_unknown_reason": "The collaboration surface does not expose an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Distinct Architect child returned bounded A2 advice; exact lifecycle timestamps were not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-27T22:53:27Z",
+      "latest": "2026-11-27T22:54:00Z",
+      "evidence": "Accepted child task was observed by 22:53:27Z; response was returned before the following Test Designer dispatch."
+    },
+    "started_time_unknown_reason": "The collaboration runtime did not expose an execution start timestamp.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-27T22:53:27Z",
+      "latest": "2026-11-27T22:56:30Z",
+      "evidence": "Distinct Architect response was received by 22:56:30Z."
+    },
+    "ended_time_unknown_reason": "The collaboration runtime did not expose an execution completion timestamp."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/approval-nontransfer-architect-review.md",
+    "sha256": "e82a0289c4732cecdfce717dcc8ac7467bb69cd69d8cd05a78ad721cae325ab2",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-27T22:56:30Z",
+    "reason": "Accepted the version-pinned one-time-approval design and required the Test Designer to prove that the selected operation actually triggers the host approval path before implementation."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "The accepted Architect task and response were observed, but exact host dispatch/completion and first dependent action timestamps were not provided.",
+    "assessed_at": "2026-11-27T22:56:30Z",
+    "first_dependent_action_at": null,
+    "reason": "The first dependent action is a Test Designer design dispatch after the Architect response; exact timestamps are unavailable.",
+    "first_dependent_action_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/approval-nontransfer-test-design.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "Test Designer dispatch is observed after the Architect response, but no precise dispatch time is exposed."
+  },
+  "decision_id": "sdlcdeep-20261127-approval-nontransfer-architect",
+  "attempt_id": "sdlcdeep-20261127-approval-nontransfer-architect-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Issue #748 AC-D04/HANDOFF-04 and latest runtime evidence: bounded fresh-session resume passed, but approval_non_transfer remains NOT_RUN because no real approval was requested or granted.",
+      "captured_at": "2026-11-27T22:51:31Z"
+    },
+    {
+      "reference": "Installed Codex CLI 0.159.1 and version-pinned App Server protocol schema; approval isolation behavior is not yet tested.",
+      "captured_at": "2026-11-27T22:51:31Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "The proposal tests whether a one-time authorization can cross isolated sessions, directly affecting the runtime trust boundary.",
+    "evidence_reference": "Issue #748 AC-D04/HANDOFF-04; App Server 0.159.1 approval protocol and fresh-session resume receipt."
+  }
+}

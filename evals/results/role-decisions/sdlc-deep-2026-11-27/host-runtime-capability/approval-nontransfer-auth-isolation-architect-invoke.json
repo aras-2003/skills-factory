@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748 \u2014 A2 review of local App Server auth/environment boundary for permission non-transfer canary",
+  "source_revision": "c5c15a3a49a504c12bd969934f5acc435370ec42",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "decision": {
+    "value": "INVOKE",
+    "reason": "Independent review found the frozen canary design claims isolated HOME/CODEX_HOME while the harness inherits both. The harness requires authenticated local model execution; choosing how to isolate ambient user state without copying credentials changes the runtime trust boundary and must be reviewed before implementation or runtime execution.",
+    "timestamp": "2026-11-28T00:21:05Z"
+  },
+  "impact": "A2",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Owner-approved .codex/agents/sf-architect.toml",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml; role instructions supplied explicitly",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface does not expose effective model, effort, or profile metadata."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface does not expose effective model, effort, or profile metadata."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The surface does not expose effective model, effort, or profile metadata."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Distinct Architect child `/root/nt_auth_architect` was accepted by collaboration runtime; exact host dispatch time is not exposed.",
+    "coordinator_bounds": {
+      "earliest": "2026-11-28T00:21:05Z",
+      "latest": "2026-11-28T00:22:09Z",
+      "evidence": "The accepted child dispatch followed the validated pre-dispatch decision and was observed by the next clock read at 00:22:09Z; exact host dispatch time is unavailable."
+    },
+    "time_unknown_reason": "The collaboration surface does not expose an exact dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned bounded A2 advice; exact runtime completion timestamp is not exposed.",
+    "started_coordinator_bounds": {
+      "earliest": "2026-11-28T00:21:05Z",
+      "latest": "2026-11-28T00:22:09Z",
+      "evidence": "The child was accepted after the pre-dispatch record and before the 00:22:09Z observation; the collaboration host exposes no worker start event."
+    },
+    "started_time_unknown_reason": "The collaboration surface does not expose an execution start timestamp.",
+    "ended_coordinator_bounds": {
+      "earliest": "2026-11-28T00:23:49Z",
+      "latest": "2026-11-28T00:37:22Z",
+      "evidence": "The Architect response arrived after the first 100-second wait timed out following the 00:22:09Z clock observation and before the 00:37:22Z reconciliation; exact host completion time is unavailable."
+    },
+    "ended_time_unknown_reason": "The collaboration surface does not expose an execution completion timestamp."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/approval-nontransfer-auth-isolation-architect-review.md",
+    "sha256": "ea2f5aa58e86020697227377e9ef5eba9a78ab4053922814a8f6582781059744",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-28T00:37:22Z",
+    "reason": "Adopted the recommendation to stop model/runtime execution until supported isolated auth exists; updated the test contract and added a fail-closed harness guard."
+  },
+  "timing_assessment": {
+    "value": "ON_TIME",
+    "assessor": "Coordinator",
+    "provenance": "Coordinator bounds show accepted Architect dispatch by 00:22:09Z and the dependent auth-boundary test-design update no earlier than 00:23:49Z.",
+    "assessed_at": "2026-11-28T00:37:22Z",
+    "first_dependent_action_at": null,
+    "reason": "The Architect dispatch preceded the Test Designer\u2019s auth-boundary contract update. The recorded coordinator bounds do not overlap; exact host timestamps remain unavailable.",
+    "first_dependent_action_reference": "evals/results/role-decisions/sdlc-deep-2026-11-27/host-runtime-capability/approval-nontransfer-test-design.md",
+    "no_qualifying_action_confirmed": false,
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T00:23:49Z",
+      "latest": "2026-11-28T00:37:22Z",
+      "evidence": "The Test Designer was dispatched only after the Architect response; the update was observed before the 00:37:22Z clock reconciliation, after the first 100-second wait had timed out."
+    },
+    "first_dependent_action_time_unknown_reason": "Exact update timestamp was not exposed or captured at the time of the Test Designer edit."
+  },
+  "decision_id": "sdlcdeep-20261128-approval-nontransfer-auth-boundary",
+  "attempt_id": "sdlcdeep-20261128-approval-nontransfer-auth-boundary-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Independent Reviewer v4: frozen test requires isolated HOME/CODEX_HOME; candidate inherits both at isolated_runtime_env() and supplies that environment to App Server.",
+      "captured_at": "2026-11-28T00:21:05Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null,
+  "architect_trigger": {
+    "class": "A2_CAPABILITY_BOUNDARY",
+    "reason": "Using ambient Codex credentials and per-user runtime state affects the local host trust boundary and the security semantics of the canary.",
+    "evidence_reference": "Independent Reviewer v4 finding; scripts/eval/runtime_canaries/approval_nontransfer_canary.py::isolated_runtime_env and App Server subprocess setup."
+  }
+}
