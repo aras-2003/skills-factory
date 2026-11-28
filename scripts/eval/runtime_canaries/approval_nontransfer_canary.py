@@ -526,6 +526,26 @@ def fixture_permission_output(body, call_id, expected):
     return permission_tool_outcome(event, 'fixture', 'fixture', call_id, expected)
 
 
+def fixture_command_denial_output(body, call_id, marker):
+    """Require the real command tool output to name this marker and an OS denial."""
+    if not isinstance(body, dict) or not isinstance(body.get('input'), list):
+        return False
+    outputs = [item for item in body['input'] if isinstance(item, dict)
+               and item.get('type') == 'function_call_output' and item.get('call_id') == call_id]
+    if len(outputs) != 1:
+        return False
+    output = outputs[0].get('output')
+    if isinstance(output, list):
+        if any(not isinstance(item, dict) or item.get('type') != 'input_text'
+               or not isinstance(item.get('text'), str) for item in output):
+            return False
+        output = '\n'.join(item['text'] for item in output)
+    if not isinstance(output, str):
+        return False
+    lowered = output.lower()
+    return marker in output and any(phrase in lowered for phrase in ('operation not permitted', 'permission denied'))
+
+
 def enforcement_outcome(*, marker_before, marker_after, exact_item, failed,
                         exit_code, output, command_approval_seen, marker):
     """An approval decline or generic failure is not evidence of OS enforcement."""
@@ -589,6 +609,29 @@ def stop_process_group(proc, timeout):
     return wait_gone(timeout)
 
 
+def stop_process_id(pid, timeout):
+    """Terminate and verify a command PID the host reported, if it survived group cleanup."""
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return False
+    if not process_alive(pid):
+        return True
+    for sig, wait_seconds in ((signal.SIGTERM, min(1, timeout)), (signal.SIGKILL, timeout)):
+        try:
+            os.kill(pid, sig)
+        except ProcessLookupError:
+            return True
+        except OSError:
+            return False
+        deadline = time.monotonic() + wait_seconds
+        while time.monotonic() < deadline:
+            if not process_alive(pid):
+                return True
+            time.sleep(.05)
+    return not process_alive(pid)
+
+
 def candidate_is_clean(candidate, timeout, runtime_env):
     repo = Path(__file__).resolve().parents[3]
     env = {**runtime_env, 'LC_ALL': 'C', 'GIT_CONFIG_NOSYSTEM': '1',
@@ -625,6 +668,7 @@ def run_probe(binary, candidate_sha, timeout):
     marker = None
     rpc = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
+    observed_command_pids = set()
     permission_requests = {'A': [], 'B': []}
     unexpected_requests = {'A': [], 'B': []}
 
@@ -738,6 +782,8 @@ def run_probe(binary, candidate_sha, timeout):
         if item_a.get('status') != 'inProgress':
             raise RuntimeError('A command item was not in progress')
         process_id = item_a.get('processId')
+        if isinstance(process_id, int) and not isinstance(process_id, bool) and process_id > 0:
+            observed_command_pids.add(process_id)
         if process_id is not None and not process_alive(process_id):
             raise RuntimeError('A command process was not alive')
         if not rpc.wait_for_active_marker(a_id, a_turn, item_a['id'], marker,
@@ -854,6 +900,11 @@ def run_probe(binary, candidate_sha, timeout):
         if proc:
             cleanup = stop_process_group(proc, timeout)
             proc.poll()
+        process_cleanup_results = [stop_process_id(pid, min(timeout, 3)) for pid in observed_command_pids]
+        process_cleanup = all(process_cleanup_results)
+        cleanup = cleanup and process_cleanup
+        receipt['observed_command_process_count'] = len(observed_command_pids)
+        receipt['observed_command_processes_terminated'] = process_cleanup
         receipt['cleanup_verified'] = cleanup
         try:
             marker_exists = bool(root and marker and marker.exists())
@@ -934,6 +985,9 @@ class ScriptedResponses:
                 else:
                     item = None
             elif step == 2 and phase == 'ENF':
+                if not fixture_command_denial_output(body, 'command_ENF', self.expected.marker):
+                    raise ValueError('fixture command denial readback mismatch')
+                self.readbacks['ENF_command_denied'] = True
                 item = None
             else:
                 raise ValueError('unexpected fixture sequence')
@@ -963,6 +1017,14 @@ def start_fixture(expected):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_args):
             pass
+
+        def do_GET(self):
+            if self.path != '/__egress_check':
+                self.send_error(404)
+                return
+            self.send_response(200)
+            self.send_header('Content-Length', '0')
+            self.end_headers()
 
         def do_POST(self):
             try:
@@ -1014,17 +1076,44 @@ def start_fixture(expected):
     return fixture, server, worker
 
 
+def verify_network_profile(port, profile, env, timeout):
+    """Verify the active OS profile permits only the fixture localhost port for IPv4."""
+    probe = f'''import socket,sys
+port = {int(port)}
+s = socket.create_connection(("127.0.0.1", port), timeout=2)
+s.sendall(f"GET /__egress_check HTTP/1.1\\r\\nHost: 127.0.0.1\\r\\nConnection: close\\r\\n\\r\\n".encode())
+response = s.recv(256)
+s.close()
+if b" 200 " not in response.split(b"\\r\\n", 1)[0]: sys.exit(10)
+for host in ("127.0.0.2", "198.51.100.1"):
+    s = socket.socket(socket.AF_INET); s.settimeout(.5)
+    try:
+        s.connect((host, port)); sys.exit(11)
+    except PermissionError as error:
+        if error.errno != 1: sys.exit(12)
+    except OSError: sys.exit(13)
+    finally: s.close()
+'''
+    result = subprocess.run(['/usr/bin/sandbox-exec', '-p', profile, sys.executable, '-c', probe],
+        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        timeout=timeout, env=env, check=False)
+    return result.returncode == 0
+
+
 def run_local_mock(binary, candidate_sha, timeout):
     """Opt-in scripted local runtime; does not provide or test authentication."""
     receipt = {'candidate_sha': candidate_sha, 'mode': 'credential-free-local-mock',
+               'model_execution': 'SCRIPTED_FIXTURE_NO_LLM', 'effective_model': 'NOT_APPLICABLE',
+               'reasoning_effort': 'NOT_APPLICABLE',
                'gate0_auth_status': 'BLOCKED', 'auth_broker_status': 'NOT_RUN',
                'cases': {f'PERM-NT-{i:02d}': 'NOT_RUN' for i in range(1, 8)},
                'enforcement_cases': {f'ENF-{i:02d}': 'NOT_RUN' for i in range(1, 4)},
                'runtime_process_started': False, 'status': 'BLOCKED', 'reason': None,
                'cost': 'UNKNOWN',
-               'process_cleanup_scope': 'App Server process group plus observed A command PID; detached descendants are not independently enumerated.'}
+               'process_cleanup_scope': 'App Server process group plus every reported command PID; detached descendants not reported by the host are not independently enumerated.'}
     root = marker = proc = rpc = fixture = server = worker = None
     thread_ids, turn_ids, item_ids = {}, {}, {}
+    observed_command_pids = set()
     observed_a = False
     try:
         root = Path(tempfile.mkdtemp(prefix='permission-mock-', dir='/tmp'))
@@ -1049,6 +1138,13 @@ def run_local_mock(binary, candidate_sha, timeout):
         (Path(env['CODEX_HOME']) / 'config.toml').write_text(config)
         profile = ('(version 1) (allow default) (deny network-outbound) '
                    f'(allow network-outbound (remote ip "localhost:{port}"))')
+        if not verify_network_profile(port, profile, env, min(timeout, 10)):
+            raise RuntimeError('network sandbox preflight failed')
+        receipt['network_sandbox'] = {
+            'status': 'PASS', 'fixture_ipv4_loopback_allowed': True,
+            'other_ipv4_loopback_denied': True, 'reserved_external_ipv4_denied': True,
+            'ipv6_loopback': 'UNKNOWN_MAY_BE_ALLOWED_BY_LOCALHOST_MATCHER',
+        }
         proc = subprocess.Popen(['/usr/bin/sandbox-exec', '-p', profile, binary, 'app-server',
                                  '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.DEVNULL, text=True, bufsize=1, cwd=root,
@@ -1098,6 +1194,9 @@ def run_local_mock(binary, candidate_sha, timeout):
         a_event = rpc.wait_for_event(lambda e: e.get('method') == 'item/started'
             and is_exact_command_event(e, a_id, a_turn, expected), timeout, handle_a)
         a_item = event_item(a_event)
+        a_process_id = a_item.get('processId')
+        if isinstance(a_process_id, int) and not isinstance(a_process_id, bool) and a_process_id > 0:
+            observed_command_pids.add(a_process_id)
         if (not request_ok('A', a_id, a_turn, 'turn-profile')
                 or fixture.readbacks.get('A') != 'granted' or a_item.get('status') != 'inProgress'
                 or not a_item.get('id') or a_item['id'] == requests['A'][0]['itemId']):
@@ -1162,9 +1261,14 @@ def run_local_mock(binary, candidate_sha, timeout):
         if e_turn in (a_turn, b_turn):
             raise RuntimeError('enforcement turn not distinct')
         try:
-            enforcement_completed = rpc.wait_for_b_turn_or_effect(c_id, e_turn, marker, timeout, handle_e) == 'completed'
+            enforcement_wait = rpc.wait_for_b_turn_or_effect(c_id, e_turn, marker, timeout, handle_e)
         except TimeoutError:
-            enforcement_completed = False
+            enforcement_wait = 'timeout'
+        enforcement_turn_event = next((e for e in rpc.events if e.get('method') == 'turn/completed'
+            and e.get('params', {}).get('threadId') == c_id and event_turn_id(e) == e_turn), None)
+        enforcement_turn_status = (enforcement_turn_event.get('params', {}).get('turn', {}).get('status')
+                                   if enforcement_turn_event else 'UNKNOWN')
+        enforcement_completed = enforcement_wait == 'completed' and enforcement_turn_status == 'completed'
         exact = [e for e in rpc.events if is_exact_command_event(e, c_id, e_turn, expected)]
         done = next((e for e in exact if e.get('method') == 'item/completed'), None)
         started = next((e for e in exact if e.get('method') == 'item/started'), None)
@@ -1177,17 +1281,23 @@ def run_local_mock(binary, candidate_sha, timeout):
                           and events_are_ordered(rpc.events, started, done)
                           and len([e for e in rpc.events if is_b_command_event(e, c_id, e_turn)]) == 2)
         item = event_item(done) if done else {}
+        enforcement_process_id = event_item(started).get('processId') if started else None
+        if (isinstance(enforcement_process_id, int) and not isinstance(enforcement_process_id, bool)
+                and enforcement_process_id > 0):
+            observed_command_pids.add(enforcement_process_id)
         after = marker.read_bytes() if marker.exists() else b''
         receipt['enforcement_cases']['ENF-02'] = enforcement_outcome(
             marker_before=b'x', marker_after=after,
             exact_item=command_ok and enforcement_request and fixture.readbacks.get('ENF') == 'denied'
-                       and enforcement_completed,
+                       and fixture.readbacks.get('ENF_command_denied') is True and enforcement_completed,
             failed=item.get('status') == 'failed', exit_code=item.get('exitCode'),
             output=item.get('aggregatedOutput'), command_approval_seen=bool(unexpected['ENF']),
             marker=expected.marker)
         receipt['enforcement_cases']['ENF-03'] = 'FAIL' if after != b'x' else 'BLOCKED'
         receipt['enforcement_observation'] = {'exact_command_item': command_ok,
             'command_approval_seen': COMMAND_APPROVAL_METHOD in unexpected['ENF'],
+            'turn_status': enforcement_turn_status,
+            'command_output_readback': fixture.readbacks.get('ENF_command_denied') is True,
             'failed_completion': item.get('status') == 'failed',
             'nonzero_exit': isinstance(item.get('exitCode'), int) and not isinstance(item.get('exitCode'), bool)
                             and item.get('exitCode') != 0,
@@ -1203,6 +1313,11 @@ def run_local_mock(binary, candidate_sha, timeout):
         receipt['reason'] = 'local mock precondition or protocol unverified'
     finally:
         cleanup = stop_process_group(proc, timeout) if proc else True
+        process_cleanup_results = [stop_process_id(pid, min(timeout, 3)) for pid in observed_command_pids]
+        process_cleanup = all(process_cleanup_results)
+        cleanup = cleanup and process_cleanup
+        receipt['observed_command_process_count'] = len(observed_command_pids)
+        receipt['observed_command_processes_terminated'] = process_cleanup
         if server:
             try:
                 server.shutdown()

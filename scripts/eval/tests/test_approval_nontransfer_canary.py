@@ -292,6 +292,24 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         body = {'input': [{'type': 'function_call_output', 'call_id': 'permission_ENF', 'output': output}]}
         self.assertIn(b'exec_command', fixture.respond(body))
         self.assertEqual(fixture.readbacks['ENF'], 'denied')
+        with self.assertRaises(ValueError):
+            fixture.respond({'input': []})
+        command_output = {'input': [{'type': 'function_call_output', 'call_id': 'command_ENF',
+            'output': '/tmp/fixture/marker: Operation not permitted'}]}
+        self.assertIn(b'Done.', fixture.respond(command_output))
+        self.assertTrue(fixture.readbacks['ENF_command_denied'])
+
+    def test_command_denial_readback_is_marker_specific(self):
+        marker = '/tmp/fixture/marker'
+        good = {'input': [{'type': 'function_call_output', 'call_id': 'call-1',
+                           'output': f'{marker}: Operation not permitted'}]}
+        self.assertTrue(canary.fixture_command_denial_output(good, 'call-1', marker))
+        for bad in (
+            {'input': [{'type': 'function_call_output', 'call_id': 'wrong', 'output': f'{marker}: Operation not permitted'}]},
+            {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': 'Operation not permitted'}]},
+            {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': f'{marker}: generic error'}]},
+        ):
+            self.assertFalse(canary.fixture_command_denial_output(bad, 'call-1', marker))
 
     def test_enforcement_distinguishes_os_denial_approval_and_mutation(self):
         kwargs = dict(marker_before=b'x', marker_after=b'x', exact_item=True, failed=True,
