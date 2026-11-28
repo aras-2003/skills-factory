@@ -1200,6 +1200,8 @@ class ScriptedResponses:
                     raise ValueError('fixture command denial readback mismatch')
                 self.readbacks['ENF_command_denied'] = True
                 item = None
+            elif step == 2 and phase == 'A':
+                item = None
             else:
                 raise ValueError('unexpected fixture sequence')
             self.step += 1
