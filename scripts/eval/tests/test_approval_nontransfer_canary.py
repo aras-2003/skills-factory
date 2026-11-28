@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import socket
 import subprocess
 import sys
@@ -414,6 +415,49 @@ class LocalMockPrimitivesTests(unittest.TestCase):
             with self.assertRaises(TypeError):
                 canary.start_fixture(self.expected)
         self.assertTrue(FakeServer.created[0].closed)
+
+    def test_fixture_close_failure_is_reported_as_unverified_cleanup(self):
+        class FakeServer:
+            def __init__(self, *_args):
+                self.server_address = ('127.0.0.1', 43210)
+
+            def server_close(self):
+                raise OSError('SECRET-close-path')
+
+        with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
+             mock.patch.object(canary.threading, 'Thread', side_effect=TypeError('SECRET-thread-path')):
+            with self.assertRaises(canary.FixtureSetupCleanupError):
+                canary.start_fixture(self.expected)
+
+    def test_fixture_close_failure_cannot_claim_cleanup_verified(self):
+        expected_sha = 'a' * 40
+        version = subprocess.CompletedProcess(['codex', '--version'], 0, canary.VERSION + '\n', '')
+        created = []
+        original_mkdtemp = tempfile.mkdtemp
+
+        def recording_mkdtemp(*args, **kwargs):
+            path = original_mkdtemp(*args, **kwargs)
+            created.append(path)
+            return path
+
+        self.addCleanup(lambda: [shutil.rmtree(path, ignore_errors=True) for path in created])
+        with mock.patch.object(canary, 'candidate_is_clean', return_value=True), \
+             mock.patch.object(canary.subprocess, 'run', return_value=version), \
+             mock.patch.object(canary.sys, 'platform', 'darwin'), \
+             mock.patch.object(Path, 'is_file', return_value=True), \
+             mock.patch.object(canary.tempfile, 'mkdtemp', side_effect=recording_mkdtemp), \
+             mock.patch.object(canary, 'start_fixture', side_effect=canary.FixtureSetupCleanupError()), \
+             mock.patch.object(canary.subprocess, 'Popen') as popen:
+            receipt = canary.run_local_mock('codex', expected_sha, 2)
+
+        popen.assert_not_called()
+        self.assertEqual(receipt['failure_phase'], 'fixture_setup')
+        self.assertEqual(receipt['failure_class'], 'runtime_error')
+        self.assertEqual(receipt['fixture_setup_cleanup'], 'FAILED')
+        self.assertFalse(receipt['cleanup_verified'])
+        self.assertFalse(receipt['fixture_removed'])
+        self.assertEqual(receipt['status'], 'BLOCKED')
+        self.assertNotIn('SECRET', json.dumps(receipt))
 
     def test_removed_diagnostic_continuation_flag_has_no_side_effects(self):
         args = ['approval_nontransfer_canary.py', '--execute', '--candidate-sha', 'a' * 40,
