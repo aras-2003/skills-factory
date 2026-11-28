@@ -20,6 +20,7 @@ import time
 VERSION = 'codex-cli 0.159.1'
 PERMISSION_METHOD = 'item/permissions/requestApproval'
 COMMAND_APPROVAL_METHOD = 'item/commandExecution/requestApproval'
+SCOPED_AUTH_BROKER_AVAILABLE = False
 
 
 def digest(data):
@@ -166,10 +167,15 @@ def sanitized_receipt(*, thread_ids=None, turn_ids=None, item_ids=None, marker=N
     }
 
 
-def isolated_runtime_env(source):
-    """Keep the user's existing Codex home for auth; never copy or inspect it."""
-    env = {k: source[k] for k in ('PATH', 'LANG', 'LC_ALL', 'LC_CTYPE', 'HOME', 'CODEX_HOME') if k in source}
+def isolated_runtime_env(source, runtime_root):
+    """Build a credential-free environment rooted in fresh temporary directories."""
+    root = Path(runtime_root)
+    homes = {'HOME': root / 'home', 'CODEX_HOME': root / 'codex-home', 'TMPDIR': root / 'tmp'}
+    for path in homes.values():
+        path.mkdir(mode=0o700, parents=True, exist_ok=True)
+    env = {k: source[k] for k in ('PATH', 'LANG', 'LC_ALL', 'LC_CTYPE') if k in source}
     env.setdefault('PATH', os.defpath)
+    env.update({key: str(path) for key, path in homes.items()})
     return env
 
 
@@ -410,6 +416,10 @@ def events_are_ordered(events, first, second):
     return first_index is not None and second_index is not None and first_index < second_index
 
 
+def a_permission_order_status(events, permission_output, command_event):
+    return 'PASS' if events_are_ordered(events, permission_output, command_event) else 'BLOCKED'
+
+
 def permission_tool_outcome(event, thread_id, turn_id, permission_item_id, expected):
     """Read the completed request_permissions response; unknown output never counts as denial."""
     item = event_item(event)
@@ -496,11 +506,10 @@ def stop_process_group(proc, timeout):
     return wait_gone(timeout)
 
 
-def candidate_is_clean(candidate, timeout):
+def candidate_is_clean(candidate, timeout, runtime_env):
     repo = Path(__file__).resolve().parents[3]
-    env = {'PATH': os.environ.get('PATH', os.defpath), 'LC_ALL': 'C',
-           'GIT_CONFIG_NOSYSTEM': '1', 'GIT_CONFIG_GLOBAL': os.devnull,
-           'GIT_OPTIONAL_LOCKS': '0'}
+    env = {**runtime_env, 'LC_ALL': 'C', 'GIT_CONFIG_NOSYSTEM': '1',
+           'GIT_CONFIG_GLOBAL': os.devnull, 'GIT_OPTIONAL_LOCKS': '0'}
     try:
         head = subprocess.run(['git', '-C', str(repo), 'rev-parse', 'HEAD'], capture_output=True,
                               text=True, timeout=timeout, env=env, check=True).stdout.strip()
@@ -523,8 +532,12 @@ def run_probe(binary, candidate_sha, timeout):
         'effort_request_note': 'ThreadStartParams 0.159.1 has no confirmed effort field',
         'host_model': 'UNKNOWN', 'host_effort': 'UNKNOWN',
         'cost': 'UNKNOWN', 'cases': {f'PERM-NT-{i:02d}': 'NOT_RUN' for i in range(1, 8)},
+        'gate0_auth_status': 'BLOCKED', 'runtime_process_started': False,
         'gate2_command_approval_status': 'NOT_RUN', 'status': 'BLOCKED', 'reason': None,
     }
+    if not SCOPED_AUTH_BROKER_AVAILABLE:
+        receipt['reason'] = 'no supported scoped test identity or auth broker; model execution disabled'
+        return receipt
     proc, root = None, None
     marker = None
     rpc = None
@@ -567,16 +580,17 @@ def run_probe(binary, candidate_sha, timeout):
         return callback
 
     try:
-        if not candidate_is_clean(candidate_sha, timeout):
+        root = Path(tempfile.mkdtemp(prefix='permission-nontransfer-', dir='/tmp'))
+        runtime_env = isolated_runtime_env(os.environ, root)
+        if not candidate_is_clean(candidate_sha, timeout, runtime_env):
             receipt['reason'] = 'candidate mismatch or tracked changes'
             return receipt
         version = subprocess.run([binary, '--version'], capture_output=True, text=True,
-                                 timeout=timeout, env=isolated_runtime_env(os.environ), check=True).stdout.strip()
+                                 timeout=timeout, env=runtime_env, check=True).stdout.strip()
         receipt['runtime_version'] = version
         if version != VERSION:
             receipt['reason'] = 'unsupported runtime version'
             return receipt
-        root = Path(tempfile.mkdtemp(prefix='permission-nontransfer-', dir='/tmp'))
         marker = root / 'marker'
         marker.write_bytes(b'')
         if marker.read_bytes() != b'':
@@ -584,7 +598,7 @@ def run_probe(binary, candidate_sha, timeout):
         expected = ExpectedPermission(root, marker)
         proc = subprocess.Popen([binary, 'app-server', '--listen', 'stdio://'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=subprocess.DEVNULL, text=True, bufsize=1, cwd=root,
-                                env=isolated_runtime_env(os.environ), start_new_session=True)
+                                env=runtime_env, start_new_session=True)
         rpc = Rpc(proc, timeout)
         init = rpc.request('initialize', {'clientInfo': {'name': 'approval-nontransfer-canary', 'version': '1'},
             'capabilities': {'experimentalApi': True}})
@@ -622,7 +636,7 @@ def run_probe(binary, candidate_sha, timeout):
         if (item_a.get('id') == request_a['itemId'] or item_a.get('command') != expected.command
                 or item_a.get('cwd') != expected.cwd):
             raise RuntimeError('A command item did not match its separate permission request fixture')
-        if not events_are_ordered(rpc.events, permission_output_a, active_event):
+        if a_permission_order_status(rpc.events, permission_output_a, active_event) != 'PASS':
             raise RuntimeError('A command started before its permission tool result was observed')
         receipt['cases']['PERM-NT-01'] = 'PASS'
         receipt['permission_a'] = {'class': 'filesystem-write', 'response': 'exact-marker-only', 'scope': 'turn'}
@@ -749,7 +763,7 @@ def run_probe(binary, candidate_sha, timeout):
             proc.poll()
         receipt['cleanup_verified'] = cleanup
         try:
-            marker_exists = bool(root and marker.exists())
+            marker_exists = bool(root and marker and marker.exists())
             marker_bytes = marker.read_bytes() if marker_exists else b''
             marker_ok = observe_final_marker(receipt, exists=marker_exists, contents=marker_bytes)
             if rpc:
@@ -789,7 +803,7 @@ def main():
     parser.add_argument('--candidate-sha', required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--timeout', type=float, default=60)
-    parser.add_argument('--execute', action='store_true', help='Explicitly run the model-driven host probe')
+    parser.add_argument('--execute', action='store_true', help='Request execution; Gate 0 blocks without a scoped auth broker')
     args = parser.parse_args()
     if len(args.candidate_sha) != 40 or any(c not in '0123456789abcdef' for c in args.candidate_sha) or not 0 < args.timeout <= 180:
         parser.error('candidate SHA must be 40 lowercase hex digits; timeout must be in (0, 180]')

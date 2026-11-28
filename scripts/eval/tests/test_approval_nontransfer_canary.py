@@ -1,7 +1,12 @@
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
+import tempfile
 import unittest
+from unittest import mock
 
 PATH = Path(__file__).resolve().parents[1] / 'runtime_canaries' / 'approval_nontransfer_canary.py'
 spec = importlib.util.spec_from_file_location('approval_nontransfer_canary', PATH)
@@ -196,6 +201,63 @@ class PermissionNontransferTests(unittest.TestCase):
         self.assertEqual(canary.finalize_case('PASS', cleanup_ok=False, marker_ok=True), 'BLOCKED')
         self.assertEqual(canary.finalize_case('PASS', cleanup_ok=True, marker_ok=False), 'BLOCKED')
         self.assertEqual(canary.finalize_case('FAIL', cleanup_ok=False, marker_ok=False), 'FAIL')
+
+    def test_runtime_environment_uses_only_fresh_temp_homes_and_safe_environment(self):
+        with tempfile.TemporaryDirectory() as root:
+            env = canary.isolated_runtime_env({
+                'PATH': '/safe/bin', 'LANG': 'C', 'HOME': '/ambient/home',
+                'CODEX_HOME': '/ambient/codex', 'TMPDIR': '/ambient/tmp',
+                'OPENAI_API_KEY': 'must-not-propagate', 'AWS_SECRET_ACCESS_KEY': 'must-not-propagate',
+            }, root)
+            self.assertEqual(env['PATH'], '/safe/bin')
+            self.assertEqual(env['HOME'], str(Path(root) / 'home'))
+            self.assertEqual(env['CODEX_HOME'], str(Path(root) / 'codex-home'))
+            self.assertEqual(env['TMPDIR'], str(Path(root) / 'tmp'))
+            for key in ('HOME', 'CODEX_HOME', 'TMPDIR'):
+                self.assertTrue(Path(env[key]).is_dir())
+                self.assertEqual(list(Path(env[key]).iterdir()), [])
+            self.assertNotIn('/ambient', str(env))
+            self.assertNotIn('OPENAI_API_KEY', env)
+            self.assertNotIn('AWS_SECRET_ACCESS_KEY', env)
+            self.assertEqual(set(env), {'PATH', 'LANG', 'HOME', 'CODEX_HOME', 'TMPDIR'})
+
+    def test_missing_scoped_auth_blocks_probe_before_any_process_or_fixture(self):
+        with mock.patch.object(canary.subprocess, 'run', side_effect=AssertionError('child process forbidden')) as run, \
+             mock.patch.object(canary.subprocess, 'Popen', side_effect=AssertionError('child process forbidden')) as popen, \
+             mock.patch.object(canary.tempfile, 'mkdtemp', side_effect=AssertionError('fixture forbidden')) as mkdtemp:
+            receipt = canary.run_probe('codex', 'a' * 40, 30)
+        run.assert_not_called()
+        popen.assert_not_called()
+        mkdtemp.assert_not_called()
+        self.assertEqual(receipt['status'], 'BLOCKED')
+        self.assertEqual(receipt['gate0_auth_status'], 'BLOCKED')
+        self.assertFalse(receipt['runtime_process_started'])
+        self.assertTrue(all(status == 'NOT_RUN' for status in receipt['cases'].values()))
+        self.assertIn('auth', receipt['reason'].lower())
+
+    def test_execute_writes_blocked_not_run_receipt_without_spawning(self):
+        with tempfile.TemporaryDirectory() as root:
+            output = Path(root) / 'receipt.json'
+            with mock.patch.object(sys, 'argv', ['approval_nontransfer_canary.py', '--execute',
+                    '--candidate-sha', 'b' * 40, '--output', str(output)]), \
+                 mock.patch.object(canary.subprocess, 'run', side_effect=AssertionError('child process forbidden')) as run, \
+                 mock.patch.object(canary.subprocess, 'Popen', side_effect=AssertionError('child process forbidden')) as popen:
+                self.assertEqual(canary.main(), 1)
+            run.assert_not_called()
+            popen.assert_not_called()
+            receipt = json.loads(output.read_text())
+            self.assertEqual(receipt['status'], 'BLOCKED')
+            self.assertEqual(receipt['gate0_auth_status'], 'BLOCKED')
+            self.assertFalse(receipt['runtime_process_started'])
+            self.assertTrue(all(status == 'NOT_RUN' for status in receipt['cases'].values()))
+
+    def test_a_premature_command_without_effect_is_not_a_pass(self):
+        permission_output = {'method': 'item/completed'}
+        command_started = {'method': 'item/started'}
+        self.assertEqual(canary.a_permission_order_status([command_started, permission_output],
+            permission_output, command_started), 'BLOCKED')
+        marker_before, marker_after = b'', b''
+        self.assertEqual(marker_before, marker_after)
 
 
 if __name__ == '__main__':
