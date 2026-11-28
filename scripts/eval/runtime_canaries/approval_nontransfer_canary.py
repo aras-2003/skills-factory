@@ -139,9 +139,15 @@ def permission_profile_diagnostic(params):
         return 'unexpected_file_system_fields'
     if not {'read', 'write', 'entries'} <= set(filesystem):
         return 'missing_legacy_nullables_or_entries'
-    if any(value is not None and value != [] for value in
-           (filesystem.get('read'), filesystem.get('write'))):
-        return 'legacy_access_present'
+    def legacy_state(value):
+        if value is None:
+            return 'null'
+        if isinstance(value, list):
+            return 'empty' if not value else 'nonempty'
+        return 'invalid'
+    legacy_read, legacy_write = legacy_state(filesystem['read']), legacy_state(filesystem['write'])
+    if legacy_read not in ('null', 'empty') or legacy_write not in ('null', 'empty'):
+        return f'legacy_access_read_{legacy_read}_write_{legacy_write}'
     depth = filesystem.get('globScanMaxDepth')
     if 'globScanMaxDepth' in filesystem and (not isinstance(depth, int) or isinstance(depth, bool)):
         return 'invalid_glob_depth'
