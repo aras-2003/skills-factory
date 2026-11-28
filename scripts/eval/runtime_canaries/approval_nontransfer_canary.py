@@ -6,6 +6,8 @@ This is intentionally opt-in. Unit tests never start Codex or approve a command.
 import argparse
 import errno
 import hashlib
+import ipaddress
+import secrets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
@@ -1420,7 +1422,7 @@ def sandbox_profile(root, port):
             '(deny file-write-unlink (require-all (literal (param "CANARY_ROOT")) '
             '(vnode-type DIRECTORY))) (deny system-fcntl (fcntl-command 80 110)) '
             '(deny network-outbound) '
-            '(allow network-outbound (remote tcp (param "FIXTURE_ENDPOINT")))')
+            '(allow network-outbound (remote tcp4 (param "FIXTURE_ENDPOINT")))')
 
 
 def sandbox_prefix(root, port, profile):
@@ -1520,6 +1522,8 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
             if worker.is_alive():
                 worker.join(timeout=2)
     workers_stopped = all(not worker.is_alive() for worker in resources['workers'])
+    if result.get('ingress_finalization') != 'DRAINED':
+        result['status'] = 'BLOCKED'
     result['decoy_sockets_closed'] = sockets_closed
     result['decoy_workers_stopped'] = workers_stopped
     if not workers_stopped or not sockets_closed:
@@ -1560,6 +1564,74 @@ print(json.dumps({{'fixture_http':fixture,'wrong_port':connect(socket.AF_INET,'1
 '''
 
 
+def parse_assigned_ipv4_inventory(inventory):
+    """Parse interface-labelled ifconfig inet records; never infer an address from a route."""
+    addresses = []
+    interface = False
+    for line in inventory.splitlines():
+        if line and not line[0].isspace():
+            interface = ':' in line and '<UP,' in line
+        elif interface and line.strip().startswith('inet '):
+            try:
+                address = ipaddress.IPv4Address(line.split()[1])
+            except (ValueError, IndexError):
+                continue
+            if not (address.is_loopback or address.is_unspecified or address.is_multicast or address.is_link_local):
+                value = str(address)
+                if value not in addresses:
+                    addresses.append(value)
+    return addresses
+
+
+def assigned_ipv4_inventory(env, timeout):
+    try:
+        result = subprocess.run(['/sbin/ifconfig'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                                text=True, timeout=timeout, env=env, check=True)
+        return parse_assigned_ipv4_inventory(result.stdout)
+    except (OSError, subprocess.SubprocessError):
+        return []
+
+
+def decoy_control_identity(connection, challenge):
+    """Read a complete random challenge, rejecting timeout and wrong peers."""
+    received = b''
+    try:
+        connection.settimeout(2)
+        while len(received) < len(challenge):
+            chunk = connection.recv(len(challenge) - len(received))
+            if not chunk:
+                return False
+            received += chunk
+    except OSError:
+        return False
+    return bool(challenge) and secrets.compare_digest(received, challenge)
+
+
+def denied_at_connect(observed):
+    return (isinstance(observed, dict) and observed.get('stage') == 'connect'
+            and observed.get('class') in ('EPERM', 'EACCES'))
+
+
+def drain_pending(sock, *, datagram=False, cap=64):
+    """Drain a finite child's queued ingress before close; ambiguity blocks."""
+    count = 0
+    try:
+        sock.setblocking(False)
+        while count < cap:
+            try:
+                if datagram:
+                    sock.recvfrom(65536)
+                else:
+                    connection, _ = sock.accept()
+                    connection.close()
+                count += 1
+            except BlockingIOError:
+                return count, True
+    except OSError:
+        pass
+    return count, False
+
+
 def _verify_network_profile(port, profile, root, env, timeout, fixture, resources):
     """Verify TCP fixture allow and live wrong-port/IPv6/UDP denials."""
     decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -1569,36 +1641,17 @@ def _verify_network_profile(port, profile, root, env, timeout, fixture, resource
     decoy.listen(4)
     decoy.settimeout(.2)
     decoy_port = decoy.getsockname()[1]
-    ipv6 = udp = local_decoy = local_worker = None
-    ipv6_ingress, udp_ingress = 0, 0
-    local_ingress = [0]
-    local_lock = threading.Lock()
+    ipv6 = udp = local_decoy = None
+    ipv6_ingress, udp_ingress, local_ingress, decoy_count = 0, 0, 0, 0
     local_interface = None
     local_controller_reachable = False
-    decoy_count = 0
     baseline_ok = False
-    stop = resources['stop']
-    def serve_decoy():
-        nonlocal decoy_count
-        while not stop.is_set():
-            try:
-                connection, _ = decoy.accept()
-                decoy_count += 1
-                connection.close()
-            except socket.timeout:
-                continue
-            except OSError:
-                return
-    worker = threading.Thread(target=serve_decoy, daemon=True)
-    resources['workers'].append(worker)
-    worker.start()
     try:
-        with socket.create_connection(('127.0.0.1', decoy_port), timeout=2) as control:
+        with socket.create_connection(('127.0.0.1', decoy_port), timeout=2):
+            accepted, _ = decoy.accept()
+            accepted.close()
+            decoy_count = 1
             baseline_ok = True
-        deadline = time.monotonic() + 2
-        while decoy_count < 1 and time.monotonic() < deadline:
-            time.sleep(.01)
-        baseline_ok = baseline_ok and decoy_count == 1
         ipv6 = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
         resources['sockets'].append(ipv6)
         ipv6.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1)
@@ -1622,50 +1675,31 @@ def _verify_network_profile(port, profile, root, env, timeout, fixture, resource
         baseline_ipv6 = True
     except OSError:
         baseline_ipv6 = False
-    # Determine the selected local IPv4 interface without sending a datagram,
-    # then require a controller-positive same-port decoy there when available.
-    route = None
-    try:
-        route = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        route.connect(('192.0.2.1', 9))
-        candidate_local_ip = route.getsockname()[0]
-        if not candidate_local_ip.startswith('127.') and candidate_local_ip != '0.0.0.0':
-            local_interface = candidate_local_ip
-    except OSError:
-        pass
-    finally:
-        if route:
-            route.close()
-    if local_interface:
+    # Select only OS-reported assigned addresses; identify the listener with a
+    # fresh challenge so a successful connection to another service cannot pass.
+    for candidate_local_ip in assigned_ipv4_inventory(env, min(timeout, 5)):
+        candidate_socket = None
         try:
-            local_decoy = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            resources['sockets'].append(local_decoy)
-            local_decoy.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            local_decoy.bind((local_interface, int(port)))
-            local_decoy.listen(4)
-            local_decoy.settimeout(.2)
-            def serve_local_decoy():
-                while not stop.is_set():
-                    try:
-                        connection, _ = local_decoy.accept()
-                        connection.close()
-                        with local_lock:
-                            local_ingress[0] += 1
-                    except socket.timeout:
-                        continue
-                    except OSError:
-                        return
-            local_worker = threading.Thread(target=serve_local_decoy, daemon=True)
-            resources['workers'].append(local_worker)
-            local_worker.start()
-            with socket.create_connection((local_interface, int(port)), timeout=2):
-                pass
-            deadline = time.monotonic() + 2
-            while local_ingress[0] < 1 and time.monotonic() < deadline:
-                time.sleep(.01)
-            local_controller_reachable = local_ingress[0] == 1
+            candidate_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            candidate_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            candidate_socket.bind((candidate_local_ip, int(port)))
+            candidate_socket.listen(4)
+            candidate_socket.settimeout(.2)
+            resources['sockets'].append(candidate_socket)
+            local_decoy = candidate_socket
+            local_interface = candidate_local_ip
+            challenge = secrets.token_bytes(32)
+            with socket.create_connection((local_interface, int(port)), timeout=2) as control:
+                accepted, _ = local_decoy.accept()
+                with accepted:
+                    accepted.sendall(challenge)
+                local_ingress = 1
+                local_controller_reachable = decoy_control_identity(control, challenge)
+            break
         except OSError:
-            local_controller_reachable = False
+            if candidate_socket is not None:
+                candidate_socket.close()
+            local_decoy = None
             local_interface = None
     probe = network_probe_script(port, decoy_port, local_interface)
     result = None
@@ -1679,56 +1713,40 @@ def _verify_network_profile(port, profile, root, env, timeout, fixture, resource
             observed = {}
     except (OSError, subprocess.SubprocessError):
         observed = {}
-    deadline = time.monotonic() + 2
-    while time.monotonic() < deadline:
-        if decoy_count > 1:
-            break
-        time.sleep(.01)
-    if ipv6 is not None:
-        try:
-            connection, _ = ipv6.accept()
-            connection.close()
-            ipv6_ingress += 1
-        except socket.timeout:
-            pass
-        except OSError:
-            pass
-    if udp is not None:
-        try:
-            udp.recvfrom(64)
-            udp_ingress += 1
-        except socket.timeout:
-            pass
-        except OSError:
-            pass
-    if local_decoy is not None:
-        deadline = time.monotonic() + 2
-        while time.monotonic() < deadline:
-            with local_lock:
-                if local_ingress[0] > 1:
-                    break
-            time.sleep(.01)
+    # subprocess.run has reaped the finite, non-forking probe before any
+    # listener is sampled. Drain all queued ingress synchronously to EAGAIN.
+    # This covers the scripted probe, not unrelated adversarial host peers.
+    finalization_ok = result is not None
+    for listener, kind in ((decoy, 'wrong'), (ipv6, 'ipv6'),
+                           (local_decoy, 'local'), (udp, 'udp')):
+        if listener is None:
+            finalization_ok = False
+            continue
+        extra, drained = drain_pending(listener, datagram=kind == 'udp')
+        finalization_ok = finalization_ok and drained
+        if kind == 'wrong': decoy_count += extra
+        elif kind == 'ipv6': ipv6_ingress += extra
+        elif kind == 'local': local_ingress += extra
+        else: udp_ingress += extra
     # If a disallowed sandbox probe reached any decoy, the rule failed even if
     # the caller later received a transport error.
     no_decoy_ingress = decoy_count == 1
-    passed = (baseline_ok and result is not None and result.returncode == 0
+    passed = (finalization_ok and baseline_ok and result is not None and result.returncode == 0
               and observed.get('fixture_http') == 'allowed'
               and fixture.egress_check_count == 1
-              and isinstance(observed.get('wrong_port'), dict)
-              and observed['wrong_port'].get('class') in ('EPERM', 'EACCES')
-              and local_controller_reachable and isinstance(observed.get('local_same_port'), dict)
-              and observed['local_same_port'].get('class') in ('EPERM', 'EACCES')
-              and isinstance(observed.get('ipv6'), dict)
-              and observed['ipv6'].get('class') in ('EPERM', 'EACCES')
+              and denied_at_connect(observed.get('wrong_port'))
+              and local_controller_reachable and denied_at_connect(observed.get('local_same_port'))
+              and denied_at_connect(observed.get('ipv6'))
               and observed.get('udp') in ('EPERM', 'EACCES') and baseline_ipv6
               and ipv6_ingress == 1 and udp_ingress == 1 and no_decoy_ingress
-              and local_decoy is not None and local_ingress[0] == 1)
+              and local_decoy is not None and local_ingress == 1)
     return {'status': 'PASS' if passed else 'BLOCKED',
+            'ingress_finalization': 'DRAINED' if finalization_ok else 'UNVERIFIED',
             'fixture_http': observed.get('fixture_http', 'UNKNOWN'),
             'wrong_port': observed.get('wrong_port', 'UNKNOWN'),
             'same_port_other_local_ipv4': observed.get('local_same_port', 'UNKNOWN'),
             'other_local_ipv4_controller_reachable': local_controller_reachable,
-            'other_local_ipv4_decoy_ingress_count': local_ingress[0],
+            'other_local_ipv4_decoy_ingress_count': local_ingress,
             'ipv6_same_port_v6only': observed.get('ipv6', 'UNKNOWN'),
             'udp_to_fixture_port': observed.get('udp', 'UNKNOWN'),
             'controller_decoy_reachable': baseline_ok,
