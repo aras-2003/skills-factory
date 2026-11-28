@@ -1,0 +1,26 @@
+{
+  "candidate_sha": "13444d77ecf16a6cba6d8ec0cd504a001143dcb9",
+  "runtime_version": null,
+  "requested_role": "sf-developer-high",
+  "requested_model": "gpt-6.1-terra",
+  "requested_effort": "high",
+  "effort_sent_to_runtime": false,
+  "effort_request_note": "ThreadStartParams 0.159.1 has no confirmed effort field",
+  "host_model": "UNKNOWN",
+  "host_effort": "UNKNOWN",
+  "cost": "UNKNOWN",
+  "cases": {
+    "PERM-NT-01": "NOT_RUN",
+    "PERM-NT-02": "NOT_RUN",
+    "PERM-NT-03": "NOT_RUN",
+    "PERM-NT-04": "NOT_RUN",
+    "PERM-NT-05": "NOT_RUN",
+    "PERM-NT-06": "NOT_RUN",
+    "PERM-NT-07": "NOT_RUN"
+  },
+  "gate0_auth_status": "BLOCKED",
+  "runtime_process_started": false,
+  "gate2_command_approval_status": "NOT_RUN",
+  "status": "BLOCKED",
+  "reason": "no supported scoped test identity or auth broker; model execution disabled"
+}
