@@ -2,6 +2,8 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
+import socket
 import subprocess
 import sys
 import tempfile
@@ -18,30 +20,36 @@ class PermissionNontransferTests(unittest.TestCase):
     def setUp(self):
         self.expected = canary.ExpectedPermission('/tmp/fixture', '/tmp/fixture/marker')
 
+    def requested_profile(self, entries=None, network=None):
+        return {'fileSystem': {'read': None, 'write': None,
+                               'entries': entries if entries is not None else [self.expected.write_entry]},
+                'network': network}
+
     def test_a_profile_must_be_exact_marker_write_with_no_network_or_legacy_access(self):
-        profile = {'fileSystem': {'entries': [self.expected.write_entry]}, 'network': {'enabled': False}}
+        profile = self.requested_profile(network={'enabled': False})
         self.assertTrue(canary.request_is_exact_marker_write(profile, self.expected.marker))
         for altered in (
-            {'fileSystem': {'entries': [{**self.expected.write_entry, 'path': {'type': 'path', 'path': self.expected.cwd}}]}},
-            {'fileSystem': {'entries': [self.expected.write_entry, self.expected.write_entry]}},
-            {'fileSystem': {'entries': [{**self.expected.write_entry, 'access': 'read'}]}},
-            {'fileSystem': {'entries': [{'access': 'write', 'path': {'type': 'glob_pattern', 'pattern': self.expected.marker}}]}},
-            {'fileSystem': {'entries': [self.expected.write_entry], 'write': [self.expected.marker]}},
-            {'fileSystem': {'entries': [self.expected.write_entry]}, 'network': {'enabled': True}},
+            {'fileSystem': {'read': None, 'write': None, 'entries': [{**self.expected.write_entry, 'path': {'type': 'path', 'path': self.expected.cwd}}]}, 'network': {'enabled': False}},
+            self.requested_profile(entries=[self.expected.write_entry, self.expected.write_entry], network={'enabled': False}),
+            self.requested_profile(entries=[{**self.expected.write_entry, 'access': 'read'}], network={'enabled': False}),
+            self.requested_profile(entries=[{'access': 'write', 'path': {'type': 'glob_pattern', 'pattern': self.expected.marker}}], network={'enabled': False}),
+            {'fileSystem': {'read': None, 'write': [self.expected.cwd], 'entries': [self.expected.write_entry]}, 'network': {'enabled': False}},
+            self.requested_profile(network={'enabled': True}),
             {'fileSystem': {'entries': [self.expected.write_entry]}, 'other': {}},
         ):
             self.assertFalse(canary.request_is_exact_marker_write(altered, self.expected.marker))
 
     def test_responses_have_exact_turn_scope_and_distinct_profiles(self):
         self.assertEqual(canary.permission_response(self.expected), {
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}, 'scope': 'turn'})
+            'permissions': {'fileSystem': {'read': None, 'write': [self.expected.marker],
+                'entries': [self.expected.write_entry]}}, 'scope': 'turn'})
         self.assertEqual(canary.empty_permission_response(), {'permissions': {}, 'scope': 'turn'})
         self.assertNotIn('session', str(canary.permission_response(self.expected)))
 
     def test_a_grant_requires_correlated_ids_and_exact_permission_request(self):
         message = {'id': 77, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'item-A', 'cwd': self.expected.cwd,
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}, 'network': {'enabled': False}}}}
+            'permissions': self.requested_profile(network={'enabled': False})}}
         response, granted = canary.permission_request_reply(message, self.expected, 'A', 'turn-A', grant=True)
         self.assertEqual(response, {'result': canary.permission_response(self.expected)})
         self.assertTrue(granted)
@@ -55,11 +63,20 @@ class PermissionNontransferTests(unittest.TestCase):
             self.assertEqual(safe_reply, {'result': canary.empty_permission_response()})
             self.assertFalse(was_granted)
 
+    def test_permission_correlation_normalizes_tmp_symlink_only(self):
+        params = {'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'item-A',
+                  'cwd': '/tmp/fixture'}
+        self.assertTrue(canary.request_is_correlated(params, 'A', 'turn-A', self.expected.cwd))
+        self.assertFalse(canary.request_is_correlated({**params, 'cwd': '/tmp/other'},
+                                                       'A', 'turn-A', self.expected.cwd))
+        self.assertFalse(canary.request_is_correlated({**params, 'turnId': 'turn-B'},
+                                                       'A', 'turn-A', self.expected.cwd))
+
     def test_permission_item_and_command_item_are_distinct_but_share_thread_and_turn(self):
         request = {'id': 77, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'A', 'turnId': 'turn-A', 'itemId': 'permission-call-A',
             'cwd': self.expected.cwd,
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}}}
+            'permissions': self.requested_profile()}}
         response, granted = canary.permission_request_reply(request, self.expected, 'A', 'turn-A', grant=True)
         self.assertTrue(granted)
         self.assertEqual(response['result']['scope'], 'turn')
@@ -89,6 +106,18 @@ class PermissionNontransferTests(unittest.TestCase):
         denied = {'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'}
         self.assertEqual(canary.permission_tool_outcome(event(granted), 'A', 'turn-A', 'permission-call-A', self.expected), 'granted')
         self.assertEqual(canary.permission_tool_outcome(event(denied), 'A', 'turn-A', 'permission-call-A', self.expected), 'denied')
+        camel_granted = {'permissions': {'network': None, 'fileSystem': {
+            'read': [], 'write': [self.expected.marker], 'entries': [self.expected.write_entry]}}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(camel_granted), 'A', 'turn-A',
+                                                         'permission-call-A', self.expected), 'granted')
+        legacy_only_grant = {'permissions': {'network': None, 'file_system': {
+            'read': [], 'write': [self.expected.marker]}}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(legacy_only_grant), 'A', 'turn-A',
+                                                         'permission-call-A', self.expected), 'granted')
+        broad = {'permissions': {'network': {'enabled': True}, 'file_system': {
+            'entries': [self.expected.write_entry]}}, 'scope': 'turn'}
+        self.assertEqual(canary.permission_tool_outcome(event(broad), 'A', 'turn-A',
+                                                         'permission-call-A', self.expected), 'unknown')
         for malformed in (
             event({'error': 'permission request failed'}),
             event(denied, item_id='other-call'),
@@ -100,17 +129,21 @@ class PermissionNontransferTests(unittest.TestCase):
     def test_b_reply_is_correlated_valid_empty_profile_and_failure_is_required_for_pass(self):
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
             tool_item_correlated=True, permission_tool_denied=True,
-            marker_before=b'x', marker_after=b'x'), 'PASS')
+            marker_before=b'x', marker_after=b'x', turn_completed=True), 'PASS')
+        self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
+            tool_item_correlated=True, permission_tool_denied=True,
+            marker_before=b'x', marker_after=b'x', turn_completed=False), 'BLOCKED')
         for kwargs in (
             {'request_correlated': False, 'response_sent': True, 'tool_item_correlated': True, 'permission_tool_denied': True},
             {'request_correlated': True, 'response_sent': False, 'tool_item_correlated': True, 'permission_tool_denied': True},
             {'request_correlated': True, 'response_sent': True, 'tool_item_correlated': False, 'permission_tool_denied': True},
             {'request_correlated': True, 'response_sent': True, 'tool_item_correlated': True, 'permission_tool_denied': False},
         ):
-            self.assertEqual(canary.classify_b_outcome(**kwargs, marker_before=b'x', marker_after=b'x'), 'BLOCKED')
+            self.assertEqual(canary.classify_b_outcome(**kwargs, marker_before=b'x', marker_after=b'x',
+                turn_completed=True), 'BLOCKED')
         self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
             tool_item_correlated=True, permission_tool_denied=True,
-            marker_before=b'x', marker_after=b'xx'), 'FAIL')
+            marker_before=b'x', marker_after=b'xx', turn_completed=True), 'FAIL')
         for command_event in ('started', 'nonzero', 'completed'):
             event = {'method': 'item/started' if command_event == 'started' else 'item/completed',
                 'params': {'threadId': 'B', 'turnId': 'turn-B', 'item': {
@@ -120,10 +153,10 @@ class PermissionNontransferTests(unittest.TestCase):
             self.assertTrue(canary.is_b_command_event(event, 'B', 'turn-B'))
             self.assertEqual(canary.classify_b_outcome(request_correlated=True, response_sent=True,
                 tool_item_correlated=True, permission_tool_denied=True, marker_before=b'x', marker_after=b'x',
-                command_execution_observed=True), 'BLOCKED')
+                turn_completed=True, command_execution_observed=True), 'BLOCKED')
         self.assertEqual(canary.classify_b_outcome(request_correlated=False, response_sent=False,
             tool_item_correlated=False, permission_tool_denied=False,
-            marker_before=b'x', marker_after=b'x', generic_error=True), 'BLOCKED')
+            marker_before=b'x', marker_after=b'x', turn_completed=False, generic_error=True), 'BLOCKED')
 
     def test_unknown_host_request_uses_json_rpc_error_not_permissions_response(self):
         reply = canary.unknown_request_reply({'id': 88, 'method': 'unknown/request'})
@@ -169,7 +202,7 @@ class PermissionNontransferTests(unittest.TestCase):
         rpc.host_responses = []
         message = {'id': 994, 'method': canary.PERMISSION_METHOD, 'params': {
             'threadId': 'B', 'turnId': 'turn-B', 'itemId': 'item-B', 'cwd': self.expected.cwd,
-            'permissions': {'fileSystem': {'entries': [self.expected.write_entry]}}}}
+            'permissions': self.requested_profile()}}
         reply = {'result': canary.empty_permission_response()}
         record = rpc._reply_to_host_request(message, lambda _: reply)
         sent = json.loads(writer.values[0])
@@ -179,8 +212,8 @@ class PermissionNontransferTests(unittest.TestCase):
         self.assertTrue(record['sent'])
 
     def test_response_shape_rejects_grants_broader_than_the_requested_marker(self):
-        request = {'method': canary.PERMISSION_METHOD, 'params': {'permissions': {
-            'fileSystem': {'entries': [self.expected.write_entry]}}}}
+        request = {'method': canary.PERMISSION_METHOD, 'params': {
+            'permissions': self.requested_profile()}}
         self.assertEqual(canary.permission_reply_shape(request,
             {'result': canary.permission_response(self.expected)}), 'turn-profile')
         broad = {'result': {'permissions': {'fileSystem': {'entries': [
@@ -258,6 +291,489 @@ class PermissionNontransferTests(unittest.TestCase):
             permission_output, command_started), 'BLOCKED')
         marker_before, marker_after = b'', b''
         self.assertEqual(marker_before, marker_after)
+
+
+class LocalMockPrimitivesTests(unittest.TestCase):
+    def setUp(self):
+        self.expected = canary.ExpectedPermission('/tmp/fixture', '/tmp/fixture/marker')
+
+    def test_structured_read_only_sandbox_policy(self):
+        self.assertTrue(canary.is_read_only_policy({'type': 'readOnly', 'networkAccess': False}))
+        for policy in ('read-only', {'type': 'readOnly'}, {'type': 'readOnly', 'networkAccess': True},
+                       {'type': 'workspaceWrite'}, {'type': 'readOnly', 'other': True}):
+            self.assertFalse(canary.is_read_only_policy(policy))
+
+    def test_outer_profile_is_root_scoped_and_tcp_localhost_port_only(self):
+        profile = canary.sandbox_profile('/tmp/canary-root', 43210)
+        self.assertIn('(deny file-write* (require-not (subpath (param "CANARY_ROOT"))))', profile)
+        self.assertIn('(allow file-write* (subpath (param "CANARY_ROOT")))', profile)
+        self.assertIn('(deny network-outbound)', profile)
+        self.assertIn('(remote tcp (param "FIXTURE_ENDPOINT"))', profile)
+        self.assertNotIn('localhost', profile)
+        self.assertEqual(canary.sandbox_prefix('/tmp/canary-root', 43210, profile), [
+            '/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path("/tmp/canary-root").resolve()}',
+            '-D', 'FIXTURE_ENDPOINT=localhost:43210', '-p', profile])
+
+    def test_network_probe_script_compiles_and_covers_each_destination_class(self):
+        source = canary.network_probe_script(43210, 43211, '10.0.0.2')
+        compile(source, '<network-probe>', 'exec')
+        for target in ("'127.0.0.1',decoy_port", 'local_interface,port', "'::1',port",
+                       "'127.0.0.1',port", "'local_same_port'", "'fixture_http'"):
+            self.assertIn(target, source)
+
+    def test_network_block_keeps_aggregate_blocked_and_failure_remains_failure(self):
+        receipt = {'cases': {f'PERM-NT-{i:02d}': 'PASS' for i in range(1, 8)},
+                   'enforcement_cases': {f'ENF-{i:02d}': 'PASS' for i in range(1, 4)},
+                   'filesystem_sandbox': {'status': 'PASS'},
+                   'network_sandbox': {'status': 'BLOCKED'},
+                   'nested_execution_probe': {'status': 'PASS'},
+                   'diagnostic_continuation': {'enabled': True}}
+        self.assertEqual(canary.aggregate_canary_status(receipt), 'BLOCKED')
+        receipt['network_sandbox']['status'] = 'PASS'
+        self.assertEqual(canary.aggregate_canary_status(receipt), 'PASS')
+        receipt['network_sandbox']['status'] = 'FAIL'
+        self.assertEqual(canary.aggregate_canary_status(receipt), 'FAIL')
+
+    def test_local_mock_failure_classes_are_fixed_labels(self):
+        class SecretOSError(OSError):
+            pass
+
+        self.assertEqual(canary.local_mock_exception_class(TimeoutError('secret timeout')), 'timeout')
+        self.assertEqual(canary.local_mock_exception_class(subprocess.TimeoutExpired('secret-cmd', 1)), 'timeout')
+        self.assertEqual(canary.local_mock_exception_class(SecretOSError('secret path/cmd')), 'os_error')
+        self.assertEqual(canary.local_mock_exception_class(subprocess.SubprocessError('secret')), 'subprocess_error')
+        self.assertEqual(canary.local_mock_exception_class(json.JSONDecodeError('secret', 'x', 0)), 'value_error')
+        self.assertEqual(canary.local_mock_exception_class(ValueError('secret')), 'value_error')
+        self.assertEqual(canary.local_mock_exception_class(TypeError('secret')), 'type_error')
+        self.assertEqual(canary.local_mock_exception_class(KeyError('secret')), 'key_error')
+        self.assertEqual(canary.local_mock_exception_class(RuntimeError('secret')), 'runtime_error')
+        self.assertEqual(canary.local_mock_exception_class(Exception('secret')), 'other')
+
+    def test_fixture_setup_exception_is_sanitized_and_stops_before_app_server(self):
+        expected_sha = 'a' * 40
+        secret = 'SENTINEL-secret-/private/tmp/raw-cmd'
+        version = subprocess.CompletedProcess(['codex', '--version'], 0, canary.VERSION + '\n', '')
+        with mock.patch.object(canary, 'candidate_is_clean', return_value=True), \
+             mock.patch.object(canary.subprocess, 'run', return_value=version), \
+             mock.patch.object(canary.sys, 'platform', 'darwin'), \
+             mock.patch.object(Path, 'is_file', return_value=True), \
+             mock.patch.object(canary, 'start_fixture', side_effect=OSError(secret)), \
+             mock.patch.object(canary.subprocess, 'Popen') as popen:
+            receipt = canary.run_local_mock('codex', expected_sha, 2)
+
+        popen.assert_not_called()
+        self.assertEqual(receipt['failure_phase'], 'fixture_setup')
+        self.assertEqual(receipt['failure_class'], 'os_error')
+        self.assertEqual(receipt['reason'], 'local mock precondition or protocol unverified')
+        self.assertEqual(receipt['status'], 'BLOCKED')
+        self.assertFalse(receipt['runtime_process_started'])
+        self.assertTrue(all(receipt['cases'][f'PERM-NT-{i:02d}'] == 'NOT_RUN' for i in range(1, 7)))
+        self.assertEqual(receipt['cases']['PERM-NT-07'], 'BLOCKED')
+        self.assertTrue(receipt['cleanup_verified'])
+        serialized = json.dumps(receipt)
+        for fragment in ('SENTINEL', 'private/tmp', 'raw-cmd', secret):
+            self.assertNotIn(fragment, serialized)
+
+    def test_fixture_worker_start_failure_closes_bound_server(self):
+        class FakeServer:
+            created = []
+
+            def __init__(self, *_args):
+                self.closed = False
+                self.server_address = ('127.0.0.1', 43210)
+                self.created.append(self)
+
+            def server_close(self):
+                self.closed = True
+
+            def serve_forever(self):
+                pass
+
+        with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
+             mock.patch.object(canary.threading.Thread, 'start', side_effect=RuntimeError('secret')):
+            with self.assertRaises(RuntimeError):
+                canary.start_fixture(self.expected)
+        self.assertTrue(FakeServer.created[0].closed)
+
+    def test_fixture_thread_constructor_failure_closes_bound_server(self):
+        class FakeServer:
+            created = []
+
+            def __init__(self, *_args):
+                self.closed = False
+                self.server_address = ('127.0.0.1', 43210)
+                self.created.append(self)
+
+            def server_close(self):
+                self.closed = True
+
+            def serve_forever(self):
+                pass
+
+        with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
+             mock.patch.object(canary.threading, 'Thread', side_effect=TypeError('secret')):
+            with self.assertRaises(TypeError):
+                canary.start_fixture(self.expected)
+        self.assertTrue(FakeServer.created[0].closed)
+
+    def test_fixture_close_failure_is_reported_as_unverified_cleanup(self):
+        class FakeServer:
+            created = []
+
+            def __init__(self, *_args):
+                self.close_attempted = False
+                self.server_address = ('127.0.0.1', 43210)
+                self.created.append(self)
+
+            def server_close(self):
+                self.close_attempted = True
+                raise OSError('SECRET-close-path')
+
+            def serve_forever(self):
+                pass
+
+        with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
+             mock.patch.object(canary.threading, 'Thread', side_effect=TypeError('SECRET-thread-path')) as thread_factory:
+            with self.assertRaises(canary.FixtureSetupCleanupError):
+                canary.start_fixture(self.expected)
+        thread_factory.assert_called_once()
+        self.assertTrue(FakeServer.created[0].close_attempted)
+
+    def test_fixture_close_failure_cannot_claim_cleanup_verified(self):
+        expected_sha = 'a' * 40
+        version = subprocess.CompletedProcess(['codex', '--version'], 0, canary.VERSION + '\n', '')
+        created = []
+        original_mkdtemp = tempfile.mkdtemp
+
+        def recording_mkdtemp(*args, **kwargs):
+            path = original_mkdtemp(*args, **kwargs)
+            created.append(path)
+            return path
+
+        self.addCleanup(lambda: [shutil.rmtree(path, ignore_errors=True) for path in created])
+        with mock.patch.object(canary, 'candidate_is_clean', return_value=True), \
+             mock.patch.object(canary.subprocess, 'run', return_value=version), \
+             mock.patch.object(canary.sys, 'platform', 'darwin'), \
+             mock.patch.object(Path, 'is_file', return_value=True), \
+             mock.patch.object(canary.tempfile, 'mkdtemp', side_effect=recording_mkdtemp), \
+             mock.patch.object(canary, 'start_fixture', side_effect=canary.FixtureSetupCleanupError()), \
+             mock.patch.object(canary.subprocess, 'Popen') as popen:
+            receipt = canary.run_local_mock('codex', expected_sha, 2)
+
+        popen.assert_not_called()
+        self.assertEqual(receipt['failure_phase'], 'fixture_setup')
+        self.assertEqual(receipt['failure_class'], 'runtime_error')
+        self.assertEqual(receipt['fixture_setup_cleanup'], 'FAILED')
+        self.assertFalse(receipt['cleanup_verified'])
+        self.assertFalse(receipt['fixture_removed'])
+        self.assertEqual(receipt['status'], 'BLOCKED')
+        self.assertNotIn('SECRET', json.dumps(receipt))
+
+    def test_removed_diagnostic_continuation_flag_has_no_side_effects(self):
+        args = ['approval_nontransfer_canary.py', '--execute', '--candidate-sha', 'a' * 40,
+                '--output', '/tmp/unused-receipt.json', '--diagnostic-continue-after-network-block']
+        with mock.patch.object(sys, 'argv', args), \
+             mock.patch.object(canary, 'run_probe') as run_probe, \
+             mock.patch.object(canary, 'run_local_mock') as run_local_mock, \
+             mock.patch.object(canary.subprocess, 'Popen') as popen, \
+             mock.patch.object(Path, 'write_text') as write_text, \
+             self.assertRaises(SystemExit) as raised:
+            canary.main()
+        self.assertEqual(raised.exception.code, 2)
+        run_probe.assert_not_called()
+        run_local_mock.assert_not_called()
+        popen.assert_not_called()
+        write_text.assert_not_called()
+
+    def test_nested_probe_fixture_returns_only_true_command_and_correlated_output(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('PROBE')
+        first = fixture.respond({'tools': [{'name': 'exec_command', 'parameters': {'type': 'object'}}]})
+        event_data = [line[6:] for line in first.decode().splitlines() if line.startswith('data: ')]
+        first_payload = json.loads(event_data[1])
+        item = first_payload['item']
+        self.assertEqual(item['call_id'], 'command_PROBE')
+        self.assertEqual(json.loads(item['arguments'])['cmd'], 'true')
+        second = fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'command_PROBE',
+                                             'output': ''}]})
+        second_events = [json.loads(line[6:]) for line in second.decode().splitlines()
+                         if line.startswith('data: ')]
+        self.assertEqual(second_events[-1]['response']['status'], 'completed')
+        self.assertEqual(fixture.diagnostics['nested_execution_output'], 'expected')
+
+    def test_network_preflight_second_worker_start_exception_closes_resources(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        created = []
+        real_start = canary.threading.Thread.start
+        start_count = []
+        class FakeConnection:
+            def __enter__(self):
+                return self
+            def __exit__(self, *_args):
+                return None
+            def close(self):
+                return None
+        class FakeSocket:
+            def __init__(self, family, kind):
+                self.family, self.kind, self.closed = family, kind, False
+            def setsockopt(self, *_args):
+                return None
+            def bind(self, *_args):
+                return None
+            def listen(self, *_args):
+                return None
+            def settimeout(self, *_args):
+                return None
+            def getsockname(self):
+                return ('10.0.0.2', 43210)
+            def accept(self):
+                if (self.family == socket.AF_INET6
+                        and canary.threading.current_thread() is canary.threading.main_thread()):
+                    return FakeConnection(), ('::1', 1234)
+                canary.time.sleep(.01)
+                raise socket.timeout()
+            def recvfrom(self, *_args):
+                return b'controller', ('127.0.0.1', 1234)
+            def sendto(self, *_args):
+                return 10
+            def connect(self, *_args):
+                return None
+            def close(self):
+                self.closed = True
+            def fileno(self):
+                return -1 if self.closed else 100
+        def create_socket(family, kind, *_args, **_kwargs):
+            value = FakeSocket(family, kind)
+            created.append(value)
+            return value
+        def fail_second_start(thread, *args, **kwargs):
+            start_count.append(thread)
+            if len(start_count) == 2:
+                raise RuntimeError('injected second worker start failure')
+            return real_start(thread, *args, **kwargs)
+        with mock.patch.object(canary.socket, 'socket', side_effect=create_socket), \
+             mock.patch.object(canary.socket, 'create_connection', return_value=FakeConnection()), \
+             mock.patch.object(canary.threading.Thread, 'start', new=fail_second_start):
+            result = canary.verify_network_profile(12345, canary.sandbox_profile('/tmp/root', 12345),
+                '/tmp/root', {}, 1, fixture)
+        self.assertEqual(result['status'], 'BLOCKED')
+        self.assertTrue(result['decoy_workers_stopped'])
+        self.assertTrue(result['decoy_sockets_closed'])
+        self.assertEqual(len(start_count), 2)
+        self.assertTrue(created)
+        self.assertTrue(all(sock.closed and sock.fileno() == -1 for sock in created))
+
+    def test_fixture_readback_requires_unique_call_id_and_exact_profile(self):
+        output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
+        item = {'type': 'function_call_output', 'call_id': 'call-1', 'output': output}
+        self.assertEqual(canary.fixture_permission_output({'input': [item]}, 'call-1', self.expected), 'denied')
+        structured_item = {**item, 'output': [{'type': 'input_text', 'text': output}]}
+        self.assertEqual(canary.fixture_permission_output({'input': [structured_item]},
+                                                          'call-1', self.expected), 'denied')
+        for body in ({'input': [item, item]}, {'input': [{**item, 'call_id': 'wrong'}]},
+                     {'input': [{**item, 'output': '{}'}]}, {'input': 'invalid'}):
+            self.assertEqual(canary.fixture_permission_output(body, 'call-1', self.expected), 'unknown')
+
+    def test_fixture_permission_output_diagnostic_contains_no_payload(self):
+        output = json.dumps({'permissions': {'fileSystem': {'entries': [self.expected.write_entry]},
+                                             'network': None}, 'scope': 'turn'})
+        body = {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': output}]}
+        self.assertEqual(canary.fixture_permission_output_diagnostic(body, 'call-1', self.expected),
+                         'exact_turn_marker_grant')
+        self.assertNotIn(self.expected.marker, canary.fixture_permission_output_diagnostic(
+            body, 'call-1', self.expected))
+        broad_denial = json.dumps({'permissions': {'network': {'enabled': True}, 'file_system': None},
+                                   'scope': 'turn'})
+        broad_body = {'input': [{'type': 'function_call_output', 'call_id': 'call-1',
+                                 'output': broad_denial}]}
+        self.assertEqual(canary.fixture_permission_output_diagnostic(broad_body, 'call-1', self.expected),
+                         'permission_semantics_unknown')
+
+    def test_runtime_permission_schema_null_legacy_fields_are_allowed(self):
+        profile = {'fileSystem': {'read': None, 'write': None,
+                                  'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(profile, self.expected.marker))
+        empty_legacy = {'fileSystem': {'read': [], 'write': [],
+                                        'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(empty_legacy, self.expected.marker))
+        redundant_exact_write = {'fileSystem': {'read': None, 'write': [self.expected.marker],
+                                                 'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(redundant_exact_write, self.expected.marker))
+        unrelated_legacy_write = {'fileSystem': {'read': None, 'write': [self.expected.cwd],
+                                                  'entries': [self.expected.write_entry]}, 'network': None}
+        self.assertFalse(canary.request_is_exact_marker_write(unrelated_legacy_write, self.expected.marker))
+        params = {'permissions': redundant_exact_write}
+        self.assertEqual(canary.permission_profile_diagnostic(params, self.expected.marker),
+                         'exact_marker_profile')
+        self.assertEqual(canary.permission_profile_diagnostic(params, '/private/other/marker'),
+                         'marker_path_mismatch')
+        with_glob_depth = {'fileSystem': {**profile['fileSystem'], 'globScanMaxDepth': 3},
+                           'network': None}
+        self.assertTrue(canary.request_is_exact_marker_write(with_glob_depth, self.expected.marker))
+        for field, value in (('read', ['/']), ('write', ['/tmp']), ('globScanMaxDepth', True)):
+            broadened = {'fileSystem': {**profile['fileSystem'], field: value}, 'network': None}
+            self.assertFalse(canary.request_is_exact_marker_write(broadened, self.expected.marker))
+        for invalid_network in ({}, {'enabled': True}, {'enabled': 0}, {'other': None}):
+            self.assertFalse(canary.request_is_exact_marker_write(
+                {'fileSystem': profile['fileSystem'], 'network': invalid_network}, self.expected.marker))
+        self.assertFalse(canary.request_is_exact_marker_write({'fileSystem': profile['fileSystem']},
+                                                               self.expected.marker))
+
+    def test_fixture_sequence_requires_readback_before_command(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('ENF')
+        self.assertIn(b'request_permissions', fixture.respond({'input': []}))
+        with self.assertRaises(ValueError):
+            fixture.respond({'input': []})
+        output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
+        body = {'input': [{'type': 'function_call_output', 'call_id': 'permission_ENF', 'output': output}]}
+        self.assertIn(b'exec_command', fixture.respond(body))
+        self.assertEqual(fixture.readbacks['ENF'], 'denied')
+        with self.assertRaises(ValueError):
+            fixture.respond({'input': []})
+        marker = str(self.expected.marker)
+        command_output = {'input': [{'type': 'function_call_output', 'call_id': 'command_ENF',
+            'output': f'{marker}: Operation not permitted'}]}
+        self.assertIn(b'Done.', fixture.respond(command_output))
+        self.assertTrue(fixture.readbacks['ENF_command_denied'])
+
+    def test_fixture_A_completes_after_command_output(self):
+        with canary.tempfile.TemporaryDirectory(prefix='fixture-A-') as temp_dir:
+            expected = canary.ExpectedPermission(temp_dir, canary.Path(temp_dir) / 'marker')
+            canary.Path(expected.marker).write_bytes(b'')
+            fixture = canary.ScriptedResponses(expected)
+            fixture.begin('A')
+            self.assertIn(b'request_permissions', fixture.respond({'input': []}))
+            granted = json.dumps({'permissions': {'network': None, 'file_system': {
+                'entries': [expected.write_entry], 'glob_scan_max_depth': None}}, 'scope': 'turn'})
+            self.assertIn(b'exec_command', fixture.respond({'input': [{
+                'type': 'function_call_output', 'call_id': 'permission_A', 'output': granted}]}))
+            self.assertIn(b'Done.', fixture.respond({'input': [{
+                'type': 'function_call_output', 'call_id': 'command_A', 'output': 'command completed'}]}))
+            self.assertFalse(fixture.error)
+            self.assertEqual(fixture.diagnostics['command_A_output'], 'nonempty_other')
+            self.assertEqual(fixture.diagnostics['command_A_marker'], 'unchanged')
+
+    def test_fixture_A_rejects_uncorrelated_command_output(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('A')
+        fixture.respond({'input': []})
+        granted = json.dumps({'permissions': {'network': None, 'file_system': {
+            'entries': [self.expected.write_entry], 'glob_scan_max_depth': None}}, 'scope': 'turn'})
+        fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'permission_A',
+                                   'output': granted}]})
+        with self.assertRaises(ValueError):
+            fixture.respond({'input': [{'type': 'function_call_output', 'call_id': 'wrong',
+                                       'output': 'command completed'}]})
+
+    def test_fixture_records_only_allowlisted_tool_names(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('A')
+        fixture.respond({'tools': [{'type': 'function', 'name': 'request_permissions'},
+                                   {'type': 'function', 'name': 'exec_command'},
+                                   {'type': 'function', 'name': 'secret-bearing-name'}], 'input': []})
+        self.assertEqual(fixture.tool_classes, ['exec_command', 'other', 'request_permissions'])
+
+    def test_fixture_records_only_allowlisted_command_schema_fields(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('A')
+        fixture.respond({'tools': [{'type': 'function', 'name': 'exec_command', 'parameters': {
+            'type': 'object', 'properties': {'command': {'type': 'string'}, 'secret': {'type': 'string'}},
+            'required': ['command', 'secret']}}], 'input': []})
+        self.assertEqual(fixture.command_schema_summary, {
+            'parameters_type': 'object', 'properties': ['command', 'other'], 'required': ['command', 'other']})
+
+    def test_runtime_turn_status_summary_is_allowlisted(self):
+        events = [{'method': 'turn/completed', 'params': {'threadId': 'A',
+            'turn': {'status': 'private-unexpected-value'}}}]
+        self.assertEqual(canary.safe_turn_status(events, 'A'), 'unknown')
+        self.assertEqual(canary.safe_turn_status([], 'A'), 'not_completed')
+
+    def test_runtime_item_types_map_unknown_values_to_other(self):
+        events = [{'method': 'item/started', 'params': {'item': {'type': 'private-item-kind'}}},
+                  {'method': 'item/completed', 'params': {'item': {'type': 'functionCallOutput'}}}]
+        counts = canary.safe_item_type_counts(events)
+        self.assertEqual(counts['other'], 1)
+        self.assertEqual(counts['functionCallOutput'], 1)
+
+    def test_reported_command_pids_include_unexpected_starts(self):
+        events = [
+            {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
+                'processId': 421, 'command': 'unexpected'}}},
+            {'method': 'item/started', 'params': {'item': {'type': 'commandExecution',
+                'processId': '422'}}},
+            {'method': 'item/started', 'params': {'item': {'type': 'other', 'processId': 423}}},
+        ]
+        self.assertEqual(canary.reported_command_pids(events), {421})
+
+    def test_cleanup_drains_unread_command_notifications(self):
+        rpc = canary.Rpc.__new__(canary.Rpc)
+        rpc.lines = canary.queue.Queue()
+        rpc.events = []
+        rpc.reader = canary.threading.Thread(target=lambda: None)
+        rpc.reader.start()
+        rpc.reader.join()
+        rpc.lines.put(json.dumps({'method': 'item/started', 'params': {'item': {
+            'type': 'commandExecution', 'processId': 424}}}))
+        rpc.lines.put(None)
+        self.assertTrue(rpc.drain_pending_notifications(.1))
+        self.assertEqual(canary.reported_command_pids(rpc.events), {424})
+
+    def test_command_denial_readback_is_marker_specific(self):
+        marker = '/tmp/fixture/marker'
+        good = {'input': [{'type': 'function_call_output', 'call_id': 'call-1',
+                           'output': f'{marker}: Operation not permitted'}]}
+        self.assertTrue(canary.fixture_command_denial_output(good, 'call-1', marker))
+        for bad in (
+            {'input': [{'type': 'function_call_output', 'call_id': 'wrong', 'output': f'{marker}: Operation not permitted'}]},
+            {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': 'Operation not permitted'}]},
+            {'input': [{'type': 'function_call_output', 'call_id': 'call-1', 'output': f'{marker}: generic error'}]},
+        ):
+            self.assertFalse(canary.fixture_command_denial_output(bad, 'call-1', marker))
+
+    def test_enforcement_distinguishes_os_denial_approval_and_mutation(self):
+        kwargs = dict(marker_before=b'x', marker_after=b'x', exact_item=True, failed=True,
+                      exit_code=1, output='/tmp/fixture/marker: Operation not permitted',
+                      command_approval_seen=False, marker='/tmp/fixture/marker')
+        self.assertEqual(canary.enforcement_outcome(**kwargs), 'PASS')
+        for change in ({'command_approval_seen': True}, {'exact_item': False},
+                       {'exit_code': 0}, {'output': 'generic error'},
+                       {'output': 'Operation not permitted'}, {'failed': False}):
+            self.assertEqual(canary.enforcement_outcome(**{**kwargs, **change}), 'BLOCKED')
+        self.assertEqual(canary.enforcement_outcome(**{**kwargs, 'marker_after': b'xx',
+                                                       'command_approval_seen': True}), 'FAIL')
+
+    def test_queued_request_waits_for_independent_turn_id(self):
+        rpc = object.__new__(canary.Rpc)
+        rpc.timeout, rpc.next_id, rpc.lines, rpc.events = 1, 0, canary.queue.Queue(), []
+        rpc._send = mock.Mock()
+        rpc._reply_to_host_request = mock.Mock(side_effect=lambda message, callback: callback(message))
+        host = {'id': 8, 'method': canary.PERMISSION_METHOD, 'params': {'turnId': 'turn'}}
+        rpc.lines.put(json.dumps(host))
+        rpc.lines.put(json.dumps({'id': 1, 'result': {'turn': {'id': 'turn'}}}))
+        callback = mock.Mock(return_value={'result': {}})
+        self.assertEqual(rpc.start_turn_queued('thread', 'task', callback), 'turn')
+        callback.assert_called_once_with(host, 'thread', 'turn')
+
+    def test_shared_run_turn_uses_independent_id_queued_path(self):
+        rpc = mock.Mock()
+        rpc.start_turn_queued.return_value = 'host-returned-turn'
+        callback = mock.Mock()
+        callback.bind_turn = mock.Mock()
+        self.assertEqual(canary.run_turn(rpc, 'thread', 'task', callback), 'host-returned-turn')
+        rpc.start_turn_queued.assert_called_once_with('thread', 'task', callback)
+        callback.bind_turn.assert_called_once_with('thread', 'host-returned-turn')
+
+    def test_queued_request_is_declined_if_transport_closes(self):
+        rpc = object.__new__(canary.Rpc)
+        rpc.timeout, rpc.next_id, rpc.lines, rpc.events = 1, 0, canary.queue.Queue(), []
+        rpc._send, rpc._reply_to_host_request = mock.Mock(), mock.Mock()
+        host = {'id': 8, 'method': canary.PERMISSION_METHOD}
+        rpc.lines.put(json.dumps(host))
+        rpc.lines.put(None)
+        with self.assertRaises(RuntimeError):
+            rpc.start_turn_queued('thread', 'task', mock.Mock())
+        rpc._reply_to_host_request.assert_called_once_with(host, None)
 
 
 if __name__ == '__main__':

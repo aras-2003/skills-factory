@@ -51,3 +51,31 @@ do not start Codex or send approvals. Effective model, effort, and cost remain
 `UNKNOWN` unless the host exposes them. A pass is limited to this permission class,
 local App Server 0.159.1, and fresh-thread boundary; it does not establish Gate 2,
 Desktop child inheritance, or hosted MCP behavior.
+
+### Credential-free local mock
+
+For a separately reviewed local Lab run on macOS, `--execute --local-mock`
+selects a scripted loopback Responses fixture. Supply the same `--candidate-sha`
+and `--output` arguments as above. This path uses fresh temporary HOME,
+CODEX_HOME and TMPDIR, no credentials or MCP servers, zero provider retries,
+and a `sandbox-exec` network profile that denies outbound traffic except TCP to
+the fixture's localhost port. Before starting App Server, the runner requires
+that exact profile to pass live wrong-port, same-port IPv6, UDP, and (when
+available) same-port local-interface decoys, with controller-positive controls
+and ingress counts. macOS rejects a numeric host in this Seatbelt address
+predicate, so `localhost:<port>` may match both IPv4 and IPv6; if any decoy is
+reachable or unavailable, the network gate stays `BLOCKED` and App Server does
+not start under that profile. This canary does not claim address-family
+isolation from the localhost rule alone.
+
+The mock scripts permission and command tool calls and verifies each permission
+output in the following fixture request. All threads must return a read-only
+sandbox policy with `networkAccess: false` explicitly present. Its `PERM-NT` outcomes apply only to
+the mock, not an authenticated broker or model. Separate `ENF-01`–`ENF-03`
+cover the empty-profile response in a third fresh thread, attempted exact marker command and cleanup;
+an approval request is declined and cannot prove OS enforcement. A marker change
+is a failure. Missing or unrecognized denial evidence is blocked. Receipts omit
+raw fixture requests, commands, paths, prompts and logs; a local mock pass does
+not change Gate 0 or establish real-model behavior. Cleanup verifies the App Server
+process group and every command PID reported by the host; it does not independently
+enumerate descendants that might detach into another session or go unreported.

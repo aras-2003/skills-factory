@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748",
+  "source_revision": "dc7c99bb5adfcdf8d7d181a6b0385601a127b45b",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "architect_trigger": {
+    "class": "NONE",
+    "reason": "A source-only consultation classified the proposed optional receipt diagnostics as A1 with no Architect trigger because the existing local-mock receipt has no strict downstream consumer and no boundary or behavior change is planned.",
+    "evidence_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py at source revision dc7c99bb5adfcdf8d7d181a6b0385601a127b45b; exact-SHA local-mock receipt evals/results/runtime-canaries/sdlc-deep-2026-11-28/seatbelt-failclosed-dc7c99bb.json."
+  },
+  "decision": {
+    "value": "INVOKE",
+    "reason": "The coordinator consulted Architect to classify a proposed receipt-diagnostics change before implementation; Architect concluded future routing is SKIP for this A1 scope.",
+    "timestamp": "2026-11-28T03:41:28Z"
+  },
+  "impact": "A1",
+  "requested": {
+    "model": {
+      "value": "gpt-6.2-sol",
+      "provenance": "Repository sf-architect role profile",
+      "reason": null
+    },
+    "effort": {
+      "value": "high",
+      "provenance": "Repository sf-architect role profile",
+      "reason": null
+    },
+    "profile": {
+      "value": "sf-architect",
+      "provenance": "Repository .codex/agents/sf-architect.toml",
+      "reason": null
+    }
+  },
+  "host_observed": {
+    "model": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host does not expose the effective child model."
+    },
+    "effort": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host does not expose the effective child reasoning effort."
+    },
+    "profile": {
+      "value": "UNKNOWN",
+      "provenance": "Codex collaboration surface",
+      "reason": "The host does not expose whether the named profile was loaded."
+    }
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "The role-specific Architect consultation returned source-only advice; exact host dispatch timestamp is unavailable.",
+    "coordinator_bounds": null,
+    "time_unknown_reason": "The host exposes no exact child dispatch timestamp."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "Architect returned the source-linked routing and sanitized-diagnostics assessment; exact lifecycle timestamps are unavailable.",
+    "started_coordinator_bounds": null,
+    "started_time_unknown_reason": "The host does not expose child start time.",
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": "The host does not expose child completion time."
+  },
+  "result": {
+    "reference": "evals/results/role-decisions/sdlc-deep/architect-a1-preflight-diagnostics-result.md",
+    "sha256": "2488533a0e0b1e518ed091958944cb6d3ce4c1cb308f763b33caf7996179e252",
+    "reference_kind": "REPO_FILE"
+  },
+  "coordinator_disposition": {
+    "value": "ADAPTED",
+    "timestamp": "2026-11-28T03:41:28Z",
+    "reason": "Use Architect's fixed phase/class labels and redaction safeguards; preserve all existing runtime gates and status behavior."
+  },
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "Source-only consultation and exact collaboration timestamps are unavailable.",
+    "assessed_at": "2026-11-28T03:41:28Z",
+    "first_dependent_action_at": null,
+    "reason": "No implementation action has occurred yet; exact child dispatch and lifecycle times are unavailable.",
+    "first_dependent_action_reference": "Proposed optional preflight failure_phase/failure_class fields in scripts/eval/runtime_canaries/approval_nontransfer_canary.py",
+    "no_qualifying_action_confirmed": true,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "Implementation has not started."
+  },
+  "decision_id": "sdlc-deep-preflight-diagnostics-architect-a1",
+  "attempt_id": "sdlc-deep-preflight-diagnostics-architect-a1-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {
+      "reference": "Exact-SHA runtime receipt has runtime_process_started false, permission cases NOT_RUN, no filesystem/network boundary result, and generic reason; the phase is unknown.",
+      "captured_at": "2026-11-28T03:41:28Z"
+    }
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null
+}

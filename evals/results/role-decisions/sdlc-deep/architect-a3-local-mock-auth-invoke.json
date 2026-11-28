@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.2",
+  "task_reference": "https://github.com/aras-2003/skills-factory/issues/748",
+  "source_revision": "5bedc1a6e9244d7a9e625f91e2e60af843b1779b",
+  "policy_revision": "docs/governance/CODEX-ROLE-OBSERVABILITY.md sha256:1b72add557fd6c2583f465b934438945cf090f2bfce9014c21ecd2e6c465c6c0",
+  "role": "Architect",
+  "architect_trigger": {
+    "class": "A3_MULTICOMPONENT_OR_MIGRATION_OR_SECURITY_OR_OPERATIONS",
+    "reason": "Choosing a credential-free local model provider changes the security boundary and runtime test architecture for App Server permission enforcement.",
+    "evidence_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py at 5bedc1a blocks before process launch without a scoped auth broker; upstream Codex rust-v0.159.1 includes a loopback Responses mock server."
+  },
+  "decision": {
+    "value": "INVOKE",
+    "reason": "A3 security/runtime architecture decision is required before changing the canary authentication boundary.",
+    "timestamp": "2026-11-28T01:00:00Z"
+  },
+  "impact": "A3",
+  "requested": {
+    "model": {"value": "gpt-6.2-sol", "provenance": "Repository sf-architect role profile", "reason": null},
+    "effort": {"value": "high", "provenance": "Repository sf-architect role profile", "reason": null},
+    "profile": {"value": "sf-architect", "provenance": "Repository .codex/agents/sf-architect.toml", "reason": null}
+  },
+  "host_observed": {
+    "model": {"value": "UNKNOWN", "provenance": "Codex collaboration surface", "reason": "The host does not expose the effective child model."},
+    "effort": {"value": "UNKNOWN", "provenance": "Codex collaboration surface", "reason": "The host does not expose the effective child reasoning effort."},
+    "profile": {"value": "UNKNOWN", "provenance": "Codex collaboration surface", "reason": "The host does not expose whether the named profile was loaded."}
+  },
+  "dispatch": {
+    "status": "ACCEPTED",
+    "timestamp": null,
+    "reason": "Architect child thread returned a source-linked A3 decision; the host exposes no exact dispatch timestamp.",
+    "coordinator_bounds": null,
+    "time_unknown_reason": "The collaboration host does not expose exact dispatch timestamps or coordinator bounds."
+  },
+  "execution": {
+    "state": "COMPLETED",
+    "started_at": null,
+    "ended_at": null,
+    "reason": "The child returned the linked architecture recommendation; exact lifecycle timestamps are unavailable.",
+    "started_coordinator_bounds": null,
+    "started_time_unknown_reason": "The host exposes no child start timestamp or coordinator bounds.",
+    "ended_coordinator_bounds": null,
+    "ended_time_unknown_reason": "The host exposes no child completion timestamp or coordinator bounds."
+  },
+  "result": {"reference": "evals/results/role-decisions/sdlc-deep/architect-a3-local-mock-auth-result.md", "sha256": "b23379795be5cc7599094e5512f46be2a11e5aef77c3ffd139665638d114701e", "reference_kind": "REPO_FILE"},
+  "coordinator_disposition": {"value": "ADAPTED", "timestamp": "2026-11-28T01:23:44Z", "reason": "Adopted a separate no-credential local-mock runner, preserved frozen Gate 1 evidence, and added a distinct fresh-thread challenge requiring an actual correlated sandbox denial."},
+  "timing_assessment": {
+    "value": "UNKNOWN",
+    "assessor": "Coordinator",
+    "provenance": "The Architect recommendation was observed before implementation changes; no independent timing review or reliable host timestamps are available.",
+    "assessed_at": "2026-11-28T01:23:44Z",
+    "first_dependent_action_at": null,
+    "reason": "A dependent code change has occurred after the Architect recommendation, but dispatch time and first-action bounds were not recorded.",
+    "first_dependent_action_reference": "Added the opt-in local mock runtime runner to scripts/eval/runtime_canaries/approval_nontransfer_canary.py in this worktree.",
+    "no_qualifying_action_confirmed": null,
+    "first_dependent_action_coordinator_bounds": null,
+    "first_dependent_action_time_unknown_reason": "No exact first-action timestamp or non-overlapping coordinator bounds were recorded."
+  },
+  "decision_id": "sdlc-deep-local-mock-provider-architect-a3",
+  "attempt_id": "sdlc-deep-local-mock-provider-architect-a3-attempt-1",
+  "retry_of": null,
+  "trigger_source": "NATURAL",
+  "signal_evidence": [
+    {"reference": "Canary Gate 0 block and host non-transfer target at exact source SHA 5bedc1a6e9244d7a9e625f91e2e60af843b1779b.", "captured_at": "2026-11-28T01:00:00Z"},
+    {"reference": "Upstream Codex rust-v0.159.1 test source shows loopback Responses API mock; implementation compatibility with installed CLI is unverified.", "captured_at": "2026-11-28T00:59:56Z"}
+  ],
+  "supersedes_decision_id": null,
+  "parent_decision_id": null,
+  "retry_resolution_reason": null
+}
