@@ -85,7 +85,11 @@
     "reason": "A3 routing occurred after implementation; exact first edit time was not recorded.",
     "first_dependent_action_reference": "scripts/eval/runtime_canaries/approval_nontransfer_canary.py and scripts/eval/tests/test_approval_nontransfer_canary.py current working diff.",
     "no_qualifying_action_confirmed": false,
-    "first_dependent_action_coordinator_bounds": "After 2026-11-28T03:20:33Z and before 2026-11-28T03:28:35Z",
+    "first_dependent_action_coordinator_bounds": {
+      "earliest": "2026-11-28T03:20:34Z",
+      "latest": "2026-11-28T03:28:34Z",
+      "evidence": "Coordinator recorded that the diagnostic implementation and initial focused tests occurred after the prior 03:20:33Z observation and before the A3 decision at 03:28:35Z; the exact edit timestamp was not captured."
+    },
     "first_dependent_action_time_unknown_reason": "The first edit timestamp was not captured."
   },
   "decision_id": "sdlc-deep-seatbelt-diagnostic-continuation-architect-a3",
