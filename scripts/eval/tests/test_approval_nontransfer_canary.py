@@ -375,6 +375,8 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertTrue(fixture.readbacks['ENF_command_denied'])
 
     def test_fixture_A_completes_after_command_output(self):
+        canary.Path(self.expected.marker).parent.mkdir(parents=True, exist_ok=True)
+        canary.Path(self.expected.marker).write_bytes(b'')
         fixture = canary.ScriptedResponses(self.expected)
         fixture.begin('A')
         self.assertIn(b'request_permissions', fixture.respond({'input': []}))
@@ -385,6 +387,8 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertIn(b'Done.', fixture.respond({'input': [{
             'type': 'function_call_output', 'call_id': 'command_A', 'output': 'command completed'}]}))
         self.assertFalse(fixture.error)
+        self.assertEqual(fixture.diagnostics['command_A_output'], 'nonempty_other')
+        self.assertEqual(fixture.diagnostics['command_A_marker'], 'unchanged')
 
     def test_fixture_A_rejects_uncorrelated_command_output(self):
         fixture = canary.ScriptedResponses(self.expected)
