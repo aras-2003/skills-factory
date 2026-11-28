@@ -699,7 +699,7 @@ def fixture_permission_output_diagnostic(body, call_id, expected):
     fs_key = 'file_system' if 'file_system' in permissions else 'fileSystem'
     filesystem = permissions.get(fs_key)
     if filesystem is None:
-        return 'permission_denied'
+        return 'permission_semantics_unknown'
     if not isinstance(filesystem, dict):
         return 'file_system_not_object'
     entries = filesystem.get('entries')
