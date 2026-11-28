@@ -58,12 +58,15 @@ For a separately reviewed local Lab run on macOS, `--execute --local-mock`
 selects a scripted loopback Responses fixture. Supply the same `--candidate-sha`
 and `--output` arguments as above. This path uses fresh temporary HOME,
 CODEX_HOME and TMPDIR, no credentials or MCP servers, zero provider retries,
-and a `sandbox-exec` network profile that denies outbound traffic except the
-fixture's localhost port. Before starting App Server, the runner requires a
-preflight through that exact profile: fixture IPv4 loopback succeeds, another
-IPv4 loopback and a reserved external IPv4 target return OS `EPERM`. The profile's
-localhost allowance can include IPv6; the fixture itself binds numeric IPv4 and
-the receipt labels IPv6 egress `UNKNOWN`.
+and a `sandbox-exec` network profile that denies outbound traffic except TCP to
+the fixture's localhost port. Before starting App Server, the runner requires
+that exact profile to pass live wrong-port, same-port IPv6, UDP, and (when
+available) same-port local-interface decoys, with controller-positive controls
+and ingress counts. macOS rejects a numeric host in this Seatbelt address
+predicate, so `localhost:<port>` may match both IPv4 and IPv6; if any decoy is
+reachable or unavailable, the network gate stays `BLOCKED` and App Server does
+not start under that profile. This canary does not claim address-family
+isolation from the localhost rule alone.
 
 The mock scripts permission and command tool calls and verifies each permission
 output in the following fixture request. All threads must return a read-only
