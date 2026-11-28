@@ -308,11 +308,68 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertIn('(deny file-write* (require-not (subpath (param "CANARY_ROOT"))))', profile)
         self.assertIn('(allow file-write* (subpath (param "CANARY_ROOT")))', profile)
         self.assertIn('(deny network-outbound)', profile)
-        self.assertIn('(remote tcp (param "FIXTURE_ENDPOINT"))', profile)
+        self.assertIn('(remote tcp4 (param "FIXTURE_ENDPOINT"))', profile)
+        self.assertNotIn('(remote tcp ', profile)
         self.assertNotIn('localhost', profile)
         self.assertEqual(canary.sandbox_prefix('/tmp/canary-root', 43210, profile), [
             '/usr/bin/sandbox-exec', '-D', f'CANARY_ROOT={Path("/tmp/canary-root").resolve()}',
             '-D', 'FIXTURE_ENDPOINT=localhost:43210', '-p', profile])
+
+    def test_assigned_ipv4_inventory_parses_only_interface_addresses(self):
+        inventory = '''en0: flags=8863<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+\tinet 192.168.1.90 netmask 0xffffff00 broadcast 192.168.1.255
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+\tinet 127.0.0.1 netmask 0xff000000
+utun4: flags=8051<UP,POINTOPOINT,RUNNING,MULTICAST> mtu 1380
+\tinet6 fe80::1%utun4 prefixlen 64
+'''
+        self.assertEqual(canary.parse_assigned_ipv4_inventory(inventory), ['192.168.1.90'])
+        for invalid in ('inet 0.0.0.0 netmask 0', 'inet 224.0.0.1 netmask 0',
+                        'inet not-an-address netmask 0', '192.168.1.90 unlabelled'):
+            with self.subTest(invalid=invalid):
+                self.assertEqual(canary.parse_assigned_ipv4_inventory(invalid), [])
+
+    def test_assigned_ipv4_inventory_fails_closed_on_command_error(self):
+        with mock.patch.object(canary.subprocess, 'run', side_effect=OSError('private details')):
+            self.assertEqual(canary.assigned_ipv4_inventory({}, 1), [])
+
+    def test_decoy_identity_rejects_mismatch_truncation_and_timeout(self):
+        challenge = b'unique-random-challenge'
+        for chunks, expected in (([challenge[:4], challenge[4:]], True),
+                                 ([b'x' * len(challenge)], False), ([challenge[:3], b''], False),
+                                 ([socket.timeout()], False)):
+            with self.subTest(chunks=chunks):
+                connection = mock.Mock()
+                connection.recv.side_effect = chunks
+                self.assertEqual(canary.decoy_control_identity(connection, challenge), expected)
+                connection.settimeout.assert_called_once_with(2)
+        self.assertFalse(canary.decoy_control_identity(mock.Mock(), b''))
+
+    def test_network_preflight_unexpected_ingress_blocks_and_cleans(self):
+        resources = {'sockets': [], 'workers': []}
+        def compromised(*args):
+            resources['sockets'] = args[-1]['sockets']
+            return {'status': 'BLOCKED', 'other_local_ipv4_controller_reachable': True,
+                    'other_local_ipv4_decoy_ingress_count': 2}
+        with mock.patch.object(canary, '_verify_network_profile', side_effect=compromised):
+            result = canary.verify_network_profile(12345, 'profile', '/tmp', {}, 1, mock.Mock())
+        self.assertEqual(result['status'], 'BLOCKED')
+        self.assertEqual(result['other_local_ipv4_decoy_ingress_count'], 2)
+        self.assertTrue(result['decoy_sockets_closed'])
+        self.assertTrue(result['decoy_workers_stopped'])
+
+    def test_only_connect_stage_denial_satisfies_network_probe(self):
+        for case in ('wrong_port', 'local_same_port', 'ipv6'):
+            for stage, kind, expected in (('connect', 'EPERM', True), ('connect', 'EACCES', True),
+                                          ('socket_create', 'EPERM', False), ('connect', 'OTHER', False)):
+                with self.subTest(case=case, stage=stage, kind=kind):
+                    self.assertEqual(canary.denied_at_connect({'stage': stage, 'class': kind}), expected)
+
+    def test_pre_shutdown_pass_is_not_accepted_without_lossless_finalization(self):
+        with mock.patch.object(canary, '_verify_network_profile', return_value={'status': 'PASS'}):
+            result = canary.verify_network_profile(12345, 'profile', '/tmp', {}, 1, mock.Mock())
+        self.assertEqual(result['status'], 'BLOCKED')
+        self.assertNotEqual(result.get('ingress_finalization'), 'DRAINED')
 
     def test_network_probe_script_compiles_and_covers_each_destination_class(self):
         source = canary.network_probe_script(43210, 43211, '10.0.0.2')
@@ -373,6 +430,31 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         serialized = json.dumps(receipt)
         for fragment in ('SENTINEL', 'private/tmp', 'raw-cmd', secret):
             self.assertNotIn(fragment, serialized)
+
+    def test_network_block_stops_before_app_server_and_cleans_fixture(self):
+        version = subprocess.CompletedProcess(['codex', '--version'], 0, canary.VERSION + '\n', '')
+        fixture, server, worker = mock.Mock(), mock.Mock(), mock.Mock()
+        server.server_address = ('127.0.0.1', 12345)
+        server.active_lock = canary.threading.Lock()
+        server.active = set()
+        worker.is_alive.return_value = False
+        fixture.error = False
+        with mock.patch.object(canary, 'candidate_is_clean', return_value=True), \
+             mock.patch.object(canary.subprocess, 'run', return_value=version), \
+             mock.patch.object(canary.sys, 'platform', 'darwin'), \
+             mock.patch.object(Path, 'is_file', return_value=True), \
+             mock.patch.object(canary, 'start_fixture', return_value=(fixture, server, worker)), \
+             mock.patch.object(canary, 'verify_filesystem_profile', return_value={'status': 'PASS'}), \
+             mock.patch.object(canary, 'verify_network_profile', return_value={'status': 'BLOCKED',
+                  'decoy_workers_stopped': True, 'decoy_sockets_closed': True}), \
+             mock.patch.object(canary.subprocess, 'Popen') as popen:
+            receipt = canary.run_local_mock('codex', 'a' * 40, 2)
+        popen.assert_not_called()
+        self.assertEqual(receipt['failure_phase'], 'network_preflight')
+        self.assertEqual(receipt['status'], 'BLOCKED')
+        self.assertFalse(receipt['runtime_process_started'])
+        server.shutdown.assert_called_once()
+        server.server_close.assert_called_once()
 
     def test_fixture_worker_start_failure_closes_bound_server(self):
         class FakeServer:
@@ -501,67 +583,91 @@ class LocalMockPrimitivesTests(unittest.TestCase):
         self.assertEqual(second_events[-1]['response']['status'], 'completed')
         self.assertEqual(fixture.diagnostics['nested_execution_output'], 'expected')
 
-    def test_network_preflight_second_worker_start_exception_closes_resources(self):
-        fixture = canary.ScriptedResponses(self.expected)
-        created = []
-        real_start = canary.threading.Thread.start
-        start_count = []
-        class FakeConnection:
-            def __enter__(self):
-                return self
-            def __exit__(self, *_args):
-                return None
-            def close(self):
-                return None
-        class FakeSocket:
-            def __init__(self, family, kind):
-                self.family, self.kind, self.closed = family, kind, False
-            def setsockopt(self, *_args):
-                return None
-            def bind(self, *_args):
-                return None
-            def listen(self, *_args):
-                return None
-            def settimeout(self, *_args):
-                return None
-            def getsockname(self):
-                return ('10.0.0.2', 43210)
+    def test_drain_captures_pending_ingress_and_rejects_errors_or_cap(self):
+        listener = mock.Mock()
+        connections = [mock.Mock(), mock.Mock()]
+        listener.accept.side_effect = [(connections[0], None), (connections[1], None), BlockingIOError()]
+        self.assertEqual(canary.drain_pending(listener), (2, True))
+        for connection in connections:
+            connection.close.assert_called_once()
+        listener.accept.side_effect = OSError('listener failed')
+        self.assertEqual(canary.drain_pending(listener), (0, False))
+        listener.accept.side_effect = [(mock.Mock(), None)] * 2
+        self.assertEqual(canary.drain_pending(listener, cap=2), (2, False))
+        listener.recvfrom.side_effect = [b'queued', BlockingIOError()]
+        self.assertEqual(canary.drain_pending(listener, datagram=True), (1, True))
+
+    def test_network_preflight_drains_actual_scripted_decoy_queues(self):
+        class Connection:
+            def __enter__(self): return self
+            def __exit__(self, *_): self.close()
+            def close(self): pass
+            def settimeout(self, *_): pass
+            def recv(self, size): return b'x' * size
+            def sendall(self, _): pass
+        class Listener:
+            def __init__(self, name, extra, failure=False):
+                self.name, self.extra, self.failure = name, extra, failure
+                self.control = name in ('wrong', 'ipv6', 'local', 'udp')
+                self.closed = False
+            def setsockopt(self, *_): pass
+            def bind(self, *_): pass
+            def listen(self, *_): pass
+            def settimeout(self, *_): pass
+            def setblocking(self, *_): pass
+            def getsockname(self): return ('127.0.0.1', 12346)
+            def close(self): self.closed = True
+            def fileno(self): return -1 if self.closed else 10
+            def sendto(self, *_): return 1
+            def _next(self):
+                if self.control:
+                    self.control = False
+                    return True
+                if self.failure: raise OSError('fixture error')
+                if self.extra:
+                    self.extra -= 1
+                    return True
+                raise BlockingIOError()
             def accept(self):
-                if (self.family == socket.AF_INET6
-                        and canary.threading.current_thread() is canary.threading.main_thread()):
-                    return FakeConnection(), ('::1', 1234)
-                canary.time.sleep(.01)
-                raise socket.timeout()
-            def recvfrom(self, *_args):
-                return b'controller', ('127.0.0.1', 1234)
-            def sendto(self, *_args):
-                return 10
-            def connect(self, *_args):
-                return None
-            def close(self):
-                self.closed = True
-            def fileno(self):
-                return -1 if self.closed else 100
-        def create_socket(family, kind, *_args, **_kwargs):
-            value = FakeSocket(family, kind)
-            created.append(value)
-            return value
-        def fail_second_start(thread, *args, **kwargs):
-            start_count.append(thread)
-            if len(start_count) == 2:
-                raise RuntimeError('injected second worker start failure')
-            return real_start(thread, *args, **kwargs)
-        with mock.patch.object(canary.socket, 'socket', side_effect=create_socket), \
-             mock.patch.object(canary.socket, 'create_connection', return_value=FakeConnection()), \
-             mock.patch.object(canary.threading.Thread, 'start', new=fail_second_start):
-            result = canary.verify_network_profile(12345, canary.sandbox_profile('/tmp/root', 12345),
-                '/tmp/root', {}, 1, fixture)
+                self._next()
+                return Connection(), None
+            def recvfrom(self, *_):
+                self._next()
+                return b'packet', None
+        class Fixture:
+            egress_check_count = 1
+        observed = {'fixture_http': 'allowed', 'wrong_port': {'stage': 'connect', 'class': 'EPERM'},
+                    'local_same_port': {'stage': 'connect', 'class': 'EPERM'},
+                    'ipv6': {'stage': 'connect', 'class': 'EPERM'}, 'udp': 'EPERM'}
+        for altered in ('none', 'wrong', 'ipv6', 'local', 'udp', 'error', 'cap'):
+            with self.subTest(altered=altered):
+                sockets = [Listener(name, 64 if altered == 'cap' and name == 'local' else
+                                    int(altered == name), altered == 'error' and name == 'local')
+                           for name in ('wrong', 'ipv6', 'udp', 'sender', 'local')]
+                with mock.patch.object(canary.socket, 'socket', side_effect=sockets), \
+                     mock.patch.object(canary.socket, 'create_connection', side_effect=lambda *a, **k: Connection()), \
+                     mock.patch.object(canary, 'assigned_ipv4_inventory', return_value=['10.0.0.2']), \
+                     mock.patch.object(canary.secrets, 'token_bytes', return_value=b'x' * 32), \
+                     mock.patch.object(canary.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0, json.dumps(observed))):
+                    result = canary.verify_network_profile(12345, 'profile', '/tmp', {}, 1, Fixture())
+                self.assertEqual(result['status'], 'PASS' if altered == 'none' else 'BLOCKED')
+                self.assertTrue(result['decoy_sockets_closed'])
+                self.assertTrue(all(sock.closed for sock in sockets))
+                if altered in ('wrong', 'ipv6', 'local', 'udp'):
+                    self.assertEqual(result[{'wrong':'wrong_port_decoy_ingress_count',
+                        'ipv6':'ipv6_decoy_ingress_count', 'local':'other_local_ipv4_decoy_ingress_count',
+                        'udp':'udp_decoy_ingress_count'}[altered]], 2)
+
+    def test_network_preflight_bind_failure_closes_socket_and_blocks(self):
+        listener = mock.Mock()
+        listener.bind.side_effect = OSError('setup failure')
+        listener.fileno.return_value = -1
+        with mock.patch.object(canary.socket, 'socket', return_value=listener):
+            result = canary.verify_network_profile(12345, 'profile', '/tmp', {}, 1, mock.Mock())
         self.assertEqual(result['status'], 'BLOCKED')
-        self.assertTrue(result['decoy_workers_stopped'])
         self.assertTrue(result['decoy_sockets_closed'])
-        self.assertEqual(len(start_count), 2)
-        self.assertTrue(created)
-        self.assertTrue(all(sock.closed and sock.fileno() == -1 for sock in created))
+        self.assertTrue(result['decoy_workers_stopped'])
+        listener.close.assert_called_once()
 
     def test_fixture_readback_requires_unique_call_id_and_exact_profile(self):
         output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
