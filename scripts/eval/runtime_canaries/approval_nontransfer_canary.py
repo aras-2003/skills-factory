@@ -1499,10 +1499,8 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
         while not stop.is_set():
             try:
                 connection, _ = decoy.accept()
-                with connection:
-                    connection.recv(64)
-                    connection.sendall(b'HTTP/1.0 200 OK\\r\\nContent-Length: 0\\r\\n\\r\\n')
-                    decoy_count += 1
+                decoy_count += 1
+                connection.close()
             except socket.timeout:
                 continue
             except OSError:
@@ -1511,7 +1509,6 @@ def verify_network_profile(port, profile, root, env, timeout, fixture):
     worker.start()
     try:
         with socket.create_connection(('127.0.0.1', decoy_port), timeout=2) as control:
-            control.sendall(b'controller')
             baseline_ok = True
         deadline = time.monotonic() + 2
         while decoy_count < 1 and time.monotonic() < deadline:
@@ -1961,6 +1958,8 @@ def run_local_mock(binary, candidate_sha, timeout):
         process_cleanup_results = [stop_process_id(pid, min(timeout, 3)) for pid in observed_command_pids]
         process_cleanup = all(process_cleanup_results)
         cleanup = cleanup and process_cleanup
+        if receipt.get('network_sandbox') is not None:
+            cleanup = cleanup and receipt['network_sandbox'].get('decoy_workers_stopped', False)
         receipt['observed_command_process_count'] = len(observed_command_pids)
         receipt['observed_command_processes_terminated'] = process_cleanup
         if server:
