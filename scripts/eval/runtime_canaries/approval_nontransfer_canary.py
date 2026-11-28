@@ -546,6 +546,19 @@ def fixture_command_denial_output(body, call_id, marker):
     return marker in output and any(phrase in lowered for phrase in ('operation not permitted', 'permission denied'))
 
 
+def reported_command_pids(events):
+    """Collect all valid host-reported command PIDs, including unexpected starts."""
+    pids = set()
+    for event in events:
+        item = event_item(event)
+        if not isinstance(item, dict) or item.get('type') != 'commandExecution':
+            continue
+        process_id = item.get('processId')
+        if isinstance(process_id, int) and not isinstance(process_id, bool) and process_id > 0:
+            pids.add(process_id)
+    return pids
+
+
 def enforcement_outcome(*, marker_before, marker_after, exact_item, failed,
                         exit_code, output, command_approval_seen, marker):
     """An approval decline or generic failure is not evidence of OS enforcement."""
@@ -1312,6 +1325,8 @@ def run_local_mock(binary, candidate_sha, timeout):
             json.JSONDecodeError):
         receipt['reason'] = 'local mock precondition or protocol unverified'
     finally:
+        if rpc:
+            observed_command_pids.update(reported_command_pids(rpc.events))
         cleanup = stop_process_group(proc, timeout) if proc else True
         process_cleanup_results = [stop_process_id(pid, min(timeout, 3)) for pid in observed_command_pids]
         process_cleanup = all(process_cleanup_results)
