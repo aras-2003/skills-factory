@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "case_id": "LOCAL-PROVIDER-CONNECTIVITY-SMOKE",
+  "candidate_sha": "5bedc1a6e9244d7a9e625f91e2e60af843b1779b",
+  "runtime_version": "codex-cli 0.159.1",
+  "status": "PASS",
+  "scope": "One credential-free local Responses text turn through the installed App Server; no tools, approvals, MCP servers, external model, auth broker, or permission enforcement were tested.",
+  "provider": {
+    "host": "127.0.0.1",
+    "port": "ephemeral",
+    "path": "/v1/responses",
+    "requests_observed": 1,
+    "static_response_observed": true,
+    "turn_status": "completed"
+  },
+  "isolation": {
+    "fresh_home_codex_home_tmpdir_and_cwd": true,
+    "ambient_credentials_inherited": false,
+    "credential_fields_configured": false,
+    "egress_policy": "macOS sandbox-exec denied network-outbound except localhost:<fixture-port>; provider URL and listener used numeric 127.0.0.1.",
+    "egress_probe": {
+      "fixture_ipv4_loopback": "PASS",
+      "other_ipv4_loopback": "DENIED_EPERM",
+      "reserved_external_ipv4": "DENIED_EPERM",
+      "ipv6_loopback": "INCONCLUSIVE_CONNECTION_REFUSED"
+    }
+  },
+  "cleanup_verified": true,
+  "fixture_removed": true,
+  "limitations": [
+    "The sandbox profile's localhost matcher may include IPv6 loopback; this experiment proves no external IPv4 egress and successful numeric IPv4 fixture access, not a deny rule for ::1.",
+    "A static response fixture is not an actual model and does not validate role selection, tool schemas, permission RPCs, command sandbox denial, or the SDLC lifecycle."
+  ],
+  "cost": "UNKNOWN_FOR_MODEL; fixture response reported zero synthetic token usage."
+}

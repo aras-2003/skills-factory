@@ -260,5 +260,70 @@ class PermissionNontransferTests(unittest.TestCase):
         self.assertEqual(marker_before, marker_after)
 
 
+class LocalMockPrimitivesTests(unittest.TestCase):
+    def setUp(self):
+        self.expected = canary.ExpectedPermission('/tmp/fixture', '/tmp/fixture/marker')
+
+    def test_structured_read_only_sandbox_policy(self):
+        self.assertTrue(canary.is_read_only_policy({'type': 'readOnly', 'networkAccess': False}))
+        for policy in ('read-only', {'type': 'readOnly'}, {'type': 'readOnly', 'networkAccess': True},
+                       {'type': 'workspaceWrite'}, {'type': 'readOnly', 'other': True}):
+            self.assertFalse(canary.is_read_only_policy(policy))
+
+    def test_fixture_readback_requires_unique_call_id_and_exact_profile(self):
+        output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
+        item = {'type': 'function_call_output', 'call_id': 'call-1', 'output': output}
+        self.assertEqual(canary.fixture_permission_output({'input': [item]}, 'call-1', self.expected), 'denied')
+        for body in ({'input': [item, item]}, {'input': [{**item, 'call_id': 'wrong'}]},
+                     {'input': [{**item, 'output': '{}'}]}, {'input': 'invalid'}):
+            self.assertEqual(canary.fixture_permission_output(body, 'call-1', self.expected), 'unknown')
+
+    def test_fixture_sequence_requires_readback_before_command(self):
+        fixture = canary.ScriptedResponses(self.expected)
+        fixture.begin('ENF')
+        self.assertIn(b'request_permissions', fixture.respond({'input': []}))
+        with self.assertRaises(ValueError):
+            fixture.respond({'input': []})
+        output = json.dumps({'permissions': {'network': None, 'file_system': None}, 'scope': 'turn'})
+        body = {'input': [{'type': 'function_call_output', 'call_id': 'permission_ENF', 'output': output}]}
+        self.assertIn(b'exec_command', fixture.respond(body))
+        self.assertEqual(fixture.readbacks['ENF'], 'denied')
+
+    def test_enforcement_distinguishes_os_denial_approval_and_mutation(self):
+        kwargs = dict(marker_before=b'x', marker_after=b'x', exact_item=True, failed=True,
+                      exit_code=1, output='/tmp/fixture/marker: Operation not permitted',
+                      command_approval_seen=False, marker='/tmp/fixture/marker')
+        self.assertEqual(canary.enforcement_outcome(**kwargs), 'PASS')
+        for change in ({'command_approval_seen': True}, {'exact_item': False},
+                       {'exit_code': 0}, {'output': 'generic error'},
+                       {'output': 'Operation not permitted'}, {'failed': False}):
+            self.assertEqual(canary.enforcement_outcome(**{**kwargs, **change}), 'BLOCKED')
+        self.assertEqual(canary.enforcement_outcome(**{**kwargs, 'marker_after': b'xx',
+                                                       'command_approval_seen': True}), 'FAIL')
+
+    def test_queued_request_waits_for_independent_turn_id(self):
+        rpc = object.__new__(canary.Rpc)
+        rpc.timeout, rpc.next_id, rpc.lines, rpc.events = 1, 0, canary.queue.Queue(), []
+        rpc._send = mock.Mock()
+        rpc._reply_to_host_request = mock.Mock(side_effect=lambda message, callback: callback(message))
+        host = {'id': 8, 'method': canary.PERMISSION_METHOD, 'params': {'turnId': 'turn'}}
+        rpc.lines.put(json.dumps(host))
+        rpc.lines.put(json.dumps({'id': 1, 'result': {'turn': {'id': 'turn'}}}))
+        callback = mock.Mock(return_value={'result': {}})
+        self.assertEqual(rpc.start_turn_queued('thread', 'task', callback), 'turn')
+        callback.assert_called_once_with(host, 'thread', 'turn')
+
+    def test_queued_request_is_declined_if_transport_closes(self):
+        rpc = object.__new__(canary.Rpc)
+        rpc.timeout, rpc.next_id, rpc.lines, rpc.events = 1, 0, canary.queue.Queue(), []
+        rpc._send, rpc._reply_to_host_request = mock.Mock(), mock.Mock()
+        host = {'id': 8, 'method': canary.PERMISSION_METHOD}
+        rpc.lines.put(json.dumps(host))
+        rpc.lines.put(None)
+        with self.assertRaises(RuntimeError):
+            rpc.start_turn_queued('thread', 'task', mock.Mock())
+        rpc._reply_to_host_request.assert_called_once_with(host, None)
+
+
 if __name__ == '__main__':
     unittest.main()
