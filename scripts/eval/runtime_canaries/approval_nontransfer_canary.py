@@ -127,7 +127,7 @@ def permission_reply_shape(message, reply):
     return 'invalid-permission-reply'
 
 
-def permission_profile_diagnostic(params):
+def permission_profile_diagnostic(params, expected_marker=None):
     """Return a path-free structural diagnosis for a host permission request."""
     profile = params.get('permissions') if isinstance(params, dict) else None
     if not isinstance(profile, dict):
@@ -160,6 +160,10 @@ def permission_profile_diagnostic(params):
     path = entry.get('path')
     if not isinstance(path, dict) or path.get('type') != 'path' or not isinstance(path.get('path'), str):
         return 'entry_path_shape_invalid'
+    if set(entry) != {'access', 'path'} or set(path) != {'type', 'path'}:
+        return 'entry_has_extra_fields'
+    if expected_marker is not None and path['path'] != expected_marker:
+        return 'marker_path_mismatch'
     if legacy_read not in ('null', 'empty'):
         return f'legacy_access_read_{legacy_read}_write_{legacy_write}'
     if legacy_write not in ('null', 'empty') and filesystem.get('write') != [path['path']]:
@@ -169,7 +173,7 @@ def permission_profile_diagnostic(params):
         return 'network_shape_invalid'
     if isinstance(network, dict) and network['enabled'] is not None and network['enabled'] is not False:
         return 'network_enabled'
-    return 'valid_shape_path_or_marker_mismatch'
+    return 'exact_marker_profile'
 
 
 def classify_b_outcome(*, request_correlated, response_sent, tool_item_correlated,
@@ -349,7 +353,8 @@ class Rpc:
             'sent': True,
         }
         if method == PERMISSION_METHOD:
-            record['permission_profile_diagnostic'] = permission_profile_diagnostic(params)
+            record['permission_profile_diagnostic'] = message.get('_safe_permission_diagnostic',
+                permission_profile_diagnostic(params))
         self.host_responses.append(record)
         return record
 
@@ -1257,6 +1262,11 @@ def run_local_mock(binary, candidate_sha, timeout):
                 grant = label == 'A' and not requests[label]
                 reply, valid = permission_request_reply(message, expected, thread_id, turn_id, grant=grant)
                 params = message.get('params', {}) if isinstance(message.get('params'), dict) else {}
+                message['_safe_permission_diagnostic'] = {
+                    'correlation': ('valid' if request_is_correlated(
+                        params, thread_id, turn_id, expected.cwd) else 'mismatch'),
+                    'profile': permission_profile_diagnostic(params, expected.marker),
+                }
                 requests[label].append({'id': message.get('id'), 'threadId': params.get('threadId'),
                     'turnId': params.get('turnId'), 'itemId': params.get('itemId'), 'valid': valid})
                 return reply
