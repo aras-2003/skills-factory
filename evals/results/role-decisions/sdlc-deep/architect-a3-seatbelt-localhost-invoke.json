@@ -77,12 +77,12 @@
     "reason": "The parser-valid localhost TCP rule was tested at runtime and admitted the IPv6 same-port decoy; strict egress remains BLOCKED. The other-local-IPv4 baseline was not correlated, so that claim remains UNKNOWN."
   },
   "timing_assessment": {
-    "value": "ON_TIME",
+    "value": "UNKNOWN",
     "assessor": "Coordinator",
-    "provenance": "The A3 decision record preceded the localhost rule and AF_INET6 control experiments.",
+    "provenance": "The A3 decision record preceded the localhost rule and AF_INET6 control experiments, but exact dispatch and first-action times are unavailable.",
     "assessed_at": "2026-11-28T03:20:33Z",
     "first_dependent_action_at": null,
-    "reason": "The first dependent action occurred after the recorded decision, but its precise time was not captured.",
+    "reason": "The collaboration host provides no accepted dispatch timestamp or bounds, so ordering before the first dependent action cannot be established.",
     "first_dependent_action_reference": "Harmless Seatbelt parser and AF_INET6 socket-creation experiments under the candidate profile.",
     "no_qualifying_action_confirmed": false,
     "first_dependent_action_coordinator_bounds": {
