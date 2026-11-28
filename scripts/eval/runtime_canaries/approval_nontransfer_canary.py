@@ -1396,8 +1396,8 @@ def start_fixture(expected):
                 raise
 
     server = FixtureServer(('127.0.0.1', 0), Handler)
-    worker = threading.Thread(target=server.serve_forever, daemon=True)
     try:
+        worker = threading.Thread(target=server.serve_forever, daemon=True)
         worker.start()
     except BaseException:
         server.server_close()

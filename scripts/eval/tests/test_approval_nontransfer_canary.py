@@ -394,6 +394,27 @@ class LocalMockPrimitivesTests(unittest.TestCase):
                 canary.start_fixture(self.expected)
         self.assertTrue(FakeServer.created[0].closed)
 
+    def test_fixture_thread_constructor_failure_closes_bound_server(self):
+        class FakeServer:
+            created = []
+
+            def __init__(self, *_args):
+                self.closed = False
+                self.server_address = ('127.0.0.1', 43210)
+                self.created.append(self)
+
+            def server_close(self):
+                self.closed = True
+
+            def serve_forever(self):
+                pass
+
+        with mock.patch.object(canary, 'ThreadingHTTPServer', FakeServer), \
+             mock.patch.object(canary.threading, 'Thread', side_effect=TypeError('secret')):
+            with self.assertRaises(TypeError):
+                canary.start_fixture(self.expected)
+        self.assertTrue(FakeServer.created[0].closed)
+
     def test_removed_diagnostic_continuation_flag_has_no_side_effects(self):
         args = ['approval_nontransfer_canary.py', '--execute', '--candidate-sha', 'a' * 40,
                 '--output', '/tmp/unused-receipt.json', '--diagnostic-continue-after-network-block']
